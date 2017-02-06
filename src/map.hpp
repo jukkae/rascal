@@ -11,6 +11,7 @@ public:
 	~Map();
 	void setWall(int x, int y);
 	void addMonster(int x, int y);
+	void addItem(int x, int y);
 	bool isWall(int x, int y) const;
 	bool canWalk(int x, int y) const;
 	bool isInFov(int x, int y) const;

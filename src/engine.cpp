@@ -8,6 +8,7 @@ gameStatus(STARTUP), fovRadius(10), screenWidth(screenWidth), screenHeight(scree
 	player->destructible = new PlayerDestructible(30, 2, "your corpse");
 	player->attacker = new Attacker(5);
 	player->ai = new PlayerAi();
+	player->container = new Container(26);
 	actors.push(player);
 	map = new Map(80, 43);
 	gui = new Gui();

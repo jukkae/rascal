@@ -13,13 +13,21 @@ float Destructible::takeDamage(Actor* owner, float damage) {
 	return damage;
 }
 
+float Destructible::heal(float amount) {
+	hp += amount;
+	if(hp > maxHp) {
+		amount -= hp - maxHp;
+		hp = maxHp;
+	}
+	return amount; // return the actual amount of hp restored
+}
+
 void Destructible::die(Actor *owner) {
-	// transform the actor into a corpse
 	owner->ch = '%';
 	owner->col = TCODColor::darkRed;   
 	owner->name = corpseName;
 	owner->blocks = false;
-	// make sure corpses are drawn before living actors
+	// draw corpses before living actors
 	engine.sendToBack(owner);
 }
 

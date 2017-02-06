@@ -5,11 +5,14 @@ public:
 	TCODColor col; // color
 	const char* name;
 	bool blocks; // does it block movement?
-	Attacker* attacker; // something that can deal damage
-	Destructible* destructible; // something that can be damaged
-	Ai* ai; // something self-updating
+	Attacker* attacker;
+	Destructible* destructible;
+	Ai* ai; // self-updating
+	Pickable* pickable;
+	Container* container;
 
 	Actor(int x, int y, int ch, const char* name, const TCODColor &col);
+	~Actor();
 	void update();
 	void render() const;
 };

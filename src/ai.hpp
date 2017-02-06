@@ -1,21 +1,25 @@
 class Ai {
-public :
+public:
 	virtual void update(Actor* owner) = 0;
+	virtual ~Ai() {};
 };
 
 class PlayerAi : public Ai {
-public :
+public:
 	void update(Actor* owner);
 
-protected :
+protected:
 	bool moveOrAttack(Actor* owner, int targetX, int targetY);
+
+private:
+	void handleActionKey(Actor* owner, int ascii);
 };
 
 class MonsterAi : public Ai {
-public :
+public:
 	void update(Actor* owner);
 
-protected :
+protected:
 	int moveCount;
 
 	void moveOrAttack(Actor* owner, int targetX, int targetY);
