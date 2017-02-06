@@ -23,7 +23,7 @@ Engine::~Engine() {
 void Engine::update() {
 	if(gameStatus == STARTUP) map->computeFov();
 	gameStatus = IDLE;
-	TCODSystem::checkForEvent(TCOD_EVENT_KEY_PRESS, &lastKey, NULL);
+	TCODSystem::checkForEvent(TCOD_EVENT_KEY_PRESS|TCOD_EVENT_MOUSE, &lastKey, &mouse);
 	player->update();
 	if(gameStatus == NEW_TURN) {
 		for(Actor** iterator = actors.begin(); iterator != actors.end(); iterator++) {

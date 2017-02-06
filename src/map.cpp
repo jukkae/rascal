@@ -58,6 +58,7 @@ bool Map::isExplored(int x, int y) const {
 }
 
 bool Map::isInFov(int x, int y) const {
+	if(x < 0 || x >= width || y < 0 || y >= height) return false;
 	if(map->isInFov(x, y)) {
 		tiles[x + y*width].explored = true;
 		return true;

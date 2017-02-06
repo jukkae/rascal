@@ -16,4 +16,5 @@ protected:
 	TCODList<Message*> log;
 
 	void renderBar(int x, int y, int width, const char* name, float value, float maxValue, const TCODColor& barColor, const TCODColor& backColor);
+	void renderMouseLook();
 };

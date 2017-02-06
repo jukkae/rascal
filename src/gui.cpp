@@ -30,6 +30,7 @@ void Gui::render() {
 			colCoef += 0.3f;
 		}
 	}
+	renderMouseLook();
 	TCODConsole::blit(con, 0, 0, engine.screenWidth, PANEL_HEIGHT, TCODConsole::root, 0, engine.screenHeight - PANEL_HEIGHT);
 }
 
@@ -44,6 +45,26 @@ void Gui::renderBar(int x, int y, int width, const char* name, float value, floa
 	con->setDefaultForeground(TCODColor::white);
 	con->printEx(x + width/2, y, TCOD_BKGND_NONE, TCOD_CENTER, "%s : %g/%g", name, value, maxValue);
 }
+
+void Gui::renderMouseLook() {
+	if(!engine.map->isInFov(engine.mouse.cx, engine.mouse.cy)) {
+		return;
+	}
+	char buf[128] = "";
+	bool first = true;
+	for(Actor** i = engine.actors.begin(); i != engine.actors.end(); i++) {
+		Actor* actor = *i;
+		if(actor->x == engine.mouse.cx && actor->y == engine.mouse.cy) {
+			if(!first) {
+			strcat(buf, ", ");
+			} else { first = false; }
+			strcat(buf, actor->name);
+		}
+	}
+	con->setDefaultForeground(TCODColor::lightGrey);
+	con->print(1, 0, buf);
+}
+
 
 Gui::Message::Message(const char* text, const TCODColor& col) :
 col(col) {
