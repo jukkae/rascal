@@ -12,5 +12,4 @@ void Actor::render() const {
 
 void Actor::update() {
 	if(ai) ai->update(this);
-	printf("The %s growls!\n", name);
 }
