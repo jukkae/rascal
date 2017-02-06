@@ -53,3 +53,19 @@ void Engine::sendToBack(Actor* actor) {
 	actors.remove(actor);
 	actors.insertBefore(actor, 0);
 }
+
+Actor* Engine::getClosestMonster(int x, int y, float range) const {
+	Actor *closest = NULL;
+	float bestDistance = 1E6f; // TODO float max
+	for (Actor** i = actors.begin(); i != actors.end(); i++) {
+		Actor* actor = *i;
+		if(actor != player && actor->destructible && !actor->destructible->isDead()) {
+			float distance = actor->getDistance(x,y);
+			if(distance < bestDistance && (distance <= range || range == 0.0f)) {
+				bestDistance = distance;
+				closest = actor;
+			}
+		}
+	}
+	return closest;
+}
