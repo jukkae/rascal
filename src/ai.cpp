@@ -36,7 +36,7 @@ bool PlayerAi::moveOrAttack(Actor* owner, int targetX, int targetY) {
 	for (Actor **iterator=engine.actors.begin(); iterator != engine.actors.end(); iterator++) {
 		Actor *actor=*iterator;
 		if ( actor->destructible && actor->destructible->isDead() && actor->x == targetX && actor->y == targetY) {
-			printf ("There's a %s here\n", actor->name);
+			engine.gui->message(TCODColor::lightGrey, "There's a %s here!", actor->name);
 		}
 	}
 	owner->x = targetX;
@@ -50,7 +50,7 @@ void MonsterAi::update(Actor* owner) {
 		moveCount = TRACKING_TURNS;
 	} else { moveCount--; }
 	if(moveCount > 0) {
-		printf("The %s threatens you!\n", owner->name);
+		engine.gui->message(TCODColor::white, "The %s threatens you!", owner->name);
 		moveOrAttack(owner, engine.player->x, engine.player->y);
 	}
 }

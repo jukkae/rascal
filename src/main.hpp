@@ -5,4 +5,5 @@ class Actor;
 #include "ai.hpp"
 #include "actor.hpp"
 #include "map.hpp"
+#include "gui.hpp"
 #include "engine.hpp"

@@ -9,12 +9,15 @@ gameStatus(STARTUP), fovRadius(10), screenWidth(screenWidth), screenHeight(scree
 	player->attacker = new Attacker(5);
 	player->ai = new PlayerAi();
 	actors.push(player);
-	map = new Map(80, 45);
+	map = new Map(80, 43);
+	gui = new Gui();
+	gui->message(TCODColor::green, "Welcome to year 20XXAD, you strange rascal!\nPrepare to fight or die!");
 }
 
 Engine::~Engine() {
 	actors.clearAndDelete();
 	delete map;
+	delete gui;
 }
 
 void Engine::update() {
@@ -36,10 +39,12 @@ void Engine::render() {
 	map->render();
 	for (Actor **iterator=actors.begin(); iterator != actors.end(); iterator++) {
 		Actor *actor = *iterator;
-		if(map->isInFov(actor->x, actor->y)) {
+		if(actor != player && map->isInFov(actor->x, actor->y)) {
 			actor->render();
 		}
 	}
+	player->render();
+	gui->render();
 	TCODConsole::root->print(1, screenHeight-2, "HP : %d/%d", (int) player->destructible->hp, (int) player->destructible->maxHp);
 }
 
