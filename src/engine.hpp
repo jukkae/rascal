@@ -11,11 +11,15 @@ public:
 	Actor* player;
 	Map* map;
 	int fovRadius;
+	int screenWidth;
+	int screenHeight;
+	TCOD_key_t lastKey;
 
-	Engine();
+	Engine(int screenWidth, int screenHeight);
 	~Engine();
 	void update();
 	void render();
+	void sendToBack(Actor* actor);
 private:
 };
 
