@@ -10,6 +10,7 @@ public:
 
 protected:
 	bool moveOrAttack(Actor* owner, int targetX, int targetY);
+	Actor* chooseFromInventory(Actor* owner);
 
 private:
 	void handleActionKey(Actor* owner, int ascii);

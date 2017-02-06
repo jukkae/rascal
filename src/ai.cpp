@@ -46,28 +46,65 @@ bool PlayerAi::moveOrAttack(Actor* owner, int targetX, int targetY) {
 	return true;
 }
 
+Actor* PlayerAi::chooseFromInventory(Actor* owner) {
+	static const int INVENTORY_WIDTH = 50;
+	static const int INVENTORY_HEIGHT = 28;
+	static TCODConsole con(INVENTORY_WIDTH, INVENTORY_HEIGHT);
+	// display the inventory frame
+	con.setDefaultForeground(TCODColor(200,180,50));
+	con.printFrame(0, 0, INVENTORY_WIDTH, INVENTORY_HEIGHT, true, TCOD_BKGND_DEFAULT, "inventory");
+	// display the items with their keyboard shortcut
+	con.setDefaultForeground(TCODColor::white);
+	int shortcut = 'a';
+	int y = 1;
+	for (Actor** it = owner->container->inventory.begin(); it != owner->container->inventory.end(); it++) {
+		Actor* actor = *it;
+		con.print(2, y, "(%c) %s", shortcut, actor->name);
+		y++;
+		shortcut++;
+	}
+	// blit the inventory console on the root console
+	TCODConsole::blit(&con, 0, 0, INVENTORY_WIDTH, INVENTORY_HEIGHT, TCODConsole::root, engine.screenWidth/2 - INVENTORY_WIDTH/2, engine.screenHeight/2 - INVENTORY_HEIGHT/2);
+	TCODConsole::flush();
+	// wait for a key press
+	TCOD_key_t key;
+	TCODSystem::waitForEvent(TCOD_EVENT_KEY_PRESS, &key, NULL, true);
+	if(key.vk == TCODK_CHAR) {
+		int actorIndex=key.c - 'a';
+		if(actorIndex >= 0 && actorIndex < owner->container->inventory.size()) { return owner->container->inventory.get(actorIndex); }
+	}
+	return NULL;
+}
+
 void PlayerAi::handleActionKey(Actor *owner, int ascii) {
 	switch(ascii) {
 		case 'g' : // pickup item
-			{
-			bool found = false;
-			for(Actor** i = engine.actors.begin(); i != engine.actors.end(); i++) {
-				Actor* actor = *i;
-				if(actor->pickable && actor->x == owner->x && actor->y == owner->y) {
-					if(actor->pickable->pick(actor,owner)) {
-						found = true;
-						engine.gui->message(TCODColor::lightGrey, "You pick up the %s.", actor->name);
-						break;
-					} else if(!found) {
-						found = true;
-						engine.gui->message(TCODColor::red, "Your inventory is full.");
-					}
+		{
+		bool found = false;
+		for(Actor** i = engine.actors.begin(); i != engine.actors.end(); i++) {
+			Actor* actor = *i;
+			if(actor->pickable && actor->x == owner->x && actor->y == owner->y) {
+				if(actor->pickable->pick(actor,owner)) {
+					found = true;
+					engine.gui->message(TCODColor::green, "You pick up the %s.", actor->name);
+					break;
+				} else if(!found) {
+					found = true;
+					engine.gui->message(TCODColor::red, "Your inventory is full.");
 				}
 			}
-			if(!found) { engine.gui->message(TCODColor::lightGrey, "There's nothing here that you can pick up."); }
-			engine.gameStatus = Engine::NEW_TURN;
+		}
+		if(!found) { engine.gui->message(TCODColor::lightGrey, "There's nothing here that you can pick up."); }
+		engine.gameStatus = Engine::NEW_TURN;
+		} break;
+		case 'i' : // display inventory
+		{
+			Actor* actor = chooseFromInventory(owner);
+			if(actor) {
+				actor->pickable->use(actor, owner);
+				engine.gameStatus = Engine::NEW_TURN;
 			}
-			break;
+		} break;
 	}
 }
 
