@@ -40,10 +40,19 @@ void Map::addMonster(int x, int y) {
 }
 
 void Map::addItem(int x, int y) {
-	Actor* stimpak = new Actor(x, y, '!', "stimpak", TCODColor::violet);
-	stimpak->blocks = false;
-	stimpak->pickable = new Healer(4);
-	engine.actors.push(stimpak);
+	TCODRandom* rng = TCODRandom::getInstance();
+	int r = rng->getInt(0, 100);
+	if(r < 70) {
+		Actor* stimpak = new Actor(x, y, '!', "stimpak", TCODColor::violet);
+		stimpak->blocks = false;
+		stimpak->pickable = new Healer(4);
+		engine.actors.push(stimpak);
+	} else if(r < 80) {
+		Actor* blasterBoltDevice = new Actor(x, y, '?', "blaster bolt device", TCODColor::lightYellow);
+		blasterBoltDevice->blocks = false;
+		blasterBoltDevice->pickable = new BlasterBolt(5, 20);
+		engine.actors.push(blasterBoltDevice);
+	}
 }
 
 bool Map::isWall(int x, int y) const {

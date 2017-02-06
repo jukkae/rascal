@@ -26,3 +26,16 @@ bool Healer::use(Actor* owner, Actor* wearer) {
 	}
 	return false;
 }
+
+BlasterBolt::BlasterBolt(float range, float damage) : range(range), damage(damage) {;}
+
+bool BlasterBolt::use(Actor* owner, Actor* wearer) {
+	Actor* closestMonster = engine.getClosestMonster(wearer->x,wearer->y,range);
+	if(!closestMonster) {
+		engine.gui->message(TCODColor::lightGrey, "Zark! No enemy close enough to blast!");
+		return false;
+	}
+	engine.gui->message(TCODColor::lightBlue, "A lighting bolt strikes the %s with a loud thunder!\nThe damage is %g hit points.", closestMonster->name, damage);
+	closestMonster->destructible->takeDamage(closestMonster, damage);
+	return Pickable::use(owner, wearer);
+}
