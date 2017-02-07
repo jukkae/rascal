@@ -26,3 +26,11 @@ public:
 	FragmentationGrenade(float range, float damage);
 	bool use(Actor* owner, Actor* wearer);
 };
+
+class Confusor : public Pickable {
+public:
+	int turns;
+	float range;
+	Confusor(int turns, float range);
+	bool use(Actor* owner, Actor* wearer);
+};

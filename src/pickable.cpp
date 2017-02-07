@@ -56,3 +56,17 @@ bool FragmentationGrenade::use(Actor* owner, Actor* wearer) {
 	}
 	return Pickable::use(owner,wearer);
 }
+
+Confusor::Confusor(int turns, float range) : turns(turns), range(range) {;}
+
+bool Confusor::use(Actor* owner, Actor* wearer) {
+	engine.gui->message(TCODColor::cyan, "Left-click an enemy to confuse it,\nor right-click to cancel.");
+	int x, y;
+	if(!engine.pickTile(&x, &y)) { return false; }
+	Actor* actor = engine.getActor(x, y);
+	if(!actor) { return false; }
+	Ai* confAi = new ConfusedMonsterAi(turns, actor->ai);
+	actor->ai = confAi;
+	engine.gui->message(TCODColor::lightGreen,"The eyes of the %s look empty,\nas he starts to stumble around!", actor->name);
+	return Pickable::use(owner,wearer);
+}

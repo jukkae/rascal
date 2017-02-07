@@ -70,6 +70,14 @@ Actor* Engine::getClosestMonster(int x, int y, float range) const {
 	return closest;
 }
 
+Actor* Engine::getActor(int x, int y) const { // TODO actually, should be getLiveActor or something like that
+	for(Actor** i = actors.begin(); i != actors.end(); i++) {
+		Actor* actor = *i;
+		if(actor->x == x && actor->y == y && actor->destructible && !actor->destructible->isDead()) return actor;
+	}
+	return NULL;
+}
+
 bool Engine::pickTile(int* x, int* y, float maxRange) { // TODO move to keyboard picking
 	while(!TCODConsole::isWindowClosed()) {
 		render();

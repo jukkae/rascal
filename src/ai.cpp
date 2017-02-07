@@ -141,3 +141,26 @@ void MonsterAi::moveOrAttack(Actor* owner, int targetX, int targetY) {
 	}
 }
 
+ConfusedMonsterAi::ConfusedMonsterAi(int turns, Ai* oldAi): turns(turns), oldAi(oldAi) {;}
+
+void ConfusedMonsterAi::update(Actor* owner) {
+	TCODRandom* rng = TCODRandom::getInstance();
+	int dx = rng->getInt(-1,1);
+	int dy = rng->getInt(-1,1);
+	if(dx != 0 || dy != 0) {
+		int destX = owner->x + dx;
+		int destY = owner->y + dy;
+		if(engine.map->canWalk(destX, destY)) {
+			owner->x = destX;
+			owner->y = destY;
+		} else {
+			Actor* target = engine.getActor(destX, destY);
+			if(target) { owner->attacker->attack(owner, target); }
+		}
+	}
+	turns--;
+	if(turns <= 0) {
+		owner->ai = oldAi;
+		delete this;
+	}
+}
