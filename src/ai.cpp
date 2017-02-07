@@ -105,6 +105,14 @@ void PlayerAi::handleActionKey(Actor *owner, int ascii) {
 				engine.gameStatus = Engine::NEW_TURN;
 			}
 		} break;
+		case 'd' : // drop item
+		{
+			Actor* actor = chooseFromInventory(owner);
+			if(actor) {
+				actor->pickable->drop(actor, owner);
+				engine.gameStatus = Engine::NEW_TURN;
+			}
+		} break;
 	}
 }
 
