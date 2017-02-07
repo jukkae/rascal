@@ -21,3 +21,8 @@ public:
 	bool use(Actor* owner, Actor* wearer);
 };
 
+class FragmentationGrenade : public BlasterBolt { // TODO inherits from BB for fast dev
+public:
+	FragmentationGrenade(float range, float damage);
+	bool use(Actor* owner, Actor* wearer);
+};

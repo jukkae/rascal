@@ -39,3 +39,20 @@ bool BlasterBolt::use(Actor* owner, Actor* wearer) {
 	closestMonster->destructible->takeDamage(closestMonster, damage);
 	return Pickable::use(owner, wearer);
 }
+
+FragmentationGrenade::FragmentationGrenade (float range, float damage) : BlasterBolt(range, damage) {;}
+
+bool FragmentationGrenade::use(Actor* owner, Actor* wearer) {
+	engine.gui->message(TCODColor::cyan, "Left-click a target tile for the frag grenade,\nor right-click to cancel.");
+	int x, y;
+	if(!engine.pickTile(&x, &y)) { return false; }
+	engine.gui->message(TCODColor::orange,"The grenade explodes, harming everything within %g tiles!", range);
+	for(Actor** it = engine.actors.begin(); it != engine.actors.end(); it++) {
+		Actor* actor = *it;
+		if(actor->destructible && !actor->destructible->isDead() && actor->getDistance(x, y) <= range) {
+			engine.gui->message(TCODColor::orange,"The %s gets hit by shrapnel for %g hit points.", actor->name,damage);
+			actor->destructible->takeDamage(actor, damage);
+		}
+	}
+	return Pickable::use(owner,wearer);
+}

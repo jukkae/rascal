@@ -52,6 +52,11 @@ void Map::addItem(int x, int y) {
 		blasterBoltDevice->blocks = false;
 		blasterBoltDevice->pickable = new BlasterBolt(5, 20);
 		engine.actors.push(blasterBoltDevice);
+	} else if(r < 90) {
+		Actor* fragGrenade = new Actor(x,y,'?', "fragmentation grenade", TCODColor::lightGreen);
+		fragGrenade->blocks = false;
+		fragGrenade->pickable = new FragmentationGrenade(3, 12);
+		engine.actors.push(fragGrenade);
 	}
 }
 
