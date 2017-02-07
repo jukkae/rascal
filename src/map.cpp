@@ -29,12 +29,13 @@ void Map::init() {
 
 void Map::save(TCODZip& zip) {
 	zip.putInt(seed);
-	//TODO add explored status
+	for(int i = 0; i < width * height; i++) { zip.putInt(tiles[i].explored); }
 }
 
 void Map::load(TCODZip& zip) {
 	seed = zip.getInt();
-	init();
+	init(); // TODO add bool initActors to init
+	for(int i = 0; i < width * height; i++) { tiles[i].explored = zip.getInt(); }
 }
 
 void Map::addMonster(int x, int y) {
