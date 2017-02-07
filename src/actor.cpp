@@ -33,10 +33,16 @@ float Actor::getDistance(int cx, int cy) const {
 void Actor::save(TCODZip& zip) {
 	zip.putInt(x);
 	zip.putInt(y);
+	zip.putInt(ch);
+	zip.putColor(&col);
+	zip.putString(name);
 	// TODO other attributes
 }
 
 void Actor::load(TCODZip& zip) {
 	x = zip.getInt();
 	y = zip.getInt();
+	ch = zip.getInt();
+	col = zip.getColor();
+	name = strdup(zip.getString());
 }

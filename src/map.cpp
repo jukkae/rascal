@@ -15,7 +15,7 @@ Map::~Map() {
 	delete map;
 }
 
-void Map::init() {
+void Map::init(bool initActors) { // TODO initActors
 	rng = new TCODRandom(seed);
 	tiles = new Tile[width * height];
 	map = new TCODMap(width, height);
@@ -34,7 +34,7 @@ void Map::save(TCODZip& zip) {
 
 void Map::load(TCODZip& zip) {
 	seed = zip.getInt();
-	init(); // TODO add bool initActors to init
+	init(false);
 	for(int i = 0; i < width * height; i++) { tiles[i].explored = zip.getInt(); }
 }
 

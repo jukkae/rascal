@@ -9,7 +9,7 @@ public:
 
 	Map(int width, int height);
 	~Map();
-	void init();
+	void init(bool initActors);
 	void save(TCODZip& zip);
 	void load(TCODZip& zip);
 
