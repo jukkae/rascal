@@ -21,6 +21,7 @@ void Engine::init() {
 	player->container = new Container(26);
 	actors.push(player);
 	map = new Map(80, 43);
+	map->init();
 	gui->message(TCODColor::green, "Welcome to year 20XXAD, you strange rascal!\nPrepare to fight or die!");
 }
 
@@ -31,8 +32,8 @@ void Engine::save() {
 		TCODZip zip;
 		zip.putInt(map->width);
 		zip.putInt(map->height);
-		//map->save(zip);
-		//player->save(zip);
+		map->save(zip);
+		player->save(zip);
 		/* TODO save other actors
 		zip.putInt(actors.size()-1);
 		for (Actor **it=actors.begin(); it!=actors.end(); it++) {
@@ -48,7 +49,19 @@ void Engine::save() {
 
 void Engine::load() {
 	if(TCODSystem::fileExists("game.sav")) {
-
+		player = new Actor(40, 25, '@', "you", TCODColor::white);
+		player->destructible = new PlayerDestructible(30, 2, "your corpse");
+		player->attacker = new Attacker(5);
+		player->ai = new PlayerAi();
+		player->container = new Container(26);
+		actors.push(player);
+		TCODZip zip;
+		zip.loadFromFile("game.sav");
+		int width = zip.getInt();
+		int height = zip.getInt();
+		map = new Map(width, height);
+		map->load(zip);
+		player->load(zip);
 	} else {
 		engine.init();
 	}

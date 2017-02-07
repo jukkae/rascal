@@ -9,6 +9,10 @@ public:
 
 	Map(int width, int height);
 	~Map();
+	void init();
+	void save(TCODZip& zip);
+	void load(TCODZip& zip);
+
 	void setWall(int x, int y);
 	void addMonster(int x, int y);
 	void addItem(int x, int y);
@@ -22,6 +26,8 @@ public:
 protected:
 	Tile* tiles;
 	TCODMap* map;
+	int seed;
+	TCODRandom* rng;
 	friend class BspListener;
 
 	void dig(int x1, int y1, int x2, int y2);
@@ -30,11 +36,12 @@ protected:
 
 class BspListener : public ITCODBspCallback {
 private:
-	Map &map; // a map to dig
 	int roomNum; // room number
-	int lastx,lasty; // center of the last room
+	Map &map; // a map to dig
+	int lastx, lasty; // center of the last room
+	TCODRandom* rng;
 
 public:
-	BspListener(Map &map);
-	bool visitNode(TCODBsp *node, void *userData);
+	BspListener(Map &map, TCODRandom* rng);
+	bool visitNode(TCODBsp* node, void* userData);
 };

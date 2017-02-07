@@ -16,4 +16,7 @@ public:
 	void update();
 	void render() const;
 	float getDistance(int cx, int cy) const;
+
+	void save(TCODZip& zip);
+	void load(TCODZip& zip);
 };

@@ -29,3 +29,14 @@ float Actor::getDistance(int cx, int cy) const {
 	int dy = y-cy;
 	return sqrtf(dx*dx + dy*dy);
 }
+
+void Actor::save(TCODZip& zip) {
+	zip.putInt(x);
+	zip.putInt(y);
+	// TODO other attributes
+}
+
+void Actor::load(TCODZip& zip) {
+	x = zip.getInt();
+	y = zip.getInt();
+}

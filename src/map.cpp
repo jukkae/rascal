@@ -7,14 +7,7 @@ static const int MAX_ROOM_MONSTERS = 3;
 static const int MAX_ROOM_ITEMS = 2;
 
 Map::Map(int width, int height) : width(width), height(height) {
-	tiles = new Tile[width*height];
-	map = new TCODMap(width, height);
-	TCODBsp bsp(0, 0, width, height);
-	// 8: recursion level,
-	// 1.5f, 1.5f H/V and V/H ratios of rooms
-	bsp.splitRecursive(NULL, 8, ROOM_MAX_SIZE, ROOM_MAX_SIZE, 1.5f, 1.5f);
-	BspListener listener(*this);
-	bsp.traverseInvertedLevelOrder(&listener, NULL);
+	seed = 1;//TODO TCODRandom::getInstance()->getInt(0, 0x7FFFFFFF);
 }
 
 Map::~Map() {
@@ -22,8 +15,29 @@ Map::~Map() {
 	delete map;
 }
 
+void Map::init() {
+	rng = new TCODRandom(seed);
+	tiles = new Tile[width * height];
+	map = new TCODMap(width, height);
+	TCODBsp bsp(0, 0, width, height);
+	// 8: recursion level,
+	// 1.5f, 1.5f H/V and V/H ratios of rooms
+	bsp.splitRecursive(rng, 8, ROOM_MAX_SIZE, ROOM_MAX_SIZE, 1.5f, 1.5f);
+	BspListener listener(*this, rng);
+	bsp.traverseInvertedLevelOrder(&listener, NULL);
+}
+
+void Map::save(TCODZip& zip) {
+	zip.putInt(seed);
+	//TODO add explored status
+}
+
+void Map::load(TCODZip& zip) {
+	seed = zip.getInt();
+	init();
+}
+
 void Map::addMonster(int x, int y) {
-	TCODRandom* rng = TCODRandom::getInstance();
 	if(rng->getInt(0, 100) < 80) {
 		Actor* orc = new Actor(x, y, 'h', "punk", TCODColor::desaturatedGreen);
 		orc->destructible = new MonsterDestructible(10, 0, "dead punk");
@@ -40,7 +54,6 @@ void Map::addMonster(int x, int y) {
 }
 
 void Map::addItem(int x, int y) {
-	TCODRandom* rng = TCODRandom::getInstance();
 	int r = rng->getInt(0, 100);
 	if(r < 70) {
 		Actor* stimpak = new Actor(x, y, '!', "stimpak", TCODColor::violet);
@@ -127,11 +140,10 @@ void Map::dig(int x1, int y1, int x2, int y2) {
 
 void Map::createRoom(bool first, int x1, int y1, int x2, int y2) {
 	dig (x1, y1, x2, y2);
-	TCODRandom* rng = TCODRandom::getInstance();
 	if(first) {
 		// put the player in the first room
-		engine.player->x=(x1+x2)/2;
-		engine.player->y=(y1+y2)/2;
+		engine.player->x=(x1 + x2)/2;
+		engine.player->y=(y1 + y2)/2;
 	} else {
 		int nMonsters = rng->getInt(0, MAX_ROOM_MONSTERS);
 		while(nMonsters > 0) {
@@ -151,13 +163,12 @@ void Map::createRoom(bool first, int x1, int y1, int x2, int y2) {
 	}
 }
 
-BspListener::BspListener(Map &map) : map(map), roomNum(0) {;}
+BspListener::BspListener(Map &map, TCODRandom* rng) : roomNum(0), map(map), rng(rng) {;}
 
-bool BspListener::visitNode(TCODBsp *node, void *userData) {
+bool BspListener::visitNode(TCODBsp* node, void* userData) {
 	if ( node->isLeaf() ) {
 		int x,y,w,h;
 		// dig a room
-		TCODRandom *rng = TCODRandom::getInstance();
 		w = rng->getInt(ROOM_MIN_SIZE, node->w-2);
 		h = rng->getInt(ROOM_MIN_SIZE, node->h-2);
 		x = rng->getInt(node->x+1, node->x+node->w-w-1);
