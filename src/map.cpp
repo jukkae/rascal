@@ -7,7 +7,7 @@ static const int MAX_ROOM_MONSTERS = 3;
 static const int MAX_ROOM_ITEMS = 2;
 
 Map::Map(int width, int height) : width(width), height(height) {
-	seed = 1;//TODO TCODRandom::getInstance()->getInt(0, 0x7FFFFFFF);
+	seed = TCODRandom::getInstance()->getInt(0, 0x7FFFFFFF);
 }
 
 Map::~Map() {

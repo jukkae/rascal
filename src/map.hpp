@@ -26,7 +26,7 @@ public:
 protected:
 	Tile* tiles;
 	TCODMap* map;
-	int seed;
+	long seed;
 	TCODRandom* rng;
 	friend class BspListener;
 
