@@ -4,6 +4,16 @@
 Engine::Engine(int screenWidth, int screenHeight) :
 gameStatus(STARTUP), fovRadius(10), screenWidth(screenWidth), screenHeight(screenHeight) {
 	TCODConsole::initRoot(80, 50, "Rascal", false);
+	gui = new Gui();
+}
+
+Engine::~Engine() {
+	actors.clearAndDelete();
+	delete map;
+	delete gui;
+}
+
+void Engine::init() {
 	player = new Actor(40, 25, '@', "you", TCODColor::white);
 	player->destructible = new PlayerDestructible(30, 2, "your corpse");
 	player->attacker = new Attacker(5);
@@ -11,14 +21,37 @@ gameStatus(STARTUP), fovRadius(10), screenWidth(screenWidth), screenHeight(scree
 	player->container = new Container(26);
 	actors.push(player);
 	map = new Map(80, 43);
-	gui = new Gui();
 	gui->message(TCODColor::green, "Welcome to year 20XXAD, you strange rascal!\nPrepare to fight or die!");
 }
 
-Engine::~Engine() {
-	actors.clearAndDelete();
-	delete map;
-	delete gui;
+void Engine::save() {
+	if (player->destructible->isDead()) { // Permadeath
+		TCODSystem::deleteFile("game.sav");
+	} else {
+		TCODZip zip;
+		zip.putInt(map->width);
+		zip.putInt(map->height);
+		//map->save(zip);
+		//player->save(zip);
+		/* TODO save other actors
+		zip.putInt(actors.size()-1);
+		for (Actor **it=actors.begin(); it!=actors.end(); it++) {
+			if ( *it != player ) {
+				(*it)->save(zip);
+			}
+		}
+		gui->save(zip);
+		*/
+		zip.saveToFile("game.sav");
+	}
+}
+
+void Engine::load() {
+	if(TCODSystem::fileExists("game.sav")) {
+
+	} else {
+		engine.init();
+	}
 }
 
 void Engine::update() {
