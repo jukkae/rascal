@@ -15,7 +15,7 @@ Map::~Map() {
 	delete map;
 }
 
-void Map::init(bool initActors) { // TODO initActors
+void Map::init(bool initActors) { // TODO initActors, especially the player!
 	rng = new TCODRandom(seed);
 	tiles = new Tile[width * height];
 	map = new TCODMap(width, height);
@@ -24,7 +24,7 @@ void Map::init(bool initActors) { // TODO initActors
 	// 1.5f, 1.5f H/V and V/H ratios of rooms
 	bsp.splitRecursive(rng, 8, ROOM_MAX_SIZE, ROOM_MAX_SIZE, 1.5f, 1.5f);
 	BspListener listener(*this, rng);
-	bsp.traverseInvertedLevelOrder(&listener, NULL);
+	bsp.traverseInvertedLevelOrder(&listener, (void*) initActors);
 }
 
 void Map::save(TCODZip& zip) {
@@ -139,8 +139,9 @@ void Map::dig(int x1, int y1, int x2, int y2) {
 	}
 }
 
-void Map::createRoom(bool first, int x1, int y1, int x2, int y2) {
+void Map::createRoom(bool first, int x1, int y1, int x2, int y2, bool initActors) {
 	dig (x1, y1, x2, y2);
+	if(!initActors) { return; }
 	if(first) {
 		// put the player in the first room
 		engine.player->x=(x1 + x2)/2;
@@ -166,16 +167,20 @@ void Map::createRoom(bool first, int x1, int y1, int x2, int y2) {
 
 BspListener::BspListener(Map &map, TCODRandom* rng) : roomNum(0), map(map), rng(rng) {;}
 
-bool BspListener::visitNode(TCODBsp* node, void* userData) {
-	if ( node->isLeaf() ) {
-		int x,y,w,h;
+bool BspListener::visitNode(TCODBsp* node, void* userData) { // TODO move to directly using map->rng instead of having pointer to it
+	bool initActors = (bool) userData; // TODO yep it's dirty
+	if(node->isLeaf()) {
+		int x;
+		int y;
+		int w;
+		int h;
 		// dig a room
 		w = rng->getInt(ROOM_MIN_SIZE, node->w-2);
 		h = rng->getInt(ROOM_MIN_SIZE, node->h-2);
 		x = rng->getInt(node->x+1, node->x+node->w-w-1);
 		y = rng->getInt(node->y+1, node->y+node->h-h-1);
-		map.createRoom(roomNum == 0, x, y, x+w-1, y+h-1);
-		if ( roomNum != 0 ) {
+		map.createRoom(roomNum == 0, x, y, x+w-1, y+h-1, initActors);
+		if(roomNum != 0) {
 			// dig a corridor from last room
 			map.dig(lastx, lasty, x+w/2, lasty);
 			map.dig(x+w/2, lasty, x+w/2, y+h/2);

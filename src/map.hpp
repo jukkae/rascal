@@ -31,7 +31,7 @@ protected:
 	friend class BspListener;
 
 	void dig(int x1, int y1, int x2, int y2);
-	void createRoom(bool first, int x1, int y1, int x2, int y2);
+	void createRoom(bool first, int x1, int y1, int x2, int y2, bool initActors);
 };
 
 class BspListener : public ITCODBspCallback {
