@@ -34,8 +34,9 @@ void Actor::save(TCODZip& zip) {
 	zip.putInt(x);
 	zip.putInt(y);
 	zip.putInt(ch);
-	zip.putColor(&col);
+	zip.putColor(&col); // TODO saving or loading of color seems to be buggy - look into LibCOTD
 	zip.putString(name);
+	printf("saved actor: %s\n", name);
 	zip.putInt(blocks);
 
 	zip.putInt(attacker != NULL);
@@ -57,6 +58,7 @@ void Actor::load(TCODZip& zip) {
 	ch     = zip.getInt();
 	col    = zip.getColor();
 	name   = strdup(zip.getString());
+	printf("loaded actor: %s\n", name);
 	blocks = zip.getInt();
 
 	bool hasAttacker     = zip.getInt();

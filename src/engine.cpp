@@ -35,6 +35,7 @@ void Engine::save() {
 		map->save(zip);
 		player->save(zip);
 		zip.putInt(actors.size() - 1);
+		printf("actors: %d\n", actors.size() - 1);
 		for (Actor** it = actors.begin(); it != actors.end(); it++) {
 			if ( *it != player ) {
 				(*it)->save(zip);
@@ -60,6 +61,7 @@ void Engine::load() {
 		map->load(zip);
 		player->load(zip);
 		int nOfActors = zip.getInt();
+		printf("actors: %d\n", nOfActors);
 		while (nOfActors > 0) {
 			Actor* a = new Actor(0, 0, 0, NULL, TCODColor::white);
 			a->load(zip);
