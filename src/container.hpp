@@ -7,4 +7,6 @@ public:
 	~Container();
 	bool add(Actor* actor);
 	void remove(Actor* actor);
+	void save(TCODZip& zip);
+	void load(TCODZip& zip);
 };

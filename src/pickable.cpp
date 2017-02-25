@@ -27,6 +27,19 @@ void Pickable::drop(Actor* owner, Actor* wearer) {
 	}
 }
 
+Pickable *Pickable::create(TCODZip &zip) {
+	PickableType type=(PickableType)zip.getInt();
+	Pickable *pickable=NULL;
+	switch(type) {
+		case HEALER : pickable=new Healer(0); break;
+		case BLASTER_BOLT : pickable=new BlasterBolt(0,0); break;
+		case CONFUSOR : pickable=new Confusor(0,0); break;
+		case FRAGMENTATION_GRENADE : pickable=new FragmentationGrenade(0,0); break;
+	}
+	pickable->load(zip);
+	return pickable;
+}
+
 Healer::Healer(float amount) : amount(amount) {;}
 
 bool Healer::use(Actor* owner, Actor* wearer) {
@@ -35,6 +48,15 @@ bool Healer::use(Actor* owner, Actor* wearer) {
 		if(amountHealed > 0) { return Pickable::use(owner, wearer); }
 	}
 	return false;
+}
+
+void Healer::load(TCODZip &zip) {
+	amount=zip.getFloat();
+}
+
+void Healer::save(TCODZip &zip) {
+	zip.putInt(HEALER);
+	zip.putFloat(amount);
 }
 
 BlasterBolt::BlasterBolt(float range, float damage) : range(range), damage(damage) {;}
@@ -48,6 +70,18 @@ bool BlasterBolt::use(Actor* owner, Actor* wearer) {
 	engine.gui->message(TCODColor::lightBlue, "A lighting bolt strikes the %s with a loud thunder!\nThe damage is %g hit points.", closestMonster->name, damage);
 	closestMonster->destructible->takeDamage(closestMonster, damage);
 	return Pickable::use(owner, wearer);
+}
+
+
+void BlasterBolt::load(TCODZip &zip) {
+	range=zip.getFloat();
+	damage=zip.getFloat();
+}
+
+void BlasterBolt::save(TCODZip &zip) {
+	zip.putInt(BLASTER_BOLT);
+	zip.putFloat(range);
+	zip.putFloat(damage);
 }
 
 FragmentationGrenade::FragmentationGrenade (float range, float damage) : BlasterBolt(range, damage) {;}
@@ -67,6 +101,12 @@ bool FragmentationGrenade::use(Actor* owner, Actor* wearer) {
 	return Pickable::use(owner,wearer);
 }
 
+void FragmentationGrenade::save(TCODZip &zip) {
+	zip.putInt(FRAGMENTATION_GRENADE);
+	zip.putFloat(range);
+	zip.putFloat(damage);   
+}
+
 Confusor::Confusor(int turns, float range) : turns(turns), range(range) {;}
 
 bool Confusor::use(Actor* owner, Actor* wearer) {
@@ -79,4 +119,15 @@ bool Confusor::use(Actor* owner, Actor* wearer) {
 	actor->ai = confAi;
 	engine.gui->message(TCODColor::lightGreen,"The eyes of the %s look empty,\nas he starts to stumble around!", actor->name);
 	return Pickable::use(owner,wearer);
+}
+
+void Confusor::load(TCODZip &zip) {
+	turns=zip.getInt();
+	range=zip.getFloat();
+}
+
+void Confusor::save(TCODZip &zip) {
+	zip.putInt(CONFUSOR);
+	zip.putInt(turns);
+	zip.putFloat(range);
 }

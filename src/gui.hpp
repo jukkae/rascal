@@ -2,6 +2,9 @@ class Gui {
 public:
 	Gui();
 	~Gui();
+	void save(TCODZip& zip);
+	void load(TCODZip& zip);
+
 	void render();
 	void message(const TCODColor &col, const char* text, ...);
 

@@ -34,15 +34,13 @@ void Engine::save() {
 		zip.putInt(map->height);
 		map->save(zip);
 		player->save(zip);
-		/* TODO save other actors
-		zip.putInt(actors.size()-1);
-		for (Actor **it=actors.begin(); it!=actors.end(); it++) {
+		zip.putInt(actors.size() - 1);
+		for (Actor** it = actors.begin(); it != actors.end(); it++) {
 			if ( *it != player ) {
 				(*it)->save(zip);
 			}
 		}
-		gui->save(zip);
-		*/
+		gui->save(zip); // TODO fix gui saving
 		zip.saveToFile("game.sav");
 	}
 }
@@ -54,7 +52,6 @@ void Engine::load() {
 		player->attacker = new Attacker(5);
 		player->ai = new PlayerAi();
 		player->container = new Container(26);
-		actors.push(player);
 		TCODZip zip;
 		zip.loadFromFile("game.sav");
 		int width = zip.getInt();
@@ -62,6 +59,15 @@ void Engine::load() {
 		map = new Map(width, height);
 		map->load(zip);
 		player->load(zip);
+		int nOfActors = zip.getInt();
+		while (nOfActors > 0) {
+			Actor* a = new Actor(0, 0, 0, NULL, TCODColor::white);
+			a->load(zip);
+			actors.push(a);
+			nOfActors--;
+		}
+		actors.push(player);
+		gui->load(zip);
 	} else {
 		engine.init();
 	}

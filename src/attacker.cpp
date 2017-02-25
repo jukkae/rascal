@@ -15,3 +15,11 @@ if(target->destructible && !target->destructible->isDead()) {
 		engine.gui->message(TCODColor::lightGrey, "%s attacks %s in vain.", owner->name, target->name);
 	}
 }
+
+void Attacker::save(TCODZip& zip) {
+	zip.putFloat(power);
+}
+
+void Attacker::load(TCODZip& zip) {
+	power = zip.getFloat();
+}
