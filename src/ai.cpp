@@ -3,18 +3,6 @@
 
 static const int TRACKING_TURNS = 3;
 
-Ai *Ai::create(TCODZip &zip) {
-	AiType type = (AiType) zip.getInt();
-	Ai* ai = NULL;
-	switch(type) {
-		case PLAYER: ai = new PlayerAi(); break;
-		case MONSTER: ai = new MonsterAi(); break;
-		case CONFUSED_MONSTER: ai = new ConfusedMonsterAi(0, NULL); break;
-	}
-	ai->load(zip);
-	return ai;
-}
-
 void PlayerAi::update(Actor* owner) {
 	if (owner->destructible && owner->destructible->isDead()) return;
 	int dx = 0;

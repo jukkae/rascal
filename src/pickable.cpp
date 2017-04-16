@@ -27,19 +27,6 @@ void Pickable::drop(Actor* owner, Actor* wearer) {
 	}
 }
 
-Pickable *Pickable::create(TCODZip &zip) {
-	PickableType type=(PickableType)zip.getInt();
-	Pickable *pickable=NULL;
-	switch(type) {
-		case HEALER : pickable=new Healer(0); break;
-		case BLASTER_BOLT : pickable=new BlasterBolt(0,0); break;
-		case CONFUSOR : pickable=new Confusor(0,0); break;
-		case FRAGMENTATION_GRENADE : pickable=new FragmentationGrenade(0,0); break;
-	}
-	pickable->load(zip);
-	return pickable;
-}
-
 Healer::Healer(float amount) : amount(amount) {;}
 
 bool Healer::use(Actor* owner, Actor* wearer) {

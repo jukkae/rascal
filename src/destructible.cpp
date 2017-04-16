@@ -31,18 +31,6 @@ void Destructible::die(Actor *owner) {
 	engine.sendToBack(owner);
 }
 
-Destructible *Destructible::create(TCODZip& zip) {
-	DestructibleType type = (DestructibleType) zip.getInt();
-	Destructible* destructible = NULL;
-	switch(type) {
-		case MONSTER: destructible = new MonsterDestructible(0,0,NULL); break;
-		case PLAYER:  destructible = new PlayerDestructible (0,0,NULL); break;
-	}
-	destructible->load(zip);
-	return destructible;
-	}
-
-
 MonsterDestructible::MonsterDestructible(float maxHp, float defense, const char* corpseName) :
 	Destructible(maxHp, defense, corpseName) {;}
 
