@@ -15,7 +15,7 @@ Map::~Map() {
 	delete map;
 }
 
-void Map::init(bool initActors) { // TODO initActors, especially the player!
+void Map::init(bool initActors) {
 	rng = new TCODRandom(seed);
 	tiles = new Tile[width * height];
 	map = new TCODMap(width, height);
