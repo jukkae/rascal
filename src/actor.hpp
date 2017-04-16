@@ -1,4 +1,4 @@
-class Actor {
+class Actor : public Persistent {
 public:
 	int x, y;
 	int ch; // ASCII code
