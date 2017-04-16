@@ -1,4 +1,4 @@
-class Attacker {
+class Attacker : public Persistent {
 public :
 	float power;
 

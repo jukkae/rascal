@@ -1,4 +1,4 @@
-class Gui {
+class Gui : public Persistent {
 public:
 	Gui();
 	~Gui();

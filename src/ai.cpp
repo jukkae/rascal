@@ -128,13 +128,6 @@ void PlayerAi::handleActionKey(Actor *owner, int ascii) {
 	}
 }
 
-void PlayerAi::load(TCODZip &zip) {
-} 
-
-void PlayerAi::save(TCODZip &zip) {
-	zip.putInt(PLAYER);
-}
-
 void MonsterAi::update(Actor* owner) {
 	if (owner->destructible && owner->destructible->isDead()) return;
 	if (engine.map->isInFov(owner->x, owner->y)) {
@@ -168,15 +161,6 @@ void MonsterAi::moveOrAttack(Actor* owner, int targetX, int targetY) {
 	}
 }
 
-void MonsterAi::load(TCODZip& zip) {
-	moveCount = zip.getInt();
-}
-
-void MonsterAi::save(TCODZip& zip) {
-	zip.putInt(MONSTER);
-	zip.putInt(moveCount);
-}
-
 ConfusedMonsterAi::ConfusedMonsterAi(int turns, Ai* oldAi): turns(turns), oldAi(oldAi) {;}
 
 void ConfusedMonsterAi::update(Actor* owner) {
@@ -199,15 +183,4 @@ void ConfusedMonsterAi::update(Actor* owner) {
 		owner->ai = oldAi;
 		delete this;
 	}
-}
-
-void ConfusedMonsterAi::load(TCODZip &zip) {
-	turns = zip.getInt();
-	oldAi = Ai::create(zip);
-}
-
-void ConfusedMonsterAi::save(TCODZip &zip) {
-	zip.putInt(CONFUSED_MONSTER);
-	zip.putInt(turns);
-	oldAi->save(zip);
 }

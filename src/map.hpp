@@ -3,7 +3,7 @@ struct Tile {
 	Tile() : explored(false) {;}
 };
 
-class Map {
+class Map : public Persistent {
 public:
 	int width, height;
 

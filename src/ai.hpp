@@ -1,4 +1,4 @@
-class Ai {
+class Ai : public Persistent {
 public:
 	virtual void update(Actor* owner) = 0;
 	virtual ~Ai() {};

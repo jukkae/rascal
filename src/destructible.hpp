@@ -1,4 +1,4 @@
-class Destructible {
+class Destructible : public Persistent {
 public:
 	float maxHp;
 	float hp;

@@ -27,17 +27,6 @@ void Map::init(bool initActors) {
 	bsp.traverseInvertedLevelOrder(&listener, (void*) initActors);
 }
 
-void Map::save(TCODZip& zip) {
-	zip.putInt(seed);
-	for(int i = 0; i < width * height; i++) { zip.putInt(tiles[i].explored); }
-}
-
-void Map::load(TCODZip& zip) {
-	seed = zip.getInt();
-	init(false);
-	for(int i = 0; i < width * height; i++) { tiles[i].explored = zip.getInt(); }
-}
-
 void Map::addMonster(int x, int y) {
 	if(rng->getInt(0, 100) < 80) {
 		Actor* orc = new Actor(x, y, 'h', "punk", TCODColor::desaturatedGreen);

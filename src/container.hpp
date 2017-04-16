@@ -1,4 +1,4 @@
-class Container {
+class Container : public Persistent {
 public:
 	int size; // max number of actors in container, 0 = unlimited - TODO think later about weight etc
 	TCODList<Actor*> inventory;

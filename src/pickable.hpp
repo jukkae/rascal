@@ -1,4 +1,4 @@
-class Pickable {
+class Pickable : public Persistent {
 public:
 	bool pick(Actor* owner, Actor* wearer);
 	virtual bool use(Actor* owner, Actor* wearer);

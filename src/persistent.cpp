@@ -55,3 +55,197 @@ void Actor::load(TCODZip& zip) {
         container->load(zip);                                                                                 
     }                                                                                                         
 }
+
+void PlayerAi::load(TCODZip &zip) {
+}
+
+void PlayerAi::save(TCODZip &zip) {
+    zip.putInt(PLAYER);
+}
+
+void MonsterAi::load(TCODZip& zip) {
+    moveCount = zip.getInt();
+}
+
+void MonsterAi::save(TCODZip& zip) {
+    zip.putInt(MONSTER);
+    zip.putInt(moveCount);
+}
+
+void ConfusedMonsterAi::load(TCODZip &zip) {
+    turns = zip.getInt();
+    oldAi = Ai::create(zip);
+}
+
+void ConfusedMonsterAi::save(TCODZip &zip) {
+    zip.putInt(CONFUSED_MONSTER);
+    zip.putInt(turns);
+    oldAi->save(zip);
+} 
+
+void Attacker::save(TCODZip& zip) {
+    zip.putFloat(power);
+}
+
+void Attacker::load(TCODZip& zip) {
+    power = zip.getFloat();
+}
+
+void Container::load(TCODZip &zip) {
+    size=zip.getInt();
+    int nbActors=zip.getInt();
+    while ( nbActors > 0 ) {
+        Actor *actor=new Actor(0,0,0,NULL,TCODColor::white);
+        actor->load(zip);
+        inventory.push(actor);
+        nbActors--;
+    }
+}
+
+void Container::save(TCODZip &zip) {
+    zip.putInt(size);
+    zip.putInt(inventory.size());
+    for (Actor **it=inventory.begin(); it != inventory.end(); it++) {
+        (*it)->save(zip);
+    }
+}
+
+void Destructible::save(TCODZip& zip) {
+    zip.putFloat(maxHp);
+    zip.putFloat(hp);
+    zip.putFloat(defense);
+    zip.putString(corpseName);
+}
+
+void Destructible::load(TCODZip& zip) {
+    maxHp = zip.getFloat();
+    hp = zip.getFloat();
+    defense = zip.getFloat();
+    corpseName = strdup(zip.getString());
+}  
+
+void MonsterDestructible::save(TCODZip &zip) {
+    zip.putInt(MONSTER);
+    Destructible::save(zip);
+} 
+
+void PlayerDestructible::save(TCODZip &zip) {
+    zip.putInt(PLAYER);
+    Destructible::save(zip);
+}  
+
+void Engine::save() {
+    if (player->destructible->isDead()) { // Permadeath
+        TCODSystem::deleteFile("game.sav");
+    } else {
+        TCODZip zip;
+        zip.putInt(map->width);
+        zip.putInt(map->height);
+        map->save(zip);
+        player->save(zip);
+        zip.putInt(actors.size() - 1);
+        printf("actors: %d\n", actors.size() - 1);
+        for (Actor** it = actors.begin(); it != actors.end(); it++) {
+            if ( *it != player ) {
+                (*it)->save(zip);
+            }
+        }
+        gui->save(zip); // TODO fix gui saving
+        zip.saveToFile("game.sav");
+    }
+}
+
+void Engine::load() {
+    if(TCODSystem::fileExists("game.sav")) {
+        player = new Actor(0, 0, 0, NULL, TCODColor::white);
+        player->destructible = new PlayerDestructible(30, 2, "your corpse");
+        player->attacker = new Attacker(5);
+        player->ai = new PlayerAi();
+        player->container = new Container(26);
+        TCODZip zip;
+        zip.loadFromFile("game.sav");
+        int width = zip.getInt();
+        int height = zip.getInt();
+        map = new Map(width, height);
+        map->load(zip);
+        player->load(zip);
+        int nOfActors = zip.getInt();
+        printf("actors: %d\n", nOfActors);
+        while (nOfActors > 0) {
+            Actor* a = new Actor(0, 0, 0, NULL, TCODColor::white);
+            a->load(zip);
+            actors.push(a);
+            nOfActors--;
+        }
+        actors.push(player);
+        gui->load(zip);
+    } else {
+        engine.init();
+    }
+} 
+
+void Gui::save(TCODZip& zip) {
+    zip.putInt(log.size());
+    for(Message** it = log.begin(); it != log.end(); it++) {
+        zip.putString((*it)->text);
+        zip.putColor(&(*it)->col);
+    }
+}
+
+void Gui::load(TCODZip& zip) {
+    int nMsgs = zip.getInt();
+    while (nMsgs > 0) {
+        const char* text = zip.getString();
+        TCODColor col = zip.getColor();
+        message(col, text);
+        nMsgs--;
+    }
+}
+
+void Map::save(TCODZip& zip) {
+    zip.putInt(seed);
+    for(int i = 0; i < width * height; i++) { zip.putInt(tiles[i].explored); }
+}
+
+void Map::load(TCODZip& zip) {
+    seed = zip.getInt();
+    init(false);
+    for(int i = 0; i < width * height; i++) { tiles[i].explored = zip.getInt(); }
+} 
+
+void Healer::load(TCODZip &zip) {
+    amount=zip.getFloat();
+}
+
+void Healer::save(TCODZip &zip) {
+    zip.putInt(HEALER);
+    zip.putFloat(amount);
+}
+
+void BlasterBolt::load(TCODZip &zip) {
+    range=zip.getFloat();
+    damage=zip.getFloat();
+}
+
+void BlasterBolt::save(TCODZip &zip) {
+    zip.putInt(BLASTER_BOLT);
+    zip.putFloat(range);
+    zip.putFloat(damage);
+}
+
+void FragmentationGrenade::save(TCODZip &zip) {
+    zip.putInt(FRAGMENTATION_GRENADE);
+    zip.putFloat(range);
+    zip.putFloat(damage);
+}
+
+void Confusor::load(TCODZip &zip) {
+    turns=zip.getInt();
+    range=zip.getFloat();
+}
+
+void Confusor::save(TCODZip &zip) {
+    zip.putInt(CONFUSOR);
+    zip.putInt(turns);
+    zip.putFloat(range);
+}
