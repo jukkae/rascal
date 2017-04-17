@@ -1,12 +1,19 @@
 #include "main.hpp"
+#include <fstream>
+
 
 void Engine::save() {
     if (player->destructible->isDead()) { // Permadeath
-        TCODSystem::deleteFile("game.sav");
+        TCODSystem::deleteFile("savegame.zip");
     } else {
+		std::ofstream outfile;
+		outfile.open("save.txt");
+		outfile << "RASCAL V0 SAVEGAME\n";
+		outfile.close();
         TCODZip zip;
 
 		zip.putString("RASCAL V0 SAVEGAME");
+		
 
         zip.putInt(map->width);
         zip.putInt(map->height);
@@ -22,14 +29,14 @@ void Engine::save() {
             }
         }
         gui->save(zip);
-        zip.saveToFile("game.sav");
+        zip.saveToFile("savegame.zip");
     }
 }
 
 void Engine::load() {
-    if(TCODSystem::fileExists("game.sav")) {
+    if(TCODSystem::fileExists("savegame.zip")) {
         TCODZip zip;
-        zip.loadFromFile("game.sav");
+        zip.loadFromFile("savegame.zip");
 
 		char* crap = strdup(zip.getString());
         
