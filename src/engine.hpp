@@ -28,6 +28,18 @@ public:
 	Actor* getClosestMonster(int x, int y, float range) const;
 	Actor* getActor(int x, int y) const;
 	bool pickTile(int* x, int* y, float maxRange = 0.0f);
+private:
+	std::string name = "name";
+
+	friend class boost::serialization::access;
+
+    template<class Archive>
+
+    void serialize(Archive & ar, const unsigned int version)
+    {
+        // Simply list all the fields to be serialized/deserialized.
+        ar & name;
+    }
 };
 
 extern Engine engine;

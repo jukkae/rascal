@@ -1,19 +1,12 @@
 #include "main.hpp"
-#include <fstream>
-
 
 void Engine::save() {
     if (player->destructible->isDead()) { // Permadeath
         TCODSystem::deleteFile("savegame.zip");
     } else {
-		std::ofstream outfile;
-		outfile.open("save.txt");
-		outfile << "RASCAL V0 SAVEGAME\n";
-		outfile.close();
         TCODZip zip;
 
 		zip.putString("RASCAL V0 SAVEGAME");
-		
 
         zip.putInt(map->width);
         zip.putInt(map->height);

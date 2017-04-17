@@ -1,3 +1,7 @@
+#include <fstream>                                                                                            
+#include <boost/archive/text_oarchive.hpp>                                                                    
+#include <boost/archive/text_iarchive.hpp> 
+
 #include "libtcod.hpp"
 class Actor;
 #include "persistent.hpp"

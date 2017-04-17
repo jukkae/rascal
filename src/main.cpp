@@ -1,5 +1,7 @@
 #include "main.hpp"
 
+std::string file = "save.txt";
+
 Engine engine(80, 50);
 
 int main() {
@@ -10,5 +12,10 @@ int main() {
 		TCODConsole::flush();
 	}
 	engine.save();
+
+	std::ofstream ofs(file);
+	boost::archive::text_oarchive oa(ofs);
+	oa << engine;   
+
 	return 0;
 }
