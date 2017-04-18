@@ -26,7 +26,7 @@ void PlayerAi::update(Actor* owner) {
 bool PlayerAi::moveOrAttack(Actor* owner, int targetX, int targetY) {
 	if (engine.map->isWall(targetX, targetY)) return false;
 	// look for living actors to attack
-	for (Actor** iterator = engine.actors.begin(); iterator != engine.actors.end(); iterator++) {
+	for (auto iterator = engine.actors.begin(); iterator != engine.actors.end(); iterator++) {
 		Actor* actor = *iterator;
 		if (actor->destructible && !actor->destructible->isDead() && actor->x == targetX && actor->y == targetY) {
 			owner->attacker->attack(owner, actor);
@@ -34,11 +34,11 @@ bool PlayerAi::moveOrAttack(Actor* owner, int targetX, int targetY) {
 		}
 	}
 	// look for corpses or items
-	for (Actor** iterator=engine.actors.begin(); iterator != engine.actors.end(); iterator++) {
+	for (auto iterator=engine.actors.begin(); iterator != engine.actors.end(); iterator++) {
 		Actor* actor = *iterator;
 		bool corpseOrItem = (actor->destructible && actor->destructible->isDead()) || actor->pickable;
 		if(corpseOrItem && actor->x == targetX && actor->y == targetY) {
-			engine.gui->message(TCODColor::lightGrey, "There's a %s here!", actor->name);
+			engine.gui->message(TCODColor::lightGrey, "There's a %s here!", actor->name.c_str());
 		}
 	}
 	owner->x = targetX;
@@ -57,9 +57,9 @@ Actor* PlayerAi::chooseFromInventory(Actor* owner) {
 	con.setDefaultForeground(TCODColor::white);
 	int shortcut = 'a';
 	int y = 1;
-	for (Actor** it = owner->container->inventory.begin(); it != owner->container->inventory.end(); it++) {
+	for (auto it = owner->container->inventory.begin(); it != owner->container->inventory.end(); it++) {
 		Actor* actor = *it;
-		con.print(2, y, "(%c) %s", shortcut, actor->name);
+		con.print(2, y, "(%c) %s", shortcut, actor->name.c_str());
 		y++;
 		shortcut++;
 	}
@@ -71,7 +71,7 @@ Actor* PlayerAi::chooseFromInventory(Actor* owner) {
 	TCODSystem::waitForEvent(TCOD_EVENT_KEY_PRESS, &key, NULL, true);
 	if(key.vk == TCODK_CHAR) {
 		int actorIndex=key.c - 'a';
-		if(actorIndex >= 0 && actorIndex < owner->container->inventory.size()) { return owner->container->inventory.get(actorIndex); }
+		if(actorIndex >= 0 && actorIndex < owner->container->inventory.size()) { return owner->container->inventory.at(actorIndex); }
 	}
 	return NULL;
 }
@@ -81,12 +81,12 @@ void PlayerAi::handleActionKey(Actor *owner, int ascii) {
 		case 'g' : // pickup item
 		{
 		bool found = false;
-		for(Actor** i = engine.actors.begin(); i != engine.actors.end(); i++) {
+		for(auto i = engine.actors.begin(); i != engine.actors.end(); i++) {
 			Actor* actor = *i;
 			if(actor->pickable && actor->x == owner->x && actor->y == owner->y) {
 				if(actor->pickable->pick(actor,owner)) {
 					found = true;
-					engine.gui->message(TCODColor::green, "You pick up the %s.", actor->name);
+					engine.gui->message(TCODColor::green, "You pick up the %s.", actor->name.c_str());
 					break;
 				} else if(!found) {
 					found = true;
@@ -122,7 +122,7 @@ void MonsterAi::update(Actor* owner) {
 		moveCount = TRACKING_TURNS;
 	} else { moveCount--; }
 	if(moveCount > 0) {
-		engine.gui->message(TCODColor::white, "The %s threatens you!", owner->name);
+		engine.gui->message(TCODColor::white, "The %s threatens you!", owner->name.c_str());
 		moveOrAttack(owner, engine.player->x, engine.player->y);
 	}
 }

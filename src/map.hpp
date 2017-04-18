@@ -1,6 +1,11 @@
 struct Tile {
 	bool explored;
 	Tile() : explored(false) {;}
+
+	template<typename Archive>
+	void serialize(Archive & ar, const unsigned int version) {
+		ar & explored;
+	}
 };
 
 class Map : public Persistent {
@@ -10,8 +15,6 @@ public:
 	Map(int width, int height);
 	~Map();
 	void init(bool initActors);
-	void save(TCODZip& zip);
-	void load(TCODZip& zip);
 
 	void setWall(int x, int y);
 	void addMonster(int x, int y);
@@ -32,6 +35,16 @@ protected:
 
 	void dig(int x1, int y1, int x2, int y2);
 	void createRoom(bool first, int x1, int y1, int x2, int y2, bool initActors);
+
+private:
+	friend class boost::serialization::access;
+	template<class Archive>
+	void serialize(Archive & ar, const unsigned int version) {
+		ar & width;
+		ar & height;
+		ar & tiles;
+		ar & seed;
+	}
 };
 
 class BspListener : public ITCODBspCallback {

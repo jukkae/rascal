@@ -1,65 +1,22 @@
 #include "main.hpp"
 
 void Engine::save() {
+	//TODO move this logic to game loop
     if (player->destructible->isDead()) { // Permadeath
-        TCODSystem::deleteFile("savegame.zip");
+		// remove save file
     } else {
-        TCODZip zip;
-
-		zip.putString("RASCAL V0 SAVEGAME");
-
-        zip.putInt(map->width);
-        zip.putInt(map->height);
-        map->save(zip);
-		
-        player->save(zip);
-
-        zip.putInt(actors.size() - 1);
-        printf("actors: %d\n", actors.size() - 1);
-        for (Actor** it = actors.begin(); it != actors.end(); it++) {
-            if ( *it != player ) {
-                (*it)->save(zip);
-            }
-        }
-        gui->save(zip);
-        zip.saveToFile("savegame.zip");
+		// SAVE
     }
 }
 
 void Engine::load() {
     if(TCODSystem::fileExists("savegame.zip")) {
-        TCODZip zip;
-        zip.loadFromFile("savegame.zip");
-
-		char* crap = strdup(zip.getString());
-        
-		int width = zip.getInt();
-        int height = zip.getInt();
-        map = new Map(width, height);
-        map->load(zip);
-
-        player = new Actor(0, 0, 0, NULL, TCODColor::white);
-        //player->destructible = new PlayerDestructible(30, 2, "your corpse");
-        //player->attacker = new Attacker(5);
-        //player->ai = new PlayerAi();
-        //player->container = new Container(26);
-        player->load(zip);
-        actors.push(player);
-
-        int nOfActors = zip.getInt();
-        printf("actors: %d\n", nOfActors);
-        while (nOfActors > 0) {
-            Actor* a = new Actor(0, 0, 0, NULL, TCODColor::white);
-            a->load(zip);
-            actors.push(a);
-            nOfActors--;
-        }
-        gui->load(zip);
+		// load file
     } else {
-        engine.init();
+    engine.init();
     }
 } 
-
+/*
 void Actor::save(TCODZip& zip) {                                                                              
     zip.putInt(x);                                                                                            
     zip.putInt(y);                                                                                            
@@ -229,7 +186,6 @@ void Gui::save(TCODZip& zip) {
 void Gui::load(TCODZip& zip) {
     int nMsgs = zip.getInt();
     while (nMsgs > 0) {
-        const char* text = zip.getString();
         TCODColor col = zip.getColor();
         message(col, text);
         nMsgs--;
@@ -295,4 +251,4 @@ Pickable* Pickable::create(TCODZip& zip) {
     }
     pickable->load(zip);
     return pickable;
-}    
+}    */

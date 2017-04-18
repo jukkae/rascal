@@ -1,6 +1,9 @@
-#include <fstream>                                                                                            
+#include <fstream>
+#include <sstream>
 #include <boost/archive/text_oarchive.hpp>                                                                    
 #include <boost/archive/text_iarchive.hpp> 
+#include <boost/serialization/export.hpp>
+#include <boost/serialization/vector.hpp>
 
 #include "libtcod.hpp"
 class Actor;

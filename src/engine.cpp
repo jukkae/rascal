@@ -8,7 +8,7 @@ gameStatus(STARTUP), fovRadius(10), screenWidth(screenWidth), screenHeight(scree
 }
 
 Engine::~Engine() {
-	actors.clearAndDelete();
+	actors.clear(); // TODO check for memory leaks
 	delete map;
 	delete gui;
 }
@@ -19,7 +19,7 @@ void Engine::init() {
 	player->attacker = new Attacker(5);
 	player->ai = new PlayerAi();
 	player->container = new Container(26);
-	actors.push(player);
+	actors.push_back(player);
 	map = new Map(80, 43);
 	map->init(true);
 	gui->message(TCODColor::green, "Welcome to year 20XXAD, you strange rascal!\nPrepare to fight or die!");
@@ -31,7 +31,7 @@ void Engine::update() {
 	TCODSystem::checkForEvent(TCOD_EVENT_KEY_PRESS|TCOD_EVENT_MOUSE, &lastKey, &mouse);
 	player->update();
 	if(gameStatus == NEW_TURN) {
-		for(Actor** iterator = actors.begin(); iterator != actors.end(); iterator++) {
+		for(auto iterator = actors.begin(); iterator != actors.end(); iterator++) {
 			Actor* actor = *iterator;
 			if (actor != player) actor->update();
 		}
@@ -41,7 +41,7 @@ void Engine::update() {
 void Engine::render() {
 	TCODConsole::root->clear();
 	map->render();
-	for (Actor **iterator=actors.begin(); iterator != actors.end(); iterator++) {
+	for (auto iterator=actors.begin(); iterator != actors.end(); iterator++) {
 		Actor *actor = *iterator;
 		if(actor != player && map->isInFov(actor->x, actor->y)) {
 			actor->render();
@@ -53,14 +53,15 @@ void Engine::render() {
 }
 
 void Engine::sendToBack(Actor* actor) {
-	actors.remove(actor);
-	actors.insertBefore(actor, 0);
+	//actors.remove(actor); TODO check below is correct
+	actors.erase(std::remove(actors.begin(), actors.end(), actor), actors.end());
+	actors.insert(actors.begin(), actor);
 }
 
 Actor* Engine::getClosestMonster(int x, int y, float range) const {
 	Actor *closest = NULL;
 	float bestDistance = 1E6f; // TODO float max
-	for (Actor** i = actors.begin(); i != actors.end(); i++) {
+	for (auto i = actors.begin(); i != actors.end(); i++) {
 		Actor* actor = *i;
 		if(actor != player && actor->destructible && !actor->destructible->isDead()) {
 			float distance = actor->getDistance(x,y);
@@ -74,7 +75,7 @@ Actor* Engine::getClosestMonster(int x, int y, float range) const {
 }
 
 Actor* Engine::getActor(int x, int y) const { // TODO actually, should be getLiveActor or something like that
-	for(Actor** i = actors.begin(); i != actors.end(); i++) {
+	for(auto i = actors.begin(); i != actors.end(); i++) {
 		Actor* actor = *i;
 		if(actor->x == x && actor->y == y && actor->destructible && !actor->destructible->isDead()) return actor;
 	}

@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "main.hpp"
 
-Destructible::Destructible(float maxHp, float defense, const char* corpseName) :
+Destructible::Destructible(float maxHp, float defense, std::string corpseName) :
 	maxHp(maxHp), hp(maxHp), defense(defense), corpseName(corpseName) {;}
 
 float Destructible::takeDamage(Actor* owner, float damage) {
@@ -31,16 +31,16 @@ void Destructible::die(Actor *owner) {
 	engine.sendToBack(owner);
 }
 
-MonsterDestructible::MonsterDestructible(float maxHp, float defense, const char* corpseName) :
+MonsterDestructible::MonsterDestructible(float maxHp, float defense, std::string corpseName) :
 	Destructible(maxHp, defense, corpseName) {;}
 
 void MonsterDestructible::die(Actor* owner) {
-	engine.gui->message(TCODColor::lightGrey, "%s is dead!", owner->name);
+	engine.gui->message(TCODColor::lightGrey, "%s is dead!", owner->name.c_str());
 	Destructible::die(owner);
 }
 
 
-PlayerDestructible::PlayerDestructible(float maxHp, float defense, const char* corpseName) :
+PlayerDestructible::PlayerDestructible(float maxHp, float defense, std::string corpseName) :
 	Destructible(maxHp, defense, corpseName) {;}
 
 void PlayerDestructible::die(Actor* owner) {

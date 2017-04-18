@@ -33,13 +33,13 @@ void Map::addMonster(int x, int y) {
 		orc->destructible = new MonsterDestructible(10, 0, "dead punk");
 		orc->attacker = new Attacker(3);
 		orc->ai = new MonsterAi();
-		engine.actors.push(orc);
+		engine.actors.push_back(orc);
 	} else {
 		Actor *troll = new Actor(x, y, 'H', "fighter", TCODColor::darkerGreen);
 		troll->destructible = new MonsterDestructible(16, 1, "fighter carcass");
 		troll->attacker = new Attacker(4);
 		troll->ai = new MonsterAi();
-		engine.actors.push(troll);
+		engine.actors.push_back(troll);
 	}
 }
 
@@ -49,22 +49,22 @@ void Map::addItem(int x, int y) {
 		Actor* stimpak = new Actor(x, y, '!', "stimpak", TCODColor::violet);
 		stimpak->blocks = false;
 		stimpak->pickable = new Healer(4);
-		engine.actors.push(stimpak);
+		engine.actors.push_back(stimpak);
 	} else if(r < 80) {
 		Actor* blasterBoltDevice = new Actor(x, y, '?', "blaster bolt device", TCODColor::lightYellow);
 		blasterBoltDevice->blocks = false;
 		blasterBoltDevice->pickable = new BlasterBolt(5, 20);
-		engine.actors.push(blasterBoltDevice);
+		engine.actors.push_back(blasterBoltDevice);
 	} else if(r < 90) {
 		Actor* fragGrenade = new Actor(x, y, '?', "fragmentation grenade", TCODColor::lightGreen);
 		fragGrenade->blocks = false;
 		fragGrenade->pickable = new FragmentationGrenade(3, 12);
-		engine.actors.push(fragGrenade);
+		engine.actors.push_back(fragGrenade);
 	} else {
 		Actor* confusor = new Actor(x, y, '?', "confusor", TCODColor::lightBlue);
 		confusor->blocks = false;
 		confusor->pickable = new Confusor(10, 8);
-		engine.actors.push(confusor);
+		engine.actors.push_back(confusor);
 	}
 }
 
@@ -74,7 +74,7 @@ bool Map::isWall(int x, int y) const {
 
 bool Map::canWalk(int x, int y) const {
 	if(isWall(x, y)) return false;
-	for(Actor** iterator = engine.actors.begin(); iterator != engine.actors.end(); iterator++) {
+	for(auto iterator = engine.actors.begin(); iterator != engine.actors.end(); iterator++) {
 		Actor* actor = *iterator;
 		if(actor->blocks && actor->x == x && actor->y == y) {
 			return false;

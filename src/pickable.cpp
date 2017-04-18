@@ -2,7 +2,8 @@
 
 bool Pickable::pick(Actor* owner, Actor* wearer) {
 	if(wearer->container && wearer->container->add(owner)) {
-		engine.actors.remove(owner);
+		//engine.actors.remove(owner);
+		engine.actors.erase(std::remove(engine.actors.begin(), engine.actors.end(), owner), engine.actors.end());
 		return true;
 	}
 	return false;
@@ -20,10 +21,10 @@ bool Pickable::use(Actor* owner, Actor* wearer) {
 void Pickable::drop(Actor* owner, Actor* wearer) {
 	if(wearer->container) {
 		wearer->container->remove(owner);
-		engine.actors.push(owner);
+		engine.actors.push_back(owner);
 		owner->x = wearer->x;
 		owner->y = wearer->y;
-		engine.gui->message(TCODColor::lightGrey, "%s drops a %s.", wearer->name, owner->name);
+		engine.gui->message(TCODColor::lightGrey, "%s drops a %s.", wearer->name.c_str(), owner->name.c_str());
 	}
 }
 
@@ -45,7 +46,7 @@ bool BlasterBolt::use(Actor* owner, Actor* wearer) {
 		engine.gui->message(TCODColor::lightGrey, "Zark! No enemy close enough to blast!");
 		return false;
 	}
-	engine.gui->message(TCODColor::lightBlue, "A lighting bolt strikes the %s with a loud thunder!\nThe damage is %g hit points.", closestMonster->name, damage);
+	engine.gui->message(TCODColor::lightBlue, "A lighting bolt strikes the %s with a loud thunder!\nThe damage is %g hit points.", closestMonster->name.c_str(), damage);
 	closestMonster->destructible->takeDamage(closestMonster, damage);
 	return Pickable::use(owner, wearer);
 }
@@ -57,10 +58,10 @@ bool FragmentationGrenade::use(Actor* owner, Actor* wearer) {
 	int x, y;
 	if(!engine.pickTile(&x, &y)) { return false; }
 	engine.gui->message(TCODColor::orange,"The grenade explodes, harming everything within %g tiles!", range);
-	for(Actor** it = engine.actors.begin(); it != engine.actors.end(); it++) {
+	for(auto it = engine.actors.begin(); it != engine.actors.end(); it++) {
 		Actor* actor = *it;
 		if(actor->destructible && !actor->destructible->isDead() && actor->getDistance(x, y) <= range) {
-			engine.gui->message(TCODColor::orange,"The %s gets hit by shrapnel for %g hit points.", actor->name,damage);
+			engine.gui->message(TCODColor::orange,"The %s gets hit by shrapnel for %g hit points.", actor->name.c_str(),damage);
 			actor->destructible->takeDamage(actor, damage);
 		}
 	}
@@ -77,6 +78,6 @@ bool Confusor::use(Actor* owner, Actor* wearer) {
 	if(!actor) { return false; }
 	Ai* confAi = new ConfusedMonsterAi(turns, actor->ai);
 	actor->ai = confAi;
-	engine.gui->message(TCODColor::lightGreen,"The eyes of the %s look empty,\nas he starts to stumble around!", actor->name);
+	engine.gui->message(TCODColor::lightGreen,"The eyes of the %s look empty,\nas he starts to stumble around!", actor->name.c_str());
 	return Pickable::use(owner,wearer);
 }

@@ -2,22 +2,34 @@ class Gui : public Persistent {
 public:
 	Gui();
 	~Gui();
-	void save(TCODZip& zip);
-	void load(TCODZip& zip);
 
 	void render();
-	void message(const TCODColor &col, const char* text, ...);
+	void message(const TCODColor &col, std::string text, ...);
 
 protected:
 	TCODConsole* con;
 	struct Message {
-		char* text;
+		std::string text;
 		TCODColor col;
-		Message(const char* text, const TCODColor& col);
-		~Message();
-	};
-	TCODList<Message*> log;
 
-	void renderBar(int x, int y, int width, const char* name, float value, float maxValue, const TCODColor& barColor, const TCODColor& backColor);
+		Message(std::string text, const TCODColor& col);
+		~Message();
+
+		template<typename Archive>
+		void serialize(Archive & ar, const unsigned int version) {
+			ar & text;
+			ar & col;
+		}
+	};
+	std::vector<Message*> log;
+
+	void renderBar(int x, int y, int width, std::string name, float value, float maxValue, const TCODColor& barColor, const TCODColor& backColor);
 	void renderMouseLook();
+
+private:
+	friend class boost::serialization::access;
+	template<class Archive>
+	void serialize(Archive & ar, const unsigned int version) {
+		//ar & log; TODO get this working!
+	}
 };

@@ -3,9 +3,9 @@ public:
 	float maxHp;
 	float hp;
 	float defense;
-	const char* corpseName;
+	std::string corpseName;
 	
-	Destructible(float maxHp, float defense, const char *corpseName);
+	Destructible(float maxHp = 0, float defense = 0, std::string corpseName = "corpse");
 	virtual ~Destructible() {};
 
 	inline bool isDead() { return hp <= 0; }
@@ -13,25 +13,46 @@ public:
 	float heal(float amount);
 	virtual void die(Actor *owner);
 
-	void save(TCODZip& zip);
-	void load(TCODZip& zip);
 	static Destructible* create(TCODZip& zip);
 protected:
 	enum DestructibleType {
 		MONSTER, PLAYER
 	};
+private:
+	friend class boost::serialization::access;
+	template<class Archive>
+	void serialize(Archive & ar, const unsigned int version) {
+		ar & maxHp;
+		ar & hp;
+		ar & defense;
+		ar & corpseName;
+	}
 };
 
 class MonsterDestructible : public Destructible {
 public :
-	MonsterDestructible(float maxHp, float defense, const char *corpseName);
+	MonsterDestructible(float maxHp = 0, float defense = 0, std::string corpseName = "corpse");
 	void die(Actor *owner);
-	void save(TCODZip& zip);
+private:
+	friend class boost::serialization::access;
+	template<class Archive>
+	void serialize(Archive & ar, const unsigned int version) {
+		ar & boost::serialization::base_object<Destructible>(*this);
+	}
 };
 
 class PlayerDestructible : public Destructible {
 public :
-	PlayerDestructible(float maxHp, float defense, const char *corpseName);
+	PlayerDestructible(float maxHp = 0, float defense = 0, std::string corpseName = "your corpse");
 	void die(Actor *owner);
-	void save(TCODZip& zip);
+private:
+	friend class boost::serialization::access;
+	template<class Archive>
+	void serialize(Archive & ar, const unsigned int version) {
+		ar & boost::serialization::base_object<Destructible>(*this);
+	}
 };
+
+//BOOST_CLASS_EXPORT_GUID(Destructible, "Destructible")
+//BOOST_CLASS_EXPORT_GUID(MonsterDestructible, "MonsterDestructible")
+//BOOST_CLASS_EXPORT_GUID(PlayerDestructible, "PlayerDestructible")

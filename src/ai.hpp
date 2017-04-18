@@ -3,20 +3,20 @@ public:
 	virtual void update(Actor* owner) = 0;
 	virtual ~Ai() {};
 	static Ai* create (TCODZip& zip);
-
-	virtual void save(TCODZip& zip) = 0;
-	virtual void load(TCODZip& zip) = 0;
 protected :
 	enum AiType {
 		MONSTER, CONFUSED_MONSTER, PLAYER
 	};
+private:
+	friend class boost::serialization::access;
+	template<class Archive>
+	void serialize(Archive & ar, const unsigned int version) {
+	}
 };
 
 class PlayerAi : public Ai {
 public:
 	void update(Actor* owner);
-	void save(TCODZip& zip);
-	void load(TCODZip& zip);
 
 protected:
 	bool moveOrAttack(Actor* owner, int targetX, int targetY);
@@ -24,28 +24,44 @@ protected:
 
 private:
 	void handleActionKey(Actor* owner, int ascii);
+
+	friend class boost::serialization::access;
+	template<class Archive>
+	void serialize(Archive & ar, const unsigned int version) {
+	}
 };
 
 class MonsterAi : public Ai {
 public:
 	void update(Actor* owner);
-	void save(TCODZip& zip);
-	void load(TCODZip& zip);
 
 protected:
 	int moveCount;
 
 	void moveOrAttack(Actor* owner, int targetX, int targetY);
+
+private:
+	friend class boost::serialization::access;
+	template<class Archive>
+	void serialize(Archive & ar, const unsigned int version) {
+		ar & moveCount;
+	}
 };
 
 class ConfusedMonsterAi : public Ai {
 public:
 	ConfusedMonsterAi(int turns, Ai* oldAi);
 	void update(Actor* owner);
-	void save(TCODZip& zip);
-	void load(TCODZip& zip);
 
 protected:
 	int turns;
 	Ai* oldAi;
+
+private:
+	friend class boost::serialization::access;
+	template<class Archive>
+	void serialize(Archive & ar, const unsigned int version) {
+		ar & turns;
+		ar & oldAi;
+	}
 };
