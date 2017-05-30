@@ -37,6 +37,7 @@ private:
 	friend class boost::serialization::access;
 	template<class Archive>
 	void serialize(Archive & ar, const unsigned int version) {
+		ar.template register_type<Destructible>();
 		ar & boost::serialization::base_object<Destructible>(*this);
 	}
 };
@@ -49,10 +50,7 @@ private:
 	friend class boost::serialization::access;
 	template<class Archive>
 	void serialize(Archive & ar, const unsigned int version) {
+		ar.template register_type<Destructible>();
 		ar & boost::serialization::base_object<Destructible>(*this);
 	}
 };
-
-//BOOST_CLASS_EXPORT_GUID(Destructible, "Destructible")
-//BOOST_CLASS_EXPORT_GUID(MonsterDestructible, "MonsterDestructible")
-//BOOST_CLASS_EXPORT_GUID(PlayerDestructible, "PlayerDestructible")

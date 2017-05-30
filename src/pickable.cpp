@@ -1,5 +1,10 @@
 #include "main.hpp"
 
+BOOST_CLASS_EXPORT(Healer)
+BOOST_CLASS_EXPORT(BlasterBolt)
+BOOST_CLASS_EXPORT(FragmentationGrenade)
+BOOST_CLASS_EXPORT(Confusor)
+
 bool Pickable::pick(Actor* owner, Actor* wearer) {
 	if(wearer->container && wearer->container->add(owner)) {
 		//engine.actors.remove(owner);

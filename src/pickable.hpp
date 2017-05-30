@@ -27,6 +27,7 @@ private:
     friend class boost::serialization::access;
     template<class Archive>
     void serialize(Archive & ar, const unsigned int version) {
+		ar.template register_type<Pickable>();
 		ar & boost::serialization::base_object<Pickable>(*this);
 		ar & amount;
     }
@@ -42,6 +43,7 @@ private:
     friend class boost::serialization::access;
     template<class Archive>
     void serialize(Archive & ar, const unsigned int version) {
+		ar.template register_type<Pickable>();
 		ar & boost::serialization::base_object<Pickable>(*this);
 		ar & range;
 		ar & damage;
@@ -56,6 +58,7 @@ private:
     friend class boost::serialization::access;
     template<class Archive>
     void serialize(Archive & ar, const unsigned int version) {
+		ar.template register_type<Pickable>();
 		ar & boost::serialization::base_object<BlasterBolt>(*this);
     }
 };
@@ -70,14 +73,9 @@ private:
     friend class boost::serialization::access;
     template<class Archive>
     void serialize(Archive & ar, const unsigned int version) {
+		ar.template register_type<Pickable>();
 		ar & boost::serialization::base_object<Pickable>(*this);
 		ar & turns;
 		ar & range;
     }
 };
-
-//BOOST_CLASS_EXPORT_GUID(Pickable, "Pickable")
-//BOOST_CLASS_EXPORT_GUID(Healer, "Healer")
-//BOOST_CLASS_EXPORT_GUID(BlasterBolt, "BlasterBolt")
-//BOOST_CLASS_EXPORT_GUID(FragmentationGrenade, "FragmentationGrenade")
-//BOOST_CLASS_EXPORT_GUID(Confusor, "Confusor")

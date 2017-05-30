@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include "main.hpp"
 
+BOOST_CLASS_EXPORT(MonsterDestructible)
+BOOST_CLASS_EXPORT(PlayerDestructible)
+
 Destructible::Destructible(float maxHp, float defense, std::string corpseName) :
 	maxHp(maxHp), hp(maxHp), defense(defense), corpseName(corpseName) {;}
 
