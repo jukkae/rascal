@@ -1,10 +1,5 @@
 #include "main.hpp"
 
-BOOST_CLASS_EXPORT(Healer)
-BOOST_CLASS_EXPORT(BlasterBolt)
-BOOST_CLASS_EXPORT(FragmentationGrenade)
-BOOST_CLASS_EXPORT(Confusor)
-
 bool Pickable::pick(Actor* owner, Actor* wearer) {
 	if(wearer->container && wearer->container->add(owner)) {
 		//engine.actors.remove(owner);
@@ -86,3 +81,17 @@ bool Confusor::use(Actor* owner, Actor* wearer) {
 	engine.gui->message(TCODColor::lightGreen,"The eyes of the %s look empty,\nas he starts to stumble around!", actor->name.c_str());
 	return Pickable::use(owner,wearer);
 }
+
+template void Healer::serialize(boost::archive::text_iarchive& arch, const unsigned int version);
+template void Healer::serialize(boost::archive::text_oarchive& arch, const unsigned int version);
+template void BlasterBolt::serialize(boost::archive::text_iarchive& arch, const unsigned int version);
+template void BlasterBolt::serialize(boost::archive::text_oarchive& arch, const unsigned int version);
+template void FragmentationGrenade::serialize(boost::archive::text_iarchive& arch, const unsigned int version);
+template void FragmentationGrenade::serialize(boost::archive::text_oarchive& arch, const unsigned int version);
+template void Confusor::serialize(boost::archive::text_iarchive& arch, const unsigned int version);
+template void Confusor::serialize(boost::archive::text_oarchive& arch, const unsigned int version);
+
+BOOST_CLASS_EXPORT_IMPLEMENT(Healer)
+BOOST_CLASS_EXPORT_IMPLEMENT(BlasterBolt)
+BOOST_CLASS_EXPORT_IMPLEMENT(FragmentationGrenade)
+BOOST_CLASS_EXPORT_IMPLEMENT(Confusor)

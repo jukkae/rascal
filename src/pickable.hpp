@@ -1,4 +1,4 @@
-class Pickable : public Persistent {
+class Pickable {
 public:
 	bool pick(Actor* owner, Actor* wearer);
 	virtual bool use(Actor* owner, Actor* wearer);
@@ -28,7 +28,8 @@ private:
     template<class Archive>
     void serialize(Archive & ar, const unsigned int version) {
 		ar.template register_type<Pickable>();
-		ar & boost::serialization::base_object<Pickable>(*this);
+		//ar & boost::serialization::base_object<Pickable>(*this);
+		ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(Pickable);
 		ar & amount;
     }
 };
@@ -44,7 +45,8 @@ private:
     template<class Archive>
     void serialize(Archive & ar, const unsigned int version) {
 		ar.template register_type<Pickable>();
-		ar & boost::serialization::base_object<Pickable>(*this);
+		//ar & boost::serialization::base_object<Pickable>(*this);
+		ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(Pickable);
 		ar & range;
 		ar & damage;
     }
@@ -59,7 +61,8 @@ private:
     template<class Archive>
     void serialize(Archive & ar, const unsigned int version) {
 		ar.template register_type<Pickable>();
-		ar & boost::serialization::base_object<BlasterBolt>(*this);
+		//ar & boost::serialization::base_object<BlasterBolt>(*this);
+		ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(Pickable);
     }
 };
 
@@ -74,8 +77,14 @@ private:
     template<class Archive>
     void serialize(Archive & ar, const unsigned int version) {
 		ar.template register_type<Pickable>();
-		ar & boost::serialization::base_object<Pickable>(*this);
+		//ar & boost::serialization::base_object<Pickable>(*this);
+		ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(Pickable);
 		ar & turns;
 		ar & range;
     }
 };
+
+BOOST_CLASS_EXPORT_KEY(Healer)
+BOOST_CLASS_EXPORT_KEY(BlasterBolt)
+BOOST_CLASS_EXPORT_KEY(FragmentationGrenade)
+BOOST_CLASS_EXPORT_KEY(Confusor)

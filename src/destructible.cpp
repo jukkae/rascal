@@ -1,9 +1,6 @@
 #include <stdio.h>
 #include "main.hpp"
 
-BOOST_CLASS_EXPORT(MonsterDestructible)
-BOOST_CLASS_EXPORT(PlayerDestructible)
-
 Destructible::Destructible(float maxHp, float defense, std::string corpseName) :
 	maxHp(maxHp), hp(maxHp), defense(defense), corpseName(corpseName) {;}
 
@@ -42,7 +39,6 @@ void MonsterDestructible::die(Actor* owner) {
 	Destructible::die(owner);
 }
 
-
 PlayerDestructible::PlayerDestructible(float maxHp, float defense, std::string corpseName) :
 	Destructible(maxHp, defense, corpseName) {;}
 
@@ -51,3 +47,11 @@ void PlayerDestructible::die(Actor* owner) {
 	Destructible::die(owner);
 	engine.gameStatus = Engine::DEFEAT;
 }
+
+template void PlayerDestructible::serialize(boost::archive::text_iarchive& arch, const unsigned int version);
+template void PlayerDestructible::serialize(boost::archive::text_oarchive& arch, const unsigned int version);
+template void MonsterDestructible::serialize(boost::archive::text_iarchive& arch, const unsigned int version);
+template void MonsterDestructible::serialize(boost::archive::text_oarchive& arch, const unsigned int version);
+
+BOOST_CLASS_EXPORT_IMPLEMENT(MonsterDestructible)
+BOOST_CLASS_EXPORT_IMPLEMENT(PlayerDestructible)

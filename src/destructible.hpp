@@ -1,4 +1,4 @@
-class Destructible : public Persistent {
+class Destructible {
 public:
 	float maxHp;
 	float hp;
@@ -38,7 +38,8 @@ private:
 	template<class Archive>
 	void serialize(Archive & ar, const unsigned int version) {
 		ar.template register_type<Destructible>();
-		ar & boost::serialization::base_object<Destructible>(*this);
+		//ar & boost::serialization::base_object<Destructible>(*this);
+		ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(Destructible);
 	}
 };
 
@@ -51,6 +52,10 @@ private:
 	template<class Archive>
 	void serialize(Archive & ar, const unsigned int version) {
 		ar.template register_type<Destructible>();
-		ar & boost::serialization::base_object<Destructible>(*this);
+		//ar & boost::serialization::base_object<Destructible>(*this);
+		ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(Destructible);
 	}
 };
+
+BOOST_CLASS_EXPORT_KEY(MonsterDestructible)
+BOOST_CLASS_EXPORT_KEY(PlayerDestructible)

@@ -13,7 +13,7 @@ void Engine::load() {
     if(TCODSystem::fileExists("savegame.zip")) {
 		// load file
     } else {
-    engine.init();
+		engine.init();
     }
 } 
 /*

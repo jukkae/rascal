@@ -8,7 +8,7 @@ struct Tile {
 	}
 };
 
-class Map : public Persistent {
+class Map {
 public:
 	int width, height;
 

@@ -172,3 +172,4 @@ void ConfusedMonsterAi::update(Actor* owner) {
 		delete this;
 	}
 }
+
