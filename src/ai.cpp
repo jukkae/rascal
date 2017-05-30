@@ -173,3 +173,13 @@ void ConfusedMonsterAi::update(Actor* owner) {
 	}
 }
 
+template void PlayerAi::serialize(boost::archive::text_iarchive& arch, const unsigned int version);
+template void PlayerAi::serialize(boost::archive::text_oarchive& arch, const unsigned int version);
+template void MonsterAi::serialize(boost::archive::text_iarchive& arch, const unsigned int version);
+template void MonsterAi::serialize(boost::archive::text_oarchive& arch, const unsigned int version);
+template void ConfusedMonsterAi::serialize(boost::archive::text_iarchive& arch, const unsigned int version);
+template void ConfusedMonsterAi::serialize(boost::archive::text_oarchive& arch, const unsigned int version);
+
+BOOST_CLASS_EXPORT_IMPLEMENT(PlayerAi)
+BOOST_CLASS_EXPORT_IMPLEMENT(MonsterAi)
+BOOST_CLASS_EXPORT_IMPLEMENT(ConfusedMonsterAi)
