@@ -28,7 +28,7 @@ private:
 		ar & blocks; // works on save
 		ar & attacker; // works on save
 		ar & destructible; // works on save
-		ar & ai; // TODO crashes
+		ar & ai; // works on save
 		ar & pickable; // works on save
 		ar & container; // works on save
     }   

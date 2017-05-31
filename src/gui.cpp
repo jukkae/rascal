@@ -24,7 +24,8 @@ void Gui::render() {
 	for(auto i = log.begin(); i != log.end(); i++) {
 		Message *msg = *i;
 		con->setDefaultForeground(msg->col * colCoef);
-		con->print(MSG_X, y, msg->text.c_str());
+		std::cout << msg->text << "\n"; // TODO with this line we get "there's a (null) here" messages
+		con->print(MSG_X, y, msg->text.c_str()); // TODO this crashes on any new messages!
 		y++;
 		if(colCoef < 1.0f) {
 			colCoef += 0.3f;
@@ -79,16 +80,22 @@ Gui::Message::~Message() {
 }
 
 void Gui::message(const TCODColor& col, std::string text, ...) {
+	std::cout << "\nNew message\n";
 	// TODO clean all this up
+	// TODO AND FIX THIS CAUSE THIS DOES NOT SEEM TO WORK
 	// build the text
 	va_list ap;
 	std::string buf = "";
+	char dest[1024*16]; // TODO YEAH ITS CRAP BUT IT DO WORK EH
 	va_start(ap, text);
+	std::cout << "\n\nVSPRINT\n\n";
+	vsnprintf(dest, 1024*16, text.c_str(), ap);
 	//vsprintf(buf, text, ap);
-	std::cout << buf << text << ap;
+	std::cout << dest << "\n";
+	// std::cout << buf << text << ap; // old version debug print
 	va_end(ap);
 	//std::string lineBegin = buf;
-	std::istringstream iss (text);
+	std::istringstream iss (dest);
 	std::string line;
 	while (std::getline(iss, line, '\n')) { // TODO make sure this logic works
 		// make room for the new message

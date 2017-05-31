@@ -42,7 +42,7 @@ private:
 	void serialize(Archive & ar, const unsigned int version) {
 		ar & width;
 		ar & height;
-		ar & tiles;
+		ar & tiles; // TODO this only serializes the first tile, no?
 		ar & seed;
 	}
 };
