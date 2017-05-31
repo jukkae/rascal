@@ -150,6 +150,7 @@ void MonsterAi::moveOrAttack(Actor* owner, int targetX, int targetY) {
 }
 
 ConfusedMonsterAi::ConfusedMonsterAi(int turns, Ai* oldAi): turns(turns), oldAi(oldAi) {;}
+ConfusedMonsterAi::ConfusedMonsterAi(): turns(0), oldAi(NULL) {;} // TODO dirty hack
 
 void ConfusedMonsterAi::update(Actor* owner) {
 	TCODRandom* rng = TCODRandom::getInstance();
@@ -173,13 +174,14 @@ void ConfusedMonsterAi::update(Actor* owner) {
 	}
 }
 
-template void PlayerAi::serialize(boost::archive::text_iarchive& arch, const unsigned int version);
-template void PlayerAi::serialize(boost::archive::text_oarchive& arch, const unsigned int version);
-template void MonsterAi::serialize(boost::archive::text_iarchive& arch, const unsigned int version);
-template void MonsterAi::serialize(boost::archive::text_oarchive& arch, const unsigned int version);
-template void ConfusedMonsterAi::serialize(boost::archive::text_iarchive& arch, const unsigned int version);
-template void ConfusedMonsterAi::serialize(boost::archive::text_oarchive& arch, const unsigned int version);
+// TODO these don't seem necessary at all
+//template void PlayerAi::serialize(boost::archive::text_iarchive& arch, const unsigned int version);
+//template void PlayerAi::serialize(boost::archive::text_oarchive& arch, const unsigned int version);
+//template void MonsterAi::serialize(boost::archive::text_iarchive& arch, const unsigned int version);
+//template void MonsterAi::serialize(boost::archive::text_oarchive& arch, const unsigned int version);
+//template void ConfusedMonsterAi::serialize(boost::archive::text_iarchive& arch, const unsigned int version);
+//template void ConfusedMonsterAi::serialize(boost::archive::text_oarchive& arch, const unsigned int version);
 
-BOOST_CLASS_EXPORT_IMPLEMENT(PlayerAi)
-BOOST_CLASS_EXPORT_IMPLEMENT(MonsterAi)
-BOOST_CLASS_EXPORT_IMPLEMENT(ConfusedMonsterAi)
+BOOST_CLASS_EXPORT(PlayerAi)
+BOOST_CLASS_EXPORT(MonsterAi)
+BOOST_CLASS_EXPORT(ConfusedMonsterAi)
