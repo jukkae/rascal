@@ -7,6 +7,11 @@ Actor::Actor(int x, int y, int ch, std::string name, const TCODColor& col) :
 	blocks(true), attacker(NULL), destructible(NULL), ai(NULL),
 	pickable(NULL), container(NULL) {;}
 
+Actor::Actor() : // TODO dirty hack
+	x(0), y(0), ch(1), col(TCODColor::white), name(""),
+	blocks(true), attacker(NULL), destructible(NULL), ai(NULL),
+	pickable(NULL), container(NULL) {;}
+
 Actor::~Actor() {
 	if(attacker)     delete attacker;
 	if(destructible) delete destructible;

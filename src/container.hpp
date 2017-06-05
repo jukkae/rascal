@@ -4,6 +4,7 @@ public:
 	std::vector<Actor*> inventory;
 
 	Container(int size);
+	Container(); // TODO dirty hack
 	~Container();
 	bool add(Actor* actor);
 	void remove(Actor* actor);

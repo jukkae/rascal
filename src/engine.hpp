@@ -34,10 +34,10 @@ private:
     void serialize(Archive & ar, const unsigned int version)
     {
         // Simply list all the fields to be serialized/deserialized.
-        ar & map; // works
+        ar & map;
 		ar & player;
 		ar & actors;
-		ar & gui; // works?? or at least doesn't crash
+		ar & gui;
     }
 };
 

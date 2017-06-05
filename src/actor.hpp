@@ -12,6 +12,7 @@ public:
 	Container* container;
 
 	Actor(int x, int y, int ch, std::string name, const TCODColor& col);
+	Actor(); // TODO dirty hack
 	~Actor();
 	void update();
 	void render() const;

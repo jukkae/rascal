@@ -1,6 +1,7 @@
 #include "main.hpp"
 
 Container::Container(int size) : size(size) {;}
+Container::Container() : size(0) {;} // TODO dirty hack
 
 Container::~Container() {
 	//inventory.clearAndDelete(); // Delete all actors in container

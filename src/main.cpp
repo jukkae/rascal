@@ -5,8 +5,10 @@ std::string file = "save.txt";
 Engine engine(80, 50);
 
 int main() {
-	if(TCODSystem::fileExists("savegame.zip")) {
-		// TODO implement loading
+	if(TCODSystem::fileExists("save.txt")) {
+		std::ifstream ifs(file);
+		boost::archive::text_iarchive ia(ifs);
+		ia >> engine;
 	}
 	else {
 		engine.init();
@@ -20,9 +22,11 @@ int main() {
 	//engine.save();
 
 	// TODO implement permadeath
+	// Save starts
 	std::ofstream ofs(file);
 	boost::archive::text_oarchive oa(ofs);
 	oa << engine;   
+	// Save ends
 
 	return 0;
 }

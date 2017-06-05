@@ -13,6 +13,7 @@ protected:
 		TCODColor col;
 
 		Message(std::string text, const TCODColor& col);
+		Message(); // TODO dirty hack
 		~Message();
 
 		template<typename Archive>

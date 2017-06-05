@@ -3,6 +3,7 @@ public :
 	float power;
 
 	Attacker(float power);
+	Attacker(); // TODO dirty hack
 	void attack(Actor* owner, Actor* target);
 
 private:

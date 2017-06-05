@@ -10,12 +10,19 @@ Map::Map(int width, int height) : width(width), height(height) {
 	seed = TCODRandom::getInstance()->getInt(0, 0x7FFFFFFF);
 }
 
+Map::Map() : width(1), height(1) 
+{ 
+	seed = TCODRandom::getInstance()->getInt(0, 0x7FFFFFFF); 
+	init(false); // TODO uhh
+} // TODO dirty hack
+
 Map::~Map() {
 	delete [] tiles;
 	delete map;
 }
 
 void Map::init(bool initActors) {
+	std::cout << "\n\nwidth: " << width << "\n\n";
 	rng = new TCODRandom(seed);
 	tiles = new Tile[width * height];
 	map = new TCODMap(width, height);

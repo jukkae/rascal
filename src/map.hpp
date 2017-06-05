@@ -13,6 +13,7 @@ public:
 	int width, height;
 
 	Map(int width, int height);
+	Map(); // TODO dirty hack
 	~Map();
 	void init(bool initActors);
 
@@ -27,7 +28,7 @@ public:
 	void render() const;
 
 protected:
-	Tile* tiles;
+	Tile* tiles; // TODO i believe this should be changed to native stl container
 	TCODMap* map;
 	long seed;
 	TCODRandom* rng;
