@@ -1,2 +1,4 @@
 *.sav
 .DS_Store
+rascal
+rascal.dSYM
