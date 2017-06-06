@@ -84,7 +84,6 @@ Gui::Message::~Message() {
 }
 
 void Gui::message(const TCODColor& col, std::string text, ...) {
-	std::cout << "\nNew message\n";
 	// TODO clean all this up
 	// build the text
 	va_list ap;
@@ -92,7 +91,6 @@ void Gui::message(const TCODColor& col, std::string text, ...) {
 	char dest[1024*16]; // TODO YEAH ITS CRAP BUT IT DO WORK EH
 	va_start(ap, text);
 	vsnprintf(dest, 1024*16, text.c_str(), ap);
-	std::cout << dest << "\n";
 	va_end(ap);
 	std::istringstream iss (dest);
 	std::string line;
