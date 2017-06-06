@@ -17,14 +17,16 @@ Map::Map() : width(1), height(1)
 } // TODO dirty hack
 
 Map::~Map() {
-	delete [] tiles;
+	// delete [] tiles; no longer needed, i assume, with the vector?
 	delete map;
 }
 
 void Map::init(bool initActors) {
-	std::cout << "\n\nwidth: " << width << "\n\n";
 	rng = new TCODRandom(seed);
-	tiles = new Tile[width * height];
+	//std::vector<Tile> tiles;
+	for(int i = 0; i < width*height; i++) {
+		tiles.push_back(Tile());
+	}
 	map = new TCODMap(width, height);
 	TCODBsp bsp(0, 0, width, height);
 	// 8: recursion level,
@@ -94,7 +96,8 @@ bool Map::isExplored(int x, int y) const {
 	return tiles[x + y*width].explored;
 }
 
-bool Map::isInFov(int x, int y) const {
+// TODO this WAS marked as const!!!
+bool Map::isInFov(int x, int y) {
 	if(x < 0 || x >= width || y < 0 || y >= height) return false;
 	if(map->isInFov(x, y)) {
 		tiles[x + y*width].explored = true;
@@ -107,7 +110,8 @@ void Map::computeFov() {
 	map->computeFov(engine.player->x, engine.player->y, engine.fovRadius);
 }
 
-void Map::render() const {
+// TODO was marked as const
+void Map::render() {
 	static const TCODColor darkWall   (0, 0, 100);
 	static const TCODColor darkGround (50, 50, 150);
 	static const TCODColor lightWall  (130, 110, 50);

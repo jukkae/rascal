@@ -22,13 +22,13 @@ public:
 	void addItem(int x, int y);
 	bool isWall(int x, int y) const;
 	bool canWalk(int x, int y) const;
-	bool isInFov(int x, int y) const;
+	bool isInFov(int x, int y); // TODO was marked as const
 	bool isExplored(int x, int y) const;
 	void computeFov();
-	void render() const;
+	void render(); // TODO was marked as const
 
 protected:
-	Tile* tiles; // TODO i believe this should be changed to native stl container
+	std::vector<Tile> tiles;
 	TCODMap* map;
 	long seed;
 	TCODRandom* rng;
@@ -43,7 +43,7 @@ private:
 	void serialize(Archive & ar, const unsigned int version) {
 		ar & width;
 		ar & height;
-		ar & tiles; // TODO this only serializes the first tile, no?
+		ar & tiles;
 		ar & seed;
 	}
 };
