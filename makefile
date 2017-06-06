@@ -10,6 +10,7 @@ compile-debug:
 clean:
 	rm -f rascal
 	rm -f save.txt
+	rm -rf rascal.dSYM
 
 run:
 	./rascal
