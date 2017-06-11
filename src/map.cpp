@@ -8,13 +8,8 @@ static const int MAX_ROOM_ITEMS = 2;
 
 Map::Map(int width, int height) : width(width), height(height) {
 	seed = TCODRandom::getInstance()->getInt(0, 0x7FFFFFFF);
+	seed = 1; // TODO just for debugging - 1 guaranteed to be a random integer chosen by a fair dice roll
 }
-
-Map::Map() : width(1), height(1) 
-{ 
-	seed = TCODRandom::getInstance()->getInt(0, 0x7FFFFFFF); 
-	init(false); // TODO uhh
-} // TODO dirty hack
 
 Map::~Map() {
 	// delete [] tiles; no longer needed, i assume, with the vector?
