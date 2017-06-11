@@ -22,16 +22,16 @@ private:
 	friend class boost::serialization::access;                                                                
     template<class Archive>                                                                                   
     void serialize(Archive & ar, const unsigned int version) {                                                
-        ar & x; // works on save
-		ar & y; // works on save
+        ar & x;
+		ar & y;
 		ar & ch;
-		ar & col; // works on save
-		ar & name; // works on save
-		ar & blocks; // works on save
-		ar & attacker; // works on save
-		ar & destructible; // works on save
-		ar & ai; // works on save
-		ar & pickable; // works on save
-		ar & container; // works on save
+		ar & col;
+		ar & name;
+		ar & blocks;
+		ar & attacker;
+		ar & destructible;
+		ar & ai;
+		ar & pickable;
+		ar & container;
     }   
 };

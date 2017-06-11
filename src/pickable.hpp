@@ -28,7 +28,6 @@ private:
     template<class Archive>
     void serialize(Archive & ar, const unsigned int version) {
 		ar.template register_type<Pickable>();
-		//ar & boost::serialization::base_object<Pickable>(*this);
 		ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(Pickable);
 		ar & amount;
     }
@@ -45,7 +44,6 @@ private:
     template<class Archive>
     void serialize(Archive & ar, const unsigned int version) {
 		ar.template register_type<Pickable>();
-		//ar & boost::serialization::base_object<Pickable>(*this);
 		ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(Pickable);
 		ar & range;
 		ar & damage;
@@ -61,7 +59,6 @@ private:
     template<class Archive>
     void serialize(Archive & ar, const unsigned int version) {
 		ar.template register_type<Pickable>();
-		//ar & boost::serialization::base_object<BlasterBolt>(*this);
 		ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(Pickable);
     }
 };
@@ -77,7 +74,6 @@ private:
     template<class Archive>
     void serialize(Archive & ar, const unsigned int version) {
 		ar.template register_type<Pickable>();
-		//ar & boost::serialization::base_object<Pickable>(*this);
 		ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(Pickable);
 		ar & turns;
 		ar & range;

@@ -174,14 +174,6 @@ void ConfusedMonsterAi::update(Actor* owner) {
 	}
 }
 
-// TODO these don't seem necessary at all
-//template void PlayerAi::serialize(boost::archive::text_iarchive& arch, const unsigned int version);
-//template void PlayerAi::serialize(boost::archive::text_oarchive& arch, const unsigned int version);
-//template void MonsterAi::serialize(boost::archive::text_iarchive& arch, const unsigned int version);
-//template void MonsterAi::serialize(boost::archive::text_oarchive& arch, const unsigned int version);
-//template void ConfusedMonsterAi::serialize(boost::archive::text_iarchive& arch, const unsigned int version);
-//template void ConfusedMonsterAi::serialize(boost::archive::text_oarchive& arch, const unsigned int version);
-
 BOOST_CLASS_EXPORT(PlayerAi)
 BOOST_CLASS_EXPORT(MonsterAi)
 BOOST_CLASS_EXPORT(ConfusedMonsterAi)

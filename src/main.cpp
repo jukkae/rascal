@@ -13,13 +13,11 @@ int main() {
 	else {
 		engine.init();
 	}
-	//engine.load();
 	while(!TCODConsole::isWindowClosed()) {
 		engine.update();
 		engine.render();
 		TCODConsole::flush();
 	}
-	//engine.save();
 
 	// TODO implement permadeath
 	// Save starts

@@ -20,7 +20,6 @@ Map::~Map() {
 
 void Map::init(bool initActors) {
 	rng = new TCODRandom(seed);
-	//std::vector<Tile> tiles;
 	for(int i = 0; i < width*height; i++) {
 		tiles.push_back(Tile());
 	}
@@ -93,7 +92,7 @@ bool Map::isExplored(int x, int y) const {
 	return tiles[x + y*width].explored;
 }
 
-// TODO this WAS marked as const!!!
+// TODO was marked as const!!!
 bool Map::isInFov(int x, int y) {
 	if(x < 0 || x >= width || y < 0 || y >= height) return false;
 	if(map->isInFov(x, y)) {

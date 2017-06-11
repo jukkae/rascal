@@ -14,7 +14,6 @@ private:
 
 	}
 };
-//BOOST_SERIALIZATION_ASSUME_ABSTRACT(Ai) TODO this won't work
 
 class PlayerAi : public Ai {
 public:
@@ -30,7 +29,6 @@ private:
 	friend class boost::serialization::access;
 	template<class Archive>
 	void serialize(Archive & ar, const unsigned int version) {
-		//ar.template register_type<Ai>();
 		ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(Ai);
 	}
 };
@@ -48,7 +46,6 @@ private:
 	friend class boost::serialization::access;
 	template<class Archive>
 	void serialize(Archive & ar, const unsigned int version) {
-		//ar.template register_type<Ai>();
 		ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(Ai);
 		ar & moveCount;
 	}
@@ -68,13 +65,8 @@ private:
 	friend class boost::serialization::access;
 	template<class Archive>
 	void serialize(Archive & ar, const unsigned int version) {
-		//ar.template register_type<Ai>();
 		ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(Ai);
 		ar & turns;
 		ar & oldAi;
 	}
 };
-
-//BOOST_CLASS_EXPORT_KEY(PlayerAi)
-//BOOST_CLASS_EXPORT_KEY(MonsterAi)
-//BOOST_CLASS_EXPORT_KEY(ConfusedMonsterAi)
