@@ -13,6 +13,7 @@ public:
 	int width, height;
 
 	Map(int width, int height);
+	Map(int width, int height, long seed);
 	~Map();
 	void init(bool initActors);
 
@@ -38,8 +39,6 @@ protected:
 	void createRoom(bool first, int x1, int y1, int x2, int y2, bool initActors);
 
 private:
-	// TODO it seems that serialize must be split into save and load to allow for non-default constructor
-	// see: https://stackoverflow.com/questions/6734814/boostserialization-reconstruction-loading
 	friend class boost::serialization::access;
 	template<class Archive>
 	void serialize(Archive & ar, const unsigned int version) {
@@ -53,7 +52,6 @@ private:
 namespace boost { namespace serialization {
 template<class Archive>
 	inline void save_construct_data (Archive & ar, const Map* m, const unsigned int file_version) {
-		// TODO
 		ar << m->width;
 		ar << m->height;
 		ar << m-> tiles;
@@ -62,17 +60,18 @@ template<class Archive>
 
 template<class Archive>
 	inline void load_construct_data (Archive & ar, Map* m, const unsigned int file_version) {
-		// TODO
 		int width;
 		int height;
 		std::vector<Tile> tiles;
 		long seed;
+
 		ar >> width;
 		ar >> height;
 		ar >> tiles;
 		ar >> seed;
 
-		::new(m)Map(width, height);
+		//TODO there's still something a bit off with saving and loading the random seed, idk what exactly
+		::new(m)Map(width, height, seed);
 		m->init(false);
 	}
 }} // namespace boost::serialization

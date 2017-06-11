@@ -24,6 +24,7 @@ private:
     void serialize(Archive & ar, const unsigned int version) {                                                
         ar & x; // works on save
 		ar & y; // works on save
+		ar & ch;
 		ar & col; // works on save
 		ar & name; // works on save
 		ar & blocks; // works on save

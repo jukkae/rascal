@@ -8,7 +8,9 @@ static const int MAX_ROOM_ITEMS = 2;
 
 Map::Map(int width, int height) : width(width), height(height) {
 	seed = TCODRandom::getInstance()->getInt(0, 0x7FFFFFFF);
-	seed = 1; // TODO just for debugging - 1 guaranteed to be a random integer chosen by a fair dice roll
+}
+
+Map::Map(int width, int height, long seed) : width(width), height(height), seed(seed) {
 }
 
 Map::~Map() {
