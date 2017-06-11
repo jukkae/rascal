@@ -3,3 +3,9 @@
 rascal
 rascal.dSYM
 save.txt
+include/
+lib/
+*.a
+*.la
+*.lai
+*.dylib
