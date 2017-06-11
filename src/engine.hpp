@@ -20,8 +20,6 @@ public:
 	Engine(int screenWidth, int screenHeight);
 	~Engine();
 	void init();
-	void save();
-	void load();
 	void update();
 	void render();
 	void sendToBack(Actor* actor);
@@ -33,7 +31,6 @@ private:
     template<class Archive>
     void serialize(Archive & ar, const unsigned int version)
     {
-        // Simply list all the fields to be serialized/deserialized.
         ar & map;
 		ar & player;
 		ar & actors;
