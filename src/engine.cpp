@@ -36,6 +36,11 @@ void Engine::update() {
 	if(gameStatus == STARTUP) map->computeFov();
 	gameStatus = IDLE;
 	TCODSystem::checkForEvent(TCOD_EVENT_KEY_PRESS|TCOD_EVENT_MOUSE, &lastKey, &mouse);
+	if(lastKey.vk == TCODK_ESCAPE) {
+		//save();
+		//load();
+		//TODO this must be done in main
+	}
 	player->update();
 	if(gameStatus == NEW_TURN) {
 		for(auto iterator = actors.begin(); iterator != actors.end(); iterator++) {
