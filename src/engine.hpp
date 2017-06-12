@@ -20,6 +20,7 @@ public:
 	Engine(int screenWidth, int screenHeight);
 	~Engine();
 	void init();
+	void term();
 	void update();
 	void render();
 	void sendToBack(Actor* actor);

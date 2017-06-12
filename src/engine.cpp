@@ -8,9 +8,15 @@ gameStatus(STARTUP), fovRadius(10), screenWidth(screenWidth), screenHeight(scree
 }
 
 Engine::~Engine() {
-	actors.clear(); // TODO check for memory leaks
-	delete map;
+	term();
 	delete gui;
+}
+
+// clear actors, map and log
+void Engine::term() {
+	actors.clear(); // TODO check for memory leaks
+	if(map) delete map;
+	gui->clear();
 }
 
 void Engine::init() {
@@ -23,6 +29,7 @@ void Engine::init() {
 	map = new Map(80, 43);
 	map->init(true);
 	gui->message(TCODColor::green, "Welcome to year 20XXAD, you strange rascal!\nPrepare to fight or die!");
+	gameStatus = STARTUP;
 }
 
 void Engine::update() {

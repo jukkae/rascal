@@ -1,10 +1,29 @@
+class Menu {
+public:
+	enum MenuItemCode { NONE, NEW_GAME, CONTINUE, EXIT };
+	~Menu();
+	void clear();
+	void addItem(MenuItemCode code, const std::string label);
+	MenuItemCode pick();
+
+protected:
+	struct MenuItem {
+		MenuItemCode code;
+		std::string label;
+	};
+	std::vector<MenuItem*> items;
+};
+
 class Gui {
 public:
 	Gui();
 	~Gui();
+	void clear();
 
 	void render();
 	void message(const TCODColor &col, std::string text, ...);
+
+	Menu menu;
 
 protected:
 	TCODConsole* con;

@@ -12,6 +12,9 @@ Gui::Gui() {
 
 Gui::~Gui() {
 	delete con;
+}
+
+void Gui::clear() {
 	log.clear();
 }
 
@@ -108,4 +111,56 @@ void Gui::message(const TCODColor& col, std::string text, ...) {
 		// go to next line
 		//lineBegin = lineEnd + 1;
 	} //while (lineEnd);
+}
+
+Menu::~Menu() {
+	clear();
+}
+
+void Menu::clear() {
+	items.clear(); // TODO free memory
+}
+
+void Menu::addItem(MenuItemCode code, const std::string label) {
+	MenuItem* item = new MenuItem();
+	item->code = code;
+	item->label = label;
+	items.push_back(item);
+}
+
+Menu::MenuItemCode Menu::pick() {
+	static TCODImage img("menu_background1.png");
+	int selectedItem = 0;
+	while(!TCODConsole::isWindowClosed()) {
+		img.blit2x(TCODConsole::root, 0, 0);
+		int currentItem = 0;
+		for (auto it = items.begin(); it != items.end(); it++) {
+			if (currentItem == selectedItem) {
+				TCODConsole::root->setDefaultForeground(TCODColor::lighterOrange);
+			} else {
+			   TCODConsole::root->setDefaultForeground(TCODColor::lightGrey);
+			}
+			TCODConsole::root->print(10, 10+currentItem*3, (*it)->label.c_str());
+			currentItem++;
+		}
+		TCODConsole::flush();
+		TCOD_key_t key;
+		TCODSystem::checkForEvent(TCOD_EVENT_KEY_PRESS, &key, NULL);
+		switch (key.vk) {
+			case TCODK_UP:
+				selectedItem--;
+				if (selectedItem < 0) {
+					selectedItem = items.size() - 1;
+				}
+				break;
+			case TCODK_DOWN: 
+				selectedItem = (selectedItem + 1) % items.size(); 
+				break;
+			case TCODK_ENTER:
+				return items.at(selectedItem)->code;
+			default:
+				break;
+		}
+	}
+	return NONE;
 }
