@@ -5,7 +5,36 @@ std::string file = "save.txt";
 Engine engine(80, 50);
 
 int main() {
-	// Show menu on startup
+	showMenu();
+
+	while(!TCODConsole::isWindowClosed()) {
+		// TODO implement permadeath
+		// TODO open game menu by pressing esc
+		// TCODSystem::checkForEvent(TCOD_EVENT_KEY_PRESS|TCOD_EVENT_MOUSE, &lastKey, &mouse);
+		// if(lastKey.vk == TCODK_ESCAPE)
+		// { save & load engine and reshow menu }
+		engine.update();
+		engine.render();
+		TCODConsole::flush();
+	}
+
+	save();
+	return 0;
+}
+
+void load() {
+	std::ifstream ifs(file);
+	boost::archive::text_iarchive ia(ifs);
+	ia >> engine;
+}
+
+void save() {
+	std::ofstream ofs(file);
+	boost::archive::text_oarchive oa(ofs);
+	oa << engine;
+}
+
+void showMenu() {
 	engine.gui->menu.clear();
 	engine.gui->menu.addItem(Menu::NEW_GAME, "New game");
 	if(TCODSystem::fileExists(file.c_str())) {
@@ -21,29 +50,7 @@ int main() {
 		engine.init();
 	} else {
 		engine.term();
-		std::ifstream ifs(file);
-		boost::archive::text_iarchive ia(ifs);
-		ia >> engine;
+		load();
 		engine.gameStatus = Engine::STARTUP;
 	}
-
-	// Main game loop
-	while(!TCODConsole::isWindowClosed()) {
-		// TODO open game menu by pressing esc
-		// TCODSystem::checkForEvent(TCOD_EVENT_KEY_PRESS|TCOD_EVENT_MOUSE, &lastKey, &mouse);
-		// if(lastKey.vk == TCODK_ESCAPE)
-		// { save & load engine and reshow menu }
-		engine.update();
-		engine.render();
-		TCODConsole::flush();
-	}
-
-	// TODO implement permadeath
-	// Save starts
-	std::ofstream ofs(file);
-	boost::archive::text_oarchive oa(ofs);
-	oa << engine;   
-	// Save ends
-
-	return 0;
 }

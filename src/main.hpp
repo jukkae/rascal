@@ -17,3 +17,7 @@ class Actor;
 #include "map.hpp"
 #include "gui.hpp"
 #include "engine.hpp"
+
+void save();
+void load();
+void showMenu();
