@@ -8,11 +8,17 @@ int main() {
 	showMenu();
 
 	while(!TCODConsole::isWindowClosed()) {
-		// TODO implement permadeath
-		// TODO open game menu by pressing esc
-		// TCODSystem::checkForEvent(TCOD_EVENT_KEY_PRESS|TCOD_EVENT_MOUSE, &lastKey, &mouse);
-		// if(lastKey.vk == TCODK_ESCAPE)
-		// { save & load engine and reshow menu }
+		TCOD_key_t lastKey;
+		TCOD_mouse_t mouse;
+		TCODSystem::checkForEvent(TCOD_EVENT_KEY_PRESS|TCOD_EVENT_MOUSE, &lastKey, &mouse);
+		if(lastKey.vk == TCODK_ESCAPE) {
+			save();
+			load();
+			showMenu();
+		} else {
+			engine.lastKey.vk = lastKey.vk;
+			engine.mouse = mouse;
+		}
 		engine.update();
 		engine.render();
 		TCODConsole::flush();
