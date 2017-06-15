@@ -2,7 +2,7 @@
 #include "main.hpp"
 
 Engine::Engine(int screenWidth, int screenHeight) :
-gameStatus(STARTUP), fovRadius(10), screenWidth(screenWidth), screenHeight(screenHeight) {
+gameStatus(STARTUP), fovRadius(10), screenWidth(screenWidth), screenHeight(screenHeight), level(1) {
 	TCODConsole::initRoot(80, 50, "Rascal", false);
 	gui = new Gui();
 }
@@ -26,6 +26,10 @@ void Engine::init() {
 	player->ai = new PlayerAi();
 	player->container = new Container(26);
 	actors.push_back(player);
+	stairs = new Actor(0, 0, '>', "stairs", TCODColor::white);
+	stairs->blocks = false;
+	stairs->fovOnly = false;
+	actors.push_back(stairs);
 	map = new Map(80, 43);
 	map->init(true);
 	gui->message(TCODColor::green, "Welcome to year 20XXAD, you strange rascal!\nPrepare to fight or die!");
@@ -49,13 +53,31 @@ void Engine::render() {
 	map->render();
 	for (auto iterator=actors.begin(); iterator != actors.end(); iterator++) {
 		Actor *actor = *iterator;
-		if(actor != player && map->isInFov(actor->x, actor->y)) {
+		if(actor != player && ((!actor->fovOnly && map->isExplored(actor->x, actor->y)) || map->isInFov(actor->x, actor->y))) {
 			actor->render();
 		}
 	}
 	player->render();
 	gui->render();
 	TCODConsole::root->print(1, screenHeight-2, "HP : %d/%d", (int) player->destructible->hp, (int) player->destructible->maxHp);
+}
+
+// TODO sometimes segfaults
+void Engine::nextLevel() {
+	level++;
+	gui->message(TCODColor::lightViolet,"You take a moment to rest, and recover your strength.");
+	player->destructible->heal(player->destructible->maxHp/2);
+	gui->message(TCODColor::red,"After a rare moment of peace, you descend\ndeeper into the heart of the dungeon...");
+	delete map;
+	for (auto it=actors.begin(); it!=actors.end(); it++) {
+       if (*it != player && *it != stairs) {
+           delete *it;
+           it = actors.erase(it);
+       }
+   }
+   map = new Map(80,43);
+   map->init(true);
+   gameStatus = STARTUP;
 }
 
 void Engine::sendToBack(Actor* actor) {

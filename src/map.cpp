@@ -142,6 +142,8 @@ void Map::createRoom(bool first, int x1, int y1, int x2, int y2, bool initActors
 		// put the player in the first room
 		engine.player->x=(x1 + x2)/2;
 		engine.player->y=(y1 + y2)/2;
+		engine.stairs->x = (x1 + x2) / 2 + 1; // TODO debugging
+		engine.stairs->y = (y1 + y2) / 2;
 	} else {
 		int nMonsters = rng->getInt(0, MAX_ROOM_MONSTERS);
 		while(nMonsters > 0) {
@@ -159,6 +161,9 @@ void Map::createRoom(bool first, int x1, int y1, int x2, int y2, bool initActors
 		if(canWalk(x,y)) { addItem(x,y); }
 		nItems--;
 	}
+	// TODO crappy way of putting stairs to the last room but whatever for now
+	// engine.stairs->x = (x1 + x2) / 2;
+	// engine.stairs->y = (y1 + y2) / 2;
 }
 
 BspListener::BspListener(Map &map, TCODRandom* rng) : roomNum(0), map(map), rng(rng) {;}

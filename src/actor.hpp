@@ -5,6 +5,7 @@ public:
 	TCODColor col; // color
 	std::string name;
 	bool blocks; // does it block movement?
+	bool fovOnly; // visible only when in fov?
 	Attacker* attacker;
 	Destructible* destructible;
 	Ai* ai; // self-updating
@@ -28,6 +29,7 @@ private:
 		ar & col;
 		ar & name;
 		ar & blocks;
+		ar & fovOnly;
 		ar & attacker;
 		ar & destructible;
 		ar & ai;

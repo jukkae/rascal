@@ -9,6 +9,7 @@ public:
 	} gameStatus;
 	std::vector<Actor*> actors;
 	Actor* player;
+	Actor* stairs;
 	Map* map;
 	int fovRadius;
 	int screenWidth;
@@ -16,6 +17,7 @@ public:
 	Gui* gui;
 	TCOD_key_t lastKey;
 	TCOD_mouse_t mouse;
+	int level;
 
 	Engine(int screenWidth, int screenHeight);
 	~Engine();
@@ -24,6 +26,7 @@ public:
 	void update();
 	void render();
 	void sendToBack(Actor* actor);
+	void nextLevel();
 	Actor* getClosestMonster(int x, int y, float range) const;
 	Actor* getActor(int x, int y) const;
 	bool pickTile(int* x, int* y, float maxRange = 0.0f);
@@ -32,7 +35,9 @@ private:
     template<class Archive>
     void serialize(Archive & ar, const unsigned int version)
     {
+		ar & level;
         ar & map;
+		ar & stairs;
 		ar & player;
 		ar & actors;
 		ar & gui;

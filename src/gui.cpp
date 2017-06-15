@@ -34,6 +34,8 @@ void Gui::render() {
 		}
 	}
 	renderMouseLook();
+	con->setDefaultForeground(TCODColor::white);
+	con->print(3, 3, "Dungeon level %d", engine.level);
 	TCODConsole::blit(con, 0, 0, engine.screenWidth, PANEL_HEIGHT, TCODConsole::root, 0, engine.screenHeight - PANEL_HEIGHT);
 }
 
