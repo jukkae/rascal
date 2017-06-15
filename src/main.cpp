@@ -16,7 +16,7 @@ int main() {
 			load();
 			showMenu();
 		} else {
-			engine.lastKey.vk = lastKey.vk;
+			engine.lastKey = lastKey;
 			engine.mouse = mouse;
 		}
 		engine.update();
