@@ -1,6 +1,6 @@
 class Menu {
 public:
-	enum MenuItemCode { NONE, NEW_GAME, CONTINUE, EXIT };
+	enum MenuItemCode { NONE, NEW_GAME, CONTINUE, EXIT, CONSTITUTION, STRENGTH, AGILITY };
 	~Menu();
 	void clear();
 	void addItem(MenuItemCode code, const std::string label);
