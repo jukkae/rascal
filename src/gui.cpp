@@ -36,6 +36,13 @@ void Gui::render() {
 	renderMouseLook();
 	con->setDefaultForeground(TCODColor::white);
 	con->print(3, 3, "Dungeon level %d", engine.level);
+	PlayerAi *ai=(PlayerAi *)engine.player->ai;
+
+	// TODO extremely ugly
+	char xpTxt[128];
+	sprintf(xpTxt, "XP(%d)", ai->xpLevel);
+	renderBar(1, 5, BAR_WIDTH, xpTxt, engine.player->destructible->xp, ai->getNextLevelXp(), TCODColor::lightViolet,TCODColor::darkerViolet);
+			  			  
 	TCODConsole::blit(con, 0, 0, engine.screenWidth, PANEL_HEIGHT, TCODConsole::root, 0, engine.screenHeight - PANEL_HEIGHT);
 }
 

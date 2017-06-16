@@ -3,9 +3,10 @@ public:
 	float maxHp;
 	float hp;
 	float defense;
+	int xp; // TODO this is both player's xp and the xp gain from killing creature
 	std::string corpseName;
 	
-	Destructible(float maxHp = 0, float defense = 0, std::string corpseName = "corpse");
+	Destructible(float maxHp = 0, float defense = 0, int xp = 0, std::string corpseName = "corpse");
 	virtual ~Destructible() {};
 
 	inline bool isDead() { return hp <= 0; }
@@ -25,13 +26,14 @@ private:
 		ar & maxHp;
 		ar & hp;
 		ar & defense;
+		ar & xp;
 		ar & corpseName;
 	}
 };
 
 class MonsterDestructible : public Destructible {
 public :
-	MonsterDestructible(float maxHp = 0, float defense = 0, std::string corpseName = "corpse");
+	MonsterDestructible(float maxHp = 0, float defense = 0, int xp = 0, std::string corpseName = "corpse");
 	void die(Actor *owner);
 private:
 	friend class boost::serialization::access;
@@ -44,7 +46,7 @@ private:
 
 class PlayerDestructible : public Destructible {
 public :
-	PlayerDestructible(float maxHp = 0, float defense = 0, std::string corpseName = "your corpse");
+	PlayerDestructible(float maxHp = 0, float defense = 0, int xp = 0, std::string corpseName = "your corpse");
 	void die(Actor *owner);
 private:
 	friend class boost::serialization::access;

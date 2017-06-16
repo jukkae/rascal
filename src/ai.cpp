@@ -3,7 +3,22 @@
 
 static const int TRACKING_TURNS = 3;
 
+PlayerAi::PlayerAi() : xpLevel(1) {}
+
+const int LEVEL_UP_BASE = 200;
+const int LEVEL_UP_FACTOR = 150;
+
+int PlayerAi::getNextLevelXp() {
+	return LEVEL_UP_BASE + xpLevel * LEVEL_UP_FACTOR;
+}
+
 void PlayerAi::update(Actor* owner) {
+	int levelUpXp = getNextLevelXp();
+	if (owner->destructible->xp >= levelUpXp) {
+		xpLevel++;
+		owner->destructible->xp -= levelUpXp;
+		engine.gui->message(TCODColor::yellow, "You've reached level %d!", xpLevel);
+	}
 	if (owner->destructible && owner->destructible->isDead()) return;
 	int dx = 0;
 	int dy = 0;

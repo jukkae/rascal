@@ -35,13 +35,13 @@ void Map::init(bool initActors) {
 void Map::addMonster(int x, int y) {
 	if(rng->getInt(0, 100) < 80) {
 		Actor* punk = new Actor(x, y, 'h', "punk", TCODColor::desaturatedGreen);
-		punk->destructible = new MonsterDestructible(10, 0, "dead punk");
+		punk->destructible = new MonsterDestructible(10, 0, 50, "dead punk");
 		punk->attacker = new Attacker(3);
 		punk->ai = new MonsterAi();
 		engine.actors.push_back(punk);
 	} else {
 		Actor *fighter = new Actor(x, y, 'H', "fighter", TCODColor::darkerGreen);
-		fighter->destructible = new MonsterDestructible(16, 1, "fighter carcass");
+		fighter->destructible = new MonsterDestructible(16, 1, 100, "fighter carcass");
 		fighter->attacker = new Attacker(4);
 		fighter->ai = new MonsterAi();
 		engine.actors.push_back(fighter);
@@ -142,8 +142,8 @@ void Map::createRoom(bool first, int x1, int y1, int x2, int y2, bool initActors
 		// put the player in the first room
 		engine.player->x=(x1 + x2)/2;
 		engine.player->y=(y1 + y2)/2;
-		engine.stairs->x = (x1 + x2) / 2 + 1; // TODO debugging
-		engine.stairs->y = (y1 + y2) / 2;
+		// engine.stairs->x = (x1 + x2) / 2 + 1; // debugging
+		// engine.stairs->y = (y1 + y2) / 2;
 	} else {
 		int nMonsters = rng->getInt(0, MAX_ROOM_MONSTERS);
 		while(nMonsters > 0) {
@@ -162,8 +162,8 @@ void Map::createRoom(bool first, int x1, int y1, int x2, int y2, bool initActors
 		nItems--;
 	}
 	// TODO crappy way of putting stairs to the last room but whatever for now
-	// engine.stairs->x = (x1 + x2) / 2;
-	// engine.stairs->y = (y1 + y2) / 2;
+	engine.stairs->x = (x1 + x2) / 2;
+	engine.stairs->y = (y1 + y2) / 2;
 }
 
 BspListener::BspListener(Map &map, TCODRandom* rng) : roomNum(0), map(map), rng(rng) {;}

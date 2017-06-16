@@ -21,7 +21,7 @@ void Engine::term() {
 
 void Engine::init() {
 	player = new Actor(40, 25, '@', "you", TCODColor::white);
-	player->destructible = new PlayerDestructible(30, 2, "your corpse");
+	player->destructible = new PlayerDestructible(30, 2, 0, "your corpse");
 	player->attacker = new Attacker(5);
 	player->ai = new PlayerAi();
 	player->container = new Container(26);

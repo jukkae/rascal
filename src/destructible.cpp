@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include "main.hpp"
 
-Destructible::Destructible(float maxHp, float defense, std::string corpseName) :
-	maxHp(maxHp), hp(maxHp), defense(defense), corpseName(corpseName) {;}
+Destructible::Destructible(float maxHp, float defense, int xp, std::string corpseName) :
+	maxHp(maxHp), hp(maxHp), defense(defense), xp(xp), corpseName(corpseName) {;}
 
 float Destructible::takeDamage(Actor* owner, float damage) {
 	damage -= defense;
@@ -31,16 +31,17 @@ void Destructible::die(Actor *owner) {
 	engine.sendToBack(owner);
 }
 
-MonsterDestructible::MonsterDestructible(float maxHp, float defense, std::string corpseName) :
-	Destructible(maxHp, defense, corpseName) {;}
+MonsterDestructible::MonsterDestructible(float maxHp, float defense, int xp, std::string corpseName) :
+	Destructible(maxHp, defense, xp, corpseName) {;}
 
 void MonsterDestructible::die(Actor* owner) {
-	engine.gui->message(TCODColor::lightGrey, "%s is dead!", owner->name.c_str());
+	engine.gui->message(TCODColor::lightGrey, "%s is dead! You gain %d xp!", owner->name.c_str(), xp);
+	engine.player->destructible->xp += xp;
 	Destructible::die(owner);
 }
 
-PlayerDestructible::PlayerDestructible(float maxHp, float defense, std::string corpseName) :
-	Destructible(maxHp, defense, corpseName) {;}
+PlayerDestructible::PlayerDestructible(float maxHp, float defense, int xp, std::string corpseName) :
+	Destructible(maxHp, defense, xp, corpseName) {;}
 
 void PlayerDestructible::die(Actor* owner) {
 	engine.gui->message(TCODColor::red, "You died!");
