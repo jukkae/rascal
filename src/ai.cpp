@@ -156,7 +156,7 @@ void PlayerAi::handleActionKey(Actor *owner, int ascii) {
 				engine.gameStatus = Engine::GameStatus::NEW_TURN;
 			}
 		} break;
-		case 'x' : // go down stairs TODO should ofc be '>'
+		case -89 : // '</>' key, damn nasty
 		{
 			if(engine.stairs->x == owner->x && engine.stairs->y == owner->y) {
 				engine.nextLevel();
