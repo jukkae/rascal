@@ -22,7 +22,7 @@ void PlayerAi::update(Actor* owner) {
 		engine.gui->menu.addItem(Menu::CONSTITUTION,"Constitution (+20HP)");
 		engine.gui->menu.addItem(Menu::STRENGTH,"Strength (+1 attack)");
 		engine.gui->menu.addItem(Menu::AGILITY,"Agility (+1 defense)");
-		Menu::MenuItemCode menuItem = engine.gui->menu.pick(/* Menu::PAUSE */);
+		Menu::MenuItemCode menuItem = engine.gui->menu.pick(Menu::DisplayMode::PAUSE);
 		switch (menuItem) {
 		case Menu::CONSTITUTION :
 			owner->destructible->maxHp += 20;

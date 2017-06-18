@@ -1,10 +1,11 @@
 class Menu {
 public:
 	enum MenuItemCode { NONE, NEW_GAME, CONTINUE, EXIT, CONSTITUTION, STRENGTH, AGILITY };
+	enum class DisplayMode { MAIN, PAUSE };
 	~Menu();
 	void clear();
 	void addItem(MenuItemCode code, const std::string label);
-	MenuItemCode pick();
+	MenuItemCode pick(DisplayMode mode = DisplayMode::MAIN);
 
 protected:
 	struct MenuItem {

@@ -137,11 +137,26 @@ void Menu::addItem(MenuItemCode code, const std::string label) {
 	items.push_back(item);
 }
 
-Menu::MenuItemCode Menu::pick() {
-	static TCODImage img("menu_background1.png");
+const int PAUSE_MENU_WIDTH = 30;
+const int PAUSE_MENU_HEIGHT = 15;
+
+Menu::MenuItemCode Menu::pick(DisplayMode mode) {
 	int selectedItem = 0;
-	while(!TCODConsole::isWindowClosed()) {
+	int menuX, menuY;
+	if(mode == DisplayMode::PAUSE) {
+		menuX = engine.screenWidth / 2 - PAUSE_MENU_WIDTH / 2;
+		menuY = engine.screenHeight / 2 - PAUSE_MENU_HEIGHT / 2;
+		TCODConsole::root->setDefaultForeground(TCODColor(200, 180, 50));
+		TCODConsole::root->printFrame(menuX, menuY, PAUSE_MENU_WIDTH, PAUSE_MENU_HEIGHT, true, TCOD_BKGND_ALPHA(70), "menu");
+		menuX += 2;
+		menuY += 3;
+	} else {
+		static TCODImage img("menu_background1.png");
 		img.blit2x(TCODConsole::root, 0, 0);
+		menuX = 10;
+		menuY = TCODConsole::root->getHeight() / 3;
+	}
+	while(!TCODConsole::isWindowClosed()) {
 		int currentItem = 0;
 		for (auto it = items.begin(); it != items.end(); it++) {
 			if (currentItem == selectedItem) {
@@ -149,7 +164,7 @@ Menu::MenuItemCode Menu::pick() {
 			} else {
 			   TCODConsole::root->setDefaultForeground(TCODColor::lightGrey);
 			}
-			TCODConsole::root->print(10, 10+currentItem*3, (*it)->label.c_str());
+			TCODConsole::root->print(menuX, menuY + currentItem * 3, (*it)->label.c_str());
 			currentItem++;
 		}
 		TCODConsole::flush();
