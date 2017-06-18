@@ -122,7 +122,7 @@ bool Engine::pickTile(int* x, int* y, float maxRange) { // TODO move to keyboard
 				}
 			}
 		}
-		TCODSystem::checkForEvent(TCOD_EVENT_KEY_PRESS | TCOD_EVENT_MOUSE, &lastKey, &mouse);
+		TCODSystem::waitForEvent(TCOD_EVENT_KEY_PRESS | TCOD_EVENT_MOUSE, &lastKey, &mouse, true);
 		if(map->isInFov(mouse.cx, mouse.cy) && (maxRange == 0 || player->getDistance(mouse.cx, mouse.cy) <= maxRange)) {
 			TCODConsole::root->setCharBackground(mouse.cx,mouse.cy,TCODColor::white);
 			if(mouse.lbutton_pressed) {
