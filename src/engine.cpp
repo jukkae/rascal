@@ -41,6 +41,7 @@ void Engine::update() {
 	if(gameStatus == GameStatus::STARTUP) map->computeFov();
 	gameStatus = GameStatus::IDLE;
 	player->update();
+	map->markExploredTiles();
 	if(gameStatus == GameStatus::NEW_TURN) {
 		for(auto iterator = actors.begin(); iterator != actors.end(); iterator++) {
 			Actor* actor = *iterator;

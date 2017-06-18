@@ -25,10 +25,12 @@ public:
 	void addItem(int x, int y);
 	bool isWall(int x, int y) const;
 	bool canWalk(int x, int y) const;
-	bool isInFov(int x, int y); // TODO was marked as const
+	bool isInFov(int x, int y) const;
+	void markAsExplored(int x, int y);
+	void markExploredTiles();
 	bool isExplored(int x, int y) const;
 	void computeFov();
-	void render(); // TODO was marked as const
+	void render() const;
 
 protected:
 	TCODMap* map;

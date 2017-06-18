@@ -93,13 +93,25 @@ bool Map::isExplored(int x, int y) const {
 }
 
 // TODO was marked as const!!!
-bool Map::isInFov(int x, int y) {
+bool Map::isInFov(int x, int y) const {
 	if(x < 0 || x >= width || y < 0 || y >= height) return false;
 	if(map->isInFov(x, y)) {
-		tiles[x + y*width].explored = true;
+		//tiles[x + y*width].explored = true;
 		return true;
 	}
 	return false;
+}
+
+void Map::markAsExplored(int x, int y) {
+	if(map->isInFov(x, y)) tiles[x + y*width].explored = true;
+}
+
+void Map::markExploredTiles() {
+	for(int x = 0; x < width; x++) {
+		for(int y = 0; y < height; y++) {
+			if(isInFov(x, y)) markAsExplored(x, y);
+		}
+	}
 }
 
 void Map::computeFov() {
@@ -107,7 +119,7 @@ void Map::computeFov() {
 }
 
 // TODO was marked as const
-void Map::render() {
+void Map::render() const {
 	static const TCODColor darkWall   (0, 0, 100);
 	static const TCODColor darkGround (50, 50, 150);
 	static const TCODColor lightWall  (130, 110, 50);
