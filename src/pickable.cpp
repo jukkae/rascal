@@ -23,7 +23,7 @@ void Pickable::drop(Actor* owner, Actor* wearer) {
 		engine.actors.push_back(owner);
 		owner->x = wearer->x;
 		owner->y = wearer->y;
-		engine.gui->message(TCODColor::lightGrey, "%s drops a %s.", wearer->name.c_str(), owner->name.c_str());
+		engine.gui.message(TCODColor::lightGrey, "%s drops a %s.", wearer->name.c_str(), owner->name.c_str());
 	}
 }
 
@@ -42,10 +42,10 @@ BlasterBolt::BlasterBolt(float range, float damage) : range(range), damage(damag
 bool BlasterBolt::use(Actor* owner, Actor* wearer) {
 	Actor* closestMonster = engine.getClosestMonster(wearer->x,wearer->y,range);
 	if(!closestMonster) {
-		engine.gui->message(TCODColor::lightGrey, "Zark! No enemy close enough to blast!");
+		engine.gui.message(TCODColor::lightGrey, "Zark! No enemy close enough to blast!");
 		return false;
 	}
-	engine.gui->message(TCODColor::lightBlue, "A lighting bolt strikes the %s with a loud thunder!\nThe damage is %g hit points.", closestMonster->name.c_str(), damage);
+	engine.gui.message(TCODColor::lightBlue, "A lighting bolt strikes the %s with a loud thunder!\nThe damage is %g hit points.", closestMonster->name.c_str(), damage);
 	closestMonster->destructible->takeDamage(closestMonster, damage);
 	return Pickable::use(owner, wearer);
 }
@@ -53,14 +53,14 @@ bool BlasterBolt::use(Actor* owner, Actor* wearer) {
 FragmentationGrenade::FragmentationGrenade (float range, float damage) : BlasterBolt(range, damage) {;}
 
 bool FragmentationGrenade::use(Actor* owner, Actor* wearer) {
-	engine.gui->message(TCODColor::cyan, "Left-click a target tile for the frag grenade,\nor right-click to cancel.");
+	engine.gui.message(TCODColor::cyan, "Left-click a target tile for the frag grenade,\nor right-click to cancel.");
 	int x, y;
 	if(!engine.pickTile(&x, &y)) { return false; }
-	engine.gui->message(TCODColor::orange,"The grenade explodes, harming everything within %g tiles!", range);
+	engine.gui.message(TCODColor::orange,"The grenade explodes, harming everything within %g tiles!", range);
 	for(auto it = engine.actors.begin(); it != engine.actors.end(); it++) {
 		Actor* actor = *it;
 		if(actor->destructible && !actor->destructible->isDead() && actor->getDistance(x, y) <= range) {
-			engine.gui->message(TCODColor::orange,"The %s gets hit by shrapnel for %g hit points.", actor->name.c_str(),damage);
+			engine.gui.message(TCODColor::orange,"The %s gets hit by shrapnel for %g hit points.", actor->name.c_str(),damage);
 			actor->destructible->takeDamage(actor, damage);
 		}
 	}
@@ -70,14 +70,14 @@ bool FragmentationGrenade::use(Actor* owner, Actor* wearer) {
 Confusor::Confusor(int turns, float range) : turns(turns), range(range) {;}
 
 bool Confusor::use(Actor* owner, Actor* wearer) {
-	engine.gui->message(TCODColor::cyan, "Left-click an enemy to confuse it,\nor right-click to cancel.");
+	engine.gui.message(TCODColor::cyan, "Left-click an enemy to confuse it,\nor right-click to cancel.");
 	int x, y;
 	if(!engine.pickTile(&x, &y)) { return false; }
 	Actor* actor = engine.getLiveActor(x, y);
 	if(!actor) { return false; }
 	Ai* confAi = new ConfusedMonsterAi(turns, actor->ai);
 	actor->ai = confAi;
-	engine.gui->message(TCODColor::lightGreen,"The eyes of the %s look empty,\nas he starts to stumble around!", actor->name.c_str());
+	engine.gui.message(TCODColor::lightGreen,"The eyes of the %s look empty,\nas he starts to stumble around!", actor->name.c_str());
 	return Pickable::use(owner,wearer);
 }
 

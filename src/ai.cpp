@@ -17,12 +17,12 @@ void PlayerAi::update(Actor* owner) {
 	if (owner->destructible->xp >= levelUpXp) {
 		xpLevel++;
 		owner->destructible->xp -= levelUpXp;
-		engine.gui->message(TCODColor::yellow, "You've reached level %d!", xpLevel);
-		engine.gui->menu.clear();
-		engine.gui->menu.addItem(Menu::MenuItemCode::CONSTITUTION,"Constitution (+20HP)");
-		engine.gui->menu.addItem(Menu::MenuItemCode::STRENGTH,"Strength (+1 attack)");
-		engine.gui->menu.addItem(Menu::MenuItemCode::AGILITY,"Agility (+1 defense)");
-		Menu::MenuItemCode menuItem = engine.gui->menu.pick(Menu::DisplayMode::PAUSE);
+		engine.gui.message(TCODColor::yellow, "You've reached level %d!", xpLevel);
+		engine.gui.menu.clear();
+		engine.gui.menu.addItem(Menu::MenuItemCode::CONSTITUTION,"Constitution (+20HP)");
+		engine.gui.menu.addItem(Menu::MenuItemCode::STRENGTH,"Strength (+1 attack)");
+		engine.gui.menu.addItem(Menu::MenuItemCode::AGILITY,"Agility (+1 defense)");
+		Menu::MenuItemCode menuItem = engine.gui.menu.pick(Menu::DisplayMode::PAUSE);
 		/* switch (menuItem) { TODO getting error: expression is not an integral constant expression
 		case Menu::MenuItemCode::CONSTITUTION :
 			owner->destructible->maxHp += 20;
@@ -81,7 +81,7 @@ bool PlayerAi::moveOrAttack(Actor* owner, int targetX, int targetY) {
 		Actor* actor = *iterator;
 		bool corpseOrItem = (actor->destructible && actor->destructible->isDead()) || actor->pickable;
 		if(corpseOrItem && actor->x == targetX && actor->y == targetY) {
-			engine.gui->message(TCODColor::lightGrey, "There's a %s here!", actor->name.c_str());
+			engine.gui.message(TCODColor::lightGrey, "There's a %s here!", actor->name.c_str());
 		}
 	}
 	owner->x = targetX;
@@ -129,15 +129,15 @@ void PlayerAi::handleActionKey(Actor *owner, int ascii) {
 			if(actor->pickable && actor->x == owner->x && actor->y == owner->y) {
 				if(actor->pickable->pick(actor,owner)) {
 					found = true;
-					engine.gui->message(TCODColor::green, "You pick up the %s.", actor->name.c_str());
+					engine.gui.message(TCODColor::green, "You pick up the %s.", actor->name.c_str());
 					break;
 				} else if(!found) {
 					found = true;
-					engine.gui->message(TCODColor::red, "Your inventory is full.");
+					engine.gui.message(TCODColor::red, "Your inventory is full.");
 				}
 			}
 		}
-		if(!found) { engine.gui->message(TCODColor::lightGrey, "There's nothing here that you can pick up."); }
+		if(!found) { engine.gui.message(TCODColor::lightGrey, "There's nothing here that you can pick up."); }
 		engine.gameStatus = Engine::GameStatus::NEW_TURN;
 		} break;
 		case 'i' : // display inventory
@@ -161,7 +161,7 @@ void PlayerAi::handleActionKey(Actor *owner, int ascii) {
 			if(engine.stairs->x == owner->x && engine.stairs->y == owner->y) {
 				engine.nextLevel();
 			} else {
-				engine.gui->message(TCODColor::lightGrey, "There are no stairs here.");
+				engine.gui.message(TCODColor::lightGrey, "There are no stairs here.");
 			}
 		} break;
 	}
@@ -173,7 +173,7 @@ void MonsterAi::update(Actor* owner) {
 		moveCount = TRACKING_TURNS;
 	} else { moveCount--; }
 	if(moveCount > 0) {
-		engine.gui->message(TCODColor::white, "The %s threatens you!", owner->name.c_str());
+		engine.gui.message(TCODColor::white, "The %s threatens you!", owner->name.c_str());
 		moveOrAttack(owner, engine.player->x, engine.player->y);
 	}
 }

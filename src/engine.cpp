@@ -5,19 +5,17 @@
 Engine::Engine(int screenWidth, int screenHeight) :
 gameStatus(GameStatus::STARTUP), fovRadius(10), screenWidth(screenWidth), screenHeight(screenHeight), level(1) {
 	TCODConsole::initRoot(80, 50, "Rascal", false);
-	gui = new Gui();
 }
 
 Engine::~Engine() {
 	term();
-	delete gui;
 }
 
 // clear actors, map and log
 void Engine::term() {
 	actors.clear(); // TODO check for memory leaks
 	if(map) delete map;
-	gui->clear();
+	gui.clear();
 }
 
 void Engine::init() {
@@ -33,7 +31,7 @@ void Engine::init() {
 	actors.push_back(stairs);
 	map = new Map(80, 43);
 	map->init(true);
-	gui->message(TCODColor::green, "Welcome to year 20XXAD, you strange rascal!\nPrepare to fight or die!");
+	gui.message(TCODColor::green, "Welcome to year 20XXAD, you strange rascal!\nPrepare to fight or die!");
 	gameStatus = GameStatus::STARTUP;
 }
 
@@ -60,15 +58,15 @@ void Engine::render() {
 		}
 	}
 	player->render();
-	gui->render();
+	gui.render();
 }
 
 // TODO sometimes segfaults
 void Engine::nextLevel() {
 	level++;
-	gui->message(TCODColor::lightViolet,"You take a moment to rest, and recover your strength.");
+	gui.message(TCODColor::lightViolet,"You take a moment to rest, and recover your strength.");
 	player->destructible->heal(player->destructible->maxHp/2);
-	gui->message(TCODColor::red,"After a rare moment of peace, you descend\ndeeper into the heart of the dungeon...");
+	gui.message(TCODColor::red,"After a rare moment of peace, you descend\ndeeper into the heart of the dungeon...");
 	delete map;
 	for (auto it=actors.begin(); it!=actors.end(); it++) {
        if (*it != player && *it != stairs) {

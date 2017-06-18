@@ -35,7 +35,7 @@ MonsterDestructible::MonsterDestructible(float maxHp, float defense, int xp, std
 	Destructible(maxHp, defense, xp, corpseName) {;}
 
 void MonsterDestructible::die(Actor* owner) {
-	engine.gui->message(TCODColor::lightGrey, "%s is dead! You gain %d xp!", owner->name.c_str(), xp);
+	engine.gui.message(TCODColor::lightGrey, "%s is dead! You gain %d xp!", owner->name.c_str(), xp);
 	engine.player->destructible->xp += xp;
 	Destructible::die(owner);
 }
@@ -44,7 +44,7 @@ PlayerDestructible::PlayerDestructible(float maxHp, float defense, int xp, std::
 	Destructible(maxHp, defense, xp, corpseName) {;}
 
 void PlayerDestructible::die(Actor* owner) {
-	engine.gui->message(TCODColor::red, "You died!");
+	engine.gui.message(TCODColor::red, "You died!");
 	Destructible::die(owner);
 	engine.gameStatus = Engine::GameStatus::DEFEAT;
 }
