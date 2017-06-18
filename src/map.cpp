@@ -170,15 +170,14 @@ void Map::createRoom(bool first, int x1, int y1, int x2, int y2, bool initActors
 		if(canWalk(x,y)) { addItem(x,y); }
 		nItems--;
 	}
-	// TODO crappy way of putting stairs to the last room but whatever for now
 	engine.stairs->x = (x1 + x2) / 2;
 	engine.stairs->y = (y1 + y2) / 2;
 }
 
 BspListener::BspListener(Map &map, TCODRandom* rng) : roomNum(0), map(map), rng(rng) {;}
 
-bool BspListener::visitNode(TCODBsp* node, void* userData) { // TODO move to directly using map->rng instead of having pointer to it
-	bool initActors = (bool) userData; // TODO yep it's dirty
+bool BspListener::visitNode(TCODBsp* node, void* userData) {
+	bool initActors = (bool) userData;
 	if(node->isLeaf()) {
 		int x;
 		int y;
