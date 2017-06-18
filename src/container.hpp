@@ -1,6 +1,6 @@
 class Container {
 public:
-	int size; // max number of actors in container, 0 = unlimited - TODO think later about weight etc
+	int size; // max number of actors in container, 0 = unlimited
 	std::vector<Actor*> inventory;
 
 	Container(int size);
