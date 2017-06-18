@@ -1,6 +1,6 @@
 class Menu {
 public:
-	enum MenuItemCode { NONE, NEW_GAME, CONTINUE, EXIT, CONSTITUTION, STRENGTH, AGILITY };
+	enum class MenuItemCode { NONE, NEW_GAME, CONTINUE, EXIT, CONSTITUTION, STRENGTH, AGILITY };
 	enum class DisplayMode { MAIN, PAUSE };
 	~Menu();
 	void clear();

@@ -186,5 +186,5 @@ Menu::MenuItemCode Menu::pick(DisplayMode mode) {
 				break;
 		}
 	}
-	return NONE;
+	return MenuItemCode::NONE;
 }

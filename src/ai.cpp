@@ -19,22 +19,32 @@ void PlayerAi::update(Actor* owner) {
 		owner->destructible->xp -= levelUpXp;
 		engine.gui->message(TCODColor::yellow, "You've reached level %d!", xpLevel);
 		engine.gui->menu.clear();
-		engine.gui->menu.addItem(Menu::CONSTITUTION,"Constitution (+20HP)");
-		engine.gui->menu.addItem(Menu::STRENGTH,"Strength (+1 attack)");
-		engine.gui->menu.addItem(Menu::AGILITY,"Agility (+1 defense)");
+		engine.gui->menu.addItem(Menu::MenuItemCode::CONSTITUTION,"Constitution (+20HP)");
+		engine.gui->menu.addItem(Menu::MenuItemCode::STRENGTH,"Strength (+1 attack)");
+		engine.gui->menu.addItem(Menu::MenuItemCode::AGILITY,"Agility (+1 defense)");
 		Menu::MenuItemCode menuItem = engine.gui->menu.pick(Menu::DisplayMode::PAUSE);
-		switch (menuItem) {
-		case Menu::CONSTITUTION :
+		/* switch (menuItem) { TODO getting error: expression is not an integral constant expression
+		case Menu::MenuItemCode::CONSTITUTION :
 			owner->destructible->maxHp += 20;
 			owner->destructible->hp += 20;
 			break;
-		case Menu::STRENGTH :
+		case Menu::MenuItemCode::STRENGTH :
 			owner->attacker->power += 1;
 			break;
-		case Menu::AGILITY :
+		case Menu::MenuItemCode::AGILITY :
 			owner->destructible->defense += 1;
 			break;
 		default: break;
+		} */
+		if(menuItem == Menu::MenuItemCode::CONSTITUTION) {
+			owner->destructible->maxHp += 20;
+			owner->destructible->hp += 20;
+		}
+		if(menuItem == Menu::MenuItemCode::STRENGTH) {
+			owner->attacker->power += 1;
+		}
+		if(menuItem == Menu::MenuItemCode::AGILITY) {
+			owner->destructible->defense += 1;
 		}
 	}
 	if (owner->destructible && owner->destructible->isDead()) return;

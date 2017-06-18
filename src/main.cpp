@@ -42,16 +42,16 @@ void save() {
 
 void showMenu() {
 	engine.gui->menu.clear();
-	engine.gui->menu.addItem(Menu::NEW_GAME, "New game");
+	engine.gui->menu.addItem(Menu::MenuItemCode::NEW_GAME, "New game");
 	if(TCODSystem::fileExists(file.c_str())) {
-		engine.gui->menu.addItem(Menu::CONTINUE, "Continue");
+		engine.gui->menu.addItem(Menu::MenuItemCode::CONTINUE, "Continue");
 	}
-	engine.gui->menu.addItem(Menu::EXIT, "Exit");
+	engine.gui->menu.addItem(Menu::MenuItemCode::EXIT, "Exit");
 	Menu::MenuItemCode menuItem = engine.gui->menu.pick();
 
-	if (menuItem == Menu::EXIT || menuItem == Menu::NONE) {
+	if (menuItem == Menu::MenuItemCode::EXIT || menuItem == Menu::MenuItemCode::NONE) {
 		exit(0);
-	} else if (menuItem == Menu::NEW_GAME) {
+	} else if (menuItem == Menu::MenuItemCode::NEW_GAME) {
 		engine.term();
 		engine.init();
 	} else {
