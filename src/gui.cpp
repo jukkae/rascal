@@ -25,9 +25,9 @@ void Gui::render() {
 	int y = 1;
 	float colCoef = 0.4f;
 	for(auto i = log.begin(); i != log.end(); i++) {
-		Message *msg = *i;
-		con->setDefaultForeground(msg->col * colCoef);
-		con->print(MSG_X, y, msg->text.c_str());
+		Message msg = *i;
+		con->setDefaultForeground(msg.col * colCoef);
+		con->print(MSG_X, y, msg.text.c_str());
 		y++;
 		if(colCoef < 1.0f) {
 			colCoef += 0.3f;
@@ -104,7 +104,7 @@ void Gui::message(const TCODColor& col, std::string text, ...) {
 		if(log.size() == MSG_HEIGHT) {
 			log.erase(log.begin());
 		}
-		Message* msg = new Message(line, col);
+		Message msg(line, col);
 		log.push_back(msg);
 	}
 }
