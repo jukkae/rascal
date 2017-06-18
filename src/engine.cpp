@@ -1,5 +1,6 @@
 #include "libtcod.hpp"
 #include "main.hpp"
+#include <cfloat>
 
 Engine::Engine(int screenWidth, int screenHeight) :
 gameStatus(GameStatus::STARTUP), fovRadius(10), screenWidth(screenWidth), screenHeight(screenHeight), level(1) {
@@ -88,7 +89,7 @@ void Engine::sendToBack(Actor* actor) {
 
 Actor* Engine::getClosestMonster(int x, int y, float range) const {
 	Actor *closest = NULL;
-	float bestDistance = 1E6f; // TODO float max
+	float bestDistance = FLT_MAX;
 	for (auto i = actors.begin(); i != actors.end(); i++) {
 		Actor* actor = *i;
 		if(actor != player && actor->destructible && !actor->destructible->isDead()) {
