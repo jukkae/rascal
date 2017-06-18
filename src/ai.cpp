@@ -59,7 +59,7 @@ void PlayerAi::update(Actor* owner) {
 		default: break;
 	}
 	if(dx != 0 || dy != 0) {
-		engine.gameStatus = Engine::NEW_TURN;
+		engine.gameStatus = Engine::GameStatus::NEW_TURN;
 		if (moveOrAttack(owner, owner->x + dx,owner->y + dy)) {
 			engine.map->computeFov();
 		}
@@ -138,14 +138,14 @@ void PlayerAi::handleActionKey(Actor *owner, int ascii) {
 			}
 		}
 		if(!found) { engine.gui->message(TCODColor::lightGrey, "There's nothing here that you can pick up."); }
-		engine.gameStatus = Engine::NEW_TURN;
+		engine.gameStatus = Engine::GameStatus::NEW_TURN;
 		} break;
 		case 'i' : // display inventory
 		{
 			Actor* actor = chooseFromInventory(owner);
 			if(actor) {
 				actor->pickable->use(actor, owner);
-				engine.gameStatus = Engine::NEW_TURN;
+				engine.gameStatus = Engine::GameStatus::NEW_TURN;
 			}
 		} break;
 		case 'd' : // drop item
@@ -153,7 +153,7 @@ void PlayerAi::handleActionKey(Actor *owner, int ascii) {
 			Actor* actor = chooseFromInventory(owner);
 			if(actor) {
 				actor->pickable->drop(actor, owner);
-				engine.gameStatus = Engine::NEW_TURN;
+				engine.gameStatus = Engine::GameStatus::NEW_TURN;
 			}
 		} break;
 		case 'x' : // go down stairs TODO should ofc be '>'

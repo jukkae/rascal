@@ -57,6 +57,6 @@ void showMenu() {
 	} else {
 		engine.term();
 		load();
-		engine.gameStatus = Engine::STARTUP;
+		engine.gameStatus = Engine::GameStatus::STARTUP;
 	}
 }

@@ -2,7 +2,7 @@
 #include "main.hpp"
 
 Engine::Engine(int screenWidth, int screenHeight) :
-gameStatus(STARTUP), fovRadius(10), screenWidth(screenWidth), screenHeight(screenHeight), level(1) {
+gameStatus(GameStatus::STARTUP), fovRadius(10), screenWidth(screenWidth), screenHeight(screenHeight), level(1) {
 	TCODConsole::initRoot(80, 50, "Rascal", false);
 	gui = new Gui();
 }
@@ -33,14 +33,14 @@ void Engine::init() {
 	map = new Map(80, 43);
 	map->init(true);
 	gui->message(TCODColor::green, "Welcome to year 20XXAD, you strange rascal!\nPrepare to fight or die!");
-	gameStatus = STARTUP;
+	gameStatus = GameStatus::STARTUP;
 }
 
 void Engine::update() {
-	if(gameStatus == STARTUP) map->computeFov();
-	gameStatus = IDLE;
+	if(gameStatus == GameStatus::STARTUP) map->computeFov();
+	gameStatus = GameStatus::IDLE;
 	player->update();
-	if(gameStatus == NEW_TURN) {
+	if(gameStatus == GameStatus::NEW_TURN) {
 		for(auto iterator = actors.begin(); iterator != actors.end(); iterator++) {
 			Actor* actor = *iterator;
 			if (actor != player) actor->update();
@@ -77,7 +77,7 @@ void Engine::nextLevel() {
    }
    map = new Map(80,43);
    map->init(true);
-   gameStatus = STARTUP;
+   gameStatus = GameStatus::STARTUP;
 }
 
 void Engine::sendToBack(Actor* actor) {

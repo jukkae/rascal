@@ -4,7 +4,7 @@ public:
 	virtual ~Ai() {};
 	static Ai* create (TCODZip& zip);
 protected :
-	enum AiType {
+	enum class AiType {
 		MONSTER, CONFUSED_MONSTER, PLAYER
 	};
 private:

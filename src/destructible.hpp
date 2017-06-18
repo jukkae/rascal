@@ -16,7 +16,7 @@ public:
 
 	static Destructible* create(TCODZip& zip);
 protected:
-	enum DestructibleType {
+	enum class DestructibleType {
 		MONSTER, PLAYER
 	};
 private:

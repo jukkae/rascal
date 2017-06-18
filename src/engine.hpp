@@ -1,6 +1,6 @@
 class Engine {
 public:
-	enum GameStatus {
+	enum class GameStatus {
 		STARTUP,
 		IDLE,
 		NEW_TURN,

@@ -6,7 +6,7 @@ public:
 	void drop(Actor* owner, Actor* wearer);
 	static Pickable* create (TCODZip& zip);
 protected:
-	enum PickableType {
+	enum class PickableType {
 		HEALER, BLASTER_BOLT, FRAGMENTATION_GRENADE, CONFUSOR
 	};
 private:
