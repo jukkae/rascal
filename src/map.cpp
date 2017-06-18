@@ -19,7 +19,7 @@ Map::~Map() {
 }
 
 void Map::init(bool initActors) {
-	TCODRandom rng(seed); // = new TCODRandom(seed);
+	TCODRandom rng(seed);
 	for(int i = 0; i < width*height; i++) {
 		tiles.push_back(Tile());
 	}

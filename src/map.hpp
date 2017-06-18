@@ -79,7 +79,6 @@ template<class Archive>
 		ar >> tiles;
 		ar >> seed;
 
-		//TODO there's still something a bit off with saving and loading the random seed, idk what exactly
 		::new(m)Map(width, height, seed);
 		m->init(false);
 	}
