@@ -12,7 +12,7 @@ protected:
 		MenuItemCode code;
 		std::string label;
 	};
-	std::vector<MenuItem*> items;
+	std::vector<MenuItem> items;
 };
 
 class Gui {

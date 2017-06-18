@@ -118,9 +118,9 @@ void Menu::clear() {
 }
 
 void Menu::addItem(MenuItemCode code, const std::string label) {
-	MenuItem* item = new MenuItem();
-	item->code = code;
-	item->label = label;
+	MenuItem item;
+	item.code = code;
+	item.label = label;
 	items.push_back(item);
 }
 
@@ -151,7 +151,7 @@ Menu::MenuItemCode Menu::pick(DisplayMode mode) {
 			} else {
 			   TCODConsole::root->setDefaultForeground(TCODColor::lightGrey);
 			}
-			TCODConsole::root->print(menuX, menuY + currentItem * 3, (*it)->label.c_str());
+			TCODConsole::root->print(menuX, menuY + currentItem * 3, (*it).label.c_str());
 			currentItem++;
 		}
 		TCODConsole::flush();
@@ -168,7 +168,7 @@ Menu::MenuItemCode Menu::pick(DisplayMode mode) {
 				selectedItem = (selectedItem + 1) % items.size(); 
 				break;
 			case TCODK_ENTER:
-				return items.at(selectedItem)->code;
+				return items.at(selectedItem).code;
 			default:
 				break;
 		}
