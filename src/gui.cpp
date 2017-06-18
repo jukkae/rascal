@@ -93,7 +93,7 @@ Gui::Message::~Message() {
 void Gui::message(const TCODColor& col, std::string text, ...) {
 	va_list ap;
 	std::string buf = "";
-	char dest[1024*16]; // TODO YEAH ITS CRAP BUT IT DO WORK EH
+	char dest[1024*16]; // maybe something a bit more sane would be in order at some point
 	va_start(ap, text);
 	vsnprintf(dest, 1024*16, text.c_str(), ap);
 	va_end(ap);

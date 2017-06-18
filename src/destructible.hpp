@@ -3,7 +3,7 @@ public:
 	float maxHp;
 	float hp;
 	float defense;
-	int xp; // TODO this is both player's xp and the xp gain from killing creature
+	int xp; // this is both player's xp and the xp gain from killing creature
 	std::string corpseName;
 	
 	Destructible(float maxHp = 0, float defense = 0, int xp = 0, std::string corpseName = "corpse");

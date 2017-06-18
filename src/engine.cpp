@@ -110,7 +110,7 @@ Actor* Engine::getLiveActor(int x, int y) const {
 	return NULL;
 }
 
-bool Engine::pickTile(int* x, int* y, float maxRange) { // TODO move to keyboard picking
+bool Engine::pickTile(int* x, int* y, float maxRange) {
 	while(!TCODConsole::isWindowClosed()) {
 		render();
 		for(int cx = 0; cx < map->width; cx++) {
