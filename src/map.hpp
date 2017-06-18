@@ -17,9 +17,6 @@ public:
 	~Map();
 	void init(bool initActors);
 
-	std::vector<Tile> tiles; // TODO these should be protected
-	long seed; // and this too
-
 	void setWall(int x, int y);
 	void addMonster(int x, int y);
 	void addItem(int x, int y);
@@ -37,11 +34,21 @@ protected:
 	TCODRandom* rng;
 	friend class BspListener;
 
+	std::vector<Tile> tiles;
+	long seed;
+
 	void dig(int x1, int y1, int x2, int y2);
 	void createRoom(bool first, int x1, int y1, int x2, int y2, bool initActors);
 
 private:
 	friend class boost::serialization::access;
+
+	template<class Archive>
+	friend void boost::serialization::save_construct_data(Archive & ar, const Map* m, const unsigned int file_version);
+
+	template<class Archive>
+	friend void boost::serialization::load_construct_data(Archive & ar, const Map* m, const unsigned int file_version);
+
 	template<class Archive>
 	void serialize(Archive & ar, const unsigned int version) {
 		ar & width;
@@ -56,7 +63,7 @@ template<class Archive>
 	inline void save_construct_data (Archive & ar, const Map* m, const unsigned int file_version) {
 		ar << m->width;
 		ar << m->height;
-		ar << m-> tiles;
+		ar << m->tiles;
 		ar << m->seed;
 	}
 
