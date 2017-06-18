@@ -50,7 +50,7 @@ private:
     }
 };
 
-class FragmentationGrenade : public BlasterBolt { // TODO inherits from BB for fast dev
+class FragmentationGrenade : public BlasterBolt {
 public:
 	FragmentationGrenade(float range = 0, float damage = 0);
 	bool use(Actor* owner, Actor* wearer);
