@@ -13,7 +13,7 @@ Engine::~Engine() {
 
 // clear actors, map and log
 void Engine::term() {
-	actors.clear(); // TODO check for memory leaks
+	actors.clear();
 	if(map) delete map;
 	gui.clear();
 }
