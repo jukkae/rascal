@@ -214,7 +214,7 @@ void ConfusedMonsterAi::update(Actor* owner) {
 			owner->x = destX;
 			owner->y = destY;
 		} else {
-			Actor* target = engine.getActor(destX, destY);
+			Actor* target = engine.getLiveActor(destX, destY);
 			if(target) { owner->attacker->attack(owner, target); }
 		}
 	}

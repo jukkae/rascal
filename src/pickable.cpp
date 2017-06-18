@@ -73,7 +73,7 @@ bool Confusor::use(Actor* owner, Actor* wearer) {
 	engine.gui->message(TCODColor::cyan, "Left-click an enemy to confuse it,\nor right-click to cancel.");
 	int x, y;
 	if(!engine.pickTile(&x, &y)) { return false; }
-	Actor* actor = engine.getActor(x, y);
+	Actor* actor = engine.getLiveActor(x, y);
 	if(!actor) { return false; }
 	Ai* confAi = new ConfusedMonsterAi(turns, actor->ai);
 	actor->ai = confAi;

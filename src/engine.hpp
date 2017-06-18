@@ -28,7 +28,7 @@ public:
 	void sendToBack(Actor* actor);
 	void nextLevel();
 	Actor* getClosestMonster(int x, int y, float range) const;
-	Actor* getActor(int x, int y) const;
+	Actor* getLiveActor(int x, int y) const;
 	bool pickTile(int* x, int* y, float maxRange = 0.0f);
 private:
 	friend class boost::serialization::access;

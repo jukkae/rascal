@@ -102,7 +102,7 @@ Actor* Engine::getClosestMonster(int x, int y, float range) const {
 	return closest;
 }
 
-Actor* Engine::getActor(int x, int y) const { // TODO actually, should be getLiveActor or something like that
+Actor* Engine::getLiveActor(int x, int y) const {
 	for(auto i = actors.begin(); i != actors.end(); i++) {
 		Actor* actor = *i;
 		if(actor->x == x && actor->y == y && actor->destructible && !actor->destructible->isDead()) return actor;
