@@ -82,7 +82,6 @@ void Engine::nextLevel() {
 }
 
 void Engine::sendToBack(Actor* actor) {
-	//actors.remove(actor); TODO check below is correct
 	actors.erase(std::remove(actors.begin(), actors.end(), actor), actors.end());
 	actors.insert(actors.begin(), actor);
 }
