@@ -31,7 +31,7 @@ public:
 
 protected:
 	TCODMap* map;
-	TCODRandom* rng;
+	TCODRandom rng;
 	friend class BspListener;
 
 	std::vector<Tile> tiles;

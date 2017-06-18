@@ -19,7 +19,7 @@ Map::~Map() {
 }
 
 void Map::init(bool initActors) {
-	rng = new TCODRandom(seed);
+	TCODRandom rng(seed); // = new TCODRandom(seed);
 	for(int i = 0; i < width*height; i++) {
 		tiles.push_back(Tile());
 	}
@@ -27,13 +27,13 @@ void Map::init(bool initActors) {
 	TCODBsp bsp(0, 0, width, height);
 	// 8: recursion level,
 	// 1.5f, 1.5f H/V and V/H ratios of rooms
-	bsp.splitRecursive(rng, 8, ROOM_MAX_SIZE, ROOM_MAX_SIZE, 1.5f, 1.5f);
-	BspListener listener(*this, rng);
+	bsp.splitRecursive(&rng, 8, ROOM_MAX_SIZE, ROOM_MAX_SIZE, 1.5f, 1.5f);
+	BspListener listener(*this, &rng);
 	bsp.traverseInvertedLevelOrder(&listener, (void*) initActors);
 }
 
 void Map::addMonster(int x, int y) {
-	if(rng->getInt(0, 100) < 80) {
+	if(rng.getInt(0, 100) < 80) {
 		Actor* punk = new Actor(x, y, 'h', "punk", TCODColor::desaturatedGreen);
 		punk->destructible = new MonsterDestructible(10, 0, 50, "dead punk");
 		punk->attacker = new Attacker(3);
@@ -49,7 +49,7 @@ void Map::addMonster(int x, int y) {
 }
 
 void Map::addItem(int x, int y) {
-	int r = rng->getInt(0, 100);
+	int r = rng.getInt(0, 100);
 	if(r < 70) {
 		Actor* stimpak = new Actor(x, y, '!', "stimpak", TCODColor::violet);
 		stimpak->blocks = false;
@@ -154,19 +154,19 @@ void Map::createRoom(bool first, int x1, int y1, int x2, int y2, bool initActors
 		// engine.stairs->x = (x1 + x2) / 2 + 1; // debugging
 		// engine.stairs->y = (y1 + y2) / 2;
 	} else {
-		int nMonsters = rng->getInt(0, MAX_ROOM_MONSTERS);
+		int nMonsters = rng.getInt(0, MAX_ROOM_MONSTERS);
 		while(nMonsters > 0) {
-			int x = rng->getInt(x1, x2);
-			int y = rng->getInt(y1, y2);
+			int x = rng.getInt(x1, x2);
+			int y = rng.getInt(y1, y2);
 			if(canWalk(x, y)) addMonster(x, y);
 			nMonsters--;
 		}
 	}
 	// add stimpaks
-	int nItems = rng->getInt(0, MAX_ROOM_ITEMS);
+	int nItems = rng.getInt(0, MAX_ROOM_ITEMS);
 	while (nItems > 0) {
-		int x = rng->getInt(x1, x2);
-		int y = rng->getInt(y1, y2);
+		int x = rng.getInt(x1, x2);
+		int y = rng.getInt(y1, y2);
 		if(canWalk(x,y)) { addItem(x,y); }
 		nItems--;
 	}
