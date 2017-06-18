@@ -100,7 +100,7 @@ void Gui::message(const TCODColor& col, std::string text, ...) {
 	std::istringstream iss (dest);
 	std::string line;
 	while (std::getline(iss, line, '\n')) {
-		// make room for the new message
+		// make room for the message
 		if(log.size() == MSG_HEIGHT) {
 			log.erase(log.begin());
 		}
