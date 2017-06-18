@@ -92,11 +92,9 @@ bool Map::isExplored(int x, int y) const {
 	return tiles[x + y*width].explored;
 }
 
-// TODO was marked as const!!!
 bool Map::isInFov(int x, int y) const {
 	if(x < 0 || x >= width || y < 0 || y >= height) return false;
 	if(map->isInFov(x, y)) {
-		//tiles[x + y*width].explored = true;
 		return true;
 	}
 	return false;
@@ -118,7 +116,6 @@ void Map::computeFov() {
 	map->computeFov(engine.player->x, engine.player->y, engine.fovRadius);
 }
 
-// TODO was marked as const
 void Map::render() const {
 	static const TCODColor darkWall   (0, 0, 100);
 	static const TCODColor darkGround (50, 50, 150);
