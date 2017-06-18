@@ -36,9 +36,8 @@ void Gui::render() {
 	renderMouseLook();
 	con->setDefaultForeground(TCODColor::white);
 	con->print(3, 3, "Dungeon level %d", engine.level);
-	PlayerAi *ai=(PlayerAi *)engine.player->ai;
+	PlayerAi* ai = (PlayerAi*)engine.player->ai;
 
-	// TODO extremely ugly
 	char xpTxt[128];
 	sprintf(xpTxt, "XP(%d)", ai->xpLevel);
 	renderBar(1, 5, BAR_WIDTH, xpTxt, engine.player->destructible->xp, ai->getNextLevelXp(), TCODColor::lightViolet,TCODColor::darkerViolet);
@@ -69,10 +68,8 @@ void Gui::renderMouseLook() {
 		if(actor->x == engine.mouse.cx && actor->y == engine.mouse.cy) {
 			if(!first) {
 				buf += ", ";
-			//strcat(buf, ", ");
 			} else { first = false; }
 			buf += actor->name;
-			//strcat(buf, actor->name);
 		}
 	}
 	con->setDefaultForeground(TCODColor::lightGrey);
@@ -82,8 +79,7 @@ void Gui::renderMouseLook() {
 
 Gui::Message::Message(std::string text, const TCODColor& col) :
 col(col) {
-	//this->text = "";
-	this->text = text; //strcpy(this->text, text);
+	this->text = text;
 }
 
 Gui::Message::Message() : // TODO dirty hack
@@ -92,12 +88,9 @@ col(TCODColor::white) {
 }
 
 Gui::Message::~Message() {
-	//delete [] text;
 }
 
 void Gui::message(const TCODColor& col, std::string text, ...) {
-	// TODO clean all this up
-	// build the text
 	va_list ap;
 	std::string buf = "";
 	char dest[1024*16]; // TODO YEAH ITS CRAP BUT IT DO WORK EH
@@ -106,20 +99,14 @@ void Gui::message(const TCODColor& col, std::string text, ...) {
 	va_end(ap);
 	std::istringstream iss (dest);
 	std::string line;
-	while (std::getline(iss, line, '\n')) { // TODO make sure this logic works
+	while (std::getline(iss, line, '\n')) {
 		// make room for the new message
 		if(log.size() == MSG_HEIGHT) {
 			log.erase(log.begin());
 		}
-		// detect end of the line
-		//lineEnd = strchr(lineBegin,'\n');
-		//if(lineEnd) { *lineEnd = '\0'; }
-		// add a new message to the log
 		Message* msg = new Message(line, col);
 		log.push_back(msg);
-		// go to next line
-		//lineBegin = lineEnd + 1;
-	} //while (lineEnd);
+	}
 }
 
 Menu::~Menu() {
