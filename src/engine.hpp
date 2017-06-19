@@ -10,7 +10,7 @@ public:
 	std::vector<Actor*> actors;
 	Actor* player;
 	Actor* stairs;
-	Map* map;
+	std::unique_ptr<Map> map;
 	int fovRadius;
 	int screenWidth;
 	int screenHeight;

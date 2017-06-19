@@ -14,7 +14,6 @@ Engine::~Engine() {
 // clear actors, map and log
 void Engine::term() {
 	actors.clear();
-	if(map) delete map;
 	gui.clear();
 }
 
@@ -29,7 +28,7 @@ void Engine::init() {
 	stairs->blocks = false;
 	stairs->fovOnly = false;
 	actors.push_back(stairs);
-	map = new Map(80, 43);
+	map = std::unique_ptr<Map>(new Map(80, 43));
 	map->init(true);
 	gui.message(TCODColor::green, "Welcome to year 20XXAD, you strange rascal!\nPrepare to fight or die!");
 	gameStatus = GameStatus::STARTUP;
@@ -67,14 +66,13 @@ void Engine::nextLevel() {
 	gui.message(TCODColor::lightViolet,"You take a moment to rest, and recover your strength.");
 	player->destructible->heal(player->destructible->maxHp/2);
 	gui.message(TCODColor::red,"After a rare moment of peace, you descend\ndeeper into the heart of the dungeon...");
-	delete map;
 	for (auto it=actors.begin(); it!=actors.end(); it++) {
        if (*it != player && *it != stairs) {
-           delete *it;
+           // delete *it; // TODO could this be it?
            it = actors.erase(it);
        }
    }
-   map = new Map(80,43);
+   map = std::unique_ptr<Map>(new Map(80,43));
    map->init(true);
    gameStatus = GameStatus::STARTUP;
 }
