@@ -6,55 +6,49 @@ static const int BAR_WIDTH = 20;
 static const int MSG_X = BAR_WIDTH + 2;
 static const int MSG_HEIGHT = PANEL_HEIGHT - 1;
 
-Gui::Gui() {
-	con = new TCODConsole(engine.screenWidth, PANEL_HEIGHT);
-}
-
-Gui::~Gui() {
-	delete con;
-}
+Gui::~Gui() {}
 
 void Gui::clear() {
 	log.clear();
 }
 
 void Gui::render() {
-	con->setDefaultBackground(TCODColor::black);
-	con->clear();
+	con.setDefaultBackground(TCODColor::black);
+	con.clear();
 	renderBar(1, 1, BAR_WIDTH, "HP", engine.player->destructible->hp, engine.player->destructible->maxHp, TCODColor::lightRed, TCODColor::darkerRed);
 	int y = 1;
 	float colCoef = 0.4f;
 	for(auto i = log.begin(); i != log.end(); i++) {
 		Message msg = *i;
-		con->setDefaultForeground(msg.col * colCoef);
-		con->print(MSG_X, y, msg.text.c_str());
+		con.setDefaultForeground(msg.col * colCoef);
+		con.print(MSG_X, y, msg.text.c_str());
 		y++;
 		if(colCoef < 1.0f) {
 			colCoef += 0.3f;
 		}
 	}
 	renderMouseLook();
-	con->setDefaultForeground(TCODColor::white);
-	con->print(3, 3, "Dungeon level %d", engine.level);
+	con.setDefaultForeground(TCODColor::white);
+	con.print(3, 3, "Dungeon level %d", engine.level);
 	PlayerAi* ai = (PlayerAi*)engine.player->ai;
 
 	char xpTxt[128];
 	sprintf(xpTxt, "XP(%d)", ai->xpLevel);
 	renderBar(1, 5, BAR_WIDTH, xpTxt, engine.player->destructible->xp, ai->getNextLevelXp(), TCODColor::lightViolet,TCODColor::darkerViolet);
 			  			  
-	TCODConsole::blit(con, 0, 0, engine.screenWidth, PANEL_HEIGHT, TCODConsole::root, 0, engine.screenHeight - PANEL_HEIGHT);
+	TCODConsole::blit(&con, 0, 0, engine.screenWidth, PANEL_HEIGHT, TCODConsole::root, 0, engine.screenHeight - PANEL_HEIGHT);
 }
 
 void Gui::renderBar(int x, int y, int width, std::string name, float value, float maxValue, const TCODColor& barColor, const TCODColor& backColor) {
-	con->setDefaultBackground(backColor);
-	con->rect(x, y, width, 1, false, TCOD_BKGND_SET);
+	con.setDefaultBackground(backColor);
+	con.rect(x, y, width, 1, false, TCOD_BKGND_SET);
 	int barWidth = (int) (value / maxValue * width);
 	if ( barWidth > 0 ) {
-		con->setDefaultBackground(barColor);
-		con->rect(x, y, barWidth, 1, false, TCOD_BKGND_SET);
+		con.setDefaultBackground(barColor);
+		con.rect(x, y, barWidth, 1, false, TCOD_BKGND_SET);
 	}
-	con->setDefaultForeground(TCODColor::white);
-	con->printEx(x + width/2, y, TCOD_BKGND_NONE, TCOD_CENTER, "%s : %g/%g", name.c_str(), value, maxValue);
+	con.setDefaultForeground(TCODColor::white);
+	con.printEx(x + width/2, y, TCOD_BKGND_NONE, TCOD_CENTER, "%s : %g/%g", name.c_str(), value, maxValue);
 }
 
 void Gui::renderMouseLook() {
@@ -72,8 +66,8 @@ void Gui::renderMouseLook() {
 			buf += actor->name;
 		}
 	}
-	con->setDefaultForeground(TCODColor::lightGrey);
-	con->print(1, 0, buf.c_str());
+	con.setDefaultForeground(TCODColor::lightGrey);
+	con.print(1, 0, buf.c_str());
 }
 
 

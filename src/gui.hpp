@@ -17,7 +17,11 @@ protected:
 
 class Gui {
 public:
-	Gui();
+	static const int PANEL_HEIGHT = 7;
+	static const int ENGINE_SCREEN_WIDTH = 80; // TODO get this dynamically
+	
+	Gui(): con(ENGINE_SCREEN_WIDTH, PANEL_HEIGHT) {;}
+
 	~Gui();
 	void clear();
 
@@ -27,7 +31,6 @@ public:
 	Menu menu;
 
 protected:
-	TCODConsole* con;
 	struct Message {
 		std::string text;
 		TCODColor col;
@@ -42,6 +45,8 @@ protected:
 			ar & col;
 		}
 	};
+
+	TCODConsole con;
 	std::vector<Message> log;
 
 	void renderBar(int x, int y, int width, std::string name, float value, float maxValue, const TCODColor& barColor, const TCODColor& backColor);
