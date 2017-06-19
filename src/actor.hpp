@@ -9,7 +9,7 @@ public:
 	std::unique_ptr<Attacker> attacker;
 	std::unique_ptr<Destructible> destructible;
 	Ai* ai; // self-updating
-	Pickable* pickable;
+	std::unique_ptr<Pickable> pickable;
 	Container* container;
 
 	Actor(int x, int y, int ch, std::string name, const TCODColor& col);

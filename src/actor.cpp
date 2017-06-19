@@ -14,7 +14,6 @@ Actor::Actor() : // TODO dirty hack
 
 Actor::~Actor() {
 	if(ai)           delete ai;
-	if(pickable)     delete pickable;
 	if(container)    delete container;
 }
 
