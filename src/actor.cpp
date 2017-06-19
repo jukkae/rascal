@@ -14,7 +14,6 @@ Actor::Actor() : // TODO dirty hack
 
 Actor::~Actor() {
 	if(ai)           delete ai;
-	if(container)    delete container;
 }
 
 void Actor::render() const {

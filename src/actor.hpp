@@ -10,7 +10,7 @@ public:
 	std::unique_ptr<Destructible> destructible;
 	Ai* ai; // self-updating
 	std::unique_ptr<Pickable> pickable;
-	Container* container;
+	std::unique_ptr<Container> container;
 
 	Actor(int x, int y, int ch, std::string name, const TCODColor& col);
 	Actor(); // TODO dirty hack

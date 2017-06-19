@@ -23,7 +23,7 @@ void Engine::init() {
 	player->destructible = std::unique_ptr<Destructible>(new PlayerDestructible(30, 2, 0, "your corpse"));
 	player->attacker = std::unique_ptr<Attacker>(new Attacker(5));
 	player->ai = new PlayerAi();
-	player->container = new Container(26);
+	player->container = std::unique_ptr<Container>(new Container(26));
 	actors.push_back(player);
 	stairs = new Actor(0, 0, '>', "stairs", TCODColor::white);
 	stairs->blocks = false;
