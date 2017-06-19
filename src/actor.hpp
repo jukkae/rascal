@@ -7,7 +7,7 @@ public:
 	bool blocks; // does it block movement?
 	bool fovOnly; // visible only when in fov?
 	std::unique_ptr<Attacker> attacker;
-	Destructible* destructible;
+	std::unique_ptr<Destructible> destructible;
 	Ai* ai; // self-updating
 	Pickable* pickable;
 	Container* container;
