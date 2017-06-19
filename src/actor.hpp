@@ -6,7 +6,7 @@ public:
 	std::string name;
 	bool blocks; // does it block movement?
 	bool fovOnly; // visible only when in fov?
-	Attacker* attacker;
+	std::unique_ptr<Attacker> attacker;
 	Destructible* destructible;
 	Ai* ai; // self-updating
 	Pickable* pickable;
