@@ -15,7 +15,6 @@ Map::Map(int width, int height, long seed) : width(width), height(height), seed(
 }
 
 Map::~Map() {
-	delete map;
 }
 
 void Map::init(bool initActors) {
@@ -23,7 +22,7 @@ void Map::init(bool initActors) {
 	for(int i = 0; i < width*height; i++) {
 		tiles.push_back(Tile());
 	}
-	map = new TCODMap(width, height);
+	this->map = std::unique_ptr<TCODMap>(new TCODMap(width, height));
 	TCODBsp bsp(0, 0, width, height);
 	// 8: recursion level,
 	// 1.5f, 1.5f H/V and V/H ratios of rooms

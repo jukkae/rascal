@@ -30,7 +30,7 @@ public:
 	void render() const;
 
 protected:
-	TCODMap* map;
+	std::unique_ptr<TCODMap> map;
 	TCODRandom rng;
 	friend class BspListener;
 
