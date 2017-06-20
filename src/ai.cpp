@@ -12,7 +12,7 @@ int PlayerAi::getNextLevelXp() {
 	return LEVEL_UP_BASE + xpLevel * LEVEL_UP_FACTOR;
 }
 
-void PlayerAi::update(Actor* owner) {
+int PlayerAi::update(Actor* owner) {
 	int levelUpXp = getNextLevelXp();
 	if (owner->destructible->xp >= levelUpXp) {
 		xpLevel++;
@@ -47,7 +47,7 @@ void PlayerAi::update(Actor* owner) {
 			owner->destructible->defense += 1;
 		}
 	}
-	if (owner->destructible && owner->destructible->isDead()) return;
+	if (owner->destructible && owner->destructible->isDead()) return 100; // TODO well this is crap allright
 	int dx = 0;
 	int dy = 0;
 	switch(engine.lastKey.vk) {
@@ -64,6 +64,7 @@ void PlayerAi::update(Actor* owner) {
 			engine.map->computeFov();
 		}
 	}
+	return 100; // TODO make all these returns depend on the speed
 }
 
 bool PlayerAi::moveOrAttack(Actor* owner, int targetX, int targetY) {
@@ -167,15 +168,15 @@ void PlayerAi::handleActionKey(Actor *owner, int ascii) {
 	}
 }
 
-void MonsterAi::update(Actor* owner) {
-	if (owner->destructible && owner->destructible->isDead()) return;
+int MonsterAi::update(Actor* owner) {
+	if (owner->destructible && owner->destructible->isDead()) return 100; // TODO this won't do
 	if (engine.map->isInFov(owner->x, owner->y)) {
 		moveCount = TRACKING_TURNS;
 	} else { moveCount--; }
 	if(moveCount > 0) {
-		engine.gui.message(TCODColor::white, "The %s threatens you!", owner->name.c_str());
 		moveOrAttack(owner, engine.player->x, engine.player->y);
 	}
+	return 100;
 }
 
 void MonsterAi::moveOrAttack(Actor* owner, int targetX, int targetY) {
@@ -185,6 +186,7 @@ void MonsterAi::moveOrAttack(Actor* owner, int targetX, int targetY) {
 	int stepDy = (dy > 0 ? 1 : -1);
 	float distance = sqrtf(dx*dx + dy*dy);
 	if(distance >= 2) {
+		engine.gui.message(TCODColor::white, "The %s threatens you!", owner->name.c_str());
 		dx = (int) (round(dx / distance));
 		dy = (int) (round(dy / distance));
 		if(engine.map->canWalk(owner->x + dx, owner->y + dy)) {
@@ -203,7 +205,7 @@ void MonsterAi::moveOrAttack(Actor* owner, int targetX, int targetY) {
 ConfusedMonsterAi::ConfusedMonsterAi(int turns, Ai* oldAi): turns(turns), oldAi(oldAi) {;}
 ConfusedMonsterAi::ConfusedMonsterAi(): turns(0), oldAi(NULL) {;} // TODO dirty hack
 
-void ConfusedMonsterAi::update(Actor* owner) {
+int ConfusedMonsterAi::update(Actor* owner) {
 	TCODRandom* rng = TCODRandom::getInstance();
 	int dx = rng->getInt(-1,1);
 	int dy = rng->getInt(-1,1);
@@ -223,6 +225,7 @@ void ConfusedMonsterAi::update(Actor* owner) {
 		owner->ai = oldAi;
 		delete this;
 	}
+	return 100;
 }
 
 BOOST_CLASS_EXPORT(PlayerAi)

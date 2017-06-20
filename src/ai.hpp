@@ -1,8 +1,10 @@
 class Ai {
 public:
-	virtual void update(Actor* owner) = 0;
+	virtual int update(Actor* owner) = 0;
 	virtual ~Ai() {};
 	static Ai* create (TCODZip& zip);
+	int actionPoints = 0; // TODO crap
+	int speed; // TODO crap
 protected :
 	enum class AiType {
 		MONSTER, CONFUSED_MONSTER, PLAYER
@@ -20,7 +22,9 @@ public:
 	int xpLevel;
 	PlayerAi();
 	int getNextLevelXp();
-	void update(Actor* owner) override;
+	int update(Actor* owner) override;
+	int actionPoints = 0;
+	int speed = 100; // TODO crap
 
 protected:
 	bool moveOrAttack(Actor* owner, int targetX, int targetY);
@@ -39,7 +43,9 @@ private:
 
 class MonsterAi : public Ai {
 public:
-	void update(Actor* owner) override;
+	int update(Actor* owner) override;
+	int actionPoints = 0;
+	int speed = 200; // TODO crap
 
 protected:
 	int moveCount;
@@ -59,7 +65,7 @@ class ConfusedMonsterAi : public Ai {
 public:
 	ConfusedMonsterAi(int turns, Ai* oldAi);
 	ConfusedMonsterAi(); // TODO dirty hack
-	void update(Actor* owner) override;
+	int update(Actor* owner) override;
 
 protected:
 	int turns;

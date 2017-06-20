@@ -21,8 +21,9 @@ void Actor::render() const {
 	TCODConsole::root->setCharForeground(x, y, col);
 }
 
-void Actor::update() {
-	if(ai) ai->update(this);
+int Actor::update() {
+	if(ai) return ai->update(this);
+	else return 100; // TODO yeah this won't work in the long run
 }
 
 float Actor::getDistance(int cx, int cy) const {

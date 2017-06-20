@@ -37,12 +37,18 @@ void Engine::init() {
 void Engine::update() {
 	if(gameStatus == GameStatus::STARTUP) map->computeFov();
 	gameStatus = GameStatus::IDLE;
-	player->update();
+	// TODO player is treated as a special case
+	int elapsedTime = player->update();
 	map->markExploredTiles();
-	if(gameStatus == GameStatus::NEW_TURN) {
+	if(gameStatus == GameStatus::NEW_TURN && elapsedTime > 0) {
 		for(auto iterator = actors.begin(); iterator != actors.end(); iterator++) {
 			Actor* actor = *iterator;
-			if (actor != player) actor->update();
+			if(actor != player && actor->ai != NULL) {
+				actor->ai->actionPoints += (elapsedTime * 2) ; // TODO get speed from ai
+				while (actor->ai->actionPoints > 0) { // TODO bump the monsters back in queue after their turn
+					actor->ai->actionPoints -= actor->update();
+				}
+			}
 		}
 	}
 }
