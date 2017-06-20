@@ -60,7 +60,6 @@ void Engine::render() {
 	gui.render();
 }
 
-// TODO sometimes segfaults
 void Engine::nextLevel() {
 	level++;
 	gui.message(TCODColor::lightViolet,"You take a moment to rest, and recover your strength.");
