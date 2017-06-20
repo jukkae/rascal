@@ -66,12 +66,15 @@ void Engine::nextLevel() {
 	gui.message(TCODColor::lightViolet,"You take a moment to rest, and recover your strength.");
 	player->destructible->heal(player->destructible->maxHp/2);
 	gui.message(TCODColor::red,"After a rare moment of peace, you descend\ndeeper into the heart of the dungeon...");
-	for (auto it=actors.begin(); it!=actors.end(); it++) {
+
+	auto it = actors.begin();
+	while (it != actors.end()) {
        if (*it != player && *it != stairs) {
-           // delete *it; // TODO could this be it?
            it = actors.erase(it);
        }
+	   else ++it;
    }
+
    map = std::unique_ptr<Map>(new Map(80,43));
    map->init(true);
    gameStatus = GameStatus::STARTUP;
