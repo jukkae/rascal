@@ -33,6 +33,7 @@ private:
 	template<class Archive>
 	void serialize(Archive & ar, const unsigned int version) {
 		ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(Ai);
+		ar & xpLevel;
 	}
 };
 
