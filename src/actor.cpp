@@ -13,7 +13,7 @@ Actor::Actor() : // TODO dirty hack
 	pickable(NULL), container(NULL) {;}
 
 Actor::~Actor() {
-	if(ai)           delete ai;
+	if(ai) delete ai;
 }
 
 void Actor::render() const {
