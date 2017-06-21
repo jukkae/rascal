@@ -10,7 +10,7 @@ int main() {
 	while(!TCODConsole::isWindowClosed()) {
 		TCOD_key_t lastKey;
 		TCOD_mouse_t mouse;
-		TCODSystem::waitForEvent(TCOD_EVENT_KEY_PRESS|TCOD_EVENT_MOUSE, &lastKey, &mouse, true);
+		TCODSystem::checkForEvent(TCOD_EVENT_KEY_PRESS|TCOD_EVENT_MOUSE, &lastKey, &mouse);
 		if(lastKey.vk == TCODK_ESCAPE) {
 			save();
 			load();

@@ -51,12 +51,9 @@ void Engine::update() {
 		float activeActorTUNA = activeActor.first;
 		for(std::pair<float, Actor*>& a : actorsQueue) {
 			a.first -= activeActorTUNA;
-			std::cout << "\na.first now: " << a.first;
 		}
 		float elapsedTime = activeActor.second->update();
-		std::cout << "\nElapsed time: " << elapsedTime;
 		if(activeActor.second == player) {
-			std::cout << "\nPLAYER TURN";
 			map->markExploredTiles();
 		}
 		activeActor.first += elapsedTime;
@@ -77,6 +74,7 @@ void Engine::render() {
 	gui.render();
 }
 
+// TODO fix this now with the new turn system
 void Engine::nextLevel() {
 	level++;
 	gui.message(TCODColor::lightViolet,"You take a moment to rest, and recover your strength.");

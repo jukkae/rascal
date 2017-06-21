@@ -12,6 +12,7 @@ int PlayerAi::getNextLevelXp() {
 	return LEVEL_UP_BASE + xpLevel * LEVEL_UP_FACTOR;
 }
 
+// TODO fix keyboard handling: Who handles what? currently split here, main and engine!
 int PlayerAi::update(Actor* owner) {
 	int levelUpXp = getNextLevelXp();
 	if (owner->destructible->xp >= levelUpXp) {
@@ -58,7 +59,7 @@ int PlayerAi::update(Actor* owner) {
 		case TCODK_DOWN:  dy = 1;  break;
 		case TCODK_LEFT:  dx = -1; break;
 		case TCODK_RIGHT: dx = 1;  break;
-		case TCODK_CHAR:  handleActionKey(owner, engine.lastKey.c); break;
+		case TCODK_CHAR:  handleActionKey(owner, lastKey.c); break;
 		default: break;
 	}
 	if(dx != 0 || dy != 0) {
