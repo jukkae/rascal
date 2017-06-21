@@ -32,14 +32,19 @@ void Engine::init() {
 	map->init(true);
 	gui.message(TCODColor::green, "Welcome to year 20XXAD, you strange rascal!\nPrepare to fight or die!");
 
+	updateQueue();
+
+	gameStatus = GameStatus::STARTUP;
+}
+
+void Engine::updateQueue() {
+	actorsQueue.clear();
 	for(int i = 0; i < actors.size(); i++) {
 		Actor* a = actors.at(i);
 		if(a->ai) {
 			actorsQueue.push_back(std::pair<float, Actor*>((100.0+i), a));
 		}
 	}
-
-	gameStatus = GameStatus::STARTUP;
 }
 
 void Engine::update() {
@@ -74,7 +79,6 @@ void Engine::render() {
 	gui.render();
 }
 
-// TODO fix this now with the new turn system
 void Engine::nextLevel() {
 	level++;
 	gui.message(TCODColor::lightViolet,"You take a moment to rest, and recover your strength.");
@@ -91,6 +95,9 @@ void Engine::nextLevel() {
 
    map = std::unique_ptr<Map>(new Map(80,43));
    map->init(true);
+
+   updateQueue(); // A bit hacky
+
    gameStatus = GameStatus::STARTUP;
 }
 
