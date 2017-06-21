@@ -180,7 +180,7 @@ int MonsterAi::update(Actor* owner) {
 	if(moveCount > 0) {
 		moveOrAttack(owner, engine.player->x, engine.player->y);
 	}
-	return 100;
+	return 70; // TODO just a test value for now
 }
 
 void MonsterAi::moveOrAttack(Actor* owner, int targetX, int targetY) {
