@@ -41,6 +41,7 @@ private:
 		ar & stairs;
 		ar & player;
 		ar & actors;
+		ar & actorsQueue;
 		ar & gui;
     }
 };
