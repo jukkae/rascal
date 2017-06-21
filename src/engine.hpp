@@ -3,7 +3,6 @@ public:
 	enum class GameStatus {
 		STARTUP,
 		NEW_TURN,
-		IDLE,
 		VICTORY,
 		DEFEAT
 	} gameStatus;

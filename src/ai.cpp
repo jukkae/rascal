@@ -13,7 +13,6 @@ int PlayerAi::getNextLevelXp() {
 }
 
 int PlayerAi::update(Actor* owner) {
-	engine.gameStatus = Engine::GameStatus::IDLE;
 	int levelUpXp = getNextLevelXp();
 	if (owner->destructible->xp >= levelUpXp) {
 		xpLevel++;
@@ -68,7 +67,6 @@ int PlayerAi::update(Actor* owner) {
 			engine.map->computeFov();
 		}
 	}
-	engine.gameStatus = Engine::GameStatus::NEW_TURN;
 	return 100; // TODO make all these returns depend on the speed
 }
 

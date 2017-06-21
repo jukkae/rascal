@@ -32,9 +32,10 @@ void Engine::init() {
 	map->init(true);
 	gui.message(TCODColor::green, "Welcome to year 20XXAD, you strange rascal!\nPrepare to fight or die!");
 
-	for(Actor* a : actors) {
+	for(int i = 0; i < actors.size(); i++) {
+		Actor* a = actors.at(i);
 		if(a->ai) {
-			actorsQueue.push_back(std::pair<float, Actor*>(100.0, a));
+			actorsQueue.push_back(std::pair<float, Actor*>((100.0+i), a));
 		}
 	}
 
@@ -46,12 +47,16 @@ void Engine::update() {
 
 	gameStatus = GameStatus::NEW_TURN;
 	if (gameStatus == GameStatus::NEW_TURN) {
-		std::pair<float, Actor*> activeActor = actorsQueue.at(0);
-		for(std::pair<float, Actor*> a : actorsQueue) {
-			a.first -= activeActor.first;
+		std::pair<float, Actor*>& activeActor = actorsQueue.at(0);
+		float activeActorTUNA = activeActor.first;
+		for(std::pair<float, Actor*>& a : actorsQueue) {
+			a.first -= activeActorTUNA;
+			std::cout << "\na.first now: " << a.first;
 		}
 		float elapsedTime = activeActor.second->update();
+		std::cout << "\nElapsed time: " << elapsedTime;
 		if(activeActor.second == player) {
+			std::cout << "\nPLAYER TURN";
 			map->markExploredTiles();
 		}
 		activeActor.first += elapsedTime;
