@@ -11,13 +11,12 @@ int main() {
 		TCOD_key_t lastKey;
 		TCOD_mouse_t mouse;
 		TCODSystem::checkForEvent(TCOD_EVENT_KEY_PRESS|TCOD_EVENT_MOUSE, &lastKey, &mouse);
+		engine.mouse = mouse;
 		if(lastKey.vk == TCODK_ESCAPE) {
 			save();
 			load();
 			showMenu();
 		}
-		engine.mouse.cx = mouse.cx;
-		engine.mouse.cy = mouse.cy;
 		engine.update();
 		engine.render(); // TODO don't render after each turn, render just before each player turn
 		TCODConsole::flush();

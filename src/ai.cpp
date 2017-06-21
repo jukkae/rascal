@@ -68,6 +68,7 @@ int PlayerAi::update(Actor* owner) {
 			engine.map->computeFov();
 		}
 	}
+	if(mouse.dx != 0 || mouse.dy != 0) return 0; // TODO hack
 	return 100; // TODO make all these returns depend on the speed
 }
 
