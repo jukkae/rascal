@@ -21,7 +21,7 @@ void Actor::render() const {
 	TCODConsole::root->setCharForeground(x, y, col);
 }
 
-int Actor::update() {
+float Actor::update() {
 	if(ai) return ai->update(this);
 	else return 100; // TODO yeah this won't work in the long run
 }

@@ -2,12 +2,13 @@ class Engine {
 public:
 	enum class GameStatus {
 		STARTUP,
-		IDLE,
 		NEW_TURN,
+		IDLE,
 		VICTORY,
 		DEFEAT
 	} gameStatus;
 	std::vector<Actor*> actors;
+	std::vector<std::pair<float, Actor*> > actorsQueue;
 	Actor* player;
 	Actor* stairs;
 	std::unique_ptr<Map> map;

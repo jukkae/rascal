@@ -3,7 +3,6 @@ public:
 	virtual int update(Actor* owner) = 0;
 	virtual ~Ai() {};
 	static Ai* create (TCODZip& zip);
-	int actionPoints = 0; // TODO crap
 	int speed; // TODO crap
 protected :
 	enum class AiType {
@@ -23,7 +22,6 @@ public:
 	PlayerAi();
 	int getNextLevelXp();
 	int update(Actor* owner) override;
-	int actionPoints = 0;
 	int speed = 100; // TODO crap
 
 protected:
@@ -44,7 +42,6 @@ private:
 class MonsterAi : public Ai {
 public:
 	int update(Actor* owner) override;
-	int actionPoints = 0;
 	int speed = 200; // TODO crap
 
 protected:

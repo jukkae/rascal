@@ -15,7 +15,7 @@ public:
 	Actor(int x, int y, int ch, std::string name, const TCODColor& col);
 	Actor(); // TODO dirty hack
 	~Actor();
-	int update();
+	float update();
 	void render() const;
 	float getDistance(int cx, int cy) const;
 

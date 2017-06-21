@@ -31,25 +31,31 @@ void Engine::init() {
 	map = std::unique_ptr<Map>(new Map(80, 43));
 	map->init(true);
 	gui.message(TCODColor::green, "Welcome to year 20XXAD, you strange rascal!\nPrepare to fight or die!");
+
+	for(Actor* a : actors) {
+		if(a->ai) {
+			actorsQueue.push_back(std::pair<float, Actor*>(100.0, a));
+		}
+	}
+
 	gameStatus = GameStatus::STARTUP;
 }
 
 void Engine::update() {
 	if(gameStatus == GameStatus::STARTUP) map->computeFov();
-	gameStatus = GameStatus::IDLE;
-	// TODO player is treated as a special case
-	int elapsedTime = player->update();
-	map->markExploredTiles();
-	if(gameStatus == GameStatus::NEW_TURN && elapsedTime > 0) {
-		for(auto iterator = actors.begin(); iterator != actors.end(); iterator++) {
-			Actor* actor = *iterator;
-			if(actor != player && actor->ai != NULL) {
-				actor->ai->actionPoints += (elapsedTime * 2) ; // TODO get speed from ai
-				while (actor->ai->actionPoints > 0) { // TODO bump the monsters back in queue after their turn
-					actor->ai->actionPoints -= actor->update();
-				}
-			}
+
+	gameStatus = GameStatus::NEW_TURN;
+	if (gameStatus == GameStatus::NEW_TURN) {
+		std::pair<float, Actor*> activeActor = actorsQueue.at(0);
+		for(std::pair<float, Actor*> a : actorsQueue) {
+			a.first -= activeActor.first;
 		}
+		float elapsedTime = activeActor.second->update();
+		if(activeActor.second == player) {
+			map->markExploredTiles();
+		}
+		activeActor.first += elapsedTime;
+		std::sort(actorsQueue.begin(), actorsQueue.end());
 	}
 }
 

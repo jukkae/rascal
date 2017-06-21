@@ -13,6 +13,7 @@ int PlayerAi::getNextLevelXp() {
 }
 
 int PlayerAi::update(Actor* owner) {
+	engine.gameStatus = Engine::GameStatus::IDLE;
 	int levelUpXp = getNextLevelXp();
 	if (owner->destructible->xp >= levelUpXp) {
 		xpLevel++;
@@ -50,7 +51,10 @@ int PlayerAi::update(Actor* owner) {
 	if (owner->destructible && owner->destructible->isDead()) return 100; // TODO well this is crap allright
 	int dx = 0;
 	int dy = 0;
-	switch(engine.lastKey.vk) {
+	TCOD_key_t lastKey;
+	TCOD_mouse_t mouse;
+	TCODSystem::waitForEvent(TCOD_EVENT_KEY_PRESS | TCOD_EVENT_MOUSE, &lastKey, &mouse, true);
+	switch(lastKey.vk) {
 		case TCODK_UP:    dy = -1; break;
 		case TCODK_DOWN:  dy = 1;  break;
 		case TCODK_LEFT:  dx = -1; break;
@@ -64,6 +68,7 @@ int PlayerAi::update(Actor* owner) {
 			engine.map->computeFov();
 		}
 	}
+	engine.gameStatus = Engine::GameStatus::NEW_TURN;
 	return 100; // TODO make all these returns depend on the speed
 }
 
