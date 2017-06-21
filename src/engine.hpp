@@ -31,6 +31,7 @@ public:
 	Actor* getLiveActor(int x, int y) const;
 	bool pickTile(int* x, int* y, float maxRange = 0.0f);
 private:
+	// TODO fix serialization with actorsQueue
 	friend class boost::serialization::access;
     template<class Archive>
     void serialize(Archive & ar, const unsigned int version)

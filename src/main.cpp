@@ -17,7 +17,7 @@ int main() {
 			showMenu();
 		}
 		engine.update();
-		engine.render();
+		engine.render(); // TODO don't render after each turn, render just before each player turn
 		TCODConsole::flush();
 	}
 
@@ -37,6 +37,7 @@ void save() {
 	oa << engine;
 }
 
+// TODO immediately go back to running game on enter
 void showMenu() {
 	engine.gui.menu.clear();
 	engine.gui.menu.addItem(Menu::MenuItemCode::NEW_GAME, "New game");
