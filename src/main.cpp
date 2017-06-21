@@ -16,6 +16,8 @@ int main() {
 			load();
 			showMenu();
 		}
+		engine.mouse.cx = mouse.cx;
+		engine.mouse.cy = mouse.cy;
 		engine.update();
 		engine.render(); // TODO don't render after each turn, render just before each player turn
 		TCODConsole::flush();
