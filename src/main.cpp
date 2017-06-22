@@ -18,7 +18,7 @@ int main() {
 			showMenu();
 		}
 		engine.update();
-		engine.render(); // TODO don't render after each turn, render just before each player turn
+		engine.render();
 		TCODConsole::flush();
 	}
 
@@ -38,7 +38,6 @@ void save() {
 	oa << engine;
 }
 
-// TODO immediately go back to running game on enter
 void showMenu() {
 	engine.gui.menu.clear();
 	engine.gui.menu.addItem(Menu::MenuItemCode::NEW_GAME, "New game");
@@ -58,4 +57,8 @@ void showMenu() {
 		load();
 		engine.gameStatus = Engine::GameStatus::STARTUP;
 	}
+
+	engine.map->computeFov();
+	engine.render();
+	TCODConsole::flush();
 }

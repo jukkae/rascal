@@ -24,6 +24,10 @@ int PlayerAi::update(Actor* owner) {
 		engine.gui.menu.addItem(Menu::MenuItemCode::STRENGTH,"Strength (+1 attack)");
 		engine.gui.menu.addItem(Menu::MenuItemCode::AGILITY,"Agility (+1 defense)");
 		Menu::MenuItemCode menuItem = engine.gui.menu.pick(Menu::DisplayMode::PAUSE);
+
+		TCODConsole::root->clear();
+		engine.render();
+		TCODConsole::root->flush();
 		/* switch (menuItem) { TODO getting error: expression is not an integral constant expression
 		case Menu::MenuItemCode::CONSTITUTION :
 			owner->destructible->maxHp += 20;

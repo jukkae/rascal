@@ -57,9 +57,13 @@ void Engine::update() {
 		for(std::pair<float, Actor*>& a : actorsQueue) {
 			a.first -= activeActorTUNA;
 		}
+		if(activeActor.second == player) {
+			render();
+		}
 		float elapsedTime = activeActor.second->update();
 		if(activeActor.second == player) {
 			map->markExploredTiles();
+			render();
 		}
 		activeActor.first += elapsedTime;
 		std::sort(actorsQueue.begin(), actorsQueue.end());
