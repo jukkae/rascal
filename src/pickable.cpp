@@ -1,5 +1,7 @@
 #include "main.hpp"
 
+// owner is the Actor that this Pickable belongs to,
+// wearer is the Actor that has this Pickable in inventory.
 bool Pickable::pick(Actor* owner, Actor* wearer) {
 	if(wearer->container && wearer->container->add(owner)) {
 		engine.actors.erase(std::remove(engine.actors.begin(), engine.actors.end(), owner), engine.actors.end());
