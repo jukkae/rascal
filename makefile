@@ -2,7 +2,7 @@
 
 CXX=gcc
 CPPFLAGS=-Wall -Wno-c++11-extensions
-LDLIBS=-L.
+LDLIBS=-L./lib
 LDFLAGS=-ltcod -ltcodxx -lc++ -lboost_serialization
 
 SRCS=src/*.cpp
