@@ -76,10 +76,6 @@ col(col) {
 	this->text = text;
 }
 
-Gui::Message::Message() : // TODO dirty hack
-col(TCODColor::white) {
-	this->text = "";
-}
 
 Gui::Message::~Message() {
 }
