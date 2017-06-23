@@ -2,8 +2,7 @@ class Attacker {
 public :
 	float power;
 
-	Attacker(float power);
-	Attacker(); // TODO dirty hack
+	Attacker(float power = 0);
 	void attack(Actor* owner, Actor* target);
 
 private:

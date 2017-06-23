@@ -2,7 +2,6 @@
 #include "main.hpp"
 
 Attacker::Attacker(float power) : power(power) {;}
-Attacker::Attacker() : power(0.0f) {;} // TODO dirty hack
 
 void Attacker::attack(Actor* owner, Actor* target) {
 if(target->destructible && !target->destructible->isDead()) {
