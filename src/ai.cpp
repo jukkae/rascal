@@ -224,8 +224,6 @@ void TemporaryAi::applyTo(Actor* actor) {
 	actor->ai = std::unique_ptr<Ai>(this);
 }
 
-ConfusedMonsterAi::ConfusedMonsterAi(int turns): turns(turns) {;}
-
 int ConfusedMonsterAi::update(Actor* owner) {
 	TCODRandom* rng = TCODRandom::getInstance();
 	int dx = rng->getInt(-1,1);

@@ -50,7 +50,7 @@ private:
 
 class TemporaryAi : public Ai {
 public:
-	//TemporaryAi(int turns = 0); // TODO make sure this actually works
+	TemporaryAi(int turns = 0) : turns(turns) {;}
 	int update(Actor* owner) override;
 	void applyTo(Actor* actor);
 protected:
@@ -68,7 +68,7 @@ private:
 
 class ConfusedMonsterAi : public TemporaryAi {
 public:
-	ConfusedMonsterAi(int turns = 0);
+	ConfusedMonsterAi(int turns = 0) : TemporaryAi(turns) {;}
 	int update(Actor* owner) override;
 
 protected:
