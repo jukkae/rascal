@@ -71,16 +71,10 @@ public:
 	ConfusedMonsterAi(int turns = 0) : TemporaryAi(turns) {;}
 	int update(Actor* owner) override;
 
-protected:
-	int turns;
-	std::unique_ptr<Ai> oldAi;
-
 private:
 	friend class boost::serialization::access;
 	template<class Archive>
 	void serialize(Archive & ar, const unsigned int version) {
 		ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(TemporaryAi);
-		ar & turns;
-		ar & oldAi;
 	}
 };
