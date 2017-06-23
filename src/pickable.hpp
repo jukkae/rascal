@@ -1,3 +1,29 @@
+class TargetSelector {
+public:
+	// TODO move to enum class as soon as makefile trouble is fixed
+	enum SelectorType { CLOSEST_MONSTER, SELECTED_MONSTER, WEARER, WEARER_RANGE, SELECTED_RANGE };
+	TargetSelector();
+	TargetSelector(SelectorType type, float range);
+	void selectTargets(Actor* wearer, std::vector<Actor*>& list);
+protected:
+	SelectorType type;
+	float range;
+};
+
+class Effect {
+public:
+	virtual bool applyTo(Actor* actor) = 0;
+};
+
+class HealthEffect {
+public:
+	float amount;
+	std::string message;
+
+	HealthEffect(float amount, std::string message);
+	bool applyTo(Actor* actor);
+};
+
 class Pickable {
 public:
 	bool pick(Actor* owner, Actor* wearer);
