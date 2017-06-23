@@ -14,11 +14,6 @@ public:
 	float heal(float amount);
 	virtual void die(Actor *owner);
 
-	static Destructible* create(TCODZip& zip);
-protected:
-	enum class DestructibleType {
-		MONSTER, PLAYER
-	};
 private:
 	friend class boost::serialization::access;
 	template<class Archive>
