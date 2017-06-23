@@ -19,7 +19,7 @@ private:
 
 class Effect {
 public:
-	virtual bool applyTo(Actor* actor);
+	virtual bool applyTo(Actor* actor) = 0;
 private:
 	friend class boost::serialization::access;
 	template<class Archive>
@@ -64,14 +64,14 @@ private:
 
 class Pickable {
 public:
-	Pickable(TargetSelector selector = TargetSelector(TargetSelector::SelectorType::NONE, 0), Effect effect = Effect());
+	Pickable(TargetSelector selector = TargetSelector(TargetSelector::SelectorType::NONE, 0), std::unique_ptr<Effect> effect = std::unique_ptr<Effect>());
 	virtual ~Pickable() {};
 	bool pick(Actor* owner, Actor* wearer);
 	bool use (Actor* owner, Actor* wearer);
 	void drop(Actor* owner, Actor* wearer);
 protected:
 	TargetSelector selector;
-	Effect effect;
+	std::unique_ptr<Effect> effect;
 private:
     friend class boost::serialization::access;
     template<class Archive>

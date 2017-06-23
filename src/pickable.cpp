@@ -50,10 +50,6 @@ void TargetSelector::selectTargets(Actor* wearer, std::vector<Actor*>& list) {
 	if(list.size() == 0) engine.gui.message(TCODColor::lightGrey, "Zork! No enemy close enough!");
 }
 
-bool Effect::applyTo(Actor* actor) {
-	return false;
-}
-
 HealthEffect::HealthEffect(float amount, std::string message) : amount(amount), message(message) {;}
 
 bool HealthEffect::applyTo(Actor* actor) {
@@ -81,7 +77,7 @@ bool AiChangeEffect::applyTo(Actor* actor) {
 	return true;
 }
 
-Pickable::Pickable(TargetSelector selector, Effect effect) : selector(selector), effect(effect) {;}
+Pickable::Pickable(TargetSelector selector, std::unique_ptr<Effect> effect) : selector(selector), effect(std::move(effect)) {;}
 
 // owner is the Actor that this Pickable belongs to,
 // wearer is the Actor that has this Pickable in inventory.
@@ -100,7 +96,7 @@ bool Pickable::use(Actor* owner, Actor* wearer) {
 
 	bool success = false;
 	for(auto it = list.begin(); it != list.end(); it++) {
-		if(effect.applyTo(*it)) success = true;
+		if(effect->applyTo(*it)) success = true;
 	}
 	if(success) {
 		if(wearer->container) {
