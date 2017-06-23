@@ -8,20 +8,42 @@ public:
 protected:
 	SelectorType type;
 	float range;
+private:
+	friend class boost::serialization::access;
+	template<class Archive>
+	void serialize(Archive & ar, const unsigned int version) {
+		ar & type;
+		ar & range;
+	}
 };
 
 class Effect {
 public:
 	virtual bool applyTo(Actor* actor) = 0;
+private:
+	friend class boost::serialization::access;
+	template<class Archive>
+	void serialize(Archive & ar, const unsigned int version) {
+
+	}
 };
 
-class HealthEffect {
+class HealthEffect : public Effect {
 public:
 	float amount;
 	std::string message;
 
 	HealthEffect(float amount, std::string message);
-	bool applyTo(Actor* actor);
+	HealthEffect();
+	bool applyTo(Actor* actor) override;
+private:
+	friend class boost::serialization::access;
+	template<class Archive>
+	void serialize(Archive & ar, const unsigned int version) {
+		ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(Effect);
+		ar & amount;
+		ar & message;
+	}
 };
 
 class Pickable {
@@ -100,6 +122,8 @@ private:
 		ar & range;
     }
 };
+
+BOOST_CLASS_EXPORT_KEY(HealthEffect)
 
 BOOST_CLASS_EXPORT_KEY(Healer)
 BOOST_CLASS_EXPORT_KEY(BlasterBolt)

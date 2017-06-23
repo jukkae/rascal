@@ -51,6 +51,7 @@ void TargetSelector::selectTargets(Actor* wearer, std::vector<Actor*>& list) {
 }
 
 HealthEffect::HealthEffect(float amount, std::string message) : amount(amount), message(message) {}
+HealthEffect::HealthEffect() : amount(0), message("") {} // TODO dirty hack
 
 bool HealthEffect::applyTo(Actor* actor) {
 	if(!actor->destructible) return false;
@@ -151,6 +152,10 @@ bool Confusor::use(Actor* owner, Actor* wearer) {
 	engine.gui.message(TCODColor::lightGreen,"The eyes of the %s look empty,\nas he starts to stumble around!", actor->name.c_str());
 	return Pickable::use(owner,wearer);
 }
+
+template void HealthEffect::serialize(boost::archive::text_iarchive& arch, const unsigned int version);
+template void HealthEffect::serialize(boost::archive::text_oarchive& arch, const unsigned int version);
+BOOST_CLASS_EXPORT_IMPLEMENT(HealthEffect)
 
 template void Healer::serialize(boost::archive::text_iarchive& arch, const unsigned int version);
 template void Healer::serialize(boost::archive::text_oarchive& arch, const unsigned int version);
