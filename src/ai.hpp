@@ -53,10 +53,27 @@ private:
 	}
 };
 
-class ConfusedMonsterAi : public Ai {
+class TemporaryAi : public Ai {
 public:
-	ConfusedMonsterAi(int turns, std::unique_ptr<Ai> oldAi);
-	ConfusedMonsterAi(); // TODO dirty hack
+	TemporaryAi(int turns = 0); // TODO make sure this actually works
+	int update(Actor* owner) override;
+	void applyTo(Actor* actor);
+protected:
+	int turns;
+	std::unique_ptr<Ai> oldAi;
+private:
+	friend class boost::serialization::access;
+	template<class Archive>
+	void serialize(Archive & ar, const unsigned int version) {
+		ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(Ai);
+		ar & turns;
+		ar & oldAi;
+	}
+};
+
+class ConfusedMonsterAi : public TemporaryAi {
+public:
+	ConfusedMonsterAi(int turns = 0);
 	int update(Actor* owner) override;
 
 protected:
@@ -67,7 +84,7 @@ private:
 	friend class boost::serialization::access;
 	template<class Archive>
 	void serialize(Archive & ar, const unsigned int version) {
-		ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(Ai);
+		ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(TemporaryAi);
 		ar & turns;
 		ar & oldAi;
 	}

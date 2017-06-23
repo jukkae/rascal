@@ -211,8 +211,22 @@ void MonsterAi::moveOrAttack(Actor* owner, int targetX, int targetY) {
 	}
 }
 
-ConfusedMonsterAi::ConfusedMonsterAi(int turns, std::unique_ptr<Ai> oldAi): turns(turns), oldAi(std::move(oldAi)) {;}
-ConfusedMonsterAi::ConfusedMonsterAi(): turns(0), oldAi(NULL) {;} // TODO dirty hack
+TemporaryAi::TemporaryAi(int turns) : turns(turns) {;}
+
+int TemporaryAi::update(Actor* owner) {
+	turns--;
+	if(turns <= 0) {
+		owner->ai = std::move(oldAi);
+	}
+	return 100; // TODO yeah fix this
+}
+
+void TemporaryAi::applyTo(Actor* actor) {
+	oldAi = std::move(actor->ai);
+	actor->ai = std::unique_ptr<Ai>(this);
+}
+
+ConfusedMonsterAi::ConfusedMonsterAi(int turns): turns(turns) {;}
 
 int ConfusedMonsterAi::update(Actor* owner) {
 	TCODRandom* rng = TCODRandom::getInstance();
@@ -229,13 +243,10 @@ int ConfusedMonsterAi::update(Actor* owner) {
 			if(target) { owner->attacker->attack(owner, target); }
 		}
 	}
-	turns--;
-	if(turns <= 0) {
-		owner->ai = std::move(oldAi);
-	}
-	return 100;
+	return TemporaryAi::update(owner);
 }
 
 BOOST_CLASS_EXPORT(PlayerAi)
 BOOST_CLASS_EXPORT(MonsterAi)
+BOOST_CLASS_EXPORT(TemporaryAi)
 BOOST_CLASS_EXPORT(ConfusedMonsterAi)
