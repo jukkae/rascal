@@ -211,7 +211,7 @@ void MonsterAi::moveOrAttack(Actor* owner, int targetX, int targetY) {
 	}
 }
 
-ConfusedMonsterAi::ConfusedMonsterAi(int turns, Ai* oldAi): turns(turns), oldAi(oldAi) {;}
+ConfusedMonsterAi::ConfusedMonsterAi(int turns, std::unique_ptr<Ai> oldAi): turns(turns), oldAi(std::move(oldAi)) {;}
 ConfusedMonsterAi::ConfusedMonsterAi(): turns(0), oldAi(NULL) {;} // TODO dirty hack
 
 int ConfusedMonsterAi::update(Actor* owner) {
@@ -231,8 +231,7 @@ int ConfusedMonsterAi::update(Actor* owner) {
 	}
 	turns--;
 	if(turns <= 0) {
-		owner->ai = oldAi;
-		delete this;
+		owner->ai = std::move(oldAi);
 	}
 	return 100;
 }

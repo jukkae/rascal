@@ -18,22 +18,23 @@ void Engine::term() {
 }
 
 void Engine::init() {
-	player = new Actor(40, 25, '@', "you", TCODColor::white);
+	player               = new Actor(40, 25, '@', "you", TCODColor::white);
 	player->destructible = std::unique_ptr<Destructible>(new PlayerDestructible(30, 2, 0, "your corpse"));
-	player->attacker = std::unique_ptr<Attacker>(new Attacker(5));
-	player->ai = new PlayerAi();
-	player->container = std::unique_ptr<Container>(new Container(26));
+	player->attacker     = std::unique_ptr<Attacker>(new Attacker(5));
+	player->ai           = std::unique_ptr<Ai>(new PlayerAi());
+	player->container    = std::unique_ptr<Container>(new Container(26));
 	actors.push_back(player);
+
 	stairs = new Actor(0, 0, '>', "stairs", TCODColor::white);
 	stairs->blocks = false;
 	stairs->fovOnly = false;
 	actors.push_back(stairs);
+
 	map = std::unique_ptr<Map>(new Map(80, 43));
 	map->init(true);
+
 	gui.message(TCODColor::green, "Welcome to year 20XXAD, you strange rascal!\nPrepare to fight or die!");
-
 	updateQueue();
-
 	gameStatus = GameStatus::STARTUP;
 }
 

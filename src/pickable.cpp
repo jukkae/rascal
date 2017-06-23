@@ -75,8 +75,8 @@ bool Confusor::use(Actor* owner, Actor* wearer) {
 	if(!engine.pickTile(&x, &y)) { return false; }
 	Actor* actor = engine.getLiveActor(x, y);
 	if(!actor) { return false; }
-	Ai* confAi = new ConfusedMonsterAi(turns, actor->ai);
-	actor->ai = confAi;
+	std::unique_ptr<Ai> confAi = std::unique_ptr<Ai>(new ConfusedMonsterAi(turns, std::move(actor->ai)));
+	actor->ai = std::move(confAi);
 	engine.gui.message(TCODColor::lightGreen,"The eyes of the %s look empty,\nas he starts to stumble around!", actor->name.c_str());
 	return Pickable::use(owner,wearer);
 }

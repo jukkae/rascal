@@ -8,7 +8,7 @@ public:
 	bool fovOnly; // visible only when in fov?
 	std::unique_ptr<Attacker> attacker;
 	std::unique_ptr<Destructible> destructible;
-	Ai* ai; // self-updating
+	std::unique_ptr<Ai> ai;
 	std::unique_ptr<Pickable> pickable;
 	std::unique_ptr<Container> container;
 

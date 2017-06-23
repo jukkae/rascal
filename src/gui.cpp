@@ -30,7 +30,7 @@ void Gui::render() {
 	renderMouseLook();
 	con.setDefaultForeground(TCODColor::white);
 	con.print(3, 3, "Dungeon level %d", engine.level);
-	PlayerAi* ai = (PlayerAi*)engine.player->ai;
+	PlayerAi* ai = (PlayerAi*)engine.player->ai.get(); // Don't transfer ownership!
 
 	char xpTxt[128];
 	sprintf(xpTxt, "XP(%d)", ai->xpLevel);

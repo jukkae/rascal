@@ -36,13 +36,13 @@ void Map::addMonster(int x, int y) {
 		Actor* punk = new Actor(x, y, 'h', "punk", TCODColor::desaturatedGreen);
 		punk->destructible = std::unique_ptr<Destructible>(new MonsterDestructible(10, 0, 50, "dead punk"));
 		punk->attacker = std::unique_ptr<Attacker>(new Attacker(3));
-		punk->ai = new MonsterAi();
+		punk->ai = std::unique_ptr<Ai>(new MonsterAi());
 		engine.actors.push_back(punk);
 	} else {
 		Actor *fighter = new Actor(x, y, 'H', "fighter", TCODColor::darkerGreen);
 		fighter->destructible = std::unique_ptr<Destructible>(new MonsterDestructible(16, 1, 100, "fighter carcass"));
 		fighter->attacker = std::unique_ptr<Attacker>(new Attacker(4));
-		fighter->ai = new MonsterAi();
+		fighter->ai = std::unique_ptr<Ai>(new MonsterAi());
 		engine.actors.push_back(fighter);
 	}
 }

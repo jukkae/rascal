@@ -60,13 +60,13 @@ private:
 
 class ConfusedMonsterAi : public Ai {
 public:
-	ConfusedMonsterAi(int turns, Ai* oldAi);
+	ConfusedMonsterAi(int turns, std::unique_ptr<Ai> oldAi);
 	ConfusedMonsterAi(); // TODO dirty hack
 	int update(Actor* owner) override;
 
 protected:
 	int turns;
-	Ai* oldAi;
+	std::unique_ptr<Ai> oldAi;
 
 private:
 	friend class boost::serialization::access;
