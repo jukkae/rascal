@@ -211,8 +211,6 @@ void MonsterAi::moveOrAttack(Actor* owner, int targetX, int targetY) {
 	}
 }
 
-TemporaryAi::TemporaryAi(int turns) : turns(turns) {;}
-
 int TemporaryAi::update(Actor* owner) {
 	turns--;
 	if(turns <= 0) {

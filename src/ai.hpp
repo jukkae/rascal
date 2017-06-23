@@ -18,11 +18,9 @@ public:
 	int getNextLevelXp();
 	int update(Actor* owner) override;
 	int speed = 100; // TODO crap
-
 protected:
 	bool moveOrAttack(Actor* owner, int targetX, int targetY);
 	Actor* chooseFromInventory(Actor* owner);
-
 private:
 	void handleActionKey(Actor* owner, int ascii);
 
@@ -38,12 +36,9 @@ class MonsterAi : public Ai {
 public:
 	int update(Actor* owner) override;
 	int speed = 200; // TODO crap
-
 protected:
 	int moveCount;
-
 	void moveOrAttack(Actor* owner, int targetX, int targetY);
-
 private:
 	friend class boost::serialization::access;
 	template<class Archive>
@@ -55,7 +50,7 @@ private:
 
 class TemporaryAi : public Ai {
 public:
-	TemporaryAi(int turns = 0); // TODO make sure this actually works
+	//TemporaryAi(int turns = 0); // TODO make sure this actually works
 	int update(Actor* owner) override;
 	void applyTo(Actor* actor);
 protected:
