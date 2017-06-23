@@ -1,12 +1,12 @@
 class TargetSelector {
 public:
 	// TODO move to enum class as soon as makefile trouble is fixed
-	enum SelectorType { CLOSEST_MONSTER, SELECTED_MONSTER, WEARER, WEARER_RANGE, SELECTED_RANGE };
+	enum SelectorType { CLOSEST_MONSTER, SELECTED_MONSTER, WEARER, WEARER_RANGE, SELECTED_RANGE, NONE };
 	TargetSelector();
 	TargetSelector(SelectorType type, float range);
 	void selectTargets(Actor* wearer, std::vector<Actor*>& list);
-protected:
 	SelectorType type;
+protected:
 	float range;
 private:
 	friend class boost::serialization::access;
@@ -19,7 +19,7 @@ private:
 
 class Effect {
 public:
-	virtual bool applyTo(Actor* actor) = 0;
+	virtual bool applyTo(Actor* actor);
 private:
 	friend class boost::serialization::access;
 	template<class Archive>
@@ -47,10 +47,10 @@ private:
 
 class AiChangeEffect : public Effect {
 public:
-	TemporaryAi* newAi;
+	std::unique_ptr<TemporaryAi> newAi;
 	std::string message;
 
-	AiChangeEffect(TemporaryAi* newAi = NULL, std::string message = "");
+	AiChangeEffect(std::unique_ptr<TemporaryAi> newAi = std::unique_ptr<TemporaryAi>(), std::string message = "");
 	bool applyTo(Actor* actor) override;
 private:
 	friend class boost::serialization::access;
@@ -64,85 +64,23 @@ private:
 
 class Pickable {
 public:
-	bool pick(Actor* owner, Actor* wearer);
-	virtual bool use(Actor* owner, Actor* wearer);
+	Pickable(TargetSelector selector = TargetSelector(TargetSelector::SelectorType::NONE, 0), Effect effect = Effect());
 	virtual ~Pickable() {};
+	bool pick(Actor* owner, Actor* wearer);
+	bool use (Actor* owner, Actor* wearer);
 	void drop(Actor* owner, Actor* wearer);
+protected:
+	TargetSelector selector;
+	Effect effect;
 private:
     friend class boost::serialization::access;
     template<class Archive>
     void serialize(Archive & ar, const unsigned int version) {
-
+		ar & selector;
+		ar & effect;
     }
 };
 
-class Healer : public Pickable {
-public:
-	float amount;
-
-	Healer(float amount = 0);
-	bool use(Actor* owner, Actor* wearer);
-private:
-    friend class boost::serialization::access;
-    template<class Archive>
-    void serialize(Archive & ar, const unsigned int version) {
-		ar.template register_type<Pickable>();
-		ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(Pickable);
-		ar & amount;
-    }
-};
-
-class BlasterBolt : public Pickable {
-public:
-	float range;
-	float damage;
-	BlasterBolt(float range = 0, float damage = 0);
-	bool use(Actor* owner, Actor* wearer);
-private:
-    friend class boost::serialization::access;
-    template<class Archive>
-    void serialize(Archive & ar, const unsigned int version) {
-		ar.template register_type<Pickable>();
-		ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(Pickable);
-		ar & range;
-		ar & damage;
-    }
-};
-
-class FragmentationGrenade : public BlasterBolt {
-public:
-	FragmentationGrenade(float range = 0, float damage = 0);
-	bool use(Actor* owner, Actor* wearer);
-private:
-    friend class boost::serialization::access;
-    template<class Archive>
-    void serialize(Archive & ar, const unsigned int version) {
-		ar.template register_type<Pickable>();
-		ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(BlasterBolt);
-    }
-};
-
-class Confusor : public Pickable {
-public:
-	int turns;
-	float range;
-	Confusor(int turns = 0, float range = 0);
-	bool use(Actor* owner, Actor* wearer);
-private:
-    friend class boost::serialization::access;
-    template<class Archive>
-    void serialize(Archive & ar, const unsigned int version) {
-		ar.template register_type<Pickable>();
-		ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(Pickable);
-		ar & turns;
-		ar & range;
-    }
-};
-
+BOOST_CLASS_EXPORT_KEY(Effect)
 BOOST_CLASS_EXPORT_KEY(HealthEffect)
 BOOST_CLASS_EXPORT_KEY(AiChangeEffect)	
-
-BOOST_CLASS_EXPORT_KEY(Healer)
-BOOST_CLASS_EXPORT_KEY(BlasterBolt)
-BOOST_CLASS_EXPORT_KEY(FragmentationGrenade)
-BOOST_CLASS_EXPORT_KEY(Confusor)
