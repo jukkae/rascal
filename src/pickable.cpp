@@ -21,7 +21,7 @@ void TargetSelector::selectTargets(Actor* wearer, std::vector<Actor*>& list) {
 		} break;
 		case SelectorType::WEARER :
 		{
-			// TODO
+			list.push_back(wearer);
 		} break;
 		case SelectorType::WEARER_RANGE :
 		{
@@ -91,8 +91,9 @@ bool Pickable::pick(Actor* owner, Actor* wearer) {
 
 bool Pickable::use(Actor* owner, Actor* wearer) {
 	std::vector<Actor*> list;
-	if(selector.type != TargetSelector::WEARER) selector.selectTargets(wearer, list);
-	else list.push_back(wearer);
+	if(selector.type != TargetSelector::NONE) {
+		selector.selectTargets(wearer, list);
+	}
 
 	bool success = false;
 	for(auto it = list.begin(); it != list.end(); it++) {

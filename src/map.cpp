@@ -52,7 +52,7 @@ void Map::addItem(int x, int y) {
 	if(r < 70) {
 		Actor* stimpak = new Actor(x, y, '!', "stimpak", TCODColor::violet);
 		stimpak->blocks = false;
-		stimpak->pickable = std::unique_ptr<Pickable>(new Pickable(TargetSelector(), std::unique_ptr<Effect>(new HealthEffect(4))));
+		stimpak->pickable = std::unique_ptr<Pickable>(new Pickable(TargetSelector(TargetSelector::SelectorType::WEARER, 0), std::unique_ptr<Effect>(new HealthEffect(4))));
 		engine.actors.push_back(stimpak);
 	} else if(r < 80) {
 		Actor* blasterBoltDevice = new Actor(x, y, '?', "blaster bolt device", TCODColor::lightYellow);
