@@ -4,11 +4,6 @@ public:
 	virtual bool use(Actor* owner, Actor* wearer);
 	virtual ~Pickable() {};
 	void drop(Actor* owner, Actor* wearer);
-	static Pickable* create (TCODZip& zip);
-protected:
-	enum class PickableType {
-		HEALER, BLASTER_BOLT, FRAGMENTATION_GRENADE, CONFUSOR
-	};
 private:
     friend class boost::serialization::access;
     template<class Archive>

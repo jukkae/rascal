@@ -2,12 +2,7 @@ class Ai {
 public:
 	virtual int update(Actor* owner) = 0;
 	virtual ~Ai() {};
-	static Ai* create (TCODZip& zip);
 	int speed; // TODO crap
-protected :
-	enum class AiType {
-		MONSTER, CONFUSED_MONSTER, PLAYER
-	};
 private:
 	friend class boost::serialization::access;
 	template<class Archive>
