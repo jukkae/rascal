@@ -50,8 +50,7 @@ void TargetSelector::selectTargets(Actor* wearer, std::vector<Actor*>& list) {
 	if(list.size() == 0) engine.gui.message(TCODColor::lightGrey, "Zork! No enemy close enough!");
 }
 
-HealthEffect::HealthEffect(float amount, std::string message) : amount(amount), message(message) {}
-HealthEffect::HealthEffect() : amount(0), message("") {} // TODO dirty hack
+HealthEffect::HealthEffect(float amount, std::string message) : amount(amount), message(message) {;}
 
 bool HealthEffect::applyTo(Actor* actor) {
 	if(!actor->destructible) return false;
@@ -68,6 +67,14 @@ bool HealthEffect::applyTo(Actor* actor) {
 		if(actor->destructible->takeDamage(actor, -amount) > 0) return true;
 	}
 	return false;
+}
+
+AiChangeEffect::AiChangeEffect(TemporaryAi* newAi, std::string message) : newAi(newAi), message(message) {;}
+
+bool AiChangeEffect::applyTo(Actor* actor) {
+	newAi->applyTo(actor);
+	if(message != "") engine.gui.message(TCODColor::lightGrey, message, actor->name.c_str());
+	return true;
 }
 
 // owner is the Actor that this Pickable belongs to,
@@ -155,7 +162,11 @@ bool Confusor::use(Actor* owner, Actor* wearer) {
 
 template void HealthEffect::serialize(boost::archive::text_iarchive& arch, const unsigned int version);
 template void HealthEffect::serialize(boost::archive::text_oarchive& arch, const unsigned int version);
+template void AiChangeEffect::serialize(boost::archive::text_iarchive& arch, const unsigned int version);
+template void AiChangeEffect::serialize(boost::archive::text_oarchive& arch, const unsigned int version);
+
 BOOST_CLASS_EXPORT_IMPLEMENT(HealthEffect)
+BOOST_CLASS_EXPORT_IMPLEMENT(AiChangeEffect)
 
 template void Healer::serialize(boost::archive::text_iarchive& arch, const unsigned int version);
 template void Healer::serialize(boost::archive::text_oarchive& arch, const unsigned int version);

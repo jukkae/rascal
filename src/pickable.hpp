@@ -33,8 +33,7 @@ public:
 	float amount;
 	std::string message;
 
-	HealthEffect(float amount, std::string message);
-	HealthEffect();
+	HealthEffect(float amount = 0, std::string message = "");
 	bool applyTo(Actor* actor) override;
 private:
 	friend class boost::serialization::access;
@@ -42,6 +41,23 @@ private:
 	void serialize(Archive & ar, const unsigned int version) {
 		ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(Effect);
 		ar & amount;
+		ar & message;
+	}
+};
+
+class AiChangeEffect : public Effect {
+public:
+	TemporaryAi* newAi;
+	std::string message;
+
+	AiChangeEffect(TemporaryAi* newAi = NULL, std::string message = "");
+	bool applyTo(Actor* actor) override;
+private:
+	friend class boost::serialization::access;
+	template<class Archive>
+	void serialize(Archive & ar, const unsigned int version) {
+		ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(Effect);
+		ar & newAi;
 		ar & message;
 	}
 };
@@ -124,6 +140,7 @@ private:
 };
 
 BOOST_CLASS_EXPORT_KEY(HealthEffect)
+BOOST_CLASS_EXPORT_KEY(AiChangeEffect)	
 
 BOOST_CLASS_EXPORT_KEY(Healer)
 BOOST_CLASS_EXPORT_KEY(BlasterBolt)
