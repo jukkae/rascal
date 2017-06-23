@@ -12,8 +12,7 @@ public:
 	std::unique_ptr<Pickable> pickable;
 	std::unique_ptr<Container> container;
 
-	Actor(int x, int y, int ch, std::string name, const TCODColor& col);
-	Actor(); // TODO dirty hack
+	Actor(int x = 0, int y = 0, int ch = 'x', std::string name = "", const TCODColor& col = TCODColor::white);
 	~Actor();
 	float update();
 	void render() const;
