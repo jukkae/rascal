@@ -3,8 +3,7 @@ public:
 	int size; // max number of actors in container, 0 = unlimited
 	std::vector<Actor*> inventory;
 
-	Container(int size);
-	Container(); // TODO dirty hack
+	Container(int size = 0);
 	~Container();
 	bool add(Actor* actor);
 	void remove(Actor* actor);
