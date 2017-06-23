@@ -1,7 +1,6 @@
 #include "main.hpp"
 
 TargetSelector::TargetSelector(SelectorType type, float range) : type(type), range(range) {;}
-TargetSelector::TargetSelector() : type(), range(0) {;} // TODO dirty hack
 
 void TargetSelector::selectTargets(Actor* wearer, std::vector<Actor*>& list) {
 	switch(type) {
