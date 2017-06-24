@@ -15,7 +15,7 @@ class PlayerAi : public Ai {
 public:
 	int xpLevel;
 	PlayerAi();
-	int getNextLevelXp();
+	int getNextLevelXp() const;
 	int update(Actor* owner) override;
 	int speed = 100; // TODO crap
 protected:

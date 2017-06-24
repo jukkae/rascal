@@ -8,7 +8,7 @@ PlayerAi::PlayerAi() : xpLevel(1) {}
 const int LEVEL_UP_BASE = 200;
 const int LEVEL_UP_FACTOR = 150;
 
-int PlayerAi::getNextLevelXp() {
+int PlayerAi::getNextLevelXp() const {
 	return LEVEL_UP_BASE + xpLevel * LEVEL_UP_FACTOR;
 }
 
