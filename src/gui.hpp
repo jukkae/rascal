@@ -25,7 +25,7 @@ public:
 	~Gui();
 	void clear();
 
-	void render();
+	void render(); // TODO this should be const
 	void message(const TCODColor &col, std::string text, ...);
 
 	Menu menu;

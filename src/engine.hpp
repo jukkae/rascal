@@ -25,7 +25,7 @@ public:
 	void updateQueue();
 	void term();
 	void update();
-	void render();
+	void render(); // TODO this should be const
 	void sendToBack(Actor* actor);
 	void nextLevel();
 	Actor* getClosestMonster(int x, int y, float range) const;
