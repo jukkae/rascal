@@ -1,7 +1,7 @@
 # Compile for macOs
 
 CXX=gcc
-CPPFLAGS=-Wall -Wno-c++11-extensions
+CPPFLAGS=-Wall -std=c++1z
 LDLIBS=-L./lib
 LDFLAGS=-ltcod -ltcodxx -lc++ -lboost_serialization
 
