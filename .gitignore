@@ -3,7 +3,7 @@
 rascal
 rascal.dSYM
 save.txt
-include/
+# include/
 lib/
 old/
 *.a
