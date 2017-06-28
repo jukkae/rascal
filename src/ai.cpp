@@ -126,7 +126,7 @@ Actor* PlayerAi::chooseFromInventory(Actor* owner) {
 		int actorIndex=key.c - 'a';
 		if(actorIndex >= 0 && actorIndex < owner->container->inventory.size()) { return owner->container->inventory.at(actorIndex); }
 	}
-	return NULL;
+	return nullptr;
 }
 
 void PlayerAi::handleActionKey(Actor *owner, int ascii) {

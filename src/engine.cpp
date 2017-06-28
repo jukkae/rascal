@@ -112,7 +112,7 @@ void Engine::sendToBack(Actor* actor) {
 }
 
 Actor* Engine::getClosestMonster(int x, int y, float range) const {
-	Actor *closest = NULL;
+	Actor *closest = nullptr;
 	float bestDistance = std::numeric_limits<float>::max();
 	for (auto i = actors.begin(); i != actors.end(); i++) {
 		Actor* actor = *i;
@@ -132,7 +132,7 @@ Actor* Engine::getLiveActor(int x, int y) const {
 		Actor* actor = *i;
 		if(actor->x == x && actor->y == y && actor->destructible && !actor->destructible->isDead()) return actor;
 	}
-	return NULL;
+	return nullptr;
 }
 
 bool Engine::pickTile(int* x, int* y, float maxRange) {
