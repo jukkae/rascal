@@ -1,3 +1,5 @@
+#ifndef AI_HPP
+#define AI_HPP
 class Ai {
 public:
 	virtual float update(Actor* owner) = 0;
@@ -79,3 +81,4 @@ private:
 		ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(TemporaryAi);
 	}
 };
+#endif /* AI_HPP */

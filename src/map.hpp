@@ -1,3 +1,5 @@
+#ifndef MAP_HPP
+#define MAP_HPP
 struct Tile {
 	bool explored;
 	Tile() : explored(false) {;}
@@ -95,3 +97,4 @@ public:
 	BspListener(Map &map, TCODRandom* rng);
 	bool visitNode(TCODBsp* node, void* userData);
 };
+#endif /* MAP_HPP */

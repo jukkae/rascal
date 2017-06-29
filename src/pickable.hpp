@@ -1,3 +1,6 @@
+#ifndef PICKABLE_HPP
+#define PICKABLE_HPP
+
 class TargetSelector {
 public:
 	enum class SelectorType { CLOSEST_MONSTER, SELECTED_MONSTER, WEARER, WEARER_RANGE, SELECTED_RANGE, NONE };
@@ -82,3 +85,5 @@ private:
 BOOST_CLASS_EXPORT_KEY(Effect)
 BOOST_CLASS_EXPORT_KEY(HealthEffect)
 BOOST_CLASS_EXPORT_KEY(AiChangeEffect)	
+
+#endif /* PICKABLE_HPP */

@@ -1,3 +1,5 @@
+#ifndef DESTRUCTIBLE_HPP
+#define DESTRUCTIBLE_HPP
 class Destructible {
 public:
 	float maxHp;
@@ -54,3 +56,4 @@ private:
 
 BOOST_CLASS_EXPORT_KEY(MonsterDestructible)
 BOOST_CLASS_EXPORT_KEY(PlayerDestructible)
+#endif /* DESTRUCTIBLE_HPP */

@@ -1,3 +1,5 @@
+#ifndef MAIN_HPP
+#define MAIN_HPP
 #include <fstream>
 #include <sstream>
 #include <boost/archive/text_oarchive.hpp>                                                                    
@@ -21,3 +23,4 @@ class Actor;
 void save();
 void load();
 void showMenu();
+#endif /* MAIN_HPP */

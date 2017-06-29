@@ -1,3 +1,5 @@
+#ifndef CONTAINER_HPP
+#define CONTAINER_HPP
 class Container {
 public:
 	int size; // max number of actors in container, 0 = unlimited
@@ -16,3 +18,4 @@ private:
 		ar & inventory;
 	}
 };
+#endif /* CONTAINER_HPP */

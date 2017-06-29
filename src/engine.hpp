@@ -1,3 +1,5 @@
+#ifndef ENGINE_HPP
+#define ENGINE_HPP
 class Engine {
 public:
 	enum class GameStatus {
@@ -47,3 +49,4 @@ private:
 };
 
 extern Engine engine;
+#endif /* ENGINE_HPP */

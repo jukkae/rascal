@@ -1,3 +1,6 @@
+#ifndef PERSISTENT_HPP
+#define PERSISTENT_HPP
+
 #include <boost/serialization/unique_ptr.hpp>
 #include <boost/serialization/utility.hpp>
 
@@ -12,3 +15,5 @@ inline void serialize (
 	ar & t.g;
 	ar & t.b;
 }
+
+#endif /* PERSISTENT_HPP */

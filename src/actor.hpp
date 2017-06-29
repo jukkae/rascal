@@ -1,3 +1,5 @@
+#ifndef ACTOR_HPP
+#define ACTOR_HPP
 class Actor {
 public:
 	int x, y;
@@ -36,3 +38,4 @@ private:
 		ar & container;
     }   
 };
+#endif /* ACTOR_HPP */

@@ -1,3 +1,5 @@
+#ifndef ATTACKER_HPP
+#define ATTACKER_HPP
 class Attacker {
 public :
 	float power;
@@ -12,3 +14,4 @@ private:
 		ar & power;
 	}
 };
+#endif /* ATTACKER_HPP */

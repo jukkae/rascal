@@ -1,3 +1,5 @@
+#ifndef GUI_HPP
+#define GUI_HPP
 class Menu {
 public:
 	enum class MenuItemCode { NONE, NEW_GAME, CONTINUE, EXIT, CONSTITUTION, STRENGTH, AGILITY };
@@ -58,3 +60,4 @@ private:
 		ar & log;
 	}
 };
+#endif /* GUI_HPP */
