@@ -28,7 +28,7 @@ int PlayerAi::update(Actor* owner) {
 		TCODConsole::root->clear();
 		engine.render();
 		TCODConsole::root->flush();
-		/* switch (menuItem) { TODO getting error: expression is not an integral constant expression
+		switch (menuItem) {
 		case Menu::MenuItemCode::CONSTITUTION :
 			owner->destructible->maxHp += 20;
 			owner->destructible->hp += 20;
@@ -40,16 +40,6 @@ int PlayerAi::update(Actor* owner) {
 			owner->destructible->defense += 1;
 			break;
 		default: break;
-		} */
-		if(menuItem == Menu::MenuItemCode::CONSTITUTION) {
-			owner->destructible->maxHp += 20;
-			owner->destructible->hp += 20;
-		}
-		if(menuItem == Menu::MenuItemCode::STRENGTH) {
-			owner->attacker->power += 1;
-		}
-		if(menuItem == Menu::MenuItemCode::AGILITY) {
-			owner->destructible->defense += 1;
 		}
 	}
 	if (owner->destructible && owner->destructible->isDead()) return 100; // TODO well this is crap allright

@@ -1,7 +1,6 @@
 class TargetSelector {
 public:
-	// TODO move to enum class as soon as makefile trouble is fixed
-	enum SelectorType { CLOSEST_MONSTER, SELECTED_MONSTER, WEARER, WEARER_RANGE, SELECTED_RANGE, NONE };
+	enum class SelectorType { CLOSEST_MONSTER, SELECTED_MONSTER, WEARER, WEARER_RANGE, SELECTED_RANGE, NONE };
 	TargetSelector(SelectorType type = SelectorType::NONE, float range = 0);
 	void selectTargets(Actor* wearer, std::vector<Actor*>& list);
 	SelectorType type;

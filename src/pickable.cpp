@@ -90,7 +90,7 @@ bool Pickable::pick(Actor* owner, Actor* wearer) {
 
 bool Pickable::use(Actor* owner, Actor* wearer) {
 	std::vector<Actor*> list;
-	if(selector.type != TargetSelector::NONE) {
+	if(selector.type != TargetSelector::SelectorType::NONE) {
 		selector.selectTargets(wearer, list);
 	}
 
