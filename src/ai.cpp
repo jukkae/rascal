@@ -13,7 +13,7 @@ int PlayerAi::getNextLevelXp() const {
 }
 
 // TODO fix keyboard handling: Who handles what? currently split here, main and engine!
-int PlayerAi::update(Actor* owner) {
+float PlayerAi::update(Actor* owner) {
 	int levelUpXp = getNextLevelXp();
 	if (owner->destructible->xp >= levelUpXp) {
 		xpLevel++;
@@ -167,7 +167,7 @@ void PlayerAi::handleActionKey(Actor *owner, int ascii) {
 	}
 }
 
-int MonsterAi::update(Actor* owner) {
+float MonsterAi::update(Actor* owner) {
 	if (owner->destructible && owner->destructible->isDead()) return 100; // TODO this won't do
 	if (engine.map->isInFov(owner->x, owner->y)) {
 		moveCount = TRACKING_TURNS;
@@ -201,7 +201,7 @@ void MonsterAi::moveOrAttack(Actor* owner, int targetX, int targetY) {
 	}
 }
 
-int TemporaryAi::update(Actor* owner) {
+float TemporaryAi::update(Actor* owner) {
 	turns--;
 	if(turns <= 0) {
 		owner->ai = std::move(oldAi);
@@ -214,7 +214,7 @@ void TemporaryAi::applyTo(Actor* actor) {
 	actor->ai = std::unique_ptr<Ai>(this);
 }
 
-int ConfusedMonsterAi::update(Actor* owner) {
+float ConfusedMonsterAi::update(Actor* owner) {
 	TCODRandom* rng = TCODRandom::getInstance();
 	int dx = rng->getInt(-1,1);
 	int dy = rng->getInt(-1,1);

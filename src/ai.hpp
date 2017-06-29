@@ -1,13 +1,13 @@
 class Ai {
 public:
-	virtual int update(Actor* owner) = 0;
+	virtual float update(Actor* owner) = 0;
 	virtual ~Ai() {};
-	int speed; // TODO crap
+	float speed;
 private:
 	friend class boost::serialization::access;
 	template<class Archive>
 	void serialize(Archive & ar, const unsigned int version) {
-
+		ar & speed;
 	}
 };
 
@@ -16,8 +16,8 @@ public:
 	int xpLevel;
 	PlayerAi();
 	int getNextLevelXp() const;
-	int update(Actor* owner) override;
-	int speed = 100; // TODO crap
+	float update(Actor* owner) override;
+	float speed = 100;
 protected:
 	bool moveOrAttack(Actor* owner, int targetX, int targetY);
 	Actor* chooseFromInventory(Actor* owner);
@@ -34,8 +34,8 @@ private:
 
 class MonsterAi : public Ai {
 public:
-	int update(Actor* owner) override;
-	int speed = 200; // TODO crap
+	float update(Actor* owner) override;
+	float speed = 140;
 protected:
 	int moveCount;
 	void moveOrAttack(Actor* owner, int targetX, int targetY);
@@ -51,8 +51,9 @@ private:
 class TemporaryAi : public Ai {
 public:
 	TemporaryAi(int turns = 0) : turns(turns) {;}
-	int update(Actor* owner) override;
+	float update(Actor* owner) override;
 	void applyTo(Actor* actor);
+	float speed = 140;
 protected:
 	int turns;
 	std::unique_ptr<Ai> oldAi;
@@ -69,8 +70,8 @@ private:
 class ConfusedMonsterAi : public TemporaryAi {
 public:
 	ConfusedMonsterAi(int turns = 0) : TemporaryAi(turns) {;}
-	int update(Actor* owner) override;
-
+	float update(Actor* owner) override;
+	float speed = 140;
 private:
 	friend class boost::serialization::access;
 	template<class Archive>
