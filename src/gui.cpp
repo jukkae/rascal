@@ -104,7 +104,7 @@ Menu::~Menu() {
 }
 
 void Menu::clear() {
-	items.clear(); // TODO free memory
+	items.clear();
 }
 
 void Menu::addItem(MenuItemCode code, const std::string label) {
