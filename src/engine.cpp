@@ -37,6 +37,8 @@ void Engine::init() {
 	map = std::unique_ptr<Map>(new Map(80, 43));
 	map->init(true);
 
+	time = 0;
+
 	gui.message(TCODColor::green, "Welcome to year 20XXAD, you strange rascal!\nPrepare to fight or die!");
 	updateQueue();
 	gameStatus = GameStatus::STARTUP;
