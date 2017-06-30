@@ -55,6 +55,7 @@ protected:
 
 	void renderBar(int x, int y, int width, std::string name, float value, float maxValue, const TCODColor& barColor, const TCODColor& backColor);
 	void renderMessageLog();
+	void renderXpBar();
 	void renderMouseLook();
 
 private:

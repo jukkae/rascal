@@ -19,19 +19,23 @@ void Gui::clear() {
 
 void Gui::render() {
 	con.setDefaultBackground(TCODColor::black);
+	con.setDefaultForeground(TCODColor::white);
 	con.clear();
+
 	renderMessageLog();
 	renderBar(1, 1, BAR_WIDTH, "HP", engine.player->destructible->hp, engine.player->destructible->maxHp, TCODColor::lightRed, TCODColor::darkerRed);
-	renderMouseLook();
-	con.setDefaultForeground(TCODColor::white);
 	con.print(3, 3, "Dungeon level %d", engine.level);
-	PlayerAi* ai = (PlayerAi*)engine.player->ai.get(); // Don't transfer ownership!
+	renderXpBar();
+	renderMouseLook();
 
+	TCODConsole::blit(&con, 0, 0, engine.screenWidth, PANEL_HEIGHT, TCODConsole::root, 0, engine.screenHeight - PANEL_HEIGHT);
+}
+
+void Gui::renderXpBar() {
+	PlayerAi* ai = (PlayerAi*)engine.player->ai.get(); // Don't transfer ownership!
 	char xpTxt[128];
 	sprintf(xpTxt, "XP(%d)", ai->xpLevel);
 	renderBar(1, 5, BAR_WIDTH, xpTxt, engine.player->destructible->xp, ai->getNextLevelXp(), TCODColor::lightViolet,TCODColor::darkerViolet);
-
-	TCODConsole::blit(&con, 0, 0, engine.screenWidth, PANEL_HEIGHT, TCODConsole::root, 0, engine.screenHeight - PANEL_HEIGHT);
 }
 
 void Gui::renderMessageLog() {
