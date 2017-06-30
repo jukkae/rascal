@@ -12,11 +12,6 @@ Actor::Actor(int x, int y, int ch, std::string name, const TCODColor& col) :
 Actor::~Actor() {
 }
 
-void Actor::render() const {
-	TCODConsole::root->setChar(x, y, ch);
-	TCODConsole::root->setCharForeground(x, y, col);
-}
-
 float Actor::update() {
 	return ai ? ai->update(this) : DEFAULT_TURN_LENGTH;
 }

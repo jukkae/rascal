@@ -81,11 +81,16 @@ void Engine::render() {
 	for (auto iterator=actors.begin(); iterator != actors.end(); iterator++) {
 		Actor *actor = *iterator;
 		if(actor != player && ((!actor->fovOnly && map->isExplored(actor->x, actor->y)) || map->isInFov(actor->x, actor->y))) {
-			actor->render();
+			renderActor(*actor);
 		}
 	}
-	player->render();
+	renderActor(*player);
 	gui.render();
+}
+
+void Engine::renderActor(const Actor& actor) const {
+	TCODConsole::root->setChar(actor.x, actor.y, actor.ch);
+	TCODConsole::root->setCharForeground(actor.x, actor.y, actor.col);
 }
 
 void Engine::nextLevel() {

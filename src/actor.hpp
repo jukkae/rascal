@@ -33,7 +33,6 @@ public:
 	Actor(int x = 0, int y = 0, int ch = 'x', std::string name = "", const TCODColor& col = TCODColor::white);
 	~Actor();
 	float update();
-	void render() const;
 	float getDistance(int cx, int cy) const;
 
 private:
