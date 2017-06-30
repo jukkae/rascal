@@ -20,7 +20,21 @@ void Gui::clear() {
 void Gui::render() {
 	con.setDefaultBackground(TCODColor::black);
 	con.clear();
+	renderMessageLog();
 	renderBar(1, 1, BAR_WIDTH, "HP", engine.player->destructible->hp, engine.player->destructible->maxHp, TCODColor::lightRed, TCODColor::darkerRed);
+	renderMouseLook();
+	con.setDefaultForeground(TCODColor::white);
+	con.print(3, 3, "Dungeon level %d", engine.level);
+	PlayerAi* ai = (PlayerAi*)engine.player->ai.get(); // Don't transfer ownership!
+
+	char xpTxt[128];
+	sprintf(xpTxt, "XP(%d)", ai->xpLevel);
+	renderBar(1, 5, BAR_WIDTH, xpTxt, engine.player->destructible->xp, ai->getNextLevelXp(), TCODColor::lightViolet,TCODColor::darkerViolet);
+
+	TCODConsole::blit(&con, 0, 0, engine.screenWidth, PANEL_HEIGHT, TCODConsole::root, 0, engine.screenHeight - PANEL_HEIGHT);
+}
+
+void Gui::renderMessageLog() {
 	int y = 1;
 	float colCoef = 0.4f;
 	for(auto i = log.begin(); i != log.end(); i++) {
@@ -32,16 +46,6 @@ void Gui::render() {
 			colCoef += 0.3f;
 		}
 	}
-	renderMouseLook();
-	con.setDefaultForeground(TCODColor::white);
-	con.print(3, 3, "Dungeon level %d", engine.level);
-	PlayerAi* ai = (PlayerAi*)engine.player->ai.get(); // Don't transfer ownership!
-
-	char xpTxt[128];
-	sprintf(xpTxt, "XP(%d)", ai->xpLevel);
-	renderBar(1, 5, BAR_WIDTH, xpTxt, engine.player->destructible->xp, ai->getNextLevelXp(), TCODColor::lightViolet,TCODColor::darkerViolet);
-			  			  
-	TCODConsole::blit(&con, 0, 0, engine.screenWidth, PANEL_HEIGHT, TCODConsole::root, 0, engine.screenHeight - PANEL_HEIGHT);
 }
 
 void Gui::renderBar(int x, int y, int width, std::string name, float value, float maxValue, const TCODColor& barColor, const TCODColor& backColor) {
