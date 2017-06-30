@@ -2,8 +2,7 @@
 #include <math.h>
 
 static const int TRACKING_TURNS = 3;
-
-PlayerAi::PlayerAi() : xpLevel(1) {}
+static const float DEFAULT_TURN_LENGTH = 100;
 
 const int LEVEL_UP_BASE = 200;
 const int LEVEL_UP_FACTOR = 150;
@@ -42,7 +41,7 @@ float PlayerAi::update(Actor* owner) {
 		default: break;
 		}
 	}
-	if (owner->destructible && owner->destructible->isDead()) return 100; // TODO well this is crap allright
+	if (owner->destructible && owner->destructible->isDead()) return DEFAULT_TURN_LENGTH;
 	int dx = 0;
 	int dy = 0;
 	TCOD_key_t lastKey;
@@ -63,7 +62,7 @@ float PlayerAi::update(Actor* owner) {
 		}
 	}
 	if(mouse.dx != 0 || mouse.dy != 0) return 0; // TODO hack
-	return 100; // TODO make all these returns depend on the speed
+	return 100 * (100 / speed);
 }
 
 bool PlayerAi::moveOrAttack(Actor* owner, int targetX, int targetY) {
@@ -168,14 +167,14 @@ void PlayerAi::handleActionKey(Actor *owner, int ascii) {
 }
 
 float MonsterAi::update(Actor* owner) {
-	if (owner->destructible && owner->destructible->isDead()) return 100; // TODO this won't do
+	if (owner->destructible && owner->destructible->isDead()) return DEFAULT_TURN_LENGTH;
 	if (engine.map->isInFov(owner->x, owner->y)) {
 		moveCount = TRACKING_TURNS;
 	} else { moveCount--; }
 	if(moveCount > 0) {
 		moveOrAttack(owner, engine.player->x, engine.player->y);
 	}
-	return 70; // TODO just a test value for now
+	return 100 * (100 / speed);
 }
 
 void MonsterAi::moveOrAttack(Actor* owner, int targetX, int targetY) {
@@ -206,7 +205,7 @@ float TemporaryAi::update(Actor* owner) {
 	if(turns <= 0) {
 		owner->ai = std::move(oldAi);
 	}
-	return 100; // TODO yeah fix this
+	return 100 * (100 / speed);
 }
 
 void TemporaryAi::applyTo(Actor* actor) {

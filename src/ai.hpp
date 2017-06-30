@@ -2,6 +2,8 @@
 #define AI_HPP
 class Ai {
 public:
+	explicit Ai() : speed(100) {;}
+	explicit Ai(float speed) : speed(speed) {;}
 	virtual float update(Actor* owner) = 0;
 	virtual ~Ai() {};
 	float speed;
@@ -15,11 +17,11 @@ private:
 
 class PlayerAi : public Ai {
 public:
-	int xpLevel;
-	PlayerAi();
+	PlayerAi() : xpLevel(1) {;}
+
 	int getNextLevelXp() const;
 	float update(Actor* owner) override;
-	float speed = 100;
+	int xpLevel;
 protected:
 	bool moveOrAttack(Actor* owner, int targetX, int targetY);
 	Actor* chooseFromInventory(Actor* owner);
@@ -36,8 +38,9 @@ private:
 
 class MonsterAi : public Ai {
 public:
+	MonsterAi() : Ai(140), moveCount(0) {;}
+	MonsterAi(float speed) : Ai(speed) {;}
 	float update(Actor* owner) override;
-	float speed = 140;
 protected:
 	int moveCount;
 	void moveOrAttack(Actor* owner, int targetX, int targetY);
@@ -55,7 +58,6 @@ public:
 	TemporaryAi(int turns = 0) : turns(turns) {;}
 	float update(Actor* owner) override;
 	void applyTo(Actor* actor);
-	float speed = 140;
 protected:
 	int turns;
 	std::unique_ptr<Ai> oldAi;
@@ -73,7 +75,6 @@ class ConfusedMonsterAi : public TemporaryAi {
 public:
 	ConfusedMonsterAi(int turns = 0) : TemporaryAi(turns) {;}
 	float update(Actor* owner) override;
-	float speed = 140;
 private:
 	friend class boost::serialization::access;
 	template<class Archive>
