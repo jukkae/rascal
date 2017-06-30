@@ -4,7 +4,7 @@
 #include "ai.hpp"
 #include "container.hpp"
 #include "destructible.hpp"
-#include "main.hpp"
+#include "engine.hpp"
 
 Engine::Engine(int screenWidth, int screenHeight) :
 gameStatus(GameStatus::STARTUP), fovRadius(10), screenWidth(screenWidth), screenHeight(screenHeight), level(1) {
