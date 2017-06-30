@@ -1,6 +1,8 @@
 #include <stdio.h>
+#include "attacker.hpp"
 #include "actor.hpp"
-#include "main.hpp"
+#include "destructible.hpp"
+#include "engine.hpp"
 
 Attacker::Attacker(float power) : power(power) {;}
 
