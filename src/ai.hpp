@@ -1,6 +1,13 @@
 #ifndef AI_HPP
 #define AI_HPP
+
 class Actor;
+
+#include <boost/archive/text_oarchive.hpp>
+#include <boost/archive/text_iarchive.hpp>
+#include <boost/serialization/export.hpp>
+#include <boost/serialization/vector.hpp>
+
 class Ai {
 public:
 	explicit Ai() : speed(100) {;}

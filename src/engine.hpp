@@ -1,6 +1,9 @@
 #ifndef ENGINE_HPP
 #define ENGINE_HPP
 class Actor;
+class Map;
+#include "gui.hpp"
+
 class Engine {
 public:
 	enum class GameStatus {

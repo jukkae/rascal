@@ -1,7 +1,18 @@
+#include "ai.hpp"
 #include "actor.hpp"
+#include "attacker.hpp"
 #include "container.hpp"
-#include "main.hpp"
+#include "destructible.hpp"
+#include "engine.hpp"
+#include "gui.hpp"
+#include "map.hpp"
+#include "pickable.hpp"
+#include "persistent.hpp"
 #include <math.h>
+#include <boost/archive/text_oarchive.hpp>
+#include <boost/archive/text_iarchive.hpp>
+#include <boost/serialization/export.hpp>
+#include <boost/serialization/vector.hpp>
 
 static const int TRACKING_TURNS = 3;
 static const float DEFAULT_TURN_LENGTH = 100;
