@@ -1,5 +1,8 @@
 #ifndef DESTRUCTIBLE_HPP
 #define DESTRUCTIBLE_HPP
+
+#include "actor.hpp" // must be included for serialization
+
 class Destructible {
 public:
 	float maxHp;

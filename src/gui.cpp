@@ -1,3 +1,4 @@
+#include "actor.hpp"
 #include "main.hpp"
 #include <stdarg.h>
 

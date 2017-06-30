@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include "actor.hpp"
 #include "main.hpp"
 
 Attacker::Attacker(float power) : power(power) {;}

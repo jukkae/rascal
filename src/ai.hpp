@@ -1,5 +1,6 @@
 #ifndef AI_HPP
 #define AI_HPP
+class Actor;
 class Ai {
 public:
 	explicit Ai() : speed(100) {;}

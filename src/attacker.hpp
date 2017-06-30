@@ -1,5 +1,6 @@
 #ifndef ATTACKER_HPP
 #define ATTACKER_HPP
+class Actor;
 class Attacker {
 public :
 	float power;

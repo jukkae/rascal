@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <limits>
+#include "actor.hpp"
 #include "main.hpp"
 
 static const int ROOM_MAX_SIZE = 12;

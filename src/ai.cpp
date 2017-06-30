@@ -1,3 +1,5 @@
+#include "actor.hpp"
+#include "container.hpp"
 #include "main.hpp"
 #include <math.h>
 

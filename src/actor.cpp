@@ -3,7 +3,6 @@
 #include "attacker.hpp"
 #include "destructible.hpp"
 #include "pickable.hpp"
-#include "container.hpp"
 
 static const float DEFAULT_TURN_LENGTH = 100; // I know, this is now in two places
 

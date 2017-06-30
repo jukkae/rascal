@@ -1,5 +1,6 @@
 #ifndef ENGINE_HPP
 #define ENGINE_HPP
+class Actor;
 class Engine {
 public:
 	enum class GameStatus {

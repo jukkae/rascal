@@ -11,7 +11,8 @@ class Attacker;
 class Destructible;
 class Ai;
 class Pickable;
-class Container;
+
+#include "container.hpp" // must be included for serialization
 
 class Actor {
 public:

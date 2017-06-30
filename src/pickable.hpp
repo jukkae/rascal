@@ -1,6 +1,7 @@
 #ifndef PICKABLE_HPP
 #define PICKABLE_HPP
 
+class Actor;
 class TargetSelector {
 public:
 	enum class SelectorType { CLOSEST_MONSTER, SELECTED_MONSTER, WEARER, WEARER_RANGE, SELECTED_RANGE, NONE };
