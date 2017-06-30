@@ -1,5 +1,6 @@
 #include <stdio.h>
-#include "main.hpp"
+#include "destructible.hpp"
+#include "engine.hpp"
 
 Destructible::Destructible(float maxHp, float defense, int xp, std::string corpseName) :
 	maxHp(maxHp), hp(maxHp), defense(defense), xp(xp), corpseName(corpseName) {;}
