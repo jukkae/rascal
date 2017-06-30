@@ -1,6 +1,7 @@
 #include <limits>
 #include "libtcod.hpp"
 #include "actor.hpp"
+#include "ai.hpp"
 #include "container.hpp"
 #include "destructible.hpp"
 #include "main.hpp"

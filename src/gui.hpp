@@ -1,6 +1,8 @@
 #ifndef GUI_HPP
 #define GUI_HPP
-class Actor;
+
+#include "actor.hpp" // must be included for serialization
+
 class Menu {
 public:
 	enum class MenuItemCode { NONE, NEW_GAME, CONTINUE, EXIT, CONSTITUTION, STRENGTH, AGILITY };

@@ -14,6 +14,7 @@ class Pickable;
 
 #include "container.hpp" // must be included for serialization
 #include "destructible.hpp"
+#include "pickable.hpp"
 
 class Actor {
 public:

@@ -4,6 +4,7 @@
 #include "attacker.hpp"
 #include "destructible.hpp"
 #include "main.hpp"
+#include "pickable.hpp"
 
 static const int ROOM_MAX_SIZE = 12;
 static const int ROOM_MIN_SIZE = 6;

@@ -1,7 +1,6 @@
 #include "actor.hpp"
 #include "ai.hpp"
 #include "attacker.hpp"
-#include "pickable.hpp"
 
 static const float DEFAULT_TURN_LENGTH = 100; // I know, this is now in two places
 

@@ -9,7 +9,6 @@
 
 #include "libtcod.hpp"
 #include "persistent.hpp"
-#include "pickable.hpp"
 #include "map.hpp"
 #include "gui.hpp"
 #include "engine.hpp"
