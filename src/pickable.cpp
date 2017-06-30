@@ -1,6 +1,8 @@
+#include "pickable.hpp"
 #include "container.hpp"
 #include "destructible.hpp"
-#include "main.hpp"
+#include "engine.hpp"
+#include "persistent.hpp"
 
 TargetSelector::TargetSelector(SelectorType type, float range) : type(type), range(range) {;}
 
