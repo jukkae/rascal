@@ -1,5 +1,13 @@
 #ifndef CONTAINER_HPP
 #define CONTAINER_HPP
+
+class Actor;
+#include <vector>
+#include <boost/archive/text_oarchive.hpp>
+#include <boost/archive/text_iarchive.hpp>
+#include <boost/serialization/export.hpp>
+#include <boost/serialization/vector.hpp>
+
 class Container {
 public:
 	int size; // max number of actors in container, 0 = unlimited
