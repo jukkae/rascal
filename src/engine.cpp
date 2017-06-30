@@ -64,12 +64,12 @@ void Engine::update() {
 		for(std::pair<float, Actor*>& a : actorsQueue) {
 			a.first -= activeActorTUNA;
 		}
-		time += activeActorTUNA;
 		if(activeActor.second == player) {
 			render();
 		}
 		float elapsedTime = activeActor.second->update();
 		if(activeActor.second == player) {
+			time += elapsedTime;
 			map->markExploredTiles();
 			render();
 		}
