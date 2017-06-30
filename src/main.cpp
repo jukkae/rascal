@@ -1,3 +1,4 @@
+#include "engine.hpp"
 #include "main.hpp"
 
 std::string file = "save.txt";
