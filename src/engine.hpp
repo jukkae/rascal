@@ -4,6 +4,7 @@ class Actor;
 class Map;
 #include "gui.hpp"
 #include "attacker.hpp"
+#include "map.hpp"
 
 class Engine {
 public:
