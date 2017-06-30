@@ -10,7 +10,6 @@
 #include "libtcod.hpp"
 #include "persistent.hpp"
 #include "map.hpp"
-#include "gui.hpp"
 #include "engine.hpp"
 
 void save();
