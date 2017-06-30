@@ -3,7 +3,8 @@
 #include "actor.hpp"
 #include "attacker.hpp"
 #include "destructible.hpp"
-#include "main.hpp"
+#include "engine.hpp"
+#include "map.hpp"
 #include "pickable.hpp"
 
 static const int ROOM_MAX_SIZE = 12;
