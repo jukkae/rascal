@@ -26,6 +26,7 @@ public:
 	TCOD_key_t lastKey;
 	TCOD_mouse_t mouse;
 	int level;
+	float time;
 
 	Engine(int screenWidth, int screenHeight);
 	~Engine();
@@ -46,6 +47,7 @@ private:
     void serialize(Archive & ar, const unsigned int version)
     {
 		ar & level;
+		ar & time;
         ar & map;
 		ar & stairs;
 		ar & player;

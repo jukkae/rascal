@@ -7,7 +7,7 @@
 #include "engine.hpp"
 
 Engine::Engine(int screenWidth, int screenHeight) :
-gameStatus(GameStatus::STARTUP), fovRadius(10), screenWidth(screenWidth), screenHeight(screenHeight), level(1) {
+gameStatus(GameStatus::STARTUP), fovRadius(10), screenWidth(screenWidth), screenHeight(screenHeight), level(1), time(0) {
 	TCODConsole::initRoot(80, 50, "Rascal", false);
 }
 
@@ -62,6 +62,7 @@ void Engine::update() {
 		for(std::pair<float, Actor*>& a : actorsQueue) {
 			a.first -= activeActorTUNA;
 		}
+		time += activeActorTUNA;
 		if(activeActor.second == player) {
 			render();
 		}
