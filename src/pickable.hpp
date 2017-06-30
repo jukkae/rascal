@@ -2,6 +2,9 @@
 #define PICKABLE_HPP
 
 class Actor;
+
+#include "ai.hpp"
+
 class TargetSelector {
 public:
 	enum class SelectorType { CLOSEST_MONSTER, SELECTED_MONSTER, WEARER, WEARER_RANGE, SELECTED_RANGE, NONE };
