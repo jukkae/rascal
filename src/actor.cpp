@@ -2,6 +2,8 @@
 #include <math.h>
 #include "main.hpp"
 
+static const float DEFAULT_TURN_LENGTH = 100; // I know, this is now in two places
+
 Actor::Actor(int x, int y, int ch, std::string name, const TCODColor& col) :
 	x(x), y(y), ch(ch), col(col), name(name),
 	blocks(true), fovOnly(true), attacker(nullptr), destructible(nullptr), ai(nullptr),
@@ -16,8 +18,7 @@ void Actor::render() const {
 }
 
 float Actor::update() {
-	if(ai) return ai->update(this);
-	else return 100; // TODO yeah this won't work in the long run
+	return ai ? ai->update(this) : DEFAULT_TURN_LENGTH;
 }
 
 float Actor::getDistance(int cx, int cy) const {
