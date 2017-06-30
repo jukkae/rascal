@@ -1,4 +1,5 @@
 #include "actor.hpp"
+#include "destructible.hpp"
 #include "main.hpp"
 #include <stdarg.h>
 

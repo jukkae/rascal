@@ -1,8 +1,7 @@
 #ifndef PICKABLE_HPP
 #define PICKABLE_HPP
 
-class Actor;
-
+#include "actor.hpp"
 #include "ai.hpp"
 
 class TargetSelector {

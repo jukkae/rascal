@@ -8,11 +8,12 @@
 #include <boost/serialization/export.hpp>
 #include <boost/serialization/vector.hpp>
 class Attacker;
-class Destructible;
 class Ai;
+class Destructible;
 class Pickable;
 
 #include "container.hpp" // must be included for serialization
+#include "destructible.hpp"
 
 class Actor {
 public:

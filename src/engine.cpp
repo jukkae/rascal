@@ -2,6 +2,7 @@
 #include "libtcod.hpp"
 #include "actor.hpp"
 #include "container.hpp"
+#include "destructible.hpp"
 #include "main.hpp"
 
 Engine::Engine(int screenWidth, int screenHeight) :

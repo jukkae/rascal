@@ -1,5 +1,5 @@
-#include "actor.hpp"
 #include "container.hpp"
+#include "destructible.hpp"
 #include "main.hpp"
 
 TargetSelector::TargetSelector(SelectorType type, float range) : type(type), range(range) {;}
