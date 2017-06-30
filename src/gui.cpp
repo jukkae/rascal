@@ -1,7 +1,10 @@
 #include "ai.hpp"
 #include "destructible.hpp"
-#include "main.hpp"
+#include "engine.hpp"
+#include "gui.hpp"
+#include "map.hpp"
 #include <stdarg.h>
+#include <sstream>
 
 static const int PANEL_HEIGHT = 7;
 static const int BAR_WIDTH = 20;
