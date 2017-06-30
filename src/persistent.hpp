@@ -3,6 +3,7 @@
 
 #include <boost/serialization/unique_ptr.hpp>
 #include <boost/serialization/utility.hpp>
+#include "libtcod.hpp"
 
 // Non-intrusive serializations for TCOD classes
 template<class Archive>
