@@ -1,5 +1,18 @@
 #ifndef ACTOR_HPP
 #define ACTOR_HPP
+
+#include "libtcod.hpp"
+#include <string>
+#include <boost/archive/text_oarchive.hpp>
+#include <boost/archive/text_iarchive.hpp>
+#include <boost/serialization/export.hpp>
+#include <boost/serialization/vector.hpp>
+class Attacker;
+class Destructible;
+class Ai;
+class Pickable;
+class Container;
+
 class Actor {
 public:
 	int x, y;
