@@ -80,7 +80,7 @@ void Engine::update() {
 
 void Engine::render() {
 	TCODConsole::root->clear();
-	map->render();
+	renderMap(*map);
 	for (auto iterator=actors.begin(); iterator != actors.end(); iterator++) {
 		Actor *actor = *iterator;
 		if(actor != player && ((!actor->fovOnly && map->isExplored(actor->x, actor->y)) || map->isInFov(actor->x, actor->y))) {
@@ -89,6 +89,24 @@ void Engine::render() {
 	}
 	renderActor(*player);
 	gui.render();
+}
+
+void Engine::renderMap(const Map& map) const {
+	static const TCODColor darkWall   (0, 0, 100);
+	static const TCODColor darkGround (50, 50, 150);
+	static const TCODColor lightWall  (130, 110, 50);
+	static const TCODColor lightGround(200, 180, 50);
+
+	for(int x = 0; x < map.width; x++) {
+		for(int y = 0; y < map.height; y++) {
+			if(map.isInFov(x, y)) {
+				TCODConsole::root->setCharBackground(x, y, map.isWall(x,y) ? lightWall : lightGround);
+			}
+			else if(map.isExplored(x, y)) {
+				TCODConsole::root->setCharBackground(x, y, map.isWall(x,y) ? darkWall : darkGround);
+			}
+		}
+	}
 }
 
 void Engine::renderActor(const Actor& actor) const {

@@ -29,7 +29,6 @@ public:
 	void markExploredTiles();
 	bool isExplored(int x, int y) const;
 	void computeFov();
-	void render() const;
 
 protected:
 	std::unique_ptr<TCODMap> map;

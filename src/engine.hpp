@@ -35,6 +35,7 @@ public:
 	void term();
 	void update();
 	void render(); // TODO this should be const
+	void renderMap(const Map& map) const;
 	void renderActor(const Actor& actor) const;
 	void sendToBack(Actor* actor);
 	void nextLevel();
