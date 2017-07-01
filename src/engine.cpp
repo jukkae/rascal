@@ -34,7 +34,7 @@ void Engine::init() {
 	stairs->fovOnly = false;
 	actors.push_back(stairs);
 
-	map = std::unique_ptr<Map>(new Map(80, 43));
+	map = std::unique_ptr<Map>(new Map(120, 72));
 	map->init(true);
 
 	time = 0;
