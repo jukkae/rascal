@@ -35,6 +35,7 @@ float PlayerAi::update(Actor* owner) {
 		engine.gui.menu.addItem(Menu::MenuItemCode::CONSTITUTION,"Constitution (+20HP)");
 		engine.gui.menu.addItem(Menu::MenuItemCode::STRENGTH,"Strength (+1 attack)");
 		engine.gui.menu.addItem(Menu::MenuItemCode::AGILITY,"Agility (+1 defense)");
+		engine.gui.menu.addItem(Menu::MenuItemCode::SPEED,"Speed (+10 speed)");
 		Menu::MenuItemCode menuItem = engine.gui.menu.pick(Menu::DisplayMode::PAUSE);
 
 		TCODConsole::root->clear();
@@ -50,6 +51,9 @@ float PlayerAi::update(Actor* owner) {
 			break;
 		case Menu::MenuItemCode::AGILITY :
 			owner->destructible->defense += 1;
+			break;
+		case Menu::MenuItemCode::SPEED :
+			owner->ai->speed += 10;
 			break;
 		default: break;
 		}
