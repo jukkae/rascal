@@ -96,22 +96,31 @@ void Engine::renderMap(const Map& map) const {
 	static const TCODColor darkGround (50, 50, 150);
 	static const TCODColor lightWall  (130, 110, 50);
 	static const TCODColor lightGround(200, 180, 50);
+	int cameraX = player->x - (screenWidth/2); // upper left corner of camera
+	int cameraY = player->y - (screenHeight/2);
 
-	for(int x = 0; x < map.width; x++) {
+	for(int x = 0; x < map.width; x++) { // TODO no need to loop through all of map, just what's visible
 		for(int y = 0; y < map.height; y++) {
+			int screenX = x - cameraX;
+			int screenY = y - cameraY;
 			if(map.isInFov(x, y)) {
-				TCODConsole::root->setCharBackground(x, y, map.isWall(x,y) ? lightWall : lightGround);
+				TCODConsole::root->setCharBackground(screenX, screenY, map.isWall(x,y) ? lightWall : lightGround);
 			}
 			else if(map.isExplored(x, y)) {
-				TCODConsole::root->setCharBackground(x, y, map.isWall(x,y) ? darkWall : darkGround);
+				TCODConsole::root->setCharBackground(screenX, screenY, map.isWall(x,y) ? darkWall : darkGround);
 			}
 		}
 	}
 }
 
 void Engine::renderActor(const Actor& actor) const {
-	TCODConsole::root->setChar(actor.x, actor.y, actor.ch);
-	TCODConsole::root->setCharForeground(actor.x, actor.y, actor.col);
+	int cameraX = player->x - (screenWidth/2); // upper left corner of camera
+	int cameraY = player->y - (screenHeight/2);
+	int x = actor.x - cameraX;
+	int y = actor.y - cameraY;
+
+	TCODConsole::root->setChar(x, y, actor.ch);
+	TCODConsole::root->setCharForeground(x, y, actor.col);
 }
 
 void Engine::nextLevel() {
