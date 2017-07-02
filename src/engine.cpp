@@ -49,7 +49,7 @@ void Engine::updateQueue() {
 	for(int i = 0; i < actors.size(); i++) {
 		Actor* a = actors.at(i);
 		if(a->ai) {
-			actorsQueue.push_back(std::pair<float, Actor*>((100.0+i), a));
+			actorsQueue.push_back(std::pair<float, Actor*>((100.0+i), a)); // TODO wait... why the 100.0+i here?
 		}
 	}
 }
@@ -81,8 +81,7 @@ void Engine::update() {
 void Engine::render() {
 	TCODConsole::root->clear();
 	renderMap(*map);
-	for (auto iterator=actors.begin(); iterator != actors.end(); iterator++) {
-		Actor *actor = *iterator;
+	for (Actor* actor : actors) {
 		if(actor != player && ((!actor->fovOnly && map->isExplored(actor->x, actor->y)) || map->isInFov(actor->x, actor->y))) {
 			renderActor(*actor);
 		}
@@ -153,8 +152,7 @@ void Engine::sendToBack(Actor* actor) {
 Actor* Engine::getClosestMonster(int x, int y, float range) const {
 	Actor *closest = nullptr;
 	float bestDistance = std::numeric_limits<float>::max();
-	for (auto i = actors.begin(); i != actors.end(); i++) {
-		Actor* actor = *i;
+	for (Actor* actor : actors) {
 		if(actor != player && actor->destructible && !actor->destructible->isDead()) {
 			float distance = actor->getDistance(x,y);
 			if(distance < bestDistance && (distance <= range || range == 0.0f)) {
@@ -167,13 +165,13 @@ Actor* Engine::getClosestMonster(int x, int y, float range) const {
 }
 
 Actor* Engine::getLiveActor(int x, int y) const {
-	for(auto i = actors.begin(); i != actors.end(); i++) {
-		Actor* actor = *i;
+	for(Actor* actor : actors) {
 		if(actor->x == x && actor->y == y && actor->destructible && !actor->destructible->isDead()) return actor;
 	}
 	return nullptr;
 }
 
+// TODO fix this now that map is scrolling
 bool Engine::pickTile(int* x, int* y, float maxRange) {
 	while(!TCODConsole::isWindowClosed()) {
 		render();
