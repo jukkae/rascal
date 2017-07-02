@@ -28,8 +28,7 @@ void TargetSelector::selectTargets(Actor* wearer, std::vector<Actor*>& list) {
 		} break;
 		case SelectorType::WEARER_RANGE :
 		{
-			for(auto it = engine.actors.begin(); it != engine.actors.end(); it++) {
-				Actor* actor = *it;
+			for(Actor* actor : engine.actors) {
 				if(actor != wearer && actor->destructible && !actor->destructible->isDead() && actor->getDistance(wearer->x, wearer->y) <= range) {
 					list.push_back(actor);
 				}
@@ -40,8 +39,7 @@ void TargetSelector::selectTargets(Actor* wearer, std::vector<Actor*>& list) {
 			int x, y;
 			engine.gui.message(TCODColor::cyan, "Left-click to select a tile,\nor right-click to cancel.");
 			if(engine.pickTile(&x, &y)) {
-				for(auto it = engine.actors.begin(); it != engine.actors.end(); it++) {
-					Actor* actor = *it;
+				for(Actor* actor : engine.actors) {
 					if(actor->destructible && !actor->destructible->isDead() && actor->getDistance(x, y) <= range ) {
 						list.push_back(actor);
 					}
@@ -99,13 +97,13 @@ bool Pickable::use(Actor* owner, Actor* wearer) {
 	}
 
 	bool success = false;
-	for(auto it = list.begin(); it != list.end(); it++) {
-		if(effect->applyTo(*it)) success = true;
+	for(Actor* actor : list) {
+		if(effect->applyTo(actor)) success = true;
 	}
 	if(success) {
 		if(wearer->container) {
 			wearer->container->remove(owner);
-			delete owner;
+			delete owner; // TODO
 		}
 	}
 	return success;

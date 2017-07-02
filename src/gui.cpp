@@ -44,8 +44,7 @@ void Gui::renderXpBar() {
 void Gui::renderMessageLog() {
 	int y = 1;
 	float colCoef = 0.4f;
-	for(auto i = log.begin(); i != log.end(); i++) {
-		Message msg = *i;
+	for(Message msg : log) {
 		con.setDefaultForeground(msg.col * colCoef);
 		con.print(MSG_X, y, msg.text.c_str());
 		y++;
@@ -67,14 +66,14 @@ void Gui::renderBar(int x, int y, int width, std::string name, float value, floa
 	con.printEx(x + width/2, y, TCOD_BKGND_NONE, TCOD_CENTER, "%s : %g/%g", name.c_str(), value, maxValue);
 }
 
+// TODO fix now that map is scrolling
 void Gui::renderMouseLook() {
 	if(!engine.map->isInFov(engine.mouse.cx, engine.mouse.cy)) {
 		return;
 	}
 	std::string buf = "";
 	bool first = true;
-	for(auto i = engine.actors.begin(); i != engine.actors.end(); i++) {
-		Actor* actor = *i;
+	for(Actor* actor : engine.actors) {
 		if(actor->x == engine.mouse.cx && actor->y == engine.mouse.cy) {
 			if(!first) {
 				buf += ", ";
@@ -151,13 +150,13 @@ Menu::MenuItemCode Menu::pick(DisplayMode mode) {
 	}
 	while(!TCODConsole::isWindowClosed()) {
 		int currentItem = 0;
-		for (auto it = items.begin(); it != items.end(); it++) {
+		for (MenuItem item : items) {
 			if (currentItem == selectedItem) {
 				TCODConsole::root->setDefaultForeground(TCODColor::lighterOrange);
 			} else {
 			   TCODConsole::root->setDefaultForeground(TCODColor::lightGrey);
 			}
-			TCODConsole::root->print(menuX, menuY + currentItem * 3, (*it).label.c_str());
+			TCODConsole::root->print(menuX, menuY + currentItem * 3, item.label.c_str());
 			currentItem++;
 		}
 		TCODConsole::flush();
