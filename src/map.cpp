@@ -83,8 +83,7 @@ bool Map::isWall(int x, int y) const {
 
 bool Map::canWalk(int x, int y) const {
 	if(isWall(x, y)) return false;
-	for(auto iterator = engine.actors.begin(); iterator != engine.actors.end(); iterator++) {
-		Actor* actor = *iterator;
+	for(Actor* actor : engine.actors) {
 		if(actor->blocks && actor->x == x && actor->y == y) {
 			return false;
 		}
