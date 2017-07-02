@@ -23,7 +23,7 @@ float Destructible::heal(float amount) {
 	return amount; // return the actual amount of hp restored
 }
 
-void Destructible::die(Actor *owner) {
+void Destructible::die(Actor* owner) {
 	owner->ch = '%';
 	owner->col = TCODColor::darkRed;   
 	owner->name = corpseName;

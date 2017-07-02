@@ -150,7 +150,7 @@ void Engine::sendToBack(Actor* actor) {
 }
 
 Actor* Engine::getClosestMonster(int x, int y, float range) const {
-	Actor *closest = nullptr;
+	Actor* closest = nullptr;
 	float bestDistance = std::numeric_limits<float>::max();
 	for (Actor* actor : actors) {
 		if(actor != player && actor->destructible && !actor->destructible->isDead()) {

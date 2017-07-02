@@ -132,7 +132,7 @@ Actor* PlayerAi::chooseFromInventory(Actor* owner) {
 	return nullptr;
 }
 
-void PlayerAi::handleActionKey(Actor *owner, int ascii) {
+void PlayerAi::handleActionKey(Actor* owner, int ascii) {
 	switch(ascii) {
 		case 'g' : // pickup item
 		{

@@ -17,7 +17,7 @@ public:
 	inline bool isDead() { return hp <= 0; }
 	float takeDamage(Actor* owner, float damage);
 	float heal(float amount);
-	virtual void die(Actor *owner);
+	virtual void die(Actor* owner);
 
 private:
 	friend class boost::serialization::access;
@@ -34,7 +34,7 @@ private:
 class MonsterDestructible : public Destructible {
 public :
 	MonsterDestructible(float maxHp = 0, float defense = 0, int xp = 0, std::string corpseName = "corpse");
-	void die(Actor *owner);
+	void die(Actor* owner);
 private:
 	friend class boost::serialization::access;
 	template<class Archive>
@@ -47,7 +47,7 @@ private:
 class PlayerDestructible : public Destructible {
 public :
 	PlayerDestructible(float maxHp = 0, float defense = 0, int xp = 0, std::string corpseName = "your corpse");
-	void die(Actor *owner);
+	void die(Actor* owner);
 private:
 	friend class boost::serialization::access;
 	template<class Archive>
