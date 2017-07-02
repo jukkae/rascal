@@ -85,16 +85,14 @@ float PlayerAi::update(Actor* owner) {
 bool PlayerAi::moveOrAttack(Actor* owner, int targetX, int targetY) {
 	if (engine.map->isWall(targetX, targetY)) return false;
 	// look for living actors to attack
-	for (auto iterator = engine.actors.begin(); iterator != engine.actors.end(); iterator++) {
-		Actor* actor = *iterator;
+	for (Actor* actor : engine.actors) {
 		if (actor->destructible && !actor->destructible->isDead() && actor->x == targetX && actor->y == targetY) {
 			owner->attacker->attack(owner, actor);
 			return false;
 		}
 	}
 	// look for corpses or items
-	for (auto iterator=engine.actors.begin(); iterator != engine.actors.end(); iterator++) {
-		Actor* actor = *iterator;
+	for (Actor* actor : engine.actors) {
 		bool corpseOrItem = (actor->destructible && actor->destructible->isDead()) || actor->pickable;
 		if(corpseOrItem && actor->x == targetX && actor->y == targetY) {
 			engine.gui.message(TCODColor::lightGrey, "There's a %s here!", actor->name.c_str());
@@ -116,8 +114,7 @@ Actor* PlayerAi::chooseFromInventory(Actor* owner) {
 	con.setDefaultForeground(TCODColor::white);
 	int shortcut = 'a';
 	int y = 1;
-	for (auto it = owner->container->inventory.begin(); it != owner->container->inventory.end(); it++) {
-		Actor* actor = *it;
+	for (Actor* actor : owner->container->inventory) {
 		con.print(2, y, "(%c) %s", shortcut, actor->name.c_str());
 		y++;
 		shortcut++;
@@ -140,8 +137,7 @@ void PlayerAi::handleActionKey(Actor *owner, int ascii) {
 		case 'g' : // pickup item
 		{
 		bool found = false;
-		for(auto i = engine.actors.begin(); i != engine.actors.end(); i++) {
-			Actor* actor = *i;
+		for(Actor* actor : engine.actors) {
 			if(actor->pickable && actor->x == owner->x && actor->y == owner->y) {
 				if(actor->pickable->pick(actor,owner)) {
 					found = true;
