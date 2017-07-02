@@ -128,6 +128,7 @@ void Engine::nextLevel() {
 	player->destructible->heal(player->destructible->maxHp/2);
 	gui.message(TCODColor::red,"After a rare moment of peace, you descend\ndeeper into the heart of the dungeon...");
 
+	// Clunky, not idiomatic
 	auto it = actors.begin();
 	while (it != actors.end()) {
        if (*it != player && *it != stairs) {

@@ -15,7 +15,7 @@ public:
 		DEFEAT
 	} gameStatus;
 	std::vector<Actor*> actors;
-	std::vector<std::pair<float, Actor*> > actorsQueue;
+	std::vector<std::pair<float, Actor*> > actorsQueue; // TODO maybe use std::set or map instead?
 	Actor* player;
 	Actor* stairs;
 	std::unique_ptr<Map> map;
