@@ -161,7 +161,7 @@ Menu::MenuItemCode Menu::pick(DisplayMode mode) {
 		}
 		TCODConsole::flush();
 		TCOD_key_t key;
-		TCODSystem::waitForEvent(TCOD_EVENT_KEY_PRESS, &key, NULL, true);
+		TCODSystem::waitForEvent(TCOD_EVENT_KEY_PRESS, &key, nullptr, true);
 		switch (key.vk) {
 			case TCODK_UP:
 				selectedItem--;

@@ -122,7 +122,7 @@ Actor* PlayerAi::chooseFromInventory(Actor* owner) {
 	TCODConsole::flush();
 	// wait for a key press
 	TCOD_key_t key;
-	TCODSystem::waitForEvent(TCOD_EVENT_KEY_PRESS, &key, NULL, true);
+	TCODSystem::waitForEvent(TCOD_EVENT_KEY_PRESS, &key, nullptr, true);
 	if(key.vk == TCODK_CHAR) {
 		int actorIndex=key.c - 'a';
 		if(actorIndex >= 0 && actorIndex < owner->container->inventory.size()) { return owner->container->inventory.at(actorIndex); }
