@@ -28,7 +28,7 @@ void Destructible::die(Actor* owner) {
 	owner->col = TCODColor::darkRed;   
 	owner->name = corpseName;
 	owner->blocks = false;
-	// draw corpses before living actors
+	// draw corpses before living actors -- TODO engine should take care of this!
 	engine.sendToBack(owner);
 }
 

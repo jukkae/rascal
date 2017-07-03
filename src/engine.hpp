@@ -16,7 +16,7 @@ public:
 	} gameStatus;
 	std::vector<Actor*> actors;
 	std::vector<std::pair<float, Actor*>> actorsQueue; // TODO maybe use std::set or map instead?
-	Actor* player;
+	Actor* player; // TODO fix reliance on explicit pointer to player
 	Actor* stairs;
 	std::unique_ptr<Map> map;
 	int fovRadius;
@@ -58,5 +58,5 @@ private:
     }
 };
 
-extern Engine engine;
+extern Engine engine; // TODO get rid of this, implement in a more robust way
 #endif /* ENGINE_HPP */
