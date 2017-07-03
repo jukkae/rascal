@@ -62,8 +62,7 @@ float PlayerAi::update(Actor* owner) {
 	int dx = 0;
 	int dy = 0;
 	TCOD_key_t lastKey;
-	TCOD_mouse_t mouse;
-	TCODSystem::waitForEvent(TCOD_EVENT_KEY_PRESS | TCOD_EVENT_MOUSE, &lastKey, &mouse, true);
+	TCODSystem::waitForEvent(TCOD_EVENT_KEY_PRESS, &lastKey, nullptr, true);
 	switch(lastKey.vk) {
 		case TCODK_UP:    dy = -1; break;
 		case TCODK_DOWN:  dy = 1;  break;
@@ -78,7 +77,6 @@ float PlayerAi::update(Actor* owner) {
 			engine.map->computeFov();
 		}
 	}
-	if(mouse.dx != 0 || mouse.dy != 0) return 0; // TODO hack
 	return 100 * (100 / speed);
 }
 
