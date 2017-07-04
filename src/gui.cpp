@@ -66,13 +66,13 @@ void Gui::renderBar(int x, int y, int width, std::string name, float value, floa
 	con.printEx(x + width/2, y, TCOD_BKGND_NONE, TCOD_CENTER, "%s : %g/%g", name.c_str(), value, maxValue);
 }
 
-// TODO fix now that map is scrolling
+// TODO refactor coordinate handling to engine
 void Gui::renderMouseLook() {
 	int mouseX = engine.mouse.cx;
 	int mouseY = engine.mouse.cy;
 	int x = mouseX - (engine.screenWidth/2) + engine.player->x;
 	int y = mouseY - (engine.screenHeight/2) + engine.player->y;
-	con.print(1, 0, "x: %d, y: %d", x, y);
+
 	if(!engine.map->isInFov(x, y)) {
 		return;
 	}
