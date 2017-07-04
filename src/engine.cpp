@@ -172,13 +172,15 @@ Actor* Engine::getLiveActor(int x, int y) const {
 	return nullptr;
 }
 
-// TODO fix this now that map is scrolling
+// this is a mess. a working mess, sure, but a mess nonetheless.
 bool Engine::pickTile(int* x, int* y, float maxRange) {
 	while(!TCODConsole::isWindowClosed()) {
 		render();
 		for(int cx = 0; cx < map->width; cx++) {
 			for(int cy = 0; cy < map->height; cy++) {
-				if(map->isInFov(cx, cy) && (maxRange == 0 || player->getDistance(cx, cy) <= maxRange)) {
+				int realX = cx - (screenWidth / 2) + player->x; // real good naming here, har har
+				int realY = cy - (screenHeight / 2) + player->y;
+				if(map->isInFov(realX, realY) && (maxRange == 0 || player->getDistance(realX, realY) <= maxRange)) {
 					TCODColor col = TCODConsole::root->getCharBackground(cx, cy);
 					col = col * 1.2;
 					TCODConsole::root->setCharBackground(cx, cy, col);
@@ -186,11 +188,13 @@ bool Engine::pickTile(int* x, int* y, float maxRange) {
 			}
 		}
 		TCODSystem::waitForEvent(TCOD_EVENT_KEY_PRESS | TCOD_EVENT_MOUSE, &lastKey, &mouse, true);
-		if(map->isInFov(mouse.cx, mouse.cy) && (maxRange == 0 || player->getDistance(mouse.cx, mouse.cy) <= maxRange)) {
+		int realX = mouse.cx - (screenWidth / 2) + player->x;
+		int realY = mouse.cy - (screenHeight / 2) + player->y;
+		if(map->isInFov(realX, realY) && (maxRange == 0 || player->getDistance(realX, realY) <= maxRange)) {
 			TCODConsole::root->setCharBackground(mouse.cx,mouse.cy,TCODColor::white);
 			if(mouse.lbutton_pressed) {
-				*x = mouse.cx;
-				*y = mouse.cy;
+				*x = realX;
+				*y = realY;
 				return true;
 			}
 		}
