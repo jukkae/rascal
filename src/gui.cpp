@@ -68,13 +68,18 @@ void Gui::renderBar(int x, int y, int width, std::string name, float value, floa
 
 // TODO fix now that map is scrolling
 void Gui::renderMouseLook() {
-	if(!engine.map->isInFov(engine.mouse.cx, engine.mouse.cy)) {
+	int mouseX = engine.mouse.cx;
+	int mouseY = engine.mouse.cy;
+	int x = mouseX - (engine.screenWidth/2) + engine.player->x;
+	int y = mouseY - (engine.screenHeight/2) + engine.player->y;
+	con.print(1, 0, "x: %d, y: %d", x, y);
+	if(!engine.map->isInFov(x, y)) {
 		return;
 	}
 	std::string buf = "";
 	bool first = true;
 	for(Actor* actor : engine.actors) {
-		if(actor->x == engine.mouse.cx && actor->y == engine.mouse.cy) {
+		if(actor->x == x && actor->y == y) {
 			if(!first) {
 				buf += ", ";
 			} else { first = false; }
