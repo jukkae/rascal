@@ -1,5 +1,14 @@
 #ifndef MAP_HPP
 #define MAP_HPP
+#include <memory>
+#include <vector>
+#include <fstream>
+#include <sstream>
+#include <boost/archive/text_oarchive.hpp>
+#include <boost/archive/text_iarchive.hpp>
+#include <boost/serialization/export.hpp>
+#include "libtcod.hpp"
+
 struct Tile {
 	bool explored;
 	Tile() : explored(false) {;}
