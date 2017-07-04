@@ -80,7 +80,8 @@ void Engine::update() {
 
 void Engine::render() {
 	TCODConsole::root->clear();
-	renderMap(*map);
+	renderer.renderMap(map.get());
+	//renderMap(*map);
 	for (Actor* actor : actors) {
 		if(actor != player && ((!actor->fovOnly && map->isExplored(actor->x, actor->y)) || map->isInFov(actor->x, actor->y))) {
 			renderActor(*actor);
@@ -90,6 +91,7 @@ void Engine::render() {
 	gui.render();
 }
 
+// TODO remove
 void Engine::renderMap(const Map& map) const {
 	static const TCODColor darkWall   (0, 0, 100);
 	static const TCODColor darkGround (50, 50, 150);

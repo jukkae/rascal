@@ -2,6 +2,7 @@
 #define ENGINE_HPP
 class Actor;
 class Map;
+#include "renderer.hpp"
 #include "gui.hpp"
 #include "attacker.hpp"
 #include "map.hpp"
@@ -23,6 +24,7 @@ public:
 	int screenWidth;
 	int screenHeight;
 	Gui gui;
+	Renderer renderer;
 	TCOD_key_t lastKey;
 	TCOD_mouse_t mouse;
 	int level;
