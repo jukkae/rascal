@@ -2,11 +2,22 @@
 #include "renderer.hpp"
 #include "map.hpp"
 
+static const TCODColor darkWall   (0, 0, 100);
+static const TCODColor darkGround (50, 50, 150);
+static const TCODColor lightWall  (130, 110, 50);
+static const TCODColor lightGround(200, 180, 50);
+
+void Renderer::render(const Map* const map, const std::vector<Actor*> actors) const {
+	renderMap(map);
+	for (Actor* actor : actors) {
+		if(actor != engine.player && ((!actor->fovOnly && map->isExplored(actor->x, actor->y)) || map->isInFov(actor->x, actor->y))) {
+			renderActor(actor);
+		}
+	}
+	renderActor(engine.player);
+}
+
 void Renderer::renderMap(const Map* const map) const {
-	static const TCODColor darkWall   (0, 0, 100);
-	static const TCODColor darkGround (50, 50, 150);
-	static const TCODColor lightWall  (130, 110, 50);
-	static const TCODColor lightGround(200, 180, 50);
 	int cameraX = engine.player->x - (screenWidth/2); // upper left corner of camera
 	int cameraY = engine.player->y - (screenHeight/2);
 

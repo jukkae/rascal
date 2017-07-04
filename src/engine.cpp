@@ -80,13 +80,7 @@ void Engine::update() {
 
 void Engine::render() {
 	TCODConsole::root->clear();
-	renderer.renderMap(map.get());
-	for (Actor* actor : actors) {
-		if(actor != player && ((!actor->fovOnly && map->isExplored(actor->x, actor->y)) || map->isInFov(actor->x, actor->y))) {
-			renderer.renderActor(actor);
-		}
-	}
-	renderer.renderActor(player);
+	renderer.render(map.get(), actors);
 	gui.render();
 }
 
