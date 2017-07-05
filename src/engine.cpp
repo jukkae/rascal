@@ -28,11 +28,13 @@ void Engine::init() {
 	player->ai           = std::unique_ptr<Ai>(new PlayerAi());
 	player->container    = std::unique_ptr<Container>(new Container(26));
 	actors.push_back(player);
+	scheduler.insertActor(player);
 
 	stairs = new Actor(0, 0, '>', "stairs", TCODColor::white);
 	stairs->blocks = false;
 	stairs->fovOnly = false;
 	actors.push_back(stairs);
+	scheduler.insertActor(stairs);
 
 	map = std::unique_ptr<Map>(new Map(120, 72));
 	map->init(true);
@@ -59,22 +61,25 @@ void Engine::update() {
 
 	gameStatus = GameStatus::NEW_TURN;
 	if (gameStatus == GameStatus::NEW_TURN) {
-		std::pair<float, Actor*>& activeActor = actorsQueue.at(0);
-		float activeActorTUNA = activeActor.first;
-		for(std::pair<float, Actor*>& a : actorsQueue) {
-			a.first -= activeActorTUNA;
-		}
-		if(activeActor.second == player) {
+		Actor* activeActor = scheduler.getNextActor();
+		//std::pair<float, Actor*>& activeActor = actorsQueue.at(0);
+		//float activeActorTUNA = activeActor.first;
+		//for(std::pair<float, Actor*>& a : actorsQueue) {
+			//a.first -= activeActorTUNA;
+		//}
+		if(activeActor == player) {
 			render();
 		}
-		float elapsedTime = activeActor.second->update();
-		if(activeActor.second == player) {
-			time += elapsedTime;
+		scheduler.updateNextActor();
+		//float elapsedTime = activeActor.second->update();
+		if(activeActor == player) {
+			//time += elapsedTime;
 			map->markExploredTiles();
 			render();
 		}
-		activeActor.first += elapsedTime;
-		std::sort(actorsQueue.begin(), actorsQueue.end());
+		time = scheduler.getCurrentTime();
+		//activeActor.first += elapsedTime;
+		//std::sort(actorsQueue.begin(), actorsQueue.end());
 	}
 }
 
@@ -109,6 +114,7 @@ void Engine::nextLevel() {
 void Engine::sendToBack(Actor* actor) {
 	actors.erase(std::remove(actors.begin(), actors.end(), actor), actors.end());
 	actors.insert(actors.begin(), actor);
+	scheduler.insertActor(actor);
 }
 
 Actor* Engine::getClosestMonster(int x, int y, float range) const {
