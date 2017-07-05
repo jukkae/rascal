@@ -9,6 +9,7 @@ static const TCODColor lightWall  (130, 110, 50);
 static const TCODColor lightGround(200, 180, 50);
 
 void Renderer::render(const Map* const map, const std::vector<Actor*> actors) const {
+	TCODConsole::root->clear();
 	renderMap(map);
 	for (Actor* actor : actors) {
 		if(actor != engine.player && ((!actor->fovOnly && map->isExplored(actor->x, actor->y)) || map->isInFov(actor->x, actor->y))) {

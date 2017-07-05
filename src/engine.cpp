@@ -79,7 +79,6 @@ void Engine::update() {
 }
 
 void Engine::render() {
-	TCODConsole::root->clear();
 	renderer.render(map.get(), actors);
 	gui.render();
 }
