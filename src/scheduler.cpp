@@ -12,7 +12,7 @@ void Scheduler::updateNextActor() {
 
 	float elapsedTime = activeActor.second->update();
 	activeActor.first += elapsedTime;
-	std::sort(actorsQueue.begin(), actorsQueue.end());
+	std::sort(actorsQueue.begin(), actorsQueue.end()); // TODO inefficient
 }
 
 void Scheduler::insertActor(Actor* actor) {

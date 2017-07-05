@@ -9,7 +9,7 @@ public:
 	void updateNextActor();
 	void insertActor(Actor* actor);
 private:
-	std::vector<std::pair<float, Actor*>> actorsQueue;
+	std::vector<std::pair<float, Actor*>> actorsQueue; // TODO better container
 	float time;
 };
 #endif /* SCHEDULER_HPP */
