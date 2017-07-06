@@ -63,7 +63,6 @@ void Engine::update() {
 	if (gameStatus == GameStatus::NEW_TURN) {
 		Actor* activeActor = scheduler.getNextActor();
 		if(activeActor == player) {
-			std::cout << "\nCurrent time: " << time;
 			render();
 		}
 		scheduler.updateNextActor();

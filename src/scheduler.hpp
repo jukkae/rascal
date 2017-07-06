@@ -14,6 +14,7 @@ public:
 private:
 	std::vector<std::pair<int, Actor*>> actorsQueue; // TODO better container
 	int time;
+	void updateTime();
 
 	friend class boost::serialization::access;
     template<class Archive>
