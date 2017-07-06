@@ -28,7 +28,7 @@ int PlayerAi::getNextLevelXp() const {
 float PlayerAi::update(Actor* owner) {
 	int levelUpXp = getNextLevelXp();
 	if (owner->destructible->xp >= levelUpXp) {
-		xpLevel++;
+		++xpLevel;
 		owner->destructible->xp -= levelUpXp;
 		engine.gui.message(TCODColor::yellow, "You've reached level %d!", xpLevel);
 		engine.gui.menu.clear();
@@ -116,8 +116,8 @@ Actor* PlayerAi::chooseFromInventory(Actor* owner) {
 	int y = 1;
 	for (Actor* actor : owner->container->inventory) {
 		con.print(2, y, "(%c) %s", shortcut, actor->name.c_str());
-		y++;
-		shortcut++;
+		++y;
+		++shortcut;
 	}
 	// blit the inventory console on the root console
 	TCODConsole::blit(&con, 0, 0, INVENTORY_WIDTH, INVENTORY_HEIGHT, TCODConsole::root, engine.screenWidth/2 - INVENTORY_WIDTH/2, engine.screenHeight/2 - INVENTORY_HEIGHT/2);
@@ -183,7 +183,7 @@ float MonsterAi::update(Actor* owner) {
 	if (owner->destructible && owner->destructible->isDead()) return DEFAULT_TURN_LENGTH;
 	if (engine.map->isInFov(owner->x, owner->y)) {
 		moveCount = TRACKING_TURNS;
-	} else { moveCount--; }
+	} else { --moveCount; }
 	if(moveCount > 0) {
 		moveOrAttack(owner, engine.player->x, engine.player->y);
 	}
@@ -214,7 +214,7 @@ void MonsterAi::moveOrAttack(Actor* owner, int targetX, int targetY) {
 }
 
 float TemporaryAi::update(Actor* owner) {
-	turns--;
+	--turns;
 	if(turns <= 0) {
 		owner->ai = std::move(oldAi);
 	}

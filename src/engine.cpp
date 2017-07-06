@@ -49,7 +49,7 @@ void Engine::init() {
 
 void Engine::updateQueue() {
 	//actorsQueue.clear();
-	for(int i = 0; i < actors.size(); i++) {
+	for(int i = 0; i < actors.size(); ++i) {
 		Actor* a = actors.at(i);
 		if(a->ai) {
 			//actorsQueue.push_back(std::pair<float, Actor*>((100.0+i), a)); // TODO wait... why the 100.0+i here?
@@ -81,7 +81,7 @@ void Engine::render() {
 }
 
 void Engine::nextLevel() {
-	level++;
+	++level;
 	gui.message(TCODColor::lightViolet,"You take a moment to rest, and recover your strength.");
 	player->destructible->heal(player->destructible->maxHp/2);
 	gui.message(TCODColor::red,"After a rare moment of peace, you descend\ndeeper into the heart of the dungeon...");
@@ -134,8 +134,8 @@ Actor* Engine::getLiveActor(int x, int y) const {
 bool Engine::pickTile(int* x, int* y, float maxRange) {
 	while(!TCODConsole::isWindowClosed()) {
 		render();
-		for(int cx = 0; cx < map->width; cx++) {
-			for(int cy = 0; cy < map->height; cy++) {
+		for(int cx = 0; cx < map->width; ++cx) {
+			for(int cy = 0; cy < map->height; ++cy) {
 				int realX = cx - (screenWidth / 2) + player->x; // real good naming here, har har
 				int realY = cy - (screenHeight / 2) + player->y;
 				if(map->isInFov(realX, realY) && (maxRange == 0 || player->getDistance(realX, realY) <= maxRange)) {

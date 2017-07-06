@@ -47,7 +47,7 @@ void Gui::renderMessageLog() {
 	for(Message msg : log) {
 		con.setDefaultForeground(msg.col * colCoef);
 		con.print(MSG_X, y, msg.text.c_str());
-		y++;
+		++y;
 		if(colCoef < 1.0f) {
 			colCoef += 0.3f;
 		}
@@ -162,14 +162,14 @@ Menu::MenuItemCode Menu::pick(DisplayMode mode) {
 			   TCODConsole::root->setDefaultForeground(TCODColor::lightGrey);
 			}
 			TCODConsole::root->print(menuX, menuY + currentItem * 3, item.label.c_str());
-			currentItem++;
+			++currentItem;
 		}
 		TCODConsole::flush();
 		TCOD_key_t key;
 		TCODSystem::waitForEvent(TCOD_EVENT_KEY_PRESS, &key, nullptr, true);
 		switch (key.vk) {
 			case TCODK_UP:
-				selectedItem--;
+				--selectedItem;
 				if (selectedItem < 0) {
 					selectedItem = items.size() - 1;
 				}

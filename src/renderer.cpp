@@ -21,8 +21,8 @@ void Renderer::render(const Map* const map, const std::vector<Actor*> actors) co
 
 void Renderer::renderMap(const Map* const map) const {
 
-	for(int x = 0; x < screenWidth; x++) { // TODO no need to loop through all of map, just what's visible
-		for(int y = 0; y < screenHeight; y++) {
+	for(int x = 0; x < screenWidth; ++x) {
+		for(int y = 0; y < screenHeight; ++y) {
 			Point screenPosition(x, y);
 			Point worldPosition = getWorldCoordsFromScreenCoords(screenPosition);
 			int worldX = worldPosition.x;

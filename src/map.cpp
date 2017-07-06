@@ -24,7 +24,7 @@ Map::~Map() {
 
 void Map::init(bool initActors) {
 	TCODRandom rng(seed);
-	for(int i = 0; i < width*height; i++) {
+	for(int i = 0; i < width*height; ++i) {
 		tiles.push_back(Tile());
 	}
 	this->map = std::unique_ptr<TCODMap>(new TCODMap(width, height));
@@ -115,8 +115,8 @@ void Map::markAsExplored(int x, int y) {
 }
 
 void Map::markExploredTiles() {
-	for(int x = 0; x < width; x++) {
-		for(int y = 0; y < height; y++) {
+	for(int x = 0; x < width; ++x) {
+		for(int y = 0; y < height; ++y) {
 			if(isInFov(x, y)) markAsExplored(x, y);
 		}
 	}
@@ -129,8 +129,8 @@ void Map::computeFov() {
 void Map::dig(int x1, int y1, int x2, int y2) {
 	if(x2 < x1) std::swap(x1, x2);
 	if(y2 < y1) std::swap(y1, y2);
-	for(int tileX = x1; tileX <= x2; tileX++) {
-		for(int tileY = y1; tileY <= y2; tileY++) {
+	for(int tileX = x1; tileX <= x2; ++tileX) {
+		for(int tileY = y1; tileY <= y2; ++tileY) {
 			map->setProperties(tileX, tileY, true, true);
 		}
 	}
@@ -151,7 +151,7 @@ void Map::createRoom(bool first, int x1, int y1, int x2, int y2, bool initActors
 			int x = rng.getInt(x1, x2);
 			int y = rng.getInt(y1, y2);
 			if(canWalk(x, y)) addMonster(x, y);
-			nMonsters--;
+			--nMonsters;
 		}
 	}
 	// add stimpaks
@@ -160,7 +160,7 @@ void Map::createRoom(bool first, int x1, int y1, int x2, int y2, bool initActors
 		int x = rng.getInt(x1, x2);
 		int y = rng.getInt(y1, y2);
 		if(canWalk(x,y)) { addItem(x,y); }
-		nItems--;
+		--nItems;
 	}
 	engine.stairs->x = (x1 + x2) / 2;
 	engine.stairs->y = (y1 + y2) / 2;
@@ -188,7 +188,7 @@ bool BspListener::visitNode(TCODBsp* node, void* userData) {
 		}
 		lastx = x+w/2;
 		lasty = y+h/2;
-		roomNum++;
+		++roomNum;
 	}
 return true;
 }
