@@ -22,6 +22,7 @@ void Engine::term() {
 }
 
 void Engine::init() {
+	scheduler.zeroTime();
 	player               = new Actor(40, 25, '@', "you", TCODColor::white);
 	player->destructible = std::unique_ptr<Destructible>(new PlayerDestructible(30, 2, 0, "your corpse"));
 	player->attacker     = std::unique_ptr<Attacker>(new Attacker(5));

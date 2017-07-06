@@ -11,6 +11,8 @@ public:
 	Actor* getNextActor() const { return actorsQueue.at(0).second; }
 	void updateNextActor();
 	void insertActor(Actor* actor);
+	void zeroTime() { time = 0; }
+
 private:
 	std::vector<std::pair<int, Actor*>> actorsQueue; // TODO better container
 	int time;
@@ -21,7 +23,7 @@ private:
     void serialize(Archive & ar, const unsigned int version)
     {
 		ar & time;
-		ar & actorsQueue;
+		ar & actorsQueue; // TODO i believe that i'm getting duplication of actors and ais when serializing
     }
 };
 #endif /* SCHEDULER_HPP */
