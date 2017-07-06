@@ -17,7 +17,6 @@ public:
 		DEFEAT
 	} gameStatus;
 	std::vector<Actor*> actors;
-	std::vector<std::pair<float, Actor*>> actorsQueue; // TODO maybe use std::set or map instead?
 	Actor* player; // TODO fix reliance on explicit pointer to player
 	Actor* stairs;
 	std::unique_ptr<Map> map;
@@ -38,7 +37,7 @@ public:
 	void updateQueue();
 	void term();
 	void update();
-	void render(); // TODO this should be const
+	void render();
 	void sendToBack(Actor* actor);
 	void nextLevel();
 	Actor* getClosestMonster(int x, int y, float range) const;
@@ -55,8 +54,8 @@ private:
 		ar & stairs;
 		ar & player;
 		ar & actors;
-		ar & actorsQueue;
 		ar & gui;
+		ar & scheduler;
     }
 };
 

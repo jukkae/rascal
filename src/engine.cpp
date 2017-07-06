@@ -47,11 +47,11 @@ void Engine::init() {
 }
 
 void Engine::updateQueue() {
-	actorsQueue.clear();
+	//actorsQueue.clear();
 	for(int i = 0; i < actors.size(); i++) {
 		Actor* a = actors.at(i);
 		if(a->ai) {
-			actorsQueue.push_back(std::pair<float, Actor*>((100.0+i), a)); // TODO wait... why the 100.0+i here?
+			//actorsQueue.push_back(std::pair<float, Actor*>((100.0+i), a)); // TODO wait... why the 100.0+i here?
 		}
 	}
 }
@@ -62,24 +62,16 @@ void Engine::update() {
 	gameStatus = GameStatus::NEW_TURN;
 	if (gameStatus == GameStatus::NEW_TURN) {
 		Actor* activeActor = scheduler.getNextActor();
-		//std::pair<float, Actor*>& activeActor = actorsQueue.at(0);
-		//float activeActorTUNA = activeActor.first;
-		//for(std::pair<float, Actor*>& a : actorsQueue) {
-			//a.first -= activeActorTUNA;
-		//}
 		if(activeActor == player) {
+			std::cout << "\nCurrent time: " << time;
 			render();
 		}
 		scheduler.updateNextActor();
-		//float elapsedTime = activeActor.second->update();
 		if(activeActor == player) {
-			//time += elapsedTime;
 			map->markExploredTiles();
 			render();
 		}
 		time = scheduler.getCurrentTime();
-		//activeActor.first += elapsedTime;
-		//std::sort(actorsQueue.begin(), actorsQueue.end());
 	}
 }
 
@@ -114,7 +106,6 @@ void Engine::nextLevel() {
 void Engine::sendToBack(Actor* actor) {
 	actors.erase(std::remove(actors.begin(), actors.end(), actor), actors.end());
 	actors.insert(actors.begin(), actor);
-	scheduler.insertActor(actor);
 }
 
 Actor* Engine::getClosestMonster(int x, int y, float range) const {
