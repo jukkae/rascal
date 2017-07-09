@@ -39,6 +39,7 @@ public:
 	void update();
 	void render();
 	void nextLevel();
+	Actor* getPlayer() const;
 	Actor* getClosestMonster(int x, int y, float range) const;
 	Actor* getLiveActor(int x, int y) const;
 	bool pickTile(int* x, int* y, float maxRange = 0.0f);
