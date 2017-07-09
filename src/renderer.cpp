@@ -12,7 +12,7 @@ void Renderer::render(const Map* const map, const std::vector<Actor*> actors) co
 	TCODConsole::root->clear();
 	renderMap(map);
 	for (Actor* actor : actors) {
-		if(actor != engine.player && ((!actor->fovOnly && map->isExplored(actor->x, actor->y)) || map->isInFov(actor->x, actor->y))) {
+		if(!actor->isPlayer() && ((!actor->fovOnly && map->isExplored(actor->x, actor->y)) || map->isInFov(actor->x, actor->y))) {
 			renderActor(actor);
 		}
 	}
