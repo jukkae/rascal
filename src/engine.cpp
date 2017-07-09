@@ -67,7 +67,7 @@ void Engine::update() {
 			render();
 		}
 		scheduler.updateNextActor();
-		if(activeActor == player) {
+		if(activeActor->isPlayer()) {
 			map->markExploredTiles();
 			render();
 		}
