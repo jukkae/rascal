@@ -103,11 +103,6 @@ void Engine::nextLevel() {
    gameStatus = GameStatus::STARTUP;
 }
 
-void Engine::sendToBack(Actor* actor) {
-	actors.erase(std::remove(actors.begin(), actors.end(), actor), actors.end());
-	actors.insert(actors.begin(), actor);
-}
-
 Actor* Engine::getClosestMonster(int x, int y, float range) const {
 	Actor* closest = nullptr;
 	float bestDistance = std::numeric_limits<float>::max();

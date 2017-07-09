@@ -38,7 +38,6 @@ public:
 	void term();
 	void update();
 	void render();
-	void sendToBack(Actor* actor);
 	void nextLevel();
 	Actor* getClosestMonster(int x, int y, float range) const;
 	Actor* getLiveActor(int x, int y) const;
