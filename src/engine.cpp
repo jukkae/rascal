@@ -105,7 +105,7 @@ void Engine::nextLevel() {
 
 Actor* Engine::getPlayer() const {
 	for(Actor* actor : actors) {
-		if(actor->isPlayer) return actor;
+		if(actor->isPlayer()) return actor;
 	}
 	return nullptr;
 }
