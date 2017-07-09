@@ -8,10 +8,10 @@
 #include <boost/serialization/export.hpp>
 #include <boost/serialization/vector.hpp>
 class Attacker;
-class Ai;
 class Destructible;
 class Pickable;
 
+#include "ai.hpp"
 #include "container.hpp" // must be included for serialization
 #include "destructible.hpp"
 #include "pickable.hpp"
@@ -34,6 +34,7 @@ public:
 	~Actor();
 	float update();
 	float getDistance(int cx, int cy) const;
+	bool isPlayer() { return ai ? this->ai->isPlayer() : false; }
 
 private:
 	friend class boost::serialization::access;                                                                

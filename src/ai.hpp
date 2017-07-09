@@ -15,6 +15,7 @@ public:
 	virtual float update(Actor* owner) = 0;
 	virtual ~Ai() {};
 	float speed;
+	virtual bool isPlayer() { return false; }
 private:
 	friend class boost::serialization::access;
 	template<class Archive>
@@ -30,6 +31,7 @@ public:
 	int getNextLevelXp() const;
 	float update(Actor* owner) override;
 	int xpLevel;
+	bool isPlayer() override { return true; }
 protected:
 	bool moveOrAttack(Actor* owner, int targetX, int targetY);
 	Actor* chooseFromInventory(Actor* owner);

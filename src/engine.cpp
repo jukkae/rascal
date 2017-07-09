@@ -63,7 +63,7 @@ void Engine::update() {
 	gameStatus = GameStatus::NEW_TURN;
 	if (gameStatus == GameStatus::NEW_TURN) {
 		Actor* activeActor = scheduler.getNextActor();
-		if(activeActor == player) {
+		if(activeActor->isPlayer()) {
 			render();
 		}
 		scheduler.updateNextActor();
@@ -107,7 +107,7 @@ Actor* Engine::getClosestMonster(int x, int y, float range) const {
 	Actor* closest = nullptr;
 	float bestDistance = std::numeric_limits<float>::max();
 	for (Actor* actor : actors) {
-		if(actor != player && actor->destructible && !actor->destructible->isDead()) {
+		if(!actor->isPlayer() && actor->destructible && !actor->destructible->isDead()) {
 			float distance = actor->getDistance(x,y);
 			if(distance < bestDistance && (distance <= range || range == 0.0f)) {
 				bestDistance = distance;
