@@ -149,8 +149,9 @@ bool Engine::pickTile(int* x, int* y, float maxRange) {
 			}
 		}
 		TCODSystem::waitForEvent(TCOD_EVENT_KEY_PRESS | TCOD_EVENT_MOUSE, &lastKey, &mouse, true);
-		int realX = mouse.cx - (screenWidth / 2) + player->x;
-		int realY = mouse.cy - (screenHeight / 2) + player->y;
+		Point mouseLocation = renderer.getWorldCoordsFromScreenCoords(Point(mouse.cx, mouse.cy));
+		int realX = mouseLocation.x;
+		int realY = mouseLocation.y;
 		if(map->isInFov(realX, realY) && (maxRange == 0 || player->getDistance(realX, realY) <= maxRange)) {
 			TCODConsole::root->setCharBackground(mouse.cx,mouse.cy,TCODColor::white);
 			if(mouse.lbutton_pressed) {
