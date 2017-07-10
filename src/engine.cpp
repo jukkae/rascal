@@ -136,8 +136,8 @@ Actor* Engine::getLiveActor(int x, int y) const {
 bool Engine::pickTile(int* x, int* y, float maxRange) {
 	while(!TCODConsole::isWindowClosed()) {
 		render();
-		for(int cx = 0; cx < map->width; ++cx) {
-			for(int cy = 0; cy < map->height; ++cy) {
+		for(int cx = 0; cx < screenWidth; ++cx) {
+			for(int cy = 0; cy < screenHeight; ++cy) {
 				Point location = renderer.getWorldCoordsFromScreenCoords(Point(cx, cy));
 				int realX = location.x;
 				int realY = location.y;
