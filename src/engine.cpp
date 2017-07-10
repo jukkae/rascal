@@ -138,8 +138,9 @@ bool Engine::pickTile(int* x, int* y, float maxRange) {
 		render();
 		for(int cx = 0; cx < map->width; ++cx) {
 			for(int cy = 0; cy < map->height; ++cy) {
-				int realX = cx - (screenWidth / 2) + player->x; // real good naming here, har har
-				int realY = cy - (screenHeight / 2) + player->y;
+				Point location = renderer.getWorldCoordsFromScreenCoords(Point(cx, cy));
+				int realX = location.x;
+				int realY = location.y;
 				if(map->isInFov(realX, realY) && (maxRange == 0 || player->getDistance(realX, realY) <= maxRange)) {
 					TCODColor col = TCODConsole::root->getCharBackground(cx, cy);
 					col = col * 1.2;
