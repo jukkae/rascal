@@ -16,7 +16,7 @@ void Renderer::render(const Map* const map, const std::vector<Actor*> actors) co
 			renderActor(actor);
 		}
 	}
-	renderActor(engine.player);
+	renderActor(engine.getPlayer());
 }
 
 void Renderer::renderMap(const Map* const map) const {
@@ -48,8 +48,8 @@ void Renderer::renderActor(const Actor* const actor) const {
 }
 
 Point Renderer::getWorldCoordsFromScreenCoords(const Point point) const {
-	int cameraX = engine.player->x - (screenWidth/2);
-	int cameraY = engine.player->y - (screenHeight/2);
+	int cameraX = engine.getPlayer()->x - (screenWidth/2);
+	int cameraY = engine.getPlayer()->y - (screenHeight/2);
 
 	int worldX = point.x + cameraX;
 	int worldY = point.y + cameraY;
@@ -58,8 +58,8 @@ Point Renderer::getWorldCoordsFromScreenCoords(const Point point) const {
 }
 
 Point Renderer::getScreenCoordsFromWorldCoords(const Point point) const {
-	int cameraX = engine.player->x - (screenWidth/2); // upper left corner of camera
-	int cameraY = engine.player->y - (screenHeight/2);
+	int cameraX = engine.getPlayer()->x - (screenWidth/2); // upper left corner of camera
+	int cameraY = engine.getPlayer()->y - (screenHeight/2);
 
 	int screenX = point.x - cameraX;
 	int screenY = point.y - cameraY;

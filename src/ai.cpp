@@ -185,7 +185,7 @@ float MonsterAi::update(Actor* owner) {
 		moveCount = TRACKING_TURNS;
 	} else { --moveCount; }
 	if(moveCount > 0) {
-		moveOrAttack(owner, engine.player->x, engine.player->y);
+		moveOrAttack(owner, engine.getPlayer()->x, engine.getPlayer()->y);
 	}
 	return 100 * (100 / speed);
 }
@@ -209,7 +209,7 @@ void MonsterAi::moveOrAttack(Actor* owner, int targetX, int targetY) {
 			owner->y += stepDy;
 		}
 	} else if ( owner->attacker ) {
-		owner->attacker->attack(owner, engine.player);
+		owner->attacker->attack(owner, engine.getPlayer());
 	}
 }
 

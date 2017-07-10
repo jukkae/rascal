@@ -23,9 +23,7 @@ void Gui::render() {
 	con.clear();
 
 	renderMessageLog();
-	renderBar(1, 1, BAR_WIDTH, "HP", engine.player->destructible->hp, engine.player->destructible->maxHp, TCODColor::lightRed, TCODColor::darkerRed);
-	con.print(3, 2, "X: %d", engine.player->x); // debugging
-	con.print(10, 2, "Y: %d", engine.player->y);
+	renderBar(1, 1, BAR_WIDTH, "HP", engine.getPlayer()->destructible->hp, engine.getPlayer()->destructible->maxHp, TCODColor::lightRed, TCODColor::darkerRed);
 	con.print(3, 3, "Dungeon level %d", engine.level);
 	con.print(3, 4, "Time: %d", (int)engine.time);
 	renderXpBar();
@@ -35,10 +33,10 @@ void Gui::render() {
 }
 
 void Gui::renderXpBar() {
-	PlayerAi* ai = (PlayerAi*)engine.player->ai.get(); // Don't transfer ownership!
+	PlayerAi* ai = (PlayerAi*)engine.getPlayer()->ai.get(); // Don't transfer ownership!
 	char xpTxt[128];
 	sprintf(xpTxt, "XP(%d)", ai->xpLevel);
-	renderBar(1, 5, BAR_WIDTH, xpTxt, engine.player->destructible->xp, ai->getNextLevelXp(), TCODColor::lightViolet,TCODColor::darkerViolet);
+	renderBar(1, 5, BAR_WIDTH, xpTxt, engine.getPlayer()->destructible->xp, ai->getNextLevelXp(), TCODColor::lightViolet,TCODColor::darkerViolet);
 }
 
 void Gui::renderMessageLog() {
@@ -66,12 +64,12 @@ void Gui::renderBar(int x, int y, int width, std::string name, float value, floa
 	con.printEx(x + width/2, y, TCOD_BKGND_NONE, TCOD_CENTER, "%s : %g/%g", name.c_str(), value, maxValue);
 }
 
-// TODO refactor coordinate handling to engine
 void Gui::renderMouseLook() {
 	int mouseX = engine.mouse.cx;
 	int mouseY = engine.mouse.cy;
-	int x = mouseX - (engine.screenWidth/2) + engine.player->x;
-	int y = mouseY - (engine.screenHeight/2) + engine.player->y;
+	Point location = engine.renderer.getWorldCoordsFromScreenCoords(Point(mouseX, mouseY));
+	int x = location.x;
+	int y = location.y;
 
 	if(!engine.map->isInFov(x, y)) {
 		return;

@@ -123,7 +123,7 @@ void Map::markExploredTiles() {
 }
 
 void Map::computeFov() {
-	map->computeFov(engine.player->x, engine.player->y, engine.fovRadius);
+	map->computeFov(engine.getPlayer()->x, engine.getPlayer()->y, engine.fovRadius);
 }
 
 void Map::dig(int x1, int y1, int x2, int y2) {
@@ -141,8 +141,8 @@ void Map::createRoom(bool first, int x1, int y1, int x2, int y2, bool initActors
 	if(!initActors) { return; }
 	if(first) {
 		// put the player in the first room
-		engine.player->x=(x1 + x2)/2;
-		engine.player->y=(y1 + y2)/2;
+		engine.getPlayer()->x=(x1 + x2)/2;
+		engine.getPlayer()->y=(y1 + y2)/2;
 		// engine.stairs->x = (x1 + x2) / 2 + 1; // debugging
 		// engine.stairs->y = (y1 + y2) / 2;
 	} else {
