@@ -8,7 +8,7 @@
 
 Engine::Engine(int screenWidth, int screenHeight) :
 gameStatus(GameStatus::STARTUP), fovRadius(10), screenWidth(screenWidth), screenHeight(screenHeight), level(1), time(0) {
-	TCODConsole::initRoot(80, 50, "Rascal", false);
+	TCODConsole::initRoot(screenWidth, screenHeight, "Rascal", false);
 }
 
 Engine::~Engine() {
