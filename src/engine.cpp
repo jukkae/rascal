@@ -62,6 +62,9 @@ void Engine::update() {
 		}
 		time = scheduler.getCurrentTime();
 	}
+	if(gameStatus == GameStatus::DEFEAT) {
+		// TODO u ded
+	}
 }
 
 void Engine::render() {
