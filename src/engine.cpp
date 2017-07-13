@@ -43,18 +43,7 @@ void Engine::init() {
 	time = 0;
 
 	gui.message(TCODColor::green, "Welcome to year 20XXAD, you strange rascal!\nPrepare to fight or die!");
-	updateQueue();
 	gameStatus = GameStatus::STARTUP;
-}
-
-void Engine::updateQueue() {
-	//actorsQueue.clear();
-	for(int i = 0; i < actors.size(); ++i) {
-		Actor* a = actors.at(i);
-		if(a->ai) {
-			//actorsQueue.push_back(std::pair<float, Actor*>((100.0+i), a)); // TODO wait... why the 100.0+i here?
-		}
-	}
 }
 
 void Engine::update() {
@@ -80,7 +69,7 @@ void Engine::render() {
 	gui.render();
 }
 
-void Engine::nextLevel() {
+void Engine::nextLevel() { // TODO fix this
 	++level;
 	gui.message(TCODColor::lightViolet,"You take a moment to rest, and recover your strength.");
 	player->destructible->heal(player->destructible->maxHp/2);
@@ -97,8 +86,6 @@ void Engine::nextLevel() {
 
    map = std::unique_ptr<Map>(new Map(80,43));
    map->init(true);
-
-   updateQueue(); // A bit hacky
 
    gameStatus = GameStatus::STARTUP;
 }

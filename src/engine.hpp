@@ -34,7 +34,6 @@ public:
 	Engine(int screenWidth, int screenHeight);
 	~Engine();
 	void init();
-	void updateQueue();
 	void term();
 	void update();
 	void render();
