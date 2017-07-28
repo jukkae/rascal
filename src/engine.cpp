@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <limits>
 #include "libtcod.hpp"
 #include "actor.hpp"
@@ -22,20 +23,19 @@ void Engine::term() {
 }
 
 void Engine::init() {
-	scheduler.zeroTime();
-	player               = new Actor(40, 25, '@', "you", TCODColor::white);
+	player               = new Actor(40, 25, '@', "you", TCODColor::white, 2); // TODO
 	player->destructible = std::unique_ptr<Destructible>(new PlayerDestructible(30, 2, 0, "your corpse"));
 	player->attacker     = std::unique_ptr<Attacker>(new Attacker(5));
 	player->ai           = std::unique_ptr<Ai>(new PlayerAi());
 	player->container    = std::unique_ptr<Container>(new Container(26));
 	actors.push_back(player);
-	scheduler.insertActor(player);
+//	scheduler.insertActor(player);
 
 	stairs = new Actor(0, 0, '>', "stairs", TCODColor::white);
 	stairs->blocks = false;
 	stairs->fovOnly = false;
 	actors.push_back(stairs);
-	scheduler.insertActor(stairs);
+//	scheduler.insertActor(stairs);
 
 	map = std::unique_ptr<Map>(new Map(120, 72));
 	map->init(true);
@@ -51,19 +51,47 @@ void Engine::update() {
 
 	gameStatus = GameStatus::NEW_TURN;
 	if (gameStatus == GameStatus::NEW_TURN) {
-		Actor* activeActor = scheduler.getNextActor();
+		Actor* activeActor = getNextActor();
 		if(activeActor->isPlayer()) {
 			render();
 		}
-		scheduler.updateNextActor();
+		updateNextActor();
 		if(activeActor->isPlayer()) {
 			map->markExploredTiles();
 			render();
 		}
-		time = scheduler.getCurrentTime();
 	}
 	if(gameStatus == GameStatus::DEFEAT) {
 		// TODO u ded
+	}
+}
+
+void Engine::updateNextActor() {
+	Actor* activeActor = actors.at(0);
+
+	int actionTime = activeActor->update();
+	activeActor->energy -= actionTime;
+
+	std::sort(actors.begin(), actors.end(), [](const auto& lhs, const auto& rhs)
+	{
+		return lhs->energy > rhs->energy;
+	});
+
+	updateTime();
+}
+
+void Engine::updateTime() {
+	if(actors.at(0)->energy > 0) return;
+	else {
+		time++;
+		for(auto a : actors) {
+			if(a->ai != nullptr) a->energy++; // TODO speed
+		}
+		std::sort(actors.begin(), actors.end(), [](const auto& lhs, const auto& rhs)
+		{
+			return lhs->energy > rhs->energy;
+		});
+		updateTime();
 	}
 }
 

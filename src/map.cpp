@@ -38,19 +38,17 @@ void Map::init(bool initActors) {
 
 void Map::addMonster(int x, int y) {
 	if(rng.getInt(0, 100) < 80) {
-		Actor* punk = new Actor(x, y, 'h', "punk", TCODColor::desaturatedGreen);
+		Actor* punk = new Actor(x, y, 'h', "punk", TCODColor::desaturatedGreen, 1); // TODO
 		punk->destructible = std::unique_ptr<Destructible>(new MonsterDestructible(10, 0, 50, "dead punk"));
 		punk->attacker = std::unique_ptr<Attacker>(new Attacker(3));
 		punk->ai = std::unique_ptr<Ai>(new MonsterAi());
 		engine.actors.push_back(punk);
-		engine.scheduler.insertActor(punk); // TODO clean up
 	} else {
-		Actor* fighter = new Actor(x, y, 'H', "fighter", TCODColor::darkerGreen);
+		Actor* fighter = new Actor(x, y, 'H', "fighter", TCODColor::darkerGreen, 1); // TODO
 		fighter->destructible = std::unique_ptr<Destructible>(new MonsterDestructible(16, 1, 100, "fighter carcass"));
 		fighter->attacker = std::unique_ptr<Attacker>(new Attacker(4));
 		fighter->ai = std::unique_ptr<Ai>(new MonsterAi());
 		engine.actors.push_back(fighter);
-		engine.scheduler.insertActor(fighter); // TODO clean up
 	}
 }
 

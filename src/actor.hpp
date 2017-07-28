@@ -22,6 +22,7 @@ public:
 	int ch; // ASCII code
 	TCODColor col; // color
 	std::string name;
+	float energy; // TODO proper encapsulation
 	bool blocks; // does it block movement?
 	bool fovOnly; // visible only when in fov?
 	std::unique_ptr<Attacker> attacker;
@@ -30,7 +31,7 @@ public:
 	std::unique_ptr<Pickable> pickable;
 	std::unique_ptr<Container> container;
 
-	Actor(int x = 0, int y = 0, int ch = 'x', std::string name = "", const TCODColor& col = TCODColor::white);
+	Actor(int x = 0, int y = 0, int ch = 'x', std::string name = "", const TCODColor& col = TCODColor::white, float energy = 0);
 	~Actor();
 	float update();
 	float getDistance(int cx, int cy) const;
@@ -45,6 +46,7 @@ private:
 		ar & ch;
 		ar & col;
 		ar & name;
+		ar & energy;
 		ar & blocks;
 		ar & fovOnly;
 		ar & attacker;

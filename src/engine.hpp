@@ -6,7 +6,7 @@ class Map;
 #include "gui.hpp"
 #include "attacker.hpp"
 #include "map.hpp"
-#include "scheduler.hpp"
+//#include "scheduler.hpp"
 
 class Engine {
 public:
@@ -25,11 +25,11 @@ public:
 	int screenHeight;
 	Gui gui;
 	Renderer renderer;
-	Scheduler scheduler;
+//	Scheduler scheduler;
 	TCOD_key_t lastKey;
 	TCOD_mouse_t mouse;
 	int level;
-	float time;
+	int time;
 
 	Engine(int screenWidth, int screenHeight);
 	~Engine();
@@ -38,6 +38,11 @@ public:
 	void update();
 	void render();
 	void nextLevel();
+
+	Actor* getNextActor() const { return actors.at(0); }
+	void updateNextActor();
+	void updateTime();
+
 	Actor* getPlayer() const;
 	Actor* getClosestMonster(int x, int y, float range) const;
 	Actor* getLiveActor(int x, int y) const;
@@ -54,7 +59,7 @@ private:
 		ar & player;
 		ar & actors;
 		ar & gui;
-		ar & scheduler;
+//		ar & scheduler;
     }
 };
 
