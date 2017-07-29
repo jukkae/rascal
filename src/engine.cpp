@@ -78,12 +78,12 @@ void Engine::updateNextActor() {
 	updateTime();
 }
 
-void Engine::updateTime() {
+void Engine::updateTime() { // TODO this is very, very non-performant
 	if(actors.at(0)->energy > 0) return;
 	else {
 		time++;
 		for(auto a : actors) {
-			if(a->ai != nullptr) a->energy++; // TODO speed
+			if(a->ai != nullptr) a->energy++; // TODO actor speed: here or directly in action?
 		}
 		std::sort(actors.begin(), actors.end(), [](const auto& lhs, const auto& rhs)
 		{
