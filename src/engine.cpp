@@ -29,13 +29,11 @@ void Engine::init() {
 	player->ai           = std::unique_ptr<Ai>(new PlayerAi());
 	player->container    = std::unique_ptr<Container>(new Container(26));
 	actors.push_back(player);
-//	scheduler.insertActor(player);
 
 	stairs = new Actor(0, 0, '>', "stairs", TCODColor::white);
 	stairs->blocks = false;
 	stairs->fovOnly = false;
 	actors.push_back(stairs);
-//	scheduler.insertActor(stairs);
 
 	map = std::unique_ptr<Map>(new Map(120, 72));
 	map->init(true);

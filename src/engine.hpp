@@ -6,7 +6,6 @@ class Map;
 #include "gui.hpp"
 #include "attacker.hpp"
 #include "map.hpp"
-//#include "scheduler.hpp"
 
 class Engine {
 public:
@@ -25,7 +24,6 @@ public:
 	int screenHeight;
 	Gui gui;
 	Renderer renderer;
-//	Scheduler scheduler;
 	TCOD_key_t lastKey;
 	TCOD_mouse_t mouse;
 	int level;
@@ -59,7 +57,6 @@ private:
 		ar & player;
 		ar & actors;
 		ar & gui;
-//		ar & scheduler;
     }
 };
 
