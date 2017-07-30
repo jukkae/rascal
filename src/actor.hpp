@@ -3,9 +3,11 @@
 
 #include "libtcod.hpp"
 #include <string>
+#include <boost/optional.hpp>
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/serialization/export.hpp>
+#include <boost/serialization/optional.hpp>
 #include <boost/serialization/vector.hpp>
 class Attacker;
 class Destructible;
@@ -22,7 +24,7 @@ public:
 	int ch; // ASCII code
 	TCODColor col; // color
 	std::string name;
-	float energy; // TODO proper encapsulation
+	boost::optional<float> energy; // TODO proper encapsulation
 	bool blocks; // does it block movement?
 	bool fovOnly; // visible only when in fov?
 	std::unique_ptr<Attacker> attacker;

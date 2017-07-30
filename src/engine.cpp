@@ -68,7 +68,7 @@ void Engine::updateNextActor() {
 	Actor* activeActor = actors.at(0);
 
 	int actionTime = activeActor->update();
-	activeActor->energy -= actionTime;
+	*activeActor->energy -= actionTime;
 
 	std::sort(actors.begin(), actors.end(), [](const auto& lhs, const auto& rhs)
 	{
@@ -79,15 +79,15 @@ void Engine::updateNextActor() {
 }
 
 void Engine::updateTime() { // TODO this is very, very non-performant
-	if(actors.at(0)->energy > 0) return;
+	if(actors.at(0)->energy.get() > 0) return; // TODO check if energy HAS value (if(a->energy))
 	//if(std::find_if(actors.begin(), actors.end(), [](const auto& a) { return a->energy > 0; }) != actors.end()) return;
 	else {
 		Actor* next = *std::find_if(actors.begin(), actors.end(), [](const auto& a) { return a->ai != nullptr; });
 
-		float tuna = next->energy * -1;
+		float tuna = next->energy.get() * -1;
 		time += tuna;
 		for(auto a : actors) {
-			if(a->ai != nullptr) a->energy += tuna;
+			if(a->ai != nullptr) *a->energy += tuna;
 		}
 	}
 }
