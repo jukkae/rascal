@@ -87,13 +87,9 @@ void Engine::updateTime() { // TODO this is very, very non-performant
 		Actor* next = *std::find_if(actors.begin(), actors.end(), [](const auto& a) { return a->ai != nullptr; });
 
 		float tuna = next->energy * -1;
-
-		while(tuna >= 0) {
-			--tuna;
-			++time;
-			for(auto a : actors) {
-				if(a->ai != nullptr) a->energy++;
-			}
+		time += tuna;
+		for(auto a : actors) {
+			if(a->ai != nullptr) a->energy += tuna;
 		}
 
 		/*
