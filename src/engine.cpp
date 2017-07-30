@@ -79,11 +79,9 @@ void Engine::updateNextActor() {
 }
 
 void Engine::updateTime() { // TODO this is very, very non-performant
-	//if(actors.at(0)->energy > 0) return;
-	if(std::find_if(actors.begin(), actors.end(), [](const auto& a) { return a->energy > 0; }) != actors.end()) return;
+	if(actors.at(0)->energy > 0) return;
+	//if(std::find_if(actors.begin(), actors.end(), [](const auto& a) { return a->energy > 0; }) != actors.end()) return;
 	else {
-		std::sort(actors.begin(), actors.end(), [](const auto& lhs, const auto& rhs) { return lhs->energy > rhs->energy; });
-
 		Actor* next = *std::find_if(actors.begin(), actors.end(), [](const auto& a) { return a->ai != nullptr; });
 
 		float tuna = next->energy * -1;
@@ -91,18 +89,6 @@ void Engine::updateTime() { // TODO this is very, very non-performant
 		for(auto a : actors) {
 			if(a->ai != nullptr) a->energy += tuna;
 		}
-
-		/*
-		time++;
-		for(auto a : actors) {
-			if(a->ai != nullptr) a->energy++; // TODO actor speed: here or directly in action?
-		}
-		std::sort(actors.begin(), actors.end(), [](const auto& lhs, const auto& rhs)
-		{
-			return lhs->energy > rhs->energy;
-		});
-		updateTime();
-		*/
 	}
 }
 
