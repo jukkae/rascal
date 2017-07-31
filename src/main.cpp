@@ -28,7 +28,6 @@ int main() {
 			showMenu();
 		}
 		engine.update();
-		engine.render();
 		TCODConsole::flush();
 	}
 

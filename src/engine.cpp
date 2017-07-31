@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <chrono>
 #include <limits>
 #include "libtcod.hpp"
 #include "actor.hpp"
@@ -6,6 +7,8 @@
 #include "container.hpp"
 #include "destructible.hpp"
 #include "engine.hpp"
+
+using namespace std::chrono;
 
 Engine::Engine(int screenWidth, int screenHeight) :
 gameStatus(GameStatus::STARTUP), fovRadius(10), screenWidth(screenWidth), screenHeight(screenHeight), level(1), time(0) {
@@ -40,6 +43,11 @@ void Engine::init() {
 
 	time = 0;
 
+	std::sort(actors.begin(), actors.end(), [](const auto& lhs, const auto& rhs)
+	{
+		return lhs->energy > rhs->energy;
+	});
+
 	gui.message(TCODColor::green, "Welcome to year 20XXAD, you strange rascal!\nPrepare to fight or die!");
 	gameStatus = GameStatus::STARTUP;
 }
@@ -51,6 +59,7 @@ void Engine::update() {
 	if (gameStatus == GameStatus::NEW_TURN) {
 		Actor* activeActor = getNextActor();
 		if(activeActor->isPlayer()) {
+			std::cout << "PLAYER\n";
 			render();
 		}
 		updateNextActor();
@@ -70,17 +79,19 @@ void Engine::updateNextActor() {
 	int actionTime = activeActor->update();
 	*activeActor->energy -= actionTime;
 
-	std::sort(actors.begin(), actors.end(), [](const auto& lhs, const auto& rhs)
+	actors.erase(actors.begin());
+	auto it = std::lower_bound(actors.begin(), actors.end(), activeActor, [](const auto& lhs, const auto& rhs) { return lhs->energy > rhs->energy; });
+	actors.insert(it, activeActor);
+	/*std::sort(actors.begin(), actors.end(), [](const auto& lhs, const auto& rhs)
 	{
 		return lhs->energy > rhs->energy;
-	});
+	});*/
 
 	updateTime();
 }
 
-void Engine::updateTime() { // TODO this is very, very non-performant
+void Engine::updateTime() {
 	if(actors.at(0)->energy.get() > 0) return; // TODO check if energy HAS value (if(a->energy))
-	//if(std::find_if(actors.begin(), actors.end(), [](const auto& a) { return a->energy > 0; }) != actors.end()) return;
 	else {
 		Actor* next = *std::find_if(actors.begin(), actors.end(), [](const auto& a) { return a->ai != nullptr; });
 
@@ -93,8 +104,17 @@ void Engine::updateTime() { // TODO this is very, very non-performant
 }
 
 void Engine::render() {
+	high_resolution_clock::time_point t1 = high_resolution_clock::now();
 	renderer.render(map.get(), actors);
+	high_resolution_clock::time_point t2 = high_resolution_clock::now();
+	auto duration1 = duration_cast<microseconds>( t2 - t1 ).count();
+	std::cout << "renderer.render() duration: " << duration1 << " microseconds\n";
+
+	high_resolution_clock::time_point t3 = high_resolution_clock::now();
 	gui.render();
+	high_resolution_clock::time_point t4 = high_resolution_clock::now();
+	auto duration2 = duration_cast<microseconds>( t4 - t3 ).count();
+	std::cout << "gui.render() duration: " << duration2 << " microseconds\n";
 }
 
 void Engine::nextLevel() { // TODO fix this

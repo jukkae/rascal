@@ -7,7 +7,7 @@ class Renderer {
 public:
 	Renderer() : screenWidth(80), screenHeight(50) {;} // TODO remove default constructor
 	Renderer(int screenWidth, int screenHeight): screenWidth(screenWidth), screenHeight(screenHeight) {;}
-	void render(const Map* const map, const std::vector<Actor*> actors) const;
+	void render(const Map* const map, const std::vector<Actor*>& actors) const;
 	Point getWorldCoordsFromScreenCoords(const Point point) const;
 
 private:
