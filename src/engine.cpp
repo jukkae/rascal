@@ -1,5 +1,4 @@
 #include <algorithm>
-#include <chrono>
 #include <limits>
 #include "libtcod.hpp"
 #include "actor.hpp"
@@ -7,8 +6,6 @@
 #include "container.hpp"
 #include "destructible.hpp"
 #include "engine.hpp"
-
-using namespace std::chrono;
 
 Engine::Engine(int screenWidth, int screenHeight) :
 gameStatus(GameStatus::STARTUP), fovRadius(10), screenWidth(screenWidth), screenHeight(screenHeight), level(1), time(0) {
@@ -57,10 +54,10 @@ void Engine::update() {
 
 	gameStatus = GameStatus::NEW_TURN;
 	if (gameStatus == GameStatus::NEW_TURN) {
+		render(); // yep rendering is that cheap now
 		Actor* activeActor = getNextActor();
 		if(activeActor->isPlayer()) {
-			std::cout << "PLAYER\n";
-			render();
+			//render();
 		}
 		updateNextActor();
 		if(activeActor->isPlayer()) {
@@ -104,17 +101,8 @@ void Engine::updateTime() {
 }
 
 void Engine::render() {
-	high_resolution_clock::time_point t1 = high_resolution_clock::now();
 	renderer.render(map.get(), actors);
-	high_resolution_clock::time_point t2 = high_resolution_clock::now();
-	auto duration1 = duration_cast<microseconds>( t2 - t1 ).count();
-	std::cout << "renderer.render() duration: " << duration1 << " microseconds\n";
-
-	high_resolution_clock::time_point t3 = high_resolution_clock::now();
 	gui.render();
-	high_resolution_clock::time_point t4 = high_resolution_clock::now();
-	auto duration2 = duration_cast<microseconds>( t4 - t3 ).count();
-	std::cout << "gui.render() duration: " << duration2 << " microseconds\n";
 }
 
 void Engine::nextLevel() { // TODO fix this
