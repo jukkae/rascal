@@ -4,7 +4,7 @@
 
 static const float DEFAULT_TURN_LENGTH = 100; // I know, this is now in two places
 
-Actor::Actor(int x, int y, int ch, std::string name, const TCODColor& col, float energy) :
+Actor::Actor(int x, int y, int ch, std::string name, const TCODColor& col, boost::optional<float> energy) :
 	x(x), y(y), ch(ch), col(col), name(name), energy(energy),
 	blocks(true), fovOnly(true), attacker(nullptr), destructible(nullptr), ai(nullptr),
 	pickable(nullptr), container(nullptr) {;}

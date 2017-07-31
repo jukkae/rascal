@@ -33,7 +33,7 @@ public:
 	std::unique_ptr<Pickable> pickable;
 	std::unique_ptr<Container> container;
 
-	Actor(int x = 0, int y = 0, int ch = 'x', std::string name = "", const TCODColor& col = TCODColor::white, float energy = 0);
+	Actor(int x = 0, int y = 0, int ch = 'x', std::string name = "", const TCODColor& col = TCODColor::white, boost::optional<float> energy = boost::none);
 	~Actor();
 	float update();
 	float getDistance(int cx, int cy) const;
