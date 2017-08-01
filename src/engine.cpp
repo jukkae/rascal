@@ -114,14 +114,19 @@ void Engine::nextLevel() { // TODO fix this
 	// Clunky, not idiomatic
 	auto it = actors.begin();
 	while (it != actors.end()) {
-       if (*it != player && *it != stairs) {
-           it = actors.erase(it);
-       }
-	   else ++it;
-   }
+		if (*it != player && *it != stairs) {
+			it = actors.erase(it);
+		}
+		else ++it;
+	}
 
-   map = std::unique_ptr<Map>(new Map(80,43));
-   map->init(true);
+	map = std::unique_ptr<Map>(new Map(80,43));
+	map->init(true);
+
+	std::sort(actors.begin(), actors.end(), [](const auto& lhs, const auto& rhs)
+	{
+		return lhs->energy > rhs->energy;
+	});
 
    gameStatus = GameStatus::STARTUP;
 }
