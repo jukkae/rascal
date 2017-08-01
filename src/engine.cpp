@@ -107,8 +107,6 @@ void Engine::updateTime() {
 
 void Engine::render() {
 	states.back()->render(this);
-	renderer.render(map.get(), actors);
-	gui.render();
 }
 
 void Engine::nextLevel() { // TODO fix this
