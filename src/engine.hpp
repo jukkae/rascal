@@ -8,6 +8,7 @@ class Map;
 #include "map.hpp"
 #include "state.hpp"
 #include "dummy_state.hpp"
+#include "gameplay_state.hpp"
 
 class Engine {
 public:
@@ -38,7 +39,7 @@ public:
 
 	//void changeState(State* state);
 	void pushState(State* state) { states.push_back(state); }
-	void popState() { states.erase(states.end() - 1); }
+	void popState() { states.pop_back(); }
 	void update();
 	void render();
 
@@ -54,6 +55,7 @@ public:
 	bool pickTile(int* x, int* y, float maxRange = 0.0f);
 private:
 	DummyState dummyState;
+	GameplayState gameplayState;
 	std::vector<State*> states;
 
 	friend class boost::serialization::access;

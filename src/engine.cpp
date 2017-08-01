@@ -47,9 +47,14 @@ void Engine::init() {
 
 	gui.message(TCODColor::green, "Welcome to year 20XXAD, you strange rascal!\nPrepare to fight or die!");
 	gameStatus = GameStatus::STARTUP;
+
+	states.push_back(&dummyState);
+	states.push_back(&gameplayState);
 }
 
 void Engine::update() {
+	states.back()->update(this);
+
 	if(gameStatus == GameStatus::STARTUP) map->computeFov();
 
 	gameStatus = GameStatus::NEW_TURN;
@@ -101,7 +106,7 @@ void Engine::updateTime() {
 }
 
 void Engine::render() {
-	dummyState.render(this);
+	states.back()->render(this);
 	renderer.render(map.get(), actors);
 	gui.render();
 }
