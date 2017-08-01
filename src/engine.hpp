@@ -6,6 +6,8 @@ class Map;
 #include "gui.hpp"
 #include "attacker.hpp"
 #include "map.hpp"
+#include "state.hpp"
+#include "dummy_state.hpp"
 
 class Engine {
 public:
@@ -33,19 +35,27 @@ public:
 	~Engine();
 	void init();
 	void term();
+
+	//void changeState(State* state);
+	void pushState(State* state) { states.push_back(state); }
+	void popState() { states.erase(states.end() - 1); }
 	void update();
 	void render();
+
 	void nextLevel();
+	void updateTime();
 
 	Actor* getNextActor() const { return actors.at(0); }
 	void updateNextActor();
-	void updateTime();
-
 	Actor* getPlayer() const;
 	Actor* getClosestMonster(int x, int y, float range) const;
 	Actor* getLiveActor(int x, int y) const;
+
 	bool pickTile(int* x, int* y, float maxRange = 0.0f);
 private:
+	DummyState dummyState;
+	std::vector<State*> states;
+
 	friend class boost::serialization::access;
     template<class Archive>
     void serialize(Archive & ar, const unsigned int version)

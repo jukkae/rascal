@@ -101,6 +101,7 @@ void Engine::updateTime() {
 }
 
 void Engine::render() {
+	dummyState.render(this);
 	renderer.render(map.get(), actors);
 	gui.render();
 }
