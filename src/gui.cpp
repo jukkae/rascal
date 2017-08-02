@@ -1,4 +1,5 @@
 #include "ai.hpp"
+#include "constants.hpp"
 #include "destructible.hpp"
 #include "engine.hpp"
 #include "gui.hpp"
@@ -29,7 +30,7 @@ void Gui::render() {
 	renderXpBar();
 	renderMouseLook();
 
-	TCODConsole::blit(&con, 0, 0, engine.screenWidth, PANEL_HEIGHT, TCODConsole::root, 0, engine.screenHeight - PANEL_HEIGHT);
+	TCODConsole::blit(&con, 0, 0, constants::SCREEN_WIDTH, PANEL_HEIGHT, TCODConsole::root, 0, constants::SCREEN_HEIGHT - PANEL_HEIGHT);
 }
 
 void Gui::renderXpBar() {
@@ -139,8 +140,8 @@ Menu::MenuItemCode Menu::pick(DisplayMode mode) {
 	int selectedItem = 0;
 	int menuX, menuY;
 	if(mode == DisplayMode::PAUSE) {
-		menuX = engine.screenWidth / 2 - PAUSE_MENU_WIDTH / 2;
-		menuY = engine.screenHeight / 2 - PAUSE_MENU_HEIGHT / 2;
+		menuX = constants::SCREEN_WIDTH / 2 - PAUSE_MENU_WIDTH / 2;
+		menuY = constants::SCREEN_HEIGHT / 2 - PAUSE_MENU_HEIGHT / 2;
 		TCODConsole::root->setDefaultForeground(TCODColor(200, 180, 50));
 		TCODConsole::root->printFrame(menuX, menuY, PAUSE_MENU_WIDTH, PAUSE_MENU_HEIGHT, true, TCOD_BKGND_ALPHA(70), "menu");
 		menuX += 2;

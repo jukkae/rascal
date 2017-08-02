@@ -30,8 +30,6 @@ public:
 
 	bool pickTile(int* x, int* y, float maxRange = 0.0f);
 private:
-	int screenWidth;
-	int screenHeight;
 	int time = 0;
 	int level = 1;
 	std::vector<Actor*> actors; // TODO should be std::vector<std::unique_ptr<Actor>>

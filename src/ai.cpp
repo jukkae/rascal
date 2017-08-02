@@ -1,6 +1,7 @@
 #include "ai.hpp"
 #include "actor.hpp"
 #include "attacker.hpp"
+#include "constants.hpp"
 #include "container.hpp"
 #include "destructible.hpp"
 #include "engine.hpp"
@@ -120,7 +121,7 @@ Actor* PlayerAi::chooseFromInventory(Actor* owner) {
 		++shortcut;
 	}
 	// blit the inventory console on the root console
-	TCODConsole::blit(&con, 0, 0, INVENTORY_WIDTH, INVENTORY_HEIGHT, TCODConsole::root, engine.screenWidth/2 - INVENTORY_WIDTH/2, engine.screenHeight/2 - INVENTORY_HEIGHT/2);
+	TCODConsole::blit(&con, 0, 0, INVENTORY_WIDTH, INVENTORY_HEIGHT, TCODConsole::root, constants::SCREEN_WIDTH/2 - INVENTORY_WIDTH/2, constants::SCREEN_HEIGHT/2 - INVENTORY_HEIGHT/2);
 	TCODConsole::flush();
 	// wait for a key press
 	TCOD_key_t key;

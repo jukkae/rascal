@@ -22,14 +22,12 @@ public:
 	Actor* player; // moved
 	Actor* stairs; // moved
 	std::unique_ptr<Map> map; // moved
-	int screenWidth; // moved
-	int screenHeight; // moved
 	Gui gui; // moved
 	Renderer renderer; // moved
 	TCOD_key_t lastKey;
 	TCOD_mouse_t mouse;
 
-	Engine(int screenWidth, int screenHeight);
+	Engine(int dummy); // dummy parameter due to idiotic extern
 	~Engine();
 	void init();
 	void term();

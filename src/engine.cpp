@@ -3,13 +3,13 @@
 #include "libtcod.hpp"
 #include "actor.hpp"
 #include "ai.hpp"
+#include "constants.hpp"
 #include "container.hpp"
 #include "destructible.hpp"
 #include "engine.hpp"
 
-Engine::Engine(int screenWidth, int screenHeight) :
-gameStatus(GameStatus::STARTUP), screenWidth(screenWidth), screenHeight(screenHeight) {
-	TCODConsole::initRoot(screenWidth, screenHeight, "Rascal", false);
+Engine::Engine(int dummy) : gameStatus(GameStatus::STARTUP) {
+	TCODConsole::initRoot(constants::SCREEN_WIDTH, constants::SCREEN_HEIGHT, "Rascal", false);
 }
 
 Engine::~Engine() {
@@ -167,8 +167,8 @@ Actor* Engine::getLiveActor(int x, int y) const {
 bool Engine::pickTile(int* x, int* y, float maxRange) {
 	while(!TCODConsole::isWindowClosed()) {
 		render();
-		for(int cx = 0; cx < screenWidth; ++cx) {
-			for(int cy = 0; cy < screenHeight; ++cy) {
+		for(int cx = 0; cx < constants::SCREEN_WIDTH; ++cx) {
+			for(int cy = 0; cy < constants::SCREEN_HEIGHT; ++cy) {
 				Point location = renderer.getWorldCoordsFromScreenCoords(Point(cx, cy));
 				int realX = location.x;
 				int realY = location.y;

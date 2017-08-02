@@ -12,7 +12,7 @@
 
 std::string file = "save.txt";
 
-Engine engine(80, 50);
+Engine engine(1);
 
 int main() {
 	showMenu();
