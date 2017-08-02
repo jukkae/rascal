@@ -24,7 +24,7 @@ public:
 
 	Actor* getNextActor() const { return actors.at(0); }
 	void updateNextActor();
-	Actor* getPlayer() const;
+	Actor* getPlayer() const { return player; };
 	Actor* getClosestMonster(int x, int y, float range) const;
 	Actor* getLiveActor(int x, int y) const;
 
