@@ -29,7 +29,6 @@ public:
 	Renderer renderer; // moved
 	TCOD_key_t lastKey;
 	TCOD_mouse_t mouse;
-	int time; // moved
 
 	Engine(int screenWidth, int screenHeight);
 	~Engine();
@@ -43,6 +42,7 @@ public:
 	void render();
 
 	int getLevel() { return gameplayState.getLevel(); } // temporary
+	int getTime() { return gameplayState.getTime(); } // temporary
 	void nextLevel();
 	void updateTime();
 
@@ -62,7 +62,6 @@ private:
     template<class Archive>
     void serialize(Archive & ar, const unsigned int version)
     {
-		ar & time;
         ar & map;
 		ar & stairs;
 		ar & player;

@@ -8,7 +8,7 @@
 #include "engine.hpp"
 
 Engine::Engine(int screenWidth, int screenHeight) :
-gameStatus(GameStatus::STARTUP), fovRadius(10), screenWidth(screenWidth), screenHeight(screenHeight), time(0) {
+gameStatus(GameStatus::STARTUP), fovRadius(10), screenWidth(screenWidth), screenHeight(screenHeight) {
 	TCODConsole::initRoot(screenWidth, screenHeight, "Rascal", false);
 }
 
@@ -37,8 +37,6 @@ void Engine::init() {
 
 	map = std::unique_ptr<Map>(new Map(120, 72));
 	map->init(true);
-
-	time = 0;
 
 	std::sort(actors.begin(), actors.end(), [](const auto& lhs, const auto& rhs)
 	{
@@ -98,7 +96,9 @@ void Engine::updateTime() {
 		Actor* next = *std::find_if(actors.begin(), actors.end(), [](const auto& a) { return a->ai != nullptr; });
 
 		float tuna = next->energy.get() * -1;
-		time += tuna;
+
+		gameplayState.increaseTime(tuna); // TODO can't rely on explicitly pointing to gameplayState
+
 		for(auto a : actors) {
 			if(a->ai != nullptr) *a->energy += tuna;
 		}

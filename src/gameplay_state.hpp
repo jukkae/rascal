@@ -19,6 +19,8 @@ public:
 
 	int getLevel() { return level; } // temporary!
 	void increaseLevel() { ++level; } // temporary!
+	int getTime() { return time; } // temporary!
+	void increaseTime(int amount) { time += amount; } // temporary!
 private:
 	int screenWidth;
 	int screenHeight;
