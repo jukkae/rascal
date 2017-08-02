@@ -24,7 +24,7 @@ void Gui::render() {
 
 	renderMessageLog();
 	renderBar(1, 1, BAR_WIDTH, "HP", engine.getPlayer()->destructible->hp, engine.getPlayer()->destructible->maxHp, TCODColor::lightRed, TCODColor::darkerRed);
-	con.print(3, 3, "Dungeon level %d", engine.level);
+	con.print(3, 3, "Dungeon level %d", engine.getLevel());
 	con.print(3, 4, "Time: %d", (int)engine.time);
 	renderXpBar();
 	renderMouseLook();

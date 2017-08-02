@@ -8,7 +8,7 @@
 #include "engine.hpp"
 
 Engine::Engine(int screenWidth, int screenHeight) :
-gameStatus(GameStatus::STARTUP), fovRadius(10), screenWidth(screenWidth), screenHeight(screenHeight), level(1), time(0) {
+gameStatus(GameStatus::STARTUP), fovRadius(10), screenWidth(screenWidth), screenHeight(screenHeight), time(0) {
 	TCODConsole::initRoot(screenWidth, screenHeight, "Rascal", false);
 }
 
@@ -109,8 +109,8 @@ void Engine::render() {
 	states.back()->render(this);
 }
 
-void Engine::nextLevel() { // TODO fix this
-	++level;
+void Engine::nextLevel() {
+	gameplayState.increaseLevel(); // TODO can't rely on explicitly pointing to gameplayState
 	gui.message(TCODColor::lightViolet,"You take a moment to rest, and recover your strength.");
 	player->destructible->heal(player->destructible->maxHp/2);
 	gui.message(TCODColor::red,"After a rare moment of peace, you descend\ndeeper into the heart of the dungeon...");

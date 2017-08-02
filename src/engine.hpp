@@ -21,15 +21,14 @@ public:
 	std::vector<Actor*> actors; // moved
 	Actor* player; // moved
 	Actor* stairs; // moved
-	std::unique_ptr<Map> map;
-	int fovRadius;
-	int screenWidth;
-	int screenHeight;
-	Gui gui;
-	Renderer renderer;
+	std::unique_ptr<Map> map; // moved
+	int fovRadius; // moved
+	int screenWidth; // moved
+	int screenHeight; // moved
+	Gui gui; // moved
+	Renderer renderer; // moved
 	TCOD_key_t lastKey;
 	TCOD_mouse_t mouse;
-	int level; // moved
 	int time; // moved
 
 	Engine(int screenWidth, int screenHeight);
@@ -43,6 +42,7 @@ public:
 	void update();
 	void render();
 
+	int getLevel() { return gameplayState.getLevel(); } // temporary
 	void nextLevel();
 	void updateTime();
 
@@ -62,7 +62,6 @@ private:
     template<class Archive>
     void serialize(Archive & ar, const unsigned int version)
     {
-		ar & level;
 		ar & time;
         ar & map;
 		ar & stairs;
