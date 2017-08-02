@@ -8,6 +8,7 @@
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/serialization/export.hpp>
 #include "libtcod.hpp"
+class Actor;
 
 struct Tile {
 	bool explored;
@@ -51,6 +52,8 @@ protected:
 	void createRoom(bool first, int x1, int y1, int x2, int y2, bool initActors);
 
 private:
+	Actor* makeMonster(int x, int y);
+	Actor* makeItem(int x, int y);
 	friend class boost::serialization::access;
 
 	template<class Archive>
