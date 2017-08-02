@@ -46,13 +46,13 @@ public:
 	void nextLevel();
 	void updateTime();
 
-	Actor* getNextActor() const { return actors.at(0); }
-	void updateNextActor();
-	Actor* getPlayer() const;
-	Actor* getClosestMonster(int x, int y, float range) const;
-	Actor* getLiveActor(int x, int y) const;
+	Actor* getNextActor() const { return actors.at(0); } // moved
+	void updateNextActor(); // moved
+	Actor* getPlayer() const; // moved
+	Actor* getClosestMonster(int x, int y, float range) const; // moved
+	Actor* getLiveActor(int x, int y) const; // moved
 
-	bool pickTile(int* x, int* y, float maxRange = 0.0f);
+	bool pickTile(int* x, int* y, float maxRange = 0.0f); // moved
 private:
 	DummyState dummyState;
 	GameplayState gameplayState;

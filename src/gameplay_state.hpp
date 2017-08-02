@@ -21,6 +21,14 @@ public:
 	void increaseLevel() { ++level; } // temporary!
 	int getTime() { return time; } // temporary!
 	void increaseTime(int amount) { time += amount; } // temporary!
+
+	Actor* getNextActor() const { return actors.at(0); }
+	void updateNextActor();
+	Actor* getPlayer() const;
+	Actor* getClosestMonster(int x, int y, float range) const;
+	Actor* getLiveActor(int x, int y) const;
+
+	bool pickTile(int* x, int* y, float maxRange = 0.0f);
 private:
 	int screenWidth;
 	int screenHeight;
