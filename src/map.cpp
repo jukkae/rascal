@@ -11,6 +11,7 @@ static const int ROOM_MAX_SIZE = 12;
 static const int ROOM_MIN_SIZE = 6;
 static const int MAX_ROOM_MONSTERS = 3;
 static const int MAX_ROOM_ITEMS = 2;
+static const int fovRadius = 10; // TODO doesn't belong here
 
 Map::Map(int width, int height) : width(width), height(height) {
 	seed = TCODRandom::getInstance()->getInt(0, std::numeric_limits<int>::max());
@@ -121,7 +122,7 @@ void Map::markExploredTiles() {
 }
 
 void Map::computeFov() {
-	map->computeFov(engine.getPlayer()->x, engine.getPlayer()->y, engine.fovRadius);
+	map->computeFov(engine.getPlayer()->x, engine.getPlayer()->y, fovRadius);
 }
 
 void Map::dig(int x1, int y1, int x2, int y2) {

@@ -22,7 +22,6 @@ public:
 	Actor* player; // moved
 	Actor* stairs; // moved
 	std::unique_ptr<Map> map; // moved
-	int fovRadius; // moved
 	int screenWidth; // moved
 	int screenHeight; // moved
 	Gui gui; // moved
