@@ -18,9 +18,9 @@ public:
 		VICTORY,
 		DEFEAT
 	} gameStatus;
-	std::vector<Actor*> actors;
-	Actor* player; // TODO fix reliance on explicit pointer to player
-	Actor* stairs;
+	std::vector<Actor*> actors; // moved
+	Actor* player; // moved
+	Actor* stairs; // moved
 	std::unique_ptr<Map> map;
 	int fovRadius;
 	int screenWidth;
@@ -29,8 +29,8 @@ public:
 	Renderer renderer;
 	TCOD_key_t lastKey;
 	TCOD_mouse_t mouse;
-	int level;
-	int time;
+	int level; // moved
+	int time; // moved
 
 	Engine(int screenWidth, int screenHeight);
 	~Engine();
@@ -69,6 +69,7 @@ private:
 		ar & player;
 		ar & actors;
 		ar & gui;
+		ar & gameplayState; // TODO of course, serialize states
     }
 };
 
