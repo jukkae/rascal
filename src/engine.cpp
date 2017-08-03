@@ -70,19 +70,7 @@ void Engine::update() {
 }
 
 void Engine::updateNextActor() {
-	Actor* activeActor = actors->at(0);
-
-	int actionTime = activeActor->update();
-	*activeActor->energy -= actionTime;
-
-	actors->erase(actors->begin());
-	auto it = std::lower_bound(actors->begin(), actors->end(), activeActor, [](const auto& lhs, const auto& rhs) { return lhs->energy > rhs->energy; });
-	actors->insert(it, activeActor);
-	/*std::sort(actors->begin(), actors->end(), [](const auto& lhs, const auto& rhs)
-	{
-		return lhs->energy > rhs->energy;
-	});*/
-
+	gameplayState.updateNextActor();
 	updateTime();
 }
 

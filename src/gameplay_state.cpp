@@ -3,6 +3,7 @@
 
 void GameplayState::init() {
 	actors = engine.actors;
+	gui = &engine.gui;
 
 	player               = new Actor(40, 25, '@', "you", TCODColor::white, 2); // TODO
 	player->destructible = std::unique_ptr<Destructible>(new PlayerDestructible(30, 2, 0, "your corpse"));
@@ -22,5 +23,20 @@ void GameplayState::update(Engine* engine) {
 
 void GameplayState::render(Engine* engine) {
 	engine->renderer.render(engine->map.get(), engine->actors.get());
-	engine->gui.render();
+	gui->render();
+}
+
+void GameplayState::updateNextActor() {
+    Actor* activeActor = actors->at(0);
+
+    int actionTime = activeActor->update();
+    *activeActor->energy -= actionTime;
+
+    actors->erase(actors->begin());
+    auto it = std::lower_bound(actors->begin(), actors->end(), activeActor, [](const auto& lhs, const auto& rhs) { return lhs->energy > rhs->energy; });
+    actors->insert(it, activeActor);
+    /*std::sort(actors->begin(), actors->end(), [](const auto& lhs, const auto& rhs)
+    {
+        return lhs->energy > rhs->energy;
+    });*/
 }

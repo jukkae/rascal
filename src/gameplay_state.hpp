@@ -38,7 +38,7 @@ private:
 	Actor* player; // TODO fix reliance on explicitly pointing to player
 	Actor* stairs; // likewise, this feels bad
 	std::unique_ptr<Map> map;
-	Gui gui;
+	Gui* gui;
 	Renderer renderer;
 
 	friend class boost::serialization::access;
