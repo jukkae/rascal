@@ -28,6 +28,8 @@ public:
 	Actor* getClosestMonster(int x, int y, float range) const;
 	Actor* getLiveActor(int x, int y) const;
 
+	void addActor(Actor* actor) { actors->push_back(actor); }
+
 	bool pickTile(int* x, int* y, float maxRange = 0.0f);
 private:
 	int time = 0;

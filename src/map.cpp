@@ -54,7 +54,7 @@ Actor* Map::makeMonster(int x, int y) {
 }
 
 void Map::addMonster(int x, int y) {
-	engine.actors->push_back(makeMonster(x, y));
+	engine.addActor(makeMonster(x, y));
 }
 
 Actor* Map::makeItem(int x, int y) {
