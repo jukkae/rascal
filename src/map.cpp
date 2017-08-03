@@ -54,7 +54,7 @@ Actor* Map::makeMonster(int x, int y) {
 }
 
 void Map::addMonster(int x, int y) {
-	engine.actors.push_back(makeMonster(x, y));
+	engine.actors->push_back(makeMonster(x, y));
 }
 
 Actor* Map::makeItem(int x, int y) {
@@ -88,7 +88,7 @@ Actor* Map::makeItem(int x, int y) {
 }
 
 void Map::addItem(int x, int y) {
-	engine.actors.push_back(makeItem(x, y));
+	engine.actors->push_back(makeItem(x, y));
 }
 
 bool Map::isWall(int x, int y) const {
@@ -97,7 +97,7 @@ bool Map::isWall(int x, int y) const {
 
 bool Map::canWalk(int x, int y) const {
 	if(isWall(x, y)) return false;
-	for(Actor* actor : engine.actors) {
+	for(Actor* actor : *engine.actors) {
 		if(actor->blocks && actor->x == x && actor->y == y) {
 			return false;
 		}

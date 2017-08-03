@@ -86,14 +86,14 @@ float PlayerAi::update(Actor* owner) {
 bool PlayerAi::moveOrAttack(Actor* owner, int targetX, int targetY) {
 	if (engine.map->isWall(targetX, targetY)) return false;
 	// look for living actors to attack
-	for (Actor* actor : engine.actors) {
+	for (Actor* actor : *engine.actors) {
 		if (actor->destructible && !actor->destructible->isDead() && actor->x == targetX && actor->y == targetY) {
 			owner->attacker->attack(owner, actor);
 			return false;
 		}
 	}
 	// look for corpses or items
-	for (Actor* actor : engine.actors) {
+	for (Actor* actor : *engine.actors) {
 		bool corpseOrItem = (actor->destructible && actor->destructible->isDead()) || actor->pickable;
 		if(corpseOrItem && actor->x == targetX && actor->y == targetY) {
 			engine.gui.message(TCODColor::lightGrey, "There's a %s here!", actor->name.c_str());
@@ -138,7 +138,7 @@ void PlayerAi::handleActionKey(Actor* owner, int ascii) {
 		case 'g' : // pickup item
 		{
 		bool found = false;
-		for(Actor* actor : engine.actors) {
+		for(Actor* actor : *engine.actors) {
 			if(actor->pickable && actor->x == owner->x && actor->y == owner->y) {
 				if(actor->pickable->pick(actor,owner)) {
 					found = true;

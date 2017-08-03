@@ -18,7 +18,6 @@ Engine::~Engine() {
 
 // clear actors, map and log
 void Engine::term() {
-	actors.clear();
 	gui.clear();
 }
 
@@ -27,17 +26,17 @@ void Engine::init() {
 
 	player = gameplayState.getPlayer();
 
-	actors.push_back(player);
+	actors->push_back(player);
 
 	stairs = new Actor(0, 0, '>', "stairs", TCODColor::white);
 	stairs->blocks = false;
 	stairs->fovOnly = false;
-	actors.push_back(stairs);
+	actors->push_back(stairs);
 
 	map = std::unique_ptr<Map>(new Map(120, 72));
 	map->init(true);
 
-	std::sort(actors.begin(), actors.end(), [](const auto& lhs, const auto& rhs)
+	std::sort(actors->begin(), actors->end(), [](const auto& lhs, const auto& rhs)
 	{
 		return lhs->energy > rhs->energy;
 	});
@@ -73,15 +72,15 @@ void Engine::update() {
 }
 
 void Engine::updateNextActor() {
-	Actor* activeActor = actors.at(0);
+	Actor* activeActor = actors->at(0);
 
 	int actionTime = activeActor->update();
 	*activeActor->energy -= actionTime;
 
-	actors.erase(actors.begin());
-	auto it = std::lower_bound(actors.begin(), actors.end(), activeActor, [](const auto& lhs, const auto& rhs) { return lhs->energy > rhs->energy; });
-	actors.insert(it, activeActor);
-	/*std::sort(actors.begin(), actors.end(), [](const auto& lhs, const auto& rhs)
+	actors->erase(actors->begin());
+	auto it = std::lower_bound(actors->begin(), actors->end(), activeActor, [](const auto& lhs, const auto& rhs) { return lhs->energy > rhs->energy; });
+	actors->insert(it, activeActor);
+	/*std::sort(actors->begin(), actors->end(), [](const auto& lhs, const auto& rhs)
 	{
 		return lhs->energy > rhs->energy;
 	});*/
@@ -90,15 +89,15 @@ void Engine::updateNextActor() {
 }
 
 void Engine::updateTime() {
-	if(actors.at(0)->energy.get() > 0) return; // TODO check if energy HAS value (if(a->energy))
+	if(actors->at(0)->energy.get() > 0) return; // TODO check if energy HAS value (if(a->energy))
 	else {
-		Actor* next = *std::find_if(actors.begin(), actors.end(), [](const auto& a) { return a->ai != nullptr; });
+		Actor* next = *std::find_if(actors->begin(), actors->end(), [](const auto& a) { return a->ai != nullptr; });
 
 		float tuna = next->energy.get() * -1;
 
 		gameplayState.increaseTime(tuna); // TODO can't rely on explicitly pointing to gameplayState
 
-		for(auto a : actors) {
+		for(auto a : *actors) {
 			if(a->ai != nullptr) *a->energy += tuna;
 		}
 	}
@@ -115,10 +114,10 @@ void Engine::nextLevel() {
 	gui.message(TCODColor::red,"After a rare moment of peace, you descend\ndeeper into the heart of the dungeon...");
 
 	// Clunky, not idiomatic
-	auto it = actors.begin();
-	while (it != actors.end()) {
+	auto it = actors->begin();
+	while (it != actors->end()) {
 		if (*it != player && *it != stairs) {
-			it = actors.erase(it);
+			it = actors->erase(it);
 		}
 		else ++it;
 	}
@@ -126,7 +125,7 @@ void Engine::nextLevel() {
 	map = std::unique_ptr<Map>(new Map(80,43));
 	map->init(true);
 
-	std::sort(actors.begin(), actors.end(), [](const auto& lhs, const auto& rhs)
+	std::sort(actors->begin(), actors->end(), [](const auto& lhs, const auto& rhs)
 	{
 		return lhs->energy > rhs->energy;
 	});
@@ -135,7 +134,7 @@ void Engine::nextLevel() {
 }
 
 Actor* Engine::getPlayer() const {
-	for(Actor* actor : actors) {
+	for(Actor* actor : *actors) {
 		if(actor->isPlayer()) return actor;
 	}
 	return nullptr;
@@ -144,7 +143,7 @@ Actor* Engine::getPlayer() const {
 Actor* Engine::getClosestMonster(int x, int y, float range) const {
 	Actor* closest = nullptr;
 	float bestDistance = std::numeric_limits<float>::max();
-	for (Actor* actor : actors) {
+	for (Actor* actor : *actors) {
 		if(!actor->isPlayer() && actor->destructible && !actor->destructible->isDead()) {
 			float distance = actor->getDistance(x,y);
 			if(distance < bestDistance && (distance <= range || range == 0.0f)) {
@@ -157,7 +156,7 @@ Actor* Engine::getClosestMonster(int x, int y, float range) const {
 }
 
 Actor* Engine::getLiveActor(int x, int y) const {
-	for(Actor* actor : actors) {
+	for(Actor* actor : *actors) {
 		if(actor->x == x && actor->y == y && actor->destructible && !actor->destructible->isDead()) return actor;
 	}
 	return nullptr;

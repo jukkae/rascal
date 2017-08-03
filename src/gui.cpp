@@ -77,7 +77,7 @@ void Gui::renderMouseLook() {
 	}
 	std::string buf = "";
 	bool first = true;
-	for(Actor* actor : engine.actors) {
+	for(Actor* actor : *engine.actors) {
 		if(actor->x == x && actor->y == y) {
 			if(!first) {
 				buf += ", ";

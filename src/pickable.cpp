@@ -28,7 +28,7 @@ void TargetSelector::selectTargets(Actor* wearer, std::vector<Actor*>& list) {
 		} break;
 		case SelectorType::WEARER_RANGE :
 		{
-			for(Actor* actor : engine.actors) {
+			for(Actor* actor : *engine.actors) {
 				if(actor != wearer && actor->destructible && !actor->destructible->isDead() && actor->getDistance(wearer->x, wearer->y) <= range) {
 					list.push_back(actor);
 				}
@@ -39,7 +39,7 @@ void TargetSelector::selectTargets(Actor* wearer, std::vector<Actor*>& list) {
 			int x, y;
 			engine.gui.message(TCODColor::cyan, "Left-click to select a tile,\nor right-click to cancel.");
 			if(engine.pickTile(&x, &y)) {
-				for(Actor* actor : engine.actors) {
+				for(Actor* actor : *engine.actors) {
 					if(actor->destructible && !actor->destructible->isDead() && actor->getDistance(x, y) <= range ) {
 						list.push_back(actor);
 					}
@@ -84,7 +84,7 @@ Pickable::Pickable(TargetSelector selector, std::unique_ptr<Effect> effect) : se
 // wearer is the Actor that has this Pickable in inventory.
 bool Pickable::pick(Actor* owner, Actor* wearer) {
 	if(wearer->container && wearer->container->add(owner)) {
-		engine.actors.erase(std::remove(engine.actors.begin(), engine.actors.end(), owner), engine.actors.end());
+		engine.actors->erase(std::remove(engine.actors->begin(), engine.actors->end(), owner), engine.actors->end());
 		return true;
 	}
 	return false;
@@ -113,7 +113,7 @@ bool Pickable::use(Actor* owner, Actor* wearer) {
 void Pickable::drop(Actor* owner, Actor* wearer) {
 	if(wearer->container) {
 		wearer->container->remove(owner);
-		engine.actors.push_back(owner);
+		engine.actors->push_back(owner);
 		owner->x = wearer->x;
 		owner->y = wearer->y;
 		engine.gui.message(TCODColor::lightGrey, "%s drops a %s.", wearer->name.c_str(), owner->name.c_str());

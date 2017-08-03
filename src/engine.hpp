@@ -9,6 +9,7 @@ class Map;
 #include "state.hpp"
 #include "dummy_state.hpp"
 #include "gameplay_state.hpp"
+#include "persistent.hpp"
 
 class Engine {
 public:
@@ -18,7 +19,7 @@ public:
 		VICTORY,
 		DEFEAT
 	} gameStatus;
-	std::vector<Actor*> actors; // moved
+	std::shared_ptr<std::vector<Actor*>> actors = std::make_shared<std::vector<Actor*>>(); // moved
 	Actor* player; // moved
 	Actor* stairs; // moved
 	std::unique_ptr<Map> map; // moved
@@ -43,7 +44,7 @@ public:
 	void nextLevel();
 	void updateTime();
 
-	Actor* getNextActor() const { return actors.at(0); } // moved
+	Actor* getNextActor() const { return actors->at(0); } // moved
 	void updateNextActor(); // moved
 	Actor* getPlayer() const; // moved
 	Actor* getClosestMonster(int x, int y, float range) const; // moved

@@ -19,6 +19,6 @@ void GameplayState::update(Engine* engine) {
 }
 
 void GameplayState::render(Engine* engine) {
-	engine->renderer.render(engine->map.get(), engine->actors);
+	engine->renderer.render(engine->map.get(), engine->actors.get());
 	engine->gui.render();
 }

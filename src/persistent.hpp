@@ -2,6 +2,7 @@
 #define PERSISTENT_HPP
 
 #include <boost/serialization/unique_ptr.hpp>
+#include <boost/serialization/shared_ptr.hpp>
 #include <boost/serialization/utility.hpp>
 #include "libtcod.hpp"
 

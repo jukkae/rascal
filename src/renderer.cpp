@@ -12,10 +12,10 @@ static const TCODColor darkGround (50, 50, 150);
 static const TCODColor lightWall  (130, 110, 50);
 static const TCODColor lightGround(200, 180, 50);
 
-void Renderer::render(const Map* const map, const std::vector<Actor*>& actors) const {
+void Renderer::render(const Map* const map, const std::vector<Actor*>* const actors) const {
 	TCODConsole::root->clear();
 	renderMap(map);
-	for (Actor* actor : actors) {
+	for (Actor* actor : *actors) {
 		if(!actor->isPlayer() && ((!actor->fovOnly && map->isExplored(actor->x, actor->y)) || map->isInFov(actor->x, actor->y))) {
 			renderActor(actor);
 		}
