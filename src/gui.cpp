@@ -28,7 +28,7 @@ void Gui::render() {
 	con.print(3, 3, "Dungeon level %d", engine.getLevel());
 	con.print(3, 4, "Time: %d", engine.getTime());
 	renderXpBar();
-	renderMouseLook();
+	renderMouseLook(engine.getActors());
 
 	TCODConsole::blit(&con, 0, 0, constants::SCREEN_WIDTH, PANEL_HEIGHT, TCODConsole::root, 0, constants::SCREEN_HEIGHT - PANEL_HEIGHT);
 }
@@ -65,7 +65,7 @@ void Gui::renderBar(int x, int y, int width, std::string name, float value, floa
 	con.printEx(x + width/2, y, TCOD_BKGND_NONE, TCOD_CENTER, "%s : %g/%g", name.c_str(), value, maxValue);
 }
 
-void Gui::renderMouseLook() {
+void Gui::renderMouseLook(std::vector<Actor*>* actors) {
 	int mouseX = engine.mouse.cx;
 	int mouseY = engine.mouse.cy;
 	Point location = engine.renderer.getWorldCoordsFromScreenCoords(Point(mouseX, mouseY));
@@ -77,7 +77,7 @@ void Gui::renderMouseLook() {
 	}
 	std::string buf = "";
 	bool first = true;
-	for(Actor* actor : *engine.actors) {
+	for(Actor* actor : *actors) {
 		if(actor->x == x && actor->y == y) {
 			if(!first) {
 				buf += ", ";
