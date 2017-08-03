@@ -197,3 +197,12 @@ bool Engine::pickTile(int* x, int* y, float maxRange) {
 	}
 	return false;
 }
+
+bool Engine::canWalk(int x, int y) {
+	for(Actor* actor : *actors) {
+		if(actor->blocks && actor->x == x && actor->y == y) {
+			return false;
+		}
+	}
+	return true;
+}

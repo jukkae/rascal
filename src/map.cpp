@@ -97,11 +97,7 @@ bool Map::isWall(int x, int y) const {
 
 bool Map::canWalk(int x, int y) const {
 	if(isWall(x, y)) return false;
-	for(Actor* actor : *engine.actors) {
-		if(actor->blocks && actor->x == x && actor->y == y) {
-			return false;
-		}
-	}
+	if(!engine.canWalk(x, y)) return false;
 	return true;
 }
 
