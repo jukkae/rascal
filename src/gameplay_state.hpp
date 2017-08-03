@@ -22,7 +22,7 @@ public:
 	int getTime() { return time; } // temporary!
 	void increaseTime(int amount) { time += amount; } // temporary!
 
-	Actor* getNextActor() const { return actors.at(0); }
+	Actor* getNextActor() const { return actors->at(0); }
 	void updateNextActor();
 	Actor* getPlayer() const { return player; };
 	Actor* getClosestMonster(int x, int y, float range) const;
@@ -32,7 +32,7 @@ public:
 private:
 	int time = 0;
 	int level = 1;
-	std::vector<Actor*> actors; // TODO should be std::vector<std::unique_ptr<Actor>>
+	std::shared_ptr<std::vector<Actor*>> actors; // TODO should be std::vector<std::unique_ptr<Actor>>
 	Actor* player; // TODO fix reliance on explicitly pointing to player
 	Actor* stairs; // likewise, this feels bad
 	std::unique_ptr<Map> map;
