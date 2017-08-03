@@ -48,7 +48,7 @@ public:
 
 	Actor* getNextActor() const { return actors->at(0); } // moved
 	void updateNextActor(); // moved
-	Actor* getPlayer() const; // moved
+	Actor* getPlayer() const { return gameplayState.getPlayer(); } // moved
 	Actor* getClosestMonster(int x, int y, float range) const; // moved
 	Actor* getLiveActor(int x, int y) const; // moved
 	std::vector<Actor*>* getActors() { return actors.get(); }

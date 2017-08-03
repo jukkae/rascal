@@ -40,3 +40,10 @@ void GameplayState::updateNextActor() {
         return lhs->energy > rhs->energy;
     });*/
 }
+
+Actor* GameplayState::getPlayer() const {
+	for(Actor* actor : *actors) {
+        if(actor->isPlayer()) return actor;
+    }
+    return nullptr;
+}
