@@ -1,6 +1,7 @@
 #include "actor.hpp"
 #include "ai.hpp"
 #include "attacker.hpp"
+#include "engine.hpp"
 
 static const float DEFAULT_TURN_LENGTH = 100; // I know, this is now in two places
 
@@ -21,3 +22,5 @@ float Actor::getDistance(int cx, int cy) const {
 	int dy = y-cy;
 	return sqrtf(dx*dx + dy*dy);
 }
+
+std::vector<Actor*>* Actor::getActors() { return engine.actors.get(); }
