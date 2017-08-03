@@ -2,7 +2,8 @@
 #include "engine.hpp"
 
 void GameplayState::init() {
-	actors = std::make_shared<std::vector<Actor*>>(*engine.actors);
+	actors = engine.actors;
+
 	player               = new Actor(40, 25, '@', "you", TCODColor::white, 2); // TODO
 	player->destructible = std::unique_ptr<Destructible>(new PlayerDestructible(30, 2, 0, "your corpse"));
 	player->attacker     = std::unique_ptr<Attacker>(new Attacker(5));

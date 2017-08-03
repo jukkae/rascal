@@ -26,8 +26,6 @@ void Engine::init() {
 
 	player = gameplayState.getPlayer();
 
-	actors->push_back(player);
-
 	stairs = new Actor(0, 0, '>', "stairs", TCODColor::white);
 	stairs->blocks = false;
 	stairs->fovOnly = false;
