@@ -88,7 +88,7 @@ Actor* Map::makeItem(int x, int y) {
 }
 
 void Map::addItem(int x, int y) {
-	engine.actors->push_back(makeItem(x, y));
+	engine.addActor(makeItem(x, y));
 }
 
 bool Map::isWall(int x, int y) const {
