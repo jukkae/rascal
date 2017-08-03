@@ -51,6 +51,7 @@ public:
 	Actor* getPlayer() const; // moved
 	Actor* getClosestMonster(int x, int y, float range) const; // moved
 	Actor* getLiveActor(int x, int y) const; // moved
+	std::vector<Actor*>* getActors() { return actors.get(); }
 
 	bool pickTile(int* x, int* y, float maxRange = 0.0f); // moved
 private:

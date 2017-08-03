@@ -23,4 +23,4 @@ float Actor::getDistance(int cx, int cy) const {
 	return sqrtf(dx*dx + dy*dy);
 }
 
-std::vector<Actor*>* Actor::getActors() { return engine.actors.get(); }
+std::vector<Actor*>* Actor::getActors() { return engine.getActors(); }
