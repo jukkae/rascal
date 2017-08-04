@@ -23,8 +23,8 @@ void GameplayState::init() {
 
 void GameplayState::initMap() {
 	map = std::unique_ptr<Map>(new Map(120, 72));
-	map->init(true);
 	map->setState(this);
+	map->init(true);
 }
 
 void GameplayState::cleanup() {
@@ -64,4 +64,13 @@ Actor* GameplayState::getPlayer() const {
 
 Point GameplayState::getMouseLocation() {
 	return Point(engine.mouse.cx, engine.mouse.cy);
+}
+
+bool GameplayState::canWalk(int x, int y) {
+	for(Actor* actor : *actors) {
+		if(actor->blocks && actor->x == x && actor->y == y) {
+			return false;
+		}
+	}
+	return true;
 }

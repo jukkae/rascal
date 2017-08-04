@@ -30,7 +30,7 @@ public:
 	void message(const TCODColor& col, std::string text, ...);
 	void computeFov() { map->computeFov(); }
 	bool isWall(int x, int y) { return map->isWall(x, y); }
-	bool canWalk(int x, int y) { return map->canWalk(x, y); }
+	bool canWalk(int x, int y);
 	void markExploredTiles() { map->markExploredTiles(); }
 
 	Actor* getNextActor() const { return actors->at(0); }

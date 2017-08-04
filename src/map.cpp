@@ -98,7 +98,7 @@ bool Map::isWall(int x, int y) const {
 
 bool Map::canWalk(int x, int y) const {
 	if(isWall(x, y)) return false;
-	if(!engine.canWalk(x, y)) return false;
+	if(!state->canWalk(x, y)) return false;
 	return true;
 }
 

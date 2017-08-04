@@ -40,7 +40,6 @@ public:
 	void addActor(Actor* actor) { actors->push_back(actor); }
 	void nextLevel();
 	void updateTime();
-	bool canWalk(int x, int y); // temporary
 
 	Actor* getNextActor() const { return actors->at(0); } // moved
 	void updateNextActor(); // moved
