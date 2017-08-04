@@ -12,6 +12,7 @@ class Map;
 class GameplayState : public State {
 public:
 	void init() override;
+	void initMap(); // temporary!
 	void cleanup() override;
 
 	void update(Engine* engine) override;
@@ -37,7 +38,7 @@ private:
 	std::shared_ptr<std::vector<Actor*>> actors; // TODO should be std::vector<std::unique_ptr<Actor>>
 	Actor* player; // TODO fix reliance on explicitly pointing to player
 	Actor* stairs; // likewise, this feels bad
-	std::unique_ptr<Map> map;
+	Map* map;
 	Gui* gui;
 	Renderer* renderer;
 

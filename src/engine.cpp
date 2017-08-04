@@ -33,6 +33,7 @@ void Engine::init() {
 
 	map = std::unique_ptr<Map>(new Map(120, 72));
 	map->init(true);
+	gameplayState.initMap();
 
 	std::sort(actors->begin(), actors->end(), [](const auto& lhs, const auto& rhs)
 	{

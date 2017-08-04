@@ -14,6 +14,10 @@ void GameplayState::init() {
 	actors->push_back(player);
 }
 
+void GameplayState::initMap() {
+	map = engine.map.get();
+}
+
 void GameplayState::cleanup() {
 
 }
@@ -23,7 +27,7 @@ void GameplayState::update(Engine* engine) {
 }
 
 void GameplayState::render(Engine* engine) {
-	renderer->render(engine->map.get(), actors.get());
+	renderer->render(map, actors.get());
 	gui->render();
 }
 
