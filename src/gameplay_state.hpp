@@ -30,6 +30,7 @@ public:
 	Actor* getPlayer() const;
 	Actor* getClosestMonster(int x, int y, float range) const;
 	Actor* getLiveActor(int x, int y) const;
+	std::vector<Actor*>* getActors() { return actors.get(); }
 
 	void addActor(Actor* actor) { actors->push_back(actor); }
 

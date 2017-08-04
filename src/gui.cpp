@@ -28,7 +28,7 @@ void Gui::render() {
 	con.print(3, 3, "Dungeon level %d", engine.getLevel());
 	con.print(3, 4, "Time: %d", engine.getTime());
 	renderXpBar();
-	renderMouseLook(engine.getActors());
+	renderMouseLook(state->getActors());
 
 	TCODConsole::blit(&con, 0, 0, constants::SCREEN_WIDTH, PANEL_HEIGHT, TCODConsole::root, 0, constants::SCREEN_HEIGHT - PANEL_HEIGHT);
 }
