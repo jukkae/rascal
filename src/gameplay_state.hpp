@@ -31,6 +31,7 @@ public:
 	void computeFov() { map->computeFov(); }
 	bool isWall(int x, int y) { return map->isWall(x, y); }
 	bool canWalk(int x, int y) { return map->canWalk(x, y); }
+	void markExploredTiles() { map->markExploredTiles(); }
 
 	Actor* getNextActor() const { return actors->at(0); }
 	void updateNextActor();
@@ -49,7 +50,7 @@ private:
 	std::shared_ptr<std::vector<Actor*>> actors; // TODO should be std::vector<std::unique_ptr<Actor>>
 	Actor* player; // TODO fix reliance on explicitly pointing to player
 	Actor* stairs; // likewise, this feels bad
-	Map* map;
+	std::unique_ptr<Map> map;
 	Gui* gui;
 	Renderer* renderer;
 

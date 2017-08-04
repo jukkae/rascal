@@ -22,7 +22,7 @@ void GameplayState::init() {
 }
 
 void GameplayState::initMap() {
-	map = engine.map.get();
+	map = std::unique_ptr<Map>(new Map(120, 72));
 	map->init(true);
 	map->setState(this);
 }
@@ -36,7 +36,7 @@ void GameplayState::update(Engine* engine) {
 }
 
 void GameplayState::render(Engine* engine) {
-	renderer->render(map, actors.get());
+	renderer->render(map.get(), actors.get());
 	gui->render();
 }
 

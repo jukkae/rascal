@@ -16,7 +16,6 @@ Engine::~Engine() {
 	term();
 }
 
-// clear actors, map and log
 void Engine::term() {
 	gui.clear();
 }
@@ -27,7 +26,6 @@ void Engine::init() {
 	player = gameplayState.getPlayer();
 	stairs = gameplayState.getStairs();
 
-	map = std::unique_ptr<Map>(new Map(120, 72));
 	gameplayState.initMap();
 
 	std::sort(actors->begin(), actors->end(), [](const auto& lhs, const auto& rhs)
@@ -45,7 +43,7 @@ void Engine::init() {
 void Engine::update() {
 	states.back()->update(this);
 
-	if(gameStatus == GameStatus::STARTUP) map->computeFov();
+	if(gameStatus == GameStatus::STARTUP) gameplayState.computeFov();
 
 	gameStatus = GameStatus::NEW_TURN;
 	if (gameStatus == GameStatus::NEW_TURN) {
@@ -56,7 +54,7 @@ void Engine::update() {
 		}
 		updateNextActor();
 		if(activeActor->isPlayer()) {
-			map->markExploredTiles();
+			gameplayState.markExploredTiles();
 			render();
 		}
 	}
@@ -89,7 +87,7 @@ void Engine::render() {
 	states.back()->render(this);
 }
 
-void Engine::nextLevel() {
+void Engine::nextLevel() { // TODO completely broken, reimplement in gameplaystate
 	gameplayState.increaseLevel(); // TODO can't rely on explicitly pointing to gameplayState
 	gui.message(TCODColor::lightViolet,"You take a moment to rest, and recover your strength.");
 	player->destructible->heal(player->destructible->maxHp/2);
@@ -104,8 +102,7 @@ void Engine::nextLevel() {
 		else ++it;
 	}
 
-	map = std::unique_ptr<Map>(new Map(80,43));
-	map->init(true);
+	// gameplayState.initMap() or something like that, remember to init actors
 
 	std::sort(actors->begin(), actors->end(), [](const auto& lhs, const auto& rhs)
 	{
@@ -146,7 +143,7 @@ bool Engine::pickTile(int* x, int* y, float maxRange) {
 				Point location = renderer.getWorldCoordsFromScreenCoords(Point(cx, cy));
 				int realX = location.x;
 				int realY = location.y;
-				if(map->isInFov(realX, realY) && (maxRange == 0 || player->getDistance(realX, realY) <= maxRange)) {
+				if(gameplayState.isInFov(realX, realY) && (maxRange == 0 || player->getDistance(realX, realY) <= maxRange)) {
 					TCODColor col = TCODConsole::root->getCharBackground(cx, cy);
 					col = col * 1.2;
 					TCODConsole::root->setCharBackground(cx, cy, col);
@@ -157,7 +154,7 @@ bool Engine::pickTile(int* x, int* y, float maxRange) {
 		Point mouseLocation = renderer.getWorldCoordsFromScreenCoords(Point(mouse.cx, mouse.cy));
 		int realX = mouseLocation.x;
 		int realY = mouseLocation.y;
-		if(map->isInFov(realX, realY) && (maxRange == 0 || player->getDistance(realX, realY) <= maxRange)) {
+		if(gameplayState.isInFov(realX, realY) && (maxRange == 0 || player->getDistance(realX, realY) <= maxRange)) {
 			TCODConsole::root->setCharBackground(mouse.cx,mouse.cy,TCODColor::white);
 			if(mouse.lbutton_pressed) {
 				*x = realX;

@@ -1,11 +1,9 @@
 #ifndef ENGINE_HPP
 #define ENGINE_HPP
 class Actor;
-class Map;
 #include "renderer.hpp"
 #include "gui.hpp"
 #include "attacker.hpp"
-#include "map.hpp"
 #include "state.hpp"
 #include "dummy_state.hpp"
 #include "gameplay_state.hpp"
@@ -22,7 +20,6 @@ public:
 	std::shared_ptr<std::vector<Actor*>> actors = std::make_shared<std::vector<Actor*>>(); // moved
 	Actor* player; // moved
 	Actor* stairs; // moved
-	std::unique_ptr<Map> map; // moved
 	Gui gui; // moved
 	Renderer renderer; // moved
 	TCOD_key_t lastKey;
@@ -62,7 +59,6 @@ private:
     template<class Archive>
     void serialize(Archive & ar, const unsigned int version)
     {
-        ar & map;
 		ar & stairs;
 		ar & player;
 		ar & actors;
