@@ -111,13 +111,6 @@ void Engine::nextLevel() { // TODO completely broken, reimplement in gameplaysta
    gameStatus = GameStatus::STARTUP;
 }
 
-Actor* Engine::getLiveActor(int x, int y) const {
-	for(Actor* actor : *actors) {
-		if(actor->x == x && actor->y == y && actor->destructible && !actor->destructible->isDead()) return actor;
-	}
-	return nullptr;
-}
-
 // this is a mess. a working mess, sure, but a mess nonetheless.
 bool Engine::pickTile(int* x, int* y, float maxRange) {
 	while(!TCODConsole::isWindowClosed()) {

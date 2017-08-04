@@ -239,7 +239,7 @@ float ConfusedMonsterAi::update(Actor* owner, GameplayState* state) {
 			owner->x = destX;
 			owner->y = destY;
 		} else {
-			Actor* target = engine.getLiveActor(destX, destY);
+			Actor* target = state->getLiveActor(destX, destY);
 			if(target) { owner->attacker->attack(owner, target); }
 		}
 	}

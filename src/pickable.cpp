@@ -18,7 +18,7 @@ void TargetSelector::selectTargets(Actor* wearer, std::vector<Actor*>& list) {
 			int x, y;
 			engine.gui.message(TCODColor::cyan, "Left-click to select an enemy,\nor right-click to cancel.");
 			if(engine.pickTile(&x, &y, range)) {
-				Actor* actor = engine.getLiveActor(x, y);
+				Actor* actor = wearer->getLiveActor(x, y);
 				if(actor) list.push_back(actor);
 			}
 		} break;

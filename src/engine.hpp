@@ -42,7 +42,6 @@ public:
 
 	Actor* getNextActor() const { return actors->at(0); } // moved
 	void updateNextActor(); // moved
-	Actor* getLiveActor(int x, int y) const; // moved
 	std::vector<Actor*>* getActors() { return actors.get(); }
 
 	bool pickTile(int* x, int* y, float maxRange = 0.0f); // moved

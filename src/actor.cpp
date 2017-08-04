@@ -35,3 +35,7 @@ Actor* Actor::getPlayer() {
 Actor* Actor::getClosestMonster(int x, int y, float range) {
 	return s->getClosestMonster(x, y, range);
 }
+
+Actor* Actor::getLiveActor(int x, int y) {
+	return s->getLiveActor(x, y);
+}

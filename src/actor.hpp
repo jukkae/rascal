@@ -42,6 +42,7 @@ public:
 	std::vector<Actor*>* getActors(); // temporary for refactoring
 	Actor* getPlayer(); // temporary for refactoring
 	Actor* getClosestMonster(int x, int y, float range);
+	Actor* getLiveActor(int x, int y);
 	void setState(GameplayState* state) { s = state; } // temporary for getting access to state's actors
 
 private:
