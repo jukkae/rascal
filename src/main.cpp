@@ -67,7 +67,6 @@ void showMenu() {
 		engine.gameStatus = Engine::GameStatus::STARTUP;
 	}
 
-	engine.map->computeFov();
 	engine.render();
 	TCODConsole::flush();
 }
