@@ -3,7 +3,6 @@
 #include "actor.hpp"
 #include "attacker.hpp"
 #include "destructible.hpp"
-#include "engine.hpp"
 #include "gameplay_state.hpp"
 #include "map.hpp"
 #include "pickable.hpp"
@@ -55,7 +54,7 @@ Actor* Map::makeMonster(int x, int y) {
 }
 
 void Map::addMonster(int x, int y) {
-	engine.addActor(makeMonster(x, y));
+	state->addActor(makeMonster(x, y));
 }
 
 Actor* Map::makeItem(int x, int y) {
@@ -89,7 +88,7 @@ Actor* Map::makeItem(int x, int y) {
 }
 
 void Map::addItem(int x, int y) {
-	engine.addActor(makeItem(x, y));
+	state->addActor(makeItem(x, y));
 }
 
 bool Map::isWall(int x, int y) const {
@@ -145,8 +144,8 @@ void Map::createRoom(bool first, int x1, int y1, int x2, int y2, bool initActors
 	if(!initActors) { return; }
 	if(first) {
 		// put the player in the first room
-		engine.getPlayer()->x=(x1 + x2)/2;
-		engine.getPlayer()->y=(y1 + y2)/2;
+		state->getPlayer()->x=(x1 + x2)/2;
+		state->getPlayer()->y=(y1 + y2)/2;
 		// state->getStairs()->x = (x1 + x2) / 2 + 1; // debugging
 		// state->getStairs()->y = (y1 + y2) / 2;
 	} else {
