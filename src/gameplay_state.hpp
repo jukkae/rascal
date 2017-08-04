@@ -39,7 +39,7 @@ private:
 	Actor* stairs; // likewise, this feels bad
 	std::unique_ptr<Map> map;
 	Gui* gui;
-	Renderer renderer;
+	Renderer* renderer;
 
 	friend class boost::serialization::access;
 	template<class Archive>
