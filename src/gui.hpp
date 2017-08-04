@@ -2,6 +2,7 @@
 #define GUI_HPP
 
 #include "actor.hpp" // must be included for serialization
+#include "constants.hpp"
 class GameplayState;
 
 class Menu {
@@ -23,10 +24,7 @@ protected:
 
 class Gui {
 public:
-	static const int PANEL_HEIGHT = 7;
-	static const int ENGINE_SCREEN_WIDTH = 80; // TODO get this dynamically
-	
-	Gui(): con(ENGINE_SCREEN_WIDTH, PANEL_HEIGHT) {;}
+	Gui(): con(constants::SCREEN_WIDTH, constants::GUI_PANEL_HEIGHT) {;}
 
 	~Gui();
 	void clear();

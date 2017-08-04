@@ -7,10 +7,9 @@
 #include <stdarg.h>
 #include <sstream>
 
-static const int PANEL_HEIGHT = 7;
 static const int BAR_WIDTH = 20;
 static const int MSG_X = BAR_WIDTH + 2;
-static const int MSG_HEIGHT = PANEL_HEIGHT - 1;
+static const int MSG_HEIGHT = constants::GUI_PANEL_HEIGHT - 1;
 
 Gui::~Gui() {}
 
@@ -30,7 +29,7 @@ void Gui::render() {
 	renderXpBar();
 	renderMouseLook(state->getActors());
 
-	TCODConsole::blit(&con, 0, 0, constants::SCREEN_WIDTH, PANEL_HEIGHT, TCODConsole::root, 0, constants::SCREEN_HEIGHT - PANEL_HEIGHT);
+	TCODConsole::blit(&con, 0, 0, constants::SCREEN_WIDTH, constants::GUI_PANEL_HEIGHT, TCODConsole::root, 0, constants::SCREEN_HEIGHT - constants::GUI_PANEL_HEIGHT);
 }
 
 void Gui::renderXpBar() {
