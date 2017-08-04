@@ -1,6 +1,6 @@
 #include <chrono>
 
-#include "engine.hpp"
+#include "gameplay_state.hpp"
 #include "renderer.hpp"
 #include "map.hpp"
 #include "point.hpp"
@@ -20,12 +20,12 @@ void Renderer::render(const Map* const map, const std::vector<Actor*>* const act
 			renderActor(actor);
 		}
 	}
-	renderActor(engine.getPlayer());
+	renderActor(state->getPlayer());
 }
 
 void Renderer::renderMap(const Map* const map) const {
-	int playerX = engine.getPlayer()->x;
-	int playerY = engine.getPlayer()->y;
+	int playerX = state->getPlayer()->x;
+	int playerY = state->getPlayer()->y;
 	Point player(playerX, playerY);
 
 	for(int x = 0; x < screenWidth; ++x) {
@@ -55,8 +55,8 @@ void Renderer::renderActor(const Actor* const actor) const {
 }
 
 Point Renderer::getWorldCoordsFromScreenCoords(const Point& point) const {
-	int cameraX = engine.getPlayer()->x - (screenWidth/2);
-	int cameraY = engine.getPlayer()->y - (screenHeight/2);
+	int cameraX = state->getPlayer()->x - (screenWidth/2);
+	int cameraY = state->getPlayer()->y - (screenHeight/2);
 
 	int worldX = point.x + cameraX;
 	int worldY = point.y + cameraY;
@@ -75,8 +75,8 @@ Point Renderer::getWorldCoordsFromScreenCoords(const Point& point, const Point& 
 }
 
 Point Renderer::getScreenCoordsFromWorldCoords(const Point& point) const {
-	int cameraX = engine.getPlayer()->x - (screenWidth/2); // upper left corner of camera
-	int cameraY = engine.getPlayer()->y - (screenHeight/2);
+	int cameraX = state->getPlayer()->x - (screenWidth/2); // upper left corner of camera
+	int cameraY = state->getPlayer()->y - (screenHeight/2);
 
 	int screenX = point.x - cameraX;
 	int screenY = point.y - cameraY;

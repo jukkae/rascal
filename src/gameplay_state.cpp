@@ -6,6 +6,7 @@ void GameplayState::init() {
 	gui = &engine.gui;
 	gui->setState(this);
 	renderer = &engine.renderer;
+	renderer->setState(this);
 
 	player               = new Actor(40, 25, '@', "you", TCODColor::white, 2); // TODO
 	player->destructible = std::unique_ptr<Destructible>(new PlayerDestructible(30, 2, 0, "your corpse"));
