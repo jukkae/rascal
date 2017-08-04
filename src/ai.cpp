@@ -76,16 +76,16 @@ float PlayerAi::update(Actor* owner, GameplayState* state) {
 	}
 	if(dx != 0 || dy != 0) {
 		engine.gameStatus = Engine::GameStatus::NEW_TURN;
-		if (moveOrAttack(owner, owner->x + dx,owner->y + dy)) {
-			engine.map->computeFov();
+		if (moveOrAttack(owner, state, owner->x + dx,owner->y + dy)) {
+			state->computeFov();
 		}
 	}
 	if(mouse.dx != 0 || mouse.dy != 0) return 0; // TODO hack
 	return 100 * (100 / speed);
 }
 
-bool PlayerAi::moveOrAttack(Actor* owner, int targetX, int targetY) {
-	if (engine.map->isWall(targetX, targetY)) return false;
+bool PlayerAi::moveOrAttack(Actor* owner, GameplayState* state, int targetX, int targetY) {
+	if (state->isWall(targetX, targetY)) return false;
 	// look for living actors to attack
 	for (Actor* actor : *owner->getActors()) {
 		if (actor->destructible && !actor->destructible->isDead() && actor->x == targetX && actor->y == targetY) {
@@ -183,16 +183,16 @@ void PlayerAi::handleActionKey(Actor* owner, int ascii) {
 
 float MonsterAi::update(Actor* owner, GameplayState* state) {
 	if (owner->destructible && owner->destructible->isDead()) return DEFAULT_TURN_LENGTH;
-	if (engine.map->isInFov(owner->x, owner->y)) {
+	if (state->isInFov(owner->x, owner->y)) {
 		moveCount = TRACKING_TURNS;
 	} else { --moveCount; }
 	if(moveCount > 0) {
-		moveOrAttack(owner, engine.getPlayer()->x, engine.getPlayer()->y);
+		moveOrAttack(owner, state, engine.getPlayer()->x, engine.getPlayer()->y);
 	}
 	return 100 * (100 / speed);
 }
 
-void MonsterAi::moveOrAttack(Actor* owner, int targetX, int targetY) {
+void MonsterAi::moveOrAttack(Actor* owner, GameplayState* state, int targetX, int targetY) {
 	int dx = targetX - owner->x;
 	int dy = targetY - owner->y;
 	int stepDx = (dx > 0 ? 1 : -1);
@@ -202,12 +202,12 @@ void MonsterAi::moveOrAttack(Actor* owner, int targetX, int targetY) {
 		engine.gui.message(TCODColor::white, "The %s threatens you!", owner->name.c_str());
 		dx = (int) (round(dx / distance));
 		dy = (int) (round(dy / distance));
-		if(engine.map->canWalk(owner->x + dx, owner->y + dy)) {
+		if(state->canWalk(owner->x + dx, owner->y + dy)) {
 			owner->x += dx;
 			owner->y += dy;
-		} else if (engine.map->canWalk(owner->x + stepDx, owner->y)) { // Wall sliding
+		} else if (state->canWalk(owner->x + stepDx, owner->y)) { // Wall sliding
 			owner->x += stepDx;
-		} else if (engine.map->canWalk(owner->x, owner->y + stepDy)) {
+		} else if (state->canWalk(owner->x, owner->y + stepDy)) {
 			owner->y += stepDy;
 		}
 	} else if ( owner->attacker ) {
@@ -235,7 +235,7 @@ float ConfusedMonsterAi::update(Actor* owner, GameplayState* state) {
 	if(dx != 0 || dy != 0) {
 		int destX = owner->x + dx;
 		int destY = owner->y + dy;
-		if(engine.map->canWalk(destX, destY)) {
+		if(state->canWalk(destX, destY)) {
 			owner->x = destX;
 			owner->y = destY;
 		} else {

@@ -34,7 +34,7 @@ public:
 	int xpLevel;
 	bool isPlayer() override { return true; }
 protected:
-	bool moveOrAttack(Actor* owner, int targetX, int targetY);
+	bool moveOrAttack(Actor* owner, GameplayState* state, int targetX, int targetY);
 	Actor* chooseFromInventory(Actor* owner);
 private:
 	void handleActionKey(Actor* owner, int ascii);
@@ -54,7 +54,7 @@ public:
 	float update(Actor* owner, GameplayState* state) override;
 protected:
 	int moveCount;
-	void moveOrAttack(Actor* owner, int targetX, int targetY);
+	void moveOrAttack(Actor* owner, GameplayState* state, int targetX, int targetY);
 private:
 	friend class boost::serialization::access;
 	template<class Archive>
