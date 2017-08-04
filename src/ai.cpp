@@ -71,7 +71,7 @@ float PlayerAi::update(Actor* owner, GameplayState* state) {
 		case TCODK_DOWN:  dy = 1;  break;
 		case TCODK_LEFT:  dx = -1; break;
 		case TCODK_RIGHT: dx = 1;  break;
-		case TCODK_CHAR:  handleActionKey(owner, lastKey.c); break;
+		case TCODK_CHAR:  handleActionKey(owner, lastKey.c, state); break;
 		default: break;
 	}
 	if(dx != 0 || dy != 0) {
@@ -134,7 +134,7 @@ Actor* PlayerAi::chooseFromInventory(Actor* owner) {
 	return nullptr;
 }
 
-void PlayerAi::handleActionKey(Actor* owner, int ascii) {
+void PlayerAi::handleActionKey(Actor* owner, int ascii, GameplayState* state) {
 	switch(ascii) {
 		case 'g' : // pickup item
 		{
@@ -172,7 +172,7 @@ void PlayerAi::handleActionKey(Actor* owner, int ascii) {
 		} break;
 		case -89 : // '</>' key, damn nasty
 		{
-			if(engine.stairs->x == owner->x && engine.stairs->y == owner->y) {
+			if(state->getStairs()->x == owner->x && state->getStairs()->y == owner->y) {
 				engine.nextLevel();
 			} else {
 				engine.gui.message(TCODColor::lightGrey, "There are no stairs here.");

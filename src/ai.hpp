@@ -37,7 +37,7 @@ protected:
 	bool moveOrAttack(Actor* owner, GameplayState* state, int targetX, int targetY);
 	Actor* chooseFromInventory(Actor* owner);
 private:
-	void handleActionKey(Actor* owner, int ascii);
+	void handleActionKey(Actor* owner, int ascii, GameplayState* state);
 
 	friend class boost::serialization::access;
 	template<class Archive>
