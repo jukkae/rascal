@@ -11,7 +11,6 @@ class Actor;
 
 class Engine {
 public:
-	std::shared_ptr<std::vector<Actor*>> actors = std::make_shared<std::vector<Actor*>>(); // moved
 	Actor* player; // moved
 	Gui gui; // moved
 	Renderer renderer; // moved
@@ -29,13 +28,6 @@ public:
 	void update();
 	void render();
 
-	int getTime() { return gameplayState.getTime(); } // temporary
-	void addActor(Actor* actor) { actors->push_back(actor); }
-
-	Actor* getNextActor() const { return actors->at(0); } // moved
-	void updateNextActor(); // moved
-	std::vector<Actor*>* getActors() { return actors.get(); }
-
 	bool pickTile(int* x, int* y, float maxRange = 0.0f); // moved
 private:
 	DummyState dummyState;
@@ -47,7 +39,6 @@ private:
     void serialize(Archive & ar, const unsigned int version)
     {
 		ar & player;
-		ar & actors;
 		ar & gui;
 		ar & gameplayState; // TODO of course, serialize states
     }

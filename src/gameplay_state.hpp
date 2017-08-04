@@ -49,7 +49,7 @@ public:
 private:
 	int time = 0;
 	int level = 1;
-	std::shared_ptr<std::vector<Actor*>> actors; // TODO should be std::vector<std::unique_ptr<Actor>>
+	std::shared_ptr<std::vector<Actor*>> actors = std::make_shared<std::vector<Actor*>>(); // s.b. unique_ptr
 	Actor* player; // TODO fix reliance on explicitly pointing to player
 	Actor* stairs; // likewise, this feels bad
 	std::unique_ptr<Map> map;

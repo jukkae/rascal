@@ -1,7 +1,6 @@
 #include <algorithm>
 #include <limits>
 #include "libtcod.hpp"
-#include "actor.hpp"
 #include "ai.hpp"
 #include "constants.hpp"
 #include "container.hpp"
@@ -27,11 +26,6 @@ void Engine::init() {
 
 	gameplayState.initMap();
 
-	std::sort(actors->begin(), actors->end(), [](const auto& lhs, const auto& rhs)
-	{
-		return lhs->energy > rhs->energy;
-	});
-
 	gui.message(TCODColor::green, "Welcome to year 20XXAD, you strange rascal!\nPrepare to fight or die!");
 
 	states.push_back(&dummyState);
@@ -40,23 +34,6 @@ void Engine::init() {
 
 void Engine::update() {
 	states.back()->update(this);
-
-	gameplayState.computeFov();
-
-	render(); // yep rendering is that cheap now
-	Actor* activeActor = getNextActor();
-	if(activeActor->isPlayer()) {
-		//render();
-	}
-	updateNextActor();
-	if(activeActor->isPlayer()) {
-		gameplayState.markExploredTiles();
-		render();
-	}
-}
-
-void Engine::updateNextActor() {
-	gameplayState.updateNextActor();
 }
 
 void Engine::render() {

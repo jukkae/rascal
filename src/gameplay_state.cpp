@@ -2,7 +2,6 @@
 #include "engine.hpp"
 
 void GameplayState::init() {
-	actors = engine.actors;
 	gui = &engine.gui;
 	gui->setState(this);
 	renderer = &engine.renderer;
@@ -25,7 +24,13 @@ void GameplayState::initMap() {
 	map = std::unique_ptr<Map>(new Map(120, 72));
 	map->setState(this);
 	map->init(true);
+	// not really the correct place for following, but w/e
 	for (auto a : *actors) a->setState(this);
+	std::sort(actors->begin(), actors->end(), [](const auto& lhs, const auto& rhs)
+	{
+		return lhs->energy > rhs->energy;
+	});
+
 }
 
 void GameplayState::cleanup() {
