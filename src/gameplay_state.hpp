@@ -7,6 +7,7 @@ class Engine;
 #include <boost/archive/text_iarchive.hpp>
 #include "gui.hpp"
 #include "map.hpp"
+#include "point.hpp"
 #include "renderer.hpp"
 
 class GameplayState : public State {
@@ -24,6 +25,7 @@ public:
 	int getTime() { return time; } // temporary!
 	void increaseTime(int amount) { time += amount; } // temporary!
 	bool isInFov(int x, int y) { return map->isInFov(x, y); }
+	Point getWorldCoordsFromScreenCoords(Point point) { return renderer->getWorldCoordsFromScreenCoords(point); } // TODO pass by ref
 
 	Actor* getNextActor() const { return actors->at(0); }
 	void updateNextActor();

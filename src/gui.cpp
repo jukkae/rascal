@@ -68,7 +68,7 @@ void Gui::renderBar(int x, int y, int width, std::string name, float value, floa
 void Gui::renderMouseLook(std::vector<Actor*>* actors) {
 	int mouseX = engine.mouse.cx;
 	int mouseY = engine.mouse.cy;
-	Point location = engine.renderer.getWorldCoordsFromScreenCoords(Point(mouseX, mouseY));
+	Point location = state->getWorldCoordsFromScreenCoords(Point(mouseX, mouseY));
 	int x = location.x;
 	int y = location.y;
 
