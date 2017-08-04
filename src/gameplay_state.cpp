@@ -4,6 +4,7 @@
 void GameplayState::init() {
 	actors = engine.actors;
 	gui = &engine.gui;
+	gui->setState(this);
 	renderer = &engine.renderer;
 
 	player               = new Actor(40, 25, '@', "you", TCODColor::white, 2); // TODO

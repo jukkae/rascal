@@ -2,6 +2,7 @@
 #define GUI_HPP
 
 #include "actor.hpp" // must be included for serialization
+class GameplayState;
 
 class Menu {
 public:
@@ -34,7 +35,7 @@ public:
 	void message(const TCODColor &col, std::string text, ...);
 
 	Menu menu;
-
+	void setState(GameplayState* s) { state = s; }
 protected:
 	struct Message {
 		std::string text;
@@ -59,6 +60,7 @@ protected:
 	void renderMouseLook(std::vector<Actor*>* actors);
 
 private:
+	GameplayState* state;
 	friend class boost::serialization::access;
 	template<class Archive>
 	void serialize(Archive & ar, const unsigned int version) {
