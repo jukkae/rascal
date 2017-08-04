@@ -19,7 +19,6 @@ public:
 	} gameStatus;
 	std::shared_ptr<std::vector<Actor*>> actors = std::make_shared<std::vector<Actor*>>(); // moved
 	Actor* player; // moved
-	Actor* stairs; // moved
 	Gui gui; // moved
 	Renderer renderer; // moved
 	TCOD_key_t lastKey;
@@ -58,7 +57,6 @@ private:
     template<class Archive>
     void serialize(Archive & ar, const unsigned int version)
     {
-		ar & stairs;
 		ar & player;
 		ar & actors;
 		ar & gui;

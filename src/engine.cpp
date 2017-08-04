@@ -24,7 +24,6 @@ void Engine::init() {
 	gameplayState.init();
 
 	player = gameplayState.getPlayer();
-	stairs = gameplayState.getStairs();
 
 	gameplayState.initMap();
 
@@ -96,7 +95,7 @@ void Engine::nextLevel() { // TODO completely broken, reimplement in gameplaysta
 	// Clunky, not idiomatic
 	auto it = actors->begin();
 	while (it != actors->end()) {
-		if (*it != player && *it != stairs) {
+		if (*it != player && *it != gameplayState.getStairs()) {
 			it = actors->erase(it);
 		}
 		else ++it;
