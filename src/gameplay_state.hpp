@@ -27,10 +27,12 @@ public:
 	bool isInFov(int x, int y) { return map->isInFov(x, y); }
 	Point getWorldCoordsFromScreenCoords(Point point) { return renderer->getWorldCoordsFromScreenCoords(point); } // TODO pass by ref
 	Point getMouseLocation();
+	void message(const TCODColor& col, std::string text, ...);
 
 	Actor* getNextActor() const { return actors->at(0); }
 	void updateNextActor();
 	Actor* getPlayer() const;
+	Actor* getStairs() const { return stairs; }
 	Actor* getClosestMonster(int x, int y, float range) const;
 	Actor* getLiveActor(int x, int y) const;
 	std::vector<Actor*>* getActors() { return actors.get(); }

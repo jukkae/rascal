@@ -25,14 +25,9 @@ void Engine::init() {
 	gameplayState.init();
 
 	player = gameplayState.getPlayer();
-
-	stairs = new Actor(0, 0, '>', "stairs", TCODColor::white);
-	stairs->blocks = false;
-	stairs->fovOnly = false;
-	actors->push_back(stairs);
+	stairs = gameplayState.getStairs();
 
 	map = std::unique_ptr<Map>(new Map(120, 72));
-	map->init(true);
 	gameplayState.initMap();
 
 	std::sort(actors->begin(), actors->end(), [](const auto& lhs, const auto& rhs)

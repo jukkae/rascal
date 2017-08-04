@@ -14,10 +14,16 @@ void GameplayState::init() {
 	player->ai           = std::unique_ptr<Ai>(new PlayerAi());
 	player->container    = std::unique_ptr<Container>(new Container(26));
 	actors->push_back(player);
+
+	stairs = new Actor(0, 0, '>', "stairs", TCODColor::white);
+    stairs->blocks = false;
+    stairs->fovOnly = false;
+    actors->push_back(stairs);
 }
 
 void GameplayState::initMap() {
 	map = engine.map.get();
+	map->init(true);
 	map->setState(this);
 }
 
