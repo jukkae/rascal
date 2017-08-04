@@ -173,7 +173,7 @@ void PlayerAi::handleActionKey(Actor* owner, int ascii, GameplayState* state) {
 		case -89 : // '</>' key, damn nasty
 		{
 			if(state->getStairs()->x == owner->x && state->getStairs()->y == owner->y) {
-				engine.nextLevel();
+				state->nextLevel();
 			} else {
 				engine.gui.message(TCODColor::lightGrey, "There are no stairs here.");
 			}

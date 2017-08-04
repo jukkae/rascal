@@ -22,6 +22,7 @@ public:
 	void initMap(); // temporary!
 	int getLevel() { return level; } // temporary!
 	void increaseLevel() { ++level; } // temporary!
+	void nextLevel();
 	int getTime() { return time; } // temporary!
 	void increaseTime(int amount) { time += amount; } // temporary!
 	bool isInFov(int x, int y) { return map->isInFov(x, y); }

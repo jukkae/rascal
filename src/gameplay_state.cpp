@@ -98,3 +98,28 @@ Actor* GameplayState::getLiveActor(int x, int y) const {
 	return nullptr;
 }
 
+void GameplayState::nextLevel() {
+	increaseLevel();
+	gui->message(TCODColor::lightViolet,"You take a moment to rest, and recover your strength.");
+	player->destructible->heal(player->destructible->maxHp/2);
+	gui->message(TCODColor::red,"After a rare moment of peace, you descend\ndeeper into the heart of the dungeon...");
+
+	// Clunky, not idiomatic
+	auto it = actors->begin();
+	while (it != actors->end()) {
+		if (*it != player && *it != stairs) {
+			it = actors->erase(it);
+		}
+		else ++it;
+	}
+
+	// gameplayState.initMap() or something like that, remember to init actors
+
+	std::sort(actors->begin(), actors->end(), [](const auto& lhs, const auto& rhs)
+	{
+		return lhs->energy > rhs->energy;
+	});
+
+   engine.gameStatus = Engine::GameStatus::STARTUP;
+
+}

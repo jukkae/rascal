@@ -86,31 +86,6 @@ void Engine::render() {
 	states.back()->render(this);
 }
 
-void Engine::nextLevel() { // TODO completely broken, reimplement in gameplaystate
-	gameplayState.increaseLevel(); // TODO can't rely on explicitly pointing to gameplayState
-	gui.message(TCODColor::lightViolet,"You take a moment to rest, and recover your strength.");
-	player->destructible->heal(player->destructible->maxHp/2);
-	gui.message(TCODColor::red,"After a rare moment of peace, you descend\ndeeper into the heart of the dungeon...");
-
-	// Clunky, not idiomatic
-	auto it = actors->begin();
-	while (it != actors->end()) {
-		if (*it != player && *it != gameplayState.getStairs()) {
-			it = actors->erase(it);
-		}
-		else ++it;
-	}
-
-	// gameplayState.initMap() or something like that, remember to init actors
-
-	std::sort(actors->begin(), actors->end(), [](const auto& lhs, const auto& rhs)
-	{
-		return lhs->energy > rhs->energy;
-	});
-
-   gameStatus = GameStatus::STARTUP;
-}
-
 // this is a mess. a working mess, sure, but a mess nonetheless.
 bool Engine::pickTile(int* x, int* y, float maxRange) {
 	while(!TCODConsole::isWindowClosed()) {

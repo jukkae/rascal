@@ -37,7 +37,6 @@ public:
 
 	int getTime() { return gameplayState.getTime(); } // temporary
 	void addActor(Actor* actor) { actors->push_back(actor); }
-	void nextLevel();
 	void updateTime();
 
 	Actor* getNextActor() const { return actors->at(0); } // moved
