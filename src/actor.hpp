@@ -12,6 +12,7 @@
 class Attacker;
 class Destructible;
 class Pickable;
+class GameplayState;
 
 #include "ai.hpp"
 #include "container.hpp" // must be included for serialization
@@ -35,7 +36,7 @@ public:
 
 	Actor(int x = 0, int y = 0, int ch = 'x', std::string name = "", const TCODColor& col = TCODColor::white, boost::optional<float> energy = boost::none);
 	~Actor();
-	float update();
+	float update(GameplayState* state);
 	float getDistance(int cx, int cy) const;
 	bool isPlayer() { return ai ? this->ai->isPlayer() : false; }
 	std::vector<Actor*>* getActors(); // temporary for refactoring

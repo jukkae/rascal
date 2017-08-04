@@ -2,6 +2,7 @@
 #include "ai.hpp"
 #include "attacker.hpp"
 #include "engine.hpp"
+#include "gameplay_state.hpp"
 
 static const float DEFAULT_TURN_LENGTH = 100; // I know, this is now in two places
 
@@ -13,8 +14,8 @@ Actor::Actor(int x, int y, int ch, std::string name, const TCODColor& col, boost
 Actor::~Actor() {
 }
 
-float Actor::update() {
-	return ai ? ai->update(this) : DEFAULT_TURN_LENGTH;
+float Actor::update(GameplayState* state) {
+	return ai ? ai->update(this, state) : DEFAULT_TURN_LENGTH;
 }
 
 float Actor::getDistance(int cx, int cy) const {

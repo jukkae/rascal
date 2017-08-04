@@ -5,6 +5,7 @@
 #include "container.hpp"
 #include "destructible.hpp"
 #include "engine.hpp"
+#include "gameplay_state.hpp"
 #include "gui.hpp"
 #include "map.hpp"
 #include "pickable.hpp"
@@ -26,7 +27,7 @@ int PlayerAi::getNextLevelXp() const {
 }
 
 // TODO fix keyboard handling: Who handles what? currently split here, main and engine!
-float PlayerAi::update(Actor* owner) {
+float PlayerAi::update(Actor* owner, GameplayState* state) {
 	int levelUpXp = getNextLevelXp();
 	if (owner->destructible->xp >= levelUpXp) {
 		++xpLevel;
@@ -180,7 +181,7 @@ void PlayerAi::handleActionKey(Actor* owner, int ascii) {
 	}
 }
 
-float MonsterAi::update(Actor* owner) {
+float MonsterAi::update(Actor* owner, GameplayState* state) {
 	if (owner->destructible && owner->destructible->isDead()) return DEFAULT_TURN_LENGTH;
 	if (engine.map->isInFov(owner->x, owner->y)) {
 		moveCount = TRACKING_TURNS;
@@ -214,7 +215,7 @@ void MonsterAi::moveOrAttack(Actor* owner, int targetX, int targetY) {
 	}
 }
 
-float TemporaryAi::update(Actor* owner) {
+float TemporaryAi::update(Actor* owner, GameplayState* state) {
 	--turns;
 	if(turns <= 0) {
 		owner->ai = std::move(oldAi);
@@ -227,7 +228,7 @@ void TemporaryAi::applyTo(Actor* actor) {
 	actor->ai = std::unique_ptr<Ai>(this);
 }
 
-float ConfusedMonsterAi::update(Actor* owner) {
+float ConfusedMonsterAi::update(Actor* owner, GameplayState* state) {
 	TCODRandom* rng = TCODRandom::getInstance();
 	int dx = rng->getInt(-1,1);
 	int dy = rng->getInt(-1,1);
@@ -242,7 +243,7 @@ float ConfusedMonsterAi::update(Actor* owner) {
 			if(target) { owner->attacker->attack(owner, target); }
 		}
 	}
-	return TemporaryAi::update(owner);
+	return TemporaryAi::update(owner, state);
 }
 
 BOOST_CLASS_EXPORT(PlayerAi)

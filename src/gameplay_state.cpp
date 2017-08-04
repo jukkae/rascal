@@ -43,7 +43,7 @@ void GameplayState::render(Engine* engine) {
 void GameplayState::updateNextActor() {
     Actor* activeActor = actors->at(0);
 
-    int actionTime = activeActor->update();
+    int actionTime = activeActor->update(this);
     *activeActor->energy -= actionTime;
 
     actors->erase(actors->begin());
