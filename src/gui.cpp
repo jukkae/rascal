@@ -2,7 +2,6 @@
 #include "constants.hpp"
 #include "destructible.hpp"
 #include "engine.hpp"
-#include "gameplay_state.hpp"
 #include "gui.hpp"
 #include "map.hpp"
 #include <stdarg.h>
@@ -73,7 +72,7 @@ void Gui::renderMouseLook(std::vector<Actor*>* actors) {
 	int x = location.x;
 	int y = location.y;
 
-	if(!engine.map->isInFov(x, y)) {
+	if(!state->isInFov(x, y)) {
 		return;
 	}
 	std::string buf = "";

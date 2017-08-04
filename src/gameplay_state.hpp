@@ -3,25 +3,27 @@
 #include "state.hpp"
 class Actor;
 class Engine;
-class Map;
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
 #include "gui.hpp"
+#include "map.hpp"
 #include "renderer.hpp"
 
 class GameplayState : public State {
 public:
 	void init() override;
-	void initMap(); // temporary!
 	void cleanup() override;
 
 	void update(Engine* engine) override;
 	void render(Engine* engine) override;
 
+	// TEMPORARY FUNCTIONS FOR REFACTORING PROCESS
+	void initMap(); // temporary!
 	int getLevel() { return level; } // temporary!
 	void increaseLevel() { ++level; } // temporary!
 	int getTime() { return time; } // temporary!
 	void increaseTime(int amount) { time += amount; } // temporary!
+	bool isInFov(int x, int y) { return map->isInFov(x, y); }
 
 	Actor* getNextActor() const { return actors->at(0); }
 	void updateNextActor();
