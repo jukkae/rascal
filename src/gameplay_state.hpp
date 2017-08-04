@@ -24,6 +24,7 @@ public:
 	void increaseLevel() { ++level; } // temporary!
 	void nextLevel();
 	int getTime() { return time; } // temporary!
+	void updateTime();
 	void increaseTime(int amount) { time += amount; } // temporary!
 	bool isInFov(int x, int y) { return map->isInFov(x, y); }
 	Point getWorldCoordsFromScreenCoords(Point point) { return renderer->getWorldCoordsFromScreenCoords(point); } // TODO pass by ref

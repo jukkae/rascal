@@ -57,22 +57,6 @@ void Engine::update() {
 
 void Engine::updateNextActor() {
 	gameplayState.updateNextActor();
-	updateTime();
-}
-
-void Engine::updateTime() {
-	if(actors->at(0)->energy.get() > 0) return; // TODO check if energy HAS value (if(a->energy))
-	else {
-		Actor* next = *std::find_if(actors->begin(), actors->end(), [](const auto& a) { return a->ai != nullptr; });
-
-		float tuna = next->energy.get() * -1;
-
-		gameplayState.increaseTime(tuna); // TODO can't rely on explicitly pointing to gameplayState
-
-		for(auto a : *actors) {
-			if(a->ai != nullptr) *a->energy += tuna;
-		}
-	}
 }
 
 void Engine::render() {

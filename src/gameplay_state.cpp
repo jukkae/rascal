@@ -33,7 +33,18 @@ void GameplayState::cleanup() {
 }
 
 void GameplayState::update(Engine* engine) {
+	computeFov();
 
+	render(engine); // yep rendering is that cheap now
+	Actor* activeActor = getNextActor();
+	if(activeActor->isPlayer()) {
+		//render();
+	}
+	updateNextActor();
+	if(activeActor->isPlayer()) {
+		markExploredTiles();
+		render(engine);
+	}
 }
 
 void GameplayState::render(Engine* engine) {
@@ -54,7 +65,24 @@ void GameplayState::updateNextActor() {
     {
         return lhs->energy > rhs->energy;
     });*/
+	updateTime();
 }
+
+void GameplayState::updateTime() {
+	if(actors->at(0)->energy.get() > 0) return; // TODO check if energy HAS value (if(a->energy))
+	else {
+		Actor* next = *std::find_if(actors->begin(), actors->end(), [](const auto& a) { return a->ai != nullptr; });
+
+		float tuna = next->energy.get() * -1;
+
+		increaseTime(tuna);
+
+		for(auto a : *actors) {
+			if(a->ai != nullptr) *a->energy += tuna;
+		}
+	}
+}
+
 
 Actor* GameplayState::getPlayer() const {
 	for(Actor* actor : *actors) {
