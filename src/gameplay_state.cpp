@@ -25,6 +25,7 @@ void GameplayState::initMap() {
 	map = std::unique_ptr<Map>(new Map(120, 72));
 	map->setState(this);
 	map->init(true);
+	for (auto a : *actors) a->setState(this);
 }
 
 void GameplayState::cleanup() {

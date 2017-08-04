@@ -41,8 +41,11 @@ public:
 	bool isPlayer() { return ai ? this->ai->isPlayer() : false; }
 	std::vector<Actor*>* getActors(); // temporary for refactoring
 	Actor* getPlayer(); // temporary for refactoring
+	void setState(GameplayState* state) { s = state; } // temporary for getting access to state's actors
 
 private:
+	GameplayState* s;
+
 	friend class boost::serialization::access;                                                                
     template<class Archive>                                                                                   
     void serialize(Archive & ar, const unsigned int version) {                                                
