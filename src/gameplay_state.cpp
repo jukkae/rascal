@@ -18,6 +18,7 @@ void GameplayState::init() {
 
 void GameplayState::initMap() {
 	map = engine.map.get();
+	map->setState(this);
 }
 
 void GameplayState::cleanup() {

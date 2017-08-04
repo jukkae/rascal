@@ -9,6 +9,7 @@
 #include <boost/serialization/export.hpp>
 #include "libtcod.hpp"
 class Actor;
+class GameplayState;
 
 struct Tile {
 	bool explored;
@@ -39,6 +40,7 @@ public:
 	void markExploredTiles();
 	bool isExplored(int x, int y) const;
 	void computeFov();
+	void setState(GameplayState* s) { state = s; }
 
 protected:
 	std::unique_ptr<TCODMap> map;
@@ -52,6 +54,7 @@ protected:
 	void createRoom(bool first, int x1, int y1, int x2, int y2, bool initActors);
 
 private:
+	GameplayState* state;
 	Actor* makeMonster(int x, int y);
 	Actor* makeItem(int x, int y);
 	friend class boost::serialization::access;

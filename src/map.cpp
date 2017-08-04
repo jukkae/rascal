@@ -4,6 +4,7 @@
 #include "attacker.hpp"
 #include "destructible.hpp"
 #include "engine.hpp"
+#include "gameplay_state.hpp"
 #include "map.hpp"
 #include "pickable.hpp"
 
@@ -126,7 +127,7 @@ void Map::markExploredTiles() {
 }
 
 void Map::computeFov() {
-	map->computeFov(engine.getPlayer()->x, engine.getPlayer()->y, fovRadius);
+	map->computeFov(state->getPlayer()->x, state->getPlayer()->y, fovRadius);
 }
 
 void Map::dig(int x1, int y1, int x2, int y2) {
