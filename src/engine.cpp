@@ -8,7 +8,7 @@
 #include "destructible.hpp"
 #include "engine.hpp"
 
-Engine::Engine(int dummy) : gameStatus(GameStatus::STARTUP) {
+Engine::Engine(int dummy) {
 	TCODConsole::initRoot(constants::SCREEN_WIDTH, constants::SCREEN_HEIGHT, "Rascal", false);
 }
 
@@ -33,7 +33,6 @@ void Engine::init() {
 	});
 
 	gui.message(TCODColor::green, "Welcome to year 20XXAD, you strange rascal!\nPrepare to fight or die!");
-	gameStatus = GameStatus::STARTUP;
 
 	states.push_back(&dummyState);
 	states.push_back(&gameplayState);
@@ -42,23 +41,17 @@ void Engine::init() {
 void Engine::update() {
 	states.back()->update(this);
 
-	if(gameStatus == GameStatus::STARTUP) gameplayState.computeFov();
+	gameplayState.computeFov();
 
-	gameStatus = GameStatus::NEW_TURN;
-	if (gameStatus == GameStatus::NEW_TURN) {
-		render(); // yep rendering is that cheap now
-		Actor* activeActor = getNextActor();
-		if(activeActor->isPlayer()) {
-			//render();
-		}
-		updateNextActor();
-		if(activeActor->isPlayer()) {
-			gameplayState.markExploredTiles();
-			render();
-		}
+	render(); // yep rendering is that cheap now
+	Actor* activeActor = getNextActor();
+	if(activeActor->isPlayer()) {
+		//render();
 	}
-	if(gameStatus == GameStatus::DEFEAT) {
-		// TODO u ded
+	updateNextActor();
+	if(activeActor->isPlayer()) {
+		gameplayState.markExploredTiles();
+		render();
 	}
 }
 

@@ -64,7 +64,6 @@ void showMenu() {
 	} else {
 		engine.term();
 		load();
-		engine.gameStatus = Engine::GameStatus::STARTUP;
 	}
 
 	engine.render();

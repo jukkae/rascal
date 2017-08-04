@@ -119,7 +119,4 @@ void GameplayState::nextLevel() {
 	{
 		return lhs->energy > rhs->energy;
 	});
-
-   engine.gameStatus = Engine::GameStatus::STARTUP;
-
 }

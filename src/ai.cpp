@@ -75,7 +75,6 @@ float PlayerAi::update(Actor* owner, GameplayState* state) {
 		default: break;
 	}
 	if(dx != 0 || dy != 0) {
-		engine.gameStatus = Engine::GameStatus::NEW_TURN;
 		if (moveOrAttack(owner, state, owner->x + dx,owner->y + dy)) {
 			state->computeFov();
 		}
@@ -152,14 +151,12 @@ void PlayerAi::handleActionKey(Actor* owner, int ascii, GameplayState* state) {
 			}
 		}
 		if(!found) { engine.gui.message(TCODColor::lightGrey, "There's nothing here that you can pick up."); }
-		engine.gameStatus = Engine::GameStatus::NEW_TURN;
 		} break;
 		case 'i' : // display inventory
 		{
 			Actor* actor = chooseFromInventory(owner);
 			if(actor) {
 				actor->pickable->use(actor, owner);
-				engine.gameStatus = Engine::GameStatus::NEW_TURN;
 			}
 		} break;
 		case 'd' : // drop item
@@ -167,7 +164,6 @@ void PlayerAi::handleActionKey(Actor* owner, int ascii, GameplayState* state) {
 			Actor* actor = chooseFromInventory(owner);
 			if(actor) {
 				actor->pickable->drop(actor, owner);
-				engine.gameStatus = Engine::GameStatus::NEW_TURN;
 			}
 		} break;
 		case -89 : // '</>' key, damn nasty

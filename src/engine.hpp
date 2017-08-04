@@ -11,12 +11,6 @@ class Actor;
 
 class Engine {
 public:
-	enum class GameStatus {
-		STARTUP,
-		NEW_TURN,
-		VICTORY,
-		DEFEAT
-	} gameStatus;
 	std::shared_ptr<std::vector<Actor*>> actors = std::make_shared<std::vector<Actor*>>(); // moved
 	Actor* player; // moved
 	Gui gui; // moved
