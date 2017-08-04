@@ -24,9 +24,9 @@ void Gui::render() {
 	con.clear();
 
 	renderMessageLog();
-	renderBar(1, 1, BAR_WIDTH, "HP", engine.getPlayer()->destructible->hp, engine.getPlayer()->destructible->maxHp, TCODColor::lightRed, TCODColor::darkerRed);
+	renderBar(1, 1, BAR_WIDTH, "HP", state->getPlayer()->destructible->hp, state->getPlayer()->destructible->maxHp, TCODColor::lightRed, TCODColor::darkerRed);
 	con.print(3, 3, "Dungeon level %d", state->getLevel());
-	con.print(3, 4, "Time: %d", engine.getTime());
+	con.print(3, 4, "Time: %d", state->getTime());
 	renderXpBar();
 	renderMouseLook(state->getActors());
 
@@ -34,10 +34,10 @@ void Gui::render() {
 }
 
 void Gui::renderXpBar() {
-	PlayerAi* ai = (PlayerAi*)engine.getPlayer()->ai.get(); // Don't transfer ownership!
+	PlayerAi* ai = (PlayerAi*)state->getPlayer()->ai.get(); // Don't transfer ownership!
 	char xpTxt[128];
 	sprintf(xpTxt, "XP(%d)", ai->xpLevel);
-	renderBar(1, 5, BAR_WIDTH, xpTxt, engine.getPlayer()->destructible->xp, ai->getNextLevelXp(), TCODColor::lightViolet,TCODColor::darkerViolet);
+	renderBar(1, 5, BAR_WIDTH, xpTxt, state->getPlayer()->destructible->xp, ai->getNextLevelXp(), TCODColor::lightViolet,TCODColor::darkerViolet);
 }
 
 void Gui::renderMessageLog() {
