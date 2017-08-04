@@ -45,7 +45,7 @@ PlayerDestructible::PlayerDestructible(float maxHp, float defense, int xp, std::
 void PlayerDestructible::die(Actor* owner) {
 	engine.gui.message(TCODColor::red, "You died!");
 	Destructible::die(owner);
-	engine.gameStatus = Engine::GameStatus::DEFEAT;
+	// TODO end game
 }
 
 template void PlayerDestructible::serialize(boost::archive::text_iarchive& arch, const unsigned int version);
