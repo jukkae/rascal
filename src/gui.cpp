@@ -1,6 +1,7 @@
 #include "ai.hpp"
 #include "constants.hpp"
 #include "destructible.hpp"
+#include "gameplay_state.hpp"
 #include "gui.hpp"
 #include "map.hpp"
 #include <stdarg.h>
