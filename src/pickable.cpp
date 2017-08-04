@@ -10,7 +10,7 @@ void TargetSelector::selectTargets(Actor* wearer, std::vector<Actor*>& list) {
 	switch(type) {
 		case SelectorType::CLOSEST_MONSTER :
 		{
-			Actor* closestMonster = engine.getClosestMonster(wearer->x, wearer->y, range);
+			Actor* closestMonster = wearer->getClosestMonster(wearer->x, wearer->y, range);
 			if(closestMonster) list.push_back(closestMonster);
 		} break;
 		case SelectorType::SELECTED_MONSTER :

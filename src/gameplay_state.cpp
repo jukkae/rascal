@@ -75,3 +75,18 @@ bool GameplayState::canWalk(int x, int y) {
 	}
 	return true;
 }
+
+Actor* GameplayState::getClosestMonster(int x, int y, float range) const {
+	Actor* closest = nullptr;
+	float bestDistance = std::numeric_limits<float>::max();
+	for (Actor* actor : *actors) {
+		if(!actor->isPlayer() && actor->destructible && !actor->destructible->isDead()) {
+			float distance = actor->getDistance(x,y);
+			if(distance < bestDistance && (distance <= range || range == 0.0f)) {
+				bestDistance = distance;
+				closest = actor;
+			}
+		}
+	}
+	return closest;
+}

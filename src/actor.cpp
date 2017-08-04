@@ -31,3 +31,7 @@ Actor* Actor::getPlayer() {
 	}
 	return nullptr;
 }
+
+Actor* Actor::getClosestMonster(int x, int y, float range) {
+	return s->getClosestMonster(x, y, range);
+}

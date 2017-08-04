@@ -41,6 +41,7 @@ public:
 	bool isPlayer() { return ai ? this->ai->isPlayer() : false; }
 	std::vector<Actor*>* getActors(); // temporary for refactoring
 	Actor* getPlayer(); // temporary for refactoring
+	Actor* getClosestMonster(int x, int y, float range);
 	void setState(GameplayState* state) { s = state; } // temporary for getting access to state's actors
 
 private:

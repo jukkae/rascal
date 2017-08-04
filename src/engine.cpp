@@ -111,21 +111,6 @@ void Engine::nextLevel() { // TODO completely broken, reimplement in gameplaysta
    gameStatus = GameStatus::STARTUP;
 }
 
-Actor* Engine::getClosestMonster(int x, int y, float range) const {
-	Actor* closest = nullptr;
-	float bestDistance = std::numeric_limits<float>::max();
-	for (Actor* actor : *actors) {
-		if(!actor->isPlayer() && actor->destructible && !actor->destructible->isDead()) {
-			float distance = actor->getDistance(x,y);
-			if(distance < bestDistance && (distance <= range || range == 0.0f)) {
-				bestDistance = distance;
-				closest = actor;
-			}
-		}
-	}
-	return closest;
-}
-
 Actor* Engine::getLiveActor(int x, int y) const {
 	for(Actor* actor : *actors) {
 		if(actor->x == x && actor->y == y && actor->destructible && !actor->destructible->isDead()) return actor;
