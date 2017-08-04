@@ -55,3 +55,7 @@ Actor* GameplayState::getPlayer() const {
     }
     return nullptr;
 }
+
+Point GameplayState::getMouseLocation() {
+	return Point(engine.mouse.cx, engine.mouse.cy);
+}

@@ -26,6 +26,7 @@ public:
 	void increaseTime(int amount) { time += amount; } // temporary!
 	bool isInFov(int x, int y) { return map->isInFov(x, y); }
 	Point getWorldCoordsFromScreenCoords(Point point) { return renderer->getWorldCoordsFromScreenCoords(point); } // TODO pass by ref
+	Point getMouseLocation();
 
 	Actor* getNextActor() const { return actors->at(0); }
 	void updateNextActor();
