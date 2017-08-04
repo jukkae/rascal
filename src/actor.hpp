@@ -40,6 +40,7 @@ public:
 	float getDistance(int cx, int cy) const;
 	bool isPlayer() { return ai ? this->ai->isPlayer() : false; }
 	std::vector<Actor*>* getActors(); // temporary for refactoring
+	Actor* getPlayer(); // temporary for refactoring
 
 private:
 	friend class boost::serialization::access;                                                                

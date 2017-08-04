@@ -25,3 +25,10 @@ float Actor::getDistance(int cx, int cy) const {
 }
 
 std::vector<Actor*>* Actor::getActors() { return engine.getActors(); }
+
+Actor* Actor::getPlayer() {
+	for(auto a : *getActors()) {
+		if(a->isPlayer()) return a;
+	}
+	return nullptr;
+}
