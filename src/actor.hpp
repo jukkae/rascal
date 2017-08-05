@@ -34,6 +34,8 @@ public:
 	std::unique_ptr<Pickable> pickable;
 	std::unique_ptr<Container> container;
 
+	GameplayState* s; // temporary for messaging
+
 	Actor(int x = 0, int y = 0, int ch = 'x', std::string name = "", const TCODColor& col = TCODColor::white, boost::optional<float> energy = boost::none);
 	~Actor();
 	float update(GameplayState* state);
@@ -46,7 +48,6 @@ public:
 	void setState(GameplayState* state) { s = state; } // temporary for getting access to state's actors
 
 private:
-	GameplayState* s;
 
 	friend class boost::serialization::access;                                                                
     template<class Archive>                                                                                   

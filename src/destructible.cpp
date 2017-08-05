@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include "destructible.hpp"
-#include "engine.hpp"
+#include "gameplay_state.hpp"
 
 Destructible::Destructible(float maxHp, float defense, int xp, std::string corpseName) :
 	maxHp(maxHp), hp(maxHp), defense(defense), xp(xp), corpseName(corpseName) {;}
@@ -34,7 +34,7 @@ MonsterDestructible::MonsterDestructible(float maxHp, float defense, int xp, std
 	Destructible(maxHp, defense, xp, corpseName) {;}
 
 void MonsterDestructible::die(Actor* owner) {
-	engine.gui.message(TCODColor::lightGrey, "%s is dead! You gain %d xp!", owner->name.c_str(), xp);
+	owner->s->message(TCODColor::lightGrey, "%s is dead! You gain %d xp!", owner->name.c_str(), xp);
 	owner->getPlayer()->destructible->xp += xp;
 	Destructible::die(owner);
 }
@@ -43,7 +43,7 @@ PlayerDestructible::PlayerDestructible(float maxHp, float defense, int xp, std::
 	Destructible(maxHp, defense, xp, corpseName) {;}
 
 void PlayerDestructible::die(Actor* owner) {
-	engine.gui.message(TCODColor::red, "You died!");
+	owner->s->message(TCODColor::red, "You died!");
 	Destructible::die(owner);
 	// TODO end game
 }

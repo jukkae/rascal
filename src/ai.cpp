@@ -32,7 +32,7 @@ float PlayerAi::update(Actor* owner, GameplayState* state) {
 	if (owner->destructible->xp >= levelUpXp) {
 		++xpLevel;
 		owner->destructible->xp -= levelUpXp;
-		engine.gui.message(TCODColor::yellow, "You've reached level %d!", xpLevel);
+		state->message(TCODColor::yellow, "You've reached level %d!", xpLevel);
 		engine.gui.menu.clear();
 		engine.gui.menu.addItem(Menu::MenuItemCode::CONSTITUTION,"Constitution (+20HP)");
 		engine.gui.menu.addItem(Menu::MenuItemCode::STRENGTH,"Strength (+1 attack)");
@@ -96,7 +96,7 @@ bool PlayerAi::moveOrAttack(Actor* owner, GameplayState* state, int targetX, int
 	for (Actor* actor : *owner->getActors()) {
 		bool corpseOrItem = (actor->destructible && actor->destructible->isDead()) || actor->pickable;
 		if(corpseOrItem && actor->x == targetX && actor->y == targetY) {
-			engine.gui.message(TCODColor::lightGrey, "There's a %s here!", actor->name.c_str());
+			state->message(TCODColor::lightGrey, "There's a %s here!", actor->name.c_str());
 		}
 	}
 	owner->x = targetX;
@@ -142,15 +142,15 @@ void PlayerAi::handleActionKey(Actor* owner, int ascii, GameplayState* state) {
 			if(actor->pickable && actor->x == owner->x && actor->y == owner->y) {
 				if(actor->pickable->pick(actor,owner)) {
 					found = true;
-					engine.gui.message(TCODColor::green, "You pick up the %s.", actor->name.c_str());
+					state->message(TCODColor::green, "You pick up the %s.", actor->name.c_str());
 					break;
 				} else if(!found) {
 					found = true;
-					engine.gui.message(TCODColor::red, "Your inventory is full.");
+					state->message(TCODColor::red, "Your inventory is full.");
 				}
 			}
 		}
-		if(!found) { engine.gui.message(TCODColor::lightGrey, "There's nothing here that you can pick up."); }
+		if(!found) { state->message(TCODColor::lightGrey, "There's nothing here that you can pick up."); }
 		} break;
 		case 'i' : // display inventory
 		{
@@ -171,7 +171,7 @@ void PlayerAi::handleActionKey(Actor* owner, int ascii, GameplayState* state) {
 			if(state->getStairs()->x == owner->x && state->getStairs()->y == owner->y) {
 				state->nextLevel();
 			} else {
-				engine.gui.message(TCODColor::lightGrey, "There are no stairs here.");
+				state->message(TCODColor::lightGrey, "There are no stairs here.");
 			}
 		} break;
 	}
