@@ -19,7 +19,6 @@ public:
 	void render(Engine* engine) override;
 
 	// TEMPORARY FUNCTIONS FOR REFACTORING PROCESS
-	void initMap(); // temporary!
 	int getLevel() { return level; } // temporary!
 	void increaseLevel() { ++level; } // temporary!
 	void nextLevel();

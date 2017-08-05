@@ -19,10 +19,6 @@ void GameplayState::init() {
     stairs->fovOnly = false;
     actors->push_back(stairs);
 
-	gui->message(TCODColor::green, "Welcome to year 20XXAD, you strange rascal!\nPrepare to fight or die!");
-}
-
-void GameplayState::initMap() {
 	map = std::unique_ptr<Map>(new Map(120, 72));
 	map->setState(this);
 	map->init(true);
@@ -33,6 +29,7 @@ void GameplayState::initMap() {
 		return lhs->energy > rhs->energy;
 	});
 
+	gui->message(TCODColor::green, "Welcome to year 20XXAD, you strange rascal!\nPrepare to fight or die!");
 }
 
 void GameplayState::cleanup() {
