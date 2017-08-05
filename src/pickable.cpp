@@ -1,7 +1,6 @@
 #include "pickable.hpp"
 #include "container.hpp"
 #include "destructible.hpp"
-#include "engine.hpp"
 #include "gameplay_state.hpp"
 #include "persistent.hpp"
 
