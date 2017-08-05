@@ -4,7 +4,6 @@
 #include "constants.hpp"
 #include "container.hpp"
 #include "destructible.hpp"
-#include "engine.hpp"
 #include "gameplay_state.hpp"
 #include "gui.hpp"
 #include "map.hpp"
@@ -26,7 +25,6 @@ int PlayerAi::getNextLevelXp() const {
 	return LEVEL_UP_BASE + xpLevel * LEVEL_UP_FACTOR;
 }
 
-// TODO fix keyboard handling: Who handles what? currently split here, main and engine!
 float PlayerAi::update(Actor* owner, GameplayState* state) {
 	int levelUpXp = getNextLevelXp();
 	if (owner->destructible->xp >= levelUpXp) {
@@ -36,9 +34,6 @@ float PlayerAi::update(Actor* owner, GameplayState* state) {
 		state->showLevelUpMenu();
 		Menu::MenuItemCode menuItem = state->pickFromMenu(Menu::DisplayMode::PAUSE);
 
-		TCODConsole::root->clear();
-		engine.render();
-		TCODConsole::root->flush();
 		switch (menuItem) {
 		case Menu::MenuItemCode::CONSTITUTION :
 			owner->destructible->maxHp += 20;
