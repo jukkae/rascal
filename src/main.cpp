@@ -59,10 +59,8 @@ void showMenu() {
 	if (menuItem == Menu::MenuItemCode::EXIT || menuItem == Menu::MenuItemCode::NONE) {
 		exit(0);
 	} else if (menuItem == Menu::MenuItemCode::NEW_GAME) {
-		engine.term();
 		engine.init();
 	} else {
-		engine.term();
 		load();
 	}
 

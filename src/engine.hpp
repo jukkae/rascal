@@ -20,7 +20,6 @@ public:
 	Engine(int dummy); // dummy parameter due to idiotic extern
 	~Engine();
 	void init();
-	void term();
 
 	//void changeState(State* state);
 	void pushState(State* state) { states.push_back(state); }

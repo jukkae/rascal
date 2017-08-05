@@ -12,11 +12,6 @@ Engine::Engine(int dummy) {
 }
 
 Engine::~Engine() {
-	term();
-}
-
-void Engine::term() {
-	gui.clear();
 }
 
 void Engine::init() {
