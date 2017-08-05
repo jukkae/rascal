@@ -35,6 +35,7 @@ public:
 	bool canWalk(int x, int y);
 	void markExploredTiles() { map->markExploredTiles(); }
 	void showLevelUpMenu();
+	Menu::MenuItemCode pickFromMenu(Menu::DisplayMode mode = Menu::DisplayMode::MAIN) { return gui->menu.pick(mode); }
 
 	Actor* getNextActor() const { return actors->at(0); }
 	void updateNextActor();

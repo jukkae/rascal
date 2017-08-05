@@ -34,7 +34,7 @@ float PlayerAi::update(Actor* owner, GameplayState* state) {
 		owner->destructible->xp -= levelUpXp;
 		state->message(TCODColor::yellow, "You've reached level %d!", xpLevel);
 		state->showLevelUpMenu();
-		Menu::MenuItemCode menuItem = engine.gui.menu.pick(Menu::DisplayMode::PAUSE);
+		Menu::MenuItemCode menuItem = state->pickFromMenu(Menu::DisplayMode::PAUSE);
 
 		TCODConsole::root->clear();
 		engine.render();
