@@ -131,6 +131,13 @@ Actor* GameplayState::getLiveActor(int x, int y) const {
 	return nullptr;
 }
 
+void GameplayState::message(const TCODColor& col, std::string text, ...) {
+	va_list args;
+	va_start(args, text);
+	gui->message(col, text, args);
+	va_end(args);
+}
+
 void GameplayState::nextLevel() {
 	increaseLevel();
 	gui->message(TCODColor::lightViolet,"You take a moment to rest, and recover your strength.");

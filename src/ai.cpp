@@ -195,7 +195,7 @@ void MonsterAi::moveOrAttack(Actor* owner, GameplayState* state, int targetX, in
 	int stepDy = (dy > 0 ? 1 : -1);
 	float distance = sqrtf(dx*dx + dy*dy);
 	if(distance >= 2) {
-		engine.gui.message(TCODColor::white, "The %s threatens you!", owner->name.c_str());
+		state->message(TCODColor::white, "The %s threatens you!", owner->name.c_str());
 		dx = (int) (round(dx / distance));
 		dy = (int) (round(dy / distance));
 		if(state->canWalk(owner->x + dx, owner->y + dy)) {

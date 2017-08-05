@@ -30,7 +30,8 @@ public:
 	void clear();
 
 	void render(); // TODO this should be const
-	void message(const TCODColor &col, std::string text, ...);
+	void message(const TCODColor& col, std::string text, ...);
+	void message(const TCODColor& col, std::string text, va_list args);
 
 	Menu menu;
 	void setState(GameplayState* s) { state = s; }

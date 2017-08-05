@@ -99,6 +99,23 @@ col(col) {
 Gui::Message::~Message() {
 }
 
+void Gui::message(const TCODColor& col, std::string text, va_list args) {
+	std::string buf = "";
+	char dest[1024*16]; // maybe something a bit more sane would be in order at some point
+	vsnprintf(dest, 1024*16, text.c_str(), args);
+
+	std::istringstream iss (dest);
+	std::string line;
+	while (std::getline(iss, line, '\n')) {
+		// make room for the message
+		if(log.size() == MSG_HEIGHT) {
+			log.erase(log.begin());
+		}
+		Message msg(line, col);
+		log.push_back(msg);
+	}
+}
+
 void Gui::message(const TCODColor& col, std::string text, ...) {
 	va_list ap;
 	std::string buf = "";
