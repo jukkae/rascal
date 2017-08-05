@@ -16,9 +16,6 @@ Engine::~Engine() {
 
 void Engine::init() {
 	gameplayState.init();
-
-	player = gameplayState.getPlayer();
-
 	gameplayState.initMap();
 
 	states.push_back(&dummyState);
