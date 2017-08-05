@@ -26,8 +26,6 @@ void Engine::init() {
 
 	gameplayState.initMap();
 
-	gui.message(TCODColor::green, "Welcome to year 20XXAD, you strange rascal!\nPrepare to fight or die!");
-
 	states.push_back(&dummyState);
 	states.push_back(&gameplayState);
 }

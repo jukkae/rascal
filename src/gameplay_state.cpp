@@ -18,6 +18,8 @@ void GameplayState::init() {
     stairs->blocks = false;
     stairs->fovOnly = false;
     actors->push_back(stairs);
+
+	gui->message(TCODColor::green, "Welcome to year 20XXAD, you strange rascal!\nPrepare to fight or die!");
 }
 
 void GameplayState::initMap() {
