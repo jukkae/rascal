@@ -170,3 +170,38 @@ void GameplayState::showLevelUpMenu() {
 	gui->menu.addItem(Menu::MenuItemCode::AGILITY,"Agility (+1 defense)");
 	gui->menu.addItem(Menu::MenuItemCode::SPEED,"Speed (+10 speed)");
 }
+
+bool GameplayState::pickTile(int* x, int* y, float maxRange) {
+	while(!TCODConsole::isWindowClosed()) {
+		render(nullptr);
+		for(int cx = 0; cx < constants::SCREEN_WIDTH; ++cx) {
+			for(int cy = 0; cy < constants::SCREEN_HEIGHT; ++cy) {
+				Point location = renderer->getWorldCoordsFromScreenCoords(Point(cx, cy));
+				int realX = location.x;
+				int realY = location.y;
+				if(isInFov(realX, realY) && (maxRange == 0 || player->getDistance(realX, realY) <= maxRange)) {
+					TCODColor col = TCODConsole::root->getCharBackground(cx, cy);
+					col = col * 1.2;
+					TCODConsole::root->setCharBackground(cx, cy, col);
+				}
+			}
+		}
+		TCODSystem::waitForEvent(TCOD_EVENT_KEY_PRESS | TCOD_EVENT_MOUSE, &lastKey, &mouse, true);
+		Point mouseLocation = renderer->getWorldCoordsFromScreenCoords(Point(mouse.cx, mouse.cy));
+		int realX = mouseLocation.x;
+		int realY = mouseLocation.y;
+		if(isInFov(realX, realY) && (maxRange == 0 || player->getDistance(realX, realY) <= maxRange)) {
+			TCODConsole::root->setCharBackground(mouse.cx,mouse.cy,TCODColor::white);
+			if(mouse.lbutton_pressed) {
+				*x = realX;
+				*y = realY;
+				return true;
+			}
+		}
+		if(mouse.rbutton_pressed || lastKey.vk != TCODK_NONE) {
+			return false;
+		}
+		TCODConsole::flush();
+	}
+	return false;
+}

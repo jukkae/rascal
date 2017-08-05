@@ -58,6 +58,10 @@ private:
 	Gui* gui;
 	Renderer* renderer;
 
+	TCOD_key_t lastKey;
+	TCOD_mouse_t mouse;
+
+
 	friend class boost::serialization::access;
 	template<class Archive>
 	void serialize(Archive & ar, const unsigned int version) // TODO serialize ABC

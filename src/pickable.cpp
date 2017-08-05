@@ -18,7 +18,7 @@ void TargetSelector::selectTargets(Actor* wearer, std::vector<Actor*>& list) {
 		{
 			int x, y;
 			wearer->s->message(TCODColor::cyan, "Left-click to select an enemy,\nor right-click to cancel.");
-			if(engine.pickTile(&x, &y, range)) {
+			if(wearer->s->pickTile(&x, &y, range)) {
 				Actor* actor = wearer->getLiveActor(x, y);
 				if(actor) list.push_back(actor);
 			}
@@ -39,7 +39,7 @@ void TargetSelector::selectTargets(Actor* wearer, std::vector<Actor*>& list) {
 		{
 			int x, y;
 			wearer->s->message(TCODColor::cyan, "Left-click to select a tile,\nor right-click to cancel.");
-			if(engine.pickTile(&x, &y)) {
+			if(wearer->s->pickTile(&x, &y)) {
 				for(Actor* actor : *wearer->getActors()) {
 					if(actor->destructible && !actor->destructible->isDead() && actor->getDistance(x, y) <= range ) {
 						list.push_back(actor);

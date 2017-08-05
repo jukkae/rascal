@@ -28,7 +28,6 @@ public:
 	void update();
 	void render();
 
-	bool pickTile(int* x, int* y, float maxRange = 0.0f); // moved
 private:
 	DummyState dummyState;
 	GameplayState gameplayState;
