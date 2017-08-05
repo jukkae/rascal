@@ -162,3 +162,11 @@ void GameplayState::nextLevel() {
 		return lhs->energy > rhs->energy;
 	});
 }
+
+void GameplayState::showLevelUpMenu() {
+	gui->menu.clear();
+	gui->menu.addItem(Menu::MenuItemCode::CONSTITUTION,"Constitution (+20HP)");
+	gui->menu.addItem(Menu::MenuItemCode::STRENGTH,"Strength (+1 attack)");
+	gui->menu.addItem(Menu::MenuItemCode::AGILITY,"Agility (+1 defense)");
+	gui->menu.addItem(Menu::MenuItemCode::SPEED,"Speed (+10 speed)");
+}

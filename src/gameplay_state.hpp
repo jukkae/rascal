@@ -34,6 +34,7 @@ public:
 	bool isWall(int x, int y) { return map->isWall(x, y); }
 	bool canWalk(int x, int y);
 	void markExploredTiles() { map->markExploredTiles(); }
+	void showLevelUpMenu();
 
 	Actor* getNextActor() const { return actors->at(0); }
 	void updateNextActor();

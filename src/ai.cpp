@@ -33,11 +33,7 @@ float PlayerAi::update(Actor* owner, GameplayState* state) {
 		++xpLevel;
 		owner->destructible->xp -= levelUpXp;
 		state->message(TCODColor::yellow, "You've reached level %d!", xpLevel);
-		engine.gui.menu.clear();
-		engine.gui.menu.addItem(Menu::MenuItemCode::CONSTITUTION,"Constitution (+20HP)");
-		engine.gui.menu.addItem(Menu::MenuItemCode::STRENGTH,"Strength (+1 attack)");
-		engine.gui.menu.addItem(Menu::MenuItemCode::AGILITY,"Agility (+1 defense)");
-		engine.gui.menu.addItem(Menu::MenuItemCode::SPEED,"Speed (+10 speed)");
+		state->showLevelUpMenu();
 		Menu::MenuItemCode menuItem = engine.gui.menu.pick(Menu::DisplayMode::PAUSE);
 
 		TCODConsole::root->clear();
