@@ -19,6 +19,7 @@ void Engine::init() {
 
 	states.push_back(&dummyState);
 	states.push_back(&gameplayState);
+	states.push_back(&mainMenuState);
 }
 
 void Engine::update() {

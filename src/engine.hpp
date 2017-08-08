@@ -7,6 +7,7 @@ class Actor;
 #include "state.hpp"
 #include "dummy_state.hpp"
 #include "gameplay_state.hpp"
+#include "main_menu_state.hpp"
 #include "persistent.hpp"
 
 class Engine {
@@ -29,6 +30,7 @@ public:
 private:
 	DummyState dummyState;
 	GameplayState gameplayState;
+	MainMenuState mainMenuState;
 	std::vector<State*> states;
 
 	friend class boost::serialization::access;
