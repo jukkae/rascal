@@ -5,9 +5,11 @@ void MainMenuState::init() {
 	console.setDefaultBackground(TCODColor::black);
 
 	MenuItem newGame = { MenuItemCode::NEW_GAME, "New game!" };
+	MenuItem cont = { MenuItemCode::CONTINUE, "Continue!" };
 	MenuItem exit = { MenuItemCode::EXIT, "Exit!" };
 	MenuItem dummy = { MenuItemCode::NONE, "This is just to throw you off" };
 	menuItems.push_back(newGame);
+	menuItems.push_back(cont);
 	menuItems.push_back(exit);
 	menuItems.push_back(dummy);
 
@@ -30,7 +32,7 @@ void MainMenuState::handleEvents(Engine* engine) {
 			if(selectedItem < menuItems.size() - 1) ++selectedItem;
 			break;
 		case TCODK_ENTER:
-			// return selectedItem; or whatever
+			handleSelectedMenuItem(engine);
 			break;
 		default:
 			break;
@@ -64,4 +66,21 @@ void MainMenuState::showMenu(Engine* engine) {
 
 	console.flush();
 	TCODConsole::blit(&console, 0, 0, constants::SCREEN_WIDTH, constants::SCREEN_HEIGHT, TCODConsole::root, 0, 0);
+}
+
+void MainMenuState::handleSelectedMenuItem(Engine* engine) {
+	// TODO rather send a command to engine
+	switch (menuItems.at(selectedItem).code) {
+		case MenuItemCode::NEW_GAME:
+			break;
+		case MenuItemCode::CONTINUE:
+			//engine->popState();
+			break;
+		case MenuItemCode::EXIT:
+			break;
+		case MenuItemCode::NONE:
+			break;
+		default:
+			break;
+	}
 }

@@ -26,8 +26,9 @@ private:
 
 	std::vector<MenuItem> menuItems;
 	int selectedItem;
-
 	TCODConsole console;
+
+	void handleSelectedMenuItem(Engine* engine);
 	void showMenu(Engine* engine);
 };
 #endif /* MAIN_MENU_STATE_HPP */
