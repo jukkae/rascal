@@ -3,11 +3,14 @@
 #include "state.hpp"
 #include "constants.hpp"
 #include <iostream>
+#include <vector>
 #include "libtcod.hpp"
 
 class Engine;
 class MainMenuState : public State {
 public:
+	enum class MenuItemCode { NONE, NEW_GAME, CONTINUE, EXIT };
+
 	MainMenuState() : console(constants::SCREEN_WIDTH, constants::SCREEN_HEIGHT) {;}
 	void init() override;
 	void cleanup() override;
@@ -15,6 +18,12 @@ public:
 	void update(Engine* engine) override;
 	void render(Engine* engine) override;
 private:
+	struct MenuItem {
+		MenuItemCode code;
+		std::string label;
+	};
+	std::vector<MenuItem> menuItems;
+
 	TCODConsole console;
 	void showMenu(Engine* engine);
 };

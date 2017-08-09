@@ -16,6 +16,7 @@ Engine::~Engine() {
 
 void Engine::init() {
 	gameplayState.init();
+	mainMenuState.init();
 
 	states.push_back(&dummyState);
 	states.push_back(&gameplayState);
