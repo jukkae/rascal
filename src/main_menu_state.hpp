@@ -23,8 +23,9 @@ private:
 		MenuItemCode code;
 		std::string label;
 	};
+
 	std::vector<MenuItem> menuItems;
-	MenuItem* selectedItem;
+	int selectedItem;
 
 	TCODConsole console;
 	void showMenu(Engine* engine);

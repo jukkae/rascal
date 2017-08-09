@@ -6,10 +6,12 @@ void MainMenuState::init() {
 
 	MenuItem newGame = { MenuItemCode::NEW_GAME, "New game!" };
 	MenuItem exit = { MenuItemCode::EXIT, "Exit!" };
+	MenuItem dummy = { MenuItemCode::NONE, "This is just to throw you off" };
 	menuItems.push_back(newGame);
 	menuItems.push_back(exit);
+	menuItems.push_back(dummy);
 
-	selectedItem = &menuItems.at(0);
+	selectedItem = 0;
 }
 
 void MainMenuState::cleanup() {
@@ -22,10 +24,10 @@ void MainMenuState::handleEvents(Engine* engine) {
 
 	switch (key.vk) { // TODO don't do this like this mmkay
 		case TCODK_UP:
-			--selectedItem;
+			if(selectedItem > 0) --selectedItem;
 			break;
 		case TCODK_DOWN:
-			++selectedItem;
+			if(selectedItem < menuItems.size() - 1) ++selectedItem;
 			break;
 		case TCODK_ENTER:
 			// return selectedItem; or whatever
@@ -49,7 +51,7 @@ void MainMenuState::showMenu(Engine* engine) {
 
 	int itemIndex = 0;
 	for(MenuItem item : menuItems) {
-		if (selectedItem->code == item.code) { // nasty comparison!
+		if (selectedItem == itemIndex) {
 			console.setDefaultForeground(TCODColor::lighterOrange);
 		} else {
 			console.setDefaultForeground(TCODColor::lightGrey);
