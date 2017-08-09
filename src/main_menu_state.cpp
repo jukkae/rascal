@@ -35,14 +35,15 @@ void MainMenuState::handleEvents(Engine* engine) {
 		default:
 			break;
 	}
-}
-
-void MainMenuState::update(Engine* engine) {
 	showMenu(engine);
 }
 
-void MainMenuState::render(Engine* engine) {
+void MainMenuState::update(Engine* engine) {
 
+}
+
+void MainMenuState::render(Engine* engine) {
+	showMenu(engine);
 }
 
 void MainMenuState::showMenu(Engine* engine) {
