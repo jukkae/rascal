@@ -15,6 +15,7 @@ std::string file = "save.txt";
 Engine engine(1);
 
 int main() {
+	/*
 	showMenu();
 
 	while(!TCODConsole::isWindowClosed()) {
@@ -32,6 +33,12 @@ int main() {
 	}
 
 	save();
+	*/
+
+	while(!TCODConsole::isWindowClosed()) {
+		engine.update();
+	}
+
 	return 0;
 }
 
@@ -47,6 +54,7 @@ void save() {
 	oa << engine;
 }
 
+/*
 void showMenu() {
 	engine.gui.menu.clear();
 	engine.gui.menu.addItem(Menu::MenuItemCode::NEW_GAME, "New game");
@@ -67,3 +75,4 @@ void showMenu() {
 	engine.render();
 	TCODConsole::flush();
 }
+*/

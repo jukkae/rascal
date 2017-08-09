@@ -15,6 +15,7 @@ public:
 	void init() override;
 	void cleanup() override;
 
+	void handleEvents(Engine* engine) override {;} // TODO
 	void update(Engine* engine) override;
 	void render(Engine* engine) override;
 

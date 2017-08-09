@@ -25,7 +25,6 @@ public:
 	void pushState(State* state) { states.push_back(state); }
 	void popState() { states.pop_back(); }
 	void update();
-	void render();
 
 private:
 	DummyState dummyState;

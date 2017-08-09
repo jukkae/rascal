@@ -15,6 +15,7 @@ public:
 	void init() override;
 	void cleanup() override;
 
+	void handleEvents(Engine* engine) override;
 	void update(Engine* engine) override;
 	void render(Engine* engine) override;
 private:
@@ -23,6 +24,7 @@ private:
 		std::string label;
 	};
 	std::vector<MenuItem> menuItems;
+	MenuItem* selectedItem;
 
 	TCODConsole console;
 	void showMenu(Engine* engine);

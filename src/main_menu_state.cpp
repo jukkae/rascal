@@ -2,14 +2,37 @@
 #include "libtcod.hpp"
 
 void MainMenuState::init() {
+	console.setDefaultBackground(TCODColor::black);
+
 	MenuItem newGame = { MenuItemCode::NEW_GAME, "New game!" };
 	MenuItem exit = { MenuItemCode::EXIT, "Exit!" };
 	menuItems.push_back(newGame);
 	menuItems.push_back(exit);
+
+	selectedItem = &menuItems.at(0);
 }
 
 void MainMenuState::cleanup() {
 
+}
+
+void MainMenuState::handleEvents(Engine* engine) {
+	TCOD_key_t key;
+	TCODSystem::waitForEvent(TCOD_EVENT_KEY_PRESS, &key, nullptr, false); // blocks, nasty, but will work for now
+
+	switch (key.vk) { // TODO don't do this like this mmkay
+		case TCODK_UP:
+			--selectedItem;
+			break;
+		case TCODK_DOWN:
+			++selectedItem;
+			break;
+		case TCODK_ENTER:
+			// return selectedItem; or whatever
+			break;
+		default:
+			break;
+	}
 }
 
 void MainMenuState::update(Engine* engine) {
@@ -17,44 +40,23 @@ void MainMenuState::update(Engine* engine) {
 }
 
 void MainMenuState::render(Engine* engine) {
+
 }
 
 void MainMenuState::showMenu(Engine* engine) {
 	int menuX = 10;
 	int menuY = constants::SCREEN_HEIGHT / 3;
-	console.setDefaultBackground(TCODColor::black);
-	console.setDefaultForeground(TCODColor::white);
-	console.print(1, 1, "AAAAA");
 
-	int currentItem = 0;
-	int selectedItem = 0;
+	int itemIndex = 0;
 	for(MenuItem item : menuItems) {
-		if (currentItem == selectedItem) {
+		if (selectedItem->code == item.code) { // nasty comparison!
 			console.setDefaultForeground(TCODColor::lighterOrange);
 		} else {
 			console.setDefaultForeground(TCODColor::lightGrey);
 		}
 
-		console.print(menuX, menuY + currentItem * 3, item.label.c_str());
-		++currentItem;
-	}
-
-	TCOD_key_t key;
-	TCODSystem::waitForEvent(TCOD_EVENT_KEY_PRESS, &key, nullptr, true); // TODO how to pass events from engine to here?
-	switch (key.vk) {
-		case TCODK_UP:
-			--selectedItem;
-			if (selectedItem < 0) {
-				selectedItem = menuItems.size() - 1;
-			}
-			break;
-		case TCODK_DOWN:
-			selectedItem = (selectedItem + 1) % menuItems.size();
-			break;
-		case TCODK_ENTER:
-			//return items.at(selectedItem).code;
-		default:
-			break;
+		console.print(menuX, menuY + itemIndex * 3, item.label.c_str());
+		++itemIndex;
 	}
 
 	console.flush();

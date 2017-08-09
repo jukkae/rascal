@@ -5,6 +5,7 @@ public:
 	void init() override {;}
 	void cleanup() override {;}
 
+	void handleEvents(Engine* engine) override {;}
 	void update(Engine* engine) override {std::cout << "Dummy update\n";}
 	void render(Engine* engine) override {std::cout << "Dummy render\n";}
 };

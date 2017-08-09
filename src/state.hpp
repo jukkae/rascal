@@ -6,7 +6,7 @@ public:
 	virtual void init() = 0;
 	virtual void cleanup() = 0;
 
-	// virtual void handleEvents(Engine* engine) = 0; TODO
+	virtual void handleEvents(Engine* engine) = 0;
 	virtual void update(Engine* engine) = 0;
 	virtual void render(Engine* engine) = 0; // TODO should be const
 
