@@ -27,9 +27,34 @@ void MainMenuState::showMenu(Engine* engine) {
 	console.print(1, 1, "AAAAA");
 
 	int currentItem = 0;
+	int selectedItem = 0;
 	for(MenuItem item : menuItems) {
+		if (currentItem == selectedItem) {
+			console.setDefaultForeground(TCODColor::lighterOrange);
+		} else {
+			console.setDefaultForeground(TCODColor::lightGrey);
+		}
+
 		console.print(menuX, menuY + currentItem * 3, item.label.c_str());
 		++currentItem;
+	}
+
+	TCOD_key_t key;
+	TCODSystem::waitForEvent(TCOD_EVENT_KEY_PRESS, &key, nullptr, true); // TODO how to pass events from engine to here?
+	switch (key.vk) {
+		case TCODK_UP:
+			--selectedItem;
+			if (selectedItem < 0) {
+				selectedItem = menuItems.size() - 1;
+			}
+			break;
+		case TCODK_DOWN:
+			selectedItem = (selectedItem + 1) % menuItems.size();
+			break;
+		case TCODK_ENTER:
+			//return items.at(selectedItem).code;
+		default:
+			break;
 	}
 
 	console.flush();
