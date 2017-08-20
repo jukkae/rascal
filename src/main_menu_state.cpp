@@ -1,4 +1,5 @@
 #include "main_menu_state.hpp"
+#include "engine.hpp"
 #include "libtcod.hpp"
 
 void MainMenuState::init() {
@@ -74,7 +75,7 @@ void MainMenuState::handleSelectedMenuItem(Engine* engine) {
 		case MenuItemCode::NEW_GAME:
 			break;
 		case MenuItemCode::CONTINUE:
-			//engine->popState();
+			engine->addCommand(new DummyCommand());
 			break;
 		case MenuItemCode::EXIT:
 			break;

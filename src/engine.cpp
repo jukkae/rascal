@@ -25,7 +25,14 @@ void Engine::init() {
 }
 
 void Engine::update() {
+	while(commands.size() > 0) executeCommand();
+
 	states.back()->handleEvents(this);
 	states.back()->update(this);
 	states.back()->render(this);
+}
+
+void Engine::executeCommand() {
+	commands.front()->execute();
+	commands.pop();
 }

@@ -1,9 +1,12 @@
 #ifndef ENGINE_HPP
 #define ENGINE_HPP
 class Actor;
+#include <queue>
+
 #include "renderer.hpp"
 #include "gui.hpp"
 #include "attacker.hpp"
+#include "command.hpp"
 #include "state.hpp"
 #include "dummy_state.hpp"
 #include "gameplay_state.hpp"
@@ -25,12 +28,16 @@ public:
 	void pushState(State* state) { states.push_back(state); }
 	void popState() { states.pop_back(); }
 	void update();
+	void addCommand(Command* command) { commands.push(command); }
 
 private:
 	DummyState dummyState;
 	GameplayState gameplayState;
 	MainMenuState mainMenuState;
 	std::vector<State*> states;
+	std::queue<Command*> commands;
+
+	void executeCommand();
 
 	friend class boost::serialization::access;
     template<class Archive>
