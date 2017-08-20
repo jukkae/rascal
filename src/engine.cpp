@@ -30,6 +30,8 @@ void Engine::update() {
 	states.back()->handleEvents(this);
 	states.back()->update(this);
 	states.back()->render(this);
+
+	TCODConsole::root->flush();
 }
 
 void Engine::executeCommand() {

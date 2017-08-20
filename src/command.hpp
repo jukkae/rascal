@@ -1,5 +1,6 @@
 #ifndef COMMAND_HPP
 #define COMMAND_HPP
+class Engine;
 class Command {
 public:
 	virtual ~Command() {}
@@ -8,7 +9,10 @@ public:
 
 class DummyCommand : public Command {
 public:
+	DummyCommand(Engine* engine) : engine(engine) {;}
 	~DummyCommand() {}
-	void execute() { std::cout << "Hello from dummy command!\n"; }
+	void execute();
+private:
+	Engine* engine;
 };
 #endif /* COMMAND_HPP */

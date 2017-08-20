@@ -75,7 +75,7 @@ void MainMenuState::handleSelectedMenuItem(Engine* engine) {
 		case MenuItemCode::NEW_GAME:
 			break;
 		case MenuItemCode::CONTINUE:
-			engine->addCommand(new DummyCommand());
+			engine->addCommand(new DummyCommand(engine));
 			break;
 		case MenuItemCode::EXIT:
 			break;

@@ -180,7 +180,7 @@ Menu::MenuItemCode Menu::pick(DisplayMode mode) {
 			TCODConsole::root->print(menuX, menuY + currentItem * 3, item.label.c_str());
 			++currentItem;
 		}
-		TCODConsole::flush();
+		TCODConsole::flush(); // TODO ?? check flushes
 		TCOD_key_t key;
 		TCODSystem::waitForEvent(TCOD_EVENT_KEY_PRESS, &key, nullptr, true);
 		switch (key.vk) {
