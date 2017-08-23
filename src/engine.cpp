@@ -25,7 +25,7 @@ void Engine::init() {
 }
 
 void Engine::update() {
-	while(commands.size() > 0) executeCommand();
+	while(engineCommands.size() > 0) executeEngineCommand();
 
 	states.back()->handleEvents(this);
 	states.back()->update(this);
@@ -34,7 +34,12 @@ void Engine::update() {
 	TCODConsole::root->flush();
 }
 
-void Engine::executeCommand() {
-	commands.front()->execute();
-	commands.pop();
+void Engine::executeEngineCommand() {
+	engineCommands.front()->execute();
+	engineCommands.pop();
+}
+
+void Engine::exit() {
+	// TODO serialize etc
+	::exit(0);
 }

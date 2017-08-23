@@ -8,11 +8,9 @@ void MainMenuState::init() {
 	MenuItem newGame = { MenuItemCode::NEW_GAME, "New game!" };
 	MenuItem cont = { MenuItemCode::CONTINUE, "Continue!" };
 	MenuItem exit = { MenuItemCode::EXIT, "Exit!" };
-	MenuItem dummy = { MenuItemCode::NONE, "This is just to throw you off" };
 	menuItems.push_back(newGame);
 	menuItems.push_back(cont);
 	menuItems.push_back(exit);
-	menuItems.push_back(dummy);
 
 	selectedItem = 0;
 }
@@ -70,14 +68,15 @@ void MainMenuState::showMenu(Engine* engine) {
 }
 
 void MainMenuState::handleSelectedMenuItem(Engine* engine) {
-	// TODO rather send a command to engine
 	switch (menuItems.at(selectedItem).code) {
 		case MenuItemCode::NEW_GAME:
+			engine->addEngineCommand(new NewGameCommand(engine));
 			break;
 		case MenuItemCode::CONTINUE:
-			engine->addCommand(new DummyCommand(engine));
+			engine->addEngineCommand(new ContinueCommand(engine));
 			break;
 		case MenuItemCode::EXIT:
+			engine->addEngineCommand(new ExitCommand(engine));
 			break;
 		case MenuItemCode::NONE:
 			break;

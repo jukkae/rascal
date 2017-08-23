@@ -6,7 +6,7 @@ class Actor;
 #include "renderer.hpp"
 #include "gui.hpp"
 #include "attacker.hpp"
-#include "command.hpp"
+#include "engine_command.hpp"
 #include "state.hpp"
 #include "dummy_state.hpp"
 #include "gameplay_state.hpp"
@@ -28,16 +28,17 @@ public:
 	void pushState(State* state) { states.push_back(state); }
 	void popState() { states.pop_back(); }
 	void update();
-	void addCommand(Command* command) { commands.push(command); }
+	void addEngineCommand(EngineCommand* engineCommand) { engineCommands.push(engineCommand); }
+	void exit();
 
 private:
 	DummyState dummyState;
 	GameplayState gameplayState;
 	MainMenuState mainMenuState;
 	std::vector<State*> states;
-	std::queue<Command*> commands;
+	std::queue<EngineCommand*> engineCommands;
 
-	void executeCommand();
+	void executeEngineCommand();
 
 	friend class boost::serialization::access;
     template<class Archive>
