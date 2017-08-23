@@ -39,5 +39,6 @@ private:
 	std::queue<EngineCommand*> engineCommands;
 
 	void executeEngineCommand();
+	void updateEvents();
 };
 #endif /* ENGINE_HPP */

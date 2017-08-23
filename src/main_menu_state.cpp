@@ -20,8 +20,7 @@ void MainMenuState::cleanup() {
 }
 
 void MainMenuState::handleEvents(Engine* engine) {
-	TCOD_key_t key;
-	TCODSystem::waitForEvent(TCOD_EVENT_KEY_PRESS, &key, nullptr, false); // blocks, nasty, but will work for now
+	TCOD_key_t key = engine->lastKey; // maybe have some sort of eventBundle or something?
 
 	switch (key.vk) { // TODO don't do this like this mmkay
 		case TCODK_UP:
