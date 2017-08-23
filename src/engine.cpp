@@ -40,6 +40,21 @@ void Engine::executeEngineCommand() {
 }
 
 void Engine::exit() {
-	// TODO serialize etc
+	// TODO serialize
 	::exit(0);
 }
+
+/*
+std::string file = "save.txt";
+void load() {
+	std::ifstream ifs(file);
+	boost::archive::text_iarchive ia(ifs);
+	ia >> engine;
+}
+
+void save() {
+	std::ofstream ofs(file);
+	boost::archive::text_oarchive oa(ofs);
+	oa << engine; // no need to serialize this, just gameplaystate and gui (log)
+}
+*/
