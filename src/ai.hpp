@@ -52,7 +52,7 @@ private:
 
 class MonsterAi : public Ai {
 public:
-	MonsterAi() : Ai(140), moveCount(0) {;}
+	MonsterAi() : Ai(140, Faction::ENEMY), moveCount(0) {;}
 	MonsterAi(float speed) : Ai(speed) {;}
 
 	float update(Actor* owner, GameplayState* state) override;
