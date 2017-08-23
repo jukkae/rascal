@@ -7,6 +7,8 @@
 #include "destructible.hpp"
 #include "engine.hpp"
 
+std::string file = "save.txt";
+
 Engine::Engine(int dummy) {
 	TCODConsole::initRoot(constants::SCREEN_WIDTH, constants::SCREEN_HEIGHT, "Rascal", false);
 	init();
@@ -40,21 +42,18 @@ void Engine::executeEngineCommand() {
 }
 
 void Engine::exit() {
-	// TODO serialize
+	save();
 	::exit(0);
 }
 
-/*
-std::string file = "save.txt";
-void load() {
+void Engine::load() {
 	std::ifstream ifs(file);
 	boost::archive::text_iarchive ia(ifs);
-	ia >> engine;
+	ia >> gameplayState;
 }
 
-void save() {
+void Engine::save() {
 	std::ofstream ofs(file);
 	boost::archive::text_oarchive oa(ofs);
-	oa << engine; // no need to serialize this, just gameplaystate and gui (log)
+	oa << gameplayState;
 }
-*/

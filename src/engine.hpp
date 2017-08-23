@@ -28,6 +28,8 @@ public:
 	void update();
 	void addEngineCommand(EngineCommand* engineCommand) { engineCommands.push(engineCommand); }
 	void exit();
+	void save();
+	void load();
 
 private:
 	DummyState dummyState;
@@ -37,13 +39,6 @@ private:
 	std::queue<EngineCommand*> engineCommands;
 
 	void executeEngineCommand();
-
-	friend class boost::serialization::access;
-    template<class Archive>
-    void serialize(Archive & ar, const unsigned int version)
-    {
-		ar & gameplayState; // TODO of course, serialize states
-    }
 };
 
 extern Engine engine; // TODO get rid of this, implement in a more robust way

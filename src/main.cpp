@@ -10,8 +10,6 @@
 #include "engine.hpp"
 #include "main.hpp"
 
-std::string file = "save.txt";
-
 Engine engine(1);
 
 int main() {
@@ -20,16 +18,4 @@ int main() {
 	}
 
 	return 0;
-}
-
-void load() {
-	std::ifstream ifs(file);
-	boost::archive::text_iarchive ia(ifs);
-	ia >> engine;
-}
-
-void save() {
-	std::ofstream ofs(file);
-	boost::archive::text_oarchive oa(ofs);
-	oa << engine;
 }
