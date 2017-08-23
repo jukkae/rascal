@@ -15,8 +15,6 @@ class Actor;
 
 class Engine {
 public:
-	Gui gui; // moved
-	Renderer renderer; // moved
 	TCOD_key_t lastKey;
 	TCOD_mouse_t mouse;
 
@@ -44,7 +42,6 @@ private:
     template<class Archive>
     void serialize(Archive & ar, const unsigned int version)
     {
-		ar & gui;
 		ar & gameplayState; // TODO of course, serialize states
     }
 };

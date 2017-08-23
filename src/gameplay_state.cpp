@@ -2,9 +2,9 @@
 #include "engine.hpp"
 
 void GameplayState::init() {
-	gui = &engine.gui;
+	gui = std::unique_ptr<Gui>(new Gui());
 	gui->setState(this);
-	renderer = &engine.renderer;
+	renderer = std::unique_ptr<Renderer>(new Renderer());
 	renderer->setState(this);
 
 	player               = new Actor(40, 25, '@', "you", TCODColor::white, 2); // TODO

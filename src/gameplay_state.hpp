@@ -55,8 +55,8 @@ private:
 	Actor* player; // TODO fix reliance on explicitly pointing to player
 	Actor* stairs; // likewise, this feels bad
 	std::unique_ptr<Map> map;
-	Gui* gui;
-	Renderer* renderer;
+	std::unique_ptr<Gui> gui;
+	std::unique_ptr<Renderer> renderer;
 
 	TCOD_key_t lastKey;
 	TCOD_mouse_t mouse;
