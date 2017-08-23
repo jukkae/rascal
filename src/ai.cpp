@@ -15,6 +15,10 @@
 #include <boost/serialization/export.hpp>
 #include <boost/serialization/vector.hpp>
 
+void DummyAction::execute() {
+	std::cout << "Dummy action executed\n";
+}
+
 static const int TRACKING_TURNS = 3;
 static const float DEFAULT_TURN_LENGTH = 100;
 

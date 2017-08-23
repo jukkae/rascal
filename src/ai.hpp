@@ -29,6 +29,22 @@ private:
 	}
 };
 
+class Action {
+public:
+	Action(Actor* actor, float length = 100.0f) : actor(actor), length(length) {;}
+	virtual void execute() = 0;
+	float getLength() { return length; }
+private:
+	Actor* actor;
+	float length;
+}; // TODO move where this really belongs later on!
+
+class DummyAction : public Action {
+public:
+	DummyAction(Actor* actor) : Action(actor, 1000.0f) {;} // TODO testing
+	void execute();
+};
+
 class PlayerAi : public Ai {
 public:
 	PlayerAi() : Ai(100, Faction::PLAYER), xpLevel(1) {;}
@@ -40,6 +56,7 @@ protected:
 	bool moveOrAttack(Actor* owner, GameplayState* state, int targetX, int targetY);
 	Actor* chooseFromInventory(Actor* owner);
 private:
+	Action* nextAction;
 	void handleActionKey(Actor* owner, int ascii, GameplayState* state);
 
 	friend class boost::serialization::access;
