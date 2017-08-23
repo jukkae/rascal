@@ -40,6 +40,4 @@ private:
 
 	void executeEngineCommand();
 };
-
-extern Engine engine; // TODO get rid of this, implement in a more robust way
 #endif /* ENGINE_HPP */

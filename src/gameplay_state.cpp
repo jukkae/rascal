@@ -96,7 +96,8 @@ Actor* GameplayState::getPlayer() const {
 }
 
 Point GameplayState::getMouseLocation() {
-	return Point(engine.mouse.cx, engine.mouse.cy);
+	//return Point(engine.mouse.cx, engine.mouse.cy); TODO pass mouse location and other IO correctly!
+	return Point(0, 0);
 }
 
 bool GameplayState::canWalk(int x, int y) {
