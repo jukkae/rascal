@@ -9,14 +9,17 @@ class GameplayState;
 #include <boost/serialization/export.hpp>
 #include <boost/serialization/vector.hpp>
 
+enum class Faction { PLAYER, ENEMY, NEUTRAL };
+
 class Ai {
 public:
-	explicit Ai() : speed(100) {;}
-	explicit Ai(float speed) : speed(speed) {;}
+	explicit Ai(float speed = 100, Faction faction = Faction::NEUTRAL) : speed(speed), faction(faction) {;}
 	virtual float update(Actor* owner, GameplayState* state) = 0;
 	virtual ~Ai() {};
 	float speed;
-	virtual bool isPlayer() { return false; }
+	bool isPlayer() { return faction == Faction::PLAYER; }
+protected:
+	Faction faction;
 private:
 	friend class boost::serialization::access;
 	template<class Archive>
@@ -27,12 +30,11 @@ private:
 
 class PlayerAi : public Ai {
 public:
-	PlayerAi() : xpLevel(1) {;}
+	PlayerAi() : Ai(100, Faction::PLAYER), xpLevel(1) {;}
 
 	int getNextLevelXp() const;
 	float update(Actor* owner, GameplayState* state) override;
 	int xpLevel;
-	bool isPlayer() override { return true; }
 protected:
 	bool moveOrAttack(Actor* owner, GameplayState* state, int targetX, int targetY);
 	Actor* chooseFromInventory(Actor* owner);
@@ -51,6 +53,7 @@ class MonsterAi : public Ai {
 public:
 	MonsterAi() : Ai(140), moveCount(0) {;}
 	MonsterAi(float speed) : Ai(speed) {;}
+
 	float update(Actor* owner, GameplayState* state) override;
 protected:
 	int moveCount;
