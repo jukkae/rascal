@@ -18,7 +18,7 @@ public:
 	TCOD_key_t lastKey;
 	TCOD_mouse_t mouse;
 
-	Engine(int dummy); // dummy parameter due to idiotic extern
+	Engine();
 	~Engine();
 	void init();
 

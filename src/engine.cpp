@@ -9,7 +9,7 @@
 
 std::string file = "save.txt";
 
-Engine::Engine(int dummy) {
+Engine::Engine() {
 	TCODConsole::initRoot(constants::SCREEN_WIDTH, constants::SCREEN_HEIGHT, "Rascal", false);
 	init();
 }

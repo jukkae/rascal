@@ -10,7 +10,7 @@
 #include "engine.hpp"
 #include "main.hpp"
 
-Engine engine(1);
+Engine engine;
 
 int main() {
 	while(!TCODConsole::isWindowClosed()) {
