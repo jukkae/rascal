@@ -91,7 +91,7 @@ Action* PlayerAi::getNextAction(Actor* actor) {
 		default: dir = Direction::NONE; break;
 	}
 	std::cout << "PLAYER ACTION\n";
-	return new MoveAction(actor, dir);
+	return new MoveAction(actor, dir); // TODO news leak memory currently
 }
 
 bool PlayerAi::moveOrAttack(Actor* owner, GameplayState* state, int targetX, int targetY) {
