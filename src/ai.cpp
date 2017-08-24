@@ -1,4 +1,5 @@
 #include "ai.hpp"
+#include "action.hpp"
 #include "actor.hpp"
 #include "attacker.hpp"
 #include "constants.hpp"
