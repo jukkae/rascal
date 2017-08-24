@@ -24,7 +24,7 @@ private:
 		ar & actor;
 		ar & length;
 	}
-}; // TODO move where this really belongs later on!
+};
 
 class EmptyAction : public Action {
 public:
