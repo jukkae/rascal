@@ -78,19 +78,20 @@ float PlayerAi::update(Actor* owner, GameplayState* state) {
 Action* PlayerAi::getNextAction(Actor* actor) {
 	int dx = 0;
 	int dy = 0;
+	Direction dir;
 	TCOD_key_t lastKey;
 	TCOD_mouse_t mouse;
 	TCODSystem::waitForEvent(TCOD_EVENT_KEY_PRESS | TCOD_EVENT_MOUSE, &lastKey, &mouse, true);
 	switch(lastKey.vk) {
-		case TCODK_UP:    dy = -1; break;
-		case TCODK_DOWN:  dy = 1;  break;
-		case TCODK_LEFT:  dx = -1; break;
-		case TCODK_RIGHT: dx = 1;  break;
+		case TCODK_UP:    dir = Direction::N; break;
+		case TCODK_DOWN:  dir = Direction::S; break;
+		case TCODK_LEFT:  dir = Direction::W; break;
+		case TCODK_RIGHT: dir = Direction::E; break;
 		// case TCODK_CHAR:  handleActionKey(owner, lastKey.c, state); break;
-		default: break;
+		default: dir = Direction::NONE; break;
 	}
 	std::cout << "PLAYER ACTION\n";
-	return new EmptyAction(actor);
+	return new MoveAction(actor, dir);
 }
 
 bool PlayerAi::moveOrAttack(Actor* owner, GameplayState* state, int targetX, int targetY) {
