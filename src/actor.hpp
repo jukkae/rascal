@@ -3,6 +3,7 @@
 
 #include "libtcod.hpp"
 #include <string>
+#include <queue>
 #include <boost/optional.hpp>
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
@@ -49,6 +50,8 @@ public:
 
 private:
 
+	std::queue<Action*> actionsQueue;
+
 	friend class boost::serialization::access;                                                                
     template<class Archive>                                                                                   
     void serialize(Archive & ar, const unsigned int version) {                                                
@@ -65,6 +68,7 @@ private:
 		ar & ai;
 		ar & pickable;
 		ar & container;
+		// ar & actionsQueue;
     }   
 };
 #endif /* ACTOR_HPP */

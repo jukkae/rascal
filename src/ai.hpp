@@ -11,24 +11,6 @@ class GameplayState;
 
 enum class Faction { PLAYER, ENEMY, NEUTRAL };
 
-class Ai {
-public:
-	explicit Ai(float speed = 100, Faction faction = Faction::NEUTRAL) : speed(speed), faction(faction) {;}
-	virtual float update(Actor* owner, GameplayState* state) = 0;
-	virtual ~Ai() {};
-	float speed;
-	bool isPlayer() { return faction == Faction::PLAYER; }
-protected:
-	Faction faction;
-private:
-	friend class boost::serialization::access;
-	template<class Archive>
-	void serialize(Archive & ar, const unsigned int version) {
-		ar & speed;
-		ar & faction;
-	}
-};
-
 class Action {
 public:
 	Action(Actor* actor, float length = 100.0f) : actor(actor), length(length) {;}
@@ -39,10 +21,35 @@ private:
 	float length;
 }; // TODO move where this really belongs later on!
 
+class EmptyAction : public Action {
+public:
+	EmptyAction(Actor* actor) : Action(actor, 200.0f) {;}
+	void execute() {std::cout<<"empty\n";}
+};
+
 class DummyAction : public Action {
 public:
 	DummyAction(Actor* actor) : Action(actor, 1000.0f) {;} // TODO testing
 	void execute();
+};
+
+class Ai {
+public:
+	explicit Ai(float speed = 100, Faction faction = Faction::NEUTRAL) : speed(speed), faction(faction) {;}
+	virtual float update(Actor* owner, GameplayState* state) = 0;
+	virtual ~Ai() {};
+	float speed;
+	bool isPlayer() { return faction == Faction::PLAYER; }
+	Action* getNextAction(Actor* actor) { return new EmptyAction(actor); }
+protected:
+	Faction faction;
+private:
+	friend class boost::serialization::access;
+	template<class Archive>
+	void serialize(Archive & ar, const unsigned int version) {
+		ar & speed;
+		ar & faction;
+	}
 };
 
 class PlayerAi : public Ai {

@@ -14,6 +14,11 @@ Actor::~Actor() {
 }
 
 float Actor::update(GameplayState* state) {
+	if(ai) {
+		if(actionsQueue.empty()) actionsQueue.push(ai->getNextAction(this));
+		actionsQueue.front()->execute();
+		actionsQueue.pop();
+	}
 	return ai ? ai->update(this, state) : DEFAULT_TURN_LENGTH;
 }
 
