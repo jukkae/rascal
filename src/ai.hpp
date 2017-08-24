@@ -19,18 +19,37 @@ public:
 private:
 	Actor* actor;
 	float length;
+
+	friend class boost::serialization::access;
+	template<class Archive>
+	void serialize(Archive & ar, const unsigned int version) {
+		ar & actor;
+		ar & length;
+	}
 }; // TODO move where this really belongs later on!
 
 class EmptyAction : public Action {
 public:
 	EmptyAction(Actor* actor) : Action(actor, 200.0f) {;}
 	void execute() {std::cout<<"empty\n";}
+private:
+	friend class boost::serialization::access;
+	template<class Archive>
+	void serialize(Archive & ar, const unsigned int version) {
+		ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(Action);
+	}
 };
 
 class DummyAction : public Action {
 public:
 	DummyAction(Actor* actor) : Action(actor, 1000.0f) {;} // TODO testing
 	void execute();
+private:
+	friend class boost::serialization::access;
+	template<class Archive>
+	void serialize(Archive & ar, const unsigned int version) {
+		ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(Action);
+	}
 };
 
 class Ai {

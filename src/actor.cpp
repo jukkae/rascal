@@ -16,21 +16,14 @@ Actor::~Actor() {
 float Actor::update(GameplayState* state) {
 	if(ai) {
 		if(actionsQueue.empty()) actionsQueue.push(ai->getNextAction(this));
+		float turnCost = actionsQueue.front()->getLength();
 		actionsQueue.front()->execute();
 		actionsQueue.pop();
+		return turnCost;
 	}
-	return ai ? ai->update(this, state) : DEFAULT_TURN_LENGTH;
+	else return DEFAULT_TURN_LENGTH;
+	//return ai ? ai->update(this, state) : DEFAULT_TURN_LENGTH;
 }
-
-/* TODO FIXME URGENT and NEXT UP and all that jazz: new implementation gist:
-   Actor::update() {
-	if (actionsQueue.isEmpty()) actionsQueue.add(ai->getNewAction());
-	actionsQueue[0].execute();
-	actionsQueue.pop_first();
-   }
-   In this model, MonsterAi just generates Actions just as it basically does now.
-   PlayerAi will request kbd input from inputHandler, and will block until inputHandler responds.
-*/
 
 float Actor::getDistance(int cx, int cy) const {
 	int dx = x-cx;

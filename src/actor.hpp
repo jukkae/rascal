@@ -49,7 +49,6 @@ public:
 	void setState(GameplayState* state) { s = state; } // temporary for getting access to state's actors
 
 private:
-
 	std::queue<Action*> actionsQueue;
 
 	friend class boost::serialization::access;                                                                
@@ -68,7 +67,7 @@ private:
 		ar & ai;
 		ar & pickable;
 		ar & container;
-		// ar & actionsQueue;
+		// ar & actionsQueue; TODO serialization
     }   
 };
 #endif /* ACTOR_HPP */
