@@ -14,7 +14,7 @@ enum class Faction { PLAYER, ENEMY, NEUTRAL };
 class Action {
 public:
 	Action(Actor* actor, float length = 100.0f) : actor(actor), length(length) {;}
-	virtual void execute() = 0;
+	virtual void execute() = 0; // TODO have action return bool whether it's possible or not, return ctrl to user if not
 	float getLength() { return length; }
 private:
 	Actor* actor;
@@ -59,7 +59,7 @@ public:
 	virtual ~Ai() {};
 	float speed;
 	bool isPlayer() { return faction == Faction::PLAYER; }
-	Action* getNextAction(Actor* actor) { return new EmptyAction(actor); }
+	virtual Action* getNextAction(Actor* actor) { return new EmptyAction(actor); }
 protected:
 	Faction faction;
 private:
@@ -78,6 +78,7 @@ public:
 	int getNextLevelXp() const;
 	float update(Actor* owner, GameplayState* state) override;
 	int xpLevel;
+	Action* getNextAction(Actor* actor) override;
 protected:
 	bool moveOrAttack(Actor* owner, GameplayState* state, int targetX, int targetY);
 	Actor* chooseFromInventory(Actor* owner);

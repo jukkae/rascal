@@ -78,6 +78,24 @@ float PlayerAi::update(Actor* owner, GameplayState* state) {
 	return 100 * (100 / speed);
 }
 
+Action* PlayerAi::getNextAction(Actor* actor) {
+	int dx = 0;
+	int dy = 0;
+	TCOD_key_t lastKey;
+	TCOD_mouse_t mouse;
+	TCODSystem::waitForEvent(TCOD_EVENT_KEY_PRESS | TCOD_EVENT_MOUSE, &lastKey, &mouse, true);
+	switch(lastKey.vk) {
+		case TCODK_UP:    dy = -1; break;
+		case TCODK_DOWN:  dy = 1;  break;
+		case TCODK_LEFT:  dx = -1; break;
+		case TCODK_RIGHT: dx = 1;  break;
+		// case TCODK_CHAR:  handleActionKey(owner, lastKey.c, state); break;
+		default: break;
+	}
+	std::cout << "PLAYER ACTION\n";
+	return new EmptyAction(actor);
+}
+
 bool PlayerAi::moveOrAttack(Actor* owner, GameplayState* state, int targetX, int targetY) {
 	if (state->isWall(targetX, targetY)) return false;
 	// look for living actors to attack
