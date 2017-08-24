@@ -40,18 +40,6 @@ private:
 	}
 };
 
-class DummyAction : public Action {
-public:
-	DummyAction(Actor* actor) : Action(actor, 1000.0f) {;} // TODO testing
-	void execute();
-private:
-	friend class boost::serialization::access;
-	template<class Archive>
-	void serialize(Archive & ar, const unsigned int version) {
-		ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(Action);
-	}
-};
-
 class Ai {
 public:
 	explicit Ai(float speed = 100, Faction faction = Faction::NEUTRAL) : speed(speed), faction(faction) {;}
@@ -83,7 +71,6 @@ protected:
 	bool moveOrAttack(Actor* owner, GameplayState* state, int targetX, int targetY);
 	Actor* chooseFromInventory(Actor* owner);
 private:
-	Action* nextAction;
 	void handleActionKey(Actor* owner, int ascii, GameplayState* state);
 
 	friend class boost::serialization::access;
