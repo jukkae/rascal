@@ -23,6 +23,7 @@ float Actor::update(GameplayState* state) {
 		return turnCost;
 	}
 	else return DEFAULT_TURN_LENGTH; // ai-less actors should not get turns in the first place
+	// actually, maybe they should: for example, decaying materials etc!
 	//return ai ? ai->update(this, state) : DEFAULT_TURN_LENGTH;
 }
 
