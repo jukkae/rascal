@@ -16,9 +16,10 @@ Actor::~Actor() {
 float Actor::update(GameplayState* state) {
 	if(ai) {
 		if(actionsQueue.empty()) actionsQueue.push(ai->getNextAction(this));
-		float turnCost = actionsQueue.front()->getLength();
+		float actionCost = actionsQueue.front()->getLength();
 		actionsQueue.front()->execute();
 		actionsQueue.pop();
+		float turnCost = 100.0f * actionCost / ai->speed;
 		return turnCost;
 	}
 	else return DEFAULT_TURN_LENGTH; // ai-less actors should not get turns in the first place
