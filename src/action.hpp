@@ -16,7 +16,7 @@ enum class Direction { N, NE, E, SE, S, SW, W, NW, NONE };
 class Action {
 public:
 	Action(Actor* actor, float length = 100.0f) : actor(actor), length(length) {;}
-	virtual bool execute() = 0; // TODO have action return bool whether it's possible or not, return ctrl to user if not
+	virtual bool execute() = 0;
 	float getLength() { return length; }
 protected:
 	Actor* actor;
