@@ -31,13 +31,11 @@ float PlayerAi::update(Actor* owner, GameplayState* state) {
 
 	if (owner->destructible && owner->destructible->isDead()) return DEFAULT_TURN_LENGTH;
 	TCOD_key_t lastKey;
-	TCOD_mouse_t mouse;
-	TCODSystem::waitForEvent(TCOD_EVENT_KEY_PRESS | TCOD_EVENT_MOUSE, &lastKey, &mouse, true);
+	TCODSystem::waitForEvent(TCOD_EVENT_KEY_PRESS, &lastKey, nullptr, true);
 	switch(lastKey.vk) {
 		case TCODK_CHAR:  handleActionKey(owner, lastKey.c, state); break;
 		default: break;
 	}
-	if(mouse.dx != 0 || mouse.dy != 0) return 0; // TODO hack
 	return 100 * (100 / speed);
 }
 

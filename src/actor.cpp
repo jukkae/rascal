@@ -21,7 +21,7 @@ float Actor::update(GameplayState* state) {
 		actionsQueue.pop();
 		return turnCost;
 	}
-	else return DEFAULT_TURN_LENGTH;
+	else return DEFAULT_TURN_LENGTH; // ai-less actors should not get turns in the first place
 	//return ai ? ai->update(this, state) : DEFAULT_TURN_LENGTH;
 }
 
