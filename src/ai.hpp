@@ -40,7 +40,6 @@ public:
 	int xpLevel;
 	Action* getNextAction(Actor* actor) override;
 protected:
-	bool moveOrAttack(Actor* owner, GameplayState* state, int targetX, int targetY);
 	Actor* chooseFromInventory(Actor* owner);
 private:
 	void handleActionKey(Actor* owner, int ascii, GameplayState* state);
