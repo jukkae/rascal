@@ -2,6 +2,8 @@
 #include "engine.hpp"
 
 void GameplayState::init() {
+	inputHandler = std::unique_ptr<InputHandler>(new InputHandler());
+
 	gui = std::unique_ptr<Gui>(new Gui());
 	gui->setState(this);
 	renderer = std::unique_ptr<Renderer>(new Renderer());
@@ -49,6 +51,10 @@ void GameplayState::update(Engine* engine) {
 		markExploredTiles();
 		render(engine);
 	}
+}
+
+void GameplayState::handleEvents(Engine* engine) {
+	// TODO
 }
 
 void GameplayState::render(Engine* engine) {

@@ -29,7 +29,7 @@ int PlayerAi::getNextLevelXp() const {
 float PlayerAi::update(Actor* owner, GameplayState* state) {
 	if (owner->destructible->xp >= getNextLevelXp()) levelUpMenu(owner, state);
 
-	if (owner->destructible && owner->destructible->isDead()) return DEFAULT_TURN_LENGTH;
+	// if (owner->destructible && owner->destructible->isDead()) return DEFAULT_TURN_LENGTH; TODO send DEAD event or something
 	TCOD_key_t lastKey;
 	TCODSystem::waitForEvent(TCOD_EVENT_KEY_PRESS, &lastKey, nullptr, true);
 	switch(lastKey.vk) {

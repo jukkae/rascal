@@ -9,13 +9,14 @@ class Engine;
 #include "map.hpp"
 #include "point.hpp"
 #include "renderer.hpp"
+#include "input_handler.hpp"
 
 class GameplayState : public State {
 public:
 	void init() override;
 	void cleanup() override;
 
-	void handleEvents(Engine* engine) override {;} // TODO
+	void handleEvents(Engine* engine) override;
 	void update(Engine* engine) override;
 	void render(Engine* engine) override;
 
@@ -57,6 +58,7 @@ private:
 	std::unique_ptr<Map> map;
 	std::unique_ptr<Gui> gui;
 	std::unique_ptr<Renderer> renderer;
+	std::unique_ptr<InputHandler> inputHandler;
 
 	TCOD_key_t lastKey;
 	TCOD_mouse_t mouse;
