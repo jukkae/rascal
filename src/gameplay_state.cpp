@@ -54,7 +54,7 @@ void GameplayState::update(Engine* engine) {
 }
 
 void GameplayState::handleEvents(Engine* engine) {
-	// TODO
+	inputHandler->handleEvents(engine);
 }
 
 void GameplayState::render(Engine* engine) {
