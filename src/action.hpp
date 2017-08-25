@@ -16,7 +16,7 @@ enum class Direction { N, NE, E, SE, S, SW, W, NW, NONE };
 class Action {
 public:
 	Action(Actor* actor, float length = 100.0f) : actor(actor), length(length) {;}
-	virtual void execute() = 0; // TODO have action return bool whether it's possible or not, return ctrl to user if not
+	virtual bool execute() = 0; // TODO have action return bool whether it's possible or not, return ctrl to user if not
 	float getLength() { return length; }
 protected:
 	Actor* actor;
@@ -33,7 +33,7 @@ private:
 class EmptyAction : public Action {
 public:
 	EmptyAction(Actor* actor) : Action(actor, 200.0f) {;}
-	void execute() {std::cout<<"empty\n";}
+	bool execute() { std::cout<<"empty\n"; return true; }
 private:
 	friend class boost::serialization::access;
 	template<class Archive>
@@ -45,7 +45,7 @@ private:
 class MoveAction : public Action {
 public:
 	MoveAction(Actor* actor, Direction direction) : Action(actor, 100.0f), direction(direction) {;}
-	void execute();
+	bool execute();
 private:
 	Direction direction;
 
@@ -59,7 +59,7 @@ private:
 
 struct ActionResult {
 	bool succeeded;
-	boost::optional<Action> alternativeAction; // value would be preferable to pointer
+	boost::optional<Action> alternativeAction;
 };
 
 
