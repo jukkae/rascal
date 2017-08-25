@@ -43,6 +43,7 @@ protected:
 	Actor* chooseFromInventory(Actor* owner);
 private:
 	void handleActionKey(Actor* owner, int ascii, GameplayState* state);
+	void levelUpMenu(Actor* owner, GameplayState* state); // TODO only for untangling update cycle
 
 	friend class boost::serialization::access;
 	template<class Archive>

@@ -27,31 +27,8 @@ int PlayerAi::getNextLevelXp() const {
 }
 
 float PlayerAi::update(Actor* owner, GameplayState* state) {
-	int levelUpXp = getNextLevelXp();
-	if (owner->destructible->xp >= levelUpXp) {
-		++xpLevel;
-		owner->destructible->xp -= levelUpXp;
-		state->message(TCODColor::yellow, "You've reached level %d!", xpLevel);
-		state->showLevelUpMenu();
-		Menu::MenuItemCode menuItem = state->pickFromMenu(Menu::DisplayMode::PAUSE);
+	if (owner->destructible->xp >= getNextLevelXp()) levelUpMenu(owner, state);
 
-		switch (menuItem) {
-		case Menu::MenuItemCode::CONSTITUTION :
-			owner->destructible->maxHp += 20;
-			owner->destructible->hp += 20;
-			break;
-		case Menu::MenuItemCode::STRENGTH :
-			owner->attacker->power += 1;
-			break;
-		case Menu::MenuItemCode::AGILITY :
-			owner->destructible->defense += 1;
-			break;
-		case Menu::MenuItemCode::SPEED :
-			owner->ai->speed += 10;
-			break;
-		default: break;
-		}
-	}
 	if (owner->destructible && owner->destructible->isDead()) return DEFAULT_TURN_LENGTH;
 	TCOD_key_t lastKey;
 	TCOD_mouse_t mouse;
@@ -62,6 +39,32 @@ float PlayerAi::update(Actor* owner, GameplayState* state) {
 	}
 	if(mouse.dx != 0 || mouse.dy != 0) return 0; // TODO hack
 	return 100 * (100 / speed);
+}
+
+void PlayerAi::levelUpMenu(Actor* owner, GameplayState* state) {
+	int levelUpXp = getNextLevelXp();
+	++xpLevel;
+	owner->destructible->xp -= levelUpXp;
+	state->message(TCODColor::yellow, "You've reached level %d!", xpLevel);
+	state->showLevelUpMenu();
+	Menu::MenuItemCode menuItem = state->pickFromMenu(Menu::DisplayMode::PAUSE);
+
+	switch (menuItem) {
+	case Menu::MenuItemCode::CONSTITUTION :
+		owner->destructible->maxHp += 20;
+		owner->destructible->hp += 20;
+		break;
+	case Menu::MenuItemCode::STRENGTH :
+		owner->attacker->power += 1;
+		break;
+	case Menu::MenuItemCode::AGILITY :
+		owner->destructible->defense += 1;
+		break;
+	case Menu::MenuItemCode::SPEED :
+		owner->ai->speed += 10;
+		break;
+	default: break;
+	}
 }
 
 Action* PlayerAi::getNextAction(Actor* actor) {
