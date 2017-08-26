@@ -15,9 +15,6 @@ class Actor;
 
 class Engine {
 public:
-	TCOD_key_t lastKey;
-	TCOD_mouse_t mouse;
-
 	Engine();
 	~Engine();
 	void init();
@@ -39,6 +36,5 @@ private:
 	std::queue<EngineCommand*> engineCommands;
 
 	void executeEngineCommand();
-	void updateEvents();
 };
 #endif /* ENGINE_HPP */

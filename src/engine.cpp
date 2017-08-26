@@ -28,7 +28,6 @@ void Engine::init() {
 
 void Engine::update() {
 	while(engineCommands.size() > 0) executeEngineCommand();
-	updateEvents();
 
 	states.back()->handleEvents(this);
 	states.back()->update(this);
@@ -40,10 +39,6 @@ void Engine::update() {
 void Engine::executeEngineCommand() {
 	engineCommands.front()->execute();
 	engineCommands.pop();
-}
-
-void Engine::updateEvents() {
-	TCODSystem::checkForEvent(TCOD_EVENT_KEY_PRESS | TCOD_EVENT_MOUSE, &lastKey, &mouse);
 }
 
 void Engine::exit() {

@@ -20,9 +20,10 @@ void MainMenuState::cleanup() {
 }
 
 void MainMenuState::handleEvents(Engine* engine) {
-	TCOD_key_t key = engine->lastKey; // maybe have some sort of eventBundle or something?
+	TCOD_key_t key;
+	TCODSystem::checkForEvent(TCOD_EVENT_KEY_PRESS, &key, nullptr);
 
-	switch (key.vk) { // TODO don't do this like this mmkay
+	switch (key.vk) {
 		case TCODK_UP:
 			if(selectedItem > 0) --selectedItem;
 			break;
@@ -35,7 +36,6 @@ void MainMenuState::handleEvents(Engine* engine) {
 		default:
 			break;
 	}
-	showMenu(engine);
 }
 
 void MainMenuState::update(Engine* engine) {
