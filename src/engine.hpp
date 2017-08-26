@@ -29,9 +29,7 @@ public:
 	void load();
 
 private:
-	DummyState dummyState;
-	GameplayState gameplayState;
-	MainMenuState mainMenuState;
+	State* gameplayState;
 	std::vector<State*> states;
 	std::queue<EngineCommand*> engineCommands;
 
