@@ -49,6 +49,8 @@ public:
 	void addActor(Actor* actor) { actors->push_back(actor); }
 
 	bool pickTile(int* x, int* y, float maxRange = 0.0f);
+
+	std::unique_ptr<InputHandler> inputHandler; // TODO private? singleton? something else?
 private:
 	int time = 0;
 	int level = 1;
@@ -58,7 +60,6 @@ private:
 	std::unique_ptr<Map> map;
 	std::unique_ptr<Gui> gui;
 	std::unique_ptr<Renderer> renderer;
-	std::unique_ptr<InputHandler> inputHandler;
 
 	TCOD_key_t lastKey;
 	TCOD_mouse_t mouse;
