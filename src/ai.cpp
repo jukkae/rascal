@@ -33,7 +33,10 @@ float PlayerAi::update(Actor* owner, GameplayState* state) {
 
 	// if (owner->destructible && owner->destructible->isDead()) return DEFAULT_TURN_LENGTH; TODO send DEAD event or something
 	TCOD_key_t lastKey;
-	TCODSystem::waitForEvent(TCOD_EVENT_KEY_PRESS, &lastKey, nullptr, true);
+
+	boost::optional<RawInputEvent> event = state->inputHandler->getEvent();
+	lastKey = event->key;
+
 	switch(lastKey.vk) {
 		case TCODK_CHAR:  handleActionKey(owner, lastKey.c, state); break;
 		default: break;
@@ -71,12 +74,9 @@ Action* PlayerAi::getNextAction(Actor* actor) {
 	Direction dir;
 	TCOD_key_t lastKey;
 	TCOD_mouse_t mouse;
-	//TCODSystem::waitForEvent(TCOD_EVENT_KEY_PRESS | TCOD_EVENT_MOUSE, &lastKey, &mouse, true);
 
 	boost::optional<RawInputEvent> event = actor->s->inputHandler->getEvent();
 	lastKey = event->key;
-
-	// TODO wait until *inputHandler* has a new key!
 
 	switch(lastKey.vk) {
 		case TCODK_UP:    dir = Direction::N; break;
@@ -110,7 +110,10 @@ Actor* PlayerAi::chooseFromInventory(Actor* owner) {
 	TCODConsole::flush();
 	// wait for a key press
 	TCOD_key_t key;
-	TCODSystem::waitForEvent(TCOD_EVENT_KEY_PRESS, &key, nullptr, true);
+
+	boost::optional<RawInputEvent> event = owner->s->inputHandler->getEvent();
+	key = event->key; // This probably doesn't work, but then again this whole code is not called rn
+
 	if(key.vk == TCODK_CHAR) {
 		int actorIndex=key.c - 'a';
 		if(actorIndex >= 0 && actorIndex < owner->container->inventory.size()) { return owner->container->inventory.at(actorIndex); }
