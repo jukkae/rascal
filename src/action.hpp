@@ -32,8 +32,8 @@ private:
 
 class EmptyAction : public Action {
 public:
-	EmptyAction(Actor* actor) : Action(actor, 200.0f) {;}
-	bool execute() { std::cout<<"empty\n"; return true; }
+	EmptyAction(Actor* actor) : Action(actor, 100.0f) {;}
+	bool execute() { return true; }
 private:
 	friend class boost::serialization::access;
 	template<class Archive>

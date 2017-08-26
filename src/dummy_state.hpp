@@ -6,7 +6,7 @@ public:
 	void cleanup() override {;}
 
 	void handleEvents(Engine* engine) override {;}
-	void update(Engine* engine) override {std::cout << "Dummy update\n";}
-	void render(Engine* engine) override {std::cout << "Dummy render\n";}
+	void update(Engine* engine) override {;}
+	void render(Engine* engine) override {;}
 };
 #endif /* DUMMY_STATE_HPP */

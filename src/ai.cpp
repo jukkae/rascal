@@ -86,7 +86,6 @@ Action* PlayerAi::getNextAction(Actor* actor) {
 		// case TCODK_CHAR:  handleActionKey(owner, lastKey.c, state); break;
 		default: dir = Direction::NONE; break;
 	}
-	std::cout << "PLAYER ACTION\n";
 	return new MoveAction(actor, dir); // TODO news leak memory currently
 }
 
