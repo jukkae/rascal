@@ -7,6 +7,7 @@ void InputHandler::handleEvents(Engine* engine) {
 	TCOD_key_t key;
 	TCOD_mouse_t mouse;
 	TCOD_event_t ev = TCODSystem::checkForEvent(TCOD_EVENT_ANY, &key, &mouse);
+	event = (RawInputEvent) { key, mouse, ev };
 }
 
 boost::optional<RawInputEvent> InputHandler::getEvent() {

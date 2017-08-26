@@ -16,6 +16,7 @@
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/serialization/export.hpp>
 #include <boost/serialization/vector.hpp>
+#include "boost/optional.hpp"
 
 static const int TRACKING_TURNS = 3;
 static const float DEFAULT_TURN_LENGTH = 100;
@@ -72,6 +73,8 @@ Action* PlayerAi::getNextAction(Actor* actor) {
 	TCOD_mouse_t mouse;
 	//TCODSystem::waitForEvent(TCOD_EVENT_KEY_PRESS | TCOD_EVENT_MOUSE, &lastKey, &mouse, true);
 
+	boost::optional<RawInputEvent> event = actor->s->inputHandler->getEvent();
+	lastKey = event->key;
 
 	// TODO wait until *inputHandler* has a new key!
 
