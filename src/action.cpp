@@ -17,8 +17,9 @@ bool MoveAction::execute() {
 		case Direction::SW: targetY += 1; targetX -= 1; break;
 		case Direction::W:                targetX -= 1; break;
 		case Direction::NW: targetY -= 1; targetX -= 1; break;
-		case Direction::NONE: break;
-		default: break;
+		//case Direction::NONE: break;
+		//default: break;
+		default: return false; // TODO for testing
 	}
 
 	if (state->isWall(targetX, targetY)) return false;
