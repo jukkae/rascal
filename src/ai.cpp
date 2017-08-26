@@ -70,6 +70,9 @@ Action* PlayerAi::getNextAction(Actor* actor) {
 	TCOD_key_t lastKey;
 	TCOD_mouse_t mouse;
 	TCODSystem::waitForEvent(TCOD_EVENT_KEY_PRESS | TCOD_EVENT_MOUSE, &lastKey, &mouse, true);
+
+	// TODO wait until *inputHandler* has a new key!
+
 	switch(lastKey.vk) {
 		case TCODK_UP:    dir = Direction::N; break;
 		case TCODK_DOWN:  dir = Direction::S; break;
