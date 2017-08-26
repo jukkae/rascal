@@ -7,6 +7,7 @@
 #include "destructible.hpp"
 #include "gameplay_state.hpp"
 #include "gui.hpp"
+#include "input_handler.hpp"
 #include "map.hpp"
 #include "pickable.hpp"
 #include "persistent.hpp"
@@ -69,7 +70,8 @@ Action* PlayerAi::getNextAction(Actor* actor) {
 	Direction dir;
 	TCOD_key_t lastKey;
 	TCOD_mouse_t mouse;
-	TCODSystem::waitForEvent(TCOD_EVENT_KEY_PRESS | TCOD_EVENT_MOUSE, &lastKey, &mouse, true);
+	//TCODSystem::waitForEvent(TCOD_EVENT_KEY_PRESS | TCOD_EVENT_MOUSE, &lastKey, &mouse, true);
+
 
 	// TODO wait until *inputHandler* has a new key!
 
