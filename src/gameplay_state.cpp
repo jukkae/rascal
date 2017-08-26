@@ -209,3 +209,5 @@ bool GameplayState::pickTile(int* x, int* y, float maxRange) {
 	}
 	return false;
 }
+
+BOOST_CLASS_EXPORT(GameplayState)
