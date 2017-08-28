@@ -141,23 +141,6 @@ Actor* PlayerAi::chooseFromInventory(Actor* owner) {
 
 void PlayerAi::handleActionKey(Actor* owner, int ascii, GameplayState* state) {
 	switch(ascii) {
-		case 'g' : // pickup item
-		{
-		bool found = false;
-		for(Actor* actor : *owner->getActors()) {
-			if(actor->pickable && actor->x == owner->x && actor->y == owner->y) {
-				if(actor->pickable->pick(actor,owner)) {
-					found = true;
-					state->message(TCODColor::green, "You pick up the %s.", actor->name.c_str());
-					break;
-				} else if(!found) {
-					found = true;
-					state->message(TCODColor::red, "Your inventory is full.");
-				}
-			}
-		}
-		if(!found) { state->message(TCODColor::lightGrey, "There's nothing here that you can pick up."); }
-		} break;
 		case 'i' : // display inventory
 		{
 			Actor* actor = chooseFromInventory(owner);

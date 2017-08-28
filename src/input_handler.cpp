@@ -5,6 +5,7 @@
 
 #include "engine.hpp"
 #include "engine_command.hpp"
+#include "inventory_menu_state.hpp"
 #include "main_menu_state.hpp"
 
 void InputHandler::handleEvents(Engine* engine) {
@@ -18,6 +19,15 @@ void InputHandler::handleEvents(Engine* engine) {
 				mainMenuState->init();
 				engine->pushState(mainMenuState);
 				return;
+			}
+			case TCODK_CHAR: {
+				if(key.c == 'i') {
+					// TODO inventory needs to know about the player, so move elsewhere and pass info
+					State* inventoryMenuState = new InventoryMenuState();
+					inventoryMenuState->init();
+					engine->pushState(inventoryMenuState);
+					return;
+				}
 			}
 			default: break;
 		}
