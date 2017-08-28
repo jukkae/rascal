@@ -39,6 +39,9 @@ void InputHandler::handleEvents(Engine* engine) {
 }
 
 boost::optional<RawInputEvent> InputHandler::getEvent() {
+	// TODO change signature to getEvent(Actor* actor), call with this->owner from Ai
+	// and then create new state if key.c == 'i'.
+	// A bit nasty, but works without too much trouble.
 	boost::optional<RawInputEvent> ev = event;
 	event = boost::none;
 	return ev;
