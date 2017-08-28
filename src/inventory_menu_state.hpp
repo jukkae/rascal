@@ -6,9 +6,10 @@
 #include "libtcod.hpp"
 
 class Engine;
+class Actor;
 class InventoryMenuState : public State {
 public:
-	InventoryMenuState() : console(constants::INVENTORY_WIDTH, constants::INVENTORY_HEIGHT) {;}
+	InventoryMenuState(Actor* actor) : console(constants::INVENTORY_WIDTH, constants::INVENTORY_HEIGHT), actor(actor) {;}
 	void init() override;
 	void cleanup() override;
 
@@ -17,5 +18,6 @@ public:
 	void render(Engine* engine) override;
 private:
 	TCODConsole	console;
+	Actor* actor;
 };
 #endif /* INVENTORY_MENU_STATE_HPP */

@@ -1,6 +1,7 @@
 #include <iostream>
 #include "inventory_menu_state.hpp"
 #include "engine.hpp"
+#include "actor.hpp"
 
 void InventoryMenuState::init() {
 
@@ -21,13 +22,12 @@ void InventoryMenuState::update(Engine* engine) {
 void InventoryMenuState::render(Engine* engine) {
 	console.setDefaultForeground(TCODColor(200,180,50));
 	console.printFrame(0, 0, constants::INVENTORY_WIDTH, constants::INVENTORY_HEIGHT, true, TCOD_BKGND_DEFAULT, "inventory");
-
-	/*
 	console.setDefaultForeground(TCODColor::white);
+	/*
 	int shortcut = 'a';
 	int y = 1;
-	for (Actor* actor : owner->container->inventory) {
-		con.print(2, y, "(%c) %s", shortcut, actor->name.c_str());
+	for (Actor* a : actor->container->inventory) {
+		console.print(2, y, "(%c) %s", shortcut, a->name.c_str());
 		++y;
 		++shortcut;
 	}
@@ -39,12 +39,12 @@ void InventoryMenuState::render(Engine* engine) {
 	/*
 	TCOD_key_t key;
 
-	boost::optional<RawInputEvent> event = owner->s->inputHandler->getEvent();
+	boost::optional<RawInputEvent> event = actor->s->inputHandler->getEvent();
 	key = event->key; // This probably doesn't work, but then again this whole code is not called rn
 
 	if(key.vk == TCODK_CHAR) {
 		int actorIndex=key.c - 'a';
-		if(actorIndex >= 0 && actorIndex < owner->container->inventory.size()) { return owner->container->inventory.at(actorIndex); }
+		if(actorIndex >= 0 && actorIndex < actor->container->inventory.size()) { return actor->container->inventory.at(actorIndex); }
 	}
 	*/
 }
