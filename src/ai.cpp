@@ -79,11 +79,29 @@ Action* PlayerAi::getNextAction(Actor* actor) {
 	lastKey = event->key;
 
 	switch(lastKey.vk) {
-		case TCODK_UP:    dir = Direction::N; break;
-		case TCODK_DOWN:  dir = Direction::S; break;
-		case TCODK_LEFT:  dir = Direction::W; break;
-		case TCODK_RIGHT: dir = Direction::E; break;
-		// case TCODK_CHAR:  handleActionKey(owner, lastKey.c, state); break;
+		case TCODK_UP: {
+			dir = Direction::N;
+			break;
+		}
+		case TCODK_DOWN: {
+			dir = Direction::S;
+			break;
+		}
+		case TCODK_LEFT: {
+			dir = Direction::W;
+			break;
+		}
+		case TCODK_RIGHT: {
+			dir = Direction::E;
+			break;
+		}
+		case TCODK_CHAR: {
+			switch(lastKey.c) {
+				case 'g': {
+					return new PickupAction(actor);
+				}
+			}
+		}
 		default: dir = Direction::NONE; break;
 	}
 	return new MoveAction(actor, dir); // TODO news leak memory currently

@@ -42,3 +42,22 @@ bool MoveAction::execute() {
 	actor->y = targetY;
 	return true;
 }
+
+bool PickupAction::execute() {
+	bool found = false;
+	for(Actor* a : *actor->getActors()) {
+		if(a->pickable && a->x == actor->x && a->y == actor->y) {
+			if(a->pickable->pick(a, actor)) {
+				found = true;
+				actor->s->message(TCODColor::green, "You pick up the %s.", a->name.c_str());
+				return true;
+			} else if(!found) {
+				found = true;
+				actor->s->message(TCODColor::red, "Your inventory is full.");
+				return false;
+			}
+		}
+	}
+	if(!found) { actor->s->message(TCODColor::lightGrey, "There's nothing here that you can pick up."); }
+	return false;
+}
