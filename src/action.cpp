@@ -17,9 +17,8 @@ bool MoveAction::execute() {
 		case Direction::SW: targetY += 1; targetX -= 1; break;
 		case Direction::W:                targetX -= 1; break;
 		case Direction::NW: targetY -= 1; targetX -= 1; break;
-		//case Direction::NONE: break;
-		//default: break;
-		default: return false; // TODO for testing
+		case Direction::NONE: return false;
+		default: break;
 	}
 
 	if (state->isWall(targetX, targetY)) return false;
@@ -28,7 +27,7 @@ bool MoveAction::execute() {
 	for (Actor* a : *actor->getActors()) {
 		if (a->destructible && !a->destructible->isDead() && a->x == targetX && a->y == targetY) {
 			actor->attacker->attack(actor, a);
-			return false;
+			return true;
 		}
 	}
 	// look for corpses or items

@@ -62,13 +62,13 @@ void PlayerAi::levelUpMenu(Actor* owner, GameplayState* state) {
 }
 
 Action* PlayerAi::getNextAction(Actor* actor) {
-	Direction dir;
+	Direction dir = Direction::NONE;
 	TCOD_key_t lastKey;
 	TCOD_mouse_t mouse;
 
 	boost::optional<RawInputEvent> event = actor->s->inputHandler->getEvent(actor);
 	if(!event) {
-		return new EmptyAction(actor); // TODO
+		return new EmptyAction(actor);
 	}
 	lastKey = event->key;
 
@@ -101,15 +101,43 @@ Action* PlayerAi::getNextAction(Actor* actor) {
 	return new MoveAction(actor, dir); // TODO news leak memory currently
 }
 
-float MonsterAi::update(Actor* owner, GameplayState* state) {
-	if (owner->destructible && owner->destructible->isDead()) return DEFAULT_TURN_LENGTH;
-	if (state->isInFov(owner->x, owner->y)) {
+Action* MonsterAi::getNextAction(Actor* actor) {
+	Direction direction = Direction::NONE;
+	if (actor->destructible && actor->destructible->isDead()) return new WaitAction(actor);
+	if (actor->s->isInFov(actor->x, actor->y)) {
 		moveCount = TRACKING_TURNS;
 	} else { --moveCount; }
+	if (moveCount > 0) {
+		Actor* player = actor->s->getPlayer();
+		int targetX = player->x;
+		int targetY = player->y;
+		int dx = targetX - actor->x;
+		int dy = targetY - actor->y;
+		int stepDx = (dx > 0 ? 1 : -1);
+		int stepDy = (dy > 0 ? 1 : -1);
+		float distance = sqrtf(dx*dx + dy*dy);
+		// TODO reimplement wall sliding
+		if(distance >= 2) {
+			// only threaten when far away
+			// state->message(TCODColor::white, "The %s threatens you!", owner->name.c_str());
+		}
+		if (stepDx ==  0 && stepDy == -1) direction = Direction::N;
+		if (stepDx ==  1 && stepDy == -1) direction = Direction::NE;
+		if (stepDx ==  1 && stepDy ==  0) direction = Direction::E;
+		if (stepDx ==  1 && stepDy ==  1) direction = Direction::SE;
+		if (stepDx ==  0 && stepDy ==  1) direction = Direction::S;
+		if (stepDx == -1 && stepDy ==  1) direction = Direction::SW;
+		if (stepDx == -1 && stepDy ==  0) direction = Direction::W;
+		if (stepDx == -1 && stepDy == -1) direction = Direction::NW;
+		return new MoveAction(actor, direction);
+	}
+	return new WaitAction(actor);
+}
+
+float MonsterAi::update(Actor* owner, GameplayState* state) {
 	if(moveCount > 0) {
 		moveOrAttack(owner, state, state->getPlayer()->x, state->getPlayer()->y);
-	}
-	return 100 * (100 / speed);
+	} return 100.0f;
 }
 
 void MonsterAi::moveOrAttack(Actor* owner, GameplayState* state, int targetX, int targetY) {

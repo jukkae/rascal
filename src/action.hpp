@@ -32,7 +32,19 @@ private:
 
 class EmptyAction : public Action {
 public:
-	EmptyAction(Actor* actor) : Action(actor, 100.0f) {;}
+	EmptyAction(Actor* actor) : Action(actor, 0.0f) {;}
+	bool execute() { return true; }
+private:
+	friend class boost::serialization::access;
+	template<class Archive>
+	void serialize(Archive & ar, const unsigned int version) {
+		ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(Action);
+	}
+};
+
+class WaitAction : public Action {
+public:
+	WaitAction(Actor* actor) : Action(actor, 100.0f) {;}
 	bool execute() { return true; }
 private:
 	friend class boost::serialization::access;

@@ -19,7 +19,7 @@ public:
 	virtual ~Ai() {};
 	float speed;
 	bool isPlayer() { return faction == Faction::PLAYER; }
-	virtual Action* getNextAction(Actor* actor) { return new EmptyAction(actor); }
+	virtual Action* getNextAction(Actor* actor) { return new WaitAction(actor); }
 protected:
 	Faction faction;
 private:
@@ -57,6 +57,7 @@ public:
 	MonsterAi(float speed) : Ai(speed) {;}
 
 	float update(Actor* owner, GameplayState* state) override;
+	Action* getNextAction(Actor* actor) override;
 protected:
 	int moveCount;
 	void moveOrAttack(Actor* owner, GameplayState* state, int targetX, int targetY);
