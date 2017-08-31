@@ -117,7 +117,7 @@ Action* MonsterAi::getNextAction(Actor* actor) {
 		int stepDx = (dx > 0 ? 1 : -1);
 		int stepDy = (dy > 0 ? 1 : -1);
 		float distance = sqrtf(dx*dx + dy*dy);
-		// TODO reimplement wall sliding
+
 		if(distance >= 2) {
 			state->message(TCODColor::white, "The %s threatens you!", actor->name.c_str());
 			dx = (int) (round(dx / distance));
