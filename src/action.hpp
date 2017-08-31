@@ -70,7 +70,7 @@ private:
 		ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(Action);
 		ar & down;
 	}
-}
+};
 
 class PickupAction : public Action {
 public:
