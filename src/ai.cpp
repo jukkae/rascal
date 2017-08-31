@@ -141,6 +141,16 @@ Action* MonsterAi::getNextAction(Actor* actor) {
 				if (stepDx ==  0 && stepDy ==  1) direction = Direction::S;
 				return new MoveAction(actor, direction);
 			}
+		} else { // Melee range
+			if (stepDx ==  0 && stepDy == -1) direction = Direction::N;
+			if (stepDx ==  1 && stepDy == -1) direction = Direction::NE;
+			if (stepDx ==  1 && stepDy ==  0) direction = Direction::E;
+			if (stepDx ==  1 && stepDy ==  1) direction = Direction::SE;
+			if (stepDx ==  0 && stepDy ==  1) direction = Direction::S;
+			if (stepDx == -1 && stepDy ==  1) direction = Direction::SW;
+			if (stepDx == -1 && stepDy ==  0) direction = Direction::W;
+			if (stepDx == -1 && stepDy == -1) direction = Direction::NW;
+			return new MoveAction(actor, direction);
 		}
 	}
 	return new WaitAction(actor);
