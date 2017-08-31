@@ -32,16 +32,6 @@ float PlayerAi::update(Actor* owner, GameplayState* state) {
 	if (owner->destructible->xp >= getNextLevelXp()) levelUpMenu(owner, state);
 
 	// if (owner->destructible && owner->destructible->isDead()) return DEFAULT_TURN_LENGTH; TODO send DEAD event or something
-	TCOD_key_t lastKey;
-
-	boost::optional<RawInputEvent> event = state->inputHandler->getEvent(owner);
-	if(!event) return 0.0f; // TODO
-	lastKey = event->key;
-
-	switch(lastKey.vk) {
-		case TCODK_CHAR:  handleActionKey(owner, lastKey.c, state); break;
-		default: break;
-	}
 	return 100 * (100 / speed);
 }
 
@@ -109,19 +99,6 @@ Action* PlayerAi::getNextAction(Actor* actor) {
 		default: dir = Direction::NONE; break;
 	}
 	return new MoveAction(actor, dir); // TODO news leak memory currently
-}
-
-void PlayerAi::handleActionKey(Actor* owner, int ascii, GameplayState* state) {
-	switch(ascii) {
-		case -89 : // '</>' key, damn nasty
-		{
-			if(state->getStairs()->x == owner->x && state->getStairs()->y == owner->y) {
-				state->nextLevel();
-			} else {
-				state->message(TCODColor::lightGrey, "There are no stairs here.");
-			}
-		} break;
-	}
 }
 
 float MonsterAi::update(Actor* owner, GameplayState* state) {
