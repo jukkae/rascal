@@ -11,11 +11,14 @@ struct RawInputEvent {
 };
 
 class Engine;
+class Actor;
 class InputHandler {
 public:
-	void handleEvents(Engine* engine);
-	boost::optional<RawInputEvent> getEvent();
+	InputHandler(Engine* engine) : engine(engine) {;}
+	void handleEvents();
+	boost::optional<RawInputEvent> getEvent(Actor* actor);
 private:
+	Engine* engine;
 	boost::optional<RawInputEvent> event;
 };
 #endif /* INPUT_HANDLER_HPP */

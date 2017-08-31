@@ -12,7 +12,7 @@ public:
 	enum class MenuItemCode { NONE, NEW_GAME, CONTINUE, EXIT };
 
 	MainMenuState() : console(constants::SCREEN_WIDTH, constants::SCREEN_HEIGHT) {;}
-	void init() override;
+	void init(Engine* engine) override;
 	void cleanup() override;
 
 	void handleEvents(Engine* engine) override;

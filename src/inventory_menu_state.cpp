@@ -3,7 +3,7 @@
 #include "engine.hpp"
 #include "actor.hpp"
 
-void InventoryMenuState::init() {
+void InventoryMenuState::init(Engine* engine) {
 
 }
 

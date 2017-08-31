@@ -1,8 +1,8 @@
 #include "gameplay_state.hpp"
 #include "engine.hpp"
 
-void GameplayState::init() {
-	inputHandler = std::unique_ptr<InputHandler>(new InputHandler());
+void GameplayState::init(Engine* engine) {
+	inputHandler = std::unique_ptr<InputHandler>(new InputHandler(engine));
 
 	gui = std::unique_ptr<Gui>(new Gui());
 	gui->setState(this);
@@ -54,7 +54,7 @@ void GameplayState::update(Engine* engine) {
 }
 
 void GameplayState::handleEvents(Engine* engine) {
-	inputHandler->handleEvents(engine);
+	inputHandler->handleEvents();
 }
 
 void GameplayState::render(Engine* engine) {

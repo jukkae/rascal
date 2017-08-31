@@ -34,7 +34,7 @@ float PlayerAi::update(Actor* owner, GameplayState* state) {
 	// if (owner->destructible && owner->destructible->isDead()) return DEFAULT_TURN_LENGTH; TODO send DEAD event or something
 	TCOD_key_t lastKey;
 
-	boost::optional<RawInputEvent> event = state->inputHandler->getEvent();
+	boost::optional<RawInputEvent> event = state->inputHandler->getEvent(owner);
 	lastKey = event->key;
 
 	switch(lastKey.vk) {
@@ -75,7 +75,7 @@ Action* PlayerAi::getNextAction(Actor* actor) {
 	TCOD_key_t lastKey;
 	TCOD_mouse_t mouse;
 
-	boost::optional<RawInputEvent> event = actor->s->inputHandler->getEvent();
+	boost::optional<RawInputEvent> event = actor->s->inputHandler->getEvent(actor);
 	lastKey = event->key;
 
 	switch(lastKey.vk) {
@@ -129,7 +129,7 @@ Actor* PlayerAi::chooseFromInventory(Actor* owner) {
 	// wait for a key press
 	TCOD_key_t key;
 
-	boost::optional<RawInputEvent> event = owner->s->inputHandler->getEvent();
+	boost::optional<RawInputEvent> event = owner->s->inputHandler->getEvent(owner);
 	key = event->key; // This probably doesn't work, but then again this whole code is not called rn
 
 	if(key.vk == TCODK_CHAR) {

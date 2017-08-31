@@ -10,7 +10,7 @@ class Actor;
 class InventoryMenuState : public State {
 public:
 	InventoryMenuState(Actor* actor) : console(constants::INVENTORY_WIDTH, constants::INVENTORY_HEIGHT), actor(actor) {;}
-	void init() override;
+	void init(Engine* engine) override;
 	void cleanup() override;
 
 	void handleEvents(Engine* engine) override;

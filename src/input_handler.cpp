@@ -8,7 +8,7 @@
 #include "inventory_menu_state.hpp"
 #include "main_menu_state.hpp"
 
-void InputHandler::handleEvents(Engine* engine) {
+void InputHandler::handleEvents() {
 	TCOD_key_t key;
 	TCOD_mouse_t mouse;
 	TCOD_event_t ev = TCODSystem::checkForEvent(TCOD_EVENT_KEY_PRESS | TCOD_EVENT_MOUSE, &key, &mouse);
@@ -16,16 +16,16 @@ void InputHandler::handleEvents(Engine* engine) {
 		switch(key.vk) {
 			case TCODK_ESCAPE: {
 				State* mainMenuState = new MainMenuState();
-				mainMenuState->init();
+				mainMenuState->init(engine);
 				engine->pushState(mainMenuState);
 				return;
 			}
 			case TCODK_CHAR: {
 				if(key.c == 'i') {
 					// TODO inventory needs to know about the player, so move elsewhere and pass info
-					State* inventoryMenuState = new InventoryMenuState();
-					inventoryMenuState->init();
-					engine->pushState(inventoryMenuState);
+					// State* inventoryMenuState = new InventoryMenuState(player);
+					// inventoryMenuState->init(engine);
+					// engine->pushState(inventoryMenuState);
 					return;
 				}
 			}
@@ -38,7 +38,7 @@ void InputHandler::handleEvents(Engine* engine) {
 	event = (RawInputEvent) { key, mouse, ev };
 }
 
-boost::optional<RawInputEvent> InputHandler::getEvent() {
+boost::optional<RawInputEvent> InputHandler::getEvent(Actor* actor) {
 	// TODO change signature to getEvent(Actor* actor), call with this->owner from Ai
 	// and then create new state if key.c == 'i'.
 	// A bit nasty, but works without too much trouble.

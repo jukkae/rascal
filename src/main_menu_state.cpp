@@ -2,7 +2,7 @@
 #include "engine.hpp"
 #include "libtcod.hpp"
 
-void MainMenuState::init() {
+void MainMenuState::init(Engine* engine) {
 	console.setDefaultBackground(TCODColor::black);
 
 	MenuItem newGame = { MenuItemCode::NEW_GAME, "New game!" };

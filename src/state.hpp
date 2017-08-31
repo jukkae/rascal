@@ -5,7 +5,7 @@
 class Engine;
 class State {
 public:
-	virtual void init() = 0;
+	virtual void init(Engine* engine) = 0;
 	virtual void cleanup() = 0;
 
 	virtual void handleEvents(Engine* engine) = 0;

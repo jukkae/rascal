@@ -19,9 +19,9 @@ Engine::~Engine() {
 
 void Engine::init() {
 	gameplayState = new GameplayState(); // TODO yes leaks memory
-	gameplayState->init();
+	gameplayState->init(this);
 	State* mainMenuState = new MainMenuState();
-	mainMenuState->init();
+	mainMenuState->init(this);
 
 	states.push_back(gameplayState);
 	states.push_back(mainMenuState);

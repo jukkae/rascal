@@ -2,7 +2,7 @@
 #define DUMMY_STATE_HPP
 class DummyState : public State {
 public:
-	void init() override {;}
+	void init(Engine* engine) override {;}
 	void cleanup() override {;}
 
 	void handleEvents(Engine* engine) override {;}
