@@ -102,13 +102,14 @@ Action* PlayerAi::getNextAction(Actor* actor) {
 }
 
 Action* MonsterAi::getNextAction(Actor* actor) {
+	GameplayState* state = actor->s;
 	Direction direction = Direction::NONE;
 	if (actor->destructible && actor->destructible->isDead()) return new WaitAction(actor);
 	if (actor->s->isInFov(actor->x, actor->y)) {
 		moveCount = TRACKING_TURNS;
 	} else { --moveCount; }
 	if (moveCount > 0) {
-		Actor* player = actor->s->getPlayer();
+		Actor* player = state->getPlayer();
 		int targetX = player->x;
 		int targetY = player->y;
 		int dx = targetX - actor->x;
@@ -118,18 +119,29 @@ Action* MonsterAi::getNextAction(Actor* actor) {
 		float distance = sqrtf(dx*dx + dy*dy);
 		// TODO reimplement wall sliding
 		if(distance >= 2) {
-			// only threaten when far away
-			// state->message(TCODColor::white, "The %s threatens you!", owner->name.c_str());
+			state->message(TCODColor::white, "The %s threatens you!", actor->name.c_str());
+			dx = (int) (round(dx / distance));
+			dy = (int) (round(dy / distance));
+			if(state->canWalk(actor->x + stepDx, actor->y + stepDy)) { // uhh
+				if (stepDx ==  0 && stepDy == -1) direction = Direction::N;
+				if (stepDx ==  1 && stepDy == -1) direction = Direction::NE;
+				if (stepDx ==  1 && stepDy ==  0) direction = Direction::E;
+				if (stepDx ==  1 && stepDy ==  1) direction = Direction::SE;
+				if (stepDx ==  0 && stepDy ==  1) direction = Direction::S;
+				if (stepDx == -1 && stepDy ==  1) direction = Direction::SW;
+				if (stepDx == -1 && stepDy ==  0) direction = Direction::W;
+				if (stepDx == -1 && stepDy == -1) direction = Direction::NW;
+				return new MoveAction(actor, direction);
+			} else if (state->canWalk(actor->x + stepDx, actor->y)) { // Wall sliding
+				if (stepDx ==  1 && stepDy ==  0) direction = Direction::E;
+				if (stepDx == -1 && stepDy ==  0) direction = Direction::W;
+				return new MoveAction(actor, direction);
+			} else if (state->canWalk(actor->x, actor->y + stepDy)) {
+				if (stepDx ==  0 && stepDy == -1) direction = Direction::N;
+				if (stepDx ==  0 && stepDy ==  1) direction = Direction::S;
+				return new MoveAction(actor, direction);
+			}
 		}
-		if (stepDx ==  0 && stepDy == -1) direction = Direction::N;
-		if (stepDx ==  1 && stepDy == -1) direction = Direction::NE;
-		if (stepDx ==  1 && stepDy ==  0) direction = Direction::E;
-		if (stepDx ==  1 && stepDy ==  1) direction = Direction::SE;
-		if (stepDx ==  0 && stepDy ==  1) direction = Direction::S;
-		if (stepDx == -1 && stepDy ==  1) direction = Direction::SW;
-		if (stepDx == -1 && stepDy ==  0) direction = Direction::W;
-		if (stepDx == -1 && stepDy == -1) direction = Direction::NW;
-		return new MoveAction(actor, direction);
 	}
 	return new WaitAction(actor);
 }
