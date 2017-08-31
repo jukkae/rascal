@@ -39,8 +39,6 @@ public:
 	float update(Actor* owner, GameplayState* state) override;
 	int xpLevel;
 	Action* getNextAction(Actor* actor) override;
-protected:
-	Actor* chooseFromInventory(Actor* owner);
 private:
 	void handleActionKey(Actor* owner, int ascii, GameplayState* state);
 	void levelUpMenu(Actor* owner, GameplayState* state); // TODO only for untangling update cycle
