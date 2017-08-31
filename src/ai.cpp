@@ -35,6 +35,7 @@ float PlayerAi::update(Actor* owner, GameplayState* state) {
 	TCOD_key_t lastKey;
 
 	boost::optional<RawInputEvent> event = state->inputHandler->getEvent(owner);
+	if(!event) return 0.0f; // TODO
 	lastKey = event->key;
 
 	switch(lastKey.vk) {
@@ -76,6 +77,9 @@ Action* PlayerAi::getNextAction(Actor* actor) {
 	TCOD_mouse_t mouse;
 
 	boost::optional<RawInputEvent> event = actor->s->inputHandler->getEvent(actor);
+	if(!event) {
+		return new EmptyAction(actor); // TODO
+	}
 	lastKey = event->key;
 
 	switch(lastKey.vk) {
@@ -130,6 +134,7 @@ Actor* PlayerAi::chooseFromInventory(Actor* owner) {
 	TCOD_key_t key;
 
 	boost::optional<RawInputEvent> event = owner->s->inputHandler->getEvent(owner);
+	if(!event) return nullptr; // TODO
 	key = event->key; // This probably doesn't work, but then again this whole code is not called rn
 
 	if(key.vk == TCODK_CHAR) {

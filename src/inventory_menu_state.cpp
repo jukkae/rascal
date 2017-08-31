@@ -23,7 +23,7 @@ void InventoryMenuState::render(Engine* engine) {
 	console.setDefaultForeground(TCODColor(200,180,50));
 	console.printFrame(0, 0, constants::INVENTORY_WIDTH, constants::INVENTORY_HEIGHT, true, TCOD_BKGND_DEFAULT, "inventory");
 	console.setDefaultForeground(TCODColor::white);
-	/*
+
 	int shortcut = 'a';
 	int y = 1;
 	for (Actor* a : actor->container->inventory) {
@@ -32,7 +32,7 @@ void InventoryMenuState::render(Engine* engine) {
 		++shortcut;
 	}
 	// blit the inventory console on the root console
-	*/
+
 	TCODConsole::blit(&console, 0, 0, constants::INVENTORY_WIDTH, constants::INVENTORY_HEIGHT, TCODConsole::root, constants::SCREEN_WIDTH/2 - constants::INVENTORY_WIDTH/2, constants::SCREEN_HEIGHT/2 - constants::INVENTORY_HEIGHT/2);
 	TCODConsole::flush();
 	// wait for a key press

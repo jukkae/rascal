@@ -21,13 +21,7 @@ void InputHandler::handleEvents() {
 				return;
 			}
 			case TCODK_CHAR: {
-				if(key.c == 'i') {
-					// TODO inventory needs to know about the player, so move elsewhere and pass info
-					// State* inventoryMenuState = new InventoryMenuState(player);
-					// inventoryMenuState->init(engine);
-					// engine->pushState(inventoryMenuState);
-					return;
-				}
+
 			}
 			default: break;
 		}
@@ -39,9 +33,13 @@ void InputHandler::handleEvents() {
 }
 
 boost::optional<RawInputEvent> InputHandler::getEvent(Actor* actor) {
-	// TODO change signature to getEvent(Actor* actor), call with this->owner from Ai
-	// and then create new state if key.c == 'i'.
-	// A bit nasty, but works without too much trouble.
+	// TODO this is nasty, but inventory must know both the actor and engine
+	if(event->key.c == 'i') {
+		State* inventoryMenuState = new InventoryMenuState(actor);
+		inventoryMenuState->init(engine);
+		engine->pushState(inventoryMenuState);
+		return boost::none; // TODO return empty RawInputEvent instead
+	}
 	boost::optional<RawInputEvent> ev = event;
 	event = boost::none;
 	return ev;
