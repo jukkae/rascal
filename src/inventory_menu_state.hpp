@@ -19,5 +19,8 @@ public:
 private:
 	TCODConsole	console;
 	Actor* actor;
+
+	std::vector<Actor*> inventoryContents;
+	Actor* selectedItem;
 };
 #endif /* INVENTORY_MENU_STATE_HPP */

@@ -4,7 +4,7 @@
 #include "actor.hpp"
 
 void InventoryMenuState::init(Engine* engine) {
-
+	for(Actor* item : actor->container->inventory) inventoryContents.push_back(item);
 }
 
 void InventoryMenuState::cleanup() {
@@ -20,18 +20,19 @@ void InventoryMenuState::update(Engine* engine) {
 }
 
 void InventoryMenuState::render(Engine* engine) {
+	selectedItem = inventoryContents.front();
 	console.setDefaultForeground(TCODColor(200,180,50));
 	console.printFrame(0, 0, constants::INVENTORY_WIDTH, constants::INVENTORY_HEIGHT, true, TCOD_BKGND_DEFAULT, "inventory");
-	console.setDefaultForeground(TCODColor::white);
 
 	int shortcut = 'a';
 	int y = 1;
-	for (Actor* a : actor->container->inventory) {
-		console.print(2, y, "(%c) %s", shortcut, a->name.c_str());
+	for (auto item : inventoryContents) {
+		if(item == selectedItem) console.setDefaultForeground(TCODColor::lighterOrange);
+		else console.setDefaultForeground(TCODColor::white);
+		console.print(2, y, "(%c) %s", shortcut, item->name.c_str());
 		++y;
 		++shortcut;
 	}
-	// blit the inventory console on the root console
 
 	TCODConsole::blit(&console, 0, 0, constants::INVENTORY_WIDTH, constants::INVENTORY_HEIGHT, TCODConsole::root, constants::SCREEN_WIDTH/2 - constants::INVENTORY_WIDTH/2, constants::SCREEN_HEIGHT/2 - constants::INVENTORY_HEIGHT/2);
 	TCODConsole::flush();
