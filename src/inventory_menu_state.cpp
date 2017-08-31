@@ -26,7 +26,7 @@ void InventoryMenuState::handleEvents(Engine* engine) {
 		case TCODK_ENTER:
 			break;
 		case TCODK_ESCAPE:
-			// close inventory
+			engine->addEngineCommand(new ContinueCommand(engine));
 			break;
 		case TCODK_CHAR: // jesus f. christ, the h*ck we need to deal with
 			switch(key.c) {
