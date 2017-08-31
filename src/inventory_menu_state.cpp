@@ -31,7 +31,7 @@ void InventoryMenuState::handleEvents(Engine* engine) {
 		case TCODK_CHAR: // jesus f. christ, the h*ck we need to deal with
 			switch(key.c) {
 				case 'd':
-					// DROP
+					inventoryContents.at(selectedItem)->pickable->drop(inventoryContents.at(selectedItem), actor); // TODO will break with empty inventory
 					break;
 				case 'e':
 					// EQUIP
@@ -40,7 +40,7 @@ void InventoryMenuState::handleEvents(Engine* engine) {
 					// THROW
 					break;
 				case 'u':
-					// USE (keeping this generic for now...)
+					inventoryContents.at(selectedItem)->pickable->use(inventoryContents.at(selectedItem), actor); // TODO this does not work *properly* with states
 					break;
 			}
 			break;

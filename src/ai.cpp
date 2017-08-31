@@ -146,20 +146,6 @@ Actor* PlayerAi::chooseFromInventory(Actor* owner) {
 
 void PlayerAi::handleActionKey(Actor* owner, int ascii, GameplayState* state) {
 	switch(ascii) {
-		case 'i' : // display inventory
-		{
-			Actor* actor = chooseFromInventory(owner);
-			if(actor) {
-				actor->pickable->use(actor, owner);
-			}
-		} break;
-		case 'd' : // drop item
-		{
-			Actor* actor = chooseFromInventory(owner);
-			if(actor) {
-				actor->pickable->drop(actor, owner);
-			}
-		} break;
 		case -89 : // '</>' key, damn nasty
 		{
 			if(state->getStairs()->x == owner->x && state->getStairs()->y == owner->y) {
