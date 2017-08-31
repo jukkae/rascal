@@ -5,6 +5,7 @@
 
 void InventoryMenuState::init(Engine* engine) {
 	for(Actor* item : actor->container->inventory) inventoryContents.push_back(item);
+	selectedItem = 0;
 }
 
 void InventoryMenuState::cleanup() {
@@ -12,7 +13,40 @@ void InventoryMenuState::cleanup() {
 }
 
 void InventoryMenuState::handleEvents(Engine* engine) {
+	TCOD_key_t key;
+	TCODSystem::checkForEvent(TCOD_EVENT_KEY_PRESS, &key, nullptr);
 
+	switch(key.vk) {
+		case TCODK_UP:
+			if(selectedItem > 0) selectedItem--; // TODO doesn't work and even if it did that'd be bad
+			break;
+		case TCODK_DOWN:
+			if(selectedItem < inventoryContents.size() - 1) selectedItem++;
+			break;
+		case TCODK_ENTER:
+			break;
+		case TCODK_ESCAPE:
+			// close inventory
+			break;
+		case TCODK_CHAR: // jesus f. christ, the h*ck we need to deal with
+			switch(key.c) {
+				case 'd':
+					// DROP
+					break;
+				case 'e':
+					// EQUIP
+					break;
+				case 't':
+					// THROW
+					break;
+				case 'u':
+					// USE (keeping this generic for now...)
+					break;
+			}
+			break;
+		default:
+			break;
+	}
 }
 
 void InventoryMenuState::update(Engine* engine) {
@@ -20,32 +54,19 @@ void InventoryMenuState::update(Engine* engine) {
 }
 
 void InventoryMenuState::render(Engine* engine) {
-	selectedItem = inventoryContents.front();
 	console.setDefaultForeground(TCODColor(200,180,50));
 	console.printFrame(0, 0, constants::INVENTORY_WIDTH, constants::INVENTORY_HEIGHT, true, TCOD_BKGND_DEFAULT, "inventory");
 
-	int shortcut = 'a';
 	int y = 1;
+	int itemIndex = 0;
 	for (auto item : inventoryContents) {
-		if(item == selectedItem) console.setDefaultForeground(TCODColor::lighterOrange);
+		if(itemIndex == selectedItem) console.setDefaultForeground(TCODColor::lighterOrange);
 		else console.setDefaultForeground(TCODColor::white);
-		console.print(2, y, "(%c) %s", shortcut, item->name.c_str());
+		console.print(2, y, "%s", item->name.c_str());
 		++y;
-		++shortcut;
+		++itemIndex;
 	}
 
 	TCODConsole::blit(&console, 0, 0, constants::INVENTORY_WIDTH, constants::INVENTORY_HEIGHT, TCODConsole::root, constants::SCREEN_WIDTH/2 - constants::INVENTORY_WIDTH/2, constants::SCREEN_HEIGHT/2 - constants::INVENTORY_HEIGHT/2);
 	TCODConsole::flush();
-	// wait for a key press
-	/*
-	TCOD_key_t key;
-
-	boost::optional<RawInputEvent> event = actor->s->inputHandler->getEvent();
-	key = event->key; // This probably doesn't work, but then again this whole code is not called rn
-
-	if(key.vk == TCODK_CHAR) {
-		int actorIndex=key.c - 'a';
-		if(actorIndex >= 0 && actorIndex < actor->container->inventory.size()) { return actor->container->inventory.at(actorIndex); }
-	}
-	*/
 }

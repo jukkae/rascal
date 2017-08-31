@@ -21,6 +21,6 @@ private:
 	Actor* actor;
 
 	std::vector<Actor*> inventoryContents;
-	Actor* selectedItem;
+	int selectedItem;
 };
 #endif /* INVENTORY_MENU_STATE_HPP */
