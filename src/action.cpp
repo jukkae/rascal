@@ -43,6 +43,17 @@ bool MoveAction::execute() {
 	return true;
 }
 
+bool TraverseStairsAction::execute() {
+	/* TODO something like this
+	if(state->getStairs()->x == owner->x && state->getStairs()->y == owner->y) {
+		state->nextLevel();
+	} else {
+		state->message(TCODColor::lightGrey, "There are no stairs here.");
+	}
+	*/
+	return false;
+}
+
 bool PickupAction::execute() {
 	bool found = false;
 	for(Actor* a : *actor->getActors()) {

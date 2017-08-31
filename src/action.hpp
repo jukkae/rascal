@@ -57,6 +57,21 @@ private:
 	}
 };
 
+class TraverseStairsAction : public Action {
+public:
+	TraverseStairsAction(Actor* actor, bool down) : Action(actor, 100.0f), down(down) {;}
+	bool execute();
+private:
+	bool down;
+
+	friend class boost::serialization::access;
+	template<class Archive>
+	void serialize(Archive & ar, const unsigned int version) {
+		ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(Action);
+		ar & down;
+	}
+}
+
 class PickupAction : public Action {
 public:
 	PickupAction(Actor* actor) : Action(actor, 100.0f) {;}
