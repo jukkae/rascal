@@ -117,8 +117,10 @@ Action* MonsterAi::getNextAction(Actor* actor) {
 		int targetY = player->y;
 		int dx = targetX - actor->x;
 		int dy = targetY - actor->y;
-		int stepDx = (dx > 0 ? 1 : -1);
-		int stepDy = (dy > 0 ? 1 : -1);
+		//int stepDx = (dx > 0 ? 1 : -1);
+		//int stepDy = (dy > 0 ? 1 : -1);
+		int stepDx = (dx == 0 ? 0 : (dx > 0 ? 1 : -1));
+		int stepDy = (dy == 0 ? 0 : (dy > 0 ? 1 : -1));
 		float distance = sqrtf(dx*dx + dy*dy);
 
 		if(distance >= 2) { // TODO there's something off here, not all that surprisingly
