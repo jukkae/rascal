@@ -102,7 +102,6 @@ Action* PlayerAi::getNextAction(Actor* actor) {
 }
 
 Action* MonsterAi::getNextAction(Actor* actor) {
-	std::cout << "MonsterAi::getNextAction()\n";
 	GameplayState* state = actor->s;
 	Direction direction = Direction::NONE;
 	if (actor->destructible && actor->destructible->isDead()) return new WaitAction(actor);
@@ -117,18 +116,15 @@ Action* MonsterAi::getNextAction(Actor* actor) {
 		int targetY = player->y;
 		int dx = targetX - actor->x;
 		int dy = targetY - actor->y;
-		//int stepDx = (dx > 0 ? 1 : -1);
-		//int stepDy = (dy > 0 ? 1 : -1);
 		int stepDx = (dx == 0 ? 0 : (dx > 0 ? 1 : -1));
 		int stepDy = (dy == 0 ? 0 : (dy > 0 ? 1 : -1));
 		float distance = sqrtf(dx*dx + dy*dy);
 
-		if(distance >= 2) { // TODO there's something off here, not all that surprisingly
+		if(distance >= 2) {
 			state->message(TCODColor::white, "The %s threatens you!", actor->name.c_str());
 			dx = (int) (round(dx / distance));
 			dy = (int) (round(dy / distance));
 			if(state->canWalk(actor->x + stepDx, actor->y + stepDy)) { // uhh
-				std::cout << "not melee range\n";
 				if (stepDx ==  0 && stepDy ==  0) return new WaitAction(actor);
 
 				if (stepDx ==  0 && stepDy == -1) direction = Direction::N;
@@ -141,20 +137,17 @@ Action* MonsterAi::getNextAction(Actor* actor) {
 				if (stepDx == -1 && stepDy == -1) direction = Direction::NW;
 				return new MoveAction(actor, direction);
 			} else if (state->canWalk(actor->x + stepDx, actor->y)) { // Wall sliding
-				std::cout << "wall slide\n";
 				if (stepDx ==  0 && stepDy ==  0) return new WaitAction(actor);
 				if (stepDx ==  1 && stepDy ==  0) direction = Direction::E;
 				if (stepDx == -1 && stepDy ==  0) direction = Direction::W;
 				return new MoveAction(actor, direction);
 			} else if (state->canWalk(actor->x, actor->y + stepDy)) {
-				std::cout << "wall slide\n";
 				if (stepDx ==  0 && stepDy ==  0) return new WaitAction(actor);
 				if (stepDx ==  0 && stepDy == -1) direction = Direction::N;
 				if (stepDx ==  0 && stepDy ==  1) direction = Direction::S;
 				return new MoveAction(actor, direction);
 			}
 		} else { // Melee range
-			std::cout << "melee range!\n";
 			if (stepDx ==  0 && stepDy ==  0) return new WaitAction(actor);
 
 			if (stepDx ==  0 && stepDy == -1) direction = Direction::N;
@@ -165,11 +158,9 @@ Action* MonsterAi::getNextAction(Actor* actor) {
 			if (stepDx == -1 && stepDy ==  1) direction = Direction::SW;
 			if (stepDx == -1 && stepDy ==  0) direction = Direction::W;
 			if (stepDx == -1 && stepDy == -1) direction = Direction::NW;
-			std::cout << "dx: " << stepDx << ", dy: " << stepDy << "\n";
 			return new MoveAction(actor, direction);
 		}
 	}
-	std::cout << "waiting\n";
 	return new WaitAction(actor);
 }
 
