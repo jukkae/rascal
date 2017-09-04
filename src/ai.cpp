@@ -27,12 +27,6 @@ int PlayerAi::getNextLevelXp() const {
 	return LEVEL_UP_BASE + xpLevel * LEVEL_UP_FACTOR;
 }
 
-float PlayerAi::update(Actor* owner, GameplayState* state) {
-	if (owner->destructible->xp >= getNextLevelXp()) levelUpMenu(owner, state);
-
-	return 100 * (100 / speed);
-}
-
 void PlayerAi::levelUpMenu(Actor* owner, GameplayState* state) {
 	int levelUpXp = getNextLevelXp();
 	++xpLevel;
@@ -162,49 +156,20 @@ Action* MonsterAi::getNextAction(Actor* actor) {
 	return new WaitAction(actor);
 }
 
-float MonsterAi::update(Actor* owner, GameplayState* state) {
-	if(moveCount > 0) {
-		moveOrAttack(owner, state, state->getPlayer()->x, state->getPlayer()->y);
-	} return 100.0f;
-}
-
-void MonsterAi::moveOrAttack(Actor* owner, GameplayState* state, int targetX, int targetY) {
-	int dx = targetX - owner->x;
-	int dy = targetY - owner->y;
-	int stepDx = (dx > 0 ? 1 : -1);
-	int stepDy = (dy > 0 ? 1 : -1);
-	float distance = sqrtf(dx*dx + dy*dy);
-	if(distance >= 2) {
-		state->message(TCODColor::white, "The %s threatens you!", owner->name.c_str());
-		dx = (int) (round(dx / distance));
-		dy = (int) (round(dy / distance));
-		if(state->canWalk(owner->x + dx, owner->y + dy)) {
-			owner->x += dx;
-			owner->y += dy;
-		} else if (state->canWalk(owner->x + stepDx, owner->y)) { // Wall sliding
-			owner->x += stepDx;
-		} else if (state->canWalk(owner->x, owner->y + stepDy)) {
-			owner->y += stepDy;
-		}
-	} else if ( owner->attacker ) {
-		owner->attacker->attack(owner, state->getPlayer());
-	}
-}
-
-float TemporaryAi::update(Actor* owner, GameplayState* state) {
+/* float TemporaryAi::update(Actor* owner, GameplayState* state) { // TODO reimplement
 	--turns;
 	if(turns <= 0) {
 		owner->ai = std::move(oldAi);
 	}
 	return 100 * (100 / speed);
-}
+} */
 
 void TemporaryAi::applyTo(Actor* actor) {
 	oldAi = std::move(actor->ai);
 	actor->ai = std::unique_ptr<Ai>(this);
 }
 
-float ConfusedMonsterAi::update(Actor* owner, GameplayState* state) {
+/* float ConfusedMonsterAi::update(Actor* owner, GameplayState* state) { // TODO reimplement
 	TCODRandom* rng = TCODRandom::getInstance();
 	int dx = rng->getInt(-1,1);
 	int dy = rng->getInt(-1,1);
@@ -220,7 +185,7 @@ float ConfusedMonsterAi::update(Actor* owner, GameplayState* state) {
 		}
 	}
 	return TemporaryAi::update(owner, state);
-}
+} */
 
 BOOST_CLASS_EXPORT(PlayerAi)
 BOOST_CLASS_EXPORT(MonsterAi)
