@@ -20,7 +20,6 @@ public:
 	float speed;
 	bool isPlayer() { return faction == Faction::PLAYER; }
 	virtual Action* getNextAction(Actor* actor) { return new WaitAction(actor); }
-protected:
 	Faction faction;
 private:
 	friend class boost::serialization::access;

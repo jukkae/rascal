@@ -22,7 +22,7 @@ float Actor::update(GameplayState* state) {
 		if(success) {
 			float turnCost = 100.0f * actionCost / ai->speed;
 			return turnCost;
-		} else return 0;
+		} else return ai->faction == Faction::PLAYER ? 0.0f : 100.0f; // TODO quick hack for monsterAis, remove when math fixed
 	}
 	else return DEFAULT_TURN_LENGTH; // ai-less actors should not get turns in the first place
 	// actually, maybe they should: for example, decaying materials etc!
