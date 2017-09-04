@@ -19,7 +19,6 @@
 #include "boost/optional.hpp"
 
 static const int TRACKING_TURNS = 3;
-static const float DEFAULT_TURN_LENGTH = 100;
 
 const int LEVEL_UP_BASE = 200;
 const int LEVEL_UP_FACTOR = 150;
@@ -31,7 +30,6 @@ int PlayerAi::getNextLevelXp() const {
 float PlayerAi::update(Actor* owner, GameplayState* state) {
 	if (owner->destructible->xp >= getNextLevelXp()) levelUpMenu(owner, state);
 
-	// if (owner->destructible && owner->destructible->isDead()) return DEFAULT_TURN_LENGTH; TODO send DEAD event or something
 	return 100 * (100 / speed);
 }
 

@@ -1,9 +1,9 @@
 #include "actor.hpp"
 #include "ai.hpp"
 #include "attacker.hpp"
+#include "constants.hpp"
 #include "gameplay_state.hpp"
 
-static const float DEFAULT_TURN_LENGTH = 100; // I know, this is now in two places
 
 Actor::Actor(int x, int y, int ch, std::string name, const TCODColor& col, boost::optional<float> energy) :
 	x(x), y(y), ch(ch), col(col), name(name), energy(energy),
@@ -24,7 +24,7 @@ float Actor::update(GameplayState* state) {
 			return turnCost;
 		} else return 0;
 	}
-	else return DEFAULT_TURN_LENGTH; // ai-less actors should not get turns in the first place
+	else return constants::DEFAULT_TURN_LENGTH; // ai-less actors should not get turns in the first place
 	// actually, maybe they should: for example, decaying materials etc!
 	//return ai ? ai->update(this, state) : DEFAULT_TURN_LENGTH;
 }

@@ -40,6 +40,7 @@ void InventoryMenuState::handleEvents(Engine* engine) {
 					// THROW
 					break;
 				case 'u':
+					// implementation is simple: add useItem command to actor
 					inventoryContents.at(selectedItem)->pickable->use(inventoryContents.at(selectedItem), actor); // TODO this does not work *properly* with states
 					break;
 			}
