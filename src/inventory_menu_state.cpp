@@ -4,6 +4,7 @@
 #include "actor.hpp"
 
 void InventoryMenuState::init(Engine* engine) {
+	inventoryContents.clear();
 	for(Actor* item : actor->container->inventory) inventoryContents.push_back(item);
 	selectedItem = 0;
 }
@@ -42,6 +43,7 @@ void InventoryMenuState::handleEvents(Engine* engine) {
 				case 'u':
 					// implementation is simple: add useItem command to actor
 					inventoryContents.at(selectedItem)->pickable->use(inventoryContents.at(selectedItem), actor); // TODO this does not work *properly* with states
+					init(engine);
 					break;
 			}
 			break;
