@@ -1,6 +1,7 @@
 #include <iostream>
 #include "inventory_menu_state.hpp"
 #include "engine.hpp"
+#include "action.hpp"
 #include "actor.hpp"
 
 void InventoryMenuState::init(Engine* engine) {
@@ -41,9 +42,8 @@ void InventoryMenuState::handleEvents(Engine* engine) {
 					// THROW
 					break;
 				case 'u':
-					// implementation is simple: add useItem command to actor
-					inventoryContents.at(selectedItem)->pickable->use(inventoryContents.at(selectedItem), actor); // TODO this does not work *properly* with states
-					init(engine);
+					actor->addAction(new UseItemAction(actor, inventoryContents.at(selectedItem))); // TODO memleak
+					engine->addEngineCommand(new ContinueCommand(engine));
 					break;
 			}
 			break;

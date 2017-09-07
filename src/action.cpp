@@ -72,3 +72,8 @@ bool PickupAction::execute() {
 	if(!found) { actor->s->message(TCODColor::lightGrey, "There's nothing here that you can pick up."); }
 	return false;
 }
+
+bool UseItemAction::execute() {
+	item->pickable->use(item, actor);
+	return true;
+}
