@@ -64,11 +64,9 @@ void Gui::renderBar(int x, int y, int width, std::string name, float value, floa
 	con.printEx(x + width/2, y, TCOD_BKGND_NONE, TCOD_CENTER, "%s : %g/%g", name.c_str(), value, maxValue);
 }
 
-void Gui::renderMouseLook(std::vector<Actor*>* actors) {
+void Gui::renderMouseLook(std::vector<Actor*>* actors) { // TODO broken
 	Point mouse = state->getMouseLocation();
-	int mouseX = mouse.x;
-	int mouseY = mouse.y;
-	Point location = state->getWorldCoordsFromScreenCoords(Point(mouseX, mouseY));
+	Point location = state->getWorldCoordsFromScreenCoords(mouse);
 	int x = location.x;
 	int y = location.y;
 

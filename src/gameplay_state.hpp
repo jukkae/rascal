@@ -28,7 +28,7 @@ public:
 	void updateTime();
 	void increaseTime(int amount) { time += amount; } // temporary!
 	bool isInFov(int x, int y) { return map->isInFov(x, y); }
-	Point getWorldCoordsFromScreenCoords(Point point) { return renderer->getWorldCoordsFromScreenCoords(point); } // TODO pass by ref
+	Point getWorldCoordsFromScreenCoords(Point& point) { return renderer->getWorldCoordsFromScreenCoords(point); } // TODO pass by ref
 	Point getMouseLocation();
 	void message(const TCODColor& col, std::string text, ...);
 	void computeFov() { map->computeFov(); }
