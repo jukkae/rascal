@@ -96,6 +96,19 @@ private:
 	}
 };
 
+class UseItemAction : public Action {
+public:
+	UseItemAction(Actor* actor, Actor* item) : Action(actor, 100.0f), item(item) {;}
+	bool execute();
+private:
+	Actor* item;
+	friend class boost::serialization::access;
+	template<class Archive>
+	void serialize(Archive & ar, const unsigned int version) {
+		ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(Action);
+	}
+}
+
 struct ActionResult {
 	bool succeeded;
 	boost::optional<Action> alternativeAction;

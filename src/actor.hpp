@@ -42,6 +42,7 @@ public:
 	float update(GameplayState* state);
 	float getDistance(int cx, int cy) const;
 	bool isPlayer() { return ai ? this->ai->isPlayer() : false; }
+	void addAction(Action* action) { actionsQueue.push(action); }
 	std::vector<Actor*>* getActors(); // temporary for refactoring
 	Actor* getPlayer(); // temporary for refactoring
 	Actor* getClosestMonster(int x, int y, float range);
