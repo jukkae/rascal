@@ -7,12 +7,12 @@ class GameplayState;
 
 class Menu {
 public:
-	enum class MenuItemCode { NONE, NEW_GAME, CONTINUE, EXIT, CONSTITUTION, STRENGTH, AGILITY, SPEED };
-	enum class DisplayMode { MAIN, PAUSE };
+	enum class MenuItemCode { NONE, CONSTITUTION, STRENGTH, AGILITY, SPEED };
+	enum class DisplayMode { PAUSE };
 	~Menu();
 	void clear();
 	void addItem(MenuItemCode code, const std::string label);
-	MenuItemCode pick(DisplayMode mode = DisplayMode::MAIN);
+	MenuItemCode pick(DisplayMode mode = DisplayMode::PAUSE);
 
 protected:
 	struct MenuItem {
