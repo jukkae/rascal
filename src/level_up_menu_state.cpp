@@ -30,6 +30,7 @@ void LevelUpMenuState::handleEvents(Engine* engine) {
 			if(selectedItem < menuContents.size() - 1) selectedItem++;
 			break;
 		case TCODK_ENTER:
+			handleItem(menuContents.at(selectedItem));
 			break;
 		case TCODK_ESCAPE:
 			engine->addEngineCommand(new ContinueCommand(engine));
@@ -59,4 +60,8 @@ void LevelUpMenuState::render(Engine* engine) {
 
 	TCODConsole::blit(&console, 0, 0, constants::INVENTORY_WIDTH, constants::INVENTORY_HEIGHT, TCODConsole::root, constants::SCREEN_WIDTH/2 - constants::INVENTORY_WIDTH/2, constants::SCREEN_HEIGHT/2 - constants::INVENTORY_HEIGHT/2);
 	TCODConsole::flush();
+}
+
+void LevelUpMenuState::handleItem(MenuItem item) {
+	std::cout << item.label << "\n";
 }

@@ -25,6 +25,8 @@ public:
 	void update(Engine* engine) override;
 	void render(Engine* engine) override;
 private:
+	void handleItem(MenuItem item);
+
 	TCODConsole	console;
 	Actor* actor;
 
