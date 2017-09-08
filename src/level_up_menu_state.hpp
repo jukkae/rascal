@@ -2,13 +2,18 @@
 #define LEVEL_UP_MENU_STATE
 #include "constants.hpp"
 #include "state.hpp"
+#include <string>
 #include <vector>
 #include "libtcod.hpp"
 
 class Engine;
 class Actor;
 
-enum class MenuItem { NONE, CONSTITUTION, STRENGTH, AGILITY, SPEED };
+enum class MenuItemType { NONE, CONSTITUTION, STRENGTH, AGILITY, SPEED };
+struct MenuItem {
+	MenuItemType type;
+	std::string label;
+};
 
 class LevelUpMenuState : public State {
 public:
