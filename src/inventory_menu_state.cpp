@@ -20,7 +20,7 @@ void InventoryMenuState::handleEvents(Engine* engine) {
 
 	switch(key.vk) {
 		case TCODK_UP:
-			if(selectedItem > 0) selectedItem--; // TODO doesn't work and even if it did that'd be bad
+			if(selectedItem > 0) selectedItem--;
 			break;
 		case TCODK_DOWN:
 			if(selectedItem < inventoryContents.size() - 1) selectedItem++;

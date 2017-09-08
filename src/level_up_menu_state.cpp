@@ -6,7 +6,10 @@
 #include "ai.hpp"
 
 void LevelUpMenuState::init(Engine* engine) {
-	menuContents.push_back({MenuItemType::NONE, "test"});
+	menuContents.push_back({MenuItemType::CONSTITUTION, "constitution"});
+	menuContents.push_back({MenuItemType::STRENGTH, "strength"});
+	menuContents.push_back({MenuItemType::AGILITY, "agility"});
+	menuContents.push_back({MenuItemType::SPEED, "speed"});
 	selectedItem = 0;
 }
 
