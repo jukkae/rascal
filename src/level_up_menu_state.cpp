@@ -16,7 +16,24 @@ void LevelUpMenuState::cleanup() {
 }
 
 void LevelUpMenuState::handleEvents(Engine* engine) {
+	TCOD_key_t key;
+	TCODSystem::checkForEvent(TCOD_EVENT_KEY_PRESS, &key, nullptr);
 
+	switch(key.vk) {
+		case TCODK_UP:
+			if(selectedItem > 0) selectedItem--;
+			break;
+		case TCODK_DOWN:
+			if(selectedItem < menuContents.size() - 1) selectedItem++;
+			break;
+		case TCODK_ENTER:
+			break;
+		case TCODK_ESCAPE:
+			engine->addEngineCommand(new ContinueCommand(engine));
+			break;
+		default:
+			break;
+	}
 }
 
 void LevelUpMenuState::update(Engine* engine) {
