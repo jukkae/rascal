@@ -64,4 +64,19 @@ void LevelUpMenuState::render(Engine* engine) {
 
 void LevelUpMenuState::handleItem(MenuItem item) {
 	std::cout << item.label << "\n";
+	switch(item.type) {
+		case MenuItemType::CONSTITUTION:
+			actor->modifyStatistic(Statistic::CONSTITUTION, 20.0f);
+			break;
+		case MenuItemType::STRENGTH:
+			actor->modifyStatistic(Statistic::STRENGTH, 1.0f);
+			break;
+		case MenuItemType::AGILITY:
+			actor->modifyStatistic(Statistic::AGILITY, 1.0f);
+			break;
+		case MenuItemType::SPEED:
+			actor->modifyStatistic(Statistic::SPEED, 10.0f);
+			break;
+		default: break;
+	}
 }
