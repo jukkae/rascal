@@ -54,10 +54,19 @@ Actor* Actor::getLiveActor(int x, int y) {
 
 void Actor::modifyStatistic(Statistic stat, float delta) {
 	switch(stat) {
-		case Statistic::CONSTITUTION: break;
-		case Statistic::STRENGTH: break;
-		case Statistic::AGILITY: break;
-		case Statistic::SPEED: break;
+		case Statistic::CONSTITUTION:
+			destructible->maxHp += delta;
+			destructible->hp += delta;
+			break;
+		case Statistic::STRENGTH:
+			attacker->power += delta;
+			break;
+		case Statistic::AGILITY:
+			destructible->defense += delta;
+			break;
+		case Statistic::SPEED:
+			ai->speed += delta;
+			break;
 		default: break;
 	}
 }
