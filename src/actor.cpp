@@ -51,3 +51,13 @@ Actor* Actor::getClosestMonster(int x, int y, float range) {
 Actor* Actor::getLiveActor(int x, int y) {
 	return s->getLiveActor(x, y);
 }
+
+void Actor::modifyStatistic(Statistic stat, float delta) {
+	switch(stat) {
+		case Statistic::CONSTITUTION: break;
+		case Statistic::STRENGTH: break;
+		case Statistic::AGILITY: break;
+		case Statistic::SPEED: break;
+		default: break;
+	}
+}
