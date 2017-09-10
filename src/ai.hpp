@@ -31,10 +31,11 @@ private:
 
 class PlayerAi : public Ai {
 public:
-	PlayerAi() : Ai(100, Faction::PLAYER), xpLevel(1) {;}
+	PlayerAi() : Ai(100, Faction::PLAYER), xpLevel(1), experience(0) {;}
 
 	int getNextLevelXp() const;
 	int xpLevel;
+	int experience;
 	Action* getNextAction(Actor* actor) override;
 private:
 	void handleActionKey(Actor* owner, int ascii, GameplayState* state);
