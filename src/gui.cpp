@@ -36,7 +36,7 @@ void Gui::renderXpBar() {
 	PlayerAi* ai = (PlayerAi*)state->getPlayer()->ai.get(); // Don't transfer ownership!
 	char xpTxt[128];
 	sprintf(xpTxt, "XP(%d)", ai->xpLevel);
-	renderBar(1, 5, BAR_WIDTH, xpTxt, state->getPlayer()->destructible->xp, ai->getNextLevelXp(), TCODColor::lightViolet,TCODColor::darkerViolet);
+	renderBar(1, 5, BAR_WIDTH, xpTxt, ai->experience, ai->getNextLevelXp(), TCODColor::lightViolet,TCODColor::darkerViolet);
 }
 
 void Gui::renderMessageLog() {
