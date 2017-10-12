@@ -1,6 +1,8 @@
 #include "gameover_state.hpp"
 #include "actor.hpp"
 #include "ai.hpp"
+#include "constants.hpp"
+#include "libtcod.hpp"
 #include <iostream>
 
 GameOverState::GameOverState(Actor* actor) :
@@ -9,6 +11,9 @@ GameOverState::GameOverState(Actor* actor) :
 	{
 		description = "you died at level ";
 		description.append(std::to_string(((PlayerAi*)actor->ai.get())->xpLevel));
+		if(TCODSystem::fileExists(constants::SAVE_FILE_NAME.c_str())) { // TODO feels nasty doing this in ctor
+			TCODSystem::deleteFile(constants::SAVE_FILE_NAME.c_str());
+		}
 	}
 
 void GameOverState::init(Engine* engine) {
