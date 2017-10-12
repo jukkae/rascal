@@ -20,6 +20,8 @@ class GameplayState;
 #include "destructible.hpp"
 #include "pickable.hpp"
 
+enum class Statistic { CONSTITUTION, STRENGTH, AGILITY, SPEED };
+
 class Actor {
 public:
 	int x, y;
@@ -48,6 +50,7 @@ public:
 	Actor* getClosestMonster(int x, int y, float range);
 	Actor* getLiveActor(int x, int y);
 	void setState(GameplayState* state) { s = state; } // temporary for getting access to state's actors
+	void modifyStatistic(Statistic stat, float delta);
 
 private:
 	std::queue<Action*> actionsQueue;

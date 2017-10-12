@@ -31,14 +31,15 @@ private:
 
 class PlayerAi : public Ai {
 public:
-	PlayerAi() : Ai(100, Faction::PLAYER), xpLevel(1) {;}
+	PlayerAi() : Ai(100, Faction::PLAYER), xpLevel(1), experience(0) {;}
 
 	int getNextLevelXp() const;
 	int xpLevel;
+	int experience;
 	Action* getNextAction(Actor* actor) override;
+	void increaseXp(int xp, GameplayState* state); // TODO yes, this is bad and I should feel bad
 private:
 	void handleActionKey(Actor* owner, int ascii, GameplayState* state);
-	void levelUpMenu(Actor* owner, GameplayState* state); // TODO only for untangling update cycle
 
 	friend class boost::serialization::access;
 	template<class Archive>

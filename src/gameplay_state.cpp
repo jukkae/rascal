@@ -2,6 +2,7 @@
 #include "engine.hpp"
 
 void GameplayState::init(Engine* engine) {
+	e = engine;
 	inputHandler = std::unique_ptr<InputHandler>(new InputHandler(engine));
 
 	gui = std::unique_ptr<Gui>(new Gui());

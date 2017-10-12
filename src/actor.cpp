@@ -1,3 +1,4 @@
+#include <math.h>
 #include "actor.hpp"
 #include "ai.hpp"
 #include "attacker.hpp"
@@ -50,4 +51,23 @@ Actor* Actor::getClosestMonster(int x, int y, float range) {
 
 Actor* Actor::getLiveActor(int x, int y) {
 	return s->getLiveActor(x, y);
+}
+
+void Actor::modifyStatistic(Statistic stat, float delta) {
+	switch(stat) {
+		case Statistic::CONSTITUTION:
+			destructible->maxHp += delta;
+			destructible->hp += delta;
+			break;
+		case Statistic::STRENGTH:
+			attacker->power += delta;
+			break;
+		case Statistic::AGILITY:
+			destructible->defense += delta;
+			break;
+		case Statistic::SPEED:
+			ai->speed += delta;
+			break;
+		default: break;
+	}
 }

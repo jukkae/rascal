@@ -5,12 +5,15 @@
 #include "constants.hpp"
 #include "container.hpp"
 #include "destructible.hpp"
+#include "engine.hpp"
 #include "gameplay_state.hpp"
 #include "gui.hpp"
 #include "input_handler.hpp"
 #include "map.hpp"
 #include "pickable.hpp"
 #include "persistent.hpp"
+#include "state.hpp"
+#include "level_up_menu_state.hpp"
 #include <math.h>
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
@@ -20,36 +23,24 @@
 
 static const int TRACKING_TURNS = 3;
 
-const int LEVEL_UP_BASE = 200;
+const int LEVEL_UP_BASE = 50;
 const int LEVEL_UP_FACTOR = 150;
 
 int PlayerAi::getNextLevelXp() const {
 	return LEVEL_UP_BASE + xpLevel * LEVEL_UP_FACTOR;
 }
 
-void PlayerAi::levelUpMenu(Actor* owner, GameplayState* state) {
-	int levelUpXp = getNextLevelXp();
-	++xpLevel;
-	owner->destructible->xp -= levelUpXp;
-	state->message(TCODColor::yellow, "You've reached level %d!", xpLevel);
-	state->showLevelUpMenu();
-	Menu::MenuItemCode menuItem = state->pickFromMenu(Menu::DisplayMode::PAUSE);
-
-	switch (menuItem) {
-	case Menu::MenuItemCode::CONSTITUTION :
-		owner->destructible->maxHp += 20;
-		owner->destructible->hp += 20;
-		break;
-	case Menu::MenuItemCode::STRENGTH :
-		owner->attacker->power += 1;
-		break;
-	case Menu::MenuItemCode::AGILITY :
-		owner->destructible->defense += 1;
-		break;
-	case Menu::MenuItemCode::SPEED :
-		owner->ai->speed += 10;
-		break;
-	default: break;
+void PlayerAi::increaseXp(int xp, GameplayState* state) {
+	experience += xp;
+	if(experience >= getNextLevelXp()) {
+		experience -= getNextLevelXp();
+		++xpLevel;
+		// TODO message(TCODColor::yellow, "You've reached level %d!", xpLevel);
+		Engine* engine = state->getEngine();
+		Actor* player = state->getPlayer();
+		State* levelUpMenuState = new LevelUpMenuState(player);
+		levelUpMenuState->init(engine);
+		engine->pushState(levelUpMenuState);
 	}
 }
 
