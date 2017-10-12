@@ -1,16 +1,13 @@
 #ifndef ENGINE_HPP
 #define ENGINE_HPP
 class Actor;
+class State;
 #include <queue>
 
 #include "renderer.hpp"
 #include "gui.hpp"
 #include "attacker.hpp"
 #include "engine_command.hpp"
-#include "state.hpp"
-#include "dummy_state.hpp"
-#include "gameplay_state.hpp"
-#include "main_menu_state.hpp"
 #include "persistent.hpp"
 
 class Engine {
@@ -19,7 +16,6 @@ public:
 	~Engine();
 	void init();
 
-	//void changeState(State* state);
 	void pushState(State* state) { states.push_back(state); }
 	void popState() { states.pop_back(); }
 	void update();
@@ -27,6 +23,7 @@ public:
 	void exit();
 	void save();
 	void load();
+	void changeState(State* state) { popState(); pushState(state); }
 
 private:
 	State* gameplayState;

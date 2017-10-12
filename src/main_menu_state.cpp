@@ -1,4 +1,5 @@
 #include "main_menu_state.hpp"
+#include "constants.hpp"
 #include "engine.hpp"
 #include "libtcod.hpp"
 
@@ -9,7 +10,9 @@ void MainMenuState::init(Engine* engine) {
 	MenuItem cont = { MenuItemCode::CONTINUE, "Continue!" };
 	MenuItem exit = { MenuItemCode::EXIT, "Exit!" };
 	menuItems.push_back(newGame);
-	menuItems.push_back(cont);
+	if(TCODSystem::fileExists(constants::SAVE_FILE_NAME.c_str())) {
+		menuItems.push_back(cont);
+	}
 	menuItems.push_back(exit);
 
 	selectedItem = 0;

@@ -16,6 +16,7 @@ void InputHandler::handleEvents() {
 	if(ev == TCOD_EVENT_KEY_PRESS) {
 		switch(key.vk) {
 			case TCODK_ESCAPE: {
+				engine->save();
 				State* mainMenuState = new MainMenuState();
 				mainMenuState->init(engine);
 				engine->pushState(mainMenuState);
@@ -39,12 +40,6 @@ boost::optional<RawInputEvent> InputHandler::getEvent(Actor* actor) {
 		State* inventoryMenuState = new InventoryMenuState(actor);
 		inventoryMenuState->init(engine);
 		engine->pushState(inventoryMenuState);
-		return boost::none; // TODO return empty RawInputEvent instead
-	}
-	if(event->key.c == 'l') { // TODO this is just for quick testing
-		State* levelUpMenuState = new LevelUpMenuState(actor);
-		levelUpMenuState->init(engine);
-		engine->pushState(levelUpMenuState);
 		return boost::none; // TODO return empty RawInputEvent instead
 	}
 	boost::optional<RawInputEvent> ev = event;

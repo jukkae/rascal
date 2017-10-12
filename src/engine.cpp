@@ -6,8 +6,10 @@
 #include "container.hpp"
 #include "destructible.hpp"
 #include "engine.hpp"
+#include "state.hpp"
+#include "gameplay_state.hpp"
+#include "main_menu_state.hpp"
 
-std::string file = "save.txt";
 
 Engine::Engine() {
 	TCODConsole::initRoot(constants::SCREEN_WIDTH, constants::SCREEN_HEIGHT, "Rascal", false);
@@ -18,6 +20,15 @@ Engine::~Engine() {
 }
 
 void Engine::init() {
+	/* TODO fix serialization...
+	if(!TCODSystem::fileExists(constants::SAVE_FILE_NAME.c_str())) {
+		gameplayState = new GameplayState(); // TODO yes leaks memory
+		gameplayState->init(this);
+	}
+	else {
+		load();
+	}
+	*/
 	gameplayState = new GameplayState(); // TODO yes leaks memory
 	gameplayState->init(this);
 	State* mainMenuState = new MainMenuState();
@@ -48,13 +59,13 @@ void Engine::exit() {
 }
 
 void Engine::load() {
-	std::ifstream ifs(file);
+	std::ifstream ifs(constants::SAVE_FILE_NAME);
 	boost::archive::text_iarchive ia(ifs);
 	ia >> gameplayState;
 }
 
 void Engine::save() {
-	std::ofstream ofs(file);
+	std::ofstream ofs(constants::SAVE_FILE_NAME);
 	boost::archive::text_oarchive oa(ofs);
 	oa << gameplayState;
 }
