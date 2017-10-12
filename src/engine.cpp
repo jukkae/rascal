@@ -7,8 +7,6 @@
 #include "destructible.hpp"
 #include "engine.hpp"
 
-std::string file = "save.txt";
-
 Engine::Engine() {
 	TCODConsole::initRoot(constants::SCREEN_WIDTH, constants::SCREEN_HEIGHT, "Rascal", false);
 	init();
@@ -48,13 +46,13 @@ void Engine::exit() {
 }
 
 void Engine::load() {
-	std::ifstream ifs(file);
+	std::ifstream ifs(constants::SAVE_FILE_NAME);
 	boost::archive::text_iarchive ia(ifs);
 	ia >> gameplayState;
 }
 
 void Engine::save() {
-	std::ofstream ofs(file);
+	std::ofstream ofs(constants::SAVE_FILE_NAME);
 	boost::archive::text_oarchive oa(ofs);
 	oa << gameplayState;
 }
