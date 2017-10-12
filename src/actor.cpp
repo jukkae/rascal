@@ -1,3 +1,4 @@
+#include <math.h>
 #include "actor.hpp"
 #include "ai.hpp"
 #include "attacker.hpp"

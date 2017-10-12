@@ -53,6 +53,10 @@ void PlayerAi::levelUpMenu(Actor* owner, GameplayState* state) {
 	}
 }
 
+void PlayerAi::increaseXp(int xp) {
+	experience += xp;
+}
+
 Action* PlayerAi::getNextAction(Actor* actor) {
 	Direction dir = Direction::NONE;
 	TCOD_key_t lastKey;

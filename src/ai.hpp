@@ -37,6 +37,7 @@ public:
 	int xpLevel;
 	int experience;
 	Action* getNextAction(Actor* actor) override;
+	void increaseXp(int xp);
 private:
 	void handleActionKey(Actor* owner, int ascii, GameplayState* state);
 	void levelUpMenu(Actor* owner, GameplayState* state); // TODO only for untangling update cycle
