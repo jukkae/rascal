@@ -1,5 +1,15 @@
 #include "gameover_state.hpp"
+#include "actor.hpp"
+#include "ai.hpp"
 #include <iostream>
+
+GameOverState::GameOverState(Actor* actor) :
+	console(constants::SCREEN_WIDTH, constants::SCREEN_HEIGHT),
+	actor(actor)
+	{
+		description = "you died at level ";
+		description.append(std::to_string(((PlayerAi*)actor->ai.get())->xpLevel));
+	}
 
 void GameOverState::init(Engine* engine) {
 	console.setDefaultBackground(TCODColor::black);
@@ -29,7 +39,7 @@ void GameOverState::update(Engine* engine) {
 
 void GameOverState::render(Engine* engine) {
 	console.setDefaultForeground(TCODColor::lightGrey);
-	console.print(0, 0, "you're dead");
+	console.print(0, 0, description.c_str());
 	console.flush();
 	TCODConsole::blit(&console, 0, 0, constants::SCREEN_WIDTH, constants::SCREEN_HEIGHT, TCODConsole::root, 0, 0);
 }
