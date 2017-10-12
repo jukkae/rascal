@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include "destructible.hpp"
+#include "engine.hpp"
 #include "gameplay_state.hpp"
+#include "gameover_state.hpp"
 
 Destructible::Destructible(float maxHp, float defense, int xp, std::string corpseName) :
 	maxHp(maxHp), hp(maxHp), defense(defense), xp(xp), corpseName(corpseName) {;}
@@ -47,7 +49,11 @@ PlayerDestructible::PlayerDestructible(float maxHp, float defense, int xp, std::
 void PlayerDestructible::die(Actor* owner) {
 	owner->s->message(TCODColor::red, "You died!");
 	Destructible::die(owner);
-	// TODO end game
+	Engine* engine = owner->s->getEngine();
+	State* gameOverState = new GameOverState(owner);
+	gameOverState->init(engine);
+	// TODO delete save game file
+	engine->pushState(gameOverState);
 }
 
 template void PlayerDestructible::serialize(boost::archive::text_iarchive& arch, const unsigned int version);
