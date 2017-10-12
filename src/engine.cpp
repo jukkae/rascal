@@ -6,6 +6,10 @@
 #include "container.hpp"
 #include "destructible.hpp"
 #include "engine.hpp"
+#include "state.hpp"
+#include "gameplay_state.hpp"
+#include "main_menu_state.hpp"
+
 
 Engine::Engine() {
 	TCODConsole::initRoot(constants::SCREEN_WIDTH, constants::SCREEN_HEIGHT, "Rascal", false);
