@@ -31,9 +31,10 @@ void LevelUpMenuState::handleEvents(Engine* engine) {
 			break;
 		case TCODK_ENTER:
 			handleItem(menuContents.at(selectedItem));
+			engine->addEngineCommand(new ContinueCommand(engine));
 			break;
 		case TCODK_ESCAPE:
-			engine->addEngineCommand(new ContinueCommand(engine));
+			//engine->addEngineCommand(new ContinueCommand(engine));
 			break;
 		default:
 			break;
