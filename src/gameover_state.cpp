@@ -2,6 +2,7 @@
 #include "actor.hpp"
 #include "ai.hpp"
 #include "constants.hpp"
+#include "main_menu_state.hpp"
 #include "libtcod.hpp"
 #include <iostream>
 
@@ -29,9 +30,12 @@ void GameOverState::handleEvents(Engine* engine) {
 	TCODSystem::checkForEvent(TCOD_EVENT_KEY_PRESS, &key, nullptr);
 
 	switch (key.vk) {
-		case TCODK_ENTER:
-			// TODO
+		case TCODK_ENTER: {
+			State* mainMenuState = new MainMenuState();
+			mainMenuState->init(engine);
+			changeState(engine, mainMenuState);
 			break;
+		}
 		default:
 			break;
 	}
