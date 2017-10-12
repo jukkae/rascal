@@ -33,6 +33,7 @@ int PlayerAi::getNextLevelXp() const {
 void PlayerAi::increaseXp(int xp, GameplayState* state) {
 	experience += xp;
 	if(experience >= getNextLevelXp()) {
+		experience -= getNextLevelXp();
 		++xpLevel;
 		// TODO message(TCODColor::yellow, "You've reached level %d!", xpLevel);
 		Engine* engine = state->getEngine();
