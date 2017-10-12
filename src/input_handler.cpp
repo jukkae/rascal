@@ -41,12 +41,6 @@ boost::optional<RawInputEvent> InputHandler::getEvent(Actor* actor) {
 		engine->pushState(inventoryMenuState);
 		return boost::none; // TODO return empty RawInputEvent instead
 	}
-	if(event->key.c == 'l') { // TODO this is just for quick testing
-		State* levelUpMenuState = new LevelUpMenuState(actor);
-		levelUpMenuState->init(engine);
-		engine->pushState(levelUpMenuState);
-		return boost::none; // TODO return empty RawInputEvent instead
-	}
 	boost::optional<RawInputEvent> ev = event;
 	event = boost::none;
 	return ev;
