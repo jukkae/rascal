@@ -16,6 +16,7 @@ void InputHandler::handleEvents() {
 	if(ev == TCOD_EVENT_KEY_PRESS) {
 		switch(key.vk) {
 			case TCODK_ESCAPE: {
+				engine->save();
 				State* mainMenuState = new MainMenuState();
 				mainMenuState->init(engine);
 				engine->pushState(mainMenuState);

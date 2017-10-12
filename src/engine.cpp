@@ -16,6 +16,15 @@ Engine::~Engine() {
 }
 
 void Engine::init() {
+	/* TODO fix serialization...
+	if(!TCODSystem::fileExists(constants::SAVE_FILE_NAME.c_str())) {
+		gameplayState = new GameplayState(); // TODO yes leaks memory
+		gameplayState->init(this);
+	}
+	else {
+		load();
+	}
+	*/
 	gameplayState = new GameplayState(); // TODO yes leaks memory
 	gameplayState->init(this);
 	State* mainMenuState = new MainMenuState();
