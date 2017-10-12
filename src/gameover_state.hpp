@@ -11,7 +11,7 @@ class Actor;
 
 class GameOverState : public State {
 public:
-	GameOverState(Actor* actor) : actor(actor) {;}
+	GameOverState(Actor* actor) : console(constants::SCREEN_WIDTH, constants::SCREEN_HEIGHT), actor(actor) {;}
 
 	void init(Engine* engine) override;
 	void cleanup() override;
@@ -21,6 +21,7 @@ public:
 	void render(Engine* engine) override;
 
 private:
+	TCODConsole console;
 	Actor* actor;
 };
 #endif /* GAME_OVER_STATE */
