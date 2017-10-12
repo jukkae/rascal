@@ -37,6 +37,7 @@ public:
 	void markExploredTiles() { map->markExploredTiles(); }
 	void showLevelUpMenu();
 	Menu::MenuItemCode pickFromMenu(Menu::DisplayMode mode = Menu::DisplayMode::PAUSE) { return gui->menu.pick(mode); }
+	Engine* getEngine() { return e; }
 
 	Actor* getNextActor() const { return actors->at(0); }
 	void updateNextActor();
@@ -52,6 +53,7 @@ public:
 
 	std::unique_ptr<InputHandler> inputHandler; // TODO private? singleton? something else?
 private:
+	Engine* e; // TODO
 	int time = 0;
 	int level = 1;
 	std::shared_ptr<std::vector<Actor*>> actors = std::make_shared<std::vector<Actor*>>(); // s.b. unique_ptr
