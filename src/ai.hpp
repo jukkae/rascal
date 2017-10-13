@@ -71,9 +71,13 @@ class TemporaryAi : public Ai {
 public:
 	TemporaryAi(int turns = 0) : turns(turns) {;}
 	void applyTo(Actor* actor);
+
+	virtual Action* getNextAction(Actor* actor) override = 0;
 protected:
 	int turns;
 	std::unique_ptr<Ai> oldAi;
+
+	void decreaseTurns(Actor* owner);
 private:
 	friend class boost::serialization::access;
 	template<class Archive>
@@ -87,6 +91,8 @@ private:
 class ConfusedMonsterAi : public TemporaryAi {
 public:
 	ConfusedMonsterAi(int turns = 0) : TemporaryAi(turns) {;}
+
+	Action* getNextAction(Actor* actor) override;
 private:
 	friend class boost::serialization::access;
 	template<class Archive>

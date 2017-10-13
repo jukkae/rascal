@@ -155,20 +155,21 @@ Action* MonsterAi::getNextAction(Actor* actor) {
 	return new WaitAction(actor);
 }
 
-/* float TemporaryAi::update(Actor* owner, GameplayState* state) { // TODO reimplement
+void TemporaryAi::decreaseTurns(Actor* owner) {
 	--turns;
 	if(turns <= 0) {
 		owner->ai = std::move(oldAi);
 	}
-	return 100 * (100 / speed);
-} */
+}
 
 void TemporaryAi::applyTo(Actor* actor) {
 	oldAi = std::move(actor->ai);
 	actor->ai = std::unique_ptr<Ai>(this);
 }
 
-/* float ConfusedMonsterAi::update(Actor* owner, GameplayState* state) { // TODO reimplement
+Action* ConfusedMonsterAi::getNextAction(Actor* owner) { // TODO reimplement in terms of moveAction
+	decreaseTurns(owner);
+	GameplayState* state = owner->s;
 	TCODRandom* rng = TCODRandom::getInstance();
 	int dx = rng->getInt(-1,1);
 	int dy = rng->getInt(-1,1);
@@ -183,8 +184,8 @@ void TemporaryAi::applyTo(Actor* actor) {
 			if(target) { owner->attacker->attack(owner, target); }
 		}
 	}
-	return TemporaryAi::update(owner, state);
-} */
+	return new WaitAction(owner);
+}
 
 BOOST_CLASS_EXPORT(PlayerAi)
 BOOST_CLASS_EXPORT(MonsterAi)
