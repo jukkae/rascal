@@ -162,11 +162,15 @@ void GameplayState::nextLevel() {
 	}
 
 	// gameplayState.initMap() or something like that, remember to init actors
+	map = std::unique_ptr<Map>(new Map(120, 72));
+	map->setState(this);
+	map->init(true);
 
 	std::sort(actors->begin(), actors->end(), [](const auto& lhs, const auto& rhs)
 	{
 		return lhs->energy > rhs->energy;
 	});
+	for (auto a : *actors) a->setState(this);
 }
 
 void GameplayState::showLevelUpMenu() {
