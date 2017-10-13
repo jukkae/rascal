@@ -77,6 +77,16 @@ Action* PlayerAi::getNextAction(Actor* actor) {
 				case 'g': {
 					return new PickupAction(actor);
 				}
+				case -89: {
+					if(lastKey.shift) {
+						std::cout << "go down\n";
+						// go down
+					}
+					else {
+						std::cout << "go up\n";
+						// go up
+					}
+				}
 			}
 		}
 		default: dir = Direction::NONE; break;
