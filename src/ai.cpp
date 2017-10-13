@@ -79,12 +79,10 @@ Action* PlayerAi::getNextAction(Actor* actor) {
 				}
 				case -89: {
 					if(lastKey.shift) {
-						std::cout << "go down\n";
-						// go down
+						return new TraverseStairsAction(actor, true);
 					}
 					else {
-						std::cout << "go up\n";
-						// go up
+						return new TraverseStairsAction(actor, false);
 					}
 				}
 			}
