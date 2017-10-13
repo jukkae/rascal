@@ -36,12 +36,12 @@ void InputHandler::handleEvents() {
 
 	}
 	if(ev == TCOD_EVENT_MOUSE_PRESS) {
-		
+
 	}
 	if(ev == TCOD_EVENT_MOUSE_RELEASE) {
 		bool l = mouse.lbutton_pressed;
 		bool r = mouse.rbutton_pressed;
-		std::cout << "l: " << l << " , r: " << r << "\n";
+
 		if(l) mouseLeftClicked = true;
 		if(r) mouseRightClicked = true;
 	}
