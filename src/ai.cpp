@@ -77,6 +77,14 @@ Action* PlayerAi::getNextAction(Actor* actor) {
 				case 'g': {
 					return new PickupAction(actor);
 				}
+				case -89: {
+					if(lastKey.shift) {
+						return new TraverseStairsAction(actor, true);
+					}
+					else {
+						return new TraverseStairsAction(actor, false);
+					}
+				}
 			}
 		}
 		default: dir = Direction::NONE; break;

@@ -44,14 +44,21 @@ bool MoveAction::execute() {
 }
 
 bool TraverseStairsAction::execute() {
-	/* TODO something like this
-	if(state->getStairs()->x == owner->x && state->getStairs()->y == owner->y) {
-		state->nextLevel();
-	} else {
-		state->message(TCODColor::lightGrey, "There are no stairs here.");
+	GameplayState* state = actor->s;
+	if(down) {
+		if(state->getStairs()->x == actor->x && state->getStairs()->y == actor->y) {
+			state->nextLevel();
+			return true;
+		} else {
+			state->message(TCODColor::lightGrey, "There are no stairs here.");
+			return false;
+		}
 	}
-	*/
-	return false;
+
+	else {
+		state->message(TCODColor::lightGrey, "There are no stairs leading up here.");
+		return false; // up not implemented yet
+	}
 }
 
 bool PickupAction::execute() {
