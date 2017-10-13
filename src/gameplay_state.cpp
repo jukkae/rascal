@@ -193,7 +193,8 @@ bool GameplayState::pickTile(int* x, int* y, float maxRange) { // TODO mouse han
 			}
 		}
 		TCODSystem::waitForEvent(TCOD_EVENT_KEY_PRESS | TCOD_EVENT_MOUSE, &lastKey, &mouse, true);
-		Point mouseLocation = renderer->getWorldCoordsFromScreenCoords(Point(mouse.cx, mouse.cy));
+		Point mouseLocationScreen = inputHandler->getMouseLocation();
+		Point mouseLocation = renderer->getWorldCoordsFromScreenCoords(Point(mouseLocationScreen.x, mouseLocationScreen.y));
 		int realX = mouseLocation.x;
 		int realY = mouseLocation.y;
 		if(isInFov(realX, realY) && (maxRange == 0 || player->getDistance(realX, realY) <= maxRange)) {
