@@ -192,7 +192,6 @@ bool GameplayState::pickTile(int* x, int* y, float maxRange) { // TODO mouse han
 				}
 			}
 		}
-		//TCODSystem::waitForEvent(TCOD_EVENT_KEY_PRESS | TCOD_EVENT_MOUSE, &lastKey, &mouse, true);
 		inputHandler->handleEvents(); // ehh
 		Point mouseLocationScreen = inputHandler->getMouseLocation();
 		Point mouseLocation = renderer->getWorldCoordsFromScreenCoords(Point(mouseLocationScreen.x, mouseLocationScreen.y));
@@ -209,9 +208,6 @@ bool GameplayState::pickTile(int* x, int* y, float maxRange) { // TODO mouse han
 		}
 		if(inputHandler->mouseRightClicked) {
 			inputHandler->mouseRightClicked = false;
-			return false;
-		}
-		if(lastKey.vk != TCODK_NONE) {
 			return false;
 		}
 		TCODConsole::flush();
