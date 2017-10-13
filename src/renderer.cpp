@@ -11,6 +11,7 @@ static const TCODColor darkWall   (0, 0, 100);
 static const TCODColor darkGround (50, 50, 150);
 static const TCODColor lightWall  (130, 110, 50);
 static const TCODColor lightGround(200, 180, 50);
+static const TCODColor black      (0, 0, 0);
 
 void Renderer::render(const Map* const map, const std::vector<Actor*>* const actors) const {
 	TCODConsole::root->clear();
@@ -34,7 +35,10 @@ void Renderer::renderMap(const Map* const map) const {
 			Point worldPosition = getWorldCoordsFromScreenCoords(screenPosition, player);
 			int worldX = worldPosition.x;
 			int worldY = worldPosition.y;
-			if(map->isInFov(worldX, worldY)) {
+			if(worldX < 0 || worldX >= map->width || worldY < 0 || worldY >= map->height) {
+				TCODConsole::root->setCharBackground(x, y, black);
+			}
+			else if(map->isInFov(worldX, worldY)) {
 				TCODConsole::root->setCharBackground(x, y, map->isWall(worldX, worldY) ? lightWall : lightGround);
 			}
 			else if(map->isExplored(worldX, worldY)) {
