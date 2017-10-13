@@ -19,6 +19,8 @@ public:
 	void handleEvents();
 	boost::optional<RawInputEvent> getEvent(Actor* actor);
 	Point getMouseLocation();
+	bool mouseLeftClicked = false; // TODO bad
+	bool mouseRightClicked = false;
 private:
 	Point lastMouseLocation = Point(0, 0);
 	Engine* engine;

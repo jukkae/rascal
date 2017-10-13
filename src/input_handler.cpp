@@ -32,8 +32,18 @@ void InputHandler::handleEvents() {
 			default: break;
 		}
 	}
-	if(ev == TCOD_EVENT_MOUSE) {
+	if(ev == TCOD_EVENT_MOUSE_MOVE) {
 
+	}
+	if(ev == TCOD_EVENT_MOUSE_PRESS) {
+		
+	}
+	if(ev == TCOD_EVENT_MOUSE_RELEASE) {
+		bool l = mouse.lbutton_pressed;
+		bool r = mouse.rbutton_pressed;
+		std::cout << "l: " << l << " , r: " << r << "\n";
+		if(l) mouseLeftClicked = true;
+		if(r) mouseRightClicked = true;
 	}
 	event = (RawInputEvent) { key, mouse, ev };
 }
