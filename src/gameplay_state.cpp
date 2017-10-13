@@ -1,8 +1,5 @@
 #include "gameplay_state.hpp"
 #include "engine.hpp"
-#include <chrono>
-#include <iostream>
-#include <boost/optional/optional_io.hpp>
 
 void GameplayState::init(Engine* engine) {
 	e = engine;
@@ -77,12 +74,6 @@ void GameplayState::updateNextActor() {
     auto it = std::lower_bound(actors->begin(), actors->end(), activeActor, [](const auto& lhs, const auto& rhs) { return lhs->energy > rhs->energy; });
     actors->insert(it, activeActor);
 
-	// TODO debug
-	//std::cout << std::chrono::system_clock::now();
-	std::cout << "\n\n";
-	for(auto a : *actors) {
-		std::cout << a->name << " with energy " << a->energy << "\n";
-	}
     /*std::sort(actors->begin(), actors->end(), [](const auto& lhs, const auto& rhs)
     {
         return lhs->energy > rhs->energy;
