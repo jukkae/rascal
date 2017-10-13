@@ -23,7 +23,13 @@ float Actor::update(GameplayState* state) {
 		if(success) {
 			float turnCost = 100.0f * actionCost / ai->speed;
 			return turnCost;
-		} else return 0;
+		} else {
+			if(ai->isPlayer()) {
+				return 0;
+			} else { // TODO figure out proper way of handling failing monster ais
+				return constants::DEFAULT_TURN_LENGTH;
+			}
+		}
 	}
 	else return constants::DEFAULT_TURN_LENGTH; // ai-less actors should not get turns in the first place
 	// actually, maybe they should: for example, decaying materials etc!

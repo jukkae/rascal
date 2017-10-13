@@ -32,6 +32,7 @@ void GameplayState::init(Engine* engine) {
 		return lhs->energy > rhs->energy;
 	});
 
+
 	gui->message(TCODColor::green, "Welcome to year 20XXAD, you strange rascal!\nPrepare to fight or die!");
 }
 
@@ -72,6 +73,7 @@ void GameplayState::updateNextActor() {
     actors->erase(actors->begin());
     auto it = std::lower_bound(actors->begin(), actors->end(), activeActor, [](const auto& lhs, const auto& rhs) { return lhs->energy > rhs->energy; });
     actors->insert(it, activeActor);
+
     /*std::sort(actors->begin(), actors->end(), [](const auto& lhs, const auto& rhs)
     {
         return lhs->energy > rhs->energy;
