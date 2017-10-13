@@ -8,11 +8,15 @@
 #include "inventory_menu_state.hpp"
 #include "level_up_menu_state.hpp"
 #include "main_menu_state.hpp"
+#include "point.hpp"
 
 void InputHandler::handleEvents() {
 	TCOD_key_t key;
 	TCOD_mouse_t mouse;
 	TCOD_event_t ev = TCODSystem::checkForEvent(TCOD_EVENT_KEY_PRESS | TCOD_EVENT_MOUSE, &key, &mouse);
+
+	lastMouseLocation = Point(mouse.cx, mouse.cy);
+
 	if(ev == TCOD_EVENT_KEY_PRESS) {
 		switch(key.vk) {
 			case TCODK_ESCAPE: {
@@ -45,4 +49,8 @@ boost::optional<RawInputEvent> InputHandler::getEvent(Actor* actor) {
 	boost::optional<RawInputEvent> ev = event;
 	event = boost::none;
 	return ev;
+}
+
+Point InputHandler::getMouseLocation() {
+	return lastMouseLocation;
 }

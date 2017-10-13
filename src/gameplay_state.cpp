@@ -105,8 +105,7 @@ Actor* GameplayState::getPlayer() const {
 }
 
 Point GameplayState::getMouseLocation() {
-	//return Point(engine.mouse.cx, engine.mouse.cy); TODO pass mouse location and other IO correctly!
-	return Point(0, 0);
+	return inputHandler->getMouseLocation();
 }
 
 bool GameplayState::canWalk(int x, int y) {
@@ -178,7 +177,7 @@ void GameplayState::showLevelUpMenu() {
 	gui->menu.addItem(Menu::MenuItemCode::SPEED,"Speed (+10 speed)");
 }
 
-bool GameplayState::pickTile(int* x, int* y, float maxRange) {
+bool GameplayState::pickTile(int* x, int* y, float maxRange) { // TODO mouse handling in inputHandler
 	while(!TCODConsole::isWindowClosed()) {
 		render(nullptr); // yeah inorite
 		for(int cx = 0; cx < constants::SCREEN_WIDTH; ++cx) {
