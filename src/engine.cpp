@@ -6,6 +6,7 @@
 #include "container.hpp"
 #include "destructible.hpp"
 #include "engine.hpp"
+#include "pickable.hpp"
 #include "state.hpp"
 #include "gameplay_state.hpp"
 #include "main_menu_state.hpp"
@@ -20,17 +21,14 @@ Engine::~Engine() {
 }
 
 void Engine::init() {
-	/* TODO fix serialization...
 	if(!TCODSystem::fileExists(constants::SAVE_FILE_NAME.c_str())) {
-		gameplayState = new GameplayState(); // TODO yes leaks memory
+		gameplayState = new GameplayState();
 		gameplayState->init(this);
 	}
 	else {
+		gameplayState = new GameplayState();
 		load();
 	}
-	*/
-	gameplayState = new GameplayState(); // TODO yes leaks memory
-	gameplayState->init(this);
 	State* mainMenuState = new MainMenuState();
 	mainMenuState->init(this);
 
@@ -61,11 +59,20 @@ void Engine::exit() {
 void Engine::load() {
 	std::ifstream ifs(constants::SAVE_FILE_NAME);
 	boost::archive::text_iarchive ia(ifs);
+
+	ia.register_type<HealthEffect>();
+	ia.register_type<AiChangeEffect>();
+
 	ia >> gameplayState;
+
 }
 
 void Engine::save() {
 	std::ofstream ofs(constants::SAVE_FILE_NAME);
 	boost::archive::text_oarchive oa(ofs);
+
+	oa.register_type<HealthEffect>();
+	oa.register_type<AiChangeEffect>();
+
 	oa << gameplayState;
 }

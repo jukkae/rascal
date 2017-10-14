@@ -4,6 +4,14 @@
 #include "actor.hpp"
 #include "ai.hpp"
 
+#include <boost/archive/text_oarchive.hpp>
+#include <boost/archive/text_iarchive.hpp>
+#include <boost/serialization/export.hpp>
+#include "boost/serialization/assume_abstract.hpp"
+#include <boost/serialization/base_object.hpp>
+
+#include "persistent.hpp"
+
 class TargetSelector {
 public:
 	enum class SelectorType { CLOSEST_MONSTER, SELECTED_MONSTER, WEARER, WEARER_RANGE, SELECTED_RANGE, NONE };
@@ -28,9 +36,9 @@ private:
 	friend class boost::serialization::access;
 	template<class Archive>
 	void serialize(Archive & ar, const unsigned int version) {
-
 	}
 };
+//BOOST_SERIALIZATION_ASSUME_ABSTRACT(Effect)
 
 class HealthEffect : public Effect {
 public:
@@ -85,7 +93,7 @@ private:
     }
 };
 
-BOOST_CLASS_EXPORT_KEY(Effect)
+//BOOST_CLASS_EXPORT(Effect)
 BOOST_CLASS_EXPORT_KEY(HealthEffect)
 BOOST_CLASS_EXPORT_KEY(AiChangeEffect)	
 

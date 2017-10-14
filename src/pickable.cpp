@@ -4,6 +4,13 @@
 #include "gameplay_state.hpp"
 #include "persistent.hpp"
 
+#include <boost/archive/text_oarchive.hpp>
+#include <boost/archive/text_iarchive.hpp>
+#include <boost/serialization/export.hpp>
+#include <boost/serialization/vector.hpp>
+#include "boost/optional.hpp"
+
+
 TargetSelector::TargetSelector(SelectorType type, float range) : type(type), range(range) {;}
 
 void TargetSelector::selectTargets(Actor* wearer, std::vector<Actor*>& list) {
@@ -120,15 +127,15 @@ void Pickable::drop(Actor* owner, Actor* wearer) {
 	}
 }
 
-template void Effect::serialize(boost::archive::text_iarchive& arch, const unsigned int version);
-template void Effect::serialize(boost::archive::text_oarchive& arch, const unsigned int version);
-template void HealthEffect::serialize(boost::archive::text_iarchive& arch, const unsigned int version);
-template void HealthEffect::serialize(boost::archive::text_oarchive& arch, const unsigned int version);
-template void AiChangeEffect::serialize(boost::archive::text_iarchive& arch, const unsigned int version);
-template void AiChangeEffect::serialize(boost::archive::text_oarchive& arch, const unsigned int version);
-template void Pickable::serialize(boost::archive::text_iarchive& arch, const unsigned int version);
-template void Pickable::serialize(boost::archive::text_oarchive& arch, const unsigned int version);
+//template void Effect::serialize(boost::archive::text_iarchive& arch, const unsigned int version);
+//template void Effect::serialize(boost::archive::text_oarchive& arch, const unsigned int version);
+//template void HealthEffect::serialize(boost::archive::text_iarchive& arch, const unsigned int version);
+//template void HealthEffect::serialize(boost::archive::text_oarchive& arch, const unsigned int version);
+//template void AiChangeEffect::serialize(boost::archive::text_iarchive& arch, const unsigned int version);
+//template void AiChangeEffect::serialize(boost::archive::text_oarchive& arch, const unsigned int version);
+//template void Pickable::serialize(boost::archive::text_iarchive& arch, const unsigned int version);
+//template void Pickable::serialize(boost::archive::text_oarchive& arch, const unsigned int version);
 
-BOOST_CLASS_EXPORT_IMPLEMENT(Effect)
+//BOOST_CLASS_EXPORT(Effect)
 BOOST_CLASS_EXPORT_IMPLEMENT(HealthEffect)
 BOOST_CLASS_EXPORT_IMPLEMENT(AiChangeEffect)
