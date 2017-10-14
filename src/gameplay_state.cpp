@@ -36,11 +36,25 @@ void GameplayState::init(Engine* engine) {
 	gui->message(TCODColor::green, "Welcome to year 20XXAD, you strange rascal!\nPrepare to fight or die!");
 }
 
+void GameplayState::initLoaded(Engine* engine) {
+	e = engine;
+	inputHandler = std::unique_ptr<InputHandler>(new InputHandler(engine));
+	renderer = std::unique_ptr<Renderer>(new Renderer());
+	renderer->setState(this);
+	std::cout << "initLoaded(), actors->size(): " << actors->size() << "\n";
+	for (auto a : *actors) a->setState(this);
+}
+
 void GameplayState::cleanup() {
 
 }
 
 void GameplayState::update(Engine* engine) {
+	std::cout << "\n\nupdate()\n";
+	std::cout << "actors->size(): " << actors->size() << "\n";
+	for(auto a : *actors) {
+		std::cout << a->name << ", isPlayer: " << a->isPlayer() << "\n";
+	}
 	computeFov();
 
 	render(engine); // yep rendering is that cheap now
@@ -98,7 +112,11 @@ void GameplayState::updateTime() {
 
 
 Actor* GameplayState::getPlayer() const {
+	std::cout << "getplayer()\n";
+	std::cout << actors << "\n";
+	std::cout << "actors->size(): " << actors->size() << "\n";
 	for(Actor* actor : *actors) {
+		std::cout << actor->name << ": " << actor->isPlayer() << "\n";
         if(actor->isPlayer()) return actor;
     }
     return nullptr;

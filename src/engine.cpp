@@ -28,6 +28,7 @@ void Engine::init() {
 	else {
 		gameplayState = new GameplayState();
 		load();
+		((GameplayState*)gameplayState)->initLoaded(this);
 	}
 	State* mainMenuState = new MainMenuState();
 	mainMenuState->init(this);

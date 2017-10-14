@@ -10,6 +10,7 @@ class Engine;
 #include "point.hpp"
 #include "renderer.hpp"
 #include "input_handler.hpp"
+#include "persistent.hpp"
 
 class GameplayState : public State {
 public:
@@ -20,6 +21,7 @@ public:
 	void update(Engine* engine) override;
 	void render(Engine* engine) override;
 
+	void initLoaded(Engine* engine);
 	// TEMPORARY FUNCTIONS FOR REFACTORING PROCESS
 	int getLevel() { return level; } // temporary!
 	void increaseLevel() { ++level; } // temporary!
