@@ -2,6 +2,7 @@
 #include "engine.hpp"
 
 void GameplayState::init(Engine* engine) {
+	std::cout << "\n\nSTATE INIT\n\n";
 	e = engine;
 	inputHandler = std::unique_ptr<InputHandler>(new InputHandler(engine));
 
@@ -36,9 +37,11 @@ void GameplayState::init(Engine* engine) {
 	gui->message(TCODColor::green, "Welcome to year 20XXAD, you strange rascal!\nPrepare to fight or die!");
 }
 
-void GameplayState::initLoaded(Engine* engine) {
+void GameplayState::initLoaded(Engine* engine) { // TODO i believe either state or renderer is duplicated on deser
+	std::cout << "\n\nSTATE INITLOADED\n\n";
 	e = engine;
 	inputHandler = std::unique_ptr<InputHandler>(new InputHandler(engine));
+	gui->setState(this);
 	renderer = std::unique_ptr<Renderer>(new Renderer());
 	renderer->setState(this);
 	map->setState(this);

@@ -16,12 +16,14 @@ static const TCODColor black      (0, 0, 0);
 void Renderer::render(const Map* const map, const std::vector<Actor*>* const actors) const {
 	TCODConsole::root->clear();
 	renderMap(map);
+	Actor* player;
 	for (Actor* actor : *actors) {
 		if(!actor->isPlayer() && ((!actor->fovOnly && map->isExplored(actor->x, actor->y)) || map->isInFov(actor->x, actor->y))) {
 			renderActor(actor);
 		}
+		else if(actor->isPlayer()) player = actor;
 	}
-	renderActor(state->getPlayer());
+	renderActor(player);
 }
 
 void Renderer::renderMap(const Map* const map) const {

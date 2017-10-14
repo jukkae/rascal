@@ -26,7 +26,7 @@ void Engine::init() {
 		gameplayState->init(this);
 	}
 	else {
-		gameplayState = new GameplayState();
+		//gameplayState = new GameplayState();
 		load();
 		((GameplayState*)gameplayState)->initLoaded(this);
 	}
@@ -39,6 +39,7 @@ void Engine::init() {
 
 void Engine::update() {
 	while(engineCommands.size() > 0) executeEngineCommand();
+	std::cout << "gps: " << states.back() << "\n\n";
 
 	states.back()->handleEvents(this);
 	states.back()->update(this);
