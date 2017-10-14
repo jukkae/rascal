@@ -16,14 +16,7 @@ static const TCODColor black      (0, 0, 0);
 void Renderer::render(const Map* const map, const std::vector<Actor*>* const actors) const {
 	TCODConsole::root->clear();
 	renderMap(map);
-	Actor* player;
-	for (Actor* actor : *actors) {
-		if(!actor->isPlayer() && ((!actor->fovOnly && map->isExplored(actor->x, actor->y)) || map->isInFov(actor->x, actor->y))) {
-			renderActor(actor);
-		}
-		else if(actor->isPlayer()) player = actor;
-	}
-	renderActor(player);
+	renderActors(map, actors);
 }
 
 void Renderer::renderMap(const Map* const map) const {
@@ -49,6 +42,54 @@ void Renderer::renderMap(const Map* const map) const {
 		}
 	}
 }
+
+void Renderer::renderActors(const Map* const map, const std::vector<Actor*>* const actors) const {
+	// Crude implementation of render layers
+	Actor* player;
+	std::vector<Actor*> corpses;
+	std::vector<Actor*> misc; // Maybe useless?
+	std::vector<Actor*> pickables;
+	std::vector<Actor*> live;
+
+	for(Actor* actor : *actors) {
+		if(!actor->isPlayer()) {
+			if(actor->destructible && actor->destructible->isDead()) corpses.push_back(actor);
+			else if(actor->pickable) pickables.push_back(actor);
+			else if(actor->ai) live.push_back(actor);
+			else misc.push_back(actor);
+		} else player = actor;
+	}
+
+	for(Actor* actor : corpses) {
+		if((!actor->fovOnly && map->isExplored(actor->x, actor->y)) || map->isInFov(actor->x, actor->y)) {
+			renderActor(actor);
+		}
+	}
+	for(Actor* actor : misc) {
+		if((!actor->fovOnly && map->isExplored(actor->x, actor->y)) || map->isInFov(actor->x, actor->y)) {
+			renderActor(actor);
+		}
+	}
+	for(Actor* actor : pickables) {
+		if((!actor->fovOnly && map->isExplored(actor->x, actor->y)) || map->isInFov(actor->x, actor->y)) {
+			renderActor(actor);
+		}
+	}
+	for(Actor* actor : live) {
+		if((!actor->fovOnly && map->isExplored(actor->x, actor->y)) || map->isInFov(actor->x, actor->y)) {
+			renderActor(actor);
+		}
+	}
+
+	/*for (Actor* actor : *actors) {
+		if(!actor->isPlayer() && ((!actor->fovOnly && map->isExplored(actor->x, actor->y)) || map->isInFov(actor->x, actor->y))) {
+			renderActor(actor);
+		}
+		else if(actor->isPlayer()) player = actor;
+	}*/
+	renderActor(player);
+}
+
 
 void Renderer::renderActor(const Actor* const actor) const {
 	Point worldPosition(actor->x, actor->y);

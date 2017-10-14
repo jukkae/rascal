@@ -18,6 +18,7 @@ private:
 	GameplayState* state;
 
 	void renderMap(const Map* const map) const;
+	void renderActors(const Map* const map, const std::vector<Actor*>* const actors) const;
 	void renderActor(const Actor* const actor) const;
 
 	Point getScreenCoordsFromWorldCoords(const Point& point) const;
