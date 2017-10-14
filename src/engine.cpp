@@ -39,7 +39,6 @@ void Engine::init() {
 
 void Engine::update() {
 	while(engineCommands.size() > 0) executeEngineCommand();
-	std::cout << "gps: " << states.back() << "\n\n";
 
 	states.back()->handleEvents(this);
 	states.back()->update(this);

@@ -64,7 +64,6 @@ void LevelUpMenuState::render(Engine* engine) {
 }
 
 void LevelUpMenuState::handleItem(MenuItem item) {
-	std::cout << item.label << "\n";
 	switch(item.type) {
 		case MenuItemType::CONSTITUTION:
 			actor->modifyStatistic(Statistic::CONSTITUTION, 20.0f);

@@ -2,7 +2,6 @@
 #include "engine.hpp"
 
 void GameplayState::init(Engine* engine) {
-	std::cout << "\n\nSTATE INIT\n\n";
 	e = engine;
 	inputHandler = std::unique_ptr<InputHandler>(new InputHandler(engine));
 
@@ -37,8 +36,7 @@ void GameplayState::init(Engine* engine) {
 	gui->message(TCODColor::green, "Welcome to year 20XXAD, you strange rascal!\nPrepare to fight or die!");
 }
 
-void GameplayState::initLoaded(Engine* engine) { // TODO i believe either state or renderer is duplicated on deser
-	std::cout << "\n\nSTATE INITLOADED\n\n";
+void GameplayState::initLoaded(Engine* engine) {
 	e = engine;
 	inputHandler = std::unique_ptr<InputHandler>(new InputHandler(engine));
 	gui->setState(this);
@@ -46,7 +44,6 @@ void GameplayState::initLoaded(Engine* engine) { // TODO i believe either state 
 	renderer->setState(this);
 	map->setState(this);
 	map->init(false);
-	std::cout << "initLoaded(), actors->size(): " << actors->size() << "\n";
 	for (auto a : *actors) a->setState(this);
 }
 
@@ -55,11 +52,6 @@ void GameplayState::cleanup() {
 }
 
 void GameplayState::update(Engine* engine) {
-	std::cout << "\n\nupdate()\n";
-	std::cout << "actors->size(): " << actors->size() << "\n";
-	for(auto a : *actors) {
-		std::cout << a->name << ", isPlayer: " << a->isPlayer() << "\n";
-	}
 	computeFov();
 
 	render(engine); // yep rendering is that cheap now
@@ -117,11 +109,7 @@ void GameplayState::updateTime() {
 
 
 Actor* GameplayState::getPlayer() const {
-	std::cout << "getplayer()\n";
-	std::cout << actors << "\n";
-	std::cout << "actors->size(): " << actors->size() << "\n";
 	for(Actor* actor : *actors) {
-		std::cout << actor->name << ": " << actor->isPlayer() << "\n";
         if(actor->isPlayer()) return actor;
     }
     return nullptr;
