@@ -41,6 +41,8 @@ void GameplayState::initLoaded(Engine* engine) {
 	inputHandler = std::unique_ptr<InputHandler>(new InputHandler(engine));
 	renderer = std::unique_ptr<Renderer>(new Renderer());
 	renderer->setState(this);
+	map->setState(this);
+	map->init(false);
 	std::cout << "initLoaded(), actors->size(): " << actors->size() << "\n";
 	for (auto a : *actors) a->setState(this);
 }
