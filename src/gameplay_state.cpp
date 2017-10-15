@@ -191,14 +191,6 @@ void GameplayState::nextLevel() {
 	for (auto a : *actors) a->setState(this);
 }
 
-void GameplayState::showLevelUpMenu() {
-	gui->menu.clear();
-	gui->menu.addItem(Menu::MenuItemCode::CONSTITUTION,"Constitution (+20HP)");
-	gui->menu.addItem(Menu::MenuItemCode::STRENGTH,"Strength (+1 attack)");
-	gui->menu.addItem(Menu::MenuItemCode::AGILITY,"Agility (+1 defense)");
-	gui->menu.addItem(Menu::MenuItemCode::SPEED,"Speed (+10 speed)");
-}
-
 bool GameplayState::pickTile(int* x, int* y, float maxRange) { // TODO mouse handling in inputHandler
 	while(!TCODConsole::isWindowClosed()) {
 		render(nullptr); // yeah inorite

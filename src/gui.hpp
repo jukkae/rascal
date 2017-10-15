@@ -5,23 +5,6 @@
 #include "constants.hpp"
 class GameplayState;
 
-class Menu {
-public:
-	enum class MenuItemCode { NONE, CONSTITUTION, STRENGTH, AGILITY, SPEED };
-	enum class DisplayMode { PAUSE };
-	~Menu();
-	void clear();
-	void addItem(MenuItemCode code, const std::string label);
-	MenuItemCode pick(DisplayMode mode = DisplayMode::PAUSE);
-
-protected:
-	struct MenuItem {
-		MenuItemCode code;
-		std::string label;
-	};
-	std::vector<MenuItem> items;
-};
-
 class Gui {
 public:
 	Gui(): con(constants::SCREEN_WIDTH, constants::GUI_PANEL_HEIGHT) {;}
@@ -33,7 +16,6 @@ public:
 	void message(const TCODColor& col, std::string text, ...);
 	void message(const TCODColor& col, std::string text, va_list args);
 
-	Menu menu;
 	void setState(GameplayState* s) { state = s; }
 protected:
 	struct Message {

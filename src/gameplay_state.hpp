@@ -37,8 +37,6 @@ public:
 	bool isWall(int x, int y) { return map->isWall(x, y); }
 	bool canWalk(int x, int y);
 	void markExploredTiles() { map->markExploredTiles(); }
-	void showLevelUpMenu();
-	Menu::MenuItemCode pickFromMenu(Menu::DisplayMode mode = Menu::DisplayMode::PAUSE) { return gui->menu.pick(mode); }
 	Engine* getEngine() { return e; }
 
 	Actor* getNextActor() const { return actors->at(0); }
