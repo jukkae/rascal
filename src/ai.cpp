@@ -35,7 +35,7 @@ void PlayerAi::increaseXp(int xp, GameplayState* state) {
 	if(experience >= getNextLevelXp()) {
 		experience -= getNextLevelXp();
 		++xpLevel;
-		// TODO message(TCODColor::yellow, "You've reached level %d!", xpLevel);
+		state->message(TCODColor::yellow, "You've reached level %d!", xpLevel);
 		Engine* engine = state->getEngine();
 		Actor* player = state->getPlayer();
 		State* levelUpMenuState = new LevelUpMenuState(player);
