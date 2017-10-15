@@ -192,7 +192,7 @@ void GameplayState::nextLevel() {
 	for (auto a : *actors) a->setState(this);
 }
 
-bool GameplayState::pickTile(int* x, int* y, float maxRange) { // TODO mouse handling in inputHandler
+bool GameplayState::pickTile(int* x, int* y, float maxRange) {
 	while(!TCODConsole::isWindowClosed()) {
 		render(nullptr); // yeah inorite
 		for(int cx = 0; cx < constants::SCREEN_WIDTH; ++cx) {
