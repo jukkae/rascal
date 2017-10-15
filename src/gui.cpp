@@ -64,7 +64,7 @@ void Gui::renderBar(int x, int y, int width, std::string name, float value, floa
 	con.printEx(x + width/2, y, TCOD_BKGND_NONE, TCOD_CENTER, "%s : %g/%g", name.c_str(), value, maxValue);
 }
 
-void Gui::renderMouseLook(std::vector<Actor*>* actors) { // TODO broken
+void Gui::renderMouseLook(std::vector<Actor*>* actors) {
 	Point mouse = state->getMouseLocation();
 	Point location = state->getWorldCoordsFromScreenCoords(mouse);
 	int x = location.x;
@@ -178,7 +178,7 @@ Menu::MenuItemCode Menu::pick(DisplayMode mode) {
 			TCODConsole::root->print(menuX, menuY + currentItem * 3, item.label.c_str());
 			++currentItem;
 		}
-		TCODConsole::flush(); // TODO ?? check flushes
+		TCODConsole::flush();
 		TCOD_key_t key;
 		TCODSystem::waitForEvent(TCOD_EVENT_KEY_PRESS, &key, nullptr, true);
 		switch (key.vk) {
