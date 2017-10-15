@@ -72,7 +72,7 @@ private:
 		ar & ai;
 		ar & pickable;
 		ar & container;
-		ar & actionsQueue; // TODO serialization
+		ar & actionsQueue;
     }   
 };
 #endif /* ACTOR_HPP */
