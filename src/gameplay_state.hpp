@@ -56,7 +56,7 @@ private:
 	Engine* e; // TODO
 	int time = 0;
 	int level = 1;
-	std::shared_ptr<std::vector<Actor*>> actors = std::make_shared<std::vector<Actor*>>(); // s.b. unique_ptr
+	std::unique_ptr<std::vector<Actor*>> actors = std::make_unique<std::vector<Actor*>>();
 	std::unique_ptr<Map> map;
 	std::unique_ptr<Gui> gui;
 	std::unique_ptr<Renderer> renderer;
