@@ -59,7 +59,6 @@ private:
 	int time = 0;
 	int level = 1;
 	std::shared_ptr<std::vector<Actor*>> actors = std::make_shared<std::vector<Actor*>>(); // s.b. unique_ptr
-	Actor* player; // TODO fix reliance on explicitly pointing to player
 	Actor* stairs; // likewise, this feels bad
 	std::unique_ptr<Map> map;
 	std::unique_ptr<Gui> gui;
@@ -74,7 +73,6 @@ private:
 		ar & time;
 		ar & map;
 		ar & stairs;
-		ar & player;
 		ar & actors;
 		ar & gui;
 	}

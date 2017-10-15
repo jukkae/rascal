@@ -10,7 +10,7 @@ void GameplayState::init(Engine* engine) {
 	renderer = std::unique_ptr<Renderer>(new Renderer());
 	renderer->setState(this);
 
-	player               = new Actor(40, 25, '@', "you", TCODColor::white, 2); // TODO
+	Actor* player        = new Actor(40, 25, '@', "you", TCODColor::white, 2); // TODO
 	player->destructible = std::unique_ptr<Destructible>(new PlayerDestructible(30, 2, 0, "your corpse"));
 	player->attacker     = std::unique_ptr<Attacker>(new Attacker(5));
 	player->ai           = std::unique_ptr<Ai>(new PlayerAi());
@@ -160,13 +160,13 @@ void GameplayState::message(const TCODColor& col, std::string text, ...) {
 void GameplayState::nextLevel() {
 	increaseLevel();
 	gui->message(TCODColor::lightViolet,"You take a moment to rest, and recover your strength.");
-	player->destructible->heal(player->destructible->maxHp/2);
+	getPlayer()->destructible->heal(getPlayer()->destructible->maxHp/2);
 	gui->message(TCODColor::red,"After a rare moment of peace, you descend\ndeeper into the heart of the dungeon...");
 
 	// Clunky, not idiomatic
 	auto it = actors->begin();
 	while (it != actors->end()) {
-		if (*it != player && *it != stairs) {
+		if (!((*it)->isPlayer()) && *it != stairs) {
 			it = actors->erase(it);
 		}
 		else ++it;
@@ -200,7 +200,7 @@ bool GameplayState::pickTile(int* x, int* y, float maxRange) { // TODO mouse han
 				Point location = renderer->getWorldCoordsFromScreenCoords(Point(cx, cy));
 				int realX = location.x;
 				int realY = location.y;
-				if(isInFov(realX, realY) && (maxRange == 0 || player->getDistance(realX, realY) <= maxRange)) {
+				if(isInFov(realX, realY) && (maxRange == 0 || getPlayer()->getDistance(realX, realY) <= maxRange)) {
 					TCODColor col = TCODConsole::root->getCharBackground(cx, cy);
 					col = col * 1.2;
 					TCODConsole::root->setCharBackground(cx, cy, col);
@@ -212,7 +212,7 @@ bool GameplayState::pickTile(int* x, int* y, float maxRange) { // TODO mouse han
 		Point mouseLocation = renderer->getWorldCoordsFromScreenCoords(Point(mouseLocationScreen.x, mouseLocationScreen.y));
 		int realX = mouseLocation.x;
 		int realY = mouseLocation.y;
-		if(isInFov(realX, realY) && (maxRange == 0 || player->getDistance(realX, realY) <= maxRange)) {
+		if(isInFov(realX, realY) && (maxRange == 0 || getPlayer()->getDistance(realX, realY) <= maxRange)) {
 			TCODConsole::root->setCharBackground(mouseLocationScreen.x, mouseLocationScreen.y, TCODColor::white);
 			if(inputHandler->mouseLeftClicked) {
 				inputHandler->mouseLeftClicked = false;
