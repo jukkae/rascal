@@ -26,7 +26,7 @@ float Actor::update(GameplayState* state) {
 		} else {
 			if(ai->isPlayer()) {
 				return 0;
-			} else { // TODO figure out proper way of handling failing monster ais
+			} else {
 				return constants::DEFAULT_TURN_LENGTH;
 			}
 		}

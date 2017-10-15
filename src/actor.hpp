@@ -29,7 +29,7 @@ public:
 	int ch; // ASCII code
 	TCODColor col; // color
 	std::string name;
-	boost::optional<float> energy; // TODO proper encapsulation
+	boost::optional<float> energy; // Shouldn't be public
 	bool blocks; // does it block movement?
 	bool fovOnly; // visible only when in fov?
 	bool stairs; // is it stairs?

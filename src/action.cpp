@@ -4,7 +4,6 @@
 #include "gameplay_state.hpp"
 
 bool MoveAction::execute() {
-	// TODO behavior can also be chosen upon actor->ai->faction
 	GameplayState* state = actor->s;
 	int targetX = actor->x;
 	int targetY = actor->y;
