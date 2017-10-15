@@ -39,15 +39,15 @@ public:
 	void markExploredTiles() { map->markExploredTiles(); }
 	Engine* getEngine() { return e; }
 
-	Actor* getNextActor() const { return actors->at(0); }
+	Actor* getNextActor() const { return actors.at(0); }
 	void updateNextActor();
 	Actor* getPlayer() const;
 	Actor* getStairs() const;
 	Actor* getClosestMonster(int x, int y, float range) const;
 	Actor* getLiveActor(int x, int y) const;
-	std::vector<Actor*>* getActors() { return actors.get(); }
+	std::vector<Actor*>* getActors() { return &actors; } // TODO ultimately get rid of pointers
 
-	void addActor(Actor* actor) { actors->push_back(actor); }
+	void addActor(Actor* actor) { actors.push_back(actor); }
 
 	bool pickTile(int* x, int* y, float maxRange = 0.0f);
 
@@ -56,7 +56,7 @@ private:
 	Engine* e; // TODO
 	int time = 0;
 	int level = 1;
-	std::unique_ptr<std::vector<Actor*>> actors = std::make_unique<std::vector<Actor*>>();
+	std::vector<Actor*> actors;
 	std::unique_ptr<Map> map;
 	std::unique_ptr<Gui> gui;
 	std::unique_ptr<Renderer> renderer;
