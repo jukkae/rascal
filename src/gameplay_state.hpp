@@ -37,7 +37,6 @@ public:
 	Engine* getEngine() { return e; }
 
 	Actor* getNextActor() const { return actors.at(0); }
-	void updateNextActor();
 	Actor* getPlayer() const;
 	Actor* getStairs() const;
 	Actor* getClosestMonster(int x, int y, float range) const;
@@ -59,6 +58,7 @@ private:
 	std::unique_ptr<Renderer> renderer;
 
 	void updateTime();
+	void updateNextActor();
 
 	friend class boost::serialization::access;
 	template<class Archive>
