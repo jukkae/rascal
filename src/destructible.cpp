@@ -52,7 +52,6 @@ void PlayerDestructible::die(Actor* owner) {
 	Engine* engine = owner->s->getEngine();
 	State* gameOverState = new GameOverState(owner);
 	gameOverState->init(engine);
-	// TODO delete save game file
 	engine->pushState(gameOverState);
 }
 
