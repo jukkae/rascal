@@ -99,8 +99,7 @@ void GameplayState::updateTime() {
 		Actor* next = *std::find_if(actors.begin(), actors.end(), [](const auto& a) { return a->ai != nullptr; });
 
 		float tuna = next->energy.get() * -1;
-
-		increaseTime(tuna);
+		time += tuna;
 
 		for(auto a : actors) {
 			if(a->ai != nullptr) *a->energy += tuna;

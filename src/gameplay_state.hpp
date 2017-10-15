@@ -27,8 +27,6 @@ public:
 	void increaseLevel() { ++level; } // temporary!
 	void nextLevel();
 	int getTime() { return time; } // temporary!
-	void updateTime();
-	void increaseTime(int amount) { time += amount; } // temporary!
 	bool isInFov(int x, int y) { return map->isInFov(x, y); }
 	Point getWorldCoordsFromScreenCoords(Point& point) { return renderer->getWorldCoordsFromScreenCoords(point); }
 	Point getMouseLocation();
@@ -60,6 +58,8 @@ private:
 	std::unique_ptr<Map> map;
 	std::unique_ptr<Gui> gui;
 	std::unique_ptr<Renderer> renderer;
+
+	void updateTime();
 
 	friend class boost::serialization::access;
 	template<class Archive>
