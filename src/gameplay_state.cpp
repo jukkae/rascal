@@ -17,7 +17,7 @@ void GameplayState::init(Engine* engine) {
 	player->container    = std::unique_ptr<Container>(new Container(26));
 	actors->push_back(player);
 
-	stairs = new Actor(0, 0, '>', "stairs", TCODColor::white);
+	Actor* stairs = new Actor(0, 0, '>', "stairs", TCODColor::white, 0, true);
     stairs->blocks = false;
     stairs->fovOnly = false;
     actors->push_back(stairs);
@@ -115,6 +115,13 @@ Actor* GameplayState::getPlayer() const {
     return nullptr;
 }
 
+Actor* GameplayState::getStairs() const {
+	for(Actor* actor : *actors) {
+        if(actor->isStairs()) return actor;
+    }
+    return nullptr;
+}
+
 Point GameplayState::getMouseLocation() {
 	return inputHandler->getMouseLocation();
 }
@@ -166,7 +173,7 @@ void GameplayState::nextLevel() {
 	// Clunky, not idiomatic
 	auto it = actors->begin();
 	while (it != actors->end()) {
-		if (!((*it)->isPlayer()) && *it != stairs) {
+		if (!((*it)->isPlayer()) && !((*it)->isStairs())) {
 			it = actors->erase(it);
 		}
 		else ++it;

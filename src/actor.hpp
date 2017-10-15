@@ -32,6 +32,7 @@ public:
 	boost::optional<float> energy; // TODO proper encapsulation
 	bool blocks; // does it block movement?
 	bool fovOnly; // visible only when in fov?
+	bool stairs; // is it stairs?
 	std::unique_ptr<Attacker> attacker;
 	std::unique_ptr<Destructible> destructible;
 	std::unique_ptr<Ai> ai;
@@ -40,11 +41,12 @@ public:
 
 	GameplayState* s; // temporary for messaging
 
-	Actor(int x = 0, int y = 0, int ch = 'x', std::string name = "", const TCODColor& col = TCODColor::white, boost::optional<float> energy = boost::none);
+	Actor(int x = 0, int y = 0, int ch = 'x', std::string name = "", const TCODColor& col = TCODColor::white, boost::optional<float> energy = boost::none, bool stairs = false);
 	~Actor();
 	float update(GameplayState* state);
 	float getDistance(int cx, int cy) const;
 	bool isPlayer() { return ai ? this->ai->isPlayer() : false; }
+	bool isStairs() { return stairs; } // Bod, but better than what I had before
 	void addAction(Action* action) { actionsQueue.push_back(action); }
 	std::vector<Actor*>* getActors(); // temporary for refactoring
 	Actor* getPlayer(); // temporary for refactoring
@@ -73,6 +75,7 @@ private:
 		ar & pickable;
 		ar & container;
 		ar & actionsQueue;
+		ar & stairs;
     }   
 };
 #endif /* ACTOR_HPP */

@@ -44,7 +44,7 @@ public:
 	Actor* getNextActor() const { return actors->at(0); }
 	void updateNextActor();
 	Actor* getPlayer() const;
-	Actor* getStairs() const { return stairs; }
+	Actor* getStairs() const;
 	Actor* getClosestMonster(int x, int y, float range) const;
 	Actor* getLiveActor(int x, int y) const;
 	std::vector<Actor*>* getActors() { return actors.get(); }
@@ -59,7 +59,6 @@ private:
 	int time = 0;
 	int level = 1;
 	std::shared_ptr<std::vector<Actor*>> actors = std::make_shared<std::vector<Actor*>>(); // s.b. unique_ptr
-	Actor* stairs; // likewise, this feels bad
 	std::unique_ptr<Map> map;
 	std::unique_ptr<Gui> gui;
 	std::unique_ptr<Renderer> renderer;
@@ -72,7 +71,6 @@ private:
 		ar & level;
 		ar & time;
 		ar & map;
-		ar & stairs;
 		ar & actors;
 		ar & gui;
 	}
