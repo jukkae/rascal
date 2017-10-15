@@ -1,3 +1,4 @@
+#include "constants.hpp"
 #include "gameplay_state.hpp"
 #include "engine.hpp"
 
@@ -7,7 +8,7 @@ void GameplayState::init(Engine* engine) {
 
 	gui = std::unique_ptr<Gui>(new Gui());
 	gui->setState(this);
-	renderer = std::unique_ptr<Renderer>(new Renderer());
+	renderer = std::unique_ptr<Renderer>(new Renderer(constants::SCREEN_WIDTH, constants::SCREEN_HEIGHT));
 	renderer->setState(this);
 
 	Actor* player        = new Actor(40, 25, '@', "you", TCODColor::white, 2); // TODO
@@ -40,7 +41,7 @@ void GameplayState::initLoaded(Engine* engine) {
 	e = engine;
 	inputHandler = std::unique_ptr<InputHandler>(new InputHandler(engine));
 	gui->setState(this);
-	renderer = std::unique_ptr<Renderer>(new Renderer());
+	renderer = std::unique_ptr<Renderer>(new Renderer(constants::SCREEN_WIDTH, constants::SCREEN_HEIGHT));
 	renderer->setState(this);
 	map->setState(this);
 	map->init(false);

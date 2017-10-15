@@ -6,7 +6,6 @@ class GameplayState;
 class Map;
 class Renderer {
 public:
-	Renderer() : screenWidth(80), screenHeight(50) {;} // TODO remove default constructor
 	Renderer(int screenWidth, int screenHeight): screenWidth(screenWidth), screenHeight(screenHeight) {;}
 	void render(const Map* const map, const std::vector<Actor*>* const actors) const;
 	Point getWorldCoordsFromScreenCoords(const Point& point) const;
