@@ -165,7 +165,7 @@ void GameplayState::message(const TCODColor& col, std::string text, ...) {
 }
 
 void GameplayState::nextLevel() {
-	increaseLevel();
+	++level;
 	gui->message(TCODColor::lightViolet,"You take a moment to rest, and recover your strength.");
 	getPlayer()->destructible->heal(getPlayer()->destructible->maxHp/2);
 	gui->message(TCODColor::red,"After a rare moment of peace, you descend\ndeeper into the heart of the dungeon...");

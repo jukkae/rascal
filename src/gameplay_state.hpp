@@ -23,10 +23,9 @@ public:
 
 	void initLoaded(Engine* engine);
 	// TEMPORARY FUNCTIONS FOR REFACTORING PROCESS
-	int getLevel() { return level; } // temporary!
-	void increaseLevel() { ++level; } // temporary!
+	int getLevel() { return level; }
 	void nextLevel();
-	int getTime() { return time; } // temporary!
+	int getTime() { return time; }
 	bool isInFov(int x, int y) { return map->isInFov(x, y); }
 	Point getWorldCoordsFromScreenCoords(Point& point) { return renderer->getWorldCoordsFromScreenCoords(point); }
 	Point getMouseLocation();
