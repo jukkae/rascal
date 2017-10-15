@@ -14,7 +14,6 @@ public:
 
 	void changeState(Engine* engine, State* state) { engine->changeState(state); }
 
-// protected: State() { } TODO for implementing states as singletons
 private:
 	friend class boost::serialization::access;
 	template<class Archive>
