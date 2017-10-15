@@ -9,6 +9,7 @@
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/serialization/export.hpp>
 #include <boost/serialization/optional.hpp>
+#include <boost/serialization/deque.hpp>
 #include <boost/serialization/vector.hpp>
 class Attacker;
 class Destructible;
@@ -44,7 +45,7 @@ public:
 	float update(GameplayState* state);
 	float getDistance(int cx, int cy) const;
 	bool isPlayer() { return ai ? this->ai->isPlayer() : false; }
-	void addAction(Action* action) { actionsQueue.push(action); }
+	void addAction(Action* action) { actionsQueue.push_back(action); }
 	std::vector<Actor*>* getActors(); // temporary for refactoring
 	Actor* getPlayer(); // temporary for refactoring
 	Actor* getClosestMonster(int x, int y, float range);
@@ -53,7 +54,7 @@ public:
 	void modifyStatistic(Statistic stat, float delta);
 
 private:
-	std::queue<Action*> actionsQueue;
+	std::deque<Action*> actionsQueue;
 
 	friend class boost::serialization::access;                                                                
     template<class Archive>                                                                                   
@@ -71,7 +72,7 @@ private:
 		ar & ai;
 		ar & pickable;
 		ar & container;
-		//ar & actionsQueue; // TODO serialization
+		ar & actionsQueue; // TODO serialization
     }   
 };
 #endif /* ACTOR_HPP */

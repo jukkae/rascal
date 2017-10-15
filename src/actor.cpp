@@ -16,10 +16,10 @@ Actor::~Actor() {
 
 float Actor::update(GameplayState* state) {
 	if(ai) {
-		if(actionsQueue.empty()) actionsQueue.push(ai->getNextAction(this));
+		if(actionsQueue.empty()) actionsQueue.push_back(ai->getNextAction(this));
 		float actionCost = actionsQueue.front()->getLength();
 		bool success = actionsQueue.front()->execute();
-		actionsQueue.pop();
+		actionsQueue.pop_front();
 		if(success) {
 			float turnCost = 100.0f * actionCost / ai->speed;
 			return turnCost;
