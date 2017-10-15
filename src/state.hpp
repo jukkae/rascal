@@ -12,7 +12,7 @@ public:
 	virtual void update(Engine* engine) = 0;
 	virtual void render(Engine* engine) = 0; // TODO should be const
 
-	void changeState(Engine* engine, State* state) { engine->changeState(state); } // TODO not sure if necessary
+	void changeState(Engine* engine, State* state) { engine->changeState(state); }
 
 // protected: State() { } TODO for implementing states as singletons
 private:
