@@ -33,7 +33,9 @@ void InventoryMenuState::handleEvents(Engine* engine) {
 		case TCODK_CHAR: // jesus f. christ, the h*ck we need to deal with
 			switch(key.c) {
 				case 'd':
-					inventoryContents.at(selectedItem)->pickable->drop(inventoryContents.at(selectedItem), actor); // TODO will break with empty inventory
+					if(inventoryContents.size() > 0) {
+						inventoryContents.at(selectedItem)->pickable->drop(inventoryContents.at(selectedItem), actor);
+					}
 					break;
 				case 'e':
 					// EQUIP
@@ -42,8 +44,10 @@ void InventoryMenuState::handleEvents(Engine* engine) {
 					// THROW
 					break;
 				case 'u':
-					actor->addAction(new UseItemAction(actor, inventoryContents.at(selectedItem))); // TODO memleak
-					engine->addEngineCommand(new ContinueCommand(engine));
+					if(inventoryContents.size() > 0) {
+						actor->addAction(new UseItemAction(actor, inventoryContents.at(selectedItem))); // TODO memleak
+						engine->addEngineCommand(new ContinueCommand(engine));
+					}
 					break;
 			}
 			break;
