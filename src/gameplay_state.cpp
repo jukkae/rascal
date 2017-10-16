@@ -77,7 +77,7 @@ void GameplayState::render(Engine* engine) {
 }
 
 void GameplayState::updateNextActor() {
-    Actor* activeActor = actors.at(0);
+    Actor* activeActor = actors.front();
 
     float actionTime = activeActor->update(this);
     *activeActor->energy -= actionTime;
@@ -94,7 +94,8 @@ void GameplayState::updateNextActor() {
 }
 
 void GameplayState::updateTime() {
-	if(actors.at(0)->energy.get() > 0) return; // TODO check if energy HAS value (if(a->energy))
+	if(!actors.front()->energy) return;
+	if(actors.front()->energy.get() > 0) return;
 	else {
 		Actor* next = *std::find_if(actors.begin(), actors.end(), [](const auto& a) { return a->ai != nullptr; });
 

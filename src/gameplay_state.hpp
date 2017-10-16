@@ -36,7 +36,7 @@ public:
 	void markExploredTiles() { map->markExploredTiles(); }
 	Engine* getEngine() { return e; }
 
-	Actor* getNextActor() const { return actors.at(0); }
+	Actor* getNextActor() const { return actors.front(); }
 	Actor* getPlayer() const;
 	Actor* getStairs() const;
 	Actor* getClosestMonster(int x, int y, float range) const;
