@@ -66,7 +66,7 @@ private:
 	template<class Archive>
 	friend void boost::serialization::load_construct_data(Archive & ar, const Map* m, const unsigned int file_version);
 
-	template<class Archive>
+	template<class Archive> // Not called anymore?
 	void serialize(Archive & ar, const unsigned int version) {
 		ar & width;
 		ar & height;
