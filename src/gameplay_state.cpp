@@ -11,10 +11,10 @@ void GameplayState::init(Engine* engine) {
 	renderer.setState(this);
 
 	Actor* player        = new Actor(40, 25, '@', "you", TCODColor::white, 2); // TODO
-	player->destructible = std::unique_ptr<Destructible>(new PlayerDestructible(30, 2, 0, "your corpse"));
-	player->attacker     = std::unique_ptr<Attacker>(new Attacker(5));
-	player->ai           = std::unique_ptr<Ai>(new PlayerAi());
-	player->container    = std::unique_ptr<Container>(new Container(26));
+	player->destructible = std::make_unique<PlayerDestructible>(30, 2, 0, "your corpse");
+	player->attacker     = std::make_unique<Attacker>(5);
+	player->ai           = std::make_unique<PlayerAi>();
+	player->container    = std::make_unique<Container>(26);
 	actors.push_back(player);
 
 	Actor* stairs = new Actor(0, 0, '>', "stairs", TCODColor::white, 0, true);
