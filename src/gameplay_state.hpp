@@ -26,14 +26,14 @@ public:
 	int getLevel() { return level; }
 	void nextLevel();
 	int getTime() { return time; }
-	bool isInFov(int x, int y) { return map->isInFov(x, y); }
+	bool isInFov(int x, int y) { return map.isInFov(x, y); }
 	Point getWorldCoordsFromScreenCoords(Point& point) { return renderer->getWorldCoordsFromScreenCoords(point); }
 	Point getMouseLocation();
 	void message(const TCODColor& col, std::string text, ...);
-	void computeFov() { map->computeFov(); }
-	bool isWall(int x, int y) { return map->isWall(x, y); }
+	void computeFov() { map.computeFov(); }
+	bool isWall(int x, int y) { return map.isWall(x, y); }
 	bool canWalk(int x, int y);
-	void markExploredTiles() { map->markExploredTiles(); }
+	void markExploredTiles() { map.markExploredTiles(); }
 	Engine* getEngine() { return e; }
 
 	Actor* getNextActor() const { return actors.front(); }
@@ -53,7 +53,7 @@ private:
 	int time = 0;
 	int level = 1;
 	std::vector<Actor*> actors;
-	std::unique_ptr<Map> map;
+	Map map;
 	Gui gui;
 	std::unique_ptr<Renderer> renderer;
 

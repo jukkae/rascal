@@ -9,5 +9,7 @@ namespace constants {
 	static int const INVENTORY_HEIGHT = 28;
 	static float const DEFAULT_TURN_LENGTH = 100.0f;
 	static std::string const SAVE_FILE_NAME = "save.txt";
+	static int const DEFAULT_MAP_WIDTH = 120;
+	static int const DEFAULT_MAP_HEIGHT = 72;
 }
 #endif /* CONSTANTS_HPP */

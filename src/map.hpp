@@ -25,6 +25,7 @@ class Map {
 public:
 	int width, height;
 
+	Map();
 	Map(int width, int height);
 	Map(int width, int height, long seed);
 	~Map();
@@ -43,7 +44,7 @@ public:
 	void setState(GameplayState* s) { state = s; }
 
 protected:
-	std::unique_ptr<TCODMap> map;
+	std::shared_ptr<TCODMap> map; // TODO shouldn't be shared_ptr, but unique can't be copied
 	TCODRandom rng;
 	friend class BspListener;
 

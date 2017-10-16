@@ -22,9 +22,9 @@ void GameplayState::init(Engine* engine) {
     stairs->fovOnly = false;
     actors.push_back(stairs);
 
-	map = std::unique_ptr<Map>(new Map(120, 72));
-	map->setState(this);
-	map->init(true);
+	map = Map(120, 72);
+	map.setState(this);
+	map.init(true);
 	// not really the correct place for following, but w/e
 	for (auto a : actors) a->setState(this);
 	std::sort(actors.begin(), actors.end(), [](const auto& lhs, const auto& rhs)
@@ -42,8 +42,8 @@ void GameplayState::initLoaded(Engine* engine) {
 	gui.setState(this);
 	renderer = std::unique_ptr<Renderer>(new Renderer(constants::SCREEN_WIDTH, constants::SCREEN_HEIGHT));
 	renderer->setState(this);
-	map->setState(this);
-	map->init(false);
+	map.setState(this);
+	map.init(false);
 	for (auto a : actors) a->setState(this);
 }
 
@@ -71,7 +71,7 @@ void GameplayState::handleEvents(Engine* engine) {
 }
 
 void GameplayState::render(Engine* engine) {
-	renderer->render(map.get(), &actors);
+	renderer->render(&map, &actors);
 	gui.render();
 }
 
@@ -180,9 +180,9 @@ void GameplayState::nextLevel() {
 	}
 
 	// gameplayState.initMap() or something like that, remember to init actors
-	map = std::unique_ptr<Map>(new Map(120, 72));
-	map->setState(this);
-	map->init(true);
+	map = Map(120, 72);
+	map.setState(this);
+	map.init(true);
 
 	std::sort(actors.begin(), actors.end(), [](const auto& lhs, const auto& rhs)
 	{

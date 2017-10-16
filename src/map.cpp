@@ -2,6 +2,7 @@
 #include <limits>
 #include "actor.hpp"
 #include "attacker.hpp"
+#include "constants.hpp"
 #include "destructible.hpp"
 #include "gameplay_state.hpp"
 #include "map.hpp"
@@ -12,6 +13,8 @@ static const int ROOM_MIN_SIZE = 6;
 static const int MAX_ROOM_MONSTERS = 3;
 static const int MAX_ROOM_ITEMS = 2;
 static const int fovRadius = 10; // TODO doesn't belong here
+
+Map::Map() : Map(constants::DEFAULT_MAP_WIDTH, constants::DEFAULT_MAP_HEIGHT) {}
 
 Map::Map(int width, int height) : width(width), height(height) {
 	seed = TCODRandom::getInstance()->getInt(0, std::numeric_limits<int>::max());
@@ -28,7 +31,7 @@ void Map::init(bool initActors) {
 	for(int i = 0; i < width*height; ++i) {
 		tiles.push_back(Tile());
 	}
-	this->map = std::unique_ptr<TCODMap>(new TCODMap(width, height));
+	this->map = std::shared_ptr<TCODMap>(new TCODMap(width, height)); // TODO
 	TCODBsp bsp(0, 0, width, height);
 	// 8: recursion level,
 	// 1.5f, 1.5f H/V and V/H ratios of rooms
