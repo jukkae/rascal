@@ -31,7 +31,7 @@ void Map::init(bool initActors) {
 	for(int i = 0; i < width*height; ++i) {
 		tiles.push_back(Tile());
 	}
-	this->map = std::shared_ptr<TCODMap>(new TCODMap(width, height)); // TODO
+	this->map = std::make_shared<TCODMap>(width, height);
 	TCODBsp bsp(0, 0, width, height);
 	// 8: recursion level,
 	// 1.5f, 1.5f H/V and V/H ratios of rooms
