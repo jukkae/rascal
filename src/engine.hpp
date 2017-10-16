@@ -19,7 +19,11 @@ public:
 	void pushState(State* state) { states.push_back(state); }
 	void popState() { states.pop_back(); }
 	void update();
-	void addEngineCommand(EngineCommand* engineCommand) { engineCommands.push(engineCommand); }
+
+	template <class T>
+	void addEngineCommand(T engineCommand) { engineCommands.push(std::make_unique<T>(engineCommand)); }
+	//void addEngineCommand(EngineCommand engineCommand) { engineCommands.push(std::make_unique<EngineCommand>(engineCommand)); }
+
 	void exit();
 	void save();
 	void load();
@@ -28,7 +32,7 @@ public:
 private:
 	State* gameplayState;
 	std::vector<State*> states;
-	std::queue<EngineCommand*> engineCommands;
+	std::queue<std::unique_ptr<EngineCommand>> engineCommands;
 
 	void executeEngineCommand();
 };

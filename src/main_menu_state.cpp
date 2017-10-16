@@ -72,13 +72,13 @@ void MainMenuState::showMenu(Engine* engine) {
 void MainMenuState::handleSelectedMenuItem(Engine* engine) {
 	switch (menuItems.at(selectedItem).code) {
 		case MenuItemCode::NEW_GAME:
-			engine->addEngineCommand(new NewGameCommand(engine));
+			engine->addEngineCommand(NewGameCommand(engine));
 			break;
 		case MenuItemCode::CONTINUE:
-			engine->addEngineCommand(new ContinueCommand(engine));
+			engine->addEngineCommand(ContinueCommand(engine));
 			break;
 		case MenuItemCode::EXIT:
-			engine->addEngineCommand(new ExitCommand(engine));
+			engine->addEngineCommand(ExitCommand(engine));
 			break;
 		case MenuItemCode::NONE:
 			break;

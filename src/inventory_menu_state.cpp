@@ -28,14 +28,14 @@ void InventoryMenuState::handleEvents(Engine* engine) {
 		case TCODK_ENTER:
 			break;
 		case TCODK_ESCAPE:
-			engine->addEngineCommand(new ContinueCommand(engine));
+			engine->addEngineCommand(ContinueCommand(engine));
 			break;
 		case TCODK_CHAR: // jesus f. christ, the h*ck we need to deal with
 			switch(key.c) {
 				case 'd':
 					if(inventoryContents.size() > 0) {
 						inventoryContents.at(selectedItem)->pickable->drop(inventoryContents.at(selectedItem), actor);
-						engine->addEngineCommand(new ContinueCommand(engine));
+						engine->addEngineCommand(ContinueCommand(engine));
 					}
 					break;
 				case 'e':
@@ -47,7 +47,7 @@ void InventoryMenuState::handleEvents(Engine* engine) {
 				case 'u':
 					if(inventoryContents.size() > 0) {
 						actor->addAction(new UseItemAction(actor, inventoryContents.at(selectedItem))); // TODO memleak
-						engine->addEngineCommand(new ContinueCommand(engine));
+						engine->addEngineCommand(ContinueCommand(engine));
 					}
 					break;
 			}
