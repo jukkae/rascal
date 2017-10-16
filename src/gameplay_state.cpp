@@ -4,7 +4,7 @@
 
 void GameplayState::init(Engine* engine) {
 	e = engine;
-	inputHandler = std::unique_ptr<InputHandler>(new InputHandler(engine));
+	inputHandler = std::make_unique<InputHandler>(engine);
 
 	gui.setState(this);
 	renderer = Renderer(constants::SCREEN_WIDTH, constants::SCREEN_HEIGHT);
@@ -38,7 +38,7 @@ void GameplayState::init(Engine* engine) {
 
 void GameplayState::initLoaded(Engine* engine) {
 	e = engine;
-	inputHandler = std::unique_ptr<InputHandler>(new InputHandler(engine));
+	inputHandler = std::make_unique<InputHandler>(engine);
 	gui.setState(this);
 	renderer = Renderer(constants::SCREEN_WIDTH, constants::SCREEN_HEIGHT);
 	renderer.setState(this);
