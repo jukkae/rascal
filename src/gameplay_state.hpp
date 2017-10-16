@@ -54,7 +54,7 @@ private:
 	int level = 1;
 	std::vector<Actor*> actors;
 	std::unique_ptr<Map> map;
-	std::unique_ptr<Gui> gui;
+	Gui gui;
 	std::unique_ptr<Renderer> renderer;
 
 	void updateTime();

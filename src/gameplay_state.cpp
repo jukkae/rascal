@@ -6,8 +6,7 @@ void GameplayState::init(Engine* engine) {
 	e = engine;
 	inputHandler = std::unique_ptr<InputHandler>(new InputHandler(engine));
 
-	gui = std::unique_ptr<Gui>(new Gui());
-	gui->setState(this);
+	gui.setState(this);
 	renderer = std::unique_ptr<Renderer>(new Renderer(constants::SCREEN_WIDTH, constants::SCREEN_HEIGHT));
 	renderer->setState(this);
 
@@ -34,13 +33,13 @@ void GameplayState::init(Engine* engine) {
 	});
 
 
-	gui->message(TCODColor::green, "Welcome to year 20XXAD, you strange rascal!\nPrepare to fight or die!");
+	gui.message(TCODColor::green, "Welcome to year 20XXAD, you strange rascal!\nPrepare to fight or die!");
 }
 
 void GameplayState::initLoaded(Engine* engine) {
 	e = engine;
 	inputHandler = std::unique_ptr<InputHandler>(new InputHandler(engine));
-	gui->setState(this);
+	gui.setState(this);
 	renderer = std::unique_ptr<Renderer>(new Renderer(constants::SCREEN_WIDTH, constants::SCREEN_HEIGHT));
 	renderer->setState(this);
 	map->setState(this);
@@ -73,7 +72,7 @@ void GameplayState::handleEvents(Engine* engine) {
 
 void GameplayState::render(Engine* engine) {
 	renderer->render(map.get(), &actors);
-	gui->render();
+	gui.render();
 }
 
 void GameplayState::updateNextActor() {
@@ -161,15 +160,15 @@ Actor* GameplayState::getLiveActor(int x, int y) const {
 void GameplayState::message(const TCODColor& col, std::string text, ...) {
 	va_list args;
 	va_start(args, text);
-	gui->message(col, text, args);
+	gui.message(col, text, args);
 	va_end(args);
 }
 
 void GameplayState::nextLevel() {
 	++level;
-	gui->message(TCODColor::lightViolet,"You take a moment to rest, and recover your strength.");
+	gui.message(TCODColor::lightViolet,"You take a moment to rest, and recover your strength.");
 	getPlayer()->destructible->heal(getPlayer()->destructible->maxHp/2);
-	gui->message(TCODColor::red,"After a rare moment of peace, you descend\ndeeper into the heart of the dungeon...");
+	gui.message(TCODColor::red,"After a rare moment of peace, you descend\ndeeper into the heart of the dungeon...");
 
 	// Clunky, not idiomatic
 	auto it = actors.begin();
