@@ -35,6 +35,7 @@ void InventoryMenuState::handleEvents(Engine* engine) {
 				case 'd':
 					if(inventoryContents.size() > 0) {
 						inventoryContents.at(selectedItem)->pickable->drop(inventoryContents.at(selectedItem), actor);
+						engine->addEngineCommand(new ContinueCommand(engine));
 					}
 					break;
 				case 'e':
