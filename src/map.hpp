@@ -24,6 +24,8 @@ struct Tile {
 class Map {
 public:
 	int width, height;
+	std::vector<Tile> tiles;
+	long seed;
 
 	Map();
 	Map(int width, int height);
@@ -48,8 +50,6 @@ protected:
 	TCODRandom rng;
 	friend class BspListener;
 
-	std::vector<Tile> tiles;
-	long seed;
 
 	void dig(int x1, int y1, int x2, int y2);
 	void createRoom(bool first, int x1, int y1, int x2, int y2, bool initActors);
@@ -77,15 +77,15 @@ private:
 
 namespace boost { namespace serialization {
 template<class Archive>
-	inline void save_construct_data (Archive & ar, const Map* m, const unsigned int file_version) {
-		ar << m->width;
-		ar << m->height;
-		ar << m->tiles;
-		ar << m->seed;
+	inline void save_construct_data (Archive & ar, const Map m, const unsigned int file_version) {
+		ar << m.width;
+		ar << m.height;
+		ar << m.tiles;
+		ar << m.seed;
 	}
 
 template<class Archive>
-	inline void load_construct_data (Archive & ar, Map* m, const unsigned int file_version) {
+	inline void load_construct_data (Archive & ar, Map m, const unsigned int file_version) {
 		int width;
 		int height;
 		std::vector<Tile> tiles;
@@ -96,8 +96,8 @@ template<class Archive>
 		ar >> tiles;
 		ar >> seed;
 
-		::new(m)Map(width, height, seed);
-		m->init(false);
+		::Map(width, height, seed);
+		m.init(false);
 	}
 }} // namespace boost::serialization
 
