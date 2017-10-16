@@ -1,11 +1,13 @@
 #ifndef RENDERER_HPP
 #define RENDERER_HPP
 #include <vector>
+#include "constants.hpp"
 #include "point.hpp"
 class GameplayState;
 class Map;
 class Renderer {
 public:
+	Renderer() : Renderer(constants::SCREEN_WIDTH, constants::SCREEN_HEIGHT) {}
 	Renderer(int screenWidth, int screenHeight): screenWidth(screenWidth), screenHeight(screenHeight) {;}
 	void render(const Map* const map, const std::vector<Actor*>* const actors) const;
 	Point getWorldCoordsFromScreenCoords(const Point& point) const;

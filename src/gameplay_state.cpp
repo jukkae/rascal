@@ -7,8 +7,8 @@ void GameplayState::init(Engine* engine) {
 	inputHandler = std::unique_ptr<InputHandler>(new InputHandler(engine));
 
 	gui.setState(this);
-	renderer = std::unique_ptr<Renderer>(new Renderer(constants::SCREEN_WIDTH, constants::SCREEN_HEIGHT));
-	renderer->setState(this);
+	renderer = Renderer(constants::SCREEN_WIDTH, constants::SCREEN_HEIGHT);
+	renderer.setState(this);
 
 	Actor* player        = new Actor(40, 25, '@', "you", TCODColor::white, 2); // TODO
 	player->destructible = std::unique_ptr<Destructible>(new PlayerDestructible(30, 2, 0, "your corpse"));
@@ -40,8 +40,8 @@ void GameplayState::initLoaded(Engine* engine) {
 	e = engine;
 	inputHandler = std::unique_ptr<InputHandler>(new InputHandler(engine));
 	gui.setState(this);
-	renderer = std::unique_ptr<Renderer>(new Renderer(constants::SCREEN_WIDTH, constants::SCREEN_HEIGHT));
-	renderer->setState(this);
+	renderer = Renderer(constants::SCREEN_WIDTH, constants::SCREEN_HEIGHT);
+	renderer.setState(this);
 	map.setState(this);
 	map.init(false);
 	for (auto a : actors) a->setState(this);
@@ -71,7 +71,7 @@ void GameplayState::handleEvents(Engine* engine) {
 }
 
 void GameplayState::render(Engine* engine) {
-	renderer->render(&map, &actors);
+	renderer.render(&map, &actors);
 	gui.render();
 }
 
@@ -196,7 +196,7 @@ bool GameplayState::pickTile(int* x, int* y, float maxRange) {
 		render(nullptr); // yeah inorite
 		for(int cx = 0; cx < constants::SCREEN_WIDTH; ++cx) {
 			for(int cy = 0; cy < constants::SCREEN_HEIGHT; ++cy) {
-				Point location = renderer->getWorldCoordsFromScreenCoords(Point(cx, cy));
+				Point location = renderer.getWorldCoordsFromScreenCoords(Point(cx, cy));
 				int realX = location.x;
 				int realY = location.y;
 				if(isInFov(realX, realY) && (maxRange == 0 || getPlayer()->getDistance(realX, realY) <= maxRange)) {
@@ -208,7 +208,7 @@ bool GameplayState::pickTile(int* x, int* y, float maxRange) {
 		}
 		inputHandler->handleEvents(); // ehh
 		Point mouseLocationScreen = inputHandler->getMouseLocation();
-		Point mouseLocation = renderer->getWorldCoordsFromScreenCoords(Point(mouseLocationScreen.x, mouseLocationScreen.y));
+		Point mouseLocation = renderer.getWorldCoordsFromScreenCoords(Point(mouseLocationScreen.x, mouseLocationScreen.y));
 		int realX = mouseLocation.x;
 		int realY = mouseLocation.y;
 		if(isInFov(realX, realY) && (maxRange == 0 || getPlayer()->getDistance(realX, realY) <= maxRange)) {
