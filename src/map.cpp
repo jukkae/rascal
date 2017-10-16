@@ -65,27 +65,27 @@ Actor* Map::makeItem(int x, int y) {
 	if(r < 60) {
 		Actor* stimpak = new Actor(x, y, '!', "stimpak", TCODColor::violet);
 		stimpak->blocks = false;
-		stimpak->pickable = std::unique_ptr<Pickable>(new Pickable(TargetSelector(TargetSelector::SelectorType::WEARER, 0), std::unique_ptr<Effect>(new HealthEffect(4))));
+		stimpak->pickable = std::make_unique<Pickable>(TargetSelector(TargetSelector::SelectorType::WEARER, 0), std::make_unique<HealthEffect>(4));
 		return stimpak;
 	} else if(r < 70) {
 		Actor* blasterBoltDevice = new Actor(x, y, '?', "blaster bolt device", TCODColor::lightYellow);
 		blasterBoltDevice->blocks = false;
-		blasterBoltDevice->pickable = std::unique_ptr<Pickable>(new Pickable(TargetSelector(TargetSelector::SelectorType::CLOSEST_MONSTER, 5), std::unique_ptr<Effect>(new HealthEffect(-20, "The %s is hit by a blast!\n The damage is %g hit points."))));
+		blasterBoltDevice->pickable = std::make_unique<Pickable>(TargetSelector(TargetSelector::SelectorType::CLOSEST_MONSTER, 5), std::make_unique<HealthEffect>(-20, "The %s is hit by a blast!\n The damage is %g hit points."));
 		return blasterBoltDevice;
 	} else if(r < 80) {
 		Actor* fragGrenade = new Actor(x, y, '?', "fragmentation grenade", TCODColor::lightGreen);
 		fragGrenade->blocks = false;
-		fragGrenade->pickable = std::unique_ptr<Pickable>(new Pickable(TargetSelector(TargetSelector::SelectorType::SELECTED_RANGE, 3), std::unique_ptr<Effect>(new HealthEffect(-12, "The grenade explodes, hurting the %s for %g hit points!"))));
+		fragGrenade->pickable = std::make_unique<Pickable>(TargetSelector(TargetSelector::SelectorType::SELECTED_RANGE, 3), std::make_unique<HealthEffect>(-12, "The grenade explodes, hurting the %s for %g hit points!"));
 		return fragGrenade;
 	} else if(r < 90) {
 		Actor* confusor = new Actor(x, y, '?', "confusor", TCODColor::lightBlue);
 		confusor->blocks = false;
-		confusor->pickable = std::unique_ptr<Pickable>(new Pickable(TargetSelector(TargetSelector::SelectorType::SELECTED_MONSTER, 5), std::unique_ptr<Effect>(new AiChangeEffect(std::unique_ptr<TemporaryAi>(new ConfusedMonsterAi(10)), "The eyes of the %s look vacant!"))));
+		confusor->pickable = std::make_unique<Pickable>(TargetSelector(TargetSelector::SelectorType::SELECTED_MONSTER, 5), std::make_unique<AiChangeEffect>(std::make_unique<ConfusedMonsterAi>(10), "The eyes of the %s look vacant!"));
 		return confusor;
 	} else {
 		Actor* teslaCoil = new Actor(x, y, '#', "tesla coil", TCODColor::lightBlue);
 		teslaCoil->blocks = false;
-		teslaCoil->pickable = std::unique_ptr<Pickable>(new Pickable(TargetSelector(TargetSelector::SelectorType::WEARER_RANGE, 5), std::unique_ptr<Effect>(new HealthEffect(-6, "The tesla coil sputters, emitting raw\n electricity, hurting %s for %g hp!"))));
+		teslaCoil->pickable = std::make_unique<Pickable>(TargetSelector(TargetSelector::SelectorType::WEARER_RANGE, 5), std::make_unique<HealthEffect>(-6, "The tesla coil sputters, emitting raw\n electricity, hurting %s for %g hp!"));
 		return teslaCoil;
 	}
 }
