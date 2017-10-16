@@ -43,15 +43,15 @@ void Map::init(bool initActors) {
 Actor* Map::makeMonster(int x, int y) {
 	if(rng.getInt(0, 100) < 80) {
 		Actor* punk = new Actor(x, y, 'h', "punk", TCODColor::desaturatedGreen, 1); // TODO
-		punk->destructible = std::unique_ptr<Destructible>(new MonsterDestructible(10, 0, 50, "dead punk"));
-		punk->attacker = std::unique_ptr<Attacker>(new Attacker(3));
-		punk->ai = std::unique_ptr<Ai>(new MonsterAi());
+		punk->destructible = std::make_unique<MonsterDestructible>(10, 0, 50, "dead punk");
+		punk->attacker = std::make_unique<Attacker>(3);
+		punk->ai = std::make_unique<MonsterAi>();
 		return punk;
 	} else {
 		Actor* fighter = new Actor(x, y, 'H', "fighter", TCODColor::darkerGreen, 1); // TODO
-		fighter->destructible = std::unique_ptr<Destructible>(new MonsterDestructible(16, 1, 100, "fighter carcass"));
-		fighter->attacker = std::unique_ptr<Attacker>(new Attacker(4));
-		fighter->ai = std::unique_ptr<Ai>(new MonsterAi());
+		fighter->destructible = std::make_unique<MonsterDestructible>(16, 1, 100, "fighter carcass");
+		fighter->attacker = std::make_unique<Attacker>(4);
+		fighter->ai = std::make_unique<MonsterAi>();
 		return fighter;
 	}
 }
