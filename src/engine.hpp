@@ -22,7 +22,6 @@ public:
 
 	template <class T>
 	void addEngineCommand(T engineCommand) { engineCommands.push(std::make_unique<T>(engineCommand)); }
-	//void addEngineCommand(EngineCommand engineCommand) { engineCommands.push(std::make_unique<EngineCommand>(engineCommand)); }
 
 	void exit();
 	void save();
