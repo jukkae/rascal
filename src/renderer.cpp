@@ -1,12 +1,7 @@
-#include <chrono>
-
 #include "gameplay_state.hpp"
 #include "renderer.hpp"
 #include "map.hpp"
 #include "point.hpp"
-
-using namespace std;
-using namespace std::chrono;
 
 static const TCODColor darkWall   (0, 0, 100);
 static const TCODColor darkGround (50, 50, 150);
@@ -15,33 +10,18 @@ static const TCODColor lightGround(200, 180, 50);
 static const TCODColor black      (0, 0, 0);
 
 void Renderer::render(const Map* const map, const std::vector<Actor*>* const actors) {
-	con.clear();
-	//high_resolution_clock::time_point t1 = high_resolution_clock::now();
-	//high_resolution_clock::time_point t2 = high_resolution_clock::now();
-	renderMap(map);
-	//high_resolution_clock::time_point t3 = high_resolution_clock::now();
-	renderActors(map, actors);
-	//high_resolution_clock::time_point t4 = high_resolution_clock::now();
-
-	//auto duration1 = duration_cast<microseconds>( t2 - t1 ).count();
-	//auto duration2 = duration_cast<microseconds>( t3 - t2 ).count();
-	//auto duration3 = duration_cast<microseconds>( t4 - t3 ).count();
-    //cout << "clear: " << duration1 << "\n";
-    //cout << "rendermap: " << duration2 << "\n";
-    //cout << "renderactors: " << duration3 << "\n";
-	TCODConsole::blit(&con, 0, 0, constants::SCREEN_WIDTH, constants::SCREEN_HEIGHT, TCODConsole::root, 0, 0);
+	con.clear(); // approx. 30us
+	renderMap(map); // approx. 170us
+	renderActors(map, actors); // approx. 50us
+	TCODConsole::blit(&con, 0, 0, constants::SCREEN_WIDTH, constants::SCREEN_HEIGHT, TCODConsole::root, 0, 0); // approx. 40us
 }
 
 void Renderer::renderMap(const Map* const map) {
-	//high_resolution_clock::time_point t1 = high_resolution_clock::now();
-
 	int cameraX = state->getPlayer()->x - (screenWidth/2);
 	int cameraY = state->getPlayer()->y - (screenHeight/2);
 	int mapWidth = map->width;
 	int mapHeight = map->height;
-	//high_resolution_clock::time_point t2 = high_resolution_clock::now();
 
-	// TODO this is slow, could be optimized - but how?
 	for(int x = 0; x < screenWidth; ++x) {
 		for(int y = 0; y < screenHeight; ++y) {
 			int worldX = x + cameraX;
@@ -57,11 +37,6 @@ void Renderer::renderMap(const Map* const map) {
 			}
 		}
 	}
-	//high_resolution_clock::time_point t3 = high_resolution_clock::now();
-	//auto duration1 = duration_cast<nanoseconds>( t2 - t1 ).count();
-	//auto duration2 = duration_cast<nanoseconds>( t3 - t2 ).count();
-    //cout << "init: " << duration1 << "\n";
-    //cout << "loops: " << duration2 << "\n";
 }
 
 void Renderer::renderActors(const Map* const map, const std::vector<Actor*>* const actors) {

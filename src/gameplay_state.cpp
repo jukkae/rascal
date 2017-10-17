@@ -1,9 +1,6 @@
 #include "constants.hpp"
 #include "gameplay_state.hpp"
 #include "engine.hpp"
-#include <chrono>
-using namespace std; // TODO testing
-using namespace std::chrono; // TODO testing
 
 void GameplayState::init(Engine* engine) {
 	e = engine;
@@ -53,7 +50,6 @@ void GameplayState::cleanup() {
 }
 
 void GameplayState::update(Engine* engine) {
-	//high_resolution_clock::time_point t1 = high_resolution_clock::now();
 	Actor* activeActor = getNextActor();
 	if(activeActor->isPlayer()) {
 
@@ -63,33 +59,15 @@ void GameplayState::update(Engine* engine) {
 		markExploredTiles();
 		computeFov();
 	}
-	//high_resolution_clock::time_point t2 = high_resolution_clock::now();
-    //auto duration1 = duration_cast<microseconds>( t2 - t1 ).count();
-    //cout << "update: " << duration1 << "\n";
 }
 
 void GameplayState::handleEvents(Engine* engine) {
-	//high_resolution_clock::time_point t1 = high_resolution_clock::now();
 	inputHandler->handleEvents();
-	//high_resolution_clock::time_point t2 = high_resolution_clock::now();
-    //auto duration1 = duration_cast<microseconds>( t2 - t1 ).count();
-    //cout << "handleEvents: " << duration1 << "\n";
 }
 
 void GameplayState::render(Engine* engine) {
-	//high_resolution_clock::time_point t1 = high_resolution_clock::now();
-
 	renderer.render(&map, &actors);
-
-	//high_resolution_clock::time_point t2 = high_resolution_clock::now();
-
 	gui.render();
-
-	//high_resolution_clock::time_point t3 = high_resolution_clock::now();
-    //auto duration1 = duration_cast<microseconds>( t2 - t1 ).count();
-    //auto duration2 = duration_cast<microseconds>( t3 - t2 ).count();
-    //cout << "Renderer render: " << duration1 << "\n";
-    //cout << "GUI render: " << duration2 << "\n";
 }
 
 void GameplayState::updateNextActor() {
