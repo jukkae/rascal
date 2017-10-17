@@ -89,7 +89,7 @@ Action* PlayerAi::getNextAction(Actor* actor) {
 		}
 		default: dir = Direction::NONE; break;
 	}
-	return new MoveAction(actor, dir); // TODO news leak memory currently
+	return new MoveAction(actor, dir);
 }
 
 Action* MonsterAi::getNextAction(Actor* actor) {

@@ -46,7 +46,7 @@ void InventoryMenuState::handleEvents(Engine* engine) {
 					break;
 				case 'u':
 					if(inventoryContents.size() > 0) {
-						actor->addAction(new UseItemAction(actor, inventoryContents.at(selectedItem))); // TODO memleak
+						actor->addAction(new UseItemAction(actor, inventoryContents.at(selectedItem)));
 						engine->addEngineCommand(ContinueCommand(engine));
 					}
 					break;
