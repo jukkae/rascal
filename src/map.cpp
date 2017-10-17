@@ -12,7 +12,6 @@ static const int ROOM_MAX_SIZE = 12;
 static const int ROOM_MIN_SIZE = 6;
 static const int MAX_ROOM_MONSTERS = 3;
 static const int MAX_ROOM_ITEMS = 2;
-static const int fovRadius = 10; // TODO doesn't belong here
 
 Map::Map() : Map(constants::DEFAULT_MAP_WIDTH, constants::DEFAULT_MAP_HEIGHT) {}
 
@@ -129,7 +128,7 @@ void Map::markExploredTiles() {
 }
 
 void Map::computeFov() {
-	map->computeFov(state->getPlayer()->x, state->getPlayer()->y, fovRadius);
+	map->computeFov(state->getPlayer()->x, state->getPlayer()->y, constants::DEFAULT_FOV_RADIUS);
 }
 
 void Map::dig(int x1, int y1, int x2, int y2) {
