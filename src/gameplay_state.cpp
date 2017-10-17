@@ -10,7 +10,6 @@ void GameplayState::init(Engine* engine) {
 	inputHandler = std::make_unique<InputHandler>(engine);
 
 	gui.setState(this);
-	renderer = Renderer(constants::SCREEN_WIDTH, constants::SCREEN_HEIGHT);
 	renderer.setState(this);
 
 	Actor* player        = new Actor(40, 25, '@', "you", TCODColor::white, 2); // TODO
@@ -43,7 +42,6 @@ void GameplayState::initLoaded(Engine* engine) {
 	e = engine;
 	inputHandler = std::make_unique<InputHandler>(engine);
 	gui.setState(this);
-	renderer = Renderer(constants::SCREEN_WIDTH, constants::SCREEN_HEIGHT);
 	renderer.setState(this);
 	map.setState(this);
 	map.init(false);

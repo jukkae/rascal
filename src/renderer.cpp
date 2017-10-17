@@ -14,9 +14,9 @@ static const TCODColor lightWall  (130, 110, 50);
 static const TCODColor lightGround(200, 180, 50);
 static const TCODColor black      (0, 0, 0);
 
-void Renderer::render(const Map* const map, const std::vector<Actor*>* const actors) const {
+void Renderer::render(const Map* const map, const std::vector<Actor*>* const actors) {
+	con.clear();
 	//high_resolution_clock::time_point t1 = high_resolution_clock::now();
-	TCODConsole::root->clear();
 	//high_resolution_clock::time_point t2 = high_resolution_clock::now();
 	renderMap(map);
 	//high_resolution_clock::time_point t3 = high_resolution_clock::now();
@@ -29,10 +29,10 @@ void Renderer::render(const Map* const map, const std::vector<Actor*>* const act
     //cout << "clear: " << duration1 << "\n";
     //cout << "rendermap: " << duration2 << "\n";
     //cout << "renderactors: " << duration3 << "\n";
-
+	TCODConsole::blit(&con, 0, 0, constants::SCREEN_WIDTH, constants::SCREEN_HEIGHT, TCODConsole::root, 0, 0);
 }
 
-void Renderer::renderMap(const Map* const map) const {
+void Renderer::renderMap(const Map* const map) {
 	//high_resolution_clock::time_point t1 = high_resolution_clock::now();
 
 	int cameraX = state->getPlayer()->x - (screenWidth/2);
@@ -47,13 +47,13 @@ void Renderer::renderMap(const Map* const map) const {
 			int worldX = x + cameraX;
 			int worldY = y + cameraY;
 			if(worldX < 0 || worldX >= mapWidth || worldY < 0 || worldY >= mapHeight) {
-				TCODConsole::root->setCharBackground(x, y, black);
+				con.setCharBackground(x, y, black);
 			}
 			else if(map->isInFov(worldX, worldY)) {
-				TCODConsole::root->setCharBackground(x, y, map->isWall(worldX, worldY) ? lightWall : lightGround);
+				con.setCharBackground(x, y, map->isWall(worldX, worldY) ? lightWall : lightGround);
 			}
 			else if(map->isExplored(worldX, worldY)) {
-				TCODConsole::root->setCharBackground(x, y, map->isWall(worldX, worldY) ? darkWall : darkGround);
+				con.setCharBackground(x, y, map->isWall(worldX, worldY) ? darkWall : darkGround);
 			}
 		}
 	}
@@ -64,7 +64,7 @@ void Renderer::renderMap(const Map* const map) const {
     //cout << "loops: " << duration2 << "\n";
 }
 
-void Renderer::renderActors(const Map* const map, const std::vector<Actor*>* const actors) const {
+void Renderer::renderActors(const Map* const map, const std::vector<Actor*>* const actors) {
 	// Crude implementation of render layers
 	Actor* player;
 	std::vector<Actor*> corpses;
@@ -112,14 +112,14 @@ void Renderer::renderActors(const Map* const map, const std::vector<Actor*>* con
 }
 
 
-void Renderer::renderActor(const Actor* const actor) const {
+void Renderer::renderActor(const Actor* const actor) {
 	Point worldPosition(actor->x, actor->y);
 	Point screenPosition = getScreenCoordsFromWorldCoords(worldPosition);
 	int x = screenPosition.x;
 	int y = screenPosition.y;
 
-	TCODConsole::root->setChar(x, y, actor->ch);
-	TCODConsole::root->setCharForeground(x, y, actor->col);
+	con.setChar(x, y, actor->ch);
+	con.setCharForeground(x, y, actor->col);
 }
 
 Point Renderer::getWorldCoordsFromScreenCoords(const Point& point) const {
