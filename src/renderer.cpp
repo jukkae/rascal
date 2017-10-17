@@ -5,6 +5,7 @@
 #include "map.hpp"
 #include "point.hpp"
 
+using namespace std;
 using namespace std::chrono;
 
 static const TCODColor darkWall   (0, 0, 100);
@@ -14,23 +15,38 @@ static const TCODColor lightGround(200, 180, 50);
 static const TCODColor black      (0, 0, 0);
 
 void Renderer::render(const Map* const map, const std::vector<Actor*>* const actors) const {
+	//high_resolution_clock::time_point t1 = high_resolution_clock::now();
 	TCODConsole::root->clear();
+	//high_resolution_clock::time_point t2 = high_resolution_clock::now();
 	renderMap(map);
+	//high_resolution_clock::time_point t3 = high_resolution_clock::now();
 	renderActors(map, actors);
+	//high_resolution_clock::time_point t4 = high_resolution_clock::now();
+
+	//auto duration1 = duration_cast<microseconds>( t2 - t1 ).count();
+	//auto duration2 = duration_cast<microseconds>( t3 - t2 ).count();
+	//auto duration3 = duration_cast<microseconds>( t4 - t3 ).count();
+    //cout << "clear: " << duration1 << "\n";
+    //cout << "rendermap: " << duration2 << "\n";
+    //cout << "renderactors: " << duration3 << "\n";
+
 }
 
 void Renderer::renderMap(const Map* const map) const {
-	int playerX = state->getPlayer()->x;
-	int playerY = state->getPlayer()->y;
-	Point player(playerX, playerY);
+	//high_resolution_clock::time_point t1 = high_resolution_clock::now();
 
+	int cameraX = state->getPlayer()->x - (screenWidth/2);
+	int cameraY = state->getPlayer()->y - (screenHeight/2);
+	int mapWidth = map->width;
+	int mapHeight = map->height;
+	//high_resolution_clock::time_point t2 = high_resolution_clock::now();
+
+	// TODO this is slow, could be optimized - but how?
 	for(int x = 0; x < screenWidth; ++x) {
 		for(int y = 0; y < screenHeight; ++y) {
-			Point screenPosition(x, y);
-			Point worldPosition = getWorldCoordsFromScreenCoords(screenPosition, player);
-			int worldX = worldPosition.x;
-			int worldY = worldPosition.y;
-			if(worldX < 0 || worldX >= map->width || worldY < 0 || worldY >= map->height) {
+			int worldX = x + cameraX;
+			int worldY = y + cameraY;
+			if(worldX < 0 || worldX >= mapWidth || worldY < 0 || worldY >= mapHeight) {
 				TCODConsole::root->setCharBackground(x, y, black);
 			}
 			else if(map->isInFov(worldX, worldY)) {
@@ -41,6 +57,11 @@ void Renderer::renderMap(const Map* const map) const {
 			}
 		}
 	}
+	//high_resolution_clock::time_point t3 = high_resolution_clock::now();
+	//auto duration1 = duration_cast<nanoseconds>( t2 - t1 ).count();
+	//auto duration2 = duration_cast<nanoseconds>( t3 - t2 ).count();
+    //cout << "init: " << duration1 << "\n";
+    //cout << "loops: " << duration2 << "\n";
 }
 
 void Renderer::renderActors(const Map* const map, const std::vector<Actor*>* const actors) const {
