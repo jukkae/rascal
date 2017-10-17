@@ -168,24 +168,26 @@ void TemporaryAi::applyTo(Actor* actor) {
 	actor->ai = std::unique_ptr<Ai>(this);
 }
 
-Action* ConfusedMonsterAi::getNextAction(Actor* owner) { // TODO reimplement in terms of moveAction
+Action* ConfusedMonsterAi::getNextAction(Actor* owner) {
 	decreaseTurns(owner);
-	GameplayState* state = owner->s;
+
 	TCODRandom* rng = TCODRandom::getInstance();
-	int dx = rng->getInt(-1,1);
-	int dy = rng->getInt(-1,1);
-	if(dx != 0 || dy != 0) {
-		int destX = owner->x + dx;
-		int destY = owner->y + dy;
-		if(state->canWalk(destX, destY)) {
-			owner->x = destX;
-			owner->y = destY;
-		} else {
-			Actor* target = state->getLiveActor(destX, destY);
-			if(target) { owner->attacker->attack(owner, target); }
-		}
-	}
-	return new WaitAction(owner);
+
+	int stepDx = rng->getInt(-1,1);
+	int stepDy = rng->getInt(-1,1);
+
+	Direction direction;
+	if (stepDx ==  0 && stepDy ==  0) return new WaitAction(owner);
+
+	if (stepDx ==  0 && stepDy == -1) direction = Direction::N;
+	if (stepDx ==  1 && stepDy == -1) direction = Direction::NE;
+	if (stepDx ==  1 && stepDy ==  0) direction = Direction::E;
+	if (stepDx ==  1 && stepDy ==  1) direction = Direction::SE;
+	if (stepDx ==  0 && stepDy ==  1) direction = Direction::S;
+	if (stepDx == -1 && stepDy ==  1) direction = Direction::SW;
+	if (stepDx == -1 && stepDy ==  0) direction = Direction::W;
+	if (stepDx == -1 && stepDy == -1) direction = Direction::NW;
+	return new MoveAction(owner, direction);
 }
 
 BOOST_CLASS_EXPORT(PlayerAi)
