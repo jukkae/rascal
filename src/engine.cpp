@@ -13,6 +13,8 @@
 
 
 Engine::Engine() {
+	TCODSystem::setRenderer(TCOD_RENDERER_GLSL);
+
 	TCODConsole::initRoot(constants::SCREEN_WIDTH, constants::SCREEN_HEIGHT, "Rascal", false);
 	init();
 }
