@@ -50,6 +50,7 @@ void InputHandler::handleEvents() {
 
 boost::optional<RawInputEvent> InputHandler::getEvent(Actor* actor) {
 	// TODO this is nasty, but inventory must know both the actor and engine
+	if(!event) return boost::none;
 	if(event->key.c == 'i') {
 		State* inventoryMenuState = new InventoryMenuState(actor);
 		inventoryMenuState->init(engine);
