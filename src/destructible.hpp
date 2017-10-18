@@ -7,11 +7,12 @@ class Destructible {
 public:
 	float maxHp;
 	float hp;
-	float defense;
+	float defense; // TODO eventually remove?
+	int armorClass;
 	int xp; // PlayerDestructible should maybe not have xp?
 	std::string corpseName;
 	
-	Destructible(float maxHp = 0, float defense = 0, int xp = 0, std::string corpseName = "corpse");
+	Destructible(float maxHp = 0, float defense = 0, int xp = 0, std::string corpseName = "corpse", int armorClass = 10);
 	virtual ~Destructible() {};
 
 	inline bool isDead() { return hp <= 0; }
@@ -28,12 +29,13 @@ private:
 		ar & defense;
 		ar & xp;
 		ar & corpseName;
+		ar & armorClass;
 	}
 };
 
 class MonsterDestructible : public Destructible {
 public :
-	MonsterDestructible(float maxHp = 0, float defense = 0, int xp = 0, std::string corpseName = "corpse");
+	MonsterDestructible(float maxHp = 0, float defense = 0, int xp = 0, std::string corpseName = "corpse", int armorClass = 10);
 	void die(Actor* owner);
 private:
 	friend class boost::serialization::access;
@@ -46,7 +48,7 @@ private:
 
 class PlayerDestructible : public Destructible {
 public :
-	PlayerDestructible(float maxHp = 0, float defense = 0, int xp = 0, std::string corpseName = "your corpse");
+	PlayerDestructible(float maxHp = 0, float defense = 0, int xp = 0, std::string corpseName = "your corpse", int armorClass = 10);
 	void die(Actor* owner);
 private:
 	friend class boost::serialization::access;

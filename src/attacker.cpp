@@ -5,37 +5,38 @@
 #include "destructible.hpp"
 #include "gameplay_state.hpp"
 
-Attacker::Attacker(float power) : power(power) {;}
-
-/*void Attacker::attack(Actor* owner, Actor* target) {
-	if(target->destructible && !target->destructible->isDead()) {
-		if ( power - target->destructible->defense > 0 ) {
-			owner->s->message(TCODColor::red, "%s attacks %s for %g hit points.", owner->name.c_str(), target->name.c_str(), power - target->destructible->defense);
-		} else {
-			owner->s->message(TCODColor::lightGrey, "%s attacks %s but it has no effect!", owner->name.c_str(), target->name.c_str());
-		}
-		target->destructible->takeDamage(target, power);
-	} else {
-		owner->s->message(TCODColor::lightGrey, "%s attacks %s in vain.", owner->name.c_str(), target->name.c_str());
-	}
-}*/
+Attacker::Attacker(int power) : power(power) {;}
 
 void Attacker::attack(Actor* owner, Actor* target) {
-	int attackRoll = d20();
-	int defenseRoll = d20();
-	if(attackRoll > defenseRoll) {
-		if(target->destructible && !target->destructible->isDead()) {
-			if ( power - target->destructible->defense > 0 ) {
-				owner->s->message(TCODColor::red, "%s attacks %s for %g hit points.", owner->name.c_str(), target->name.c_str(), power - target->destructible->defense);
+	if(target->destructible && !target->destructible->isDead()) {
+		int attackRoll = d20();
+		if(attackRoll > target->destructible->armorClass) {
+			int dmg = getAttackBaseDamage();
+			if ( dmg - target->destructible->defense > 0 ) {
+				owner->s->message(TCODColor::red, "%s attacks %s for %g hit points.", owner->name.c_str(), target->name.c_str(), dmg - target->destructible->defense);
 			} else {
 				owner->s->message(TCODColor::lightGrey, "%s attacks %s but it has no effect!", owner->name.c_str(), target->name.c_str());
 			}
-			target->destructible->takeDamage(target, power);
+			target->destructible->takeDamage(target, dmg);
 		} else {
-			owner->s->message(TCODColor::lightGrey, "%s attacks %s in vain.", owner->name.c_str(), target->name.c_str());
+			owner->s->message(TCODColor::lightGrey, "%s misses %s!", owner->name.c_str(), target->name.c_str());
 		}
 	}
 	else {
-		owner->s->message(TCODColor::lightGrey, "%s misses %s!", owner->name.c_str(), target->name.c_str());
+		owner->s->message(TCODColor::lightGrey, "%s attacks %s in vain.", owner->name.c_str(), target->name.c_str());
+	}
+}
+
+int Attacker::getAttackBaseDamage() {
+	// TODO quick test!
+	switch (power) {
+		case 5: // player
+			return d6();
+		case 4: // fighter
+			return d8();
+		case 3: // punk
+			return d4();
+		default:
+			return d6();
 	}
 }

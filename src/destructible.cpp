@@ -4,8 +4,8 @@
 #include "gameplay_state.hpp"
 #include "gameover_state.hpp"
 
-Destructible::Destructible(float maxHp, float defense, int xp, std::string corpseName) :
-	maxHp(maxHp), hp(maxHp), defense(defense), xp(xp), corpseName(corpseName) {;}
+Destructible::Destructible(float maxHp, float defense, int xp, std::string corpseName, int armorClass) :
+	maxHp(maxHp), hp(maxHp), defense(defense), xp(xp), corpseName(corpseName), armorClass(armorClass) {;}
 
 float Destructible::takeDamage(Actor* owner, float damage) {
 	damage -= defense;
@@ -32,8 +32,8 @@ void Destructible::die(Actor* owner) {
 	owner->blocks = false;
 }
 
-MonsterDestructible::MonsterDestructible(float maxHp, float defense, int xp, std::string corpseName) :
-	Destructible(maxHp, defense, xp, corpseName) {;}
+MonsterDestructible::MonsterDestructible(float maxHp, float defense, int xp, std::string corpseName, int armorClass) :
+	Destructible(maxHp, defense, xp, corpseName, armorClass) {;}
 
 void MonsterDestructible::die(Actor* owner) {
 	owner->s->message(TCODColor::lightGrey, "%s is dead! You gain %d xp!", owner->name.c_str(), xp);
@@ -43,8 +43,8 @@ void MonsterDestructible::die(Actor* owner) {
 	Destructible::die(owner);
 }
 
-PlayerDestructible::PlayerDestructible(float maxHp, float defense, int xp, std::string corpseName) :
-	Destructible(maxHp, defense, xp, corpseName) {;}
+PlayerDestructible::PlayerDestructible(float maxHp, float defense, int xp, std::string corpseName, int armorClass) :
+	Destructible(maxHp, defense, xp, corpseName, armorClass) {;}
 
 void PlayerDestructible::die(Actor* owner) {
 	owner->s->message(TCODColor::red, "You died!");

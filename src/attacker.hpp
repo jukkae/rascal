@@ -8,10 +8,11 @@ class Actor;
 
 class Attacker {
 public :
-	float power;
+	int power;
 
-	Attacker(float power = 0);
+	Attacker(int power = 0);
 	void attack(Actor* owner, Actor* target);
+	int getAttackBaseDamage();
 
 private:
 	friend class boost::serialization::access;

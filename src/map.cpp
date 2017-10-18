@@ -42,13 +42,13 @@ void Map::init(bool initActors) {
 Actor* Map::makeMonster(int x, int y) {
 	if(rng.getInt(0, 100) < 80) {
 		Actor* punk = new Actor(x, y, 'h', "punk", TCODColor::desaturatedGreen, 1); // TODO
-		punk->destructible = std::make_unique<MonsterDestructible>(10, 0, 50, "dead punk");
+		punk->destructible = std::make_unique<MonsterDestructible>(10, 0, 50, "dead punk", 13);
 		punk->attacker = std::make_unique<Attacker>(3);
 		punk->ai = std::make_unique<MonsterAi>();
 		return punk;
 	} else {
 		Actor* fighter = new Actor(x, y, 'H', "fighter", TCODColor::darkerGreen, 1); // TODO
-		fighter->destructible = std::make_unique<MonsterDestructible>(16, 1, 100, "fighter carcass");
+		fighter->destructible = std::make_unique<MonsterDestructible>(16, 1, 100, "fighter carcass", 15);
 		fighter->attacker = std::make_unique<Attacker>(4);
 		fighter->ai = std::make_unique<MonsterAi>();
 		return fighter;
