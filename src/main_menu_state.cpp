@@ -42,7 +42,9 @@ void MainMenuState::handleEvents(Engine* engine) {
 }
 
 void MainMenuState::update(Engine* engine) {
-
+	handleEvents(engine);
+	render(engine);
+	TCODConsole::root->flush();
 }
 
 void MainMenuState::render(Engine* engine) {

@@ -52,12 +52,14 @@ void GameplayState::cleanup() {
 void GameplayState::update(Engine* engine) {
 	Actor* activeActor = getNextActor();
 	if(activeActor->isPlayer()) {
-
+		handleEvents(engine);
 	}
 	updateNextActor();
 	if(activeActor->isPlayer()) {
 		markExploredTiles();
 		computeFov();
+		render(engine);
+		TCODConsole::root->flush();
 	}
 }
 

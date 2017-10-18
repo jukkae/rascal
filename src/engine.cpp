@@ -40,11 +40,11 @@ void Engine::init() {
 void Engine::update() {
 	while(engineCommands.size() > 0) executeEngineCommand();
 
-	states.back()->handleEvents(this);
+	//states.back()->handleEvents(this);
 	states.back()->update(this);
-	states.back()->render(this);
+	//states.back()->render(this);
 
-	TCODConsole::root->flush();
+	//TCODConsole::root->flush();
 }
 
 void Engine::executeEngineCommand() {
