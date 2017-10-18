@@ -15,6 +15,7 @@ public:
 	Engine();
 	~Engine();
 	void init();
+	void newGame();
 
 	void pushState(State* state) { states.push_back(state); }
 	void popState() { states.pop_back(); }

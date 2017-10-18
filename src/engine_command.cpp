@@ -6,7 +6,7 @@ void DummyCommand::execute() {
 }
 
 void NewGameCommand::execute() {
-	engine->init();
+	engine->newGame();
 	engine->popState();
 }
 void ContinueCommand::execute() {

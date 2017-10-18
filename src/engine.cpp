@@ -37,6 +37,11 @@ void Engine::init() {
 	states.push_back(mainMenuState);
 }
 
+void Engine::newGame() { // kinda bad
+	if(TCODSystem::fileExists(constants::SAVE_FILE_NAME.c_str())) TCODSystem::deleteFile(constants::SAVE_FILE_NAME.c_str());
+	init();
+}
+
 void Engine::update() {
 	while(engineCommands.size() > 0) executeEngineCommand();
 
