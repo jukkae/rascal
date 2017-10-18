@@ -58,7 +58,8 @@ void InventoryMenuState::handleEvents(Engine* engine) {
 }
 
 void InventoryMenuState::update(Engine* engine) {
-
+	handleEvents(engine);
+	render(engine);
 }
 
 void InventoryMenuState::render(Engine* engine) {

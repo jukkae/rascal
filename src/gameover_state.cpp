@@ -43,7 +43,8 @@ void GameOverState::handleEvents(Engine* engine) {
 }
 
 void GameOverState::update(Engine* engine) {
-
+	handleEvents(engine);
+	render(engine);
 }
 
 void GameOverState::render(Engine* engine) {
