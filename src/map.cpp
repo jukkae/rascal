@@ -113,6 +113,12 @@ bool Map::isInFov(int x, int y) const {
 		return true;
 	}
 	return false;
+	//return isInFovNew(x, y);
+}
+
+bool Map::isInFovNew(int x, int y) {
+	//TODO
+	return false;
 }
 
 void Map::markAsExplored(int x, int y) {
@@ -129,6 +135,102 @@ void Map::markExploredTiles() {
 
 void Map::computeFov() {
 	map->computeFov(state->getPlayer()->x, state->getPlayer()->y, constants::DEFAULT_FOV_RADIUS);
+	computeFovNew();
+}
+
+void Map::computeFovNew() {
+	int playerX = state->getPlayer()->x;
+	int playerY = state->getPlayer()->y;
+	for(int octant = 0; octant < 8; octant++) {
+		computeFovForOctant(playerX, playerY, octant);
+	}
+}
+
+void Map::computeFovForOctant(int x, int y, int octant) {
+	ShadowLine shadowLine;
+	bool fullShadow = false;
+	// TODO handle all octants, reflect/rotate x and y accordingly
+	for(int row = 0; row < constants::DEFAULT_FOV_RADIUS; row++) {
+		for(int col = 0; col < row; col++) {
+			std::cout << "world pos: " << x+row << ", " << y+col << "\n";
+			if(fullShadow) {
+				std::cout << "full shadow at " << row << ", " << col << "\n";
+				// tiles[position].visible = false;
+			}
+			else {
+				Shadow projection = Shadow::projectTile(row, col);
+				bool visible = !shadowLine.isInShadow(projection);
+				//calculate world coords position
+				//tiles[position].visible = visible
+				std::cout << "visible at " << row << ", " << col << ": " << visible << "\n";
+
+				//if(visible && tiles[position].isWall {
+				if(visible && isWall(x + row, y + col)) {
+					shadowLine.addShadow(projection);
+					fullShadow = shadowLine.isFullShadow();
+				}
+			}
+		}
+	}
+}
+
+Shadow Shadow::projectTile(int row, int column) {
+	float topLeft = column / (row + 2);
+	float bottomRight = (column + 1) / (row + 1);
+	return Shadow(topLeft, bottomRight);
+}
+
+// Check if other is fully covered by this
+bool Shadow::contains(Shadow other) {
+	return start <= other.start && end >= other.end;
+}
+
+// Check if projection of tile is in shadow
+bool ShadowLine::isInShadow(Shadow projection) {
+	for(auto shadow : shadows) {
+		if(shadow.contains(projection)) return true;
+	}
+	return false;
+}
+
+void ShadowLine::addShadow(Shadow shadow) {
+	int index = 0;
+	for(; index < shadows.size(); index++) {
+		if(shadows[index].start >= shadow.start) break;
+	}
+
+	Shadow overlappingPrevious(0, 0);
+	bool overlapPrev = false;
+	if(index > 0 && shadows[index - 1].end > shadow.start) {
+		overlappingPrevious = shadows[index - 1];
+		overlapPrev = true;
+	}
+
+	Shadow overlappingNext(0, 0);
+	bool overlapNext = false;
+	if(index < shadows.size() && shadows[index].start < shadow.end) {
+		overlappingNext = shadows[index];
+		overlapNext = true;
+	}
+
+	if(overlapNext) {
+		if(overlapPrev) {
+			overlappingPrevious.end = overlappingNext.end;
+			shadows.erase(shadows.begin() + index);
+		}
+		else {
+			overlappingNext.start = shadow.start;
+		}
+	}
+	else {
+		if(overlapPrev) {
+			overlappingPrevious.end = shadow.end;
+		}
+		else {
+			shadows.insert(shadows.begin() + index, shadow);
+		}
+	}
+	std::cout << "shadow added, length: " << shadows.size() << "\n";
 }
 
 void Map::dig(int x1, int y1, int x2, int y2) {

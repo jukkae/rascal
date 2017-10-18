@@ -21,6 +21,26 @@ struct Tile {
 	}
 };
 
+class Shadow {
+public:
+	Shadow(float start, float end) : start(start), end(end) {;}
+	float start;
+	float end;
+
+	static Shadow projectTile(int row, int column);
+	bool contains(Shadow other);
+
+};
+
+class ShadowLine {
+public:
+	std::vector<Shadow> shadows;
+
+	bool isInShadow(Shadow projection);
+	bool isFullShadow() { return shadows.size() == 1 && shadows[0].start == 0 && shadows[0].end == 1; }
+	void addShadow(Shadow shadow);
+};
+
 class Map {
 public:
 	int width, height;
@@ -43,6 +63,7 @@ public:
 	void markExploredTiles();
 	bool isExplored(int x, int y) const;
 	void computeFov();
+	void computeFovForOctant(int x, int y, int octant);
 	void setState(GameplayState* s) { state = s; }
 
 protected:
@@ -50,7 +71,8 @@ protected:
 	TCODRandom rng;
 	friend class BspListener;
 
-
+	void computeFovNew();
+	bool isInFovNew(int x, int y);
 	void dig(int x1, int y1, int x2, int y2);
 	void createRoom(bool first, int x1, int y1, int x2, int y2, bool initActors);
 
