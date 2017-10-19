@@ -56,7 +56,6 @@ void GameplayState::update(Engine* engine) {
 	}
 	updateNextActor();
 	if(activeActor->isPlayer()) {
-		markExploredTiles();
 		computeFov();
 		render(engine);
 		TCODConsole::root->flush();

@@ -33,7 +33,6 @@ public:
 	void computeFov() { map.computeFov(); }
 	bool isWall(int x, int y) { return map.isWall(x, y); }
 	bool canWalk(int x, int y);
-	void markExploredTiles() { map.markExploredTiles(); }
 	Engine* getEngine() { return e; }
 
 	Actor* getNextActor() const { return actors.front(); }

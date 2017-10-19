@@ -61,8 +61,6 @@ public:
 	bool isWall(int x, int y) const;
 	bool canWalk(int x, int y) const;
 	bool isInFov(int x, int y) const;
-	void markAsExplored(int x, int y);
-	void markExploredTiles();
 	bool isExplored(int x, int y) const;
 	void computeFov();
 	void computeFovForOctant(int x, int y, int octant);
@@ -74,7 +72,6 @@ protected:
 	friend class BspListener;
 
 	void computeFovNew();
-	bool isInFovNew(int x, int y);
 	Vec<int> transformOctant(int row, int col, int octant);
 	void dig(int x1, int y1, int x2, int y2);
 	void createRoom(bool first, int x1, int y1, int x2, int y2, bool initActors);
