@@ -109,7 +109,7 @@ bool Map::isExplored(int x, int y) const {
 
 bool Map::isInFov(int x, int y) const {
 	if(x < 0 || x >= width || y < 0 || y >= height) return false;
-	if(map->isInFov(x, y)) {
+	if(tiles[x+y*width].newInFov) {
 		return true;
 	}
 	return false;
@@ -122,19 +122,21 @@ bool Map::isInFovNew(int x, int y) {
 }
 
 void Map::markAsExplored(int x, int y) {
-	if(map->isInFov(x, y)) tiles[x + y*width].explored = true;
+	//if(map->isInFov(x, y)) tiles[x + y*width].explored = true;
 }
 
 void Map::markExploredTiles() {
+	/*
 	for(int x = 0; x < width; ++x) {
 		for(int y = 0; y < height; ++y) {
 			if(isInFov(x, y)) markAsExplored(x, y);
 		}
 	}
+	*/
 }
 
 void Map::computeFov() {
-	map->computeFov(state->getPlayer()->x, state->getPlayer()->y, constants::DEFAULT_FOV_RADIUS);
+	//map->computeFov(state->getPlayer()->x, state->getPlayer()->y, constants::DEFAULT_FOV_RADIUS);
 	computeFovNew();
 }
 
@@ -170,6 +172,7 @@ void Map::computeFovForOctant(int x, int y, int octant) {
 				Shadow projection = Shadow::projectTile(row, col);
 				bool visible = !shadowLine.isInShadow(projection);
 				tiles[xPos + width*yPos].newInFov = visible;
+				if(visible) tiles[xPos + width*yPos].explored = true;
 
 				if(visible && isWall(xPos, yPos)) {
 					shadowLine.addShadow(projection);
