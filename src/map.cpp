@@ -215,39 +215,33 @@ void ShadowLine::addShadow(Shadow shadow) {
 		if(shadows[index].start >= shadow.start) break;
 	}
 
-	Shadow overlappingPrevious(0, 0);
-	bool overlapPrev = false;
+	Shadow* overlappingPrevious = nullptr;
 	if(index > 0 && shadows[index - 1].end > shadow.start) {
-		overlappingPrevious = shadows[index - 1];
-		overlapPrev = true;
+		overlappingPrevious = &shadows[index - 1];
 	}
 
-	Shadow overlappingNext(0, 0);
-	bool overlapNext = false;
+	Shadow* overlappingNext = nullptr;
 	if(index < shadows.size() && shadows[index].start < shadow.end) {
-		overlappingNext = shadows[index];
-		overlapNext = true;
+		overlappingNext = &shadows[index];
 	}
 
-	if(overlapNext) {
-		if(overlapPrev) {
-			overlappingPrevious.end = overlappingNext.end;
+	if(overlappingNext) {
+		if(overlappingPrevious) {
+			overlappingPrevious->end = overlappingNext->end;
 			shadows.erase(shadows.begin() + index);
 		}
 		else {
-			overlappingNext.start = shadow.start;
+			overlappingNext->start = shadow.start;
 		}
 	}
 	else {
-		if(overlapPrev) {
-			overlappingPrevious.end = shadow.end;
+		if(overlappingPrevious) {
+			overlappingPrevious->end = shadow.end;
 		}
 		else {
 			shadows.insert(shadows.begin() + index, shadow);
 		}
 	}
-	std::cout << "shadow added, length: " << shadows.size() << "\n";
-	std::cout << "shadow: " << shadows[index].start << ", " << shadows[index].end << "\n";
 }
 
 void Map::dig(int x1, int y1, int x2, int y2) {
