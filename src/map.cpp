@@ -157,6 +157,9 @@ void Map::computeFovForOctant(int x, int y, int octant) {
 	for(int row = 0; row < constants::DEFAULT_FOV_RADIUS; row++) {
 		// TODO break at map boundaries
 		for(int col = 0; col <= row; col++) {
+			// TODO break to this direction, too
+			// TODO also break w.r.t actual fov RADIUS
+			// - current implementation leads to square-shaped fov
 			int xPos = x + transformOctant(row, col, octant).x;
 			int yPos = y + transformOctant(row, col, octant).y;
 			if(fullShadow) {
