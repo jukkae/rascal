@@ -141,7 +141,7 @@ void Map::computeFov() {
 void Map::computeFovNew() {
 	int playerX = state->getPlayer()->x;
 	int playerY = state->getPlayer()->y;
-	for(int octant = 0; octant < 8; octant++) {
+	for(int octant = 0; octant < 1; octant++) { // TODO < 8, obv
 		computeFovForOctant(playerX, playerY, octant);
 	}
 }
@@ -152,20 +152,20 @@ void Map::computeFovForOctant(int x, int y, int octant) {
 	// TODO handle all octants, reflect/rotate x and y accordingly
 	for(int row = 0; row < constants::DEFAULT_FOV_RADIUS; row++) {
 		for(int col = 0; col < row; col++) {
-			std::cout << "world pos: " << x+row << ", " << y+col << "\n";
+			std::cout << "world pos: " << x+row << ", " << y-col << "\n";
 			if(fullShadow) {
 				std::cout << "full shadow at " << row << ", " << col << "\n";
-				// tiles[position].visible = false;
+				tiles[(x+row) + width*(y-col)].newInFov = false;
 			}
 			else {
 				Shadow projection = Shadow::projectTile(row, col);
 				bool visible = !shadowLine.isInShadow(projection);
 				//calculate world coords position
-				//tiles[position].visible = visible
+				tiles[(x+row) + width*(y-col)].newInFov = true;
 				std::cout << "visible at " << row << ", " << col << ": " << visible << "\n";
 
 				//if(visible && tiles[position].isWall {
-				if(visible && isWall(x + row, y + col)) {
+				if(visible && isWall(x + row, y - col)) {
 					shadowLine.addShadow(projection);
 					fullShadow = shadowLine.isFullShadow();
 				}

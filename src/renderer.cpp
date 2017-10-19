@@ -8,6 +8,7 @@ static const TCODColor darkGround (50, 50, 150);
 static const TCODColor lightWall  (130, 110, 50);
 static const TCODColor lightGround(200, 180, 50);
 static const TCODColor black      (0, 0, 0);
+static const TCODColor newInFov   (0, 255, 0);
 
 void Renderer::render(const Map* const map, const std::vector<Actor*>* const actors) {
 	con.clear(); // approx. 30us
@@ -28,6 +29,9 @@ void Renderer::renderMap(const Map* const map) {
 			int worldY = y + cameraY;
 			if(worldX < 0 || worldX >= mapWidth || worldY < 0 || worldY >= mapHeight) {
 				con.setCharBackground(x, y, black);
+			}
+			else if(map->tiles[worldX + mapWidth*worldY].newInFov) {
+				con.setCharBackground(x, y, newInFov);
 			}
 			else if(map->isInFov(worldX, worldY)) {
 				con.setCharBackground(x, y, map->isWall(worldX, worldY) ? lightWall : lightGround);
