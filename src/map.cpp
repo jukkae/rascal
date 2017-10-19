@@ -175,8 +175,8 @@ void Map::computeFovForOctant(int x, int y, int octant) {
 }
 
 Shadow Shadow::projectTile(int row, int column) {
-	float topLeft = column / (row + 2);
-	float bottomRight = (column + 1) / (row + 1);
+	float topLeft = column / (row + 2.0);
+	float bottomRight = (column + 1.0) / (row + 1.0);
 	return Shadow(topLeft, bottomRight);
 }
 
@@ -231,6 +231,7 @@ void ShadowLine::addShadow(Shadow shadow) {
 		}
 	}
 	std::cout << "shadow added, length: " << shadows.size() << "\n";
+	std::cout << "shadow: " << shadows[index].start << ", " << shadows[index].end << "\n";
 }
 
 void Map::dig(int x1, int y1, int x2, int y2) {
