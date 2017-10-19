@@ -31,11 +31,11 @@ void Renderer::renderMap(const Map* const map) {
 				con.setCharBackground(x, y, black);
 			}
 			else if(map->tiles[worldX + mapWidth*worldY].newInFov) {
-				con.setCharBackground(x, y, newInFov);
-			}
-			else if(map->isInFov(worldX, worldY)) {
 				con.setCharBackground(x, y, map->isWall(worldX, worldY) ? lightWall : lightGround);
 			}
+			/*else if(map->isInFov(worldX, worldY)) {
+				con.setCharBackground(x, y, map->isWall(worldX, worldY) ? lightWall : lightGround);
+			}*/
 			else if(map->isExplored(worldX, worldY)) {
 				con.setCharBackground(x, y, map->isWall(worldX, worldY) ? darkWall : darkGround);
 			}

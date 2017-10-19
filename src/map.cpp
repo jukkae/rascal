@@ -139,6 +139,11 @@ void Map::computeFov() {
 }
 
 void Map::computeFovNew() {
+	for(int x = 0; x < width; x++) {
+		for(int y = 0; y < height; y++) {
+			tiles[x + width*y].newInFov = false;
+		}
+	}
 	int playerX = state->getPlayer()->x;
 	int playerY = state->getPlayer()->y;
 	for(int octant = 0; octant < 8; octant++) {
@@ -151,16 +156,16 @@ void Map::computeFovForOctant(int x, int y, int octant) {
 	bool fullShadow = false;
 	for(int row = 0; row < constants::DEFAULT_FOV_RADIUS; row++) {
 		// TODO break at map boundaries
-		for(int col = 0; col < row; col++) {
+		for(int col = 0; col <= row; col++) {
 			int xPos = x + transformOctant(row, col, octant).x;
 			int yPos = y + transformOctant(row, col, octant).y;
 			if(fullShadow) {
-				tiles[(xPos) + width*(yPos)].newInFov = false;
+				tiles[xPos + width*yPos].newInFov = false;
 			}
 			else {
 				Shadow projection = Shadow::projectTile(row, col);
 				bool visible = !shadowLine.isInShadow(projection);
-				tiles[(xPos) + width*(yPos)].newInFov = visible;
+				tiles[xPos + width*yPos].newInFov = visible;
 
 				if(visible && isWall(xPos, yPos)) {
 					shadowLine.addShadow(projection);
