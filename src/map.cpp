@@ -151,21 +151,22 @@ void Map::computeFovForOctant(int x, int y, int octant) {
 	bool fullShadow = false;
 	// TODO handle all octants, reflect/rotate x and y accordingly
 	for(int row = 0; row < constants::DEFAULT_FOV_RADIUS; row++) {
+		// TODO break at map boundaries
 		for(int col = 0; col < row; col++) {
-			std::cout << "world pos: " << x+row << ", " << y-col << "\n";
+			std::cout << "world pos: " << x+col << ", " << y-row << "\n";
 			if(fullShadow) {
-				std::cout << "full shadow at " << row << ", " << col << "\n";
-				tiles[(x+row) + width*(y-col)].newInFov = false;
+				std::cout << "full shadow at " << col << ", " << row << "\n";
+				tiles[(x+col) + width*(y-row)].newInFov = false;
 			}
 			else {
 				Shadow projection = Shadow::projectTile(row, col);
 				bool visible = !shadowLine.isInShadow(projection);
 				//calculate world coords position
-				tiles[(x+row) + width*(y-col)].newInFov = true;
+				tiles[(x+col) + width*(y-row)].newInFov = visible;
 				std::cout << "visible at " << row << ", " << col << ": " << visible << "\n";
 
 				//if(visible && tiles[position].isWall {
-				if(visible && isWall(x + row, y - col)) {
+				if(visible && isWall(x + col, y - row)) {
 					shadowLine.addShadow(projection);
 					fullShadow = shadowLine.isFullShadow();
 				}
