@@ -141,7 +141,7 @@ void Map::computeFov() {
 void Map::computeFovNew() {
 	int playerX = state->getPlayer()->x;
 	int playerY = state->getPlayer()->y;
-	for(int octant = 0; octant < 1; octant++) { // TODO < 8, obv
+	for(int octant = 0; octant < 8; octant++) {
 		computeFovForOctant(playerX, playerY, octant);
 	}
 }
@@ -149,30 +149,40 @@ void Map::computeFovNew() {
 void Map::computeFovForOctant(int x, int y, int octant) {
 	ShadowLine shadowLine;
 	bool fullShadow = false;
-	// TODO handle all octants, reflect/rotate x and y accordingly
 	for(int row = 0; row < constants::DEFAULT_FOV_RADIUS; row++) {
 		// TODO break at map boundaries
 		for(int col = 0; col < row; col++) {
-			std::cout << "world pos: " << x+col << ", " << y-row << "\n";
+			int xPos = x + transformOctant(row, col, octant).x;
+			int yPos = y + transformOctant(row, col, octant).y;
 			if(fullShadow) {
-				std::cout << "full shadow at " << col << ", " << row << "\n";
-				tiles[(x+col) + width*(y-row)].newInFov = false;
+				tiles[(xPos) + width*(yPos)].newInFov = false;
 			}
 			else {
 				Shadow projection = Shadow::projectTile(row, col);
 				bool visible = !shadowLine.isInShadow(projection);
-				//calculate world coords position
-				tiles[(x+col) + width*(y-row)].newInFov = visible;
-				std::cout << "visible at " << row << ", " << col << ": " << visible << "\n";
+				tiles[(xPos) + width*(yPos)].newInFov = visible;
 
-				//if(visible && tiles[position].isWall {
-				if(visible && isWall(x + col, y - row)) {
+				if(visible && isWall(xPos, yPos)) {
 					shadowLine.addShadow(projection);
 					fullShadow = shadowLine.isFullShadow();
 				}
 			}
 		}
 	}
+}
+
+Vec<int> Map::transformOctant(int row, int col, int octant) {
+	switch(octant) {
+		case 0: return Vec<int>( col, -row);
+		case 1: return Vec<int>( row, -col);
+		case 2: return Vec<int>( row,  col);
+		case 3: return Vec<int>( col,  row);
+		case 4: return Vec<int>(-col,  row);
+		case 5: return Vec<int>(-row,  col);
+		case 6: return Vec<int>(-row, -col);
+		case 7: return Vec<int>(-col, -row);
+	}
+	return Vec<int> (0, 0); // should throw
 }
 
 Shadow Shadow::projectTile(int row, int column) {

@@ -8,6 +8,7 @@
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/serialization/export.hpp>
 #include "libtcod.hpp"
+#include "vec.hpp"
 class Actor;
 class GameplayState;
 
@@ -74,6 +75,7 @@ protected:
 
 	void computeFovNew();
 	bool isInFovNew(int x, int y);
+	Vec<int> transformOctant(int row, int col, int octant);
 	void dig(int x1, int y1, int x2, int y2);
 	void createRoom(bool first, int x1, int y1, int x2, int y2, bool initActors);
 
