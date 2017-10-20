@@ -5,6 +5,7 @@
 #include "constants.hpp"
 #include "container.hpp"
 #include "destructible.hpp"
+#include "dice.hpp"
 #include "engine.hpp"
 #include "gameplay_state.hpp"
 #include "gui.hpp"
@@ -171,10 +172,8 @@ void TemporaryAi::applyTo(Actor* actor) {
 Action* ConfusedMonsterAi::getNextAction(Actor* owner) {
 	decreaseTurns(owner);
 
-	TCODRandom* rng = TCODRandom::getInstance();
-
-	int stepDx = rng->getInt(-1,1);
-	int stepDy = rng->getInt(-1,1);
+	int stepDx = d3() - 2;
+	int stepDy = d3() - 2;
 
 	Direction direction;
 	if (stepDx ==  0 && stepDy ==  0) return new WaitAction(owner);
