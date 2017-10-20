@@ -23,6 +23,8 @@ struct Tile {
 	}
 };
 
+enum class FovType { SQUARE, CIRCLE };
+
 class Shadow {
 public:
 	Shadow(float start, float end) : start(start), end(end) {;}
@@ -62,8 +64,8 @@ public:
 	bool canWalk(int x, int y) const;
 	bool isInFov(int x, int y) const;
 	bool isExplored(int x, int y) const;
-	void computeFov();
-	void computeFovForOctant(int x, int y, int octant);
+	void computeFov(FovType fovType = FovType::CIRCLE);
+	void computeFovForOctant(int x, int y, int octant, FovType fovType = FovType::CIRCLE);
 	void setState(GameplayState* s) { state = s; }
 
 protected:
@@ -71,7 +73,6 @@ protected:
 	TCODRandom rng;
 	friend class BspListener;
 
-	void computeFovNew();
 	Vec<int> transformOctant(int row, int col, int octant);
 	void dig(int x1, int y1, int x2, int y2);
 	void createRoom(bool first, int x1, int y1, int x2, int y2, bool initActors);

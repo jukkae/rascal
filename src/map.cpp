@@ -116,11 +116,7 @@ bool Map::isInFov(int x, int y) const {
 	//return isInFovNew(x, y);
 }
 
-void Map::computeFov() {
-	computeFovNew();
-}
-
-void Map::computeFovNew() {
+void Map::computeFov(FovType fovType) {
 	for(int x = 0; x < width; x++) {
 		for(int y = 0; y < height; y++) {
 			tiles[x + width*y].newInFov = false;
@@ -129,11 +125,11 @@ void Map::computeFovNew() {
 	int playerX = state->getPlayer()->x;
 	int playerY = state->getPlayer()->y;
 	for(int octant = 0; octant < 8; octant++) {
-		computeFovForOctant(playerX, playerY, octant);
+		computeFovForOctant(playerX, playerY, octant, fovType);
 	}
 }
 
-void Map::computeFovForOctant(int x, int y, int octant) {
+void Map::computeFovForOctant(int x, int y, int octant, FovType fovType) {
 	ShadowLine shadowLine;
 	bool fullShadow = false;
 	for(int row = 0; row < constants::DEFAULT_FOV_RADIUS; row++) {
