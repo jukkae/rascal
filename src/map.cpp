@@ -42,8 +42,7 @@ void Map::init(bool initActors) {
 }
 
 Actor* Map::makeMonster(int x, int y) {
-	int r = rng.getInt(0, 100);
-	r = d100();
+	int r = d100();
 	if(r < 70) {
 		Actor* punk = new Actor(x, y, 'h', "punk", TCODColor::desaturatedGreen, 1); // TODO
 		punk->destructible = std::make_unique<MonsterDestructible>(10, 0, 50, "dead punk", 13);
@@ -71,7 +70,7 @@ void Map::addMonster(int x, int y) {
 }
 
 Actor* Map::makeItem(int x, int y) {
-	int r = rng.getInt(0, 100);
+	int r = d100();
 	if(r < 60) {
 		Actor* stimpak = new Actor(x, y, '!', "stimpak", TCODColor::violet);
 		stimpak->blocks = false;
