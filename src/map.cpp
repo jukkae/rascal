@@ -5,6 +5,7 @@
 #include "attacker.hpp"
 #include "constants.hpp"
 #include "destructible.hpp"
+#include "dice.hpp"
 #include "gameplay_state.hpp"
 #include "map.hpp"
 #include "pickable.hpp"
@@ -42,6 +43,7 @@ void Map::init(bool initActors) {
 
 Actor* Map::makeMonster(int x, int y) {
 	int r = rng.getInt(0, 100);
+	r = d100();
 	if(r < 70) {
 		Actor* punk = new Actor(x, y, 'h', "punk", TCODColor::desaturatedGreen, 1); // TODO
 		punk->destructible = std::make_unique<MonsterDestructible>(10, 0, 50, "dead punk", 13);
