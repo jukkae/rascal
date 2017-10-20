@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <cmath>
 #include <limits>
 #include "actor.hpp"
 #include "attacker.hpp"
@@ -136,8 +137,9 @@ void Map::computeFovForOctant(int x, int y, int octant, FovType fovType) {
 		// TODO break at map boundaries
 		for(int col = 0; col <= row; col++) {
 			// TODO break to this direction, too
-			// TODO also break w.r.t actual fov RADIUS
-			// - current implementation leads to square-shaped fov
+			if(fovType == FovType::CIRCLE) {
+				if(sqrt(row*row + col*col) > constants::DEFAULT_FOV_RADIUS) break;
+			} // else if fovType == FovType::SQUARE
 			int xPos = x + transformOctant(row, col, octant).x;
 			int yPos = y + transformOctant(row, col, octant).y;
 			if(fullShadow) {
