@@ -27,6 +27,12 @@ void Map::init(bool initActors) {
 	for(int i = 0; i < width*height; ++i) {
 		tiles.push_back(Tile());
 	}
+
+	for(int x = 0; x < width; ++x) {
+		for(int y = 0; y < height; ++y) {
+			if(x % 3 == 0 && y % 3 == 0) tiles.at(x + y*width).walkable = false;
+		}
+	}
 	// 8: recursion level,
 	// 1.5f, 1.5f H/V and V/H ratios of rooms
 
