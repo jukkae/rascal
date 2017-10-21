@@ -40,6 +40,9 @@ void Map::init(bool initActors) {
 	BspListener listener(*this, &rng);
 	bsp.traverseInvertedLevelOrder(&listener, (void*) initActors);
 
+	addItems();
+	addMonsters();
+
 	/*for(int x = 0; x < width; ++x) { // Copy data from tcodmap
 		for(int y = 0; y < height; ++y) {
 			tiles.at(x + y*width).transparent = map->isTransparent(x, y);
@@ -69,6 +72,28 @@ Actor* Map::makeMonster(int x, int y) {
 		boxer->attacker = std::make_unique<Attacker>(4);
 		boxer->ai = std::make_unique<MonsterAi>();
 		return boxer;
+	}
+}
+
+void Map::addMonsters() {
+	for(int x = 0; x < width; ++x) {
+		for(int y = 0; y < height; ++y) {
+			int r = d100();
+			if (r == 1) {
+				addMonster(x, y);
+			}
+		}
+	}
+}
+
+void Map::addItems() {
+	for(int x = 0; x < width; ++x) {
+		for(int y = 0; y < height; ++y) {
+			int r = d100();
+			if (r <= 2) {
+				addItem(x, y);
+			}
+		}
 	}
 }
 

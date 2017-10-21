@@ -62,6 +62,9 @@ public:
 	~Map();
 	void init(bool initActors);
 
+	void addItems(); // temp
+	void addMonsters(); // temp
+
 	void setWall(int x, int y);
 	void addMonster(int x, int y);
 	void addItem(int x, int y);
