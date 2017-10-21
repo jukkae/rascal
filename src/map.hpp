@@ -14,8 +14,8 @@ class GameplayState;
 
 struct Tile {
 	bool explored;
-	bool newInFov;
-	Tile() : explored(false), newInFov(false) {;}
+	bool inFov;
+	Tile() : explored(false), inFov(false) {;}
 
 	template<typename Archive>
 	void serialize(Archive & ar, const unsigned int version) {

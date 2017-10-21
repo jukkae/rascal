@@ -30,7 +30,7 @@ void Renderer::renderMap(const Map* const map) {
 			if(worldX < 0 || worldX >= mapWidth || worldY < 0 || worldY >= mapHeight) {
 				con.setCharBackground(x, y, black);
 			}
-			else if(map->tiles[worldX + mapWidth*worldY].newInFov) {
+			else if(map->tiles[worldX + mapWidth*worldY].inFov) {
 				con.setCharBackground(x, y, map->isWall(worldX, worldY) ? lightWall : lightGround);
 			}
 			/*else if(map->isInFov(worldX, worldY)) {

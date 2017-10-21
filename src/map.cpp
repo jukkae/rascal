@@ -119,7 +119,7 @@ bool Map::isExplored(int x, int y) const {
 
 bool Map::isInFov(int x, int y) const {
 	if(x < 0 || x >= width || y < 0 || y >= height) return false;
-	if(tiles[x+y*width].newInFov) {
+	if(tiles[x+y*width].inFov) {
 		return true;
 	}
 	return false;
@@ -129,7 +129,7 @@ bool Map::isInFov(int x, int y) const {
 void Map::computeFov(FovType fovType) {
 	for(int x = 0; x < width; x++) {
 		for(int y = 0; y < height; y++) {
-			tiles[x + width*y].newInFov = false;
+			tiles[x + width*y].inFov = false;
 		}
 	}
 	int playerX = state->getPlayer()->x;
@@ -152,12 +152,12 @@ void Map::computeFovForOctant(int x, int y, int octant, FovType fovType) {
 			int xPos = x + transformOctant(row, col, octant).x;
 			int yPos = y + transformOctant(row, col, octant).y;
 			if(fullShadow) {
-				tiles[xPos + width*yPos].newInFov = false;
+				tiles[xPos + width*yPos].inFov = false;
 			}
 			else {
 				Shadow projection = Shadow::projectTile(row, col);
 				bool visible = !shadowLine.isInShadow(projection);
-				tiles[xPos + width*yPos].newInFov = visible;
+				tiles[xPos + width*yPos].inFov = visible;
 				if(visible) tiles[xPos + width*yPos].explored = true; // *maybe* extract function
 
 				if(visible && isWall(xPos, yPos)) {
