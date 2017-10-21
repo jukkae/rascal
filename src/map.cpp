@@ -40,12 +40,12 @@ void Map::init(bool initActors) {
 	BspListener listener(*this, &rng);
 	bsp.traverseInvertedLevelOrder(&listener, (void*) initActors);
 
-	for(int x = 0; x < width; ++x) { // Copy data from tcodmap
+	/*for(int x = 0; x < width; ++x) { // Copy data from tcodmap
 		for(int y = 0; y < height; ++y) {
 			tiles.at(x + y*width).transparent = map->isTransparent(x, y);
 			tiles.at(x + y*width).walkable = map->isWalkable(x, y);
 		}
-	}
+	}*/
 }
 
 Actor* Map::makeMonster(int x, int y) {
@@ -111,8 +111,8 @@ void Map::addItem(int x, int y) {
 }
 
 bool Map::isWall(int x, int y) const {
-	//return !tiles.at(x + y*width).walkable;
-	return !map->isWalkable(x, y);
+	return !tiles.at(x + y*width).walkable; // can't use this while initialising monsters
+	//return !map->isWalkable(x, y);
 }
 
 bool Map::canWalk(int x, int y) const {

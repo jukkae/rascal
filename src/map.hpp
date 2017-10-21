@@ -17,7 +17,7 @@ struct Tile {
 	bool inFov;
 	bool transparent;
 	bool walkable;
-	Tile() : explored(false), inFov(false), transparent(false), walkable(false) {;}
+	Tile() : explored(false), inFov(false), transparent(true), walkable(true) {;}
 
 	template<typename Archive>
 	void serialize(Archive & ar, const unsigned int version) {
