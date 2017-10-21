@@ -172,7 +172,7 @@ void TemporaryAi::applyTo(Actor* actor) {
 Action* ConfusedMonsterAi::getNextAction(Actor* owner) {
 	decreaseTurns(owner);
 
-	int stepDx = d3() - 2;
+	int stepDx = d3() - 2; // -1, 0, 1
 	int stepDy = d3() - 2;
 
 	Direction direction;
