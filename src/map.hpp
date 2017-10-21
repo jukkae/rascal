@@ -77,10 +77,6 @@ public:
 	void setState(GameplayState* s) { state = s; }
 
 protected:
-	std::shared_ptr<TCODMap> map; // TODO shouldn't be shared_ptr, but unique can't be copied
-	TCODRandom rng;
-	friend class BspListener;
-
 	Vec<int> transformOctant(int row, int col, int octant);
 	void dig(int x1, int y1, int x2, int y2);
 	void createRoom(bool first, int x1, int y1, int x2, int y2, bool initActors);
@@ -131,16 +127,4 @@ template<class Archive>
 		m.init(false);
 	}
 }} // namespace boost::serialization
-
-class BspListener : public ITCODBspCallback {
-private:
-	int roomNum; // room number
-	Map &map; // a map to dig
-	int lastx, lasty; // center of the last room
-	TCODRandom* rng;
-
-public:
-	BspListener(Map &map, TCODRandom* rng);
-	bool visitNode(TCODBsp* node, void* userData);
-};
 #endif /* MAP_HPP */

@@ -28,17 +28,11 @@ Map::~Map() {
 }
 
 void Map::init(bool initActors) {
-	TCODRandom rng(seed);
 	for(int i = 0; i < width*height; ++i) {
 		tiles.push_back(Tile());
 	}
-	this->map = std::make_shared<TCODMap>(width, height);
-	TCODBsp bsp(0, 0, width, height);
 	// 8: recursion level,
 	// 1.5f, 1.5f H/V and V/H ratios of rooms
-	bsp.splitRecursive(&rng, 8, ROOM_MAX_SIZE, ROOM_MAX_SIZE, 1.5f, 1.5f);
-	BspListener listener(*this, &rng);
-	bsp.traverseInvertedLevelOrder(&listener, (void*) initActors);
 
 	addItems();
 	addMonsters();
@@ -269,71 +263,4 @@ void ShadowLine::addShadow(Shadow shadow) {
 			shadows.insert(shadows.begin() + index, shadow);
 		}
 	}
-}
-
-void Map::dig(int x1, int y1, int x2, int y2) {
-	if(x2 < x1) std::swap(x1, x2);
-	if(y2 < y1) std::swap(y1, y2);
-	for(int tileX = x1; tileX <= x2; ++tileX) {
-		for(int tileY = y1; tileY <= y2; ++tileY) {
-			map->setProperties(tileX, tileY, true, true);
-		}
-	}
-}
-
-void Map::createRoom(bool first, int x1, int y1, int x2, int y2, bool initActors) {
-	dig (x1, y1, x2, y2);
-	if(!initActors) { return; }
-	if(first) {
-		// put the player in the first room
-		state->getPlayer()->x=(x1 + x2)/2;
-		state->getPlayer()->y=(y1 + y2)/2;
-		// state->getStairs()->x = (x1 + x2) / 2 + 1; // debugging
-		// state->getStairs()->y = (y1 + y2) / 2;
-	} else {
-		int nMonsters = rng.getInt(0, MAX_ROOM_MONSTERS);
-		while(nMonsters > 0) {
-			int x = rng.getInt(x1, x2);
-			int y = rng.getInt(y1, y2);
-			if(canWalk(x, y)) addMonster(x, y);
-			--nMonsters;
-		}
-	}
-	// add stimpaks
-	int nItems = rng.getInt(0, MAX_ROOM_ITEMS);
-	while (nItems > 0) {
-		int x = rng.getInt(x1, x2);
-		int y = rng.getInt(y1, y2);
-		if(canWalk(x,y)) { addItem(x,y); }
-		--nItems;
-	}
-	state->getStairs()->x = (x1 + x2) / 2;
-	state->getStairs()->y = (y1 + y2) / 2;
-}
-
-BspListener::BspListener(Map &map, TCODRandom* rng) : roomNum(0), map(map), rng(rng) {;}
-
-bool BspListener::visitNode(TCODBsp* node, void* userData) {
-	bool initActors = (bool) userData;
-	if(node->isLeaf()) {
-		int x;
-		int y;
-		int w;
-		int h;
-		// dig a room
-		w = rng->getInt(ROOM_MIN_SIZE, node->w-2);
-		h = rng->getInt(ROOM_MIN_SIZE, node->h-2);
-		x = rng->getInt(node->x+1, node->x+node->w-w-1);
-		y = rng->getInt(node->y+1, node->y+node->h-h-1);
-		map.createRoom(roomNum == 0, x, y, x+w-1, y+h-1, initActors);
-		if(roomNum != 0) {
-			// dig a corridor from last room
-			map.dig(lastx, lasty, x+w/2, lasty);
-			map.dig(x+w/2, lasty, x+w/2, y+h/2);
-		}
-		lastx = x+w/2;
-		lasty = y+h/2;
-		++roomNum;
-	}
-return true;
 }
