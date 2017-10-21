@@ -1,3 +1,6 @@
+#ifndef DICE_HPP
+#define DICE_HPP
+
 #include <random>
 
 static std::default_random_engine generator;
@@ -19,3 +22,5 @@ static auto d10  = []() { return d10_dist (generator); };
 static auto d12  = []() { return d12_dist (generator); };
 static auto d20  = []() { return d20_dist (generator); };
 static auto d100 = []() { return d100_dist(generator); };
+
+#endif /* DICE_HPP */
