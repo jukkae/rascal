@@ -39,6 +39,13 @@ void Map::init(bool initActors) {
 	bsp.splitRecursive(&rng, 8, ROOM_MAX_SIZE, ROOM_MAX_SIZE, 1.5f, 1.5f);
 	BspListener listener(*this, &rng);
 	bsp.traverseInvertedLevelOrder(&listener, (void*) initActors);
+
+	for(int x = 0; x < width; ++x) { // Copy data from tcodmap
+		for(int y = 0; y < height; ++y) {
+			tiles.at(x + y*width).transparent = map->isTransparent(x, y);
+			tiles.at(x + y*width).walkable = map->isWalkable(x, y);
+		}
+	}
 }
 
 Actor* Map::makeMonster(int x, int y) {
@@ -104,6 +111,7 @@ void Map::addItem(int x, int y) {
 }
 
 bool Map::isWall(int x, int y) const {
+	//return !tiles.at(x + y*width).walkable;
 	return !map->isWalkable(x, y);
 }
 

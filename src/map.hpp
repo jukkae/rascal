@@ -15,11 +15,16 @@ class GameplayState;
 struct Tile {
 	bool explored;
 	bool inFov;
-	Tile() : explored(false), inFov(false) {;}
+	bool transparent;
+	bool walkable;
+	Tile() : explored(false), inFov(false), transparent(false), walkable(false) {;}
 
 	template<typename Archive>
 	void serialize(Archive & ar, const unsigned int version) {
 		ar & explored;
+		// ar & inFov; no serialization for dynamic properties!
+		ar & transparent;
+		ar & walkable;
 	}
 };
 
