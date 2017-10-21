@@ -82,42 +82,13 @@ private:
 	GameplayState* state;
 	Actor* makeMonster(int x, int y);
 	Actor* makeItem(int x, int y);
+
 	friend class boost::serialization::access;
-
 	template<class Archive>
-	friend void boost::serialization::save_construct_data(Archive & ar, const Map* m, const unsigned int file_version);
-
-	template<class Archive>
-	friend void boost::serialization::load_construct_data(Archive & ar, const Map* m, const unsigned int file_version);
-
-	template<class Archive> // Not called anymore?
 	void serialize(Archive & ar, const unsigned int version) {
 		ar & width;
 		ar & height;
 		ar & tiles;
 	}
 };
-
-namespace boost { namespace serialization {
-template<class Archive>
-	inline void save_construct_data (Archive & ar, const Map m, const unsigned int file_version) {
-		ar << m.width;
-		ar << m.height;
-		ar << m.tiles;
-	}
-
-template<class Archive>
-	inline void load_construct_data (Archive & ar, Map m, const unsigned int file_version) {
-		int width;
-		int height;
-		std::vector<Tile> tiles;
-
-		ar >> width;
-		ar >> height;
-		ar >> tiles;
-
-		::Map(width, height);
-		m.init(false);
-	}
-}} // namespace boost::serialization
 #endif /* MAP_HPP */
