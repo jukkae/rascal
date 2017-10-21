@@ -151,14 +151,15 @@ void Map::computeFovForOctant(int x, int y, int octant, FovType fovType) {
 	ShadowLine shadowLine;
 	bool fullShadow = false;
 	for(int row = 0; row < constants::DEFAULT_FOV_RADIUS; row++) {
-		// TODO break at map boundaries
 		for(int col = 0; col <= row; col++) {
-			// TODO break to this direction, too
 			if(fovType == FovType::CIRCLE) {
 				if(sqrt(row*row + col*col) > constants::DEFAULT_FOV_RADIUS) break;
 			} // else if fovType == FovType::SQUARE
 			int xPos = x + transformOctant(row, col, octant).x;
 			int yPos = y + transformOctant(row, col, octant).y;
+
+			if(xPos < 0 || xPos >= width || yPos < 0 || yPos >= height) break;
+
 			if(fullShadow) {
 				tiles[xPos + width*yPos].inFov = false;
 			}
