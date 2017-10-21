@@ -69,7 +69,7 @@ void Map::addMonsters() {
 	for(int x = 0; x < width; ++x) {
 		for(int y = 0; y < height; ++y) {
 			int r = d100();
-			if (r == 1) {
+			if (canWalk(x, y) && r == 1) {
 				addMonster(x, y);
 			}
 		}
@@ -80,7 +80,7 @@ void Map::addItems() {
 	for(int x = 0; x < width; ++x) {
 		for(int y = 0; y < height; ++y) {
 			int r = d100();
-			if (r <= 2) {
+			if (canWalk(x, y) && r <= 2) {
 				addItem(x, y);
 			}
 		}
