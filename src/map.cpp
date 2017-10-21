@@ -18,10 +18,6 @@ static const int MAX_ROOM_ITEMS = 2;
 Map::Map() : Map(constants::DEFAULT_MAP_WIDTH, constants::DEFAULT_MAP_HEIGHT) {}
 
 Map::Map(int width, int height) : width(width), height(height) {
-	seed = TCODRandom::getInstance()->getInt(0, std::numeric_limits<int>::max());
-}
-
-Map::Map(int width, int height, long seed) : width(width), height(height), seed(seed) {
 }
 
 Map::~Map() {

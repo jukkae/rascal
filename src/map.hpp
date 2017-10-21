@@ -7,7 +7,6 @@
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/serialization/export.hpp>
-#include "libtcod.hpp"
 #include "vec.hpp"
 class Actor;
 class GameplayState;
@@ -54,11 +53,9 @@ class Map {
 public:
 	int width, height;
 	std::vector<Tile> tiles;
-	long seed;
 
 	Map();
 	Map(int width, int height);
-	Map(int width, int height, long seed);
 	~Map();
 	void init(bool initActors);
 
@@ -98,7 +95,6 @@ private:
 		ar & width;
 		ar & height;
 		ar & tiles;
-		ar & seed;
 	}
 };
 
@@ -108,7 +104,6 @@ template<class Archive>
 		ar << m.width;
 		ar << m.height;
 		ar << m.tiles;
-		ar << m.seed;
 	}
 
 template<class Archive>
@@ -116,14 +111,12 @@ template<class Archive>
 		int width;
 		int height;
 		std::vector<Tile> tiles;
-		long seed;
 
 		ar >> width;
 		ar >> height;
 		ar >> tiles;
-		ar >> seed;
 
-		::Map(width, height, seed);
+		::Map(width, height);
 		m.init(false);
 	}
 }} // namespace boost::serialization
