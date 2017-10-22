@@ -39,6 +39,7 @@ void Map::init(bool initActors) {
 void Map::generateMap() {
 	std::vector<Rect> rooms;
 	std::vector<Rect> areas = breakRooms(Rect(0, 0, width - 1, height - 1)); // TODO dimensions
+	std::cout << "areas length: " << areas.size() << "\n";
 
 	// initialize
 	for(int x = 0; x < width; ++x) {
@@ -55,6 +56,7 @@ void Map::generateMap() {
 	}
 
 	for(auto a : areas) {
+		std::cout << "a: \n" << a.x0() << "," << a.y0() << ", " << a.x1() << "," << a.y1() << "\n";
 		for(int x = a.x0(); x < a.x1(); ++x) {
 			for(int y = a.y0(); y < a.y1(); ++y) {
 				if((x == a.x0() || x == a.x1() || y == a.y0() || y == a.y1()) && y < 30) tiles.at(x + y*width).walkable = false;
@@ -71,27 +73,28 @@ void Map::generateMap() {
 
 std::vector<Rect> Map::breakRooms(Rect area) {
 	std::vector<Rect> areas;
-	//int xBreak = d100() * area.width() / 100;
-	int xBreak = area.width() / 2;
+	int xBreak = (float)d100() * (float)area.width() / (float)100;
+	//int xBreak = area.width() / 2;
 
-	Rect area1 = Rect(0, 0, xBreak, height);
-	Rect area2 = Rect(xBreak, 0, area.width(), height);
+	Rect area1 = Rect(area.x0(), area.y0(), area.x0() + xBreak - 1, area.y1() - 1);
+	Rect area2 = Rect(area.x0() + xBreak, area.y0(), area.x1() - 1, area.y1() - 1);
 
 	
-	if(area1.width() > 60) {
+	if(area1.width() > 7) {
 		std::vector<Rect> areas1 = breakRooms(area1);
 		areas.insert(areas.end(), areas1.begin(), areas1.end());
 	}
 	else {
 		areas.push_back(area1);
 	}
-	if(area2.width() > 60) {
+	if(area2.width() > 7) {
 		std::vector<Rect> areas2 = breakRooms(area2);
 		areas.insert(areas.end(), areas2.begin(), areas2.end());
 	}
 	else {
 		areas.push_back(area2);
 	}
+	std::cout << areas.size() << "\n";
 
 	return areas;
 }
