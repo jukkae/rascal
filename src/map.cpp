@@ -9,6 +9,8 @@
 #include "gameplay_state.hpp"
 #include "map.hpp"
 #include "pickable.hpp"
+#include "point.hpp"
+#include "rect.hpp"
 
 static const int ROOM_MAX_SIZE = 12;
 static const int ROOM_MIN_SIZE = 6;
@@ -35,7 +37,22 @@ void Map::init(bool initActors) {
 }
 
 void Map::generateMap() {
-	// generate walls
+	std::vector<Rect> rooms;
+	// initialize
+	for(int x = 0; x < width; ++x) {
+		for(int y = 0; y < height; ++y) {
+			tiles.at(x + y*width).walkable = true;
+		}
+	}
+
+	Rect room = Rect(10, 20, 30, 35);
+
+	for(int x = room.topLeft.x; x < room.bottomRight.x; ++x) {
+		for(int y = room.topLeft.y; y < room.bottomRight.y; ++y) {
+			if(x == room.topLeft.x || x == room.bottomRight.x - 1 || y == room.topLeft.y || y == room.bottomRight.y - 1) tiles.at(x + y*width).walkable = false;
+		}
+	}
+	// generate outer walls
 	for(int x = 0; x < width; ++x) {
 		for(int y = 0; y < height; ++y) {
 			if(x == 0 || x == width - 1 || y == 0 || y == height - 1) tiles.at(x + y*width).walkable = false;
@@ -43,11 +60,11 @@ void Map::generateMap() {
 	}
 
 
-	for(int x = 0; x < width; ++x) {
+	/*for(int x = 0; x < width; ++x) {
 		for(int y = 0; y < height; ++y) {
 			if(x % 3 == 0 && y % 3 == 0) tiles.at(x + y*width).walkable = false;
 		}
-	}
+	}*/
 }
 
 Actor* Map::makeMonster(int x, int y) {
