@@ -38,6 +38,8 @@ void Map::init(bool initActors) {
 
 void Map::generateMap() {
 	std::vector<Rect> rooms;
+	std::vector<Rect> areas = breakRooms(Rect(0, 0, width - 1, height - 1)); // TODO dimensions
+
 	// initialize
 	for(int x = 0; x < width; ++x) {
 		for(int y = 0; y < height; ++y) {
@@ -45,13 +47,6 @@ void Map::generateMap() {
 		}
 	}
 
-	Rect room = Rect(10, 20, 30, 35);
-
-	for(int x = room.topLeft.x; x < room.bottomRight.x; ++x) {
-		for(int y = room.topLeft.y; y < room.bottomRight.y; ++y) {
-			if(x == room.topLeft.x || x == room.bottomRight.x - 1 || y == room.topLeft.y || y == room.bottomRight.y - 1) tiles.at(x + y*width).walkable = false;
-		}
-	}
 	// generate outer walls
 	for(int x = 0; x < width; ++x) {
 		for(int y = 0; y < height; ++y) {
@@ -59,12 +54,46 @@ void Map::generateMap() {
 		}
 	}
 
+	for(auto a : areas) {
+		for(int x = a.x0(); x < a.x1(); ++x) {
+			for(int y = a.y0(); y < a.y1(); ++y) {
+				if((x == a.x0() || x == a.x1() || y == a.y0() || y == a.y1()) && y < 30) tiles.at(x + y*width).walkable = false;
+			}
+		}
+	}
 
 	/*for(int x = 0; x < width; ++x) {
 		for(int y = 0; y < height; ++y) {
 			if(x % 3 == 0 && y % 3 == 0) tiles.at(x + y*width).walkable = false;
 		}
 	}*/
+}
+
+std::vector<Rect> Map::breakRooms(Rect area) {
+	std::vector<Rect> areas;
+	//int xBreak = d100() * area.width() / 100;
+	int xBreak = area.width() / 2;
+
+	Rect area1 = Rect(0, 0, xBreak, height);
+	Rect area2 = Rect(xBreak, 0, area.width(), height);
+
+	
+	if(area1.width() > 60) {
+		std::vector<Rect> areas1 = breakRooms(area1);
+		areas.insert(areas.end(), areas1.begin(), areas1.end());
+	}
+	else {
+		areas.push_back(area1);
+	}
+	if(area2.width() > 60) {
+		std::vector<Rect> areas2 = breakRooms(area2);
+		areas.insert(areas.end(), areas2.begin(), areas2.end());
+	}
+	else {
+		areas.push_back(area2);
+	}
+
+	return areas;
 }
 
 Actor* Map::makeMonster(int x, int y) {

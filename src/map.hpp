@@ -8,6 +8,7 @@
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/serialization/export.hpp>
 #include "vec.hpp"
+#include "rect.hpp"
 class Actor;
 class GameplayState;
 
@@ -63,6 +64,7 @@ public:
 	void addMonsters(); // temp
 
 	void generateMap(); // temp, s.b. private
+	std::vector<Rect> breakRooms(Rect area); // temp, s.b. private
 
 	void setWall(int x, int y);
 	void addMonster(int x, int y);
