@@ -28,23 +28,26 @@ void Map::init(bool initActors) {
 		tiles.push_back(Tile());
 	}
 
+	generateMap();
+
+	addItems();
+	addMonsters();
+}
+
+void Map::generateMap() {
+	// generate walls
+	for(int x = 0; x < width; ++x) {
+		for(int y = 0; y < height; ++y) {
+			if(x == 0 || x == width - 1 || y == 0 || y == height - 1) tiles.at(x + y*width).walkable = false;
+		}
+	}
+
+
 	for(int x = 0; x < width; ++x) {
 		for(int y = 0; y < height; ++y) {
 			if(x % 3 == 0 && y % 3 == 0) tiles.at(x + y*width).walkable = false;
 		}
 	}
-	// 8: recursion level,
-	// 1.5f, 1.5f H/V and V/H ratios of rooms
-
-	addItems();
-	addMonsters();
-
-	/*for(int x = 0; x < width; ++x) { // Copy data from tcodmap
-		for(int y = 0; y < height; ++y) {
-			tiles.at(x + y*width).transparent = map->isTransparent(x, y);
-			tiles.at(x + y*width).walkable = map->isWalkable(x, y);
-		}
-	}*/
 }
 
 Actor* Map::makeMonster(int x, int y) {

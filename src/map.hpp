@@ -62,6 +62,8 @@ public:
 	void addItems(); // temp
 	void addMonsters(); // temp
 
+	void generateMap(); // temp, s.b. private
+
 	void setWall(int x, int y);
 	void addMonster(int x, int y);
 	void addItem(int x, int y);
