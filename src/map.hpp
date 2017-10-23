@@ -50,6 +50,8 @@ public:
 	void addShadow(Shadow shadow);
 };
 
+enum class BreakDirection { HORIZONTAL, VERTICAL };
+
 class Map {
 public:
 	int width, height;
@@ -64,7 +66,7 @@ public:
 	void addMonsters(); // temp
 
 	void generateMap(); // temp, s.b. private
-	std::vector<Rect> breakRooms(Rect area); // temp, s.b. private
+	std::vector<Rect> breakRooms(Rect area, BreakDirection direction = BreakDirection::HORIZONTAL); // temp, s.b. private
 
 	void setWall(int x, int y);
 	void addMonster(int x, int y);

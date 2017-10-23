@@ -12,7 +12,7 @@ struct Rect {
 	// TODO coordinate modes: tl + br, tl + dimensions, possibly center point + dimensions
 	// TODO checks that coordinates are in correct order (or just force them)
 	// TODO getters for raw coordinates + dimensions
-	Rect(int x0, int y0, int x1, int y1) : topLeft(Point(x0, y0)), bottomRight(Point(x1, y1)) {;}
+	Rect(int x0, int y0, int x1, int y1);
 
 	// naming conventions & constness?
 	int x0() { return topLeft.x; }
