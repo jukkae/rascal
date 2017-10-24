@@ -5,6 +5,7 @@ rascal.dSYM
 save.txt
 # include/
 lib/
+frameworks/
 old/
 *.a
 *.la
