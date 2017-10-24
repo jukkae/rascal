@@ -3,12 +3,14 @@
 class Actor;
 class State;
 #include <queue>
+#include <string>
 
 #include "renderer.hpp"
 #include "gui.hpp"
 #include "attacker.hpp"
 #include "engine_command.hpp"
 #include "persistent.hpp"
+#include <SFML/Window/Event.hpp>
 
 class Engine {
 public:
@@ -24,6 +26,11 @@ public:
 	template <class T>
 	void addEngineCommand(T engineCommand) { engineCommands.push(std::make_unique<T>(engineCommand)); }
 
+	void addEvent(sf::Event event) { events.push(event); }
+	bool pollEvent(sf::Event& event);
+
+	std::string getText() { return "hello from engine"; }
+
 	void exit();
 	void save();
 	void load();
@@ -33,6 +40,7 @@ private:
 	State* gameplayState;
 	std::vector<State*> states;
 	std::queue<std::unique_ptr<EngineCommand>> engineCommands;
+	std::queue<sf::Event> events;
 
 	void executeEngineCommand();
 };

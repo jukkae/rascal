@@ -52,6 +52,16 @@ void Engine::update() {
 	//TCODConsole::root->flush();
 }
 
+bool Engine::pollEvent(sf::Event& event) {
+	if (events.empty()) return false;
+	else {
+		event = events.front();
+		events.pop();
+		return true;
+	}
+
+}
+
 void Engine::executeEngineCommand() {
 	engineCommands.front()->execute();
 	engineCommands.pop();
