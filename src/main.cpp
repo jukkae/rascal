@@ -10,9 +10,13 @@
 #include "engine.hpp"
 #include "main.hpp"
 
+#include <SFML/System.hpp>
+#include <SFML/Window.hpp>
+
 Engine engine;
 
 int main() {
+	sf::Window window(sf::VideoMode(800, 600), "My window");
 	while(!TCODConsole::isWindowClosed()) {
 		engine.update();
 	}
