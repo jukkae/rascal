@@ -39,7 +39,6 @@ void Map::init(bool initActors) {
 void Map::generateMap() {
 	std::vector<Rect> rooms;
 	std::vector<Rect> areas = breakRooms(Rect(0, 0, (width - 1), (height - 1))); // TODO dimensions
-	std::cout << "areas length: " << areas.size() << "\n";
 
 	// initialize
 	for(int x = 0; x < width; ++x) {
@@ -76,12 +75,10 @@ void Map::generateMap() {
 }
 
 std::vector<Rect> Map::breakRooms(Rect area, BreakDirection direction) {
-	std::cout << "BREAK ROOMS AREA: " << area.x0() << "," << area.y0() << ", " << area.x1() << "," << area.y1() << "\n";
 	int minDim = 30;
 	std::vector<Rect> areas;
 	
 	if(area.width() < minDim || area.height() < minDim) {
-		std::cout << "too small, quit!\n\n";
 		areas.push_back(area);
 		return areas;
 	}
@@ -89,27 +86,17 @@ std::vector<Rect> Map::breakRooms(Rect area, BreakDirection direction) {
 		Rect area1 = area;
 		Rect area2 = area;
 		if(direction == BreakDirection::HORIZONTAL) {
-			std::cout << "horizontal\n";
 			int d = d20();
-			std::cout << "d: " << d << "\n";
 			int xBreak = d * area.width() / 20;
-			std::cout << "xBreak: " << xBreak << "\n";
 			//int xBreak = area.width() / 2;
 			area1 = Rect(area.x0(),          area.y0(), area.x0() + xBreak - 1, area.y1());
 			area2 = Rect(area.x0() + xBreak, area.y0(), area.x1(),              area.y1());
-			std::cout << "area 1: " << area1.x0() << "," << area1.y0() << ", " << area1.x1() << "," << area1.y1() << "\n";
-			std::cout << "area 2: " << area2.x0() << "," << area2.y0() << ", " << area2.x1() << "," << area2.y1() << "\n";
 		} else {
-			std::cout << "vertical\n";
 			int d = d20();
-			std::cout << "d: " << d << "\n";
 			int yBreak = d * area.height() / 20;
-			std::cout << "yBreak: " << yBreak << "\n";
 			//int yBreak = area.height() / 2;
 			area1 = Rect(area.x0(), area.y0(),          area.x1(), area.y0() + yBreak - 1);
 			area2 = Rect(area.x0(), area.y0() + yBreak, area.x1(), area.y1()             );
-			std::cout << "area 1: " << area1.x0() << "," << area1.y0() << ", " << area1.x1() << "," << area1.y1() << "\n";
-			std::cout << "area 2: " << area2.x0() << "," << area2.y0() << ", " << area2.x1() << "," << area2.y1() << "\n";
 		}
 
 		BreakDirection nextDir = (direction == BreakDirection::HORIZONTAL) ? BreakDirection::VERTICAL : BreakDirection::HORIZONTAL;
