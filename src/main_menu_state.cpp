@@ -41,7 +41,7 @@ void MainMenuState::handleEvents(Engine* engine) {
 	}
 }
 
-void MainMenuState::update(Engine* engine) {
+void MainMenuState::update(Engine* engine, sf::RenderWindow& window) {
 	handleEvents(engine);
 	render(engine);
 	TCODConsole::root->flush();

@@ -57,7 +57,7 @@ void InventoryMenuState::handleEvents(Engine* engine) {
 	}
 }
 
-void InventoryMenuState::update(Engine* engine) {
+void InventoryMenuState::update(Engine* engine, sf::RenderWindow& window) {
 	handleEvents(engine);
 	render(engine);
 }

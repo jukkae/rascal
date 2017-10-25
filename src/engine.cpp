@@ -46,7 +46,7 @@ void Engine::update(sf::RenderWindow& window) {
 	while(engineCommands.size() > 0) executeEngineCommand();
 
 	//states.back()->handleEvents(this);
-	states.back()->update(this);
+	states.back()->update(this, window);
 	//states.back()->render(this);
 
 	//TCODConsole::root->flush();

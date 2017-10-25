@@ -41,7 +41,7 @@ void LevelUpMenuState::handleEvents(Engine* engine) {
 	}
 }
 
-void LevelUpMenuState::update(Engine* engine) {
+void LevelUpMenuState::update(Engine* engine, sf::RenderWindow& window) {
 	handleEvents(engine);
 	render(engine);
 }

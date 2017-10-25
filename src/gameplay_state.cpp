@@ -49,7 +49,7 @@ void GameplayState::cleanup() {
 
 }
 
-void GameplayState::update(Engine* engine) {
+void GameplayState::update(Engine* engine, sf::RenderWindow& window) {
 	Actor* activeActor = getNextActor();
 	if(activeActor->isPlayer()) {
 		handleEvents(engine);

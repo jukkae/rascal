@@ -42,7 +42,7 @@ void GameOverState::handleEvents(Engine* engine) {
 
 }
 
-void GameOverState::update(Engine* engine) {
+void GameOverState::update(Engine* engine, sf::RenderWindow& window) {
 	handleEvents(engine);
 	render(engine);
 }

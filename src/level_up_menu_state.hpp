@@ -22,7 +22,7 @@ public:
 	void cleanup() override;
 
 	void handleEvents(Engine* engine) override;
-	void update(Engine* engine) override;
+	void update(Engine* engine, sf::RenderWindow& window) override;
 	void render(Engine* engine) override;
 private:
 	void handleItem(MenuItem item);
