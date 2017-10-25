@@ -42,7 +42,7 @@ void Engine::newGame() { // kinda bad
 	init();
 }
 
-void Engine::update() {
+void Engine::update(sf::RenderWindow& window) {
 	while(engineCommands.size() > 0) executeEngineCommand();
 
 	//states.back()->handleEvents(this);

@@ -36,7 +36,7 @@ int main() {
 		window.clear(sf::Color::Black);
 		window.draw(text);
 		window.display();
-		//engine.update();
+		engine.update(window);
 	}
 
 	return 0;

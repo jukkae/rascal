@@ -11,6 +11,8 @@ class State;
 #include "engine_command.hpp"
 #include "persistent.hpp"
 #include <SFML/Window/Event.hpp>
+#include <SFML/Window.hpp>
+#include <SFML/Graphics.hpp>
 
 class Engine {
 public:
@@ -21,7 +23,7 @@ public:
 
 	void pushState(State* state) { states.push_back(state); }
 	void popState() { states.pop_back(); }
-	void update();
+	void update(sf::RenderWindow& window);
 
 	template <class T>
 	void addEngineCommand(T engineCommand) { engineCommands.push(std::make_unique<T>(engineCommand)); }
