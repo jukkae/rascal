@@ -3,8 +3,16 @@
 #include "engine.hpp"
 #include "libtcod.hpp"
 
+#include <SFML/System.hpp>
+#include <SFML/Graphics.hpp>
+
+
 void MainMenuState::init(Engine* engine) {
-	console.setDefaultBackground(TCODColor::black);
+	if(!font.loadFromFile("assets/FSEX300.ttf")) {
+		std::cout << "error\n";
+	}
+
+	//console.setDefaultBackground(TCODColor::black);
 
 	MenuItem newGame = { MenuItemCode::NEW_GAME, "New game!" };
 	MenuItem cont = { MenuItemCode::CONTINUE, "Continue!" };
@@ -23,10 +31,10 @@ void MainMenuState::cleanup() {
 }
 
 void MainMenuState::handleEvents(Engine* engine) {
-	TCOD_key_t key;
-	TCODSystem::checkForEvent(TCOD_EVENT_KEY_PRESS, &key, nullptr);
+	//TCOD_key_t key;
+	//TCODSystem::checkForEvent(TCOD_EVENT_KEY_PRESS, &key, nullptr);
 
-	switch (key.vk) {
+	/*switch (key.vk) {
 		case TCODK_UP:
 			if(selectedItem > 0) --selectedItem;
 			break;
@@ -38,17 +46,32 @@ void MainMenuState::handleEvents(Engine* engine) {
 			break;
 		default:
 			break;
-	}
+	}*/
 }
 
 void MainMenuState::update(Engine* engine, sf::RenderWindow& window) {
-	handleEvents(engine);
-	render(engine);
-	TCODConsole::root->flush();
+	std::cout << "window open 1: " << window.isOpen() << "\n"; // does NOT segfault! TODO
+	sf::Text text;
+	text.setFont(font);
+	//text.setString(engine.getText());
+	text.setString("hello hello from state");
+	text.setCharacterSize(16);
+	text.setColor(sf::Color::Red);
+
+	std::cout << "window open 2: " << window.isOpen() << "\n"; // Segfaults, window seems to not exist?
+
+	window.clear(sf::Color::Black);
+	window.draw(text);
+	window.display();
+
+
+	//handleEvents(engine);
+	//render(engine);
+	//TCODConsole::root->flush();
 }
 
 void MainMenuState::render(Engine* engine) {
-	showMenu(engine);
+	//showMenu(engine);
 }
 
 void MainMenuState::showMenu(Engine* engine) {
@@ -58,17 +81,17 @@ void MainMenuState::showMenu(Engine* engine) {
 	int itemIndex = 0;
 	for(MenuItem item : menuItems) {
 		if (selectedItem == itemIndex) {
-			console.setDefaultForeground(TCODColor::lighterOrange);
+			//console.setDefaultForeground(TCODColor::lighterOrange);
 		} else {
-			console.setDefaultForeground(TCODColor::lightGrey);
+			//console.setDefaultForeground(TCODColor::lightGrey);
 		}
 
-		console.print(menuX, menuY + itemIndex * 3, item.label.c_str());
+		//console.print(menuX, menuY + itemIndex * 3, item.label.c_str());
 		++itemIndex;
 	}
 
-	console.flush();
-	TCODConsole::blit(&console, 0, 0, constants::SCREEN_WIDTH, constants::SCREEN_HEIGHT, TCODConsole::root, 0, 0);
+	//console.flush();
+	//TCODConsole::blit(&console, 0, 0, constants::SCREEN_WIDTH, constants::SCREEN_HEIGHT, TCODConsole::root, 0, 0);
 }
 
 void MainMenuState::handleSelectedMenuItem(Engine* engine) {

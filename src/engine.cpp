@@ -33,7 +33,7 @@ void Engine::init() {
 	State* mainMenuState = new MainMenuState();
 	mainMenuState->init(this);
 
-	states.push_back(gameplayState);
+	//states.push_back(gameplayState);
 	states.push_back(mainMenuState);
 }
 
@@ -44,6 +44,7 @@ void Engine::newGame() { // kinda bad
 
 void Engine::update(sf::RenderWindow& window) {
 	while(engineCommands.size() > 0) executeEngineCommand();
+	// std::cout << "in engine window open: " << window.isOpen() << "\n"; // 1
 
 	//states.back()->handleEvents(this);
 	states.back()->update(this, window);
