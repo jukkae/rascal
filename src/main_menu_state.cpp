@@ -5,12 +5,15 @@
 
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
+#include <SFML/Window.hpp>
+#include <SFML/Graphics/Text.hpp>
 
 
 void MainMenuState::init(Engine* engine) {
 	if(!font.loadFromFile("assets/FSEX300.ttf")) {
-		std::cout << "error\n";
-	}
+		std::cout << "error loading font\n";
+	} else std::cout << "font loaded!\n";
+	std::cout << font.getInfo().family << "\n";
 
 	//console.setDefaultBackground(TCODColor::black);
 
@@ -50,18 +53,13 @@ void MainMenuState::handleEvents(Engine* engine) {
 }
 
 void MainMenuState::update(Engine* engine, sf::RenderWindow& window) {
-	std::cout << "window open 1: " << window.isOpen() << "\n"; // does NOT segfault! TODO
-	sf::Text text;
-	text.setFont(font);
-	//text.setString(engine.getText());
-	text.setString("hello hello from state");
-	text.setCharacterSize(16);
-	text.setColor(sf::Color::Red);
-
-	std::cout << "window open 2: " << window.isOpen() << "\n"; // Segfaults, window seems to not exist?
+	std::cout << "1" << window.isOpen() << "\n"; // everything is fine
+	sf::Text hello("hello from state", font, 16); // TODO this segfaults!
+	std::cout << "2" << window.isOpen() << "\n"; // not executed
+	hello.setColor(sf::Color::Red);
 
 	window.clear(sf::Color::Black);
-	window.draw(text);
+	//window.draw(text);
 	window.display();
 
 
