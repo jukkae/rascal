@@ -5,6 +5,7 @@
 //#include "libtcod.hpp"
 #include "engine.hpp"
 #include "main.hpp"
+#include "constants.hpp"
 
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
@@ -13,7 +14,9 @@
 Engine engine;
 
 int main() {
-	sf::RenderWindow window(sf::VideoMode(800, 600), "Rascal");
+	int width = constants::CELL_WIDTH * constants::SCREEN_WIDTH;
+	int height = constants::CELL_HEIGHT * constants::SCREEN_HEIGHT;
+	sf::RenderWindow window(sf::VideoMode(width, height), "Rascal");
 	while(window.isOpen()) {
 		sf::Event event;
         while (window.pollEvent(event)) {
