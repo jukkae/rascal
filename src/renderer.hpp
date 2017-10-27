@@ -21,9 +21,9 @@ private:
 	GameplayState* state;
 	//TCODConsole con;
 
-	void renderMap(const Map* const map);
-	void renderActors(const Map* const map, const std::vector<Actor*>* const actors);
-	void renderActor(const Actor* const actor);
+	void renderMap(const Map* const map, sf::RenderWindow& window);
+	void renderActors(const Map* const map, const std::vector<Actor*>* const actors, sf::RenderWindow& window);
+	void renderActor(const Actor* const actor, sf::RenderWindow& window);
 
 	Point getScreenCoordsFromWorldCoords(const Point& point) const;
 	Point getWorldCoordsFromScreenCoords(const Point& point, const Point& player) const;

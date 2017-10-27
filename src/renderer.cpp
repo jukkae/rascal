@@ -11,13 +11,15 @@ static const TCODColor black      (0, 0, 0);
 static const TCODColor newInFov   (0, 255, 0);*/
 
 void Renderer::render(const Map* const map, const std::vector<Actor*>* const actors, sf::RenderWindow& window) {
-	//con.clear(); // approx. 30us
-	renderMap(map); // approx. 170us
-	renderActors(map, actors); // approx. 50us
-	//TCODConsole::blit(&con, 0, 0, constants::SCREEN_WIDTH, constants::SCREEN_HEIGHT, TCODConsole::root, 0, 0); // approx. 40us
+	window.clear(sf::Color::Black);
+
+	renderMap(map, window); // approx. 170us
+	renderActors(map, actors, window); // approx. 50us
+
+	window.display();
 }
 
-void Renderer::renderMap(const Map* const map) {
+void Renderer::renderMap(const Map* const map, sf::RenderWindow& window) {
 	int cameraX = state->getPlayer()->x - (screenWidth/2);
 	int cameraY = state->getPlayer()->y - (screenHeight/2);
 	int mapWidth = map->width;
@@ -27,23 +29,33 @@ void Renderer::renderMap(const Map* const map) {
 		for(int y = 0; y < screenHeight; ++y) {
 			int worldX = x + cameraX;
 			int worldY = y + cameraY;
+
+			sf::RectangleShape rectangle(sf::Vector2f(constants::CELL_WIDTH, constants::CELL_HEIGHT));
+			rectangle.setFillColor(sf::Color::Red);
+			rectangle.setPosition(x * constants::CELL_WIDTH, y * constants::CELL_HEIGHT);
+
 			if(worldX < 0 || worldX >= mapWidth || worldY < 0 || worldY >= mapHeight) {
-				//con.setCharBackground(x, y, black);
+				rectangle.setFillColor(sf::Color::Red);
 			}
 			else if(map->tiles[worldX + mapWidth*worldY].inFov) {
-				//con.setCharBackground(x, y, map->isWall(worldX, worldY) ? lightWall : lightGround);
+				rectangle.setFillColor(sf::Color::Green);
 			}
 			/*else if(map->isInFov(worldX, worldY)) {
 				con.setCharBackground(x, y, map->isWall(worldX, worldY) ? lightWall : lightGround);
 			}*/
 			else if(map->isExplored(worldX, worldY)) {
-				//con.setCharBackground(x, y, map->isWall(worldX, worldY) ? darkWall : darkGround);
+				rectangle.setFillColor(sf::Color::Blue);
 			}
+			else {
+				rectangle.setFillColor(sf::Color::Yellow);
+			}
+
+			window.draw(rectangle);
 		}
 	}
 }
 
-void Renderer::renderActors(const Map* const map, const std::vector<Actor*>* const actors) {
+void Renderer::renderActors(const Map* const map, const std::vector<Actor*>* const actors, sf::RenderWindow& window) {
 	// Crude implementation of render layers
 	Actor* player;
 	std::vector<Actor*> corpses;
@@ -62,22 +74,22 @@ void Renderer::renderActors(const Map* const map, const std::vector<Actor*>* con
 
 	for(Actor* actor : corpses) {
 		if((!actor->fovOnly && map->isExplored(actor->x, actor->y)) || map->isInFov(actor->x, actor->y)) {
-			renderActor(actor);
+			renderActor(actor, window);
 		}
 	}
 	for(Actor* actor : misc) {
 		if((!actor->fovOnly && map->isExplored(actor->x, actor->y)) || map->isInFov(actor->x, actor->y)) {
-			renderActor(actor);
+			renderActor(actor, window);
 		}
 	}
 	for(Actor* actor : pickables) {
 		if((!actor->fovOnly && map->isExplored(actor->x, actor->y)) || map->isInFov(actor->x, actor->y)) {
-			renderActor(actor);
+			renderActor(actor, window);
 		}
 	}
 	for(Actor* actor : live) {
 		if((!actor->fovOnly && map->isExplored(actor->x, actor->y)) || map->isInFov(actor->x, actor->y)) {
-			renderActor(actor);
+			renderActor(actor, window);
 		}
 	}
 
@@ -87,11 +99,11 @@ void Renderer::renderActors(const Map* const map, const std::vector<Actor*>* con
 		}
 		else if(actor->isPlayer()) player = actor;
 	}*/
-	renderActor(player);
+	renderActor(player, window);
 }
 
 
-void Renderer::renderActor(const Actor* const actor) {
+void Renderer::renderActor(const Actor* const actor, sf::RenderWindow& window) {
 	Point worldPosition(actor->x, actor->y);
 	Point screenPosition = getScreenCoordsFromWorldCoords(worldPosition);
 	int x = screenPosition.x;
