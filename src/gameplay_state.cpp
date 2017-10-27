@@ -57,7 +57,7 @@ void GameplayState::update(Engine* engine, sf::RenderWindow& window) {
 	updateNextActor();
 	if(activeActor->isPlayer()) {
 		computeFov();
-		render(engine);
+		render(engine, window);
 		TCODConsole::root->flush();
 	}
 }
@@ -66,7 +66,7 @@ void GameplayState::handleEvents(Engine* engine) {
 	inputHandler->handleEvents();
 }
 
-void GameplayState::render(Engine* engine) {
+void GameplayState::render(Engine* engine, sf::RenderWindow& window) {
 	renderer.render(&map, &actors);
 	gui.render();
 }
@@ -189,7 +189,7 @@ void GameplayState::nextLevel() {
 
 bool GameplayState::pickTile(int* x, int* y, float maxRange) {
 	while(!TCODConsole::isWindowClosed()) {
-		render(nullptr); // yeah inorite
+		//render(nullptr); // yeah inorite
 		for(int cx = 0; cx < constants::SCREEN_WIDTH; ++cx) {
 			for(int cy = 0; cy < constants::SCREEN_HEIGHT; ++cy) {
 				Point location = renderer.getWorldCoordsFromScreenCoords(Point(cx, cy));

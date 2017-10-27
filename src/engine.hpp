@@ -31,8 +31,6 @@ public:
 	void addEvent(sf::Event event) { events.push(event); }
 	bool pollEvent(sf::Event& event);
 
-	std::string getText() { return "hello from engine"; }
-
 	void exit();
 	void save();
 	void load();

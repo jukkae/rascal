@@ -1,7 +1,6 @@
 #include "main_menu_state.hpp"
 #include "constants.hpp"
 #include "engine.hpp"
-#include "libtcod.hpp"
 
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
@@ -14,8 +13,6 @@ void MainMenuState::init(Engine* engine) {
 		std::cout << "error loading font\n";
 	} else std::cout << "font loaded!\n";
 	std::cout << font.getInfo().family << "\n";
-
-	//console.setDefaultBackground(TCODColor::black);
 
 	MenuItem newGame = { MenuItemCode::NEW_GAME, "New game!" };
 	MenuItem cont = { MenuItemCode::CONTINUE, "Continue!" };
@@ -34,60 +31,57 @@ void MainMenuState::cleanup() {
 }
 
 void MainMenuState::handleEvents(Engine* engine) {
-	//TCOD_key_t key;
-	//TCODSystem::checkForEvent(TCOD_EVENT_KEY_PRESS, &key, nullptr);
-
-	/*switch (key.vk) {
-		case TCODK_UP:
-			if(selectedItem > 0) --selectedItem;
-			break;
-		case TCODK_DOWN:
-			if(selectedItem < menuItems.size() - 1) ++selectedItem;
-			break;
-		case TCODK_ENTER:
-			handleSelectedMenuItem(engine);
-			break;
-		default:
-			break;
-	}*/
+	sf::Event event;
+	while(engine->pollEvent(event)) {
+		if(event.type == sf::Event::KeyPressed) {
+			using k = sf::Keyboard::Key;
+			switch(event.key.code) {
+				case k::Up:
+					if(selectedItem > 0) --selectedItem;
+					break;
+				case k::Down:
+					if(selectedItem < menuItems.size() - 1) ++selectedItem;
+					break;
+				case k::Return:
+					handleSelectedMenuItem(engine);
+					break;
+				default:
+					break;
+			}
+		}
+	}
 }
 
 void MainMenuState::update(Engine* engine, sf::RenderWindow& window) {
-	sf::Text hello("hello from state", font, 16); // TODO this segfaults!
-	hello.setColor(sf::Color::Red);
-
 	window.clear(sf::Color::Black);
-	window.draw(hello);
+
+	handleEvents(engine);
+	render(engine, window);
+
 	window.display();
-
-
-	//handleEvents(engine);
-	//render(engine);
-	//TCODConsole::root->flush();
 }
 
-void MainMenuState::render(Engine* engine) {
-	//showMenu(engine);
+void MainMenuState::render(Engine* engine, sf::RenderWindow& window) {
+	showMenu(engine, window);
 }
 
-void MainMenuState::showMenu(Engine* engine) {
+void MainMenuState::showMenu(Engine* engine, sf::RenderWindow& window) {
 	int menuX = 10;
 	int menuY = constants::SCREEN_HEIGHT / 3;
 
 	int itemIndex = 0;
 	for(MenuItem item : menuItems) {
+		sf::Text itemText(item.label, font, 16);
 		if (selectedItem == itemIndex) {
-			//console.setDefaultForeground(TCODColor::lighterOrange);
+			itemText.setColor(sf::Color::Red);
 		} else {
-			//console.setDefaultForeground(TCODColor::lightGrey);
+			itemText.setColor(sf::Color::Yellow);
 		}
 
-		//console.print(menuX, menuY + itemIndex * 3, item.label.c_str());
+		itemText.setPosition(menuX * constants::CELL_WIDTH, (menuY + itemIndex * 3) * constants::CELL_HEIGHT);
+		window.draw(itemText);
 		++itemIndex;
 	}
-
-	//console.flush();
-	//TCODConsole::blit(&console, 0, 0, constants::SCREEN_WIDTH, constants::SCREEN_HEIGHT, TCODConsole::root, 0, 0);
 }
 
 void MainMenuState::handleSelectedMenuItem(Engine* engine) {

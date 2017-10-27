@@ -4,7 +4,6 @@
 #include "constants.hpp"
 #include <iostream>
 #include <vector>
-//#include "libtcod.hpp"
 #include <SFML/Graphics.hpp>
 
 class Engine;
@@ -12,13 +11,13 @@ class MainMenuState : public State {
 public:
 	enum class MenuItemCode { NONE, NEW_GAME, CONTINUE, EXIT };
 
-	MainMenuState() /*: console(constants::SCREEN_WIDTH, constants::SCREEN_HEIGHT)*/ {;}
+	MainMenuState() {;}
 	void init(Engine* engine) override;
 	void cleanup() override;
 
 	void handleEvents(Engine* engine) override;
 	void update(Engine* engine, sf::RenderWindow& window) override;
-	void render(Engine* engine) override;
+	void render(Engine* engine, sf::RenderWindow& window) override;
 private:
 	sf::Font font;
 
@@ -29,9 +28,8 @@ private:
 
 	std::vector<MenuItem> menuItems;
 	int selectedItem;
-	//TCODConsole console;
 
 	void handleSelectedMenuItem(Engine* engine);
-	void showMenu(Engine* engine);
+	void showMenu(Engine* engine, sf::RenderWindow& window);
 };
 #endif /* MAIN_MENU_STATE_HPP */

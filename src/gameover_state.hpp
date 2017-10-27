@@ -18,7 +18,7 @@ public:
 
 	void handleEvents(Engine* engine) override;
 	void update(Engine* engine, sf::RenderWindow& window) override;
-	void render(Engine* engine) override;
+	void render(Engine* engine, sf::RenderWindow& window) override;
 
 private:
 	TCODConsole console;

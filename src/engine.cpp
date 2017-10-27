@@ -44,13 +44,9 @@ void Engine::newGame() { // kinda bad
 
 void Engine::update(sf::RenderWindow& window) {
 	while(engineCommands.size() > 0) executeEngineCommand();
-	// std::cout << "in engine window open: " << window.isOpen() << "\n"; // 1
-
 	//states.back()->handleEvents(this);
 	states.back()->update(this, window);
 	//states.back()->render(this);
-
-	//TCODConsole::root->flush();
 }
 
 bool Engine::pollEvent(sf::Event& event) {

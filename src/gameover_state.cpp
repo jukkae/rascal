@@ -44,10 +44,10 @@ void GameOverState::handleEvents(Engine* engine) {
 
 void GameOverState::update(Engine* engine, sf::RenderWindow& window) {
 	handleEvents(engine);
-	render(engine);
+	render(engine, window);
 }
 
-void GameOverState::render(Engine* engine) {
+void GameOverState::render(Engine* engine, sf::RenderWindow& window) {
 	console.setDefaultForeground(TCODColor::lightGrey);
 	console.print(0, 0, description.c_str());
 	console.flush();

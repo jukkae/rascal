@@ -43,10 +43,10 @@ void LevelUpMenuState::handleEvents(Engine* engine) {
 
 void LevelUpMenuState::update(Engine* engine, sf::RenderWindow& window) {
 	handleEvents(engine);
-	render(engine);
+	render(engine, window);
 }
 
-void LevelUpMenuState::render(Engine* engine) {
+void LevelUpMenuState::render(Engine* engine, sf::RenderWindow& window) {
 	console.setDefaultForeground(TCODColor(200,180,50));
 	console.printFrame(0, 0, constants::INVENTORY_WIDTH, constants::INVENTORY_HEIGHT, true, TCOD_BKGND_DEFAULT, "level up!");
 

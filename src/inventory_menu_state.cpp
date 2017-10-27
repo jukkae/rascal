@@ -59,10 +59,10 @@ void InventoryMenuState::handleEvents(Engine* engine) {
 
 void InventoryMenuState::update(Engine* engine, sf::RenderWindow& window) {
 	handleEvents(engine);
-	render(engine);
+	render(engine, window);
 }
 
-void InventoryMenuState::render(Engine* engine) {
+void InventoryMenuState::render(Engine* engine, sf::RenderWindow& window) {
 	console.setDefaultForeground(TCODColor(200,180,50));
 	console.printFrame(0, 0, constants::INVENTORY_WIDTH, constants::INVENTORY_HEIGHT, true, TCOD_BKGND_DEFAULT, "inventory");
 

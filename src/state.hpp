@@ -11,7 +11,7 @@ public:
 
 	virtual void handleEvents(Engine* engine) = 0;
 	virtual void update(Engine* engine, sf::RenderWindow& window) = 0;
-	virtual void render(Engine* engine) = 0; // TODO should be const
+	virtual void render(Engine* engine, sf::RenderWindow& window) = 0; // TODO should be const
 
 	void changeState(Engine* engine, State* state) { engine->changeState(state); }
 
