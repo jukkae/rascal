@@ -1,6 +1,6 @@
 #include <algorithm>
 #include <limits>
-#include "libtcod.hpp"
+//#include "libtcod.hpp"
 #include "ai.hpp"
 #include "constants.hpp"
 #include "container.hpp"
@@ -26,19 +26,19 @@ void Engine::init() {
 		gameplayState->init(this);
 	}
 	else {
-		//gameplayState = new GameplayState();
+		gameplayState = new GameplayState();
 		load();
 		((GameplayState*)gameplayState)->initLoaded(this);
 	}
 	State* mainMenuState = new MainMenuState();
 	mainMenuState->init(this);
 
-	//states.push_back(gameplayState);
+	states.push_back(gameplayState);
 	states.push_back(mainMenuState);
 }
 
 void Engine::newGame() { // kinda bad
-	if(TCODSystem::fileExists(constants::SAVE_FILE_NAME.c_str())) TCODSystem::deleteFile(constants::SAVE_FILE_NAME.c_str());
+	//if(TCODSystem::fileExists(constants::SAVE_FILE_NAME.c_str())) TCODSystem::deleteFile(constants::SAVE_FILE_NAME.c_str());
 	init();
 }
 

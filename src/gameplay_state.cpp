@@ -67,8 +67,8 @@ void GameplayState::handleEvents(Engine* engine) {
 }
 
 void GameplayState::render(Engine* engine, sf::RenderWindow& window) {
-	renderer.render(&map, &actors);
-	gui.render();
+	renderer.render(&map, &actors, window);
+	//gui.render(window);
 }
 
 void GameplayState::updateNextActor() {

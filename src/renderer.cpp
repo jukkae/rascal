@@ -3,18 +3,18 @@
 #include "map.hpp"
 #include "point.hpp"
 
-static const TCODColor darkWall   (0, 0, 100);
+/*static const TCODColor darkWall   (0, 0, 100);
 static const TCODColor darkGround (50, 50, 150);
 static const TCODColor lightWall  (130, 110, 50);
 static const TCODColor lightGround(200, 180, 50);
 static const TCODColor black      (0, 0, 0);
-static const TCODColor newInFov   (0, 255, 0);
+static const TCODColor newInFov   (0, 255, 0);*/
 
-void Renderer::render(const Map* const map, const std::vector<Actor*>* const actors) {
-	con.clear(); // approx. 30us
+void Renderer::render(const Map* const map, const std::vector<Actor*>* const actors, sf::RenderWindow& window) {
+	//con.clear(); // approx. 30us
 	renderMap(map); // approx. 170us
 	renderActors(map, actors); // approx. 50us
-	TCODConsole::blit(&con, 0, 0, constants::SCREEN_WIDTH, constants::SCREEN_HEIGHT, TCODConsole::root, 0, 0); // approx. 40us
+	//TCODConsole::blit(&con, 0, 0, constants::SCREEN_WIDTH, constants::SCREEN_HEIGHT, TCODConsole::root, 0, 0); // approx. 40us
 }
 
 void Renderer::renderMap(const Map* const map) {
@@ -28,16 +28,16 @@ void Renderer::renderMap(const Map* const map) {
 			int worldX = x + cameraX;
 			int worldY = y + cameraY;
 			if(worldX < 0 || worldX >= mapWidth || worldY < 0 || worldY >= mapHeight) {
-				con.setCharBackground(x, y, black);
+				//con.setCharBackground(x, y, black);
 			}
 			else if(map->tiles[worldX + mapWidth*worldY].inFov) {
-				con.setCharBackground(x, y, map->isWall(worldX, worldY) ? lightWall : lightGround);
+				//con.setCharBackground(x, y, map->isWall(worldX, worldY) ? lightWall : lightGround);
 			}
 			/*else if(map->isInFov(worldX, worldY)) {
 				con.setCharBackground(x, y, map->isWall(worldX, worldY) ? lightWall : lightGround);
 			}*/
 			else if(map->isExplored(worldX, worldY)) {
-				con.setCharBackground(x, y, map->isWall(worldX, worldY) ? darkWall : darkGround);
+				//con.setCharBackground(x, y, map->isWall(worldX, worldY) ? darkWall : darkGround);
 			}
 		}
 	}
@@ -97,8 +97,8 @@ void Renderer::renderActor(const Actor* const actor) {
 	int x = screenPosition.x;
 	int y = screenPosition.y;
 
-	con.setChar(x, y, actor->ch);
-	con.setCharForeground(x, y, actor->col);
+	//con.setChar(x, y, actor->ch);
+	//con.setCharForeground(x, y, actor->col);
 }
 
 Point Renderer::getWorldCoordsFromScreenCoords(const Point& point) const {
