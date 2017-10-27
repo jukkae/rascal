@@ -53,13 +53,11 @@ void MainMenuState::handleEvents(Engine* engine) {
 }
 
 void MainMenuState::update(Engine* engine, sf::RenderWindow& window) {
-	std::cout << "1" << window.isOpen() << "\n"; // everything is fine
 	sf::Text hello("hello from state", font, 16); // TODO this segfaults!
-	std::cout << "2" << window.isOpen() << "\n"; // not executed
 	hello.setColor(sf::Color::Red);
 
 	window.clear(sf::Color::Black);
-	//window.draw(text);
+	window.draw(hello);
 	window.display();
 
 
