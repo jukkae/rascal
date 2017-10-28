@@ -68,8 +68,12 @@ void GameplayState::handleEvents(Engine* engine) {
 }
 
 void GameplayState::render(Engine* engine, sf::RenderWindow& window) {
+	window.clear(sf::Color::Black);
+
 	renderer.render(&map, &actors, window);
 	gui.render(window);
+
+	window.display();
 }
 
 void GameplayState::updateNextActor() {

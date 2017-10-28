@@ -15,18 +15,6 @@ Renderer::Renderer(int screenWidth, int screenHeight): screenWidth(screenWidth),
 	} else std::cout << "font loaded!\n";
 	std::cout << font.getInfo().family << "\n";
 
-
-	//changes, but doesn't FIX
-	for(sf::Uint32 letter = 0x0020; letter < 0x00FF; letter++)
-    {
-        //cache various font sizes
-        for(int size = 16; size < 16; size++)
-        {
-            font.getGlyph(letter, size, false);
-            font.getGlyph(letter, size, true);
-        }
-    }
-
 }
 
 void Renderer::render(const Map* const map, const std::vector<Actor*>* const actors, sf::RenderWindow& window) {

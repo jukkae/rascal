@@ -26,9 +26,6 @@ void Gui::clear() {
 }
 
 void Gui::render(sf::RenderWindow& window) {
-	//con.setDefaultBackground(TCODColor::black);
-	//con.setDefaultForeground(TCODColor::white);
-	//con.clear();
 
 	renderMessageLog(window);
 	renderBar(1, 1, BAR_WIDTH, "HP", state->getPlayer()->destructible->hp, state->getPlayer()->destructible->maxHp, TCODColor::lightRed, TCODColor::darkerRed);
@@ -53,7 +50,7 @@ void Gui::renderMessageLog(sf::RenderWindow& window) {
 	for(Message msg : log) {
 		sf::Text text(msg.text, font, 16);
 		text.setColor(sf::Color::White); // msg.col * colCoef
-		text.setPosition(MSG_X * constants::CELL_WIDTH, y * constants::CELL_HEIGHT); // correct position
+		text.setPosition(MSG_X * constants::CELL_WIDTH, (y + constants::SCREEN_HEIGHT - constants::GUI_PANEL_HEIGHT) * constants::CELL_HEIGHT); // correct position
 		window.draw(text);
 		++y;
 		if(colCoef < 1.0f) {

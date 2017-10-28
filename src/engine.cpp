@@ -34,7 +34,7 @@ void Engine::init() {
 	mainMenuState->init(this);
 
 	states.push_back(gameplayState);
-	//states.push_back(mainMenuState); // TODO this causes window coordinates to get messed up in game play
+	states.push_back(mainMenuState); // TODO this causes window coordinates to get messed up in game play
 }
 
 void Engine::newGame() { // kinda bad
@@ -43,18 +43,9 @@ void Engine::newGame() { // kinda bad
 }
 
 void Engine::update(sf::RenderWindow& window) {
-	sf::Font font;
-	font.loadFromFile("assets/FSEX300.ttf");
-	sf::Text text("AAAARGH", font, 16);
-	text.setColor(sf::Color::Red);
 
 	while(engineCommands.size() > 0) executeEngineCommand();
-	window.clear(sf::Color::Black);
-	//states.back()->handleEvents(this);
 	states.back()->update(this, window);
-	window.draw(text);
-	//states.back()->render(this);
-	window.display();
 }
 
 bool Engine::pollEvent(sf::Event& event) {
