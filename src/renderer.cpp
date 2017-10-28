@@ -9,11 +9,35 @@ static const sf::Color lightWall  (130, 110, 50 );
 static const sf::Color lightGround(200, 180, 50 );
 static const sf::Color black      (0,   0,   0  );
 
+Renderer::Renderer(int screenWidth, int screenHeight): screenWidth(screenWidth), screenHeight(screenHeight) {
+	if(!font.loadFromFile("assets/FSEX300.ttf")) {
+		std::cout << "error loading font\n";
+	} else std::cout << "font loaded!\n";
+	std::cout << font.getInfo().family << "\n";
+
+	/*
+	//changes, but doesn't FIX
+	for(sf::Uint32 letter = 0x0020; letter < 0x00FF; letter++)
+    {
+        //cache various font sizes
+        for(int size = 16; size < 16; size++)
+        {
+            font.getGlyph(letter, size, false);
+            font.getGlyph(letter, size, true);
+        }
+    }
+	*/
+}
+
 void Renderer::render(const Map* const map, const std::vector<Actor*>* const actors, sf::RenderWindow& window) {
 	window.clear(sf::Color::Black);
 
-	renderMap(map, window);
-	renderActors(map, actors, window);
+	sf::Text testText("sdfasdffs", font, 16);
+	testText.setColor(sf::Color::White);
+	window.draw(testText);
+
+	//renderMap(map, window);
+	//renderActors(map, actors, window);
 
 	window.display();
 }

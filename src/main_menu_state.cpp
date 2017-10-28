@@ -9,10 +9,10 @@
 
 
 void MainMenuState::init(Engine* engine) {
-	if(!font.loadFromFile("assets/FSEX300.ttf")) {
-		std::cout << "error loading font\n";
-	} else std::cout << "font loaded!\n";
-	std::cout << font.getInfo().family << "\n";
+	//if(!font.loadFromFile("assets/FSEX300.ttf")) {
+		//std::cout << "error loading font\n";
+	//} else std::cout << "font loaded!\n";
+	//std::cout << font.getInfo().family << "\n";
 
 	MenuItem newGame = { MenuItemCode::NEW_GAME, "New game!" };
 	MenuItem cont = { MenuItemCode::CONTINUE, "Continue!" };

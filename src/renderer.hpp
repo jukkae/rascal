@@ -10,7 +10,7 @@ class Map;
 class Renderer {
 public:
 	Renderer() : Renderer(constants::SCREEN_WIDTH, constants::SCREEN_HEIGHT) {;}
-	Renderer(int screenWidth, int screenHeight): screenWidth(screenWidth), screenHeight(screenHeight)/*, con(screenWidth, screenHeight)*/ {;}
+	Renderer(int screenWidth, int screenHeight);
 	void render(const Map* const map, const std::vector<Actor*>* const actors, sf::RenderWindow& window);
 	Point getWorldCoordsFromScreenCoords(const Point& point) const;
 	void setState(GameplayState* s) { state = s; }
@@ -19,6 +19,7 @@ private:
 	int screenWidth;
 	int screenHeight;
 	GameplayState* state;
+	sf::Font font;
 	//TCODConsole con;
 
 	void renderMap(const Map* const map, sf::RenderWindow& window);
