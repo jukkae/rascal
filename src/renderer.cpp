@@ -4,9 +4,9 @@
 #include "point.hpp"
 
 static const sf::Color darkWall   (0,   0,   100);
-static const sf::Color darkGround (50,  50,  150);
-static const sf::Color lightWall  (130, 110, 50 );
-static const sf::Color lightGround(200, 180, 50 );
+static const sf::Color darkGround (100, 110, 100);
+static const sf::Color lightWall  (100, 100, 200);
+static const sf::Color lightGround(200, 210, 200);
 static const sf::Color black      (0,   0,   0  );
 
 Renderer::Renderer(int screenWidth, int screenHeight): screenWidth(screenWidth), screenHeight(screenHeight) {
