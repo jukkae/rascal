@@ -6,10 +6,16 @@
 #include "libtcod.hpp"
 #include <iostream>
 
+static const sf::Color brightBlue(100, 100, 255);
+static const sf::Color darkBlue(0, 0, 155);
+
 GameOverState::GameOverState(Actor* actor) :
-	console(constants::SCREEN_WIDTH, constants::SCREEN_HEIGHT),
 	actor(actor)
 	{
+		if(!font.loadFromFile("assets/FSEX300.ttf")) {
+			std::cout << "error loading font\n";
+		} else std::cout << "font loaded!\n";
+
 		description = "you died at level ";
 		description.append(std::to_string(((PlayerAi*)actor->ai.get())->xpLevel));
 		if(TCODSystem::fileExists(constants::SAVE_FILE_NAME.c_str())) { // TODO feels nasty doing this in ctor
@@ -18,11 +24,9 @@ GameOverState::GameOverState(Actor* actor) :
 	}
 
 void GameOverState::init(Engine* engine) {
-	console.setDefaultBackground(TCODColor::black);
 }
 
 void GameOverState::cleanup() {
-
 }
 
 void GameOverState::handleEvents(Engine* engine) {
@@ -48,8 +52,9 @@ void GameOverState::update(Engine* engine, sf::RenderWindow& window) {
 }
 
 void GameOverState::render(Engine* engine, sf::RenderWindow& window) {
-	//console.setDefaultForeground(TCODColor::lightGrey);
-	//console.print(0, 0, description.c_str());
-	//console.flush();
-	//TCODConsole::blit(&console, 0, 0, constants::SCREEN_WIDTH, constants::SCREEN_HEIGHT, TCODConsole::root, 0, 0);
+	window.clear(sf::Color::Black);
+	sf::Text text(description, font, 16);
+	text.setColor(brightBlue);
+	window.draw(text);
+	window.display();
 }

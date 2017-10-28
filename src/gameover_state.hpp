@@ -4,7 +4,8 @@
 #include "state.hpp"
 #include <string>
 #include <vector>
-#include "libtcod.hpp"
+//#include "libtcod.hpp"
+#include <SFML/Graphics.hpp>
 
 class Engine;
 class Actor;
@@ -21,7 +22,8 @@ public:
 	void render(Engine* engine, sf::RenderWindow& window) override;
 
 private:
-	TCODConsole console;
+	//TCODConsole console;
+	sf::Font font;
 	Actor* actor;
 	std::string description;
 };
