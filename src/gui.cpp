@@ -28,20 +28,18 @@ void Gui::clear() {
 void Gui::render(sf::RenderWindow& window) {
 
 	renderMessageLog(window);
-	renderBar(1, 1, BAR_WIDTH, "HP", state->getPlayer()->destructible->hp, state->getPlayer()->destructible->maxHp, TCODColor::lightRed, TCODColor::darkerRed);
+	renderBar(1, 1, BAR_WIDTH, "HP", state->getPlayer()->destructible->hp, state->getPlayer()->destructible->maxHp, TCODColor::lightRed, TCODColor::darkerRed, window);
 	//con.print(3, 3, "Dungeon level %d", state->getLevel());
 	//con.print(3, 4, "Time: %d", state->getTime());
-	renderXpBar();
+	renderXpBar(window);
 	renderMouseLook(state->getActors());
-
-	//TCODConsole::blit(&con, 0, 0, constants::SCREEN_WIDTH, constants::GUI_PANEL_HEIGHT, TCODConsole::root, 0, constants::SCREEN_HEIGHT - constants::GUI_PANEL_HEIGHT);
 }
 
-void Gui::renderXpBar() {
+void Gui::renderXpBar(sf::RenderWindow& window) {
 	PlayerAi* ai = (PlayerAi*)state->getPlayer()->ai.get(); // Don't transfer ownership!
 	char xpTxt[128];
 	sprintf(xpTxt, "XP(%d)", ai->xpLevel);
-	renderBar(1, 5, BAR_WIDTH, xpTxt, ai->experience, ai->getNextLevelXp(), TCODColor::lightViolet,TCODColor::darkerViolet);
+	renderBar(1, 5, BAR_WIDTH, xpTxt, ai->experience, ai->getNextLevelXp(), TCODColor::lightViolet,TCODColor::darkerViolet, window);
 }
 
 void Gui::renderMessageLog(sf::RenderWindow& window) {
@@ -59,11 +57,16 @@ void Gui::renderMessageLog(sf::RenderWindow& window) {
 	}
 }
 
-void Gui::renderBar(int x, int y, int width, std::string name, float value, float maxValue, const TCODColor& barColor, const TCODColor& backColor) {
-	//con.setDefaultBackground(backColor);
-	//con.rect(x, y, width, 1, false, TCOD_BKGND_SET);
+void Gui::renderBar(int x, int y, int width, std::string name, float value, float maxValue, const TCODColor& barColor, const TCODColor& backColor, sf::RenderWindow& window) {
+	//TODO draw back and front separately
+	sf::RectangleShape rect(sf::Vector2f(constants::CELL_WIDTH * width, constants::CELL_HEIGHT));
+
 	int barWidth = (int) (value / maxValue * width);
 	if ( barWidth > 0 ) {
+		rect.setFillColor(sf::Color::Red); // TODO color
+		rect.setSize(sf::Vector2f(constants::CELL_WIDTH * barWidth, constants::CELL_HEIGHT));
+		rect.setPosition(x * constants::CELL_WIDTH, (y + constants::SCREEN_HEIGHT - constants::GUI_PANEL_HEIGHT) * constants::CELL_HEIGHT);
+		window.draw(rect);
 		//con.setDefaultBackground(barColor);
 		//con.rect(x, y, barWidth, 1, false, TCOD_BKGND_SET);
 	}

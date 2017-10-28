@@ -35,9 +35,9 @@ protected:
 
 	std::vector<Message> log;
 
-	void renderBar(int x, int y, int width, std::string name, float value, float maxValue, const TCODColor& barColor, const TCODColor& backColor);
+	void renderBar(int x, int y, int width, std::string name, float value, float maxValue, const TCODColor& barColor, const TCODColor& backColor, sf::RenderWindow& window);
 	void renderMessageLog(sf::RenderWindow& window);
-	void renderXpBar();
+	void renderXpBar(sf::RenderWindow& window);
 	void renderMouseLook(std::vector<Actor*>* actors);
 
 private:
