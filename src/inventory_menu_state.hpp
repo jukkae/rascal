@@ -3,13 +3,14 @@
 #include "state.hpp"
 #include "constants.hpp"
 #include <vector>
-#include "libtcod.hpp"
+//#include "libtcod.hpp"
+#include <SFML/Graphics.hpp>
 
 class Engine;
 class Actor;
 class InventoryMenuState : public State {
 public:
-	InventoryMenuState(Actor* actor) : console(constants::INVENTORY_WIDTH, constants::INVENTORY_HEIGHT), actor(actor) {;}
+	InventoryMenuState(Actor* actor);
 	void init(Engine* engine) override;
 	void cleanup() override;
 
@@ -17,8 +18,9 @@ public:
 	void update(Engine* engine, sf::RenderWindow& window) override;
 	void render(Engine* engine, sf::RenderWindow& window) override;
 private:
-	TCODConsole	console;
+	//TCODConsole	console;
 	Actor* actor;
+	sf::Font font;
 
 	std::vector<Actor*> inventoryContents;
 	int selectedItem;
