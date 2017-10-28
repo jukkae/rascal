@@ -4,7 +4,8 @@
 #include "state.hpp"
 #include <string>
 #include <vector>
-#include "libtcod.hpp"
+//#include "libtcod.hpp"
+#include <SFML/Graphics.hpp>
 
 class Engine;
 class Actor;
@@ -17,7 +18,7 @@ struct MenuItem {
 
 class LevelUpMenuState : public State {
 public:
-	LevelUpMenuState(Actor* actor) : console(constants::INVENTORY_WIDTH, constants::INVENTORY_HEIGHT), actor(actor) {;}
+	LevelUpMenuState(Actor* actor);
 	void init(Engine* engine) override;
 	void cleanup() override;
 
@@ -27,8 +28,8 @@ public:
 private:
 	void handleItem(MenuItem item);
 
-	TCODConsole	console;
 	Actor* actor;
+	sf::Font font;
 
 	std::vector<MenuItem> menuContents;
 	int selectedItem;

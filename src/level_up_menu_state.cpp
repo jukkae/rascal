@@ -4,6 +4,16 @@
 #include "engine.hpp"
 #include "actor.hpp"
 #include "ai.hpp"
+#include "constants.hpp"
+
+static const sf::Color brightBlue(100, 100, 255);
+static const sf::Color darkBlue(0, 0, 155);
+
+LevelUpMenuState::LevelUpMenuState(Actor* actor) : actor(actor) {
+	if(!font.loadFromFile("assets/FSEX300.ttf")) {
+		std::cout << "error loading font\n";
+	} else std::cout << "font loaded!\n";
+}
 
 void LevelUpMenuState::init(Engine* engine) {
 	menuContents.push_back({MenuItemType::CONSTITUTION, "constitution"});
@@ -47,21 +57,24 @@ void LevelUpMenuState::update(Engine* engine, sf::RenderWindow& window) {
 }
 
 void LevelUpMenuState::render(Engine* engine, sf::RenderWindow& window) {
-	console.setDefaultForeground(TCODColor(200,180,50));
-	console.printFrame(0, 0, constants::INVENTORY_WIDTH, constants::INVENTORY_HEIGHT, true, TCOD_BKGND_DEFAULT, "level up!");
+	window.clear(sf::Color::Black);
 
 	int y = 1;
 	int itemIndex = 0;
 	for (auto item : menuContents) {
-		if(itemIndex == selectedItem) console.setDefaultForeground(TCODColor::lighterOrange);
-		else console.setDefaultForeground(TCODColor::white);
-		console.print(2, y, "%s", item.label.c_str());
+		sf::Text text;
+		text.setCharacterSize(16);
+		text.setFont(font);
+		text.setString(item.label);
+		text.setPosition(2*constants::CELL_WIDTH, y*constants::CELL_HEIGHT);
+		if(itemIndex == selectedItem) text.setColor(brightBlue);
+		else text.setColor(darkBlue);
+		window.draw(text);
 		++y;
 		++itemIndex;
 	}
 
-	TCODConsole::blit(&console, 0, 0, constants::INVENTORY_WIDTH, constants::INVENTORY_HEIGHT, TCODConsole::root, constants::SCREEN_WIDTH/2 - constants::INVENTORY_WIDTH/2, constants::SCREEN_HEIGHT/2 - constants::INVENTORY_HEIGHT/2);
-	TCODConsole::flush();
+	window.display();
 }
 
 void LevelUpMenuState::handleItem(MenuItem item) {
