@@ -3,18 +3,17 @@
 #include "map.hpp"
 #include "point.hpp"
 
-/*static const TCODColor darkWall   (0, 0, 100);
-static const TCODColor darkGround (50, 50, 150);
-static const TCODColor lightWall  (130, 110, 50);
-static const TCODColor lightGround(200, 180, 50);
-static const TCODColor black      (0, 0, 0);
-static const TCODColor newInFov   (0, 255, 0);*/
+static const sf::Color darkWall   (0,   0,   100);
+static const sf::Color darkGround (50,  50,  150);
+static const sf::Color lightWall  (130, 110, 50 );
+static const sf::Color lightGround(200, 180, 50 );
+static const sf::Color black      (0,   0,   0  );
 
 void Renderer::render(const Map* const map, const std::vector<Actor*>* const actors, sf::RenderWindow& window) {
 	window.clear(sf::Color::Black);
 
-	renderMap(map, window); // approx. 170us
-	renderActors(map, actors, window); // approx. 50us
+	renderMap(map, window);
+	renderActors(map, actors, window);
 
 	window.display();
 }
@@ -35,19 +34,16 @@ void Renderer::renderMap(const Map* const map, sf::RenderWindow& window) {
 			rectangle.setPosition(x * constants::CELL_WIDTH, y * constants::CELL_HEIGHT);
 
 			if(worldX < 0 || worldX >= mapWidth || worldY < 0 || worldY >= mapHeight) {
-				rectangle.setFillColor(sf::Color::Red);
+				rectangle.setFillColor(black);
 			}
 			else if(map->tiles[worldX + mapWidth*worldY].inFov) {
-				rectangle.setFillColor(sf::Color::Green);
+				rectangle.setFillColor(map->isWall(worldX, worldY) ? lightWall : lightGround);
 			}
-			/*else if(map->isInFov(worldX, worldY)) {
-				con.setCharBackground(x, y, map->isWall(worldX, worldY) ? lightWall : lightGround);
-			}*/
 			else if(map->isExplored(worldX, worldY)) {
-				rectangle.setFillColor(sf::Color::Blue);
+				rectangle.setFillColor(map->isWall(worldX, worldY) ? darkWall : darkGround);
 			}
 			else {
-				rectangle.setFillColor(sf::Color::Yellow);
+				rectangle.setFillColor(black);
 			}
 
 			window.draw(rectangle);

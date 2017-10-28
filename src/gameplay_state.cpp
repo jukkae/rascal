@@ -58,7 +58,6 @@ void GameplayState::update(Engine* engine, sf::RenderWindow& window) {
 	if(activeActor->isPlayer()) {
 		computeFov();
 		render(engine, window);
-		TCODConsole::root->flush();
 	}
 }
 

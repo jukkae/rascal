@@ -34,7 +34,7 @@ void Engine::init() {
 	mainMenuState->init(this);
 
 	states.push_back(gameplayState);
-	states.push_back(mainMenuState);
+	//states.push_back(mainMenuState); // TODO this causes window coordinates to get messed up in game play
 }
 
 void Engine::newGame() { // kinda bad
