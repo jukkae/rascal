@@ -11,6 +11,11 @@ static const int BAR_WIDTH = 20;
 static const int MSG_X = BAR_WIDTH + 2;
 static const int MSG_HEIGHT = constants::GUI_PANEL_HEIGHT - 1;
 
+static const sf::Color lightRed(255, 115, 115);
+static const sf::Color darkerRed(128, 0, 0);
+static const sf::Color lightViolet(185, 115, 255);
+static const sf::Color darkerViolet(64, 0, 128);
+
 Gui::Gui() {
 	if(!font.loadFromFile("assets/FSEX300.ttf")) {
 		std::cout << "error loading font\n";
@@ -28,7 +33,7 @@ void Gui::clear() {
 void Gui::render(sf::RenderWindow& window) {
 
 	renderMessageLog(window);
-	renderBar(1, 1, BAR_WIDTH, "HP", state->getPlayer()->destructible->hp, state->getPlayer()->destructible->maxHp, TCODColor::lightRed, TCODColor::darkerRed, window);
+	renderBar(1, 1, BAR_WIDTH, "HP", state->getPlayer()->destructible->hp, state->getPlayer()->destructible->maxHp, lightRed, darkerRed, window);
 	//con.print(3, 3, "Dungeon level %d", state->getLevel());
 	//con.print(3, 4, "Time: %d", state->getTime());
 	renderXpBar(window);
@@ -39,7 +44,7 @@ void Gui::renderXpBar(sf::RenderWindow& window) {
 	PlayerAi* ai = (PlayerAi*)state->getPlayer()->ai.get(); // Don't transfer ownership!
 	char xpTxt[128];
 	sprintf(xpTxt, "XP(%d)", ai->xpLevel);
-	renderBar(1, 5, BAR_WIDTH, xpTxt, ai->experience, ai->getNextLevelXp(), TCODColor::lightViolet,TCODColor::darkerViolet, window);
+	renderBar(1, 5, BAR_WIDTH, xpTxt, ai->experience, ai->getNextLevelXp(), lightViolet, darkerViolet, window);
 }
 
 void Gui::renderMessageLog(sf::RenderWindow& window) {
@@ -57,13 +62,18 @@ void Gui::renderMessageLog(sf::RenderWindow& window) {
 	}
 }
 
-void Gui::renderBar(int x, int y, int width, std::string name, float value, float maxValue, const TCODColor& barColor, const TCODColor& backColor, sf::RenderWindow& window) {
+void Gui::renderBar(int x, int y, int width, std::string name, float value, float maxValue, const sf::Color barColor, const sf::Color backColor, sf::RenderWindow& window) {
 	//TODO draw back and front separately
+	sf::RectangleShape bg(sf::Vector2f(constants::CELL_WIDTH * width, constants::CELL_HEIGHT));
+	bg.setFillColor(backColor);
+	bg.setPosition(x * constants::CELL_WIDTH, (y + constants::SCREEN_HEIGHT - constants::GUI_PANEL_HEIGHT) * constants::CELL_HEIGHT);
+	window.draw(bg);
+
 	sf::RectangleShape rect(sf::Vector2f(constants::CELL_WIDTH * width, constants::CELL_HEIGHT));
 
 	int barWidth = (int) (value / maxValue * width);
 	if ( barWidth > 0 ) {
-		rect.setFillColor(sf::Color::Red); // TODO color
+		rect.setFillColor(barColor);
 		rect.setSize(sf::Vector2f(constants::CELL_WIDTH * barWidth, constants::CELL_HEIGHT));
 		rect.setPosition(x * constants::CELL_WIDTH, (y + constants::SCREEN_HEIGHT - constants::GUI_PANEL_HEIGHT) * constants::CELL_HEIGHT);
 		window.draw(rect);
