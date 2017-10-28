@@ -63,7 +63,6 @@ void Gui::renderMessageLog(sf::RenderWindow& window) {
 }
 
 void Gui::renderBar(int x, int y, int width, std::string name, float value, float maxValue, const sf::Color barColor, const sf::Color backColor, sf::RenderWindow& window) {
-	//TODO draw back and front separately
 	sf::RectangleShape bg(sf::Vector2f(constants::CELL_WIDTH * width, constants::CELL_HEIGHT));
 	bg.setFillColor(backColor);
 	bg.setPosition(x * constants::CELL_WIDTH, (y + constants::SCREEN_HEIGHT - constants::GUI_PANEL_HEIGHT) * constants::CELL_HEIGHT);
@@ -77,19 +76,14 @@ void Gui::renderBar(int x, int y, int width, std::string name, float value, floa
 		rect.setSize(sf::Vector2f(constants::CELL_WIDTH * barWidth, constants::CELL_HEIGHT));
 		rect.setPosition(x * constants::CELL_WIDTH, (y + constants::SCREEN_HEIGHT - constants::GUI_PANEL_HEIGHT) * constants::CELL_HEIGHT);
 		window.draw(rect);
-		//con.setDefaultBackground(barColor);
-		//con.rect(x, y, barWidth, 1, false, TCOD_BKGND_SET);
 	}
-	//con.setDefaultForeground(TCODColor::white);
-	//con.printEx(x + width/2, y, TCOD_BKGND_NONE, TCOD_CENTER, "%s : %g/%g", name.c_str(), value, maxValue);
 	sf::Text text;
 	text.setFont(font);
-	//std::string string = "%s : %g/%g", name.c_str(), value, maxValue;
 	std::string string = name + " : " + std::to_string((int)value) + "/" + std::to_string((int)maxValue);
 	text.setString(string);
 	text.setCharacterSize(16);
 	text.setColor(sf::Color::White);
-	text.setPosition((x /*+ width/2*/)*constants::CELL_WIDTH, (y + constants::SCREEN_HEIGHT - constants::GUI_PANEL_HEIGHT) * constants::CELL_HEIGHT);
+	text.setPosition(x*constants::CELL_WIDTH, (y + constants::SCREEN_HEIGHT - constants::GUI_PANEL_HEIGHT) * constants::CELL_HEIGHT);
 	window.draw(text);
 }
 
