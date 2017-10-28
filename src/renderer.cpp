@@ -15,7 +15,7 @@ Renderer::Renderer(int screenWidth, int screenHeight): screenWidth(screenWidth),
 	} else std::cout << "font loaded!\n";
 	std::cout << font.getInfo().family << "\n";
 
-	/*
+
 	//changes, but doesn't FIX
 	for(sf::Uint32 letter = 0x0020; letter < 0x00FF; letter++)
     {
@@ -26,16 +26,16 @@ Renderer::Renderer(int screenWidth, int screenHeight): screenWidth(screenWidth),
             font.getGlyph(letter, size, true);
         }
     }
-	*/
+
 }
 
 void Renderer::render(const Map* const map, const std::vector<Actor*>* const actors, sf::RenderWindow& window) {
-	window.clear(sf::Color::Black);
+	//window.clear(sf::Color::Black);
 
 	renderMap(map, window);
 	renderActors(map, actors, window);
 
-	window.display();
+	//window.display();
 }
 
 void Renderer::renderMap(const Map* const map, sf::RenderWindow& window) {
@@ -127,7 +127,7 @@ void Renderer::renderActor(const Actor* const actor, sf::RenderWindow& window) {
 
 	sf::Text t((char)actor->ch, font, 16);
 	t.setPosition(x*constants::CELL_WIDTH, y*constants::CELL_HEIGHT);
-	t.setFillColor(black);
+	t.setFillColor(black); // TODO correct color
 	window.draw(t);
 
 }

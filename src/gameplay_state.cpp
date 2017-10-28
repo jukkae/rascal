@@ -50,6 +50,7 @@ void GameplayState::cleanup() {
 }
 
 void GameplayState::update(Engine* engine, sf::RenderWindow& window) {
+	//window.clear(sf::Color::Black);
 	Actor* activeActor = getNextActor();
 	if(activeActor->isPlayer()) {
 		handleEvents(engine);
@@ -59,6 +60,7 @@ void GameplayState::update(Engine* engine, sf::RenderWindow& window) {
 		computeFov();
 		render(engine, window);
 	}
+	//window.display();
 }
 
 void GameplayState::handleEvents(Engine* engine) {
@@ -67,7 +69,7 @@ void GameplayState::handleEvents(Engine* engine) {
 
 void GameplayState::render(Engine* engine, sf::RenderWindow& window) {
 	renderer.render(&map, &actors, window);
-	//gui.render(window);
+	gui.render(window);
 }
 
 void GameplayState::updateNextActor() {
@@ -187,6 +189,7 @@ void GameplayState::nextLevel() {
 }
 
 bool GameplayState::pickTile(int* x, int* y, float maxRange) {
+	/*
 	while(!TCODConsole::isWindowClosed()) {
 		//render(nullptr); // yeah inorite
 		for(int cx = 0; cx < constants::SCREEN_WIDTH; ++cx) {
@@ -197,7 +200,7 @@ bool GameplayState::pickTile(int* x, int* y, float maxRange) {
 				if(isInFov(realX, realY) && (maxRange == 0 || getPlayer()->getDistance(realX, realY) <= maxRange)) {
 					TCODColor col = TCODConsole::root->getCharBackground(cx, cy);
 					col = col * 1.2;
-					TCODConsole::root->setCharBackground(cx, cy, col);
+					//TCODConsole::root->setCharBackground(cx, cy, col);
 				}
 			}
 		}
@@ -207,7 +210,7 @@ bool GameplayState::pickTile(int* x, int* y, float maxRange) {
 		int realX = mouseLocation.x;
 		int realY = mouseLocation.y;
 		if(isInFov(realX, realY) && (maxRange == 0 || getPlayer()->getDistance(realX, realY) <= maxRange)) {
-			TCODConsole::root->setCharBackground(mouseLocationScreen.x, mouseLocationScreen.y, TCODColor::white);
+			//TCODConsole::root->setCharBackground(mouseLocationScreen.x, mouseLocationScreen.y, TCODColor::white);
 			if(inputHandler->mouseLeftClicked) {
 				inputHandler->mouseLeftClicked = false;
 				*x = realX;
@@ -219,8 +222,8 @@ bool GameplayState::pickTile(int* x, int* y, float maxRange) {
 			inputHandler->mouseRightClicked = false;
 			return false;
 		}
-		TCODConsole::flush();
-	}
+		//TCODConsole::flush();
+	}*/
 	return false;
 }
 

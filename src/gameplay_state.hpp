@@ -11,6 +11,7 @@ class Engine;
 #include "renderer.hpp"
 #include "input_handler.hpp"
 #include "persistent.hpp"
+#include <SFML/Graphics.hpp>
 
 class GameplayState : public State {
 public:

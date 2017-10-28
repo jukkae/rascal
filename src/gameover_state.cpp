@@ -48,8 +48,8 @@ void GameOverState::update(Engine* engine, sf::RenderWindow& window) {
 }
 
 void GameOverState::render(Engine* engine, sf::RenderWindow& window) {
-	console.setDefaultForeground(TCODColor::lightGrey);
-	console.print(0, 0, description.c_str());
-	console.flush();
-	TCODConsole::blit(&console, 0, 0, constants::SCREEN_WIDTH, constants::SCREEN_HEIGHT, TCODConsole::root, 0, 0);
+	//console.setDefaultForeground(TCODColor::lightGrey);
+	//console.print(0, 0, description.c_str());
+	//console.flush();
+	//TCODConsole::blit(&console, 0, 0, constants::SCREEN_WIDTH, constants::SCREEN_HEIGHT, TCODConsole::root, 0, 0);
 }

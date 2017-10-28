@@ -3,16 +3,17 @@
 
 #include "actor.hpp" // must be included for serialization
 #include "constants.hpp"
+#include <SFML/Graphics.hpp>
 class GameplayState;
 
 class Gui {
 public:
-	Gui(): con(constants::SCREEN_WIDTH, constants::GUI_PANEL_HEIGHT) {;}
+	Gui();
 
 	~Gui();
 	void clear();
 
-	void render(); // TODO this should be const
+	void render(sf::RenderWindow& window); // TODO this should be const
 	void message(const TCODColor& col, std::string text, ...);
 	void message(const TCODColor& col, std::string text, va_list args);
 
@@ -32,16 +33,16 @@ protected:
 		}
 	};
 
-	TCODConsole con;
 	std::vector<Message> log;
 
 	void renderBar(int x, int y, int width, std::string name, float value, float maxValue, const TCODColor& barColor, const TCODColor& backColor);
-	void renderMessageLog();
+	void renderMessageLog(sf::RenderWindow& window);
 	void renderXpBar();
 	void renderMouseLook(std::vector<Actor*>* actors);
 
 private:
 	GameplayState* state;
+	sf::Font font;
 	friend class boost::serialization::access;
 	template<class Archive>
 	void serialize(Archive & ar, const unsigned int version) {

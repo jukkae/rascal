@@ -11,25 +11,33 @@ static const int BAR_WIDTH = 20;
 static const int MSG_X = BAR_WIDTH + 2;
 static const int MSG_HEIGHT = constants::GUI_PANEL_HEIGHT - 1;
 
+Gui::Gui() {
+	if(!font.loadFromFile("assets/FSEX300.ttf")) {
+		std::cout << "error loading font\n";
+	} else std::cout << "font loaded!\n";
+	std::cout << font.getInfo().family << "\n";
+
+}
+
 Gui::~Gui() {}
 
 void Gui::clear() {
 	log.clear();
 }
 
-void Gui::render() {
-	con.setDefaultBackground(TCODColor::black);
-	con.setDefaultForeground(TCODColor::white);
-	con.clear();
+void Gui::render(sf::RenderWindow& window) {
+	//con.setDefaultBackground(TCODColor::black);
+	//con.setDefaultForeground(TCODColor::white);
+	//con.clear();
 
-	renderMessageLog();
+	renderMessageLog(window);
 	renderBar(1, 1, BAR_WIDTH, "HP", state->getPlayer()->destructible->hp, state->getPlayer()->destructible->maxHp, TCODColor::lightRed, TCODColor::darkerRed);
-	con.print(3, 3, "Dungeon level %d", state->getLevel());
-	con.print(3, 4, "Time: %d", state->getTime());
+	//con.print(3, 3, "Dungeon level %d", state->getLevel());
+	//con.print(3, 4, "Time: %d", state->getTime());
 	renderXpBar();
 	renderMouseLook(state->getActors());
 
-	TCODConsole::blit(&con, 0, 0, constants::SCREEN_WIDTH, constants::GUI_PANEL_HEIGHT, TCODConsole::root, 0, constants::SCREEN_HEIGHT - constants::GUI_PANEL_HEIGHT);
+	//TCODConsole::blit(&con, 0, 0, constants::SCREEN_WIDTH, constants::GUI_PANEL_HEIGHT, TCODConsole::root, 0, constants::SCREEN_HEIGHT - constants::GUI_PANEL_HEIGHT);
 }
 
 void Gui::renderXpBar() {
@@ -39,12 +47,14 @@ void Gui::renderXpBar() {
 	renderBar(1, 5, BAR_WIDTH, xpTxt, ai->experience, ai->getNextLevelXp(), TCODColor::lightViolet,TCODColor::darkerViolet);
 }
 
-void Gui::renderMessageLog() {
+void Gui::renderMessageLog(sf::RenderWindow& window) {
 	int y = 1;
 	float colCoef = 0.4f;
 	for(Message msg : log) {
-		con.setDefaultForeground(msg.col * colCoef);
-		con.print(MSG_X, y, msg.text.c_str());
+		sf::Text text(msg.text, font, 16);
+		text.setColor(sf::Color::White); // msg.col * colCoef
+		text.setPosition(MSG_X * constants::CELL_WIDTH, y * constants::CELL_HEIGHT); // correct position
+		window.draw(text);
 		++y;
 		if(colCoef < 1.0f) {
 			colCoef += 0.3f;
@@ -53,15 +63,15 @@ void Gui::renderMessageLog() {
 }
 
 void Gui::renderBar(int x, int y, int width, std::string name, float value, float maxValue, const TCODColor& barColor, const TCODColor& backColor) {
-	con.setDefaultBackground(backColor);
-	con.rect(x, y, width, 1, false, TCOD_BKGND_SET);
+	//con.setDefaultBackground(backColor);
+	//con.rect(x, y, width, 1, false, TCOD_BKGND_SET);
 	int barWidth = (int) (value / maxValue * width);
 	if ( barWidth > 0 ) {
-		con.setDefaultBackground(barColor);
-		con.rect(x, y, barWidth, 1, false, TCOD_BKGND_SET);
+		//con.setDefaultBackground(barColor);
+		//con.rect(x, y, barWidth, 1, false, TCOD_BKGND_SET);
 	}
-	con.setDefaultForeground(TCODColor::white);
-	con.printEx(x + width/2, y, TCOD_BKGND_NONE, TCOD_CENTER, "%s : %g/%g", name.c_str(), value, maxValue);
+	//con.setDefaultForeground(TCODColor::white);
+	//con.printEx(x + width/2, y, TCOD_BKGND_NONE, TCOD_CENTER, "%s : %g/%g", name.c_str(), value, maxValue);
 }
 
 void Gui::renderMouseLook(std::vector<Actor*>* actors) {
@@ -83,8 +93,8 @@ void Gui::renderMouseLook(std::vector<Actor*>* actors) {
 			buf += actor->name;
 		}
 	}
-	con.setDefaultForeground(TCODColor::lightGrey);
-	con.print(1, 0, buf.c_str());
+	//con.setDefaultForeground(TCODColor::lightGrey);
+	//con.print(1, 0, buf.c_str());
 }
 
 

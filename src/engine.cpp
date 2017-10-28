@@ -13,7 +13,7 @@
 
 
 Engine::Engine() {
-	TCODConsole::initRoot(constants::SCREEN_WIDTH, constants::SCREEN_HEIGHT, "Rascal", false);
+	//TCODConsole::initRoot(constants::SCREEN_WIDTH, constants::SCREEN_HEIGHT, "Rascal", false);
 	init();
 }
 
@@ -43,10 +43,18 @@ void Engine::newGame() { // kinda bad
 }
 
 void Engine::update(sf::RenderWindow& window) {
+	sf::Font font;
+	font.loadFromFile("assets/FSEX300.ttf");
+	sf::Text text("AAAARGH", font, 16);
+	text.setColor(sf::Color::Red);
+
 	while(engineCommands.size() > 0) executeEngineCommand();
+	window.clear(sf::Color::Black);
 	//states.back()->handleEvents(this);
 	states.back()->update(this, window);
+	window.draw(text);
 	//states.back()->render(this);
+	window.display();
 }
 
 bool Engine::pollEvent(sf::Event& event) {
