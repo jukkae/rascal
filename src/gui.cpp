@@ -72,6 +72,15 @@ void Gui::renderBar(int x, int y, int width, std::string name, float value, floa
 	}
 	//con.setDefaultForeground(TCODColor::white);
 	//con.printEx(x + width/2, y, TCOD_BKGND_NONE, TCOD_CENTER, "%s : %g/%g", name.c_str(), value, maxValue);
+	sf::Text text;
+	text.setFont(font);
+	//std::string string = "%s : %g/%g", name.c_str(), value, maxValue;
+	std::string string = name + " : " + std::to_string((int)value) + "/" + std::to_string((int)maxValue);
+	text.setString(string);
+	text.setCharacterSize(16);
+	text.setColor(sf::Color::White);
+	text.setPosition((x /*+ width/2*/)*constants::CELL_WIDTH, (y + constants::SCREEN_HEIGHT - constants::GUI_PANEL_HEIGHT) * constants::CELL_HEIGHT);
+	window.draw(text);
 }
 
 void Gui::renderMouseLook(std::vector<Actor*>* actors) {
