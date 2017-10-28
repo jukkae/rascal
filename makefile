@@ -1,6 +1,6 @@
 # Compile for macOs
 
-CXX=gcc
+CXX=clang
 CPPFLAGS=-Wall -std=c++1z -framework SFML -framework sfml-window -framework sfml-graphics -framework sfml-system
 INCLUDEDIRS=-I./include
 LDLIBS=-L./lib

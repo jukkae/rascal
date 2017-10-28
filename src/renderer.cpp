@@ -32,12 +32,8 @@ Renderer::Renderer(int screenWidth, int screenHeight): screenWidth(screenWidth),
 void Renderer::render(const Map* const map, const std::vector<Actor*>* const actors, sf::RenderWindow& window) {
 	window.clear(sf::Color::Black);
 
-	sf::Text testText("sdfasdffs", font, 16);
-	testText.setColor(sf::Color::White);
-	window.draw(testText);
-
-	//renderMap(map, window);
-	//renderActors(map, actors, window);
+	renderMap(map, window);
+	renderActors(map, actors, window);
 
 	window.display();
 }
@@ -129,8 +125,11 @@ void Renderer::renderActor(const Actor* const actor, sf::RenderWindow& window) {
 	int x = screenPosition.x;
 	int y = screenPosition.y;
 
-	//con.setChar(x, y, actor->ch);
-	//con.setCharForeground(x, y, actor->col);
+	sf::Text t((char)actor->ch, font, 16);
+	t.setPosition(x*constants::CELL_WIDTH, y*constants::CELL_HEIGHT);
+	t.setFillColor(black);
+	window.draw(t);
+
 }
 
 Point Renderer::getWorldCoordsFromScreenCoords(const Point& point) const {
