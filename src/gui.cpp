@@ -15,6 +15,7 @@ static const sf::Color lightRed(255, 115, 115);
 static const sf::Color darkerRed(128, 0, 0);
 static const sf::Color lightViolet(185, 115, 255);
 static const sf::Color darkerViolet(64, 0, 128);
+static const sf::Color lightGrey(159, 159, 159);
 
 Gui::Gui() {
 	if(!font.loadFromFile("assets/FSEX300.ttf")) {
@@ -48,7 +49,7 @@ void Gui::render(sf::RenderWindow& window) {
 	window.draw(time);
 
 	renderXpBar(window);
-	renderMouseLook(state->getActors());
+	renderMouseLook(state->getActors(), window);
 }
 
 void Gui::renderXpBar(sf::RenderWindow& window) {
@@ -98,8 +99,8 @@ void Gui::renderBar(int x, int y, int width, std::string name, float value, floa
 	window.draw(text);
 }
 
-void Gui::renderMouseLook(std::vector<Actor*>* actors) {
-	Point mouse = state->getMouseLocation();
+void Gui::renderMouseLook(std::vector<Actor*>* actors, sf::RenderWindow& window) {
+	// TODO mouse look broken
 	Point location = state->getWorldCoordsFromScreenCoords(mouse);
 	int x = location.x;
 	int y = location.y;
@@ -117,8 +118,14 @@ void Gui::renderMouseLook(std::vector<Actor*>* actors) {
 			buf += actor->name;
 		}
 	}
-	//con.setDefaultForeground(TCODColor::lightGrey);
-	//con.print(1, 0, buf.c_str());
+	sf::Text text;
+	text.setFont(font);
+	std::string string = buf;
+	text.setString(string);
+	text.setCharacterSize(16);
+	text.setColor(lightGrey);
+	text.setPosition(1 * constants::CELL_WIDTH, (0 + constants::SCREEN_HEIGHT - constants::GUI_PANEL_HEIGHT) * constants::CELL_HEIGHT);
+	window.draw(text);
 }
 
 
