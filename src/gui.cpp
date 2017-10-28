@@ -34,8 +34,19 @@ void Gui::render(sf::RenderWindow& window) {
 
 	renderMessageLog(window);
 	renderBar(1, 1, BAR_WIDTH, "HP", state->getPlayer()->destructible->hp, state->getPlayer()->destructible->maxHp, lightRed, darkerRed, window);
-	//con.print(3, 3, "Dungeon level %d", state->getLevel());
-	//con.print(3, 4, "Time: %d", state->getTime());
+
+	std::string dungeonLvlString = "Dungeon level " + std::to_string(state->getLevel());
+	sf::Text dlvl(dungeonLvlString, font, 16);
+	dlvl.setPosition(3*constants::CELL_WIDTH, (3+constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT)*constants::CELL_HEIGHT);
+	dlvl.setColor(sf::Color::White);
+	window.draw(dlvl);
+
+	std::string timeString = "Time: " + std::to_string(state->getTime());
+	sf::Text time(timeString, font, 16);
+	time.setPosition(3*constants::CELL_WIDTH, (4+constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT)*constants::CELL_HEIGHT);
+	time.setColor(sf::Color::White);
+	window.draw(time);
+
 	renderXpBar(window);
 	renderMouseLook(state->getActors());
 }
