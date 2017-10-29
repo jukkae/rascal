@@ -10,6 +10,7 @@
 #include "gameplay_state.hpp"
 #include "gui.hpp"
 #include "input_handler.hpp"
+#include "inventory_menu_state.hpp"
 #include "map.hpp"
 #include "pickable.hpp"
 #include "persistent.hpp"
@@ -21,6 +22,7 @@
 #include <boost/serialization/export.hpp>
 #include <boost/serialization/vector.hpp>
 #include "boost/optional.hpp"
+#include <SFML/Window.hpp>
 
 static const int TRACKING_TURNS = 3;
 
@@ -47,49 +49,46 @@ void PlayerAi::increaseXp(int xp, GameplayState* state) {
 
 Action* PlayerAi::getNextAction(Actor* actor) {
 	Direction dir = Direction::NONE;
-	TCOD_key_t lastKey;
-	TCOD_mouse_t mouse;
 
-	boost::optional<RawInputEvent> event = actor->s->inputHandler->getEvent(actor);
-	if(!event) {
-		return new EmptyAction(actor);
-	}
-	lastKey = event->key;
-
-	switch(lastKey.vk) {
-		case TCODK_UP: {
-			dir = Direction::N;
-			break;
-		}
-		case TCODK_DOWN: {
-			dir = Direction::S;
-			break;
-		}
-		case TCODK_LEFT: {
-			dir = Direction::W;
-			break;
-		}
-		case TCODK_RIGHT: {
-			dir = Direction::E;
-			break;
-		}
-		case TCODK_CHAR: {
-			switch(lastKey.c) {
-				case 'g': {
+	Engine* engine = actor->s->getEngine();
+	sf::Event event;
+	while(engine->pollEvent(event)) {
+		if(event.type == sf::Event::KeyPressed) {
+			using k = sf::Keyboard::Key;
+			switch(event.key.code) {
+				case k::Up:
+					dir = Direction::N;
+					break;
+				case k::Down:
+					dir = Direction::S;
+					break;
+				case k::Left:
+					dir = Direction::W;
+					break;
+				case k::Right:
+					dir = Direction::E;
+					break;
+				case k::G: {
 					return new PickupAction(actor);
 				}
-				case -89: {
-					if(lastKey.shift) {
+				case k::I: { // TODO is this really the right place for this?
+					State* inventoryMenuState = new InventoryMenuState(actor);
+					inventoryMenuState->init(engine);
+					engine->pushState(inventoryMenuState);
+				}
+				case 56: { // < key
+					if(event.key.shift) {
 						return new TraverseStairsAction(actor, true);
 					}
 					else {
 						return new TraverseStairsAction(actor, false);
 					}
 				}
+				default: dir = Direction::NONE; break;
 			}
 		}
-		default: dir = Direction::NONE; break;
 	}
+
 	return new MoveAction(actor, dir);
 }
 
