@@ -5,6 +5,8 @@
 #include "actor.hpp"
 #include "ai.hpp"
 #include "constants.hpp"
+#include <SFML/System.hpp>
+#include <SFML/Window.hpp>
 
 static const sf::Color brightBlue(100, 100, 255);
 static const sf::Color darkBlue(0, 0, 155);
@@ -29,25 +31,25 @@ void LevelUpMenuState::cleanup() {
 }
 
 void LevelUpMenuState::handleEvents(Engine* engine) {
-	TCOD_key_t key;
-	TCODSystem::checkForEvent(TCOD_EVENT_KEY_PRESS, &key, nullptr);
-
-	switch(key.vk) {
-		case TCODK_UP:
-			if(selectedItem > 0) selectedItem--;
-			break;
-		case TCODK_DOWN:
-			if(selectedItem < menuContents.size() - 1) selectedItem++;
-			break;
-		case TCODK_ENTER:
-			handleItem(menuContents.at(selectedItem));
-			engine->addEngineCommand(ContinueCommand(engine));
-			break;
-		case TCODK_ESCAPE:
-			//engine->addEngineCommand(new ContinueCommand(engine));
-			break;
-		default:
-			break;
+	sf::Event event;
+	while(engine->pollEvent(event)) {
+		if(event.type == sf::Event::KeyPressed) {
+			using k = sf::Keyboard::Key;
+			switch(event.key.code) {
+				case k::Up:
+					if(selectedItem > 0) --selectedItem;
+					break;
+				case k::Down:
+					if(selectedItem < menuContents.size() - 1) ++selectedItem;
+					break;
+				case k::Return:
+					handleItem(menuContents.at(selectedItem));
+					engine->addEngineCommand(ContinueCommand(engine));
+					break;
+				default:
+					break;
+			}
+		}
 	}
 }
 
