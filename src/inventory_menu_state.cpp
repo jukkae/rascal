@@ -24,45 +24,33 @@ void InventoryMenuState::cleanup() {
 }
 
 void InventoryMenuState::handleEvents(Engine* engine) {
-	TCOD_key_t key;
-	TCODSystem::checkForEvent(TCOD_EVENT_KEY_PRESS, &key, nullptr);
-
-	switch(key.vk) {
-		case TCODK_UP:
-			if(selectedItem > 0) selectedItem--;
-			break;
-		case TCODK_DOWN:
-			if(selectedItem < inventoryContents.size() - 1) selectedItem++;
-			break;
-		case TCODK_ENTER:
-			break;
-		case TCODK_ESCAPE:
-			engine->addEngineCommand(ContinueCommand(engine));
-			break;
-		case TCODK_CHAR: // jesus f. christ, the h*ck we need to deal with
-			switch(key.c) {
-				case 'd':
+	sf::Event event;
+	while(engine->pollEvent(event)) {
+		if(event.type == sf::Event::KeyPressed) {
+			using k = sf::Keyboard::Key;
+			switch(event.key.code) {
+				case k::Up:
+					if(selectedItem > 0) --selectedItem;
+					break;
+				case k::Down:
+					if(selectedItem < inventoryContents.size() - 1) ++selectedItem;
+					break;
+				case k::D:
 					if(inventoryContents.size() > 0) {
 						inventoryContents.at(selectedItem)->pickable->drop(inventoryContents.at(selectedItem), actor);
 						engine->addEngineCommand(ContinueCommand(engine));
 					}
 					break;
-				case 'e':
-					// EQUIP
-					break;
-				case 't':
-					// THROW
-					break;
-				case 'u':
+				case k::U:
 					if(inventoryContents.size() > 0) {
 						actor->addAction(new UseItemAction(actor, inventoryContents.at(selectedItem)));
 						engine->addEngineCommand(ContinueCommand(engine));
 					}
 					break;
+				default:
+					break;
 			}
-			break;
-		default:
-			break;
+		}
 	}
 }
 

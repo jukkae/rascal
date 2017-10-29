@@ -3,7 +3,6 @@
 #include "state.hpp"
 #include "constants.hpp"
 #include <vector>
-//#include "libtcod.hpp"
 #include <SFML/Graphics.hpp>
 
 class Engine;
@@ -18,7 +17,6 @@ public:
 	void update(Engine* engine, sf::RenderWindow& window) override;
 	void render(Engine* engine, sf::RenderWindow& window) override;
 private:
-	//TCODConsole	console;
 	Actor* actor;
 	sf::Font font;
 
