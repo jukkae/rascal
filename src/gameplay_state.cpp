@@ -8,14 +8,14 @@ void GameplayState::init(Engine* engine) {
 	gui.setState(this);
 	renderer.setState(this);
 
-	Actor* player        = new Actor(40, 25, '@', "you", TCODColor::white, 2); // TODO
+	Actor* player        = new Actor(40, 25, '@', "you", sf::Color::White, 2); // TODO
 	player->destructible = std::make_unique<PlayerDestructible>(100, 2, 0, "your corpse", 11);
 	player->attacker     = std::make_unique<Attacker>(5);
 	player->ai           = std::make_unique<PlayerAi>();
 	player->container    = std::make_unique<Container>(26);
 	actors.push_back(player);
 
-	Actor* stairs = new Actor(0, 0, '>', "stairs", TCODColor::white, 0, true);
+	Actor* stairs = new Actor(1, 1, '>', "stairs", sf::Color::White, 0, true);
     stairs->blocks = false;
     stairs->fovOnly = false;
     actors.push_back(stairs);

@@ -6,7 +6,7 @@
 #include "gameplay_state.hpp"
 
 
-Actor::Actor(int x, int y, int ch, std::string name, const TCODColor& col, boost::optional<float> energy, bool stairs) :
+Actor::Actor(int x, int y, int ch, std::string name, sf::Color col, boost::optional<float> energy, bool stairs) :
 	x(x), y(y), ch(ch), col(col), name(name), energy(energy),
 	blocks(true), fovOnly(true), stairs(stairs), attacker(nullptr), destructible(nullptr), ai(nullptr),
 	pickable(nullptr), container(nullptr) {;}

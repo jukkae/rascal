@@ -3,6 +3,7 @@
 #include "engine.hpp"
 #include "gameplay_state.hpp"
 #include "gameover_state.hpp"
+#include <SFML/Graphics/Color.hpp>
 
 Destructible::Destructible(float maxHp, float defense, int xp, std::string corpseName, int armorClass) :
 	maxHp(maxHp), hp(maxHp), defense(defense), xp(xp), corpseName(corpseName), armorClass(armorClass) {;}
@@ -27,7 +28,7 @@ float Destructible::heal(float amount) {
 
 void Destructible::die(Actor* owner) {
 	owner->ch = '%';
-	owner->col = TCODColor::darkRed;   
+	owner->col = sf::Color(127, 0, 0); // TODO colors
 	owner->name = corpseName;
 	owner->blocks = false;
 }

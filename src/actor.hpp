@@ -11,6 +11,7 @@
 #include <boost/serialization/optional.hpp>
 #include <boost/serialization/deque.hpp>
 #include <boost/serialization/vector.hpp>
+#include <SFML/Graphics/Color.hpp>
 class Attacker;
 class Destructible;
 class Pickable;
@@ -27,7 +28,7 @@ class Actor {
 public:
 	int x, y;
 	int ch; // ASCII code
-	TCODColor col; // color
+	sf::Color col; // color
 	std::string name;
 	boost::optional<float> energy; // Shouldn't be public
 	bool blocks; // does it block movement?
@@ -41,7 +42,7 @@ public:
 
 	GameplayState* s; // temporary for messaging
 
-	Actor(int x = 0, int y = 0, int ch = 'x', std::string name = "", const TCODColor& col = TCODColor::white, boost::optional<float> energy = boost::none, bool stairs = false);
+	Actor(int x = 0, int y = 0, int ch = 'x', std::string name = "", sf::Color col = sf::Color::White, boost::optional<float> energy = boost::none, bool stairs = false);
 	~Actor();
 	float update(GameplayState* state);
 	float getDistance(int cx, int cy) const;
@@ -64,7 +65,7 @@ private:
         ar & x;
 		ar & y;
 		ar & ch;
-		ar & col;
+		//ar & col; // TODO fix serialization
 		ar & name;
 		ar & energy;
 		ar & blocks;

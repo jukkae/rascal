@@ -115,7 +115,7 @@ void Renderer::renderActor(const Actor* const actor, sf::RenderWindow& window) {
 
 	sf::Text t((char)actor->ch, font, 16);
 	t.setPosition(x*constants::CELL_WIDTH, y*constants::CELL_HEIGHT);
-	t.setFillColor(black); // TODO correct color
+	t.setFillColor(actor->col);
 	window.draw(t);
 
 }

@@ -12,6 +12,8 @@
 #include "point.hpp"
 #include "rect.hpp"
 
+#include <SFML/Graphics/Color.hpp>
+
 static const int ROOM_MAX_SIZE = 12;
 static const int ROOM_MIN_SIZE = 6;
 static const int MAX_ROOM_MONSTERS = 3;
@@ -110,23 +112,24 @@ std::vector<Rect> Map::breakRooms(Rect area, BreakDirection direction) {
 	}
 }
 
+// TODO COLORS
 Actor* Map::makeMonster(int x, int y) {
 	int r = d100();
 	if(r < 70) {
-		Actor* punk = new Actor(x, y, 'h', "punk", TCODColor::desaturatedGreen, 1); // TODO
+		Actor* punk = new Actor(x, y, 'h', "punk", sf::Color(64, 128, 64), 1); // TODO
 		punk->destructible = std::make_unique<MonsterDestructible>(10, 0, 50, "dead punk", 13);
 		punk->attacker = std::make_unique<Attacker>(3);
 		punk->ai = std::make_unique<MonsterAi>();
 		return punk;
 	} else if (r < 80) {
-		Actor* fighter = new Actor(x, y, 'H', "fighter", TCODColor::darkerGreen, 1); // TODO
+		Actor* fighter = new Actor(x, y, 'H', "fighter", sf::Color(0, 128, 0), 1); // TODO
 		fighter->destructible = std::make_unique<MonsterDestructible>(16, 1, 100, "fighter carcass", 15);
 		fighter->attacker = std::make_unique<Attacker>(4);
 		fighter->ai = std::make_unique<MonsterAi>();
 		return fighter;
 	}
 	else {
-		Actor* boxer = new Actor(x, y, 'H', "boxer", TCODColor::darkestGreen, 1); // TODO
+		Actor* boxer = new Actor(x, y, 'H', "boxer", sf::Color(0, 64, 0), 1); // TODO
 		boxer->destructible = std::make_unique<MonsterDestructible>(4, 1, 70, "boxer carcass", 16);
 		boxer->attacker = std::make_unique<Attacker>(4);
 		boxer->ai = std::make_unique<MonsterAi>();
@@ -160,30 +163,31 @@ void Map::addMonster(int x, int y) {
 	state->addActor(makeMonster(x, y));
 }
 
+// TODO colors!
 Actor* Map::makeItem(int x, int y) {
 	int r = d100();
 	if(r < 60) {
-		Actor* stimpak = new Actor(x, y, '!', "stimpak", TCODColor::violet);
+		Actor* stimpak = new Actor(x, y, '!', "stimpak", sf::Color(128, 0, 128));
 		stimpak->blocks = false;
 		stimpak->pickable = std::make_unique<Pickable>(TargetSelector(TargetSelector::SelectorType::WEARER, 0), std::make_unique<HealthEffect>(4));
 		return stimpak;
 	} else if(r < 70) {
-		Actor* blasterBoltDevice = new Actor(x, y, '?', "blaster bolt device", TCODColor::lightYellow);
+		Actor* blasterBoltDevice = new Actor(x, y, '?', "blaster bolt device", sf::Color(128, 128, 0));
 		blasterBoltDevice->blocks = false;
 		blasterBoltDevice->pickable = std::make_unique<Pickable>(TargetSelector(TargetSelector::SelectorType::CLOSEST_MONSTER, 5), std::make_unique<HealthEffect>(-20, "The %s is hit by a blast!\n The damage is %g hit points."));
 		return blasterBoltDevice;
 	} else if(r < 80) {
-		Actor* fragGrenade = new Actor(x, y, '?', "fragmentation grenade", TCODColor::lightGreen);
+		Actor* fragGrenade = new Actor(x, y, '?', "fragmentation grenade", sf::Color(128, 255, 128));
 		fragGrenade->blocks = false;
 		fragGrenade->pickable = std::make_unique<Pickable>(TargetSelector(TargetSelector::SelectorType::SELECTED_RANGE, 3), std::make_unique<HealthEffect>(-12, "The grenade explodes, hurting the %s for %g hit points!"));
 		return fragGrenade;
 	} else if(r < 90) {
-		Actor* confusor = new Actor(x, y, '?', "confusor", TCODColor::lightBlue);
+		Actor* confusor = new Actor(x, y, '?', "confusor", sf::Color(128, 128, 255));
 		confusor->blocks = false;
 		confusor->pickable = std::make_unique<Pickable>(TargetSelector(TargetSelector::SelectorType::SELECTED_MONSTER, 5), std::make_unique<AiChangeEffect>(std::make_unique<ConfusedMonsterAi>(10), "The eyes of the %s look vacant!"));
 		return confusor;
 	} else {
-		Actor* teslaCoil = new Actor(x, y, '#', "tesla coil", TCODColor::lightBlue);
+		Actor* teslaCoil = new Actor(x, y, '#', "tesla coil", sf::Color(128, 128, 255));
 		teslaCoil->blocks = false;
 		teslaCoil->pickable = std::make_unique<Pickable>(TargetSelector(TargetSelector::SelectorType::WEARER_RANGE, 5), std::make_unique<HealthEffect>(-6, "The tesla coil sputters, emitting raw\n electricity, hurting %s for %g hp!"));
 		return teslaCoil;
