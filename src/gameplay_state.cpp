@@ -4,7 +4,6 @@
 
 void GameplayState::init(Engine* engine) {
 	e = engine;
-	inputHandler = std::make_unique<InputHandler>(engine);
 
 	gui.setState(this);
 	renderer.setState(this);
@@ -37,7 +36,6 @@ void GameplayState::init(Engine* engine) {
 
 void GameplayState::initLoaded(Engine* engine) {
 	e = engine;
-	inputHandler = std::make_unique<InputHandler>(engine);
 	gui.setState(this);
 	renderer.setState(this);
 	map.setState(this);
@@ -64,7 +62,7 @@ void GameplayState::update(Engine* engine, sf::RenderWindow& window) {
 }
 
 void GameplayState::handleEvents(Engine* engine) {
-	inputHandler->handleEvents();
+	//inputHandler->handleEvents();
 }
 
 void GameplayState::render(Engine* engine, sf::RenderWindow& window) {
@@ -123,8 +121,8 @@ Actor* GameplayState::getStairs() const {
     return nullptr;
 }
 
-Point GameplayState::getMouseLocation() {
-	return inputHandler->getMouseLocation();
+Point GameplayState::getMouseLocation() { // TODO reimplement
+	// return inputHandler->getMouseLocation();
 }
 
 bool GameplayState::canWalk(int x, int y) {

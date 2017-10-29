@@ -9,7 +9,6 @@ class Engine;
 #include "map.hpp"
 #include "point.hpp"
 #include "renderer.hpp"
-#include "input_handler.hpp"
 #include "persistent.hpp"
 #include <SFML/Graphics.hpp>
 
@@ -46,8 +45,6 @@ public:
 	void addActor(Actor* actor) { actors.push_back(actor); }
 
 	bool pickTile(int* x, int* y, float maxRange = 0.0f);
-
-	std::unique_ptr<InputHandler> inputHandler; // TODO private? singleton? something else?
 private:
 	Engine* e; // TODO
 	int time = 0;

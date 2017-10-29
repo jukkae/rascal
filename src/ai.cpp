@@ -9,13 +9,13 @@
 #include "engine.hpp"
 #include "gameplay_state.hpp"
 #include "gui.hpp"
-#include "input_handler.hpp"
 #include "inventory_menu_state.hpp"
 #include "map.hpp"
 #include "pickable.hpp"
 #include "persistent.hpp"
 #include "state.hpp"
 #include "level_up_menu_state.hpp"
+#include "main_menu_state.hpp"
 #include <math.h>
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
@@ -83,6 +83,12 @@ Action* PlayerAi::getNextAction(Actor* actor) {
 					else {
 						return new TraverseStairsAction(actor, false);
 					}
+				}
+				case k::Escape: { // TODO this would need to be captured earlier
+					engine->save();
+					State* mainMenuState = new MainMenuState();
+					mainMenuState->init(engine);
+					engine->pushState(mainMenuState);
 				}
 				default: dir = Direction::NONE; break;
 			}
