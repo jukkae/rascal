@@ -39,13 +39,13 @@ void Gui::render(sf::RenderWindow& window) {
 	std::string dungeonLvlString = "Dungeon level " + std::to_string(state->getLevel());
 	sf::Text dlvl(dungeonLvlString, font, 16);
 	dlvl.setPosition(3*constants::CELL_WIDTH, (3+constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT)*constants::CELL_HEIGHT);
-	dlvl.setColor(sf::Color::White);
+	dlvl.setFillColor(sf::Color::White);
 	window.draw(dlvl);
 
 	std::string timeString = "Time: " + std::to_string(state->getTime());
 	sf::Text time(timeString, font, 16);
 	time.setPosition(3*constants::CELL_WIDTH, (4+constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT)*constants::CELL_HEIGHT);
-	time.setColor(sf::Color::White);
+	time.setFillColor(sf::Color::White);
 	window.draw(time);
 
 	renderXpBar(window);
@@ -64,7 +64,7 @@ void Gui::renderMessageLog(sf::RenderWindow& window) {
 	float colCoef = 0.4f;
 	for(Message msg : log) {
 		sf::Text text(msg.text, font, 16);
-		text.setColor(sf::Color::White); // msg.col * colCoef
+		text.setFillColor(sf::Color::White); // msg.col * colCoef
 		text.setPosition(MSG_X * constants::CELL_WIDTH, (y + constants::SCREEN_HEIGHT - constants::GUI_PANEL_HEIGHT) * constants::CELL_HEIGHT); // correct position
 		window.draw(text);
 		++y;
@@ -94,7 +94,7 @@ void Gui::renderBar(int x, int y, int width, std::string name, float value, floa
 	std::string string = name + " : " + std::to_string((int)value) + "/" + std::to_string((int)maxValue);
 	text.setString(string);
 	text.setCharacterSize(16);
-	text.setColor(sf::Color::White);
+	text.setFillColor(sf::Color::White);
 	text.setPosition(x*constants::CELL_WIDTH, (y + constants::SCREEN_HEIGHT - constants::GUI_PANEL_HEIGHT) * constants::CELL_HEIGHT);
 	window.draw(text);
 }

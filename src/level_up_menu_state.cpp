@@ -4,12 +4,10 @@
 #include "engine.hpp"
 #include "actor.hpp"
 #include "ai.hpp"
+#include "colors.hpp"
 #include "constants.hpp"
 #include <SFML/System.hpp>
 #include <SFML/Window.hpp>
-
-static const sf::Color brightBlue(100, 100, 255);
-static const sf::Color darkBlue(0, 0, 155);
 
 LevelUpMenuState::LevelUpMenuState(Actor* actor) : actor(actor) {
 	if(!font.loadFromFile("assets/FSEX300.ttf")) {
@@ -69,8 +67,8 @@ void LevelUpMenuState::render(Engine* engine, sf::RenderWindow& window) {
 		text.setFont(font);
 		text.setString(item.label);
 		text.setPosition(2*constants::CELL_WIDTH, y*constants::CELL_HEIGHT);
-		if(itemIndex == selectedItem) text.setColor(brightBlue);
-		else text.setColor(darkBlue);
+		if(itemIndex == selectedItem) text.setFillColor(colors::brightBlue);
+		else text.setFillColor(colors::darkBlue);
 		window.draw(text);
 		++y;
 		++itemIndex;

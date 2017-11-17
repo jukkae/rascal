@@ -1,4 +1,5 @@
 #include "main_menu_state.hpp"
+#include "colors.hpp"
 #include "constants.hpp"
 #include "engine.hpp"
 
@@ -7,10 +8,6 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 #include <SFML/Graphics/Text.hpp>
-
-static const sf::Color brightBlue(100, 100, 255);
-static const sf::Color darkBlue(0, 0, 155);
-
 
 void MainMenuState::init(Engine* engine) {
 	if(!font.loadFromFile("assets/FSEX300.ttf")) {
@@ -80,9 +77,9 @@ void MainMenuState::showMenu(Engine* engine, sf::RenderWindow& window) {
 	for(MenuItem item : menuItems) {
 		sf::Text itemText(item.label, font, 16);
 		if (selectedItem == itemIndex) {
-			itemText.setColor(brightBlue);
+			itemText.setFillColor(colors::brightBlue);
 		} else {
-			itemText.setColor(darkBlue);
+			itemText.setFillColor(colors::darkBlue);
 		}
 
 		itemText.setPosition(menuX * constants::CELL_WIDTH, (menuY + itemIndex * 3) * constants::CELL_HEIGHT);

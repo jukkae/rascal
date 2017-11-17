@@ -3,9 +3,7 @@
 #include "engine.hpp"
 #include "action.hpp"
 #include "actor.hpp"
-
-static const sf::Color brightBlue(100, 100, 255);
-static const sf::Color darkBlue(0, 0, 155);
+#include "colors.hpp"
 
 InventoryMenuState::InventoryMenuState(Actor* actor) : actor(actor) {
 	if(!font.loadFromFile("assets/FSEX300.ttf")) {
@@ -67,8 +65,8 @@ void InventoryMenuState::render(Engine* engine, sf::RenderWindow& window) {
 	for (auto item : inventoryContents) {
 		sf::Text text(item->name, font, 16);
 		text.setPosition(2*constants::CELL_WIDTH, y*constants::CELL_HEIGHT);
-		if(itemIndex == selectedItem) text.setColor(brightBlue);
-		else text.setColor(darkBlue);
+		if(itemIndex == selectedItem) text.setFillColor(colors::brightBlue);
+		else text.setFillColor(colors::darkBlue);
 		window.draw(text);
 		++y;
 		++itemIndex;
