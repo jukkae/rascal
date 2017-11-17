@@ -6,6 +6,7 @@
 #include "main_menu_state.hpp"
 #include <iostream>
 #include <sys/stat.h>
+#include <cstdio.h>
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
@@ -22,7 +23,7 @@ GameOverState::GameOverState(Actor* actor) :
 		description.append(std::to_string(((PlayerAi*)actor->ai.get())->xpLevel));
 		struct stat buffer;
 		if(stat (constants::SAVE_FILE_NAME.c_str(), &buffer) == 0) { // If file exists
-			// TODO delete
+			remove(constants::SAVE_FILE_NAME.c_str());
 		}
 	}
 

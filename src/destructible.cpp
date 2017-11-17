@@ -29,7 +29,7 @@ float Destructible::heal(float amount) {
 
 void Destructible::die(Actor* owner) {
 	owner->ch = '%';
-	owner->col = sf::Color(127, 0, 0); // TODO colors
+	owner->col = colors::darkerRed;
 	owner->name = corpseName;
 	owner->blocks = false;
 }

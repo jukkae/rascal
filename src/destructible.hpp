@@ -7,7 +7,7 @@ class Destructible {
 public:
 	float maxHp;
 	float hp;
-	float defense; // TODO eventually remove?
+	float defense;
 	int xp; // PlayerDestructible should maybe not have xp?
 	std::string corpseName;
 	int armorClass;
