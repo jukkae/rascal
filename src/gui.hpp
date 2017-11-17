@@ -14,7 +14,7 @@ public:
 	~Gui();
 	void clear();
 
-	void render(sf::RenderWindow& window); // TODO this should be const
+	void render(sf::RenderWindow& window);
 	void message(sf::Color col, std::string text, ...);
 	void message(sf::Color col, std::string text, va_list args);
 

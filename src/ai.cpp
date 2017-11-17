@@ -72,7 +72,7 @@ Action* PlayerAi::getNextAction(Actor* actor) {
 				case k::G: {
 					return new PickupAction(actor);
 				}
-				case k::I: { // TODO is this really the right place for this?
+				case k::I: {
 					State* inventoryMenuState = new InventoryMenuState(actor);
 					inventoryMenuState->init(engine);
 					engine->pushState(inventoryMenuState);
@@ -85,7 +85,7 @@ Action* PlayerAi::getNextAction(Actor* actor) {
 						return new TraverseStairsAction(actor, false);
 					}
 				}
-				case k::Escape: { // TODO this would need to be captured earlier
+				case k::Escape: {
 					engine->save();
 					State* mainMenuState = new MainMenuState();
 					mainMenuState->init(engine);
