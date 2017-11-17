@@ -205,7 +205,7 @@ bool GameplayState::pickTile(int* x, int* y, float maxRange) {
 			}
 		}
 		sf::RenderWindow& window = *window_; // TODO
-		render(nullptr, window);
+		render(nullptr, window); // TODO
 		int mouseXPix = sf::Mouse::getPosition(window).x;
 		int mouseYPix = sf::Mouse::getPosition(window).y;
 		int xCells = mouseXPix / constants::CELL_WIDTH;
