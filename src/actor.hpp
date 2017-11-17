@@ -20,6 +20,7 @@ class GameplayState;
 #include "container.hpp" // must be included for serialization
 #include "destructible.hpp"
 #include "pickable.hpp"
+#include "persistent.hpp"
 
 enum class Statistic { CONSTITUTION, STRENGTH, AGILITY, SPEED };
 
@@ -64,7 +65,7 @@ private:
         ar & x;
 		ar & y;
 		ar & ch;
-		//ar & col; // TODO fix serialization
+		ar & col;
 		ar & name;
 		ar & energy;
 		ar & blocks;

@@ -6,6 +6,9 @@
 #include <boost/serialization/utility.hpp>
 #include <SFML/Graphics.hpp>
 
+namespace boost {
+namespace serialization {
+
 template<class Archive>
 inline void serialize (
 	Archive & ar,
@@ -17,5 +20,8 @@ inline void serialize (
 	ar & c.b;
 	ar & c.a;
 }
+
+} // namespace serialization
+} // namespace boost
 
 #endif /* PERSISTENT_HPP */

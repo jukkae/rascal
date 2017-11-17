@@ -3,6 +3,7 @@
 
 #include "actor.hpp" // must be included for serialization
 #include "constants.hpp"
+#include "persistent.hpp"
 #include <SFML/Graphics.hpp>
 class GameplayState;
 
@@ -29,7 +30,7 @@ protected:
 		template<typename Archive>
 		void serialize(Archive & ar, const unsigned int version) {
 			ar & text;
-			// ar & col; // TODO fix serialization
+			ar & col;
 		}
 	};
 
