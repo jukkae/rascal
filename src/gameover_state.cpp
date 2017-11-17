@@ -6,7 +6,7 @@
 #include "main_menu_state.hpp"
 #include <iostream>
 #include <sys/stat.h>
-#include <cstdio.h>
+#include <stdio.h>
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>

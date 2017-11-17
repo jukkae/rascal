@@ -21,7 +21,7 @@ void MainMenuState::init(Engine* engine) {
 	menuItems.push_back(newGame);
 
 	struct stat buffer;
-	if(stat (constants::SAVE_FILE_NAME.c_str(), &buffer) == 0) { // If file exists
+	if(stat (constants::SAVE_FILE_NAME.c_str(), &buffer) == 0) { // If file exists TODO bug
 		menuItems.push_back(cont);
 	}
 

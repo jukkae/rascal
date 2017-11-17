@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <limits>
 #include <sys/stat.h>
+#include <stdio.h>
 #include "ai.hpp"
 #include "constants.hpp"
 #include "container.hpp"
@@ -37,8 +38,11 @@ void Engine::init() {
 	states.push_back(mainMenuState);
 }
 
-void Engine::newGame() { // kinda bad
-	// TODO delete file if it exists
+void Engine::newGame() {
+	struct stat buffer;
+	if(stat (constants::SAVE_FILE_NAME.c_str(), &buffer) == 0) { // If file does exist
+		remove(constants::SAVE_FILE_NAME.c_str());
+	}
 	init();
 }
 
