@@ -1,6 +1,7 @@
 #include "constants.hpp"
 #include "gameplay_state.hpp"
 #include "engine.hpp"
+#include <SFML/Window/Mouse.hpp>
 
 void GameplayState::init(Engine* engine) {
 	e = engine;
@@ -49,6 +50,7 @@ void GameplayState::cleanup() {
 
 void GameplayState::update(Engine* engine, sf::RenderWindow& window) {
 	//window.clear(sf::Color::Black);
+	if(!window_) window_ = &window; // TODO
 	Actor* activeActor = getNextActor();
 	if(activeActor->isPlayer()) {
 		handleEvents(engine);
@@ -191,41 +193,39 @@ void GameplayState::nextLevel() {
 }
 
 bool GameplayState::pickTile(int* x, int* y, float maxRange) {
-	/*
-	while(!TCODConsole::isWindowClosed()) {
-		//render(nullptr); // yeah inorite
+	while(true) {
 		for(int cx = 0; cx < constants::SCREEN_WIDTH; ++cx) {
 			for(int cy = 0; cy < constants::SCREEN_HEIGHT; ++cy) {
 				Point location = renderer.getWorldCoordsFromScreenCoords(Point(cx, cy));
 				int realX = location.x;
 				int realY = location.y;
 				if(isInFov(realX, realY) && (maxRange == 0 || getPlayer()->getDistance(realX, realY) <= maxRange)) {
-					TCODColor col = TCODConsole::root->getCharBackground(cx, cy);
-					col = col * 1.2;
-					TCODConsole::root->setCharBackground(cx, cy, col);
+					// TODO Highlight background for tiles in range
 				}
 			}
 		}
-		inputHandler->handleEvents(); // ehh
-		Point mouseLocationScreen = inputHandler->getMouseLocation();
+		sf::RenderWindow& window = *window_; // TODO
+		render(nullptr, window);
+		int mouseXPix = sf::Mouse::getPosition(window).x;
+		int mouseYPix = sf::Mouse::getPosition(window).y;
+		int xCells = mouseXPix / constants::CELL_WIDTH;
+		int yCells = mouseYPix / constants::CELL_HEIGHT;
+		Point mouseLocationScreen(xCells, yCells);
 		Point mouseLocation = renderer.getWorldCoordsFromScreenCoords(Point(mouseLocationScreen.x, mouseLocationScreen.y));
 		int realX = mouseLocation.x;
 		int realY = mouseLocation.y;
 		if(isInFov(realX, realY) && (maxRange == 0 || getPlayer()->getDistance(realX, realY) <= maxRange)) {
-			//TCODConsole::root->setCharBackground(mouseLocationScreen.x, mouseLocationScreen.y, TCODColor::white);
-			if(inputHandler->mouseLeftClicked) {
-				inputHandler->mouseLeftClicked = false;
+			// TODO Highlight background for tile under cursor
+			if(sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
 				*x = realX;
 				*y = realY;
 				return true;
 			}
 		}
-		if(inputHandler->mouseRightClicked) {
-			inputHandler->mouseRightClicked = false;
+		if(sf::Mouse::isButtonPressed(sf::Mouse::Right)) {
 			return false;
 		}
-	}*/
-	return false;
+	}
 }
 
 BOOST_CLASS_EXPORT(GameplayState)

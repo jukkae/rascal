@@ -53,6 +53,7 @@ private:
 	Map map;
 	Gui gui;
 	Renderer renderer;
+	sf::RenderWindow* window_ = nullptr; // TODO
 
 	void updateTime();
 	void updateNextActor();
