@@ -2,6 +2,7 @@
 #include "constants.hpp"
 #include "engine.hpp"
 
+#include <sys/stat.h>
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
@@ -21,9 +22,12 @@ void MainMenuState::init(Engine* engine) {
 	MenuItem cont = { MenuItemCode::CONTINUE, "Continue!" };
 	MenuItem exit = { MenuItemCode::EXIT, "Exit!" };
 	menuItems.push_back(newGame);
-	//if(TCODSystem::fileExists(constants::SAVE_FILE_NAME.c_str())) {
+
+	struct stat buffer;
+	if(stat (constants::SAVE_FILE_NAME.c_str(), &buffer) == 0) { // If file exists
 		menuItems.push_back(cont);
-	//}
+	}
+
 	menuItems.push_back(exit);
 
 	selectedItem = 0;

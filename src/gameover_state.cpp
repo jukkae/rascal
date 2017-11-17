@@ -24,7 +24,7 @@ GameOverState::GameOverState(Actor* actor) :
 		description = "you died at level ";
 		description.append(std::to_string(((PlayerAi*)actor->ai.get())->xpLevel));
 		struct stat buffer;
-		if(stat (constants::SAVE_FILE_NAME.c_str(), &buffer) == 0) {
+		if(stat (constants::SAVE_FILE_NAME.c_str(), &buffer) == 0) { // If file exists
 			// TODO delete
 		}
 	}

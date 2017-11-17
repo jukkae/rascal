@@ -8,9 +8,9 @@ public:
 	float maxHp;
 	float hp;
 	float defense; // TODO eventually remove?
-	int armorClass;
 	int xp; // PlayerDestructible should maybe not have xp?
 	std::string corpseName;
+	int armorClass;
 	
 	Destructible(float maxHp = 0, float defense = 0, int xp = 0, std::string corpseName = "corpse", int armorClass = 10);
 	virtual ~Destructible() {};

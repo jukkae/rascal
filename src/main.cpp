@@ -2,7 +2,6 @@
 #include <sstream>
 #include <iostream>
 
-//#include "libtcod.hpp"
 #include "engine.hpp"
 #include "main.hpp"
 #include "constants.hpp"

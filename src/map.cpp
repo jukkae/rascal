@@ -14,11 +14,6 @@
 
 #include <SFML/Graphics/Color.hpp>
 
-static const int ROOM_MAX_SIZE = 12;
-static const int ROOM_MIN_SIZE = 6;
-static const int MAX_ROOM_MONSTERS = 3;
-static const int MAX_ROOM_ITEMS = 2;
-
 Map::Map() : Map(constants::DEFAULT_MAP_WIDTH, constants::DEFAULT_MAP_HEIGHT) {}
 
 Map::Map(int width, int height) : width(width), height(height) {
