@@ -3,6 +3,7 @@
 #include "destructible.hpp"
 #include "gameplay_state.hpp"
 #include "persistent.hpp"
+#include "colors.hpp"
 
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
@@ -23,7 +24,7 @@ void TargetSelector::selectTargets(Actor* wearer, std::vector<Actor*>& list) {
 		case SelectorType::SELECTED_MONSTER :
 		{
 			int x, y;
-			wearer->s->message(TCODColor::cyan, "Left-click to select an enemy,\nor right-click to cancel.");
+			wearer->s->message(colors::cyan, "Left-click to select an enemy,\nor right-click to cancel.");
 			if(wearer->s->pickTile(&x, &y, range)) {
 				Actor* actor = wearer->getLiveActor(x, y);
 				if(actor) list.push_back(actor);
@@ -44,7 +45,7 @@ void TargetSelector::selectTargets(Actor* wearer, std::vector<Actor*>& list) {
 		case SelectorType::SELECTED_RANGE :
 		{
 			int x, y;
-			wearer->s->message(TCODColor::cyan, "Left-click to select a tile,\nor right-click to cancel.");
+			wearer->s->message(colors::cyan, "Left-click to select a tile,\nor right-click to cancel.");
 			if(wearer->s->pickTile(&x, &y)) {
 				for(Actor* actor : *wearer->getActors()) {
 					if(actor->destructible && !actor->destructible->isDead() && actor->getDistance(x, y) <= range ) {
@@ -55,7 +56,7 @@ void TargetSelector::selectTargets(Actor* wearer, std::vector<Actor*>& list) {
 		} break;
 		default: break;
 	}
-	if(list.size() == 0) wearer->s->message(TCODColor::lightGrey, "Zork! No enemy close enough!");
+	if(list.size() == 0) wearer->s->message(colors::lightGrey, "Zork! No enemy close enough!");
 }
 
 HealthEffect::HealthEffect(float amount, std::string message) : amount(amount), message(message) {;}
@@ -65,12 +66,12 @@ bool HealthEffect::applyTo(Actor* actor) {
 	if(amount > 0) {
 		float pointsHealed = actor->destructible->heal(amount);
 		if(pointsHealed > 0) {
-			if(message != "") actor->s->message(TCODColor::lightGrey, message, actor->name.c_str(), pointsHealed);
+			if(message != "") actor->s->message(colors::lightGrey, message, actor->name.c_str(), pointsHealed);
 			return true;
 		}
 	} else {
 		if(message != "" && -amount-actor->destructible->defense > 0) {
-			actor->s->message(TCODColor::lightGrey, message, actor->name.c_str(), -amount-actor->destructible->defense);
+			actor->s->message(colors::lightGrey, message, actor->name.c_str(), -amount-actor->destructible->defense);
 		}
 		if(actor->destructible->takeDamage(actor, -amount) > 0) return true;
 	}
@@ -81,7 +82,7 @@ AiChangeEffect::AiChangeEffect(std::unique_ptr<TemporaryAi> newAi, std::string m
 
 bool AiChangeEffect::applyTo(Actor* actor) {
 	newAi->applyTo(actor);
-	if(message != "") actor->s->message(TCODColor::lightGrey, message, actor->name.c_str());
+	if(message != "") actor->s->message(colors::lightGrey, message, actor->name.c_str());
 	return true;
 }
 
@@ -123,7 +124,7 @@ void Pickable::drop(Actor* owner, Actor* wearer) {
 		wearer->getActors()->push_back(owner);
 		owner->x = wearer->x;
 		owner->y = wearer->y;
-		wearer->s->message(TCODColor::lightGrey, "%s drops a %s.", wearer->name.c_str(), owner->name.c_str());
+		wearer->s->message(colors::lightGrey, "%s drops a %s.", wearer->name.c_str(), owner->name.c_str());
 	}
 }
 

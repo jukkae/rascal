@@ -131,7 +131,7 @@ void Gui::renderMouseLook(std::vector<Actor*>* actors, sf::RenderWindow& window)
 }
 
 
-Gui::Message::Message(std::string text, const TCODColor& col) :
+Gui::Message::Message(std::string text, sf::Color col) :
 col(col) {
 	this->text = text;
 }
@@ -140,10 +140,10 @@ col(col) {
 Gui::Message::~Message() {
 }
 
-void Gui::message(const TCODColor& col, std::string text, va_list args) {
+void Gui::message(sf::Color col, std::string text, va_list args) {
 	std::string buf = "";
 	char dest[1024*16]; // maybe something a bit more sane would be in order at some point
-	vsnprintf(dest, 1024*16, text.c_str(), args);
+	vsnprintf(dest, 1024*16, text.c_str(), args); // FIXME
 
 	std::istringstream iss (dest);
 	std::string line;
@@ -157,12 +157,12 @@ void Gui::message(const TCODColor& col, std::string text, va_list args) {
 	}
 }
 
-void Gui::message(const TCODColor& col, std::string text, ...) {
+void Gui::message(sf::Color col, std::string text, ...) {
 	va_list ap;
 	std::string buf = "";
 	char dest[1024*16]; // maybe something a bit more sane would be in order at some point
 	va_start(ap, text);
-	vsnprintf(dest, 1024*16, text.c_str(), ap);
+	vsnprintf(dest, 1024*16, text.c_str(), ap); // FIXME
 	va_end(ap);
 	std::istringstream iss (dest);
 	std::string line;

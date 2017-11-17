@@ -1,6 +1,7 @@
 #include "action.hpp"
 #include "actor.hpp"
 #include "attacker.hpp"
+#include "colors.hpp"
 #include "gameplay_state.hpp"
 
 bool MoveAction::execute() {
@@ -34,7 +35,7 @@ bool MoveAction::execute() {
 	for (Actor* a : *actor->getActors()) {
 		bool corpseOrItem = (a->destructible && a->destructible->isDead()) || a->pickable;
 		if(corpseOrItem && a->x == targetX && a->y == targetY) {
-			state->message(TCODColor::lightGrey, "There's a %s here!", a->name.c_str());
+			state->message(colors::lightGrey, "There's a %s here!", a->name.c_str());
 		}
 	}
 	actor->x = targetX;
@@ -49,13 +50,13 @@ bool TraverseStairsAction::execute() {
 			state->nextLevel();
 			return true;
 		} else {
-			state->message(TCODColor::lightGrey, "There are no stairs here.");
+			state->message(colors::lightGrey, "There are no stairs here.");
 			return false;
 		}
 	}
 
 	else {
-		state->message(TCODColor::lightGrey, "There are no stairs leading up here.");
+		state->message(colors::lightGrey, "There are no stairs leading up here.");
 		return false; // up not implemented yet
 	}
 }
@@ -66,16 +67,16 @@ bool PickupAction::execute() {
 		if(a->pickable && a->x == actor->x && a->y == actor->y) {
 			if(a->pickable->pick(a, actor)) {
 				found = true;
-				actor->s->message(TCODColor::green, "You pick up the %s.", a->name.c_str());
+				actor->s->message(colors::green, "You pick up the %s.", a->name.c_str());
 				return true;
 			} else if(!found) {
 				found = true;
-				actor->s->message(TCODColor::red, "Your inventory is full.");
+				actor->s->message(colors::red, "Your inventory is full.");
 				return false;
 			}
 		}
 	}
-	if(!found) { actor->s->message(TCODColor::lightGrey, "There's nothing here that you can pick up."); }
+	if(!found) { actor->s->message(colors::lightGrey, "There's nothing here that you can pick up."); }
 	return false;
 }
 

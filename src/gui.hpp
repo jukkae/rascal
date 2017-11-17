@@ -14,22 +14,22 @@ public:
 	void clear();
 
 	void render(sf::RenderWindow& window); // TODO this should be const
-	void message(const TCODColor& col, std::string text, ...);
-	void message(const TCODColor& col, std::string text, va_list args);
+	void message(sf::Color col, std::string text, ...);
+	void message(sf::Color col, std::string text, va_list args);
 
 	void setState(GameplayState* s) { state = s; }
 protected:
 	struct Message {
 		std::string text;
-		TCODColor col;
+		sf::Color col;
 
-		Message(std::string text = "", const TCODColor& col = TCODColor::white);
+		Message(std::string text = "", sf::Color col = sf::Color::White);
 		~Message();
 
 		template<typename Archive>
 		void serialize(Archive & ar, const unsigned int version) {
 			ar & text;
-			ar & col;
+			// ar & col; // TODO fix serialization
 		}
 	};
 

@@ -2,6 +2,7 @@
 #include "action.hpp"
 #include "actor.hpp"
 #include "attacker.hpp"
+#include "colors.hpp"
 #include "constants.hpp"
 #include "container.hpp"
 #include "destructible.hpp"
@@ -38,7 +39,7 @@ void PlayerAi::increaseXp(int xp, GameplayState* state) {
 	if(experience >= getNextLevelXp()) {
 		experience -= getNextLevelXp();
 		++xpLevel;
-		state->message(TCODColor::yellow, "You've reached level %d!", xpLevel);
+		state->message(colors::yellow, "You've reached level %d!", xpLevel);
 		Engine* engine = state->getEngine();
 		Actor* player = state->getPlayer();
 		State* levelUpMenuState = new LevelUpMenuState(player);
@@ -118,7 +119,7 @@ Action* MonsterAi::getNextAction(Actor* actor) {
 		float distance = sqrtf(dx*dx + dy*dy);
 
 		if(distance >= 2) {
-			state->message(TCODColor::white, "The %s threatens you!", actor->name.c_str());
+			state->message(colors::white, "The %s threatens you!", actor->name.c_str());
 			dx = (int) (round(dx / distance));
 			dy = (int) (round(dy / distance));
 			if(state->canWalk(actor->x + stepDx, actor->y + stepDy)) { // uhh

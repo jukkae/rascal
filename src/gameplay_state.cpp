@@ -31,7 +31,7 @@ void GameplayState::init(Engine* engine) {
 	});
 
 
-	gui.message(TCODColor::green, "Welcome to year 20XXAD, you strange rascal!\nPrepare to fight or die!");
+	gui.message(sf::Color::Green, "Welcome to year 20XXAD, you strange rascal!\nPrepare to fight or die!");
 }
 
 void GameplayState::initLoaded(Engine* engine) {
@@ -156,7 +156,7 @@ Actor* GameplayState::getLiveActor(int x, int y) const {
 	return nullptr;
 }
 
-void GameplayState::message(const TCODColor& col, std::string text, ...) {
+void GameplayState::message(sf::Color col, std::string text, ...) {
 	va_list args;
 	va_start(args, text);
 	gui.message(col, text, args);
@@ -165,9 +165,9 @@ void GameplayState::message(const TCODColor& col, std::string text, ...) {
 
 void GameplayState::nextLevel() {
 	++level;
-	gui.message(TCODColor::lightViolet,"You take a moment to rest, and recover your strength.");
+	gui.message(sf::Color::Magenta, "You take a moment to rest, and recover your strength.");
 	getPlayer()->destructible->heal(getPlayer()->destructible->maxHp/2);
-	gui.message(TCODColor::red,"After a rare moment of peace, you descend\ndeeper into the heart of the dungeon...");
+	gui.message(sf::Color::Red, "After a rare moment of peace, you descend\ndeeper into the heart of the dungeon...");
 
 	// Clunky, not idiomatic
 	auto it = actors.begin();

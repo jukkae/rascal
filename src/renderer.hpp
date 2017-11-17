@@ -4,7 +4,7 @@
 #include "constants.hpp"
 #include "point.hpp"
 #include <SFML/Graphics.hpp>
-//#include "libtcod.hpp"
+
 class GameplayState;
 class Map;
 class Renderer {
@@ -20,7 +20,6 @@ private:
 	int screenHeight;
 	GameplayState* state;
 	sf::Font font;
-	//TCODConsole con;
 
 	void renderMap(const Map* const map, sf::RenderWindow& window);
 	void renderActors(const Map* const map, const std::vector<Actor*>* const actors, sf::RenderWindow& window);

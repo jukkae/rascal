@@ -4,7 +4,6 @@
 #include "state.hpp"
 #include <string>
 #include <vector>
-//#include "libtcod.hpp"
 #include <SFML/Graphics.hpp>
 
 class Engine;

@@ -3,6 +3,7 @@
 #include "engine.hpp"
 #include "gameplay_state.hpp"
 #include "gameover_state.hpp"
+#include "colors.hpp"
 #include <SFML/Graphics/Color.hpp>
 
 Destructible::Destructible(float maxHp, float defense, int xp, std::string corpseName, int armorClass) :
@@ -37,7 +38,7 @@ MonsterDestructible::MonsterDestructible(float maxHp, float defense, int xp, std
 	Destructible(maxHp, defense, xp, corpseName, armorClass) {;}
 
 void MonsterDestructible::die(Actor* owner) {
-	owner->s->message(TCODColor::lightGrey, "%s is dead! You gain %d xp!", owner->name.c_str(), xp);
+	owner->s->message(colors::lightGrey, "%s is dead! You gain %d xp!", owner->name.c_str(), xp);
 	PlayerAi* ai = (PlayerAi*)owner->s->getPlayer()->ai.get();
 	ai->increaseXp(xp, owner->s);
 
@@ -48,7 +49,7 @@ PlayerDestructible::PlayerDestructible(float maxHp, float defense, int xp, std::
 	Destructible(maxHp, defense, xp, corpseName, armorClass) {;}
 
 void PlayerDestructible::die(Actor* owner) {
-	owner->s->message(TCODColor::red, "You died!");
+	owner->s->message(colors::red, "You died!");
 	Destructible::die(owner);
 	Engine* engine = owner->s->getEngine();
 	State* gameOverState = new GameOverState(owner);

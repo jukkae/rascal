@@ -4,6 +4,7 @@
 #include "dice.hpp"
 #include "destructible.hpp"
 #include "gameplay_state.hpp"
+#include "colors.hpp"
 
 Attacker::Attacker(int power) : power(power) {;}
 
@@ -13,17 +14,17 @@ void Attacker::attack(Actor* owner, Actor* target) {
 		if(attackRoll > target->destructible->armorClass) {
 			int dmg = getAttackBaseDamage();
 			if ( dmg - target->destructible->defense > 0 ) {
-				owner->s->message(TCODColor::red, "%s attacks %s for %g hit points.", owner->name.c_str(), target->name.c_str(), dmg - target->destructible->defense);
+				owner->s->message(colors::red, "%s attacks %s for %g hit points.", owner->name.c_str(), target->name.c_str(), dmg - target->destructible->defense);
 			} else {
-				owner->s->message(TCODColor::lightGrey, "%s attacks %s but it has no effect!", owner->name.c_str(), target->name.c_str());
+				owner->s->message(colors::lightGrey, "%s attacks %s but it has no effect!", owner->name.c_str(), target->name.c_str());
 			}
 			target->destructible->takeDamage(target, dmg);
 		} else {
-			owner->s->message(TCODColor::lightGrey, "%s misses %s!", owner->name.c_str(), target->name.c_str());
+			owner->s->message(colors::lightGrey, "%s misses %s!", owner->name.c_str(), target->name.c_str());
 		}
 	}
 	else {
-		owner->s->message(TCODColor::lightGrey, "%s attacks %s in vain.", owner->name.c_str(), target->name.c_str());
+		owner->s->message(colors::lightGrey, "%s attacks %s in vain.", owner->name.c_str(), target->name.c_str());
 	}
 }
 
