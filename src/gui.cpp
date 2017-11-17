@@ -100,8 +100,6 @@ void Gui::renderBar(int x, int y, int width, std::string name, float value, floa
 }
 
 void Gui::renderMouseLook(std::vector<Actor*>* actors, sf::RenderWindow& window) {
-	// TODO mouse look broken
-	/*
 	Point location = state->getWorldCoordsFromScreenCoords(mouse);
 	int x = location.x;
 	int y = location.y;
@@ -124,10 +122,9 @@ void Gui::renderMouseLook(std::vector<Actor*>* actors, sf::RenderWindow& window)
 	std::string string = buf;
 	text.setString(string);
 	text.setCharacterSize(16);
-	text.setColor(lightGrey);
+	text.setFillColor(lightGrey);
 	text.setPosition(1 * constants::CELL_WIDTH, (0 + constants::SCREEN_HEIGHT - constants::GUI_PANEL_HEIGHT) * constants::CELL_HEIGHT);
 	window.draw(text);
-	*/
 }
 
 
