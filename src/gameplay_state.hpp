@@ -28,7 +28,6 @@ public:
 	int getTime() { return time; }
 	bool isInFov(int x, int y) { return map.isInFov(x, y); }
 	Point getWorldCoordsFromScreenCoords(Point& point) { return renderer.getWorldCoordsFromScreenCoords(point); }
-	Point getMouseLocation();
 	void message(sf::Color col, std::string text, ...);
 	void computeFov() { map.computeFov(); }
 	bool isWall(int x, int y) { return map.isWall(x, y); }

@@ -123,10 +123,6 @@ Actor* GameplayState::getStairs() const {
     return nullptr;
 }
 
-Point GameplayState::getMouseLocation() { // TODO reimplement
-	// return inputHandler->getMouseLocation();
-}
-
 bool GameplayState::canWalk(int x, int y) {
 	for(Actor* actor : actors) {
 		if(actor->blocks && actor->x == x && actor->y == y) {
