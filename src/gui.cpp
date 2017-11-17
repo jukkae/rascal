@@ -6,6 +6,7 @@
 #include "map.hpp"
 #include <stdarg.h>
 #include <sstream>
+#include <SFML/Window/Mouse.hpp>
 
 static const int BAR_WIDTH = 20;
 static const int MSG_X = BAR_WIDTH + 2;
@@ -100,7 +101,13 @@ void Gui::renderBar(int x, int y, int width, std::string name, float value, floa
 }
 
 void Gui::renderMouseLook(std::vector<Actor*>* actors, sf::RenderWindow& window) {
-	Point location = state->getWorldCoordsFromScreenCoords(mouse);
+	int xPix = sf::Mouse::getPosition(window).x;
+	int yPix = sf::Mouse::getPosition(window).y;
+	int xCells = xPix / constants::CELL_WIDTH;
+	int yCells = yPix / constants::CELL_HEIGHT;
+	Point screenCells(xCells, yCells);
+
+	Point location = state->getWorldCoordsFromScreenCoords(screenCells);
 	int x = location.x;
 	int y = location.y;
 
