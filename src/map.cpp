@@ -3,6 +3,7 @@
 #include <limits>
 #include "actor.hpp"
 #include "attacker.hpp"
+#include "colors.hpp"
 #include "constants.hpp"
 #include "destructible.hpp"
 #include "dice.hpp"
@@ -107,24 +108,23 @@ std::vector<Rect> Map::breakRooms(Rect area, BreakDirection direction) {
 	}
 }
 
-// TODO COLORS
 Actor* Map::makeMonster(int x, int y) {
 	int r = d100();
 	if(r < 70) {
-		Actor* punk = new Actor(x, y, 'h', "punk", sf::Color(64, 128, 64), 1); // TODO
+		Actor* punk = new Actor(x, y, 'h', "punk", colors::desaturatedGreen, 1);
 		punk->destructible = std::make_unique<MonsterDestructible>(10, 0, 50, "dead punk", 13);
 		punk->attacker = std::make_unique<Attacker>(3);
 		punk->ai = std::make_unique<MonsterAi>();
 		return punk;
 	} else if (r < 80) {
-		Actor* fighter = new Actor(x, y, 'H', "fighter", sf::Color(0, 128, 0), 1); // TODO
+		Actor* fighter = new Actor(x, y, 'H', "fighter", colors::darkGreen, 1);
 		fighter->destructible = std::make_unique<MonsterDestructible>(16, 1, 100, "fighter carcass", 15);
 		fighter->attacker = std::make_unique<Attacker>(4);
 		fighter->ai = std::make_unique<MonsterAi>();
 		return fighter;
 	}
 	else {
-		Actor* boxer = new Actor(x, y, 'H', "boxer", sf::Color(0, 64, 0), 1); // TODO
+		Actor* boxer = new Actor(x, y, 'H', "boxer", colors::darkerGreen, 1);
 		boxer->destructible = std::make_unique<MonsterDestructible>(4, 1, 70, "boxer carcass", 16);
 		boxer->attacker = std::make_unique<Attacker>(4);
 		boxer->ai = std::make_unique<MonsterAi>();
