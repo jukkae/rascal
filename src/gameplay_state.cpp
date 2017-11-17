@@ -202,7 +202,7 @@ bool GameplayState::pickTile(int* x, int* y, float maxRange) {
 				if(isInFov(realX, realY) && (maxRange == 0 || getPlayer()->getDistance(realX, realY) <= maxRange)) {
 					TCODColor col = TCODConsole::root->getCharBackground(cx, cy);
 					col = col * 1.2;
-					//TCODConsole::root->setCharBackground(cx, cy, col);
+					TCODConsole::root->setCharBackground(cx, cy, col);
 				}
 			}
 		}
@@ -224,7 +224,6 @@ bool GameplayState::pickTile(int* x, int* y, float maxRange) {
 			inputHandler->mouseRightClicked = false;
 			return false;
 		}
-		//TCODConsole::flush();
 	}*/
 	return false;
 }

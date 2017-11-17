@@ -3,8 +3,8 @@
 #include "ai.hpp"
 #include "constants.hpp"
 #include "main_menu_state.hpp"
-#include "libtcod.hpp"
 #include <iostream>
+#include <sys/stat.h>
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
@@ -23,9 +23,10 @@ GameOverState::GameOverState(Actor* actor) :
 
 		description = "you died at level ";
 		description.append(std::to_string(((PlayerAi*)actor->ai.get())->xpLevel));
-		//if(TCODSystem::fileExists(constants::SAVE_FILE_NAME.c_str())) { // TODO feels nasty doing this in ctor
-			//TCODSystem::deleteFile(constants::SAVE_FILE_NAME.c_str());
-		//}
+		struct stat buffer;
+		if(stat (constants::SAVE_FILE_NAME.c_str(), &buffer) == 0) {
+			// TODO delete
+		}
 	}
 
 void GameOverState::init(Engine* engine) {

@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <limits>
+#include <sys/stat.h>
 #include "ai.hpp"
 #include "constants.hpp"
 #include "container.hpp"
@@ -19,7 +20,8 @@ Engine::~Engine() {
 }
 
 void Engine::init() {
-	if(!TCODSystem::fileExists(constants::SAVE_FILE_NAME.c_str())) {
+	struct stat buffer;
+	if(stat (constants::SAVE_FILE_NAME.c_str(), &buffer) != 0) { // If file doesn't exist
 		gameplayState = new GameplayState();
 		gameplayState->init(this);
 	}
@@ -36,7 +38,7 @@ void Engine::init() {
 }
 
 void Engine::newGame() { // kinda bad
-	//if(TCODSystem::fileExists(constants::SAVE_FILE_NAME.c_str())) TCODSystem::deleteFile(constants::SAVE_FILE_NAME.c_str());
+	// TODO delete file if it exists
 	init();
 }
 
