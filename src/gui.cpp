@@ -64,7 +64,7 @@ void Gui::renderMessageLog(sf::RenderWindow& window) {
 	float colCoef = 0.4f;
 	for(Message msg : log) {
 		sf::Text text(msg.text, font, 16);
-		text.setFillColor(msg.col); // msg.col * colCoef
+		text.setFillColor(msg.col); //TODO  msg.col * colCoef
 		text.setPosition(MSG_X * constants::CELL_WIDTH, (y + constants::SCREEN_HEIGHT - constants::GUI_PANEL_HEIGHT) * constants::CELL_HEIGHT); // correct position
 		window.draw(text);
 		++y;
