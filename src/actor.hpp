@@ -1,7 +1,6 @@
 #ifndef ACTOR_HPP
 #define ACTOR_HPP
 
-#include "libtcod.hpp"
 #include <string>
 #include <queue>
 #include <boost/optional.hpp>

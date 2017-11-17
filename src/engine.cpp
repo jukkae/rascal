@@ -1,6 +1,5 @@
 #include <algorithm>
 #include <limits>
-//#include "libtcod.hpp"
 #include "ai.hpp"
 #include "constants.hpp"
 #include "container.hpp"
@@ -13,7 +12,6 @@
 
 
 Engine::Engine() {
-	//TCODConsole::initRoot(constants::SCREEN_WIDTH, constants::SCREEN_HEIGHT, "Rascal", false);
 	init();
 }
 

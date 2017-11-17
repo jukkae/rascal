@@ -4,18 +4,18 @@
 #include <boost/serialization/unique_ptr.hpp>
 #include <boost/serialization/shared_ptr.hpp>
 #include <boost/serialization/utility.hpp>
-#include "libtcod.hpp"
+#include <SFML/Graphics.hpp>
 
-// Non-intrusive serializations for TCOD classes
 template<class Archive>
 inline void serialize (
-    Archive & ar,
-    TCODColor & t,
-    const unsigned int file_version
+	Archive & ar,
+	sf::Color & c,
+	const unsigned int file_version
 ) {
-	ar & t.r;
-	ar & t.g;
-	ar & t.b;
+	ar & c.r;
+	ar & c.g;
+	ar & c.b;
+	ar & c.a;
 }
 
 #endif /* PERSISTENT_HPP */

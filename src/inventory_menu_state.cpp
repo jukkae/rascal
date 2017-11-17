@@ -61,8 +61,6 @@ void InventoryMenuState::update(Engine* engine, sf::RenderWindow& window) {
 
 void InventoryMenuState::render(Engine* engine, sf::RenderWindow& window) {
 	window.clear(sf::Color::Black);
-	//console.setDefaultForeground(TCODColor(200,180,50));
-	//console.printFrame(0, 0, constants::INVENTORY_WIDTH, constants::INVENTORY_HEIGHT, true, TCOD_BKGND_DEFAULT, "inventory");
 
 	int y = 1;
 	int itemIndex = 0;
@@ -76,7 +74,5 @@ void InventoryMenuState::render(Engine* engine, sf::RenderWindow& window) {
 		++itemIndex;
 	}
 
-	//TCODConsole::blit(&console, 0, 0, constants::INVENTORY_WIDTH, constants::INVENTORY_HEIGHT, TCODConsole::root, constants::SCREEN_WIDTH/2 - constants::INVENTORY_WIDTH/2, constants::SCREEN_HEIGHT/2 - constants::INVENTORY_HEIGHT/2);
-	//TCODConsole::flush();
 	window.display();
 }
