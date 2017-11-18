@@ -18,10 +18,11 @@ void MainMenuState::init(Engine* engine) {
 	MenuItem newGame = { MenuItemCode::NEW_GAME, "New game!" };
 	MenuItem cont = { MenuItemCode::CONTINUE, "Continue!" };
 	MenuItem exit = { MenuItemCode::EXIT, "Exit!" };
+
 	menuItems.push_back(newGame);
 
-	struct stat buffer;
-	if(stat (constants::SAVE_FILE_NAME.c_str(), &buffer) == 0) { // If file exists TODO bug
+	struct stat buf;
+	if(stat (constants::SAVE_FILE_NAME.c_str(), &buf) == 0) { // If file exists TODO bug
 		menuItems.push_back(cont);
 	}
 

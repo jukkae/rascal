@@ -7,6 +7,7 @@
 #include "container.hpp"
 #include "destructible.hpp"
 #include "engine.hpp"
+#include "font.hpp"
 #include "pickable.hpp"
 #include "state.hpp"
 #include "gameplay_state.hpp"
@@ -21,6 +22,7 @@ Engine::~Engine() {
 }
 
 void Engine::init() {
+	font::initialize();
 	struct stat buffer;
 	if(stat (constants::SAVE_FILE_NAME.c_str(), &buffer) != 0) { // If file doesn't exist
 		gameplayState = new GameplayState();
