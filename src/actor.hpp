@@ -48,7 +48,7 @@ public:
 	float getDistance(int cx, int cy) const;
 	bool isPlayer() { return ai ? this->ai->isPlayer() : false; }
 	bool isStairs() { return stairs; } // Bod, but better than what I had before
-	void addAction(Action* action) { actionsQueue.push_back(action); }
+	void addAction(std::unique_ptr<Action> action) { actionsQueue.push_back(std::move(action)); }
 	std::vector<Actor*>* getActors(); // temporary for refactoring
 	Actor* getPlayer(); // temporary for refactoring
 	Actor* getClosestMonster(int x, int y, float range);
@@ -57,7 +57,7 @@ public:
 	void modifyStatistic(Statistic stat, float delta);
 
 private:
-	std::deque<Action*> actionsQueue;
+	std::deque<std::unique_ptr<Action>> actionsQueue;
 
 	friend class boost::serialization::access;                                                                
     template<class Archive>                                                                                   

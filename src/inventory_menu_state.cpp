@@ -41,7 +41,7 @@ void InventoryMenuState::handleEvents(Engine* engine) {
 					break;
 				case k::U:
 					if(inventoryContents.size() > 0) {
-						actor->addAction(new UseItemAction(actor, inventoryContents.at(selectedItem)));
+						actor->addAction(std::make_unique<UseItemAction>(UseItemAction(actor, inventoryContents.at(selectedItem))));
 						engine->addEngineCommand(ContinueCommand(engine));
 					}
 					break;

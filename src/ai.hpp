@@ -18,7 +18,7 @@ public:
 	virtual ~Ai() {};
 	float speed;
 	bool isPlayer() { return faction == Faction::PLAYER; }
-	virtual Action* getNextAction(Actor* actor) { return new WaitAction(actor); }
+	virtual std::unique_ptr<Action> getNextAction(Actor* actor) { return std::make_unique<WaitAction>(WaitAction(actor)); }
 	Faction faction;
 private:
 	friend class boost::serialization::access;
@@ -36,7 +36,7 @@ public:
 	int getNextLevelXp() const;
 	int xpLevel;
 	int experience;
-	Action* getNextAction(Actor* actor) override;
+	std::unique_ptr<Action> getNextAction(Actor* actor) override;
 	void increaseXp(int xp, GameplayState* state); // TODO yes, this is bad and I should feel bad
 private:
 	void handleActionKey(Actor* owner, int ascii, GameplayState* state);
@@ -54,7 +54,7 @@ public:
 	MonsterAi() : Ai(140, Faction::ENEMY), moveCount(0) {;}
 	MonsterAi(float speed) : Ai(speed) {;}
 
-	Action* getNextAction(Actor* actor) override;
+	std::unique_ptr<Action> getNextAction(Actor* actor) override;
 protected:
 	int moveCount;
 	void moveOrAttack(Actor* owner, GameplayState* state, int targetX, int targetY);
@@ -72,7 +72,7 @@ public:
 	TemporaryAi(int turns = 0) : turns(turns) {;}
 	void applyTo(Actor* actor);
 
-	virtual Action* getNextAction(Actor* actor) override = 0;
+	virtual std::unique_ptr<Action> getNextAction(Actor* actor) override = 0;
 protected:
 	int turns;
 	std::unique_ptr<Ai> oldAi;
@@ -92,7 +92,7 @@ class ConfusedMonsterAi : public TemporaryAi {
 public:
 	ConfusedMonsterAi(int turns = 0) : TemporaryAi(turns) {;}
 
-	Action* getNextAction(Actor* actor) override;
+	std::unique_ptr<Action> getNextAction(Actor* actor) override;
 private:
 	friend class boost::serialization::access;
 	template<class Archive>
