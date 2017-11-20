@@ -128,12 +128,14 @@ bool Pickable::use(Actor* owner, Actor* wearer) {
 
 void Pickable::drop(std::unique_ptr<Actor> owner, Actor* wearer) {
 	if(wearer->container) {
+		std::cout << "1: " << wearer->container->inventory.size() << "\n";
 		std::string ownerName = owner->name;
 		wearer->container->remove(owner.get());
 		owner->x = wearer->x;
 		owner->y = wearer->y;
 		wearer->s->addActor(std::move(owner));
 		wearer->s->message(colors::lightGrey, "%s drops a %s.", wearer->name.c_str(), ownerName.c_str());
+		std::cout << "2: " << wearer->container->inventory.size() << "\n";
 	}
 }
 

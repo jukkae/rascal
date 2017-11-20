@@ -34,6 +34,7 @@ void InventoryMenuState::handleEvents(Engine* engine) {
 				case k::D:
 					if(inventoryContents.size() > 0) {
 						std::unique_ptr<Actor> item = std::move(actor->container->inventory.at(selectedItem));
+						actor->container->inventory.erase(actor->container->inventory.begin() + selectedItem); // TODO ugh
 						inventoryContents.at(selectedItem)->pickable->drop(std::move(item), actor);
 						//inventoryContents.at(selectedItem)->pickable->drop(inventoryContents.at((selectedItem)), actor);
 						engine->addEngineCommand(ContinueCommand(engine));
