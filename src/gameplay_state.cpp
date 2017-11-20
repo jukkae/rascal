@@ -77,19 +77,19 @@ void GameplayState::render(Engine* engine, sf::RenderWindow& window) {
 }
 
 void GameplayState::updateNextActor() {
-	std::unique_ptr<Actor> activeActor = std::move(actors.front());
+	Actor* activeActor = getNextActor();
 
     float actionTime = activeActor->update(this);
     *activeActor->energy -= actionTime;
 
-    actors.erase(actors.begin());
+    /*actors.erase(actors.begin());
     auto it = std::lower_bound(actors.begin(), actors.end(), activeActor, [](const auto& lhs, const auto& rhs) { return lhs->energy > rhs->energy; });
-    actors.insert(it, std::move(activeActor));
+    actors.insert(it, std::move(activeActor));*/
 
-    /*std::sort(actors.begin(), actors.end(), [](const auto& lhs, const auto& rhs)
+    std::sort(actors.begin(), actors.end(), [](const auto& lhs, const auto& rhs)
     {
         return lhs->energy > rhs->energy;
-    });*/
+    });
 	updateTime();
 }
 
