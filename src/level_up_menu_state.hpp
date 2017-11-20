@@ -28,7 +28,6 @@ private:
 	void handleItem(MenuItem item);
 
 	Actor* actor;
-	sf::Font font;
 
 	std::vector<MenuItem> menuContents;
 	int selectedItem;

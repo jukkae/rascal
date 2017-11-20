@@ -19,7 +19,6 @@ private:
 	int screenWidth;
 	int screenHeight;
 	GameplayState* state;
-	sf::Font font;
 
 	void renderMap(const Map* const map, sf::RenderWindow& window);
 	void renderActors(const Map* const map, const std::vector<std::unique_ptr<Actor>>& actors, sf::RenderWindow& window);

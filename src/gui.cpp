@@ -1,6 +1,7 @@
 #include "ai.hpp"
 #include "constants.hpp"
 #include "destructible.hpp"
+#include "font.hpp"
 #include "gameplay_state.hpp"
 #include "gui.hpp"
 #include "map.hpp"
@@ -19,11 +20,6 @@ static const sf::Color darkerViolet(64, 0, 128);
 static const sf::Color lightGrey(159, 159, 159);
 
 Gui::Gui() {
-	if(!font.loadFromFile("assets/FSEX300.ttf")) {
-		std::cout << "error loading font\n";
-	} else std::cout << "font loaded!\n";
-	std::cout << font.getInfo().family << "\n";
-
 }
 
 Gui::~Gui() {}
@@ -38,13 +34,13 @@ void Gui::render(sf::RenderWindow& window) {
 	renderBar(1, 1, BAR_WIDTH, "HP", state->getPlayer()->destructible->hp, state->getPlayer()->destructible->maxHp, lightRed, darkerRed, window);
 
 	std::string dungeonLvlString = "Dungeon level " + std::to_string(state->getLevel());
-	sf::Text dlvl(dungeonLvlString, font, 16);
+	sf::Text dlvl(dungeonLvlString, font::mainFont, 16);
 	dlvl.setPosition(3*constants::CELL_WIDTH, (3+constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT)*constants::CELL_HEIGHT);
 	dlvl.setFillColor(sf::Color::White);
 	window.draw(dlvl);
 
 	std::string timeString = "Time: " + std::to_string(state->getTime());
-	sf::Text time(timeString, font, 16);
+	sf::Text time(timeString, font::mainFont, 16);
 	time.setPosition(3*constants::CELL_WIDTH, (4+constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT)*constants::CELL_HEIGHT);
 	time.setFillColor(sf::Color::White);
 	window.draw(time);
@@ -64,7 +60,7 @@ void Gui::renderMessageLog(sf::RenderWindow& window) {
 	int y = 1;
 	float colCoef = 0.4f;
 	for(Message msg : log) {
-		sf::Text text(msg.text, font, 16);
+		sf::Text text(msg.text, font::mainFont, 16);
 		text.setFillColor(msg.col); //TODO  msg.col * colCoef
 		text.setPosition(MSG_X * constants::CELL_WIDTH, (y + constants::SCREEN_HEIGHT - constants::GUI_PANEL_HEIGHT) * constants::CELL_HEIGHT); // correct position
 		window.draw(text);
@@ -91,7 +87,7 @@ void Gui::renderBar(int x, int y, int width, std::string name, float value, floa
 		window.draw(rect);
 	}
 	sf::Text text;
-	text.setFont(font);
+	text.setFont(font::mainFont);
 	std::string string = name + " : " + std::to_string((int)value) + "/" + std::to_string((int)maxValue);
 	text.setString(string);
 	text.setCharacterSize(16);
@@ -125,7 +121,7 @@ void Gui::renderMouseLook(std::vector<std::unique_ptr<Actor>>& actors, sf::Rende
 		}
 	}
 	sf::Text text;
-	text.setFont(font);
+	text.setFont(font::mainFont);
 	std::string string = buf;
 	text.setString(string);
 	text.setCharacterSize(16);

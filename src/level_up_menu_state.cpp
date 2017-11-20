@@ -6,13 +6,11 @@
 #include "ai.hpp"
 #include "colors.hpp"
 #include "constants.hpp"
+#include "font.hpp"
 #include <SFML/System.hpp>
 #include <SFML/Window.hpp>
 
 LevelUpMenuState::LevelUpMenuState(Actor* actor) : actor(actor) {
-	if(!font.loadFromFile("assets/FSEX300.ttf")) {
-		std::cout << "error loading font\n";
-	} else std::cout << "font loaded!\n";
 }
 
 void LevelUpMenuState::init(Engine* engine) {
@@ -64,7 +62,7 @@ void LevelUpMenuState::render(Engine* engine, sf::RenderWindow& window) {
 	for (auto item : menuContents) {
 		sf::Text text;
 		text.setCharacterSize(16);
-		text.setFont(font);
+		text.setFont(font::mainFont);
 		text.setString(item.label);
 		text.setPosition(2*constants::CELL_WIDTH, y*constants::CELL_HEIGHT);
 		if(itemIndex == selectedItem) text.setFillColor(colors::brightBlue);

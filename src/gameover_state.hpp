@@ -21,7 +21,6 @@ public:
 	void render(Engine* engine, sf::RenderWindow& window) override;
 
 private:
-	sf::Font font;
 	Actor* actor;
 	std::string description;
 };

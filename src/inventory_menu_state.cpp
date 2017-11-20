@@ -4,11 +4,9 @@
 #include "action.hpp"
 #include "actor.hpp"
 #include "colors.hpp"
+#include "font.hpp"
 
 InventoryMenuState::InventoryMenuState(Actor* actor) : actor(actor) {
-	if(!font.loadFromFile("assets/FSEX300.ttf")) {
-		std::cout << "error loading font\n";
-	} else std::cout << "font loaded!\n";
 }
 
 void InventoryMenuState::init(Engine* engine) {
@@ -63,7 +61,7 @@ void InventoryMenuState::render(Engine* engine, sf::RenderWindow& window) {
 	int y = 1;
 	int itemIndex = 0;
 	for (auto item : inventoryContents) {
-		sf::Text text(item->name, font, 16);
+		sf::Text text(item->name, font::mainFont, 16);
 		text.setPosition(2*constants::CELL_WIDTH, y*constants::CELL_HEIGHT);
 		if(itemIndex == selectedItem) text.setFillColor(colors::brightBlue);
 		else text.setFillColor(colors::darkBlue);

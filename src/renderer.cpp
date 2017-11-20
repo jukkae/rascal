@@ -1,3 +1,4 @@
+#include "font.hpp"
 #include "gameplay_state.hpp"
 #include "renderer.hpp"
 #include "map.hpp"
@@ -10,11 +11,6 @@ static const sf::Color lightGround(200, 210, 200);
 static const sf::Color black      (0,   0,   0  );
 
 Renderer::Renderer(int screenWidth, int screenHeight): screenWidth(screenWidth), screenHeight(screenHeight) {
-	if(!font.loadFromFile("assets/FSEX300.ttf")) {
-		std::cout << "error loading font\n";
-	} else std::cout << "font loaded!\n";
-	std::cout << font.getInfo().family << "\n";
-
 }
 
 void Renderer::render(const Map* const map, const std::vector<std::unique_ptr<Actor>>& actors, sf::RenderWindow& window) {
@@ -113,7 +109,7 @@ void Renderer::renderActor(const Actor* const actor, sf::RenderWindow& window) {
 	int x = screenPosition.x;
 	int y = screenPosition.y;
 
-	sf::Text t((char)actor->ch, font, 16);
+	sf::Text t((char)actor->ch, font::mainFont, 16);
 	t.setPosition(x*constants::CELL_WIDTH, y*constants::CELL_HEIGHT);
 	t.setFillColor(actor->col);
 	window.draw(t);

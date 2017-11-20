@@ -3,6 +3,7 @@
 #include "ai.hpp"
 #include "colors.hpp"
 #include "constants.hpp"
+#include "font.hpp"
 #include "main_menu_state.hpp"
 #include <iostream>
 #include <sys/stat.h>
@@ -15,10 +16,6 @@
 GameOverState::GameOverState(Actor* actor) :
 	actor(actor)
 	{
-		if(!font.loadFromFile("assets/FSEX300.ttf")) {
-			std::cout << "error loading font\n";
-		} else std::cout << "font loaded!\n";
-
 		description = "you died at level ";
 		description.append(std::to_string(((PlayerAi*)actor->ai.get())->xpLevel));
 		struct stat buffer;
@@ -58,7 +55,7 @@ void GameOverState::update(Engine* engine, sf::RenderWindow& window) {
 
 void GameOverState::render(Engine* engine, sf::RenderWindow& window) {
 	window.clear(sf::Color::Black);
-	sf::Text text(description, font, 16);
+	sf::Text text(description, font::mainFont, 16);
 	text.setFillColor(colors::brightBlue);
 	window.draw(text);
 	window.display();

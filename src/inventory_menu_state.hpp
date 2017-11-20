@@ -18,7 +18,6 @@ public:
 	void render(Engine* engine, sf::RenderWindow& window) override;
 private:
 	Actor* actor;
-	sf::Font font;
 
 	std::vector<Actor*> inventoryContents;
 	int selectedItem;
