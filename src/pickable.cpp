@@ -120,16 +120,16 @@ bool Pickable::use(Actor* owner, Actor* wearer) {
 		if(wearer->container) {
 			wearer->container->remove(owner);
 			owner = 0; // let's make sure we don't delete an already-deleted pointer
-			delete owner;
+			delete owner; // TODO uh oh
 		}
 	}
 	return success;
 }
 
-void Pickable::drop(Actor* owner, Actor* wearer) {
+void Pickable::drop(std::unique_ptr<Actor> owner, Actor* wearer) {
 	if(wearer->container) {
-		wearer->container->remove(owner);
-		//wearer->getActors().push_back(owner); // TODO
+		wearer->container->remove(owner.get());
+		wearer->s->addActor(std::move(owner)); // TODO
 		owner->x = wearer->x;
 		owner->y = wearer->y;
 		wearer->s->message(colors::lightGrey, "%s drops a %s.", wearer->name.c_str(), owner->name.c_str());
