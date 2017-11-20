@@ -17,7 +17,7 @@ Renderer::Renderer(int screenWidth, int screenHeight): screenWidth(screenWidth),
 
 }
 
-void Renderer::render(const Map* const map, const std::vector<Actor*>* const actors, sf::RenderWindow& window) {
+void Renderer::render(const Map* const map, const std::vector<std::unique_ptr<Actor>>& actors, sf::RenderWindow& window) {
 	//window.clear(sf::Color::Black);
 
 	renderMap(map, window);
@@ -59,7 +59,7 @@ void Renderer::renderMap(const Map* const map, sf::RenderWindow& window) {
 	}
 }
 
-void Renderer::renderActors(const Map* const map, const std::vector<Actor*>* const actors, sf::RenderWindow& window) {
+void Renderer::renderActors(const Map* const map, const std::vector<std::unique_ptr<Actor>>& actors, sf::RenderWindow& window) {
 	// Crude implementation of render layers
 	Actor* player;
 	std::vector<Actor*> corpses;
@@ -67,31 +67,31 @@ void Renderer::renderActors(const Map* const map, const std::vector<Actor*>* con
 	std::vector<Actor*> pickables;
 	std::vector<Actor*> live;
 
-	for(Actor* actor : *actors) {
+	for(auto& actor : actors) {
 		if(!actor->isPlayer()) {
-			if(actor->destructible && actor->destructible->isDead()) corpses.push_back(actor);
-			else if(actor->pickable) pickables.push_back(actor);
-			else if(actor->ai) live.push_back(actor);
-			else misc.push_back(actor);
-		} else player = actor;
+			if(actor->destructible && actor->destructible->isDead()) corpses.push_back(actor.get());
+			else if(actor->pickable) pickables.push_back(actor.get());
+			else if(actor->ai) live.push_back(actor.get());
+			else misc.push_back(actor.get());
+		} else player = actor.get();
 	}
 
-	for(Actor* actor : corpses) {
+	for(auto& actor : corpses) {
 		if((!actor->fovOnly && map->isExplored(actor->x, actor->y)) || map->isInFov(actor->x, actor->y)) {
 			renderActor(actor, window);
 		}
 	}
-	for(Actor* actor : misc) {
+	for(auto& actor : misc) {
 		if((!actor->fovOnly && map->isExplored(actor->x, actor->y)) || map->isInFov(actor->x, actor->y)) {
 			renderActor(actor, window);
 		}
 	}
-	for(Actor* actor : pickables) {
+	for(auto& actor : pickables) {
 		if((!actor->fovOnly && map->isExplored(actor->x, actor->y)) || map->isInFov(actor->x, actor->y)) {
 			renderActor(actor, window);
 		}
 	}
-	for(Actor* actor : live) {
+	for(auto& actor : live) {
 		if((!actor->fovOnly && map->isExplored(actor->x, actor->y)) || map->isInFov(actor->x, actor->y)) {
 			renderActor(actor, window);
 		}

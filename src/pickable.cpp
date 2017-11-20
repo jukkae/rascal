@@ -36,9 +36,9 @@ void TargetSelector::selectTargets(Actor* wearer, std::vector<Actor*>& list) {
 		} break;
 		case SelectorType::WEARER_RANGE :
 		{
-			for(Actor* actor : *wearer->getActors()) {
-				if(actor != wearer && actor->destructible && !actor->destructible->isDead() && actor->getDistance(wearer->x, wearer->y) <= range) {
-					list.push_back(actor);
+			for(auto& actor : wearer->getActors()) {
+				if(actor.get() != wearer && actor->destructible && !actor->destructible->isDead() && actor->getDistance(wearer->x, wearer->y) <= range) {
+					list.push_back(actor.get());
 				}
 			}
 		} break;
@@ -47,9 +47,9 @@ void TargetSelector::selectTargets(Actor* wearer, std::vector<Actor*>& list) {
 			int x, y;
 			wearer->s->message(colors::cyan, "Left-click to select a tile,\nor right-click to cancel.");
 			if(wearer->s->pickTile(&x, &y)) {
-				for(Actor* actor : *wearer->getActors()) {
+				for(auto& actor : wearer->getActors()) {
 					if(actor->destructible && !actor->destructible->isDead() && actor->getDistance(x, y) <= range ) {
-						list.push_back(actor);
+						list.push_back(actor.get());
 					}
 				}
 			}
@@ -91,8 +91,14 @@ Pickable::Pickable(TargetSelector selector, std::unique_ptr<Effect> effect) : se
 // owner is the Actor that this Pickable belongs to,
 // wearer is the Actor that has this Pickable in inventory.
 bool Pickable::pick(Actor* owner, Actor* wearer) {
-	if(wearer->container && wearer->container->add(owner)) {
-		wearer->getActors()->erase(std::remove(wearer->getActors()->begin(), wearer->getActors()->end(), owner), wearer->getActors()->end());
+	if(wearer->container && wearer->container->add(owner)) { // Shouldn't go erasing from someone else's unique_ptrs
+		wearer->getActors().erase(
+			std::remove_if(
+				wearer->getActors().begin(), 
+				wearer->getActors().end(), 
+				[&](auto const & p) { return p.get() == owner; }
+			),
+		wearer->getActors().end());
 		return true;
 	}
 	return false;
@@ -121,7 +127,7 @@ bool Pickable::use(Actor* owner, Actor* wearer) {
 void Pickable::drop(Actor* owner, Actor* wearer) {
 	if(wearer->container) {
 		wearer->container->remove(owner);
-		wearer->getActors()->push_back(owner);
+		//wearer->getActors().push_back(owner); // TODO
 		owner->x = wearer->x;
 		owner->y = wearer->y;
 		wearer->s->message(colors::lightGrey, "%s drops a %s.", wearer->name.c_str(), owner->name.c_str());

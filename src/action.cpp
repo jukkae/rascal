@@ -25,14 +25,14 @@ bool MoveAction::execute() {
 	if (state->isWall(targetX, targetY)) return false;
 
 	// look for living actors to attack
-	for (Actor* a : *actor->getActors()) {
+	for (auto& a : actor->getActors()) {
 		if (a->destructible && !a->destructible->isDead() && a->x == targetX && a->y == targetY) {
-			actor->attacker->attack(actor, a);
+			actor->attacker->attack(actor, a.get());
 			return true;
 		}
 	}
 	// look for corpses or items
-	for (Actor* a : *actor->getActors()) {
+	for (auto& a : actor->getActors()) {
 		bool corpseOrItem = (a->destructible && a->destructible->isDead()) || a->pickable;
 		if(corpseOrItem && a->x == targetX && a->y == targetY) {
 			state->message(colors::lightGrey, "There's a %s here!", a->name.c_str());
@@ -63,9 +63,9 @@ bool TraverseStairsAction::execute() {
 
 bool PickupAction::execute() {
 	bool found = false;
-	for(Actor* a : *actor->getActors()) {
+	for(auto& a : actor->getActors()) {
 		if(a->pickable && a->x == actor->x && a->y == actor->y) {
-			if(a->pickable->pick(a, actor)) {
+			if(a->pickable->pick(a.get(), actor)) {
 				found = true;
 				actor->s->message(colors::green, "You pick up the %s.", a->name.c_str());
 				return true;

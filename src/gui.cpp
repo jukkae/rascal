@@ -100,7 +100,7 @@ void Gui::renderBar(int x, int y, int width, std::string name, float value, floa
 	window.draw(text);
 }
 
-void Gui::renderMouseLook(std::vector<Actor*>* actors, sf::RenderWindow& window) {
+void Gui::renderMouseLook(std::vector<std::unique_ptr<Actor>>& actors, sf::RenderWindow& window) {
 	int xPix = sf::Mouse::getPosition(window).x;
 	int yPix = sf::Mouse::getPosition(window).y;
 	int xCells = xPix / constants::CELL_WIDTH;
@@ -116,7 +116,7 @@ void Gui::renderMouseLook(std::vector<Actor*>* actors, sf::RenderWindow& window)
 	}
 	std::string buf = "";
 	bool first = true;
-	for(Actor* actor : *actors) {
+	for(auto& actor : actors) {
 		if(actor->x == x && actor->y == y) {
 			if(!first) {
 				buf += ", ";

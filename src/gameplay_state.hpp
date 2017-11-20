@@ -34,21 +34,21 @@ public:
 	bool canWalk(int x, int y);
 	Engine* getEngine() { return e; }
 
-	Actor* getNextActor() const { return actors.front(); }
+	Actor* getNextActor() const { return actors.front().get(); }
 	Actor* getPlayer() const;
 	Actor* getStairs() const;
 	Actor* getClosestMonster(int x, int y, float range) const;
 	Actor* getLiveActor(int x, int y) const;
-	std::vector<Actor*>* getActors() { return &actors; } // TODO ultimately get rid of pointers
+	std::vector<std::unique_ptr<Actor>>& getActors() { return actors; }
 
-	void addActor(Actor* actor) { actors.push_back(actor); }
+	void addActor(std::unique_ptr<Actor> actor) { actors.push_back(std::move(actor)); }
 
 	bool pickTile(int* x, int* y, float maxRange = 0.0f);
 private:
 	Engine* e; // TODO
 	int time = 0;
 	int level = 1;
-	std::vector<Actor*> actors;
+	std::vector<std::unique_ptr<Actor>> actors;
 	Map map;
 	Gui gui;
 	Renderer renderer;

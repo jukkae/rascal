@@ -49,7 +49,7 @@ public:
 	bool isPlayer() { return ai ? this->ai->isPlayer() : false; }
 	bool isStairs() { return stairs; } // Bod, but better than what I had before
 	void addAction(std::unique_ptr<Action> action) { actionsQueue.push_back(std::move(action)); }
-	std::vector<Actor*>* getActors(); // temporary for refactoring
+	std::vector<std::unique_ptr<Actor>>& getActors(); // temporary for refactoring
 	Actor* getPlayer(); // temporary for refactoring
 	Actor* getClosestMonster(int x, int y, float range);
 	Actor* getLiveActor(int x, int y);

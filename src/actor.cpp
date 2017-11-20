@@ -40,11 +40,14 @@ float Actor::getDistance(int cx, int cy) const {
 	return sqrtf(dx*dx + dy*dy);
 }
 
-std::vector<Actor*>* Actor::getActors() { return s->getActors(); }
+std::vector<std::unique_ptr<Actor>>& Actor::getActors() {
+	return s->getActors();
+}
+
 
 Actor* Actor::getPlayer() {
-	for(auto a : *getActors()) {
-		if(a->isPlayer()) return a;
+	for(auto& a : getActors()) {
+		if(a->isPlayer()) return a.get();
 	}
 	return nullptr;
 }

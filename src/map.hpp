@@ -86,8 +86,8 @@ protected:
 
 private:
 	GameplayState* state;
-	Actor* makeMonster(int x, int y);
-	Actor* makeItem(int x, int y);
+	std::unique_ptr<Actor> makeMonster(int x, int y);
+	std::unique_ptr<Actor> makeItem(int x, int y);
 
 	friend class boost::serialization::access;
 	template<class Archive>

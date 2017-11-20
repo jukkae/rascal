@@ -9,23 +9,23 @@ void GameplayState::init(Engine* engine) {
 	gui.setState(this);
 	renderer.setState(this);
 
-	Actor* player        = new Actor(40, 25, '@', "you", sf::Color::White, 2); // TODO
+	std::unique_ptr<Actor> player = std::make_unique<Actor>(40, 25, '@', "you", sf::Color::White, 2);
 	player->destructible = std::make_unique<PlayerDestructible>(100, 2, 0, "your corpse", 11);
 	player->attacker     = std::make_unique<Attacker>(5);
 	player->ai           = std::make_unique<PlayerAi>();
 	player->container    = std::make_unique<Container>(26);
-	actors.push_back(player);
+	actors.push_back(std::move(player));
 
-	Actor* stairs = new Actor(1, 1, '>', "stairs", sf::Color::White, 0, true);
+	std::unique_ptr<Actor> stairs = std::make_unique<Actor>(1, 1, '>', "stairs", sf::Color::White, 0, true);
     stairs->blocks = false;
     stairs->fovOnly = false;
-    actors.push_back(stairs);
+    actors.push_back(std::move(stairs));
 
 	map = Map(120, 72);
 	map.setState(this);
 	map.init(true);
 	// not really the correct place for following, but w/e
-	for (auto a : actors) a->setState(this);
+	for (auto& a : actors) a->setState(this);
 	std::sort(actors.begin(), actors.end(), [](const auto& lhs, const auto& rhs)
 	{
 		return lhs->energy > rhs->energy;
@@ -41,7 +41,7 @@ void GameplayState::initLoaded(Engine* engine) {
 	renderer.setState(this);
 	map.setState(this);
 	map.init(false);
-	for (auto a : actors) a->setState(this);
+	for (auto& a : actors) a->setState(this);
 }
 
 void GameplayState::cleanup() {
@@ -70,21 +70,21 @@ void GameplayState::handleEvents(Engine* engine) {
 void GameplayState::render(Engine* engine, sf::RenderWindow& window) {
 	window.clear(sf::Color::Black);
 
-	renderer.render(&map, &actors, window);
+	renderer.render(&map, actors, window);
 	gui.render(window);
 
 	window.display();
 }
 
 void GameplayState::updateNextActor() {
-    Actor* activeActor = actors.front();
+	std::unique_ptr<Actor> activeActor = std::move(actors.front());
 
     float actionTime = activeActor->update(this);
     *activeActor->energy -= actionTime;
 
     actors.erase(actors.begin());
     auto it = std::lower_bound(actors.begin(), actors.end(), activeActor, [](const auto& lhs, const auto& rhs) { return lhs->energy > rhs->energy; });
-    actors.insert(it, activeActor);
+    actors.insert(it, std::move(activeActor));
 
     /*std::sort(actors.begin(), actors.end(), [](const auto& lhs, const auto& rhs)
     {
@@ -97,12 +97,12 @@ void GameplayState::updateTime() {
 	if(!actors.front()->energy) return;
 	if(actors.front()->energy.get() > 0) return;
 	else {
-		Actor* next = *std::find_if(actors.begin(), actors.end(), [](const auto& a) { return a->ai != nullptr; });
+		Actor* next = std::find_if(actors.begin(), actors.end(), [](const auto& a) { return a->ai != nullptr; })->get();
 
 		float tuna = next->energy.get() * -1;
 		time += tuna;
 
-		for(auto a : actors) {
+		for(auto& a : actors) {
 			if(a->ai != nullptr) *a->energy += tuna;
 		}
 	}
@@ -110,21 +110,21 @@ void GameplayState::updateTime() {
 
 
 Actor* GameplayState::getPlayer() const {
-	for(Actor* actor : actors) {
-        if(actor->isPlayer()) return actor;
+	for(auto& actor : actors) {
+        if(actor->isPlayer()) return actor.get();
     }
     return nullptr;
 }
 
 Actor* GameplayState::getStairs() const {
-	for(Actor* actor : actors) {
-        if(actor->isStairs()) return actor;
+	for(auto& actor : actors) {
+        if(actor->isStairs()) return actor.get();
     }
     return nullptr;
 }
 
 bool GameplayState::canWalk(int x, int y) {
-	for(Actor* actor : actors) {
+	for(auto& actor : actors) {
 		if(actor->blocks && actor->x == x && actor->y == y) {
 			return false;
 		}
@@ -135,12 +135,12 @@ bool GameplayState::canWalk(int x, int y) {
 Actor* GameplayState::getClosestMonster(int x, int y, float range) const {
 	Actor* closest = nullptr;
 	float bestDistance = std::numeric_limits<float>::max();
-	for (Actor* actor : actors) {
+	for (auto& actor : actors) {
 		if(!actor->isPlayer() && actor->destructible && !actor->destructible->isDead()) {
 			float distance = actor->getDistance(x,y);
 			if(distance < bestDistance && (distance <= range || range == 0.0f)) {
 				bestDistance = distance;
-				closest = actor;
+				closest = actor.get();
 			}
 		}
 	}
@@ -148,8 +148,8 @@ Actor* GameplayState::getClosestMonster(int x, int y, float range) const {
 }
 
 Actor* GameplayState::getLiveActor(int x, int y) const {
-	for(Actor* actor : actors) {
-		if(actor->x == x && actor->y == y && actor->destructible && !actor->destructible->isDead()) return actor;
+	for(auto& actor : actors) {
+		if(actor->x == x && actor->y == y && actor->destructible && !actor->destructible->isDead()) return actor.get();
 	}
 	return nullptr;
 }
@@ -185,7 +185,7 @@ void GameplayState::nextLevel() {
 	{
 		return lhs->energy > rhs->energy;
 	});
-	for (auto a : actors) a->setState(this);
+	for (auto& a : actors) a->setState(this);
 }
 
 bool GameplayState::pickTile(int* x, int* y, float maxRange) {
