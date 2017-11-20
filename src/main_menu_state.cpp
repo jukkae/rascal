@@ -18,10 +18,11 @@ void MainMenuState::init(Engine* engine) {
 	menuItems.push_back(newGame);
 
 	struct stat buf;
-	if(stat (constants::SAVE_FILE_NAME.c_str(), &buf) == 0) { // If file exists TODO bug
+	int result = stat (constants::SAVE_FILE_NAME.c_str(), &buf);
+	std::cout << "menu: " << result << "\n";
+	if(result == 0) { // If file exists TODO bug
 		menuItems.push_back(cont);
 	}
-
 	menuItems.push_back(exit);
 
 	selectedItem = 0;
