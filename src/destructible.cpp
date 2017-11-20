@@ -52,9 +52,9 @@ void PlayerDestructible::die(Actor* owner) {
 	owner->s->message(colors::red, "You died!");
 	Destructible::die(owner);
 	Engine* engine = owner->s->getEngine();
-	State* gameOverState = new GameOverState(owner);
+	std::unique_ptr<State> gameOverState = std::make_unique<GameOverState>(owner);
 	gameOverState->init(engine);
-	engine->pushState(gameOverState);
+	engine->pushState(std::move(gameOverState));
 }
 
 template void PlayerDestructible::serialize(boost::archive::text_iarchive& arch, const unsigned int version);

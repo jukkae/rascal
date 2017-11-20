@@ -21,8 +21,10 @@ public:
 	void init();
 	void newGame();
 
-	void pushState(State* state) { states.push_back(state); }
-	void popState() { states.pop_back(); }
+	void pushState(std::unique_ptr<State> state);
+	void changeState(std::unique_ptr<State> state);
+	void popState();
+
 	void update(sf::RenderWindow& window);
 
 	template <class T>
@@ -34,11 +36,10 @@ public:
 	void exit();
 	void save();
 	void load();
-	void changeState(State* state) { popState(); pushState(state); }
 
 private:
 	State* gameplayState;
-	std::vector<State*> states;
+	std::vector<std::unique_ptr<State>> states;
 	std::queue<std::unique_ptr<EngineCommand>> engineCommands;
 	std::queue<sf::Event> events;
 

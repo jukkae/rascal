@@ -24,20 +24,21 @@ Engine::~Engine() {
 void Engine::init() {
 	font::initialize();
 	struct stat buffer;
+	std::unique_ptr<State> gps = std::make_unique<GameplayState>();
 	if(stat (constants::SAVE_FILE_NAME.c_str(), &buffer) != 0) { // If file doesn't exist
-		gameplayState = new GameplayState();
-		gameplayState->init(this);
+		gps->init(this);
 	}
 	else {
-		gameplayState = new GameplayState();
 		load();
-		((GameplayState*)gameplayState)->initLoaded(this);
+		(static_cast<GameplayState&>(*gps)).initLoaded(this);
 	}
-	State* mainMenuState = new MainMenuState();
+	gameplayState = gps.get();
+
+	std::unique_ptr<State> mainMenuState = std::make_unique<MainMenuState>();
 	mainMenuState->init(this);
 
-	states.push_back(gameplayState);
-	states.push_back(mainMenuState);
+	states.push_back(std::move(gps));
+	states.push_back(std::move(mainMenuState));
 }
 
 void Engine::newGame() {
@@ -62,6 +63,20 @@ bool Engine::pollEvent(sf::Event& event) {
 		return true;
 	}
 
+}
+
+void Engine::pushState(std::unique_ptr<State> state) {
+	states.push_back(std::move(state));
+}
+
+
+void Engine::changeState(std::unique_ptr<State> state) {
+	popState();
+	pushState(std::move(state));
+}
+
+void Engine::popState() {
+	states.pop_back();
 }
 
 void Engine::executeEngineCommand() {

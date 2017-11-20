@@ -13,7 +13,7 @@ public:
 	virtual void update(Engine* engine, sf::RenderWindow& window) = 0;
 	virtual void render(Engine* engine, sf::RenderWindow& window) = 0; // TODO should be const
 
-	void changeState(Engine* engine, State* state) { engine->changeState(state); }
+	void changeState(Engine* engine, std::unique_ptr<State> state) { engine->changeState(std::move(state)); }
 
 private:
 	friend class boost::serialization::access;

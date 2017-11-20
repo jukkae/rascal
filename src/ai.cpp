@@ -42,9 +42,9 @@ void PlayerAi::increaseXp(int xp, GameplayState* state) {
 		state->message(colors::yellow, "You've reached level %d!", xpLevel);
 		Engine* engine = state->getEngine();
 		Actor* player = state->getPlayer();
-		State* levelUpMenuState = new LevelUpMenuState(player);
+		std::unique_ptr<State> levelUpMenuState = std::make_unique<LevelUpMenuState>(player);
 		levelUpMenuState->init(engine);
-		engine->pushState(levelUpMenuState);
+		engine->pushState(std::move(levelUpMenuState));
 	}
 }
 
@@ -73,9 +73,9 @@ std::unique_ptr<Action> PlayerAi::getNextAction(Actor* actor) {
 					return std::make_unique<PickupAction>(PickupAction(actor));
 				}
 				case k::I: {
-					State* inventoryMenuState = new InventoryMenuState(actor);
+					std::unique_ptr<State> inventoryMenuState = std::make_unique<InventoryMenuState>(actor);
 					inventoryMenuState->init(engine);
-					engine->pushState(inventoryMenuState);
+					engine->pushState(std::move(inventoryMenuState));
 				}
 				case 56: { // < key
 					if(event.key.shift) {
@@ -87,9 +87,9 @@ std::unique_ptr<Action> PlayerAi::getNextAction(Actor* actor) {
 				}
 				case k::Escape: {
 					engine->save();
-					State* mainMenuState = new MainMenuState();
+					std::unique_ptr<State> mainMenuState = std::make_unique<MainMenuState>();
 					mainMenuState->init(engine);
-					engine->pushState(mainMenuState);
+					engine->pushState(std::move(mainMenuState));
 				}
 				default: dir = Direction::NONE; break;
 			}

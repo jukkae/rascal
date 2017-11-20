@@ -40,9 +40,9 @@ void GameOverState::handleEvents(Engine* engine) {
 			using k = sf::Keyboard::Key;
 			switch(event.key.code) {
 				case k::Return: {
-					State* mainMenuState = new MainMenuState();
+					std::unique_ptr<State> mainMenuState = std::make_unique<MainMenuState>();
 					mainMenuState->init(engine);
-					changeState(engine, mainMenuState);
+					changeState(engine, std::move(mainMenuState));
 					break;
 				}
 				default: break;
