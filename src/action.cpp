@@ -65,7 +65,7 @@ bool PickupAction::execute() {
 	bool found = false;
 	for(auto& a : actor->getActors()) {
 		if(a->pickable && a->x == actor->x && a->y == actor->y) {
-			if(a->pickable->pick(a.get(), actor)) {
+			if(a->pickable->pick(std::move(a), actor)) {
 				found = true;
 				actor->s->message(colors::green, "You pick up the %s.", a->name.c_str());
 				return true;

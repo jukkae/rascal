@@ -11,7 +11,7 @@ InventoryMenuState::InventoryMenuState(Actor* actor) : actor(actor) {
 
 void InventoryMenuState::init(Engine* engine) {
 	inventoryContents.clear();
-	for(Actor* item : actor->container->inventory) inventoryContents.push_back(item);
+	for(auto& item : actor->container->inventory) inventoryContents.push_back(item.get());
 	selectedItem = 0;
 }
 

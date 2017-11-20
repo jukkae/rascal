@@ -90,15 +90,17 @@ Pickable::Pickable(TargetSelector selector, std::unique_ptr<Effect> effect) : se
 
 // owner is the Actor that this Pickable belongs to,
 // wearer is the Actor that has this Pickable in inventory.
-bool Pickable::pick(Actor* owner, Actor* wearer) {
-	if(wearer->container && wearer->container->add(owner)) { // Shouldn't go erasing from someone else's unique_ptrs
+bool Pickable::pick(std::unique_ptr<Actor> owner, Actor* wearer) {
+	if(wearer->container && wearer->container->add(std::move(owner))) { // Shouldn't go erasing from someone else's unique_ptrs
 		wearer->getActors().erase(
-			std::remove_if(
+			std::remove(
 				wearer->getActors().begin(), 
 				wearer->getActors().end(), 
-				[&](auto const & p) { return p.get() == owner; }
+				owner
+				//[&](auto const & p) { return p.get() == owner; }
 			),
-		wearer->getActors().end());
+			wearer->getActors().end()
+		);
 		return true;
 	}
 	return false;

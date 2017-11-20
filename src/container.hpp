@@ -11,11 +11,11 @@ class Actor;
 class Container {
 public:
 	int size; // max number of actors in container, 0 = unlimited
-	std::vector<Actor*> inventory;
+	std::vector<std::unique_ptr<Actor>> inventory;
 
 	Container(int size = 0);
 	~Container();
-	bool add(Actor* actor);
+	bool add(std::unique_ptr<Actor> actor);
 	void remove(Actor* actor);
 
 private:

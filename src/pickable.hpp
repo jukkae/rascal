@@ -78,7 +78,7 @@ class Pickable {
 public:
 	Pickable(TargetSelector selector = TargetSelector(TargetSelector::SelectorType::NONE, 0), std::unique_ptr<Effect> effect = std::unique_ptr<Effect>());
 	virtual ~Pickable() {};
-	bool pick(Actor* owner, Actor* wearer);
+	bool pick(std::unique_ptr<Actor> owner, Actor* wearer);
 	bool use (Actor* owner, Actor* wearer);
 	void drop(Actor* owner, Actor* wearer);
 protected:
