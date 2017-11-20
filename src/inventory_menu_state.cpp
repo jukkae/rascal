@@ -46,6 +46,9 @@ void InventoryMenuState::handleEvents(Engine* engine) {
 						engine->addEngineCommand(ContinueCommand(engine));
 					}
 					break;
+				case k::Escape:
+					engine->addEngineCommand(ContinueCommand(engine));
+					break;
 				default:
 					break;
 			}

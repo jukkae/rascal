@@ -76,6 +76,7 @@ std::unique_ptr<Action> PlayerAi::getNextAction(Actor* actor) {
 					std::unique_ptr<State> inventoryMenuState = std::make_unique<InventoryMenuState>(actor);
 					inventoryMenuState->init(engine);
 					engine->pushState(std::move(inventoryMenuState));
+					break;
 				}
 				case 56: { // < key
 					if(event.key.shift) {
