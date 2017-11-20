@@ -15,6 +15,7 @@
 
 
 Engine::Engine() {
+	font::initialize();
 	init();
 }
 
@@ -22,7 +23,6 @@ Engine::~Engine() {
 }
 
 void Engine::init() {
-	font::initialize();
 	struct stat buffer;
 	std::unique_ptr<State> gps = std::make_unique<GameplayState>();
 	if(stat (constants::SAVE_FILE_NAME.c_str(), &buffer) != 0) { // If file doesn't exist
