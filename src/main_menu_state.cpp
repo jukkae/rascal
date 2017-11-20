@@ -2,6 +2,7 @@
 #include "colors.hpp"
 #include "constants.hpp"
 #include "engine.hpp"
+#include "font.hpp"
 
 #include <sys/stat.h>
 #include <SFML/System.hpp>
@@ -10,11 +11,6 @@
 #include <SFML/Graphics/Text.hpp>
 
 void MainMenuState::init(Engine* engine) {
-	if(!font.loadFromFile("assets/FSEX300.ttf")) {
-		std::cout << "error loading font\n";
-	} else std::cout << "font loaded!\n";
-	std::cout << font.getInfo().family << "\n";
-
 	MenuItem newGame = { MenuItemCode::NEW_GAME, "New game!" };
 	MenuItem cont = { MenuItemCode::CONTINUE, "Continue!" };
 	MenuItem exit = { MenuItemCode::EXIT, "Exit!" };
@@ -76,7 +72,7 @@ void MainMenuState::showMenu(Engine* engine, sf::RenderWindow& window) {
 
 	int itemIndex = 0;
 	for(MenuItem item : menuItems) {
-		sf::Text itemText(item.label, font, 16);
+		sf::Text itemText(item.label, font::mainFont, 16);
 		if (selectedItem == itemIndex) {
 			itemText.setFillColor(colors::brightBlue);
 		} else {

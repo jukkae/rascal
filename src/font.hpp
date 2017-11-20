@@ -3,8 +3,8 @@
 #include <SFML/Graphics.hpp>
 
 namespace font {
-static sf::Font mainFont;
-void initialize();
+extern sf::Font mainFont;
+extern void initialize();
 } // namespace font
 
 #endif /* FONT_HPP */
