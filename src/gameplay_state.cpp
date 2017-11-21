@@ -79,8 +79,8 @@ void GameplayState::render(Engine* engine, sf::RenderWindow& window) {
 void GameplayState::updateNextActor() {
 	Actor* activeActor = getNextActor();
 
-    float actionTime = activeActor->update(this);
-    *activeActor->energy -= actionTime;
+	float actionTime = activeActor->update(this);
+	*activeActor->energy -= actionTime;
 
     /*actors.erase(actors.begin());
     auto it = std::lower_bound(actors.begin(), actors.end(), activeActor, [](const auto& lhs, const auto& rhs) { return lhs->energy > rhs->energy; });
