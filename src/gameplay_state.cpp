@@ -189,7 +189,7 @@ void GameplayState::nextLevel() {
 }
 
 bool GameplayState::pickTile(int* x, int* y, float maxRange) {
-	while(true) {
+	while(true) { // TODO this function hangs (doesn't freeze)
 		for(int cx = 0; cx < constants::SCREEN_WIDTH; ++cx) {
 			for(int cy = 0; cy < constants::SCREEN_HEIGHT; ++cy) {
 				Point location = renderer.getWorldCoordsFromScreenCoords(Point(cx, cy));
