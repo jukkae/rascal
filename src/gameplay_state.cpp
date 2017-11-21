@@ -37,21 +37,11 @@ void GameplayState::init(Engine* engine) {
 }
 
 void GameplayState::initLoaded(Engine* engine) {
-	std::cout << "\n\ninitLoaded:\n";
-	std::cout << "Actors length: " << actors.size() << "\n";
-	for(auto& a : actors) std::cout << a->name << "\n";
-	std::cout << "\n\n";
 	e = engine;
 	gui.setState(this);
 	renderer.setState(this);
 	map.setState(this);
 	for (auto& a : actors) a->setState(this);
-
-	// TODO either loading or saving of gameplay state messes up order of actors
-	std::sort(actors.begin(), actors.end(), [](const auto& lhs, const auto& rhs)
-	{
-		return lhs->energy > rhs->energy;
-	});
 }
 
 void GameplayState::cleanup() {

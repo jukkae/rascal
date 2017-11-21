@@ -68,12 +68,6 @@ private:
 		ar & map;
 		ar & actors;
 		ar & gui;
-		std::cout << "act size: " << actors.size() << "\n";
-		std::cout << "\n\nACTOR NAMES\n";
-		for(auto& actor : actors) {
-			std::cout << actor->name << "\n";
-		}
-		std::cout << "\n\n";
 	}
 };
 #endif /* GAMEPLAY_STATE_HPP */
