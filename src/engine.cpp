@@ -29,16 +29,18 @@ void Engine::init() {
 	int result = stat (constants::SAVE_FILE_NAME.c_str(), &buf);
 	std::cout << "engine: " << result << "\n";
 
+	bool showContinueInMenu = false;
 	if(result != 0) { // If file doesn't exist
 		gps->init(this);
 	}
 	else {
 		load();
 		(static_cast<GameplayState&>(*gps)).initLoaded(this);
+		showContinueInMenu = true;
 	}
 	gameplayState = gps.get();
 
-	std::unique_ptr<State> mainMenuState = std::make_unique<MainMenuState>();
+	std::unique_ptr<State> mainMenuState = std::make_unique<MainMenuState>(showContinueInMenu);
 	mainMenuState->init(this);
 
 	states.push_back(std::move(gps));

@@ -11,7 +11,7 @@ class MainMenuState : public State {
 public:
 	enum class MenuItemCode { NONE, NEW_GAME, CONTINUE, EXIT };
 
-	MainMenuState() {;}
+	MainMenuState(bool forceShowContinue = false) : forceShowContinue(forceShowContinue) {;}
 	void init(Engine* engine) override;
 	void cleanup() override;
 
@@ -20,6 +20,7 @@ public:
 	void render(Engine* engine, sf::RenderWindow& window) override;
 private:
 	sf::Font font;
+	bool forceShowContinue;
 
 	struct MenuItem {
 		MenuItemCode code;
