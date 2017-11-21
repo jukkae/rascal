@@ -31,13 +31,14 @@ void Engine::init() {
 	bool showContinueInMenu = false;
 	if(result != 0) { // If file doesn't exist
 		gps->init(this);
+		gameplayState = gps.get();
 	}
 	else {
 		load();
-		(static_cast<GameplayState&>(*gps)).initLoaded(this);
+		//(static_cast<GameplayState&>(*gps)).initLoaded(this);
+		(static_cast<GameplayState&>(*gameplayState)).initLoaded(this);
 		showContinueInMenu = true;
 	}
-	gameplayState = gps.get();
 
 	std::unique_ptr<State> mainMenuState = std::make_unique<MainMenuState>(showContinueInMenu);
 	mainMenuState->init(this);

@@ -11,6 +11,7 @@ class Engine;
 #include "renderer.hpp"
 #include "persistent.hpp"
 #include <SFML/Graphics.hpp>
+#include <boost/serialization/vector.hpp>
 
 class GameplayState : public State {
 public:

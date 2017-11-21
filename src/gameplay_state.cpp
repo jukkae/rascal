@@ -37,6 +37,10 @@ void GameplayState::init(Engine* engine) {
 }
 
 void GameplayState::initLoaded(Engine* engine) {
+	std::cout << "\n\ninitLoaded:\n";
+	std::cout << "Actors length: " << actors.size() << "\n";
+	for(auto& a : actors) std::cout << a->name << "\n";
+	std::cout << "\n\n";
 	e = engine;
 	gui.setState(this);
 	renderer.setState(this);
