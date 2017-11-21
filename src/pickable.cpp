@@ -119,8 +119,6 @@ bool Pickable::use(Actor* owner, Actor* wearer) {
 	if(success) {
 		if(wearer->container) {
 			wearer->container->remove(owner);
-			owner = 0; // let's make sure we don't delete an already-deleted pointer
-			delete owner; // TODO uh oh
 		}
 	}
 	return success;
