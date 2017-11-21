@@ -2,6 +2,7 @@
 #include "gameplay_state.hpp"
 #include "engine.hpp"
 #include <SFML/Window/Mouse.hpp>
+#include <boost/optional/optional_io.hpp>
 
 void GameplayState::init(Engine* engine) {
 	e = engine;
@@ -14,16 +15,16 @@ void GameplayState::init(Engine* engine) {
 	player->attacker     = std::make_unique<Attacker>(5);
 	player->ai           = std::make_unique<PlayerAi>();
 	player->container    = std::make_unique<Container>(26);
-	actors.push_back(std::move(player));
+	addActor(std::move(player));
 
 	std::unique_ptr<Actor> stairs = std::make_unique<Actor>(1, 1, '>', "stairs", sf::Color::White, 0, true);
     stairs->blocks = false;
     stairs->fovOnly = false;
-    actors.push_back(std::move(stairs));
+	addActor(std::move(stairs));
 
 	map = Map(120, 72);
 	map.setState(this);
-	map.init(true);
+	map.init();
 	// not really the correct place for following, but w/e
 	for (auto& a : actors) a->setState(this);
 	std::sort(actors.begin(), actors.end(), [](const auto& lhs, const auto& rhs)
@@ -40,8 +41,13 @@ void GameplayState::initLoaded(Engine* engine) {
 	gui.setState(this);
 	renderer.setState(this);
 	map.setState(this);
-	map.init(false);
 	for (auto& a : actors) a->setState(this);
+
+	// TODO either loading or saving of gameplay state messes up order of actors
+	std::sort(actors.begin(), actors.end(), [](const auto& lhs, const auto& rhs)
+	{
+		return lhs->energy > rhs->energy;
+	});
 }
 
 void GameplayState::cleanup() {
@@ -179,7 +185,7 @@ void GameplayState::nextLevel() {
 	// gameplayState.initMap() or something like that, remember to init actors
 	map = Map(120, 72);
 	map.setState(this);
-	map.init(true);
+	map.init();
 
 	std::sort(actors.begin(), actors.end(), [](const auto& lhs, const auto& rhs)
 	{

@@ -23,7 +23,7 @@ Map::Map(int width, int height) : width(width), height(height) {
 Map::~Map() {
 }
 
-void Map::init(bool initActors) {
+void Map::init() {
 	for(int i = 0; i < width*height; ++i) {
 		tiles.push_back(Tile());
 	}

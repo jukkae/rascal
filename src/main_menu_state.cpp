@@ -19,7 +19,6 @@ void MainMenuState::init(Engine* engine) {
 
 	struct stat buf;
 	int result = stat (constants::SAVE_FILE_NAME.c_str(), &buf);
-	std::cout << "menu: " << result << "\n";
 	if(result == 0 || forceShowContinue) { // 
 		menuItems.push_back(cont);
 	}

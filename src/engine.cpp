@@ -27,7 +27,6 @@ void Engine::init() {
 
 	struct stat buf;
 	int result = stat (constants::SAVE_FILE_NAME.c_str(), &buf);
-	std::cout << "engine: " << result << "\n";
 
 	bool showContinueInMenu = false;
 	if(result != 0) { // If file doesn't exist

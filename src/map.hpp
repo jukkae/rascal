@@ -60,7 +60,7 @@ public:
 	Map();
 	Map(int width, int height);
 	~Map();
-	void init(bool initActors);
+	void init();
 
 	void addItems(); // temp
 	void addMonsters(); // temp
