@@ -50,7 +50,11 @@ void Engine::newGame() {
 	if(stat (constants::SAVE_FILE_NAME.c_str(), &buffer) == 0) { // If file does exist
 		remove(constants::SAVE_FILE_NAME.c_str());
 	}
-	init();
+
+	std::unique_ptr<State> gps = std::make_unique<GameplayState>();
+	gps->init(this);
+	gameplayState = gps.get();
+	states.at(0) = std::move(gps);
 }
 
 void Engine::update(sf::RenderWindow& window) {
