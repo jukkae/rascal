@@ -19,7 +19,7 @@ void GameplayState::init(Engine* engine) {
 
 	map = Map(120, 72);
 	map.setState(this);
-	map.init();
+	map.generateMap();
 
 	map_utils::addItems(this, &map);
 	map_utils::addMonsters(this, &map);
@@ -192,8 +192,8 @@ void GameplayState::nextLevel() {
 	// gameplayState.initMap() or something like that, remember to init actors
 	map = Map(120, 72);
 	map.setState(this);
-	if(level == 3) map.init(MapType::PILLARS);
-	else map.init();
+	if(level == 3) map.generateMap(MapType::PILLARS);
+	else map.generateMap(MapType::BUILDING);
 
 	map_utils::addItems(this, &map);
 	map_utils::addMonsters(this, &map);

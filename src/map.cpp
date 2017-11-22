@@ -19,16 +19,12 @@
 Map::Map() : Map(constants::DEFAULT_MAP_WIDTH, constants::DEFAULT_MAP_HEIGHT) {}
 
 Map::Map(int width, int height) : width(width), height(height) {
-}
-
-Map::~Map() {
-}
-
-void Map::init(MapType mapType) {
 	for(int i = 0; i < width*height; ++i) {
 		tiles.push_back(Tile());
 	}
-	generateMap(mapType);
+}
+
+Map::~Map() {
 }
 
 void Map::generateMap(MapType mapType) {

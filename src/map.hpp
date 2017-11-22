@@ -61,9 +61,8 @@ public:
 	Map();
 	Map(int width, int height);
 	~Map();
-	void init(MapType mapType = MapType::BUILDING);
 
-	void generateMap(MapType mapType = MapType::BUILDING); // temp, s.b. private
+	void generateMap(MapType mapType = MapType::BUILDING);
 	void generateBuildingMap();
 	void generatePillarsMap();
 	std::vector<Rect> breakRooms(Rect area, BreakDirection direction = BreakDirection::HORIZONTAL); // temp, s.b. private
