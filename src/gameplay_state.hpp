@@ -60,6 +60,11 @@ private:
 	void sortActors();
 
 	friend class boost::serialization::access;
+	template<class Archive>
+	friend void boost::serialization::save_construct_data(Archive & ar, const GameplayState* s, const unsigned int version);
+	template<class Archive>
+	friend void boost::serialization::load_construct_data(Archive & ar, GameplayState* s, const unsigned int version);
+
 };
 
 namespace boost {
@@ -67,7 +72,6 @@ namespace serialization {
 	template<class Archive>
 	void save_construct_data(Archive & ar, const GameplayState* s, const unsigned int version)
 	{
-		ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(State);
 		ar & s->level;
 		ar & s->time;
 		ar & s->map;
@@ -78,12 +82,13 @@ namespace serialization {
 	template<class Archive>
 	void load_construct_data(Archive & ar, GameplayState* s, const unsigned int version)
 	{
-		ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(State);
-		ar & level;
-		ar & time;
-		ar & map;
-		ar & actors;
-		ar & gui;
+		Engine* engine = nullptr; // TODO how to get this?
+		::new(s)GameplayState(engine);
+		ar & s->level;
+		ar & s->time;
+		ar & s->map;
+		ar & s->actors;
+		ar & s->gui;
 	}
 } // namespace boost
 } // namespace serialization
