@@ -1,6 +1,7 @@
 #include "constants.hpp"
 #include "gameplay_state.hpp"
 #include "engine.hpp"
+#include "victory_state.hpp"
 #include <SFML/Window/Mouse.hpp>
 #include <boost/optional/optional_io.hpp>
 
@@ -163,6 +164,11 @@ void GameplayState::message(sf::Color col, std::string text, ...) {
 
 void GameplayState::nextLevel() {
 	++level;
+	if(level > 5) {
+		std::unique_ptr<State> victoryState = std::make_unique<VictoryState>(getPlayer());
+		victoryState->init(e);
+		e->pushState(std::move(victoryState));
+	}
 	gui.message(sf::Color::Magenta, "You take a moment to rest, and recover your strength.");
 	getPlayer()->destructible->heal(getPlayer()->destructible->maxHp/2);
 	gui.message(sf::Color::Red, "After a rare moment of peace, you descend\ndeeper into the heart of the dungeon...");

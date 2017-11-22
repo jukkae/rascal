@@ -1,17 +1,13 @@
-#ifndef GAME_OVER_STATE_HPP
-#define GAME_OVER_STATE_HPP
-#include "constants.hpp"
+#ifndef VICTORY_STATE_HPP
+#define VICTORY_STATE_HPP
 #include "state.hpp"
 #include <string>
-#include <vector>
 #include <SFML/Graphics.hpp>
 
 class Engine;
-class Actor;
-
-class GameOverState : public State {
+class VictoryState : public State {
 public:
-	GameOverState(Actor* actor);
+	VictoryState(Actor* actor);
 
 	void init(Engine* engine) override;
 	void cleanup() override;
@@ -24,4 +20,4 @@ private:
 	Actor* actor;
 	std::string description;
 };
-#endif /* GAME_OVER_STATE_HPP */
+#endif /* VICTORY_STATE_HPP */

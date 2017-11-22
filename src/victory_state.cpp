@@ -1,36 +1,26 @@
-#include "gameover_state.hpp"
-#include "actor.hpp"
-#include "ai.hpp"
-#include "colors.hpp"
-#include "constants.hpp"
-#include "font.hpp"
+#include "victory_state.hpp"
 #include "main_menu_state.hpp"
-#include <iostream>
+#include "font.hpp"
+#include "colors.hpp"
 #include <sys/stat.h>
-#include <stdio.h>
-#include <SFML/System.hpp>
-#include <SFML/Graphics.hpp>
-#include <SFML/Window.hpp>
-#include <SFML/Graphics/Text.hpp>
 
-GameOverState::GameOverState(Actor* actor) :
+VictoryState::VictoryState(Actor* actor) :
 actor(actor)
 {
-	description = "you died at level ";
+	description = "you won at level ";
 	description.append(std::to_string(((PlayerAi*)actor->ai.get())->xpLevel));
 	struct stat buffer;
 	if(stat (constants::SAVE_FILE_NAME.c_str(), &buffer) == 0) { // If file exists
 		remove(constants::SAVE_FILE_NAME.c_str());
 	}
+
 }
 
-void GameOverState::init(Engine* engine) {
-}
+void VictoryState::init(Engine* engine) { }
 
-void GameOverState::cleanup() {
-}
+void VictoryState::cleanup() { }
 
-void GameOverState::handleEvents(Engine* engine) {
+void VictoryState::handleEvents(Engine* engine) {
 	sf::Event event;
 	while(engine->pollEvent(event)) {
 		if(event.type == sf::Event::KeyPressed) {
@@ -48,12 +38,12 @@ void GameOverState::handleEvents(Engine* engine) {
 	}
 }
 
-void GameOverState::update(Engine* engine, sf::RenderWindow& window) {
+void VictoryState::update(Engine* engine, sf::RenderWindow& window) {
 	handleEvents(engine);
 	render(engine, window);
 }
 
-void GameOverState::render(Engine* engine, sf::RenderWindow& window) {
+void VictoryState::render(Engine* engine, sf::RenderWindow& window) {
 	window.clear(sf::Color::Black);
 	sf::Text text(description, font::mainFont, 16);
 	text.setFillColor(colors::brightBlue);
