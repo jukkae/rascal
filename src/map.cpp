@@ -50,13 +50,6 @@ void Map::generateBuildingMap() {
 	std::vector<Rect> rooms;
 	std::vector<Rect> areas = breakRooms(Rect(0, 0, (width - 1), (height - 1)));
 
-	// initialize
-	for(int x = 0; x < width; ++x) {
-		for(int y = 0; y < height; ++y) {
-			tiles.at(x + y*width).walkable = true;
-		}
-	}
-
 	for(auto a : areas) {
 		for(int x = a.x0(); x < a.x1(); ++x) {
 			for(int y = a.y0(); y < a.y1(); ++y) {
