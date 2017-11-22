@@ -18,7 +18,6 @@ class Engine {
 public:
 	Engine();
 	~Engine();
-	void init();
 	void newGame();
 
 	void pushState(std::unique_ptr<State> state);

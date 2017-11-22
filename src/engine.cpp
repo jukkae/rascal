@@ -16,13 +16,6 @@
 
 Engine::Engine() {
 	font::initialize();
-	init();
-}
-
-Engine::~Engine() {
-}
-
-void Engine::init() {
 	std::unique_ptr<State> gps = std::make_unique<GameplayState>();
 
 	struct stat buf;
@@ -46,6 +39,9 @@ void Engine::init() {
 
 	states.push_back(std::move(gps));
 	states.push_back(std::move(mainMenuState));
+}
+
+Engine::~Engine() {
 }
 
 void Engine::newGame() {
