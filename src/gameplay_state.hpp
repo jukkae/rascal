@@ -58,6 +58,7 @@ private:
 
 	void updateTime();
 	void updateNextActor();
+	void sortActors();
 
 	friend class boost::serialization::access;
 	template<class Archive>

@@ -21,10 +21,7 @@ void GameplayState::init(Engine* engine) {
 	map.init();
 	// not really the correct place for following, but w/e
 	for (auto& a : actors) a->setState(this);
-	std::sort(actors.begin(), actors.end(), [](const auto& lhs, const auto& rhs)
-	{
-		return lhs->energy > rhs->energy;
-	});
+	sortActors();
 }
 
 void GameplayState::initLoaded(Engine* engine) {
@@ -89,10 +86,7 @@ void GameplayState::updateNextActor() {
     auto it = std::lower_bound(actors.begin(), actors.end(), activeActor, [](const auto& lhs, const auto& rhs) { return lhs->energy > rhs->energy; });
     actors.insert(it, std::move(activeActor));*/
 
-    std::sort(actors.begin(), actors.end(), [](const auto& lhs, const auto& rhs)
-    {
-        return lhs->energy > rhs->energy;
-    });
+	sortActors();
 	updateTime();
 }
 
@@ -111,6 +105,12 @@ void GameplayState::updateTime() {
 	}
 }
 
+void GameplayState::sortActors() {
+    std::sort(actors.begin(), actors.end(), [](const auto& lhs, const auto& rhs)
+    {
+        return lhs->energy > rhs->energy;
+    });
+}
 
 Actor* GameplayState::getPlayer() const {
 	for(auto& actor : actors) {
@@ -189,10 +189,7 @@ void GameplayState::nextLevel() {
 	map.setState(this);
 	map.init();
 
-	std::sort(actors.begin(), actors.end(), [](const auto& lhs, const auto& rhs)
-	{
-		return lhs->energy > rhs->energy;
-	});
+	sortActors();
 	for (auto& a : actors) a->setState(this);
 }
 
