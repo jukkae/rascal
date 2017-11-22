@@ -63,17 +63,12 @@ public:
 	~Map();
 	void init(MapType mapType = MapType::BUILDING);
 
-	void addItems(); // temp
-	void addMonsters(); // temp
-
 	void generateMap(MapType mapType = MapType::BUILDING); // temp, s.b. private
 	void generateBuildingMap();
 	void generatePillarsMap();
 	std::vector<Rect> breakRooms(Rect area, BreakDirection direction = BreakDirection::HORIZONTAL); // temp, s.b. private
 
 	void setWall(int x, int y);
-	void addMonster(int x, int y);
-	void addItem(int x, int y);
 	bool isWall(int x, int y) const;
 	bool canWalk(int x, int y) const;
 	bool isInFov(int x, int y) const;
@@ -89,8 +84,6 @@ protected:
 
 private:
 	GameplayState* state;
-	std::unique_ptr<Actor> makeMonster(int x, int y);
-	std::unique_ptr<Actor> makeItem(int x, int y);
 
 	friend class boost::serialization::access;
 	template<class Archive>

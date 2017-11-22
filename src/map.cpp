@@ -9,6 +9,7 @@
 #include "dice.hpp"
 #include "gameplay_state.hpp"
 #include "map.hpp"
+#include "map_utils.hpp"
 #include "pickable.hpp"
 #include "point.hpp"
 #include "rect.hpp"
@@ -28,9 +29,6 @@ void Map::init(MapType mapType) {
 		tiles.push_back(Tile());
 	}
 	generateMap(mapType);
-
-	addItems();
-	addMonsters();
 }
 
 void Map::generateMap(MapType mapType) {
@@ -121,90 +119,6 @@ std::vector<Rect> Map::breakRooms(Rect area, BreakDirection direction) {
 
 		return areas;
 	}
-}
-
-std::unique_ptr<Actor> Map::makeMonster(int x, int y) {
-	int r = d100();
-	if(r < 70) {
-		std::unique_ptr<Actor> punk = std::make_unique<Actor>(x, y, 'h', "punk", colors::desaturatedGreen, 1);
-		punk->destructible = std::make_unique<MonsterDestructible>(10, 0, 50, "dead punk", 13);
-		punk->attacker = std::make_unique<Attacker>(3);
-		punk->ai = std::make_unique<MonsterAi>();
-		return punk;
-	} else if (r < 80) {
-		std::unique_ptr<Actor> fighter = std::make_unique<Actor>(x, y, 'H', "fighter", colors::darkGreen, 1);
-		fighter->destructible = std::make_unique<MonsterDestructible>(16, 1, 100, "fighter carcass", 15);
-		fighter->attacker = std::make_unique<Attacker>(4);
-		fighter->ai = std::make_unique<MonsterAi>();
-		return fighter;
-	}
-	else {
-		std::unique_ptr<Actor> boxer = std::make_unique<Actor>(x, y, 'H', "boxer", colors::darkerGreen, 1);
-		boxer->destructible = std::make_unique<MonsterDestructible>(4, 1, 70, "boxer carcass", 16);
-		boxer->attacker = std::make_unique<Attacker>(4);
-		boxer->ai = std::make_unique<MonsterAi>();
-		return boxer;
-	}
-}
-
-void Map::addMonsters() {
-	for(int x = 0; x < width; ++x) {
-		for(int y = 0; y < height; ++y) {
-			int r = d100();
-			if (canWalk(x, y) && r == 1) {
-				addMonster(x, y);
-			}
-		}
-	}
-}
-
-void Map::addItems() {
-	for(int x = 0; x < width; ++x) {
-		for(int y = 0; y < height; ++y) {
-			int r = d100();
-			if (canWalk(x, y) && r <= 2) {
-				addItem(x, y);
-			}
-		}
-	}
-}
-
-void Map::addMonster(int x, int y) {
-	state->addActor(makeMonster(x, y));
-}
-
-std::unique_ptr<Actor> Map::makeItem(int x, int y) {
-	int r = d100();
-	if(r < 60) {
-		std::unique_ptr<Actor> stimpak = std::make_unique<Actor>(x, y, '!', "stimpak", sf::Color(128, 0, 128));
-		stimpak->blocks = false;
-		stimpak->pickable = std::make_unique<Pickable>(TargetSelector(TargetSelector::SelectorType::WEARER, 0), std::make_unique<HealthEffect>(4));
-		return stimpak;
-	} else if(r < 70) {
-		std::unique_ptr<Actor> blasterBoltDevice = std::make_unique<Actor>(x, y, '?', "blaster bolt device", sf::Color(128, 128, 0));
-		blasterBoltDevice->blocks = false;
-		blasterBoltDevice->pickable = std::make_unique<Pickable>(TargetSelector(TargetSelector::SelectorType::CLOSEST_MONSTER, 5), std::make_unique<HealthEffect>(-20, "The %s is hit by a blast!\n The damage is %g hit points."));
-		return blasterBoltDevice;
-	} else if(r < 80) {
-		std::unique_ptr<Actor> fragGrenade = std::make_unique<Actor>(x, y, '?', "fragmentation grenade", sf::Color(128, 255, 128));
-		fragGrenade->blocks = false;
-		fragGrenade->pickable = std::make_unique<Pickable>(TargetSelector(TargetSelector::SelectorType::SELECTED_RANGE, 3), std::make_unique<HealthEffect>(-12, "The grenade explodes, hurting the %s for %g hit points!"));
-		return fragGrenade;
-	} else if(r < 90) {
-		std::unique_ptr<Actor> confusor = std::make_unique<Actor>(x, y, '?', "confusor", sf::Color(128, 128, 255));
-		confusor->blocks = false;
-		confusor->pickable = std::make_unique<Pickable>(TargetSelector(TargetSelector::SelectorType::SELECTED_MONSTER, 5), std::make_unique<AiChangeEffect>(std::make_unique<ConfusedMonsterAi>(10), "The eyes of the %s look vacant!"));
-		return confusor;
-	} else {
-		std::unique_ptr<Actor> teslaCoil = std::make_unique<Actor>(x, y, '#', "tesla coil", sf::Color(128, 128, 255));
-		teslaCoil->blocks = false;
-		teslaCoil->pickable = std::make_unique<Pickable>(TargetSelector(TargetSelector::SelectorType::WEARER_RANGE, 5), std::make_unique<HealthEffect>(-6, "The tesla coil sputters, emitting raw\n electricity, hurting %s for %g hp!"));
-		return teslaCoil;
-	}
-}
-
-void Map::addItem(int x, int y) {
-	state->addActor(makeItem(x, y));
 }
 
 bool Map::isWall(int x, int y) const {

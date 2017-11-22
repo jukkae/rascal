@@ -1,6 +1,7 @@
 #include "constants.hpp"
 #include "gameplay_state.hpp"
 #include "engine.hpp"
+#include "map_utils.hpp"
 #include "victory_state.hpp"
 #include <SFML/Window/Mouse.hpp>
 #include <boost/optional/optional_io.hpp>
@@ -19,6 +20,10 @@ void GameplayState::init(Engine* engine) {
 	map = Map(120, 72);
 	map.setState(this);
 	map.init();
+
+	map_utils::addItems(this, &map);
+	map_utils::addMonsters(this, &map);
+
 	// not really the correct place for following, but w/e
 	for (auto& a : actors) a->setState(this);
 	sortActors();
