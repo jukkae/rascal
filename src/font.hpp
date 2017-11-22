@@ -4,7 +4,7 @@
 
 namespace font {
 extern sf::Font mainFont;
-extern void initialize();
+extern void load();
 } // namespace font
 
 #endif /* FONT_HPP */

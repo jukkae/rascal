@@ -15,7 +15,7 @@
 
 
 Engine::Engine() {
-	font::initialize();
+	font::load();
 	std::unique_ptr<State> gps = std::make_unique<GameplayState>();
 
 	struct stat buf;

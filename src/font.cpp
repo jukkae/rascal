@@ -3,7 +3,7 @@
 
 sf::Font font::mainFont;
 
-extern void font::initialize() {
+extern void font::load() {
 	if(!font::mainFont.loadFromFile("assets/FSEX300.ttf")) {
 		std::cout << "error loading font\n";
 	}
