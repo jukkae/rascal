@@ -195,6 +195,9 @@ void GameplayState::nextLevel() {
 	if(level == 3) map.init(MapType::PILLARS);
 	else map.init();
 
+	map_utils::addItems(this, &map);
+	map_utils::addMonsters(this, &map);
+
 	sortActors();
 	for (auto& a : actors) a->setState(this);
 }
