@@ -51,6 +51,7 @@ public:
 };
 
 enum class BreakDirection { HORIZONTAL, VERTICAL };
+enum class MapType { BUILDING, PILLARS };
 
 class Map {
 public:
@@ -60,12 +61,14 @@ public:
 	Map();
 	Map(int width, int height);
 	~Map();
-	void init();
+	void init(MapType mapType = MapType::BUILDING);
 
 	void addItems(); // temp
 	void addMonsters(); // temp
 
-	void generateMap(); // temp, s.b. private
+	void generateMap(MapType mapType = MapType::BUILDING); // temp, s.b. private
+	void generateBuildingMap();
+	void generatePillarsMap();
 	std::vector<Rect> breakRooms(Rect area, BreakDirection direction = BreakDirection::HORIZONTAL); // temp, s.b. private
 
 	void setWall(int x, int y);

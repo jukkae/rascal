@@ -187,7 +187,8 @@ void GameplayState::nextLevel() {
 	// gameplayState.initMap() or something like that, remember to init actors
 	map = Map(120, 72);
 	map.setState(this);
-	map.init();
+	if(level == 3) map.init(MapType::PILLARS);
+	else map.init();
 
 	sortActors();
 	for (auto& a : actors) a->setState(this);

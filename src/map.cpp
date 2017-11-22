@@ -23,20 +23,32 @@ Map::Map(int width, int height) : width(width), height(height) {
 Map::~Map() {
 }
 
-void Map::init() {
+void Map::init(MapType mapType) {
 	for(int i = 0; i < width*height; ++i) {
 		tiles.push_back(Tile());
 	}
-
-	generateMap();
+	generateMap(mapType);
 
 	addItems();
 	addMonsters();
 }
 
-void Map::generateMap() {
+void Map::generateMap(MapType mapType) {
+	switch(mapType) {
+		case MapType::BUILDING:
+			generateBuildingMap();
+			break;
+		case MapType::PILLARS:
+			generatePillarsMap();
+			break;
+		default:
+			break;
+	}
+}
+
+void Map::generateBuildingMap() {
 	std::vector<Rect> rooms;
-	std::vector<Rect> areas = breakRooms(Rect(0, 0, (width - 1), (height - 1))); // TODO dimensions
+	std::vector<Rect> areas = breakRooms(Rect(0, 0, (width - 1), (height - 1)));
 
 	// initialize
 	for(int x = 0; x < width; ++x) {
@@ -65,11 +77,21 @@ void Map::generateMap() {
 		}
 	}
 
-	/*for(int x = 0; x < width; ++x) {
+	for(int x = 0; x < width; ++x) {
+		for(int y = 0; y < height; ++y) {
+			if(x == 0 || x == width - 1 || y == 0 || y == height - 1) {
+				tiles.at(x + y*width).walkable = false;
+			}
+		}
+	}
+}
+
+void Map::generatePillarsMap() {
+	for(int x = 0; x < width; ++x) {
 		for(int y = 0; y < height; ++y) {
 			if(x % 3 == 0 && y % 3 == 0) tiles.at(x + y*width).walkable = false;
 		}
-	}*/
+	}
 	for(int x = 0; x < width; ++x) {
 		for(int y = 0; y < height; ++y) {
 			if(x == 0 || x == width - 1 || y == 0 || y == height - 1) {
