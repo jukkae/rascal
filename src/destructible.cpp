@@ -52,8 +52,7 @@ void PlayerDestructible::die(Actor* owner) {
 	owner->s->message(colors::red, "You died!");
 	Destructible::die(owner);
 	Engine* engine = owner->s->getEngine();
-	std::unique_ptr<State> gameOverState = std::make_unique<GameOverState>(owner);
-	gameOverState->init(engine);
+	std::unique_ptr<State> gameOverState = std::make_unique<GameOverState>(engine, owner);
 	engine->pushState(std::move(gameOverState));
 }
 

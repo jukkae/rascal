@@ -15,8 +15,7 @@ class Engine;
 
 class GameplayState : public State {
 public:
-	GameplayState();
-	void init(Engine* engine) override;
+	GameplayState(Engine* engine);
 
 	void handleEvents(Engine* engine) override;
 	void update(Engine* engine, sf::RenderWindow& window) override;
@@ -61,8 +60,23 @@ private:
 	void sortActors();
 
 	friend class boost::serialization::access;
+};
+
+namespace boost {
+namespace serialization {
 	template<class Archive>
-	void serialize(Archive & ar, const unsigned int version)
+	void save_construct_data(Archive & ar, const GameplayState* s, const unsigned int version)
+	{
+		ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(State);
+		ar & s->level;
+		ar & s->time;
+		ar & s->map;
+		ar & s->actors;
+		ar & s->gui;
+	}
+
+	template<class Archive>
+	void load_construct_data(Archive & ar, GameplayState* s, const unsigned int version)
 	{
 		ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(State);
 		ar & level;
@@ -71,5 +85,6 @@ private:
 		ar & actors;
 		ar & gui;
 	}
-};
+} // namespace boost
+} // namespace serialization
 #endif /* GAMEPLAY_STATE_HPP */

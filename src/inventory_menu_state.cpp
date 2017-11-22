@@ -6,10 +6,9 @@
 #include "colors.hpp"
 #include "font.hpp"
 
-InventoryMenuState::InventoryMenuState(Actor* actor) : actor(actor) {
-}
-
-void InventoryMenuState::init(Engine* engine) {
+InventoryMenuState::InventoryMenuState(Engine* engine, Actor* actor) :
+State(engine),
+actor(actor) {
 	inventoryContents.clear();
 	for(auto& item : actor->container->inventory) inventoryContents.push_back(item.get());
 	selectedItem = 0;

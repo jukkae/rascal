@@ -7,9 +7,7 @@
 class Engine;
 class VictoryState : public State {
 public:
-	VictoryState(Actor* actor);
-
-	void init(Engine* engine) override;
+	VictoryState(Engine* engine, Actor* actor);
 
 	void handleEvents(Engine* engine) override;
 	void update(Engine* engine, sf::RenderWindow& window) override;

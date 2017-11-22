@@ -10,10 +10,9 @@
 #include <SFML/System.hpp>
 #include <SFML/Window.hpp>
 
-LevelUpMenuState::LevelUpMenuState(Actor* actor) : actor(actor) {
-}
-
-void LevelUpMenuState::init(Engine* engine) {
+LevelUpMenuState::LevelUpMenuState(Engine* engine, Actor* actor) : 
+State(engine),
+actor(actor) {
 	menuContents.push_back({MenuItemType::CONSTITUTION, "constitution"});
 	menuContents.push_back({MenuItemType::STRENGTH, "strength"});
 	menuContents.push_back({MenuItemType::AGILITY, "agility"});

@@ -16,14 +16,13 @@
 
 Engine::Engine() {
 	font::load();
-	std::unique_ptr<State> gps = std::make_unique<GameplayState>();
+	std::unique_ptr<State> gps = std::make_unique<GameplayState>(this);
 
 	struct stat buf;
 	int result = stat (constants::SAVE_FILE_NAME.c_str(), &buf);
 
 	bool showContinueInMenu = false;
 	if(result != 0) { // If file doesn't exist
-		gps->init(this);
 		gameplayState = gps.get();
 	}
 	else { // FIXME urgh
@@ -34,8 +33,7 @@ Engine::Engine() {
 		gps = std::unique_ptr<GameplayState>(static_cast<GameplayState*>(gameplayState));
 	}
 
-	std::unique_ptr<State> mainMenuState = std::make_unique<MainMenuState>(showContinueInMenu);
-	mainMenuState->init(this);
+	std::unique_ptr<State> mainMenuState = std::make_unique<MainMenuState>(this, showContinueInMenu);
 
 	states.push_back(std::move(gps));
 	states.push_back(std::move(mainMenuState));
@@ -50,8 +48,7 @@ void Engine::newGame() {
 		remove(constants::SAVE_FILE_NAME.c_str());
 	}
 
-	std::unique_ptr<State> gps = std::make_unique<GameplayState>();
-	gps->init(this);
+	std::unique_ptr<State> gps = std::make_unique<GameplayState>(this);
 	gameplayState = gps.get();
 	states.at(0) = std::move(gps);
 }

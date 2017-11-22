@@ -6,13 +6,16 @@
 #include <SFML/Window.hpp>
 class State {
 public:
-	virtual void init(Engine* engine) = 0;
+	State(Engine* engine): engine(engine) {;}
 
 	virtual void handleEvents(Engine* engine) = 0;
 	virtual void update(Engine* engine, sf::RenderWindow& window) = 0;
 	virtual void render(Engine* engine, sf::RenderWindow& window) = 0; // TODO should be const
 
 	void changeState(Engine* engine, std::unique_ptr<State> state) { engine->changeState(std::move(state)); }
+
+protected:
+	Engine* engine;
 
 private:
 	friend class boost::serialization::access;

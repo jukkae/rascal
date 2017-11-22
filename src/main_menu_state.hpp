@@ -11,8 +11,7 @@ class MainMenuState : public State {
 public:
 	enum class MenuItemCode { NONE, NEW_GAME, CONTINUE, EXIT };
 
-	MainMenuState(bool forceShowContinue = false) : forceShowContinue(forceShowContinue) {;}
-	void init(Engine* engine) override;
+	MainMenuState(Engine* engine, bool forceShowContinue = false);
 
 	void handleEvents(Engine* engine) override;
 	void update(Engine* engine, sf::RenderWindow& window) override;

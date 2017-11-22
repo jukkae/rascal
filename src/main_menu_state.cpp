@@ -10,7 +10,9 @@
 #include <SFML/Window.hpp>
 #include <SFML/Graphics/Text.hpp>
 
-void MainMenuState::init(Engine* engine) {
+MainMenuState::MainMenuState(Engine* engine, bool forceShowContinue) :
+State(engine),
+forceShowContinue(forceShowContinue) {
 	MenuItem newGame = { MenuItemCode::NEW_GAME, "New game!" };
 	MenuItem cont = { MenuItemCode::CONTINUE, "Continue!" };
 	MenuItem exit = { MenuItemCode::EXIT, "Exit!" };

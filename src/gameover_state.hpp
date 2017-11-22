@@ -11,9 +11,7 @@ class Actor;
 
 class GameOverState : public State {
 public:
-	GameOverState(Actor* actor);
-
-	void init(Engine* engine) override;
+	GameOverState(Engine* engine, Actor* actor);
 
 	void handleEvents(Engine* engine) override;
 	void update(Engine* engine, sf::RenderWindow& window) override;

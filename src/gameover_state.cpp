@@ -13,7 +13,8 @@
 #include <SFML/Window.hpp>
 #include <SFML/Graphics/Text.hpp>
 
-GameOverState::GameOverState(Actor* actor) :
+GameOverState::GameOverState(Engine* engine, Actor* actor) :
+State(engine),
 actor(actor)
 {
 	description = "you died at level ";
@@ -24,9 +25,6 @@ actor(actor)
 	}
 }
 
-void GameOverState::init(Engine* engine) {
-}
-
 void GameOverState::handleEvents(Engine* engine) {
 	sf::Event event;
 	while(engine->pollEvent(event)) {
@@ -34,8 +32,7 @@ void GameOverState::handleEvents(Engine* engine) {
 			using k = sf::Keyboard::Key;
 			switch(event.key.code) {
 				case k::Return: {
-					std::unique_ptr<State> mainMenuState = std::make_unique<MainMenuState>();
-					mainMenuState->init(engine);
+					std::unique_ptr<State> mainMenuState = std::make_unique<MainMenuState>(engine);
 					changeState(engine, std::move(mainMenuState));
 					break;
 				}

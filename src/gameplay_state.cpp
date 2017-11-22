@@ -6,12 +6,8 @@
 #include <SFML/Window/Mouse.hpp>
 #include <boost/optional/optional_io.hpp>
 
-GameplayState::GameplayState() {
-
-}
-
-void GameplayState::init(Engine* engine) {
-	e = engine;
+GameplayState::GameplayState(Engine* engine) :
+State(engine) {
 	gui.setState(this);
 	renderer.setState(this);
 
@@ -172,8 +168,7 @@ void GameplayState::message(sf::Color col, std::string text, ...) {
 void GameplayState::nextLevel() {
 	++level;
 	if(level > 5) {
-		std::unique_ptr<State> victoryState = std::make_unique<VictoryState>(getPlayer());
-		victoryState->init(e);
+		std::unique_ptr<State> victoryState = std::make_unique<VictoryState>(e, getPlayer());
 		e->pushState(std::move(victoryState));
 	}
 	gui.message(sf::Color::Magenta, "You take a moment to rest, and recover your strength.");

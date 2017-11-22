@@ -9,8 +9,7 @@ class Engine;
 class Actor;
 class InventoryMenuState : public State {
 public:
-	InventoryMenuState(Actor* actor);
-	void init(Engine* engine) override;
+	InventoryMenuState(Engine* engine, Actor* actor);
 
 	void handleEvents(Engine* engine) override;
 	void update(Engine* engine, sf::RenderWindow& window) override;
