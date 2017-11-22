@@ -27,10 +27,6 @@ void MainMenuState::init(Engine* engine) {
 	selectedItem = 0;
 }
 
-void MainMenuState::cleanup() {
-
-}
-
 void MainMenuState::handleEvents(Engine* engine) {
 	sf::Event event;
 	while(engine->pollEvent(event)) {

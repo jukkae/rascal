@@ -21,11 +21,6 @@ void LevelUpMenuState::init(Engine* engine) {
 	selectedItem = 0;
 }
 
-
-void LevelUpMenuState::cleanup() {
-
-}
-
 void LevelUpMenuState::handleEvents(Engine* engine) {
 	sf::Event event;
 	while(engine->pollEvent(event)) {

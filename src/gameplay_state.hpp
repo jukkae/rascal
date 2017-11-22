@@ -16,7 +16,6 @@ class Engine;
 class GameplayState : public State {
 public:
 	void init(Engine* engine) override;
-	void cleanup() override;
 
 	void handleEvents(Engine* engine) override;
 	void update(Engine* engine, sf::RenderWindow& window) override;

@@ -45,10 +45,6 @@ void GameplayState::initLoaded(Engine* engine) {
 	for (auto& a : actors) a->setState(this);
 }
 
-void GameplayState::cleanup() {
-
-}
-
 void GameplayState::update(Engine* engine, sf::RenderWindow& window) {
 	//window.clear(sf::Color::Black);
 	if(!window_) window_ = &window; // TODO

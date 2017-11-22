@@ -27,9 +27,6 @@ actor(actor)
 void GameOverState::init(Engine* engine) {
 }
 
-void GameOverState::cleanup() {
-}
-
 void GameOverState::handleEvents(Engine* engine) {
 	sf::Event event;
 	while(engine->pollEvent(event)) {

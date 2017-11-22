@@ -18,8 +18,6 @@ actor(actor)
 
 void VictoryState::init(Engine* engine) { }
 
-void VictoryState::cleanup() { }
-
 void VictoryState::handleEvents(Engine* engine) {
 	sf::Event event;
 	while(engine->pollEvent(event)) {

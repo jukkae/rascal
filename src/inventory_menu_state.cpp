@@ -15,10 +15,6 @@ void InventoryMenuState::init(Engine* engine) {
 	selectedItem = 0;
 }
 
-void InventoryMenuState::cleanup() {
-
-}
-
 void InventoryMenuState::handleEvents(Engine* engine) {
 	sf::Event event;
 	while(engine->pollEvent(event)) {

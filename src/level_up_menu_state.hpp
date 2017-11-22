@@ -19,7 +19,6 @@ class LevelUpMenuState : public State {
 public:
 	LevelUpMenuState(Actor* actor);
 	void init(Engine* engine) override;
-	void cleanup() override;
 
 	void handleEvents(Engine* engine) override;
 	void update(Engine* engine, sf::RenderWindow& window) override;

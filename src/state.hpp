@@ -7,7 +7,6 @@
 class State {
 public:
 	virtual void init(Engine* engine) = 0;
-	virtual void cleanup() = 0;
 
 	virtual void handleEvents(Engine* engine) = 0;
 	virtual void update(Engine* engine, sf::RenderWindow& window) = 0;
