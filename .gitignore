@@ -7,10 +7,7 @@ assets/
 include/
 lib/
 frameworks/
-old/
 *.a
 *.la
 *.lai
 *.dylib
-terminal.png
-menu_background1.png
