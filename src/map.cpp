@@ -57,13 +57,6 @@ void Map::generateBuildingMap() {
 		}
 	}
 
-	// generate outer walls
-	for(int x = 0; x < width; ++x) {
-		for(int y = 0; y < height; ++y) {
-			if(x == 0 || x == width - 1 || y == 0 || y == height - 1) tiles.at(x + y*width).walkable = false;
-		}
-	}
-
 	for(auto a : areas) {
 		for(int x = a.x0(); x < a.x1(); ++x) {
 			for(int y = a.y0(); y < a.y1(); ++y) {
