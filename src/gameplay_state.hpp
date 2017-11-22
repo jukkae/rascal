@@ -15,6 +15,7 @@ class Engine;
 
 class GameplayState : public State {
 public:
+	GameplayState();
 	void init(Engine* engine) override;
 
 	void handleEvents(Engine* engine) override;
@@ -22,6 +23,7 @@ public:
 	void render(Engine* engine, sf::RenderWindow& window) override;
 
 	void initLoaded(Engine* engine);
+	void newGame(Engine* engine);
 	// TEMPORARY FUNCTIONS FOR REFACTORING PROCESS
 	int getLevel() { return level; }
 	void nextLevel();

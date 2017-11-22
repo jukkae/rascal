@@ -5,12 +5,37 @@
 #include <SFML/Window/Mouse.hpp>
 #include <boost/optional/optional_io.hpp>
 
+GameplayState::GameplayState() {
+
+}
+
 void GameplayState::init(Engine* engine) {
 	e = engine;
-
 	gui.setState(this);
 	renderer.setState(this);
 
+	newGame(engine);
+
+	map = Map(120, 72);
+	map.setState(this);
+	map.init();
+	// not really the correct place for following, but w/e
+	for (auto& a : actors) a->setState(this);
+	std::sort(actors.begin(), actors.end(), [](const auto& lhs, const auto& rhs)
+	{
+		return lhs->energy > rhs->energy;
+	});
+}
+
+void GameplayState::initLoaded(Engine* engine) {
+	e = engine;
+	gui.setState(this);
+	renderer.setState(this);
+	map.setState(this);
+	for (auto& a : actors) a->setState(this);
+}
+
+void GameplayState::newGame(Engine* engine) {
 	std::unique_ptr<Actor> player = std::make_unique<Actor>(40, 25, '@', "you", sf::Color::White, 2);
 	player->destructible = std::make_unique<PlayerDestructible>(100, 2, 0, "your corpse", 11);
 	player->attacker     = std::make_unique<Attacker>(5);
@@ -23,26 +48,7 @@ void GameplayState::init(Engine* engine) {
     stairs->fovOnly = false;
 	addActor(std::move(stairs));
 
-	map = Map(120, 72);
-	map.setState(this);
-	map.init();
-	// not really the correct place for following, but w/e
-	for (auto& a : actors) a->setState(this);
-	std::sort(actors.begin(), actors.end(), [](const auto& lhs, const auto& rhs)
-	{
-		return lhs->energy > rhs->energy;
-	});
-
-
 	gui.message(sf::Color::Green, "Welcome to year 20XXAD, you strange rascal!\nPrepare to fight or die!");
-}
-
-void GameplayState::initLoaded(Engine* engine) {
-	e = engine;
-	gui.setState(this);
-	renderer.setState(this);
-	map.setState(this);
-	for (auto& a : actors) a->setState(this);
 }
 
 void GameplayState::update(Engine* engine, sf::RenderWindow& window) {
