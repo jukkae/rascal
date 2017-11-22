@@ -70,6 +70,13 @@ void Map::generateMap() {
 			if(x % 3 == 0 && y % 3 == 0) tiles.at(x + y*width).walkable = false;
 		}
 	}*/
+	for(int x = 0; x < width; ++x) {
+		for(int y = 0; y < height; ++y) {
+			if(x == 0 || x == width - 1 || y == 0 || y == height - 1) {
+				tiles.at(x + y*width).walkable = false;
+			}
+		}
+	}
 }
 
 std::vector<Rect> Map::breakRooms(Rect area, BreakDirection direction) {
