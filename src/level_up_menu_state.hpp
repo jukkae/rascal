@@ -20,8 +20,8 @@ public:
 	LevelUpMenuState(Engine* engine, Actor* actor);
 
 	void handleEvents() override;
-	void update(sf::RenderWindow& window) override;
-	void render(sf::RenderWindow& window) override;
+	void update() override;
+	void render() override;
 private:
 	void handleItem(MenuItem item);
 

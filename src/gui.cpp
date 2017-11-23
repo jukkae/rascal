@@ -28,7 +28,7 @@ void Gui::clear() {
 	log.clear();
 }
 
-void Gui::render(sf::RenderWindow& window) {
+void Gui::render(sf::RenderWindow* window) {
 
 	renderMessageLog(window);
 	renderBar(1, 1, BAR_WIDTH, "HP", state->getPlayer()->destructible->hp, state->getPlayer()->destructible->maxHp, lightRed, darkerRed, window);
@@ -37,33 +37,33 @@ void Gui::render(sf::RenderWindow& window) {
 	sf::Text dlvl(dungeonLvlString, font::mainFont, 16);
 	dlvl.setPosition(3*constants::CELL_WIDTH, (3+constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT)*constants::CELL_HEIGHT);
 	dlvl.setFillColor(sf::Color::White);
-	window.draw(dlvl);
+	window->draw(dlvl);
 
 	std::string timeString = "Time: " + std::to_string(state->getTime());
 	sf::Text time(timeString, font::mainFont, 16);
 	time.setPosition(3*constants::CELL_WIDTH, (4+constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT)*constants::CELL_HEIGHT);
 	time.setFillColor(sf::Color::White);
-	window.draw(time);
+	window->draw(time);
 
 	renderXpBar(window);
 	renderMouseLook(state->getActors(), window);
 }
 
-void Gui::renderXpBar(sf::RenderWindow& window) {
+void Gui::renderXpBar(sf::RenderWindow* window) {
 	PlayerAi* ai = (PlayerAi*)state->getPlayer()->ai.get(); // Don't transfer ownership!
 	char xpTxt[128];
 	sprintf(xpTxt, "XP(%d)", ai->xpLevel);
 	renderBar(1, 5, BAR_WIDTH, xpTxt, ai->experience, ai->getNextLevelXp(), lightViolet, darkerViolet, window);
 }
 
-void Gui::renderMessageLog(sf::RenderWindow& window) {
+void Gui::renderMessageLog(sf::RenderWindow* window) {
 	int y = 1;
 	float colCoef = 0.4f;
 	for(Message msg : log) {
 		sf::Text text(msg.text, font::mainFont, 16);
 		text.setFillColor(msg.col); //TODO  msg.col * colCoef
 		text.setPosition(MSG_X * constants::CELL_WIDTH, (y + constants::SCREEN_HEIGHT - constants::GUI_PANEL_HEIGHT) * constants::CELL_HEIGHT); // correct position
-		window.draw(text);
+		window->draw(text);
 		++y;
 		if(colCoef < 1.0f) {
 			colCoef += 0.3f;
@@ -71,11 +71,11 @@ void Gui::renderMessageLog(sf::RenderWindow& window) {
 	}
 }
 
-void Gui::renderBar(int x, int y, int width, std::string name, float value, float maxValue, const sf::Color barColor, const sf::Color backColor, sf::RenderWindow& window) {
+void Gui::renderBar(int x, int y, int width, std::string name, float value, float maxValue, const sf::Color barColor, const sf::Color backColor, sf::RenderWindow* window) {
 	sf::RectangleShape bg(sf::Vector2f(constants::CELL_WIDTH * width, constants::CELL_HEIGHT));
 	bg.setFillColor(backColor);
 	bg.setPosition(x * constants::CELL_WIDTH, (y + constants::SCREEN_HEIGHT - constants::GUI_PANEL_HEIGHT) * constants::CELL_HEIGHT);
-	window.draw(bg);
+	window->draw(bg);
 
 	sf::RectangleShape rect(sf::Vector2f(constants::CELL_WIDTH * width, constants::CELL_HEIGHT));
 
@@ -84,7 +84,7 @@ void Gui::renderBar(int x, int y, int width, std::string name, float value, floa
 		rect.setFillColor(barColor);
 		rect.setSize(sf::Vector2f(constants::CELL_WIDTH * barWidth, constants::CELL_HEIGHT));
 		rect.setPosition(x * constants::CELL_WIDTH, (y + constants::SCREEN_HEIGHT - constants::GUI_PANEL_HEIGHT) * constants::CELL_HEIGHT);
-		window.draw(rect);
+		window->draw(rect);
 	}
 	sf::Text text;
 	text.setFont(font::mainFont);
@@ -93,12 +93,12 @@ void Gui::renderBar(int x, int y, int width, std::string name, float value, floa
 	text.setCharacterSize(16);
 	text.setFillColor(sf::Color::White);
 	text.setPosition(x*constants::CELL_WIDTH, (y + constants::SCREEN_HEIGHT - constants::GUI_PANEL_HEIGHT) * constants::CELL_HEIGHT);
-	window.draw(text);
+	window->draw(text);
 }
 
-void Gui::renderMouseLook(std::vector<std::unique_ptr<Actor>>& actors, sf::RenderWindow& window) {
-	int xPix = sf::Mouse::getPosition(window).x;
-	int yPix = sf::Mouse::getPosition(window).y;
+void Gui::renderMouseLook(std::vector<std::unique_ptr<Actor>>& actors, sf::RenderWindow* window) {
+	int xPix = sf::Mouse::getPosition(*window).x;
+	int yPix = sf::Mouse::getPosition(*window).y;
 	int xCells = xPix / constants::CELL_WIDTH;
 	int yCells = yPix / constants::CELL_HEIGHT;
 	Point screenCells(xCells, yCells);
@@ -127,7 +127,7 @@ void Gui::renderMouseLook(std::vector<std::unique_ptr<Actor>>& actors, sf::Rende
 	text.setCharacterSize(16);
 	text.setFillColor(lightGrey);
 	text.setPosition(1 * constants::CELL_WIDTH, (0 + constants::SCREEN_HEIGHT - constants::GUI_PANEL_HEIGHT) * constants::CELL_HEIGHT);
-	window.draw(text);
+	window->draw(text);
 }
 
 

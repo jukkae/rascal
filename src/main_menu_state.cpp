@@ -11,7 +11,7 @@
 #include <SFML/Graphics/Text.hpp>
 
 MainMenuState::MainMenuState(Engine* engine, bool forceShowContinue) :
-State(engine),
+State(engine, engine->getWindow()),
 forceShowContinue(forceShowContinue) {
 	MenuItem newGame = { MenuItemCode::NEW_GAME, "New game!" };
 	MenuItem cont = { MenuItemCode::CONTINUE, "Continue!" };
@@ -51,20 +51,20 @@ void MainMenuState::handleEvents() {
 	}
 }
 
-void MainMenuState::update(sf::RenderWindow& window) {
-	window.clear(sf::Color::Black);
+void MainMenuState::update() {
+	window->clear(sf::Color::Black);
 
 	handleEvents();
-	render(window);
+	render();
 
-	window.display();
+	window->display();
 }
 
-void MainMenuState::render(sf::RenderWindow& window) {
-	showMenu(window);
+void MainMenuState::render() {
+	showMenu();
 }
 
-void MainMenuState::showMenu(sf::RenderWindow& window) {
+void MainMenuState::showMenu() {
 	int menuX = 10;
 	int menuY = constants::SCREEN_HEIGHT / 3;
 
@@ -78,7 +78,7 @@ void MainMenuState::showMenu(sf::RenderWindow& window) {
 		}
 
 		itemText.setPosition(menuX * constants::CELL_WIDTH, (menuY + itemIndex * 3) * constants::CELL_HEIGHT);
-		window.draw(itemText);
+		window->draw(itemText);
 		++itemIndex;
 	}
 }

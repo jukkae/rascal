@@ -15,11 +15,11 @@ class Engine;
 
 class GameplayState : public State {
 public:
-	GameplayState(Engine* engine);
+	GameplayState(Engine* engine, sf::RenderWindow* window);
 
 	void handleEvents() override;
-	void update(sf::RenderWindow& window) override;
-	void render(sf::RenderWindow& window) override;
+	void update() override;
+	void render() override;
 
 	void initLoaded(Engine* engine);
 	void newGame(Engine* engine);
@@ -35,6 +35,7 @@ public:
 	bool canWalk(int x, int y);
 	Engine* getEngine() { return engine; }
 	void setEngine(Engine* e) { engine = e; }
+	void setWindow(sf::RenderWindow* w) { window = w; }
 
 	Actor* getNextActor() const { return actors.front().get(); }
 	Actor* getPlayer() const;
@@ -53,7 +54,6 @@ private:
 	Map map;
 	Gui gui;
 	Renderer renderer;
-	sf::RenderWindow* window_ = nullptr; // TODO
 
 	void updateTime();
 	void updateNextActor();
@@ -84,8 +84,9 @@ namespace serialization {
 	void load_construct_data(Archive & ar, GameplayState* s, const unsigned int version)
 	{
 		boost::serialization::void_cast_register<GameplayState, State>();
-		Engine* engine = nullptr; // TODO how to get this?
-		::new(s)GameplayState(engine);
+		Engine* engine = nullptr;
+		sf::RenderWindow* window = nullptr;
+		::new(s)GameplayState(engine, window);
 		ar & s->level;
 		ar & s->time;
 		ar & s->map;

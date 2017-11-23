@@ -7,7 +7,7 @@
 #include "font.hpp"
 
 InventoryMenuState::InventoryMenuState(Engine* engine, Actor* actor) :
-State(engine),
+State(engine, engine->getWindow()),
 actor(actor) {
 	inventoryContents.clear();
 	for(auto& item : actor->container->inventory) inventoryContents.push_back(item.get());
@@ -51,13 +51,13 @@ void InventoryMenuState::handleEvents() {
 	}
 }
 
-void InventoryMenuState::update(sf::RenderWindow& window) {
+void InventoryMenuState::update() {
 	handleEvents();
-	render(window);
+	render();
 }
 
-void InventoryMenuState::render(sf::RenderWindow& window) {
-	window.clear(sf::Color::Black);
+void InventoryMenuState::render() {
+	window->clear(sf::Color::Black);
 
 	int y = 1;
 	int itemIndex = 0;
@@ -66,10 +66,10 @@ void InventoryMenuState::render(sf::RenderWindow& window) {
 		text.setPosition(2*constants::CELL_WIDTH, y*constants::CELL_HEIGHT);
 		if(itemIndex == selectedItem) text.setFillColor(colors::brightBlue);
 		else text.setFillColor(colors::darkBlue);
-		window.draw(text);
+		window->draw(text);
 		++y;
 		++itemIndex;
 	}
 
-	window.display();
+	window->display();
 }

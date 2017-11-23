@@ -14,8 +14,8 @@ public:
 	MainMenuState(Engine* engine, bool forceShowContinue = false);
 
 	void handleEvents() override;
-	void update(sf::RenderWindow& window) override;
-	void render(sf::RenderWindow& window) override;
+	void update() override;
+	void render() override;
 private:
 	sf::Font font;
 	bool forceShowContinue;
@@ -29,6 +29,6 @@ private:
 	int selectedItem;
 
 	void handleSelectedMenuItem();
-	void showMenu(sf::RenderWindow& window);
+	void showMenu();
 };
 #endif /* MAIN_MENU_STATE_HPP */

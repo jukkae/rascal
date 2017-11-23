@@ -10,12 +10,12 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 
-Engine engine;
+int width = constants::CELL_WIDTH * constants::SCREEN_WIDTH;
+int height = constants::CELL_HEIGHT * constants::SCREEN_HEIGHT;
+sf::RenderWindow window(sf::VideoMode(width, height), "Rascal");
+Engine engine(&window);
 
 int main() {
-	int width = constants::CELL_WIDTH * constants::SCREEN_WIDTH;
-	int height = constants::CELL_HEIGHT * constants::SCREEN_HEIGHT;
-	sf::RenderWindow window(sf::VideoMode(width, height), "Rascal");
 	while(window.isOpen()) {
 		sf::Event event;
         while (window.pollEvent(event)) {
@@ -23,7 +23,7 @@ int main() {
                 window.close();
 			else engine.addEvent(event);
         }
-		engine.update(window);
+		engine.update();
 	}
 
 	return 0;

@@ -16,7 +16,7 @@ class State;
 
 class Engine {
 public:
-	Engine();
+	Engine(sf::RenderWindow* window);
 	~Engine();
 	void newGame();
 
@@ -24,7 +24,7 @@ public:
 	void changeState(std::unique_ptr<State> state);
 	void popState();
 
-	void update(sf::RenderWindow& window);
+	void update();
 
 	template <class T>
 	void addEngineCommand(T engineCommand) { engineCommands.push(std::make_unique<T>(engineCommand)); }
@@ -36,7 +36,9 @@ public:
 	void save();
 	void load();
 
+	sf::RenderWindow* getWindow() { return window; }
 private:
+	sf::RenderWindow* window;
 	State* gameplayState;
 	std::vector<std::unique_ptr<State>> states;
 	std::queue<std::unique_ptr<EngineCommand>> engineCommands;

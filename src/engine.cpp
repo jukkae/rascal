@@ -14,9 +14,9 @@
 #include "main_menu_state.hpp"
 
 
-Engine::Engine() {
+Engine::Engine(sf::RenderWindow* window) : window(window) {
 	font::load();
-	std::unique_ptr<State> gps = std::make_unique<GameplayState>(this);
+	std::unique_ptr<State> gps = std::make_unique<GameplayState>(this, window);
 
 	struct stat buf;
 	int result = stat (constants::SAVE_FILE_NAME.c_str(), &buf);
@@ -48,15 +48,15 @@ void Engine::newGame() {
 		remove(constants::SAVE_FILE_NAME.c_str());
 	}
 
-	std::unique_ptr<State> gps = std::make_unique<GameplayState>(this);
+	std::unique_ptr<State> gps = std::make_unique<GameplayState>(this, window);
 	gameplayState = gps.get();
 	states.at(0) = std::move(gps);
 }
 
-void Engine::update(sf::RenderWindow& window) {
+void Engine::update() {
 
 	while(engineCommands.size() > 0) executeEngineCommand();
-	states.back()->update(window);
+	states.back()->update();
 }
 
 bool Engine::pollEvent(sf::Event& event) {
@@ -102,6 +102,7 @@ void Engine::load() {
 
 	ia >> gameplayState;
 	(static_cast<GameplayState*>(gameplayState))->setEngine(this);
+	(static_cast<GameplayState*>(gameplayState))->setWindow(window);
 }
 
 void Engine::save() {

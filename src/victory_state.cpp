@@ -5,7 +5,7 @@
 #include <sys/stat.h>
 
 VictoryState::VictoryState(Engine* engine, Actor* actor) :
-State(engine),
+State(engine, engine->getWindow()),
 actor(actor)
 {
 	description = "you won at level ";
@@ -24,7 +24,7 @@ void VictoryState::handleEvents() {
 			using k = sf::Keyboard::Key;
 			switch(event.key.code) {
 				case k::Return: {
-					std::unique_ptr<State> mainMenuState = std::make_unique<MainMenuState>(engine);
+					std::unique_ptr<State> mainMenuState = std::make_unique<MainMenuState>(engine, window);
 					changeState(std::move(mainMenuState));
 					break;
 				}
@@ -34,15 +34,15 @@ void VictoryState::handleEvents() {
 	}
 }
 
-void VictoryState::update(sf::RenderWindow& window) {
+void VictoryState::update() {
 	handleEvents();
-	render(window);
+	render();
 }
 
-void VictoryState::render(sf::RenderWindow& window) {
-	window.clear(sf::Color::Black);
+void VictoryState::render() {
+	window->clear(sf::Color::Black);
 	sf::Text text(description, font::mainFont, 16);
 	text.setFillColor(colors::brightBlue);
-	window.draw(text);
-	window.display();
+	window->draw(text);
+	window->display();
 }

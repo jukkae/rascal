@@ -14,7 +14,7 @@
 #include <SFML/Graphics/Text.hpp>
 
 GameOverState::GameOverState(Engine* engine, Actor* actor) :
-State(engine),
+State(engine, engine->getWindow()),
 actor(actor)
 {
 	description = "you died at level ";
@@ -42,15 +42,15 @@ void GameOverState::handleEvents() {
 	}
 }
 
-void GameOverState::update(sf::RenderWindow& window) {
+void GameOverState::update() {
 	handleEvents();
-	render(window);
+	render();
 }
 
-void GameOverState::render(sf::RenderWindow& window) {
-	window.clear(sf::Color::Black);
+void GameOverState::render() {
+	window->clear(sf::Color::Black);
 	sf::Text text(description, font::mainFont, 16);
 	text.setFillColor(colors::brightBlue);
-	window.draw(text);
-	window.display();
+	window->draw(text);
+	window->display();
 }

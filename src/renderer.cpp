@@ -13,7 +13,7 @@ static const sf::Color black      (0,   0,   0  );
 Renderer::Renderer(int screenWidth, int screenHeight): screenWidth(screenWidth), screenHeight(screenHeight) {
 }
 
-void Renderer::render(const Map* const map, const std::vector<std::unique_ptr<Actor>>& actors, sf::RenderWindow& window) {
+void Renderer::render(const Map* const map, const std::vector<std::unique_ptr<Actor>>& actors, sf::RenderWindow* window) {
 	//window.clear(sf::Color::Black);
 
 	renderMap(map, window);
@@ -22,7 +22,7 @@ void Renderer::render(const Map* const map, const std::vector<std::unique_ptr<Ac
 	//window.display();
 }
 
-void Renderer::renderMap(const Map* const map, sf::RenderWindow& window) {
+void Renderer::renderMap(const Map* const map, sf::RenderWindow* window) {
 	int cameraX = state->getPlayer()->x - (screenWidth/2);
 	int cameraY = state->getPlayer()->y - (screenHeight/2);
 	int mapWidth = map->width;
@@ -50,12 +50,12 @@ void Renderer::renderMap(const Map* const map, sf::RenderWindow& window) {
 				rectangle.setFillColor(black);
 			}
 
-			window.draw(rectangle);
+			window->draw(rectangle);
 		}
 	}
 }
 
-void Renderer::renderActors(const Map* const map, const std::vector<std::unique_ptr<Actor>>& actors, sf::RenderWindow& window) {
+void Renderer::renderActors(const Map* const map, const std::vector<std::unique_ptr<Actor>>& actors, sf::RenderWindow* window) {
 	// Crude implementation of render layers
 	Actor* player;
 	std::vector<Actor*> corpses;
@@ -103,7 +103,7 @@ void Renderer::renderActors(const Map* const map, const std::vector<std::unique_
 }
 
 
-void Renderer::renderActor(const Actor* const actor, sf::RenderWindow& window) {
+void Renderer::renderActor(const Actor* const actor, sf::RenderWindow* window) {
 	Point worldPosition(actor->x, actor->y);
 	Point screenPosition = getScreenCoordsFromWorldCoords(worldPosition);
 	int x = screenPosition.x;
@@ -112,7 +112,7 @@ void Renderer::renderActor(const Actor* const actor, sf::RenderWindow& window) {
 	sf::Text t((char)actor->ch, font::mainFont, 16);
 	t.setPosition(x*constants::CELL_WIDTH, y*constants::CELL_HEIGHT);
 	t.setFillColor(actor->col);
-	window.draw(t);
+	window->draw(t);
 
 }
 

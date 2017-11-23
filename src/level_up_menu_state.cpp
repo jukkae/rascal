@@ -11,7 +11,7 @@
 #include <SFML/Window.hpp>
 
 LevelUpMenuState::LevelUpMenuState(Engine* engine, Actor* actor) : 
-State(engine),
+State(engine, engine->getWindow()),
 actor(actor) {
 	menuContents.push_back({MenuItemType::CONSTITUTION, "constitution"});
 	menuContents.push_back({MenuItemType::STRENGTH, "strength"});
@@ -43,13 +43,13 @@ void LevelUpMenuState::handleEvents() {
 	}
 }
 
-void LevelUpMenuState::update(sf::RenderWindow& window) {
+void LevelUpMenuState::update() {
 	handleEvents();
-	render(window);
+	render();
 }
 
-void LevelUpMenuState::render(sf::RenderWindow& window) {
-	window.clear(sf::Color::Black);
+void LevelUpMenuState::render() {
+	window->clear(sf::Color::Black);
 
 	int y = 1;
 	int itemIndex = 0;
@@ -61,12 +61,12 @@ void LevelUpMenuState::render(sf::RenderWindow& window) {
 		text.setPosition(2*constants::CELL_WIDTH, y*constants::CELL_HEIGHT);
 		if(itemIndex == selectedItem) text.setFillColor(colors::brightBlue);
 		else text.setFillColor(colors::darkBlue);
-		window.draw(text);
+		window->draw(text);
 		++y;
 		++itemIndex;
 	}
 
-	window.display();
+	window->display();
 }
 
 void LevelUpMenuState::handleItem(MenuItem item) {

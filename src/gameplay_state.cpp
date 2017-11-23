@@ -6,8 +6,8 @@
 #include <SFML/Window/Mouse.hpp>
 #include <boost/optional/optional_io.hpp>
 
-GameplayState::GameplayState(Engine* engine) :
-State(engine) {
+GameplayState::GameplayState(Engine* engine, sf::RenderWindow* window) :
+State(engine, window) {
 	gui.setState(this);
 	renderer.setState(this);
 
@@ -48,9 +48,7 @@ void GameplayState::newGame(Engine* engine) {
 	gui.message(sf::Color::Green, "Welcome to year 20XXAD, you strange rascal!\nPrepare to fight or die!");
 }
 
-void GameplayState::update(sf::RenderWindow& window) {
-	//window.clear(sf::Color::Black);
-	if(!window_) window_ = &window; // TODO
+void GameplayState::update() {
 	Actor* activeActor = getNextActor();
 	if(activeActor->isPlayer()) {
 		handleEvents();
@@ -58,22 +56,21 @@ void GameplayState::update(sf::RenderWindow& window) {
 	updateNextActor();
 	if(activeActor->isPlayer()) {
 		computeFov();
-		render(window);
+		render();
 	}
-	//window.display();
 }
 
 void GameplayState::handleEvents() {
 	//inputHandler->handleEvents();
 }
 
-void GameplayState::render(sf::RenderWindow& window) {
-	window.clear(sf::Color::Black);
+void GameplayState::render() {
+	window->clear(sf::Color::Black);
 
 	renderer.render(&map, actors, window);
 	gui.render(window);
 
-	window.display();
+	window->display();
 }
 
 void GameplayState::updateNextActor() {
@@ -207,10 +204,9 @@ bool GameplayState::pickTile(int* x, int* y, float maxRange) {
 				}
 			}
 		}
-		sf::RenderWindow& window = *window_; // TODO
-		render(window); // TODO
-		int mouseXPix = sf::Mouse::getPosition(window).x;
-		int mouseYPix = sf::Mouse::getPosition(window).y;
+		render();
+		int mouseXPix = sf::Mouse::getPosition(*window).x;
+		int mouseYPix = sf::Mouse::getPosition(*window).y;
 		int xCells = mouseXPix / constants::CELL_WIDTH;
 		int yCells = mouseYPix / constants::CELL_HEIGHT;
 		Point mouseLocationScreen(xCells, yCells);
