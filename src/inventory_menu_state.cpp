@@ -59,11 +59,16 @@ void InventoryMenuState::update() {
 void InventoryMenuState::render() {
 	window->clear(sf::Color::Black);
 
+	sf::Text heading("I N V E N T O R Y", font::mainFont, 16);
+	heading.setPosition(2*constants::CELL_WIDTH, constants::CELL_HEIGHT);
+	heading.setFillColor(colors::brightBlue);
+	window->draw(heading);
+
 	int y = 1;
 	int itemIndex = 0;
 	for (auto item : inventoryContents) {
 		sf::Text text(item->name, font::mainFont, 16);
-		text.setPosition(2*constants::CELL_WIDTH, y*constants::CELL_HEIGHT);
+		text.setPosition(2*constants::CELL_WIDTH, (y+2)*constants::CELL_HEIGHT);
 		if(itemIndex == selectedItem) text.setFillColor(colors::brightBlue);
 		else text.setFillColor(colors::darkBlue);
 		window->draw(text);
