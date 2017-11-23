@@ -10,6 +10,7 @@ void addItems(GameplayState* gameplayState, Map* map);
 void addMonsters(GameplayState* gameplayState, Map* map);
 void addPlayer(GameplayState* gameplayState, Map* map);
 void addStairs(GameplayState* gameplayState, Map* map);
+void addMcGuffin(GameplayState* gameplayState, Map* map, int level);
 
 std::unique_ptr<Actor> makeMonster(GameplayState* gameplayState, Map* map, int x, int y);
 std::unique_ptr<Actor> makeItem(GameplayState* gameplayState, Map* map, int x, int y);

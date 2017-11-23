@@ -35,6 +35,7 @@ void GameplayState::initLoaded(Engine* engine) {
 void GameplayState::newGame(Engine* engine) {
 	map_utils::addPlayer(this, &map);
 	map_utils::addStairs(this, &map);
+	map_utils::addMcGuffin(this, &map, level);
 	gui.message(sf::Color::Green, "Welcome to year 20XXAD, you strange rascal!\nPrepare to fight or die!");
 }
 
@@ -178,6 +179,7 @@ void GameplayState::nextLevel() {
 	map_utils::addItems(this, &map);
 	map_utils::addMonsters(this, &map);
 	map_utils::addStairs(this, &map);
+	map_utils::addMcGuffin(this, &map, level);
 
 	sortActors();
 	for (auto& a : actors) a->setState(this);

@@ -61,6 +61,22 @@ void map_utils::addStairs(GameplayState* gameplayState, Map* map) {
 	gameplayState->addActor(std::move(stairs));
 }
 
+void map_utils::addMcGuffin(GameplayState* gameplayState, Map* map, int level) {
+	int x = 0;
+	int y = 0;
+	do {
+		int r = d100();
+		int s = d100();
+		x = (map->width-1) * r / 100;
+		y = (map->height-1) * s / 100;
+	} while (map->isWall(x, y)); // should check for canWalk, but can't do that yet
+
+	std::unique_ptr<Actor> mcGuffin = std::make_unique<Actor>(x, y, 'q', "phlebotinum link", sf::Color::White, 0, true);
+    mcGuffin->blocks = false;
+	mcGuffin->pickable = std::make_unique<Pickable>(TargetSelector(TargetSelector::SelectorType::NONE));
+	gameplayState->addActor(std::move(mcGuffin));
+}
+
 std::unique_ptr<Actor> map_utils::makeMonster(GameplayState* gameplayState, Map* map, int x, int y) {
 	int r = d100();
 	if(r < 70) {
