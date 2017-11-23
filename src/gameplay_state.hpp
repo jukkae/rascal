@@ -33,7 +33,7 @@ public:
 	void computeFov() { map.computeFov(); }
 	bool isWall(int x, int y) { return map.isWall(x, y); }
 	bool canWalk(int x, int y);
-	Engine* getEngine() { return e; }
+	Engine* getEngine() { return engine; }
 
 	Actor* getNextActor() const { return actors.front().get(); }
 	Actor* getPlayer() const;
@@ -46,7 +46,6 @@ public:
 
 	bool pickTile(int* x, int* y, float maxRange = 0.0f);
 private:
-	Engine* e; // TODO
 	int time = 0;
 	int level = 1;
 	std::vector<std::unique_ptr<Actor>> actors;

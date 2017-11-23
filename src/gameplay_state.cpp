@@ -26,7 +26,6 @@ State(engine) {
 }
 
 void GameplayState::initLoaded(Engine* engine) {
-	e = engine;
 	gui.setState(this);
 	renderer.setState(this);
 	map.setState(this);
@@ -168,8 +167,8 @@ void GameplayState::message(sf::Color col, std::string text, ...) {
 void GameplayState::nextLevel() {
 	++level;
 	if(level > 5) {
-		std::unique_ptr<State> victoryState = std::make_unique<VictoryState>(e, getPlayer());
-		e->pushState(std::move(victoryState));
+		std::unique_ptr<State> victoryState = std::make_unique<VictoryState>(engine, getPlayer());
+		engine->pushState(std::move(victoryState));
 	}
 	gui.message(sf::Color::Magenta, "You take a moment to rest, and recover your strength.");
 	getPlayer()->destructible->heal(getPlayer()->destructible->maxHp/2);
