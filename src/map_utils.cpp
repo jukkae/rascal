@@ -65,20 +65,20 @@ std::unique_ptr<Actor> map_utils::makeMonster(GameplayState* gameplayState, Map*
 	int r = d100();
 	if(r < 70) {
 		std::unique_ptr<Actor> punk = std::make_unique<Actor>(x, y, 'h', "punk", colors::desaturatedGreen, 1);
-		punk->destructible = std::make_unique<MonsterDestructible>(10, 0, 50, "dead punk", 13);
+		punk->destructible = std::make_unique<MonsterDestructible>(10, 0, 50, "dead punk", 12);
 		punk->attacker = std::make_unique<Attacker>(1, 3, 0);
 		punk->ai = std::make_unique<MonsterAi>();
 		return punk;
 	} else if (r < 80) {
 		std::unique_ptr<Actor> fighter = std::make_unique<Actor>(x, y, 'H', "fighter", colors::darkGreen, 1);
-		fighter->destructible = std::make_unique<MonsterDestructible>(16, 1, 100, "fighter carcass", 15);
+		fighter->destructible = std::make_unique<MonsterDestructible>(16, 1, 100, "fighter carcass", 14);
 		fighter->attacker = std::make_unique<Attacker>(1, 8, 0);
 		fighter->ai = std::make_unique<MonsterAi>();
 		return fighter;
 	}
 	else {
 		std::unique_ptr<Actor> boxer = std::make_unique<Actor>(x, y, 'H', "boxer", colors::darkerGreen, 1);
-		boxer->destructible = std::make_unique<MonsterDestructible>(4, 1, 70, "boxer carcass", 16);
+		boxer->destructible = std::make_unique<MonsterDestructible>(4, 0, 70, "boxer carcass", 15);
 		boxer->attacker = std::make_unique<Attacker>(1, 8, 1);
 		boxer->ai = std::make_unique<MonsterAi>();
 		return boxer;
