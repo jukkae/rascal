@@ -28,7 +28,16 @@ void map_utils::addMonsters(GameplayState* gameplayState, Map* map) {
 }
 
 void map_utils::addPlayer(GameplayState* gameplayState, Map* map) {
-	std::unique_ptr<Actor> player = std::make_unique<Actor>(40, 25, '@', "you", sf::Color::White, 2);
+	int x = 0;
+	int y = 0;
+	do {
+		int r = d100();
+		int s = d100();
+		x = (map->width-1) * r / 100;
+		y = (map->height-1) * s / 100;
+	} while (map->isWall(x, y));
+
+	std::unique_ptr<Actor> player = std::make_unique<Actor>(x, y, '@', "you", sf::Color::White, 2);
 	player->destructible = std::make_unique<PlayerDestructible>(100, 2, 0, "your corpse", 11);
 	player->attacker     = std::make_unique<Attacker>(5);
 	player->ai           = std::make_unique<PlayerAi>();
