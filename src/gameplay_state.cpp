@@ -33,18 +33,8 @@ void GameplayState::initLoaded(Engine* engine) {
 }
 
 void GameplayState::newGame(Engine* engine) {
-	std::unique_ptr<Actor> player = std::make_unique<Actor>(40, 25, '@', "you", sf::Color::White, 2);
-	player->destructible = std::make_unique<PlayerDestructible>(100, 2, 0, "your corpse", 11);
-	player->attacker     = std::make_unique<Attacker>(5);
-	player->ai           = std::make_unique<PlayerAi>();
-	player->container    = std::make_unique<Container>(26);
-	addActor(std::move(player));
-
-	std::unique_ptr<Actor> stairs = std::make_unique<Actor>(1, 1, '>', "stairs", sf::Color::White, 0, true);
-    stairs->blocks = false;
-    stairs->fovOnly = false;
-	addActor(std::move(stairs));
-
+	map_utils::addPlayer(this, &map);
+	map_utils::addStairs(this, &map);
 	gui.message(sf::Color::Green, "Welcome to year 20XXAD, you strange rascal!\nPrepare to fight or die!");
 }
 
@@ -196,6 +186,7 @@ bool GameplayState::pickTile(int* x, int* y, float maxRange) {
 	while(true) {
 		sf::Event event;
 		while(window->pollEvent(event)) { // Dummy polling to keep macOS happy
+			render();
 			for(int cx = 0; cx < constants::SCREEN_WIDTH; ++cx) {
 				for(int cy = 0; cy < constants::SCREEN_HEIGHT; ++cy) {
 					Point location = renderer.getWorldCoordsFromScreenCoords(Point(cx, cy));
@@ -206,7 +197,6 @@ bool GameplayState::pickTile(int* x, int* y, float maxRange) {
 					}
 				}
 			}
-			render();
 			int mouseXPix = sf::Mouse::getPosition(*window).x;
 			int mouseYPix = sf::Mouse::getPosition(*window).y;
 			int xCells = mouseXPix / constants::CELL_WIDTH;

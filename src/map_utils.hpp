@@ -8,6 +8,8 @@ class Actor;
 namespace map_utils {
 void addItems(GameplayState* gameplayState, Map* map);
 void addMonsters(GameplayState* gameplayState, Map* map);
+void addPlayer(GameplayState* gameplayState, Map* map);
+void addStairs(GameplayState* gameplayState, Map* map);
 
 std::unique_ptr<Actor> makeMonster(GameplayState* gameplayState, Map* map, int x, int y);
 std::unique_ptr<Actor> makeItem(GameplayState* gameplayState, Map* map, int x, int y);

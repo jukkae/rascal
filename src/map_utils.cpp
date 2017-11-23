@@ -27,6 +27,22 @@ void map_utils::addMonsters(GameplayState* gameplayState, Map* map) {
 	}
 }
 
+void map_utils::addPlayer(GameplayState* gameplayState, Map* map) {
+	std::unique_ptr<Actor> player = std::make_unique<Actor>(40, 25, '@', "you", sf::Color::White, 2);
+	player->destructible = std::make_unique<PlayerDestructible>(100, 2, 0, "your corpse", 11);
+	player->attacker     = std::make_unique<Attacker>(5);
+	player->ai           = std::make_unique<PlayerAi>();
+	player->container    = std::make_unique<Container>(26);
+	gameplayState->addActor(std::move(player));
+}
+
+void map_utils::addStairs(GameplayState* gameplayState, Map* map) {
+	std::unique_ptr<Actor> stairs = std::make_unique<Actor>(1, 1, '>', "stairs", sf::Color::White, 0, true);
+    stairs->blocks = false;
+    stairs->fovOnly = false;
+	gameplayState->addActor(std::move(stairs));
+}
+
 std::unique_ptr<Actor> map_utils::makeMonster(GameplayState* gameplayState, Map* map, int x, int y) {
 	int r = d100();
 	if(r < 70) {
