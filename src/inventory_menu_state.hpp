@@ -16,6 +16,7 @@ public:
 	void render() override;
 private:
 	Actor* actor;
+	int credits;
 
 	std::vector<Actor*> inventoryContents;
 	int selectedItem;

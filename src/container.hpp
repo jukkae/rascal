@@ -12,6 +12,7 @@ class Container {
 public:
 	int size; // max number of actors in container, 0 = unlimited
 	std::vector<std::unique_ptr<Actor>> inventory;
+	int credits = 0;
 
 	Container(int size = 0);
 	~Container();
@@ -24,6 +25,7 @@ private:
 	void serialize(Archive & ar, const unsigned int version) {
 		ar & size;
 		ar & inventory;
+		ar & credits;
 	}
 };
 #endif /* CONTAINER_HPP */

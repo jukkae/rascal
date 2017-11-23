@@ -12,6 +12,7 @@ actor(actor) {
 	inventoryContents.clear();
 	for(auto& item : actor->container->inventory) inventoryContents.push_back(item.get());
 	selectedItem = 0;
+	credits = actor->container->credits;
 }
 
 void InventoryMenuState::handleEvents() {
@@ -64,17 +65,23 @@ void InventoryMenuState::render() {
 	heading.setFillColor(colors::brightBlue);
 	window->draw(heading);
 
-	int y = 1;
+	int y = 3;
 	int itemIndex = 0;
 	for (auto item : inventoryContents) {
 		sf::Text text(item->name, font::mainFont, 16);
-		text.setPosition(2*constants::CELL_WIDTH, (y+2)*constants::CELL_HEIGHT);
+		text.setPosition(2*constants::CELL_WIDTH, y*constants::CELL_HEIGHT);
 		if(itemIndex == selectedItem) text.setFillColor(colors::brightBlue);
 		else text.setFillColor(colors::darkBlue);
 		window->draw(text);
 		++y;
 		++itemIndex;
 	}
+
+	std::string creditsString = "credits: " + std::to_string(credits);
+	sf::Text creditsText(creditsString, font::mainFont, 16);
+	creditsText.setPosition(2*constants::CELL_WIDTH, (y+1)*constants::CELL_HEIGHT);
+	creditsText.setFillColor(colors::brightBlue);
+	window->draw(creditsText);
 
 	window->display();
 }
