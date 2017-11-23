@@ -68,13 +68,16 @@ std::unique_ptr<Action> PlayerAi::getNextAction(Actor* actor) {
 				case k::Right:
 					dir = Direction::E;
 					break;
-				case k::G: {
-					return std::make_unique<PickupAction>(PickupAction(actor));
-				}
 				case k::I: {
 					std::unique_ptr<State> inventoryMenuState = std::make_unique<InventoryMenuState>(engine, actor);
 					engine->pushState(std::move(inventoryMenuState));
 					break;
+				}
+				case k::Comma: {
+					return std::make_unique<PickupAction>(PickupAction(actor));
+				}
+				case k::Period: {
+					return std::make_unique<WaitAction>(WaitAction(actor));
 				}
 				case 56: { // < key
 					if(event.key.shift) {
