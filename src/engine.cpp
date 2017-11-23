@@ -101,7 +101,7 @@ void Engine::load() {
 	ia.register_type<AiChangeEffect>();
 
 	ia >> gameplayState;
-
+	(static_cast<GameplayState*>(gameplayState))->setEngine(this);
 }
 
 void Engine::save() {

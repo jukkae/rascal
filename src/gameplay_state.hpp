@@ -34,6 +34,7 @@ public:
 	bool isWall(int x, int y) { return map.isWall(x, y); }
 	bool canWalk(int x, int y);
 	Engine* getEngine() { return engine; }
+	void setEngine(Engine* e) { engine = e; }
 
 	Actor* getNextActor() const { return actors.front().get(); }
 	Actor* getPlayer() const;
