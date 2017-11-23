@@ -193,36 +193,39 @@ void GameplayState::nextLevel() {
 }
 
 bool GameplayState::pickTile(int* x, int* y, float maxRange) {
-	while(true) { // TODO this function hangs (doesn't freeze)
-		for(int cx = 0; cx < constants::SCREEN_WIDTH; ++cx) {
-			for(int cy = 0; cy < constants::SCREEN_HEIGHT; ++cy) {
-				Point location = renderer.getWorldCoordsFromScreenCoords(Point(cx, cy));
-				int realX = location.x;
-				int realY = location.y;
-				if(isInFov(realX, realY) && (maxRange == 0 || getPlayer()->getDistance(realX, realY) <= maxRange)) {
-					// TODO Highlight background for tiles in range
+	while(true) {
+		sf::Event event;
+		while(window->pollEvent(event)) { // Dummy polling to keep macOS happy
+			for(int cx = 0; cx < constants::SCREEN_WIDTH; ++cx) {
+				for(int cy = 0; cy < constants::SCREEN_HEIGHT; ++cy) {
+					Point location = renderer.getWorldCoordsFromScreenCoords(Point(cx, cy));
+					int realX = location.x;
+					int realY = location.y;
+					if(isInFov(realX, realY) && (maxRange == 0 || getPlayer()->getDistance(realX, realY) <= maxRange)) {
+						// TODO Highlight background for tiles in range
+					}
 				}
 			}
-		}
-		render();
-		int mouseXPix = sf::Mouse::getPosition(*window).x;
-		int mouseYPix = sf::Mouse::getPosition(*window).y;
-		int xCells = mouseXPix / constants::CELL_WIDTH;
-		int yCells = mouseYPix / constants::CELL_HEIGHT;
-		Point mouseLocationScreen(xCells, yCells);
-		Point mouseLocation = renderer.getWorldCoordsFromScreenCoords(Point(mouseLocationScreen.x, mouseLocationScreen.y));
-		int realX = mouseLocation.x;
-		int realY = mouseLocation.y;
-		if(isInFov(realX, realY) && (maxRange == 0 || getPlayer()->getDistance(realX, realY) <= maxRange)) {
-			// TODO Highlight background for tile under cursor
-			if(sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-				*x = realX;
-				*y = realY;
-				return true;
+			render();
+			int mouseXPix = sf::Mouse::getPosition(*window).x;
+			int mouseYPix = sf::Mouse::getPosition(*window).y;
+			int xCells = mouseXPix / constants::CELL_WIDTH;
+			int yCells = mouseYPix / constants::CELL_HEIGHT;
+			Point mouseLocationScreen(xCells, yCells);
+			Point mouseLocation = renderer.getWorldCoordsFromScreenCoords(Point(mouseLocationScreen.x, mouseLocationScreen.y));
+			int realX = mouseLocation.x;
+			int realY = mouseLocation.y;
+			if(isInFov(realX, realY) && (maxRange == 0 || getPlayer()->getDistance(realX, realY) <= maxRange)) {
+				// TODO Highlight background for tile under cursor
+				if(sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+					*x = realX;
+					*y = realY;
+					return true;
+				}
 			}
-		}
-		if(sf::Mouse::isButtonPressed(sf::Mouse::Right)) {
-			return false;
+			if(sf::Mouse::isButtonPressed(sf::Mouse::Right)) {
+				return false;
+			}
 		}
 	}
 }
