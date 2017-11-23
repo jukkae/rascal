@@ -10,7 +10,7 @@ public:
 
 	virtual void handleEvents() = 0;
 	virtual void update() = 0;
-	virtual void render() = 0; // TODO should be const
+	virtual void render() = 0;
 
 	void changeState(std::unique_ptr<State> state) { engine->changeState(std::move(state)); }
 
