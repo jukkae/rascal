@@ -17,7 +17,7 @@ actor(actor)
 
 }
 
-void VictoryState::handleEvents(Engine* engine) {
+void VictoryState::handleEvents() {
 	sf::Event event;
 	while(engine->pollEvent(event)) {
 		if(event.type == sf::Event::KeyPressed) {
@@ -25,7 +25,7 @@ void VictoryState::handleEvents(Engine* engine) {
 			switch(event.key.code) {
 				case k::Return: {
 					std::unique_ptr<State> mainMenuState = std::make_unique<MainMenuState>(engine);
-					changeState(engine, std::move(mainMenuState));
+					changeState(std::move(mainMenuState));
 					break;
 				}
 				default: break;
@@ -34,12 +34,12 @@ void VictoryState::handleEvents(Engine* engine) {
 	}
 }
 
-void VictoryState::update(Engine* engine, sf::RenderWindow& window) {
-	handleEvents(engine);
-	render(engine, window);
+void VictoryState::update(sf::RenderWindow& window) {
+	handleEvents();
+	render(window);
 }
 
-void VictoryState::render(Engine* engine, sf::RenderWindow& window) {
+void VictoryState::render(sf::RenderWindow& window) {
 	window.clear(sf::Color::Black);
 	sf::Text text(description, font::mainFont, 16);
 	text.setFillColor(colors::brightBlue);

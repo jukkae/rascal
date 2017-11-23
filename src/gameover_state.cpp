@@ -25,7 +25,7 @@ actor(actor)
 	}
 }
 
-void GameOverState::handleEvents(Engine* engine) {
+void GameOverState::handleEvents() {
 	sf::Event event;
 	while(engine->pollEvent(event)) {
 		if(event.type == sf::Event::KeyPressed) {
@@ -33,7 +33,7 @@ void GameOverState::handleEvents(Engine* engine) {
 			switch(event.key.code) {
 				case k::Return: {
 					std::unique_ptr<State> mainMenuState = std::make_unique<MainMenuState>(engine);
-					changeState(engine, std::move(mainMenuState));
+					changeState(std::move(mainMenuState));
 					break;
 				}
 				default: break;
@@ -42,12 +42,12 @@ void GameOverState::handleEvents(Engine* engine) {
 	}
 }
 
-void GameOverState::update(Engine* engine, sf::RenderWindow& window) {
-	handleEvents(engine);
-	render(engine, window);
+void GameOverState::update(sf::RenderWindow& window) {
+	handleEvents();
+	render(window);
 }
 
-void GameOverState::render(Engine* engine, sf::RenderWindow& window) {
+void GameOverState::render(sf::RenderWindow& window) {
 	window.clear(sf::Color::Black);
 	sf::Text text(description, font::mainFont, 16);
 	text.setFillColor(colors::brightBlue);

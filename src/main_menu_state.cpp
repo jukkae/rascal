@@ -29,7 +29,7 @@ forceShowContinue(forceShowContinue) {
 	selectedItem = 0;
 }
 
-void MainMenuState::handleEvents(Engine* engine) {
+void MainMenuState::handleEvents() {
 	sf::Event event;
 	while(engine->pollEvent(event)) {
 		if(event.type == sf::Event::KeyPressed) {
@@ -42,7 +42,7 @@ void MainMenuState::handleEvents(Engine* engine) {
 					if(selectedItem < menuItems.size() - 1) ++selectedItem;
 					break;
 				case k::Return:
-					handleSelectedMenuItem(engine);
+					handleSelectedMenuItem();
 					break;
 				default:
 					break;
@@ -51,20 +51,20 @@ void MainMenuState::handleEvents(Engine* engine) {
 	}
 }
 
-void MainMenuState::update(Engine* engine, sf::RenderWindow& window) {
+void MainMenuState::update(sf::RenderWindow& window) {
 	window.clear(sf::Color::Black);
 
-	handleEvents(engine);
-	render(engine, window);
+	handleEvents();
+	render(window);
 
 	window.display();
 }
 
-void MainMenuState::render(Engine* engine, sf::RenderWindow& window) {
-	showMenu(engine, window);
+void MainMenuState::render(sf::RenderWindow& window) {
+	showMenu(window);
 }
 
-void MainMenuState::showMenu(Engine* engine, sf::RenderWindow& window) {
+void MainMenuState::showMenu(sf::RenderWindow& window) {
 	int menuX = 10;
 	int menuY = constants::SCREEN_HEIGHT / 3;
 
@@ -83,7 +83,7 @@ void MainMenuState::showMenu(Engine* engine, sf::RenderWindow& window) {
 	}
 }
 
-void MainMenuState::handleSelectedMenuItem(Engine* engine) {
+void MainMenuState::handleSelectedMenuItem() {
 	switch (menuItems.at(selectedItem).code) {
 		case MenuItemCode::NEW_GAME:
 			engine->addEngineCommand(NewGameCommand(engine));

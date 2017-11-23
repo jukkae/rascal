@@ -13,9 +13,9 @@ public:
 
 	MainMenuState(Engine* engine, bool forceShowContinue = false);
 
-	void handleEvents(Engine* engine) override;
-	void update(Engine* engine, sf::RenderWindow& window) override;
-	void render(Engine* engine, sf::RenderWindow& window) override;
+	void handleEvents() override;
+	void update(sf::RenderWindow& window) override;
+	void render(sf::RenderWindow& window) override;
 private:
 	sf::Font font;
 	bool forceShowContinue;
@@ -28,7 +28,7 @@ private:
 	std::vector<MenuItem> menuItems;
 	int selectedItem;
 
-	void handleSelectedMenuItem(Engine* engine);
-	void showMenu(Engine* engine, sf::RenderWindow& window);
+	void handleSelectedMenuItem();
+	void showMenu(sf::RenderWindow& window);
 };
 #endif /* MAIN_MENU_STATE_HPP */

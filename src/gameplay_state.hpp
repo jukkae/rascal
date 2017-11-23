@@ -17,9 +17,9 @@ class GameplayState : public State {
 public:
 	GameplayState(Engine* engine);
 
-	void handleEvents(Engine* engine) override;
-	void update(Engine* engine, sf::RenderWindow& window) override;
-	void render(Engine* engine, sf::RenderWindow& window) override;
+	void handleEvents() override;
+	void update(sf::RenderWindow& window) override;
+	void render(sf::RenderWindow& window) override;
 
 	void initLoaded(Engine* engine);
 	void newGame(Engine* engine);

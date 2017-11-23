@@ -56,7 +56,7 @@ void Engine::newGame() {
 void Engine::update(sf::RenderWindow& window) {
 
 	while(engineCommands.size() > 0) executeEngineCommand();
-	states.back()->update(this, window);
+	states.back()->update(window);
 }
 
 bool Engine::pollEvent(sf::Event& event) {

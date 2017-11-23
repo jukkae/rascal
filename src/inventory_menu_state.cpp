@@ -14,7 +14,7 @@ actor(actor) {
 	selectedItem = 0;
 }
 
-void InventoryMenuState::handleEvents(Engine* engine) {
+void InventoryMenuState::handleEvents() {
 	sf::Event event;
 	while(engine->pollEvent(event)) {
 		if(event.type == sf::Event::KeyPressed) {
@@ -51,12 +51,12 @@ void InventoryMenuState::handleEvents(Engine* engine) {
 	}
 }
 
-void InventoryMenuState::update(Engine* engine, sf::RenderWindow& window) {
-	handleEvents(engine);
-	render(engine, window);
+void InventoryMenuState::update(sf::RenderWindow& window) {
+	handleEvents();
+	render(window);
 }
 
-void InventoryMenuState::render(Engine* engine, sf::RenderWindow& window) {
+void InventoryMenuState::render(sf::RenderWindow& window) {
 	window.clear(sf::Color::Black);
 
 	int y = 1;

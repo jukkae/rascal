@@ -48,26 +48,26 @@ void GameplayState::newGame(Engine* engine) {
 	gui.message(sf::Color::Green, "Welcome to year 20XXAD, you strange rascal!\nPrepare to fight or die!");
 }
 
-void GameplayState::update(Engine* engine, sf::RenderWindow& window) {
+void GameplayState::update(sf::RenderWindow& window) {
 	//window.clear(sf::Color::Black);
 	if(!window_) window_ = &window; // TODO
 	Actor* activeActor = getNextActor();
 	if(activeActor->isPlayer()) {
-		handleEvents(engine);
+		handleEvents();
 	}
 	updateNextActor();
 	if(activeActor->isPlayer()) {
 		computeFov();
-		render(engine, window);
+		render(window);
 	}
 	//window.display();
 }
 
-void GameplayState::handleEvents(Engine* engine) {
+void GameplayState::handleEvents() {
 	//inputHandler->handleEvents();
 }
 
-void GameplayState::render(Engine* engine, sf::RenderWindow& window) {
+void GameplayState::render(sf::RenderWindow& window) {
 	window.clear(sf::Color::Black);
 
 	renderer.render(&map, actors, window);
@@ -208,7 +208,7 @@ bool GameplayState::pickTile(int* x, int* y, float maxRange) {
 			}
 		}
 		sf::RenderWindow& window = *window_; // TODO
-		render(nullptr, window); // TODO
+		render(window); // TODO
 		int mouseXPix = sf::Mouse::getPosition(window).x;
 		int mouseYPix = sf::Mouse::getPosition(window).y;
 		int xCells = mouseXPix / constants::CELL_WIDTH;

@@ -20,7 +20,7 @@ actor(actor) {
 	selectedItem = 0;
 }
 
-void LevelUpMenuState::handleEvents(Engine* engine) {
+void LevelUpMenuState::handleEvents() {
 	sf::Event event;
 	while(engine->pollEvent(event)) {
 		if(event.type == sf::Event::KeyPressed) {
@@ -43,12 +43,12 @@ void LevelUpMenuState::handleEvents(Engine* engine) {
 	}
 }
 
-void LevelUpMenuState::update(Engine* engine, sf::RenderWindow& window) {
-	handleEvents(engine);
-	render(engine, window);
+void LevelUpMenuState::update(sf::RenderWindow& window) {
+	handleEvents();
+	render(window);
 }
 
-void LevelUpMenuState::render(Engine* engine, sf::RenderWindow& window) {
+void LevelUpMenuState::render(sf::RenderWindow& window) {
 	window.clear(sf::Color::Black);
 
 	int y = 1;

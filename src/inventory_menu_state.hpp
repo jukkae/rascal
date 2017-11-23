@@ -11,9 +11,9 @@ class InventoryMenuState : public State {
 public:
 	InventoryMenuState(Engine* engine, Actor* actor);
 
-	void handleEvents(Engine* engine) override;
-	void update(Engine* engine, sf::RenderWindow& window) override;
-	void render(Engine* engine, sf::RenderWindow& window) override;
+	void handleEvents() override;
+	void update(sf::RenderWindow& window) override;
+	void render(sf::RenderWindow& window) override;
 private:
 	Actor* actor;
 
