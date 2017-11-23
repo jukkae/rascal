@@ -33,7 +33,7 @@ void Gui::render(sf::RenderWindow* window) {
 	renderMessageLog(window);
 	renderBar(1, 1, BAR_WIDTH, "HP", state->getPlayer()->destructible->hp, state->getPlayer()->destructible->maxHp, lightRed, darkerRed, window);
 
-	std::string dungeonLvlString = "Dungeon level " + std::to_string(state->getLevel());
+	std::string dungeonLvlString = "Floor " + std::to_string(state->getLevel());
 	sf::Text dlvl(dungeonLvlString, font::mainFont, 16);
 	dlvl.setPosition(3*constants::CELL_WIDTH, (3+constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT)*constants::CELL_HEIGHT);
 	dlvl.setFillColor(sf::Color::White);

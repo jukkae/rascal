@@ -50,14 +50,18 @@ bool TraverseStairsAction::execute() {
 			state->nextLevel();
 			return true;
 		} else {
-			state->message(colors::lightGrey, "There are no stairs here.");
+			state->message(colors::lightGrey, "There are no stairs down here.");
 			return false;
 		}
 	}
-
 	else {
-		state->message(colors::lightGrey, "There are no stairs leading up here.");
-		return false; // up not implemented yet
+		if(state->getStairs()->x == actor->x && state->getStairs()->y == actor->y) {
+			state->nextLevel();
+			return true;
+		} else {
+			state->message(colors::lightGrey, "There are no stairs leading up here.");
+			return false;
+		}
 	}
 }
 

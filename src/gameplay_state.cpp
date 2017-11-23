@@ -159,7 +159,7 @@ void GameplayState::nextLevel() {
 	}
 	gui.message(sf::Color::Magenta, "You take a moment to rest, and recover your strength.");
 	getPlayer()->destructible->heal(getPlayer()->destructible->maxHp/2);
-	gui.message(sf::Color::Red, "After a rare moment of peace, you descend\ndeeper into the heart of the dungeon...");
+	gui.message(sf::Color::Red, "After a rare moment of peace, you climb\nhigher. You will escape this hellhole.");
 
 	// Clunky, not idiomatic
 	auto it = actors.begin();
@@ -177,6 +177,7 @@ void GameplayState::nextLevel() {
 
 	map_utils::addItems(this, &map);
 	map_utils::addMonsters(this, &map);
+	map_utils::addStairs(this, &map);
 
 	sortActors();
 	for (auto& a : actors) a->setState(this);

@@ -39,7 +39,7 @@ public:
 
 	Actor* getNextActor() const { return actors.front().get(); }
 	Actor* getPlayer() const;
-	Actor* getStairs() const;
+	Actor* getStairs() const; // TODO check for up / down separately
 	Actor* getClosestMonster(int x, int y, float range) const;
 	Actor* getLiveActor(int x, int y) const;
 	std::vector<std::unique_ptr<Actor>>& getActors() { return actors; }
