@@ -118,6 +118,11 @@ void Gui::renderMouseLook(std::vector<std::unique_ptr<Actor>>& actors, sf::Rende
 				buf += ", ";
 			} else { first = false; }
 			buf += actor->name;
+			if(actor->destructible && !actor->destructible->isDead()) {
+				if(actor->destructible->hp < (actor->destructible->maxHp / 2)) {
+					buf += " (almost dead)";
+				}
+			}
 		}
 	}
 	sf::Text text;
