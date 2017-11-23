@@ -2,6 +2,7 @@
 #include "main_menu_state.hpp"
 #include "font.hpp"
 #include "colors.hpp"
+#include "constants.hpp"
 #include <sys/stat.h>
 
 VictoryState::VictoryState(Engine* engine, Actor* actor) :
@@ -40,8 +41,11 @@ void VictoryState::update() {
 }
 
 void VictoryState::render() {
+	int x = 2;
+	int y = 2;
 	window->clear(sf::Color::Black);
 	sf::Text text(description, font::mainFont, 16);
+	text.setPosition(x * constants::CELL_WIDTH, y * constants::CELL_HEIGHT);
 	text.setFillColor(colors::brightBlue);
 	window->draw(text);
 	window->display();
