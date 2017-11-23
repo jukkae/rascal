@@ -71,6 +71,7 @@ namespace serialization {
 	template<class Archive>
 	void save_construct_data(Archive & ar, const GameplayState* s, const unsigned int version)
 	{
+		boost::serialization::void_cast_register<GameplayState, State>();
 		ar & s->level;
 		ar & s->time;
 		ar & s->map;
@@ -81,6 +82,7 @@ namespace serialization {
 	template<class Archive>
 	void load_construct_data(Archive & ar, GameplayState* s, const unsigned int version)
 	{
+		boost::serialization::void_cast_register<GameplayState, State>();
 		Engine* engine = nullptr; // TODO how to get this?
 		::new(s)GameplayState(engine);
 		ar & s->level;
