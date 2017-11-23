@@ -67,7 +67,7 @@ void Actor::modifyStatistic(Statistic stat, float delta) {
 			destructible->hp += delta;
 			break;
 		case Statistic::STRENGTH:
-			attacker->power += delta;
+			attacker->increase(delta);
 			break;
 		case Statistic::AGILITY:
 			destructible->defense += delta;

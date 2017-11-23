@@ -7,6 +7,7 @@ std::default_random_engine generator(seed);
 std::uniform_int_distribution<int> d2_dist  (1, 2);
 std::uniform_int_distribution<int> d3_dist  (1, 3);
 std::uniform_int_distribution<int> d4_dist  (1, 4);
+std::uniform_int_distribution<int> d5_dist  (1, 5);
 std::uniform_int_distribution<int> d6_dist  (1, 6);
 std::uniform_int_distribution<int> d8_dist  (1, 8);
 std::uniform_int_distribution<int> d10_dist (1, 10);
@@ -17,6 +18,7 @@ std::uniform_int_distribution<int> d100_dist(1, 100);
 int d2()   { return d2_dist  (generator); }
 int d3()   { return d3_dist  (generator); }
 int d4()   { return d4_dist  (generator); }
+int d5()   { return d5_dist  (generator); }
 int d6()   { return d6_dist  (generator); }
 int d8()   { return d8_dist  (generator); }
 int d10()  { return d10_dist (generator); }

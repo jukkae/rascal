@@ -6,6 +6,7 @@
 int d2();
 int d3();
 int d4();
+int d5();
 int d6();
 int d8();
 int d10();

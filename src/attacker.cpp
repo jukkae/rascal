@@ -6,8 +6,6 @@
 #include "gameplay_state.hpp"
 #include "colors.hpp"
 
-Attacker::Attacker(int power) : power(power) {;}
-
 void Attacker::attack(Actor* owner, Actor* target) {
 	if(target->destructible && !target->destructible->isDead()) {
 		int attackRoll = d20();
@@ -29,15 +27,25 @@ void Attacker::attack(Actor* owner, Actor* target) {
 }
 
 int Attacker::getAttackBaseDamage() {
-	// TODO quick test!
-	switch (power) {
-		case 5: // player
-			return d6();
-		case 4: // fighter
-			return d8();
-		case 3: // punk
-			return d4();
-		default:
-			return d6();
+	int dmg = 0;
+	for(int i = 0; i < numberOfDice; i++) {
+		int d = 0;
+		switch (dice) {
+			case 0:  d = 0; break;
+			case 1:  d = 1; break;
+			case 2:  d = d2(); break;
+			case 3:  d = d3(); break;
+			case 4:  d = d4(); break;
+			case 5:  d = d5(); break;
+			case 6:  d = d6(); break;
+			case 8:  d = d8(); break;
+			case 10: d = d10(); break;
+			case 12: d = d12(); break;
+			case 20: d = d20(); break;
+			default: break;
+		}
+		dmg += d;
 	}
+	dmg += bonus;
+	return dmg;
 }

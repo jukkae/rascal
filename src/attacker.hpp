@@ -8,17 +8,28 @@ class Actor;
 
 class Attacker {
 public :
-	int power;
 
-	Attacker(int power = 0);
+	//Would be nice, but damn hard to serialize
+	//Attacker(std::function<int(void)> damage = []() -> int { return 0; }, int power = 0);
+	Attacker(int numberOfDice = 1, int dice = 0, int bonus = 0):
+		numberOfDice(numberOfDice), dice(dice), bonus(bonus) {;} // default 1d0+0
+
 	void attack(Actor* owner, Actor* target);
 	int getAttackBaseDamage();
 
+	void increase(int delta) { bonus += delta; } // sb. checked & modified
+	//std::function<int(void)> damage;
 private:
+	int numberOfDice;
+	int dice;
+	int bonus;
+
 	friend class boost::serialization::access;
 	template<class Archive>
 	void serialize(Archive & ar, const unsigned int version) {
-		ar & power;
+		ar & numberOfDice;
+		ar & dice;
+		ar & bonus;
 	}
 };
 #endif /* ATTACKER_HPP */
