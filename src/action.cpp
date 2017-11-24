@@ -70,14 +70,15 @@ bool PickupAction::execute() {
 	for(auto& a : actor->getActors()) {
 		if(a->pickable && a->x == actor->x && a->y == actor->y) {
 			std::string itemName = a->name;
+			if(actor->container->isFull()) {
+				found = true;
+				actor->s->message(colors::red, "Your inventory is full.");
+				return false;
+			}
 			if(a->pickable->pick(std::move(a), actor)) {
 				found = true;
 				actor->s->message(colors::green, "You pick up the %s.", itemName.c_str());
 				return true;
-			} else if(!found) { // TODO segfaults
-				found = true;
-				actor->s->message(colors::red, "Your inventory is full.");
-				return false;
 			}
 		}
 	}

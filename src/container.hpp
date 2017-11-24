@@ -16,6 +16,7 @@ public:
 
 	Container(int size = 0);
 	~Container();
+	bool isFull() { return size > 0 && inventory.size() >= size; }
 	bool add(std::unique_ptr<Actor> actor);
 	void remove(Actor* actor);
 
