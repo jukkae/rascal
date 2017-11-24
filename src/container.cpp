@@ -13,7 +13,7 @@ bool Container::add(std::unique_ptr<Actor> actor) {
 	return true;
 }
 
-void Container::remove(Actor* actor) { // TODO is called already after the element is nulled
+void Container::remove(Actor* actor) {
 	inventory.erase(
 		std::remove_if(
 			inventory.begin(),
