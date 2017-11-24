@@ -1,14 +1,14 @@
 #include "container.hpp"
 #include "actor.hpp"
 
-Container::Container(int size) : size(size) {;}
+Container::Container(int capacity) : capacity(capacity) {;}
 
 Container::~Container() {
 	inventory.clear();
 }
 
 bool Container::add(std::unique_ptr<Actor> actor) {
-	if(size > 0 && inventory.size() >= size) { return false; }
+	if(capacity > 0 && inventory.size() >= capacity) { return false; }
 	inventory.push_back(std::move(actor));
 	return true;
 }
@@ -22,4 +22,10 @@ void Container::remove(Actor* actor) { // TODO is called already after the eleme
 		),
 		inventory.end()
 	);
+}
+
+int Container::getContentsWeight() {
+	int w = 0;
+	for(auto& i : inventory) w += i->pickable->weight;
+	return w; 
 }

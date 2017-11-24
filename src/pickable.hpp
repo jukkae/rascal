@@ -76,11 +76,12 @@ private:
 
 class Pickable {
 public:
-	Pickable(TargetSelector selector = TargetSelector(TargetSelector::SelectorType::NONE, 0), std::unique_ptr<Effect> effect = std::unique_ptr<Effect>());
+	Pickable(TargetSelector selector = TargetSelector(TargetSelector::SelectorType::NONE, 0), std::unique_ptr<Effect> effect = std::unique_ptr<Effect>(), int weight = 1);
 	virtual ~Pickable() {};
 	bool pick(std::unique_ptr<Actor> owner, Actor* wearer);
 	bool use (Actor* owner, Actor* wearer);
 	void drop(std::unique_ptr<Actor> owner, Actor* wearer);
+	int weight;
 protected:
 	TargetSelector selector;
 	std::unique_ptr<Effect> effect;
@@ -90,6 +91,7 @@ private:
     void serialize(Archive & ar, const unsigned int version) {
 		ar & selector;
 		ar & effect;
+		ar & weight;
     }
 };
 

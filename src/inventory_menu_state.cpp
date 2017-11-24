@@ -13,6 +13,8 @@ actor(actor) {
 	for(auto& item : actor->container->inventory) inventoryContents.push_back(item.get());
 	selectedItem = 0;
 	credits = actor->container->credits;
+	contentsWeight = actor->container->getContentsWeight();
+	capacity = actor->container->capacity;
 }
 
 void InventoryMenuState::handleEvents() {
@@ -82,6 +84,12 @@ void InventoryMenuState::render() {
 	creditsText.setPosition(2*constants::CELL_WIDTH, (y+1)*constants::CELL_HEIGHT);
 	creditsText.setFillColor(colors::brightBlue);
 	window->draw(creditsText);
+
+	std::string weightString = "weight: " + std::to_string(contentsWeight) + " / " + std::to_string(capacity);
+	sf::Text weightText(weightString, font::mainFont, 16);
+	weightText.setPosition(2*constants::CELL_WIDTH, (y+2)*constants::CELL_HEIGHT);
+	weightText.setFillColor(colors::brightBlue);
+	window->draw(weightText);
 
 	window->display();
 }

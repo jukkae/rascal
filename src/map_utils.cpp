@@ -41,7 +41,7 @@ void map_utils::addPlayer(GameplayState* gameplayState, Map* map) {
 	player->destructible = std::make_unique<PlayerDestructible>(100, 2, 0, "your corpse", 11);
 	player->attacker     = std::make_unique<Attacker>(1, 6, 1);
 	player->ai           = std::make_unique<PlayerAi>();
-	player->container    = std::make_unique<Container>(26);
+	player->container    = std::make_unique<Container>(100);
 	gameplayState->addActor(std::move(player));
 }
 

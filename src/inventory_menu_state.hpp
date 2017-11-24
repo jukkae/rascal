@@ -17,6 +17,8 @@ public:
 private:
 	Actor* actor;
 	int credits;
+	int contentsWeight;
+	int capacity;
 
 	std::vector<Actor*> inventoryContents;
 	int selectedItem;

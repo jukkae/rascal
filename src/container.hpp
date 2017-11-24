@@ -10,13 +10,14 @@ class Actor;
 
 class Container {
 public:
-	int size; // max number of actors in container, 0 = unlimited
+	int capacity; // max number of actors in container, 0 = unlimited
 	std::vector<std::unique_ptr<Actor>> inventory;
 	int credits = 0;
 
-	Container(int size = 0);
+	Container(int capacity = 0);
 	~Container();
-	bool isFull() { return size > 0 && inventory.size() >= size; }
+	bool isFull() { return capacity > 0 && inventory.size() >= capacity; }
+	int getContentsWeight();
 	bool add(std::unique_ptr<Actor> actor);
 	void remove(Actor* actor);
 
@@ -24,7 +25,7 @@ private:
 	friend class boost::serialization::access;
 	template<class Archive>
 	void serialize(Archive & ar, const unsigned int version) {
-		ar & size;
+		ar & capacity;
 		ar & inventory;
 		ar & credits;
 	}

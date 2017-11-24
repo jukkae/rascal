@@ -86,7 +86,7 @@ bool AiChangeEffect::applyTo(Actor* actor) {
 	return true;
 }
 
-Pickable::Pickable(TargetSelector selector, std::unique_ptr<Effect> effect) : selector(selector), effect(std::move(effect)) {;}
+Pickable::Pickable(TargetSelector selector, std::unique_ptr<Effect> effect, int weight) : selector(selector), effect(std::move(effect)), weight(weight) {;}
 
 // owner is the Actor that this Pickable belongs to,
 // wearer is the Actor that has this Pickable in inventory.
