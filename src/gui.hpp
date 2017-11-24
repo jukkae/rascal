@@ -40,6 +40,7 @@ protected:
 	void renderMessageLog(sf::RenderWindow* window);
 	void renderXpBar(sf::RenderWindow* window);
 	void renderMouseLook(std::vector<std::unique_ptr<Actor>>& actors, sf::RenderWindow* window);
+	void renderStats(sf::RenderWindow* window);
 
 private:
 	GameplayState* state;

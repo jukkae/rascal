@@ -74,7 +74,7 @@ bool PickupAction::execute() {
 				found = true;
 				actor->s->message(colors::green, "You pick up the %s.", itemName.c_str());
 				return true;
-			} else if(!found) {
+			} else if(!found) { // TODO segfaults
 				found = true;
 				actor->s->message(colors::red, "Your inventory is full.");
 				return false;

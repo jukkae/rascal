@@ -19,11 +19,11 @@ public :
 
 	void increase(int delta) { bonus += delta; } // sb. checked & modified
 	//std::function<int(void)> damage;
-private:
+	//
 	int numberOfDice;
 	int dice;
 	int bonus;
-
+private:
 	friend class boost::serialization::access;
 	template<class Archive>
 	void serialize(Archive & ar, const unsigned int version) {

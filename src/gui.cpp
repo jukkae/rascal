@@ -1,4 +1,5 @@
 #include "ai.hpp"
+#include "colors.hpp"
 #include "constants.hpp"
 #include "destructible.hpp"
 #include "font.hpp"
@@ -47,13 +48,36 @@ void Gui::render(sf::RenderWindow* window) {
 
 	renderXpBar(window);
 	renderMouseLook(state->getActors(), window);
+
+	renderStats(window);
 }
 
 void Gui::renderXpBar(sf::RenderWindow* window) {
-	PlayerAi* ai = (PlayerAi*)state->getPlayer()->ai.get(); // Don't transfer ownership!
+	PlayerAi* ai = (PlayerAi*)state->getPlayer()->ai.get();
 	char xpTxt[128];
 	sprintf(xpTxt, "XP(%d)", ai->xpLevel);
 	renderBar(1, 5, BAR_WIDTH, xpTxt, ai->experience, ai->getNextLevelXp(), lightViolet, darkerViolet, window);
+}
+
+void Gui::renderStats(sf::RenderWindow* window) {
+	Actor* player = state->getPlayer();
+
+	int ac = player->destructible->armorClass;
+	std::string acString = "AC: " + std::to_string(ac);
+	sf::Text acText(acString, font::mainFont, 16);
+	acText.setFillColor(colors::lightBlue);
+	acText.setPosition((constants::SCREEN_WIDTH-40)*constants::CELL_WIDTH, (0+constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT)*constants::CELL_HEIGHT);
+
+	int n = player->attacker->numberOfDice;
+	int d = player->attacker->dice;
+	int b = player->attacker->bonus;
+	std::string atkString = "atk: " + std::to_string(n) + "d" + std::to_string(d) + "+" + std::to_string(b);
+	sf::Text atkText(atkString, font::mainFont, 16);
+	atkText.setFillColor(colors::lightBlue);
+	atkText.setPosition((constants::SCREEN_WIDTH-40)*constants::CELL_WIDTH, (1+constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT)*constants::CELL_HEIGHT);
+
+	window->draw(acText);
+	window->draw(atkText);
 }
 
 void Gui::renderMessageLog(sf::RenderWindow* window) {
