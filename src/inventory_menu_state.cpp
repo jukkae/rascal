@@ -37,12 +37,12 @@ void InventoryMenuState::handleEvents() {
 					if(selectedItem > 0) --selectedItem;
 					break;
 				case k::Down:
-					if(selectedItem < inventoryContents.size() - 1) ++selectedItem;
+					if(selectedItem < piles.size() - 1) ++selectedItem;
 					break;
 				case k::D:
 					if(inventoryContents.size() > 0) {
-						std::unique_ptr<Actor> item = std::move(actor->container->inventory.at(selectedItem));
-						actor->container->inventory.erase(actor->container->inventory.begin() + selectedItem); // TODO ugh
+						std::unique_ptr<Actor> item = std::move(actor->container->inventory.at(selectedItem)); // TODO broken ?
+						actor->container->inventory.erase(actor->container->inventory.begin() + selectedItem); // this too
 						inventoryContents.at(selectedItem)->pickable->drop(std::move(item), actor);
 						//inventoryContents.at(selectedItem)->pickable->drop(inventoryContents.at((selectedItem)), actor);
 						engine->addEngineCommand(ContinueCommand(engine));
@@ -50,7 +50,7 @@ void InventoryMenuState::handleEvents() {
 					break;
 				case k::U:
 					if(inventoryContents.size() > 0) {
-						actor->addAction(std::make_unique<UseItemAction>(UseItemAction(actor, inventoryContents.at(selectedItem))));
+						actor->addAction(std::make_unique<UseItemAction>(UseItemAction(actor, piles.at(selectedItem).at(0))));
 						engine->addEngineCommand(ContinueCommand(engine));
 					}
 					break;
@@ -72,16 +72,19 @@ void InventoryMenuState::update() {
 void InventoryMenuState::render() {
 	window->clear(sf::Color::Black);
 
+
 	sf::Text heading("I N V E N T O R Y", font::mainFont, 16);
 	heading.setPosition(2*constants::CELL_WIDTH, constants::CELL_HEIGHT);
 	heading.setFillColor(colors::brightBlue);
 	window->draw(heading);
 
+	int x = 2;
 	int y = 3;
+
 	int itemIndex = 0;
-	for (auto item : inventoryContents) {
-		sf::Text text(item->name, font::mainFont, 16);
-		text.setPosition(2*constants::CELL_WIDTH, y*constants::CELL_HEIGHT);
+	for (auto pile : piles) {
+		sf::Text text(pile.at(0)->name + " (" + std::to_string(pile.size()) + ")", font::mainFont, 16);
+		text.setPosition(x*constants::CELL_WIDTH, y*constants::CELL_HEIGHT);
 		if(itemIndex == selectedItem) text.setFillColor(colors::brightBlue);
 		else text.setFillColor(colors::darkBlue);
 		window->draw(text);
@@ -101,21 +104,10 @@ void InventoryMenuState::render() {
 	weightText.setFillColor(colors::brightBlue);
 	window->draw(weightText);
 
-	renderPiles();
-
 	window->display();
 }
 
 void InventoryMenuState::renderPiles() {
-	int x = 16;
-	int y = 3;
-	for (auto pile : piles) {
-		sf::Text text(pile.at(0)->name + " (" + std::to_string(pile.size()) + ")", font::mainFont, 16);
-		text.setPosition(x*constants::CELL_WIDTH, y*constants::CELL_HEIGHT);
-		text.setFillColor(colors::brightBlue);
-		window->draw(text);
-		++y;
-	}
 }
 
 void InventoryMenuState::sortIntoPiles() {
