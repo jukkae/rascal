@@ -190,7 +190,7 @@ bool GameplayState::pickTile(int* x, int* y, float maxRange) {
 		sf::Event event;
 		while(window->pollEvent(event)) { // Dummy polling to keep macOS happy
 			render();
-			for(int cx = 0; cx < constants::SCREEN_WIDTH; ++cx) {
+			for(int cx = 0; cx < constants::SQUARE_SCREEN_WIDTH; ++cx) {
 				for(int cy = 0; cy < constants::SCREEN_HEIGHT; ++cy) {
 					Point location = renderer.getWorldCoordsFromScreenCoords(Point(cx, cy));
 					int realX = location.x;
@@ -202,8 +202,8 @@ bool GameplayState::pickTile(int* x, int* y, float maxRange) {
 			}
 			int mouseXPix = sf::Mouse::getPosition(*window).x;
 			int mouseYPix = sf::Mouse::getPosition(*window).y;
-			int xCells = mouseXPix / constants::CELL_WIDTH;
-			int yCells = mouseYPix / constants::CELL_HEIGHT;
+			int xCells = mouseXPix / constants::SQUARE_CELL_WIDTH;
+			int yCells = mouseYPix / constants::SQUARE_CELL_HEIGHT;
 			Point mouseLocationScreen(xCells, yCells);
 			Point mouseLocation = renderer.getWorldCoordsFromScreenCoords(Point(mouseLocationScreen.x, mouseLocationScreen.y));
 			int realX = mouseLocation.x;
