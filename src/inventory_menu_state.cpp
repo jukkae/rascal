@@ -19,6 +19,8 @@ actor(actor) {
 		}
 	);
 
+	sortIntoPiles();
+
 	selectedItem = 0;
 	credits = actor->container->credits;
 	contentsWeight = actor->container->getContentsWeight();
@@ -99,5 +101,34 @@ void InventoryMenuState::render() {
 	weightText.setFillColor(colors::brightBlue);
 	window->draw(weightText);
 
+	renderPiles();
+
 	window->display();
+}
+
+void InventoryMenuState::renderPiles() {
+	int x = 16;
+	int y = 3;
+	for (auto pile : piles) {
+		sf::Text text(pile.at(0)->name + " (" + std::to_string(pile.size()) + ")", font::mainFont, 16);
+		text.setPosition(x*constants::CELL_WIDTH, y*constants::CELL_HEIGHT);
+		text.setFillColor(colors::brightBlue);
+		window->draw(text);
+		++y;
+	}
+}
+
+void InventoryMenuState::sortIntoPiles() {
+	if(inventoryContents.size() > 0) {
+		int i = 0;
+		while(i < inventoryContents.size()) {
+			std::string name = inventoryContents.at(i)->name;
+			std::vector<Actor*> pile;
+			while(i < inventoryContents.size() && name == inventoryContents.at(i)->name) {
+				pile.push_back(inventoryContents.at(i));
+				++i;
+			}
+			piles.push_back(pile);
+		}
+	}
 }

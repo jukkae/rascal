@@ -15,12 +15,15 @@ public:
 	void update() override;
 	void render() override;
 private:
+	void sortIntoPiles();
+	void renderPiles();
 	Actor* actor;
 	int credits;
 	int contentsWeight;
 	int capacity;
 
 	std::vector<Actor*> inventoryContents;
+	std::vector<std::vector<Actor*>> piles;
 	int selectedItem;
 };
 #endif /* INVENTORY_MENU_STATE_HPP */
