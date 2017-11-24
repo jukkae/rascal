@@ -47,6 +47,8 @@ namespace colors {
 	static Color brightBlue       (100, 100, 255);
 	static Color cyan             (  0, 255, 255);
 	static Color yellow           (255, 255,   0);
+
+	static const inline Color multiply(Color c, float f) { return Color(c.r * f, c.g * f, c.b * f); }
 };
 
 #endif /* COLORS_HPP */
