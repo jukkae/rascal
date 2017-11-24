@@ -4,6 +4,10 @@
 #include "engine.hpp"
 #include "font.hpp"
 
+#include <fstream>
+#include <string>
+#include <sstream>
+#include <iostream>
 #include <sys/stat.h>
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
@@ -27,6 +31,11 @@ forceShowContinue(forceShowContinue) {
 	menuItems.push_back(exit);
 
 	selectedItem = 0;
+
+	std::ifstream fin("assets/asciiTitle.txt");
+	std::stringstream buffer;
+	buffer << fin.rdbuf();
+	asciiTitle = buffer.str();
 }
 
 void MainMenuState::handleEvents() {
@@ -61,7 +70,17 @@ void MainMenuState::update() {
 }
 
 void MainMenuState::render() {
+	renderAsciiTitle();
 	showMenu();
+}
+
+void MainMenuState::renderAsciiTitle() {
+	int x = 1;
+	int y = 1;
+	sf::Text text(asciiTitle, font::mainFont, 16);
+	text.setPosition(x * constants::CELL_WIDTH, y * constants::CELL_HEIGHT);
+	text.setFillColor(colors::brightBlue);
+	window->draw(text);
 }
 
 void MainMenuState::showMenu() {
