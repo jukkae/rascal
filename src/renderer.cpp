@@ -33,9 +33,9 @@ void Renderer::renderMap(const Map* const map, sf::RenderWindow* window) {
 			int worldX = x + cameraX;
 			int worldY = y + cameraY;
 
-			sf::RectangleShape rectangle(sf::Vector2f(constants::CELL_WIDTH, constants::CELL_HEIGHT));
+			sf::RectangleShape rectangle(sf::Vector2f(constants::SQUARE_CELL_WIDTH, constants::SQUARE_CELL_HEIGHT));
 			rectangle.setFillColor(sf::Color::Red);
-			rectangle.setPosition(x * constants::CELL_WIDTH, y * constants::CELL_HEIGHT);
+			rectangle.setPosition(x * constants::SQUARE_CELL_WIDTH, y * constants::SQUARE_CELL_HEIGHT);
 
 			if(worldX < 0 || worldX >= mapWidth || worldY < 0 || worldY >= mapHeight) {
 				rectangle.setFillColor(black);
@@ -109,8 +109,8 @@ void Renderer::renderActor(const Actor* const actor, sf::RenderWindow* window) {
 	int x = screenPosition.x;
 	int y = screenPosition.y;
 
-	sf::Text t((char)actor->ch, font::mainFont, 16);
-	t.setPosition(x*constants::CELL_WIDTH, y*constants::CELL_HEIGHT);
+	sf::Text t((char)actor->ch, font::squareFont, 16);
+	t.setPosition(x*constants::SQUARE_CELL_WIDTH, y*constants::SQUARE_CELL_HEIGHT);
 	t.setFillColor(actor->col);
 	window->draw(t);
 

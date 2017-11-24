@@ -9,7 +9,7 @@ class GameplayState;
 class Map;
 class Renderer {
 public:
-	Renderer() : Renderer(constants::SCREEN_WIDTH, constants::SCREEN_HEIGHT) {;}
+	Renderer() : Renderer(constants::SQUARE_SCREEN_WIDTH, constants::SCREEN_HEIGHT) {;}
 	Renderer(int screenWidth, int screenHeight);
 	void render(const Map* const map, const std::vector<std::unique_ptr<Actor>>& actors, sf::RenderWindow* window);
 	Point getWorldCoordsFromScreenCoords(const Point& point) const;

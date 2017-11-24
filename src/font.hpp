@@ -4,6 +4,7 @@
 
 namespace font {
 extern sf::Font mainFont;
+extern sf::Font squareFont;
 extern void load();
 } // namespace font
 

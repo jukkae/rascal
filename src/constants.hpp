@@ -6,6 +6,9 @@ namespace constants {
 	static int const CELL_HEIGHT = 16;
 	static int const SCREEN_WIDTH = 160;
 	static int const SCREEN_HEIGHT = 40;
+	static int const SQUARE_SCREEN_WIDTH = 80;
+	static int const SQUARE_CELL_WIDTH = 16;
+	static int const SQUARE_CELL_HEIGHT = 16;
 
 	static int const GUI_PANEL_HEIGHT = 7;
 	static int const INVENTORY_WIDTH = 50;
