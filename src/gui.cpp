@@ -123,8 +123,8 @@ void Gui::renderBar(int x, int y, int width, std::string name, float value, floa
 void Gui::renderMouseLook(std::vector<std::unique_ptr<Actor>>& actors, sf::RenderWindow* window) {
 	int xPix = sf::Mouse::getPosition(*window).x;
 	int yPix = sf::Mouse::getPosition(*window).y;
-	int xCells = xPix / constants::CELL_WIDTH;
-	int yCells = yPix / constants::CELL_HEIGHT;
+	int xCells = xPix / constants::SQUARE_CELL_WIDTH;
+	int yCells = yPix / constants::SQUARE_CELL_HEIGHT;
 	Point screenCells(xCells, yCells);
 
 	Point location = state->getWorldCoordsFromScreenCoords(screenCells);
