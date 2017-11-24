@@ -32,6 +32,7 @@ void Destructible::die(Actor* owner) {
 	owner->col = colors::darkerRed;
 	owner->name = corpseName;
 	owner->blocks = false;
+	owner->s->getPlayer()->container->credits += 15; // TODO drop credits instead
 }
 
 MonsterDestructible::MonsterDestructible(float maxHp, float defense, int xp, std::string corpseName, int armorClass) :
