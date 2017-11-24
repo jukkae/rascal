@@ -1,4 +1,5 @@
 #include <iostream>
+#include <algorithm>
 #include "inventory_menu_state.hpp"
 #include "engine.hpp"
 #include "action.hpp"
@@ -11,6 +12,13 @@ State(engine, engine->getWindow()),
 actor(actor) {
 	inventoryContents.clear();
 	for(auto& item : actor->container->inventory) inventoryContents.push_back(item.get());
+
+	std::sort(inventoryContents.begin(), inventoryContents.end(), [](const Actor* lhs, const Actor* rhs)
+		{
+			return lhs->name < rhs->name;
+		}
+	);
+
 	selectedItem = 0;
 	credits = actor->container->credits;
 	contentsWeight = actor->container->getContentsWeight();
