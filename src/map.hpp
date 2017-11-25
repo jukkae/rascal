@@ -65,7 +65,7 @@ public:
 	void generateMap(MapType mapType = MapType::BUILDING);
 	void generateBuildingMap();
 	void generatePillarsMap();
-	std::vector<Rect> breakRooms(Rect area, BreakDirection direction = BreakDirection::HORIZONTAL); // temp, s.b. private
+	std::vector<Rect> breakRooms(Rect area, BreakDirection direction = BreakDirection::HORIZONTAL);
 
 	void setWall(int x, int y);
 	bool isWall(int x, int y) const;
@@ -76,14 +76,9 @@ public:
 	void computeFovForOctant(int x, int y, int octant, FovType fovType = FovType::CIRCLE);
 	void setState(GameplayState* s) { state = s; }
 
-protected:
-	Vec<int> transformOctant(int row, int col, int octant);
-	void dig(int x1, int y1, int x2, int y2);
-	void createRoom(bool first, int x1, int y1, int x2, int y2, bool initActors);
-
 private:
 	GameplayState* state;
-
+	Vec<int> transformOctant(int row, int col, int octant);
 	friend class boost::serialization::access;
 	template<class Archive>
 	void serialize(Archive & ar, const unsigned int version) {

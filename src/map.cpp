@@ -118,8 +118,8 @@ std::vector<Rect> Map::breakRooms(Rect area, BreakDirection direction) {
 }
 
 bool Map::isWall(int x, int y) const {
-	return !tiles.at(x + y*width).walkable; // can't use this while initialising monsters
-	//return !map->isWalkable(x, y);
+	return !tiles.at(x + y*width).walkable;
+	//return !map->isWalkable(x, y); // can't use this while creating monsters
 }
 
 bool Map::canWalk(int x, int y) const {
