@@ -101,6 +101,12 @@ void InventoryMenuState::render() {
 	weightText.setFillColor(colors::brightBlue);
 	window->draw(weightText);
 
+	std::string commandsString = "(u)se - (d)rop - (w)ield - esc to close";
+	sf::Text commandsText(commandsString, font::mainFont, 16);
+	commandsText.setPosition(2*constants::CELL_WIDTH, (y+4)*constants::CELL_HEIGHT);
+	commandsText.setFillColor(colors::brightBlue);
+	window->draw(commandsText);
+
 	window->display();
 }
 
