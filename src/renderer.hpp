@@ -7,6 +7,7 @@
 
 class GameplayState;
 class Map;
+struct Point;
 class Renderer {
 public:
 	Renderer() : Renderer(constants::SQUARE_SCREEN_WIDTH, constants::SCREEN_HEIGHT) {;}
@@ -23,6 +24,7 @@ private:
 	void renderMap(const Map* const map, sf::RenderWindow* window);
 	void renderActors(const Map* const map, const std::vector<std::unique_ptr<Actor>>& actors, sf::RenderWindow* window);
 	void renderActor(const Actor* const actor, sf::RenderWindow* window);
+	void renderHighlight(const Map* const map, sf::RenderWindow* window, const Point& point);
 
 	Point getScreenCoordsFromWorldCoords(const Point& point) const;
 	Point getWorldCoordsFromScreenCoords(const Point& point, const Point& player) const;

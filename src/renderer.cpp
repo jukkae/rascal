@@ -1,14 +1,9 @@
+#include "colors.hpp"
 #include "font.hpp"
 #include "gameplay_state.hpp"
 #include "renderer.hpp"
 #include "map.hpp"
 #include "point.hpp"
-
-static const sf::Color darkWall   (0,   0,   100);
-static const sf::Color darkGround (100, 110, 100);
-static const sf::Color lightWall  (100, 100, 200);
-static const sf::Color lightGround(200, 210, 200);
-static const sf::Color black      (0,   0,   0  );
 
 Renderer::Renderer(int screenWidth, int screenHeight): screenWidth(screenWidth), screenHeight(screenHeight) {
 }
@@ -28,31 +23,72 @@ void Renderer::renderMap(const Map* const map, sf::RenderWindow* window) {
 	int mapWidth = map->width;
 	int mapHeight = map->height;
 
+	int mouseXpx = sf::Mouse::getPosition(*window).x;
+	int mouseYpx = sf::Mouse::getPosition(*window).y;
+	int mouseXcells = mouseXpx / constants::SQUARE_CELL_WIDTH;
+	int mouseYcells = mouseYpx / constants::SQUARE_CELL_HEIGHT;
+
 	for(int x = 0; x < screenWidth; ++x) {
 		for(int y = 0; y < screenHeight; ++y) {
-			int worldX = x + cameraX;
-			int worldY = y + cameraY;
-
-			sf::RectangleShape rectangle(sf::Vector2f(constants::SQUARE_CELL_WIDTH, constants::SQUARE_CELL_HEIGHT));
-			rectangle.setFillColor(sf::Color::Red);
-			rectangle.setPosition(x * constants::SQUARE_CELL_WIDTH, y * constants::SQUARE_CELL_HEIGHT);
-
-			if(worldX < 0 || worldX >= mapWidth || worldY < 0 || worldY >= mapHeight) {
-				rectangle.setFillColor(black);
-			}
-			else if(map->tiles[worldX + mapWidth*worldY].inFov) {
-				rectangle.setFillColor(map->isWall(worldX, worldY) ? lightWall : lightGround);
-			}
-			else if(map->isExplored(worldX, worldY)) {
-				rectangle.setFillColor(map->isWall(worldX, worldY) ? darkWall : darkGround);
+			if(x == mouseXcells && y == mouseYcells) {
+				renderHighlight(map, window, Point(x, y));
 			}
 			else {
-				rectangle.setFillColor(black);
-			}
+				int worldX = x + cameraX;
+				int worldY = y + cameraY;
 
-			window->draw(rectangle);
+				sf::RectangleShape rectangle(sf::Vector2f(constants::SQUARE_CELL_WIDTH, constants::SQUARE_CELL_HEIGHT));
+				rectangle.setPosition(x * constants::SQUARE_CELL_WIDTH, y * constants::SQUARE_CELL_HEIGHT);
+
+				if(worldX < 0 || worldX >= mapWidth || worldY < 0 || worldY >= mapHeight) {
+					rectangle.setFillColor(colors::black);
+				}
+				else if(map->tiles[worldX + mapWidth*worldY].inFov) {
+					rectangle.setFillColor(map->isWall(worldX, worldY) ? colors::lightWall : colors::lightGround);
+				}
+				else if(map->isExplored(worldX, worldY)) {
+					rectangle.setFillColor(map->isWall(worldX, worldY) ? colors::darkWall : colors::darkGround);
+				}
+				else {
+					rectangle.setFillColor(colors::black);
+				}
+
+				window->draw(rectangle);
+			}
 		}
 	}
+}
+
+void Renderer::renderHighlight(const Map* const map, sf::RenderWindow* window, const Point& point) {
+	int x = point.x;
+	int y = point.y;
+	int cameraX = state->getPlayer()->x - (screenWidth/2);
+	int cameraY = state->getPlayer()->y - (screenHeight/2);
+	int mapWidth = map->width;
+	int mapHeight = map->height;
+
+	int worldX = x + cameraX;
+	int worldY = y + cameraY;
+
+	float coef = 1.2;
+
+	sf::RectangleShape rectangle(sf::Vector2f(constants::SQUARE_CELL_WIDTH, constants::SQUARE_CELL_HEIGHT));
+	rectangle.setPosition(x * constants::SQUARE_CELL_WIDTH, y * constants::SQUARE_CELL_HEIGHT);
+
+	if(worldX < 0 || worldX >= mapWidth || worldY < 0 || worldY >= mapHeight) {
+		rectangle.setFillColor(colors::darkestGrey);
+	}
+	else if(map->tiles[worldX + mapWidth*worldY].inFov) {
+		rectangle.setFillColor(map->isWall(worldX, worldY) ? colors::multiply(colors::lightWall, coef) : colors::multiply(colors::lightGround, coef));
+	}
+	else if(map->isExplored(worldX, worldY)) {
+		rectangle.setFillColor(map->isWall(worldX, worldY) ? colors::multiply(colors::darkWall, coef) : colors::multiply(colors::darkGround, coef));
+	}
+	else {
+		rectangle.setFillColor(colors::black);
+	}
+
+	window->draw(rectangle);
 }
 
 void Renderer::renderActors(const Map* const map, const std::vector<std::unique_ptr<Actor>>& actors, sf::RenderWindow* window) {

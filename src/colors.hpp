@@ -48,6 +48,11 @@ namespace colors {
 	static Color cyan             (  0, 255, 255);
 	static Color yellow           (255, 255,   0);
 
+	static sf::Color darkWall     (0,   0,   100);
+	static sf::Color darkGround   (100, 110, 100);
+	static sf::Color lightWall    (100, 100, 200);
+	static sf::Color lightGround  (200, 210, 200);
+
 	static const inline Color multiply(Color c, float f) { return Color(c.r * f, c.g * f, c.b * f); }
 };
 
