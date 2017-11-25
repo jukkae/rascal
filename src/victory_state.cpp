@@ -6,8 +6,7 @@
 #include <sys/stat.h>
 
 VictoryState::VictoryState(Engine* engine, Actor* actor) :
-State(engine, engine->getWindow()),
-actor(actor)
+State(engine, engine->getWindow())
 {
 	description = "you won at level ";
 	description.append(std::to_string(((PlayerAi*)actor->ai.get())->xpLevel));

@@ -14,7 +14,6 @@ public:
 	void render() override;
 
 private:
-	Actor* actor;
 	std::string description;
 };
 #endif /* VICTORY_STATE_HPP */

@@ -14,8 +14,7 @@
 #include <SFML/Graphics/Text.hpp>
 
 GameOverState::GameOverState(Engine* engine, Actor* actor) :
-State(engine, engine->getWindow()),
-actor(actor)
+State(engine, engine->getWindow())
 {
 	description = "you died at level ";
 	description.append(std::to_string(((PlayerAi*)actor->ai.get())->xpLevel));

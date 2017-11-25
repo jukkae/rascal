@@ -18,7 +18,6 @@ public:
 	void render() override;
 
 private:
-	Actor* actor;
 	std::string description;
 };
 #endif /* GAME_OVER_STATE_HPP */
