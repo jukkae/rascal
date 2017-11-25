@@ -15,8 +15,8 @@
 #include <SFML/Graphics/Text.hpp>
 
 MainMenuState::MainMenuState(Engine* engine, bool forceShowContinue) :
-State(engine, engine->getWindow()),
-forceShowContinue(forceShowContinue) {
+State(engine, engine->getWindow())
+{
 	MenuItem newGame = { MenuItemCode::NEW_GAME, "New game!" };
 	MenuItem cont = { MenuItemCode::CONTINUE, "Continue!" };
 	MenuItem exit = { MenuItemCode::EXIT, "Exit!" };

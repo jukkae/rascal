@@ -18,7 +18,6 @@ public:
 	void render() override;
 private:
 	sf::Font font;
-	bool forceShowContinue;
 
 	struct MenuItem {
 		MenuItemCode code;
