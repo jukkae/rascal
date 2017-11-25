@@ -5,13 +5,13 @@ class Actor;
 class GameplayState;
 struct ActionResult;
 
+#include "direction.hpp"
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/serialization/export.hpp>
 #include <boost/serialization/vector.hpp>
 #include <boost/optional.hpp>
 
-enum class Direction { N, NE, E, SE, S, SW, W, NW, NONE };
 
 class Action {
 public:
