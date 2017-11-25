@@ -80,7 +80,7 @@ public:
 	virtual ~Pickable() {};
 	bool pick(std::unique_ptr<Actor> owner, Actor* wearer);
 	bool use (Actor* owner, Actor* wearer);
-	void drop(std::unique_ptr<Actor> owner, Actor* wearer);
+	void drop(Actor* owner, Actor* wearer);
 	int weight;
 protected:
 	TargetSelector selector;

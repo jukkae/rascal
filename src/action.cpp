@@ -90,3 +90,8 @@ bool UseItemAction::execute() {
 	item->pickable->use(item, actor);
 	return true;
 }
+
+bool DropItemAction::execute() {
+	item->pickable->drop(item, actor);
+	return true;
+}

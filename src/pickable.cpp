@@ -126,13 +126,20 @@ bool Pickable::use(Actor* owner, Actor* wearer) {
 	return success;
 }
 
-void Pickable::drop(std::unique_ptr<Actor> owner, Actor* wearer) {
+void Pickable::drop(Actor* owner, Actor* wearer) {
 	if(wearer->container) {
 		std::string ownerName = owner->name;
-		wearer->container->remove(owner.get());
-		owner->x = wearer->x;
-		owner->y = wearer->y;
-		wearer->s->addActor(std::move(owner));
+		const auto it = std::remove_if(
+				wearer->container->inventory.begin(),
+				wearer->container->inventory.end(),
+				[&] (const std::unique_ptr<Actor>& a) { return a->name == ownerName; });
+		std::unique_ptr<Actor> item = std::move(*it);
+
+		wearer->container->inventory.erase(it);
+
+		item->x = wearer->x;
+		item->y = wearer->y;
+		wearer->s->addActor(std::move(item));
 		wearer->s->message(colors::lightGrey, "%s drops a %s.", wearer->name.c_str(), ownerName.c_str());
 	}
 }
