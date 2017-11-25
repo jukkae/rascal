@@ -127,11 +127,17 @@ std::unique_ptr<Actor> map_utils::makeItem(GameplayState* gameplayState, Map* ma
 		confusor->blocks = false;
 		confusor->pickable = std::make_unique<Pickable>(TargetSelector(TargetSelector::SelectorType::SELECTED_MONSTER, 5), std::make_unique<AiChangeEffect>(std::make_unique<ConfusedMonsterAi>(10), "The eyes of the %s look vacant!"));
 		return confusor;
-	} else {
+	} else if(r < 95) {
 		std::unique_ptr<Actor> teslaCoil = std::make_unique<Actor>(x, y, '#', "tesla coil", sf::Color(128, 128, 255));
 		teslaCoil->blocks = false;
 		teslaCoil->pickable = std::make_unique<Pickable>(TargetSelector(TargetSelector::SelectorType::WEARER_RANGE, 5), std::make_unique<HealthEffect>(-6, "The tesla coil sputters, emitting raw\n electricity, hurting %s for %g hp!"));
 		return teslaCoil;
+	} else {
+		std::unique_ptr<Actor> baton = std::make_unique<Actor>(x, y, '|', "stun baton", sf::Color(128, 128, 255));
+		baton->blocks = false;
+		baton->pickable = std::make_unique<Pickable>();
+		baton->attacker = std::make_unique<Attacker>(1, 8, 1);
+		return baton;
 	}
 }
 

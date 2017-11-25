@@ -66,17 +66,24 @@ void Gui::renderStats(sf::RenderWindow* window) {
 	std::string acString = "AC: " + std::to_string(ac);
 	sf::Text acText(acString, font::mainFont, 16);
 	acText.setFillColor(colors::lightBlue);
-	acText.setPosition((constants::SCREEN_WIDTH-40)*constants::CELL_WIDTH, (0+constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT)*constants::CELL_HEIGHT);
+	acText.setPosition((constants::SCREEN_WIDTH-40)*constants::CELL_WIDTH, (1+constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT)*constants::CELL_HEIGHT);
+	window->draw(acText);
+
+	std::string weaponString;
+	if(!player->wornWeapon) weaponString = "Wielding: nothing";
+	else weaponString = "Wielding a weapon";
+	sf::Text weaponText(weaponString, font::mainFont, 16);
+	weaponText.setFillColor(colors::lightBlue);
+	weaponText.setPosition((constants::SCREEN_WIDTH-40)*constants::CELL_WIDTH, (2+constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT)*constants::CELL_HEIGHT);
+	window->draw(weaponText);
 
 	int n = player->attacker->numberOfDice;
 	int d = player->attacker->dice;
 	int b = player->attacker->bonus;
-	std::string atkString = "atk: " + std::to_string(n) + "d" + std::to_string(d) + "+" + std::to_string(b);
+	std::string atkString = "dm: " + std::to_string(n) + "d" + std::to_string(d) + "+" + std::to_string(b);
 	sf::Text atkText(atkString, font::mainFont, 16);
 	atkText.setFillColor(colors::lightBlue);
-	atkText.setPosition((constants::SCREEN_WIDTH-40)*constants::CELL_WIDTH, (1+constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT)*constants::CELL_HEIGHT);
-
-	window->draw(acText);
+	atkText.setPosition((constants::SCREEN_WIDTH-40)*constants::CELL_WIDTH, (3+constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT)*constants::CELL_HEIGHT);
 	window->draw(atkText);
 }
 

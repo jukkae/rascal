@@ -124,6 +124,32 @@ private:
 	}
 };
 
+class WieldItemAction : public Action {
+public:
+	WieldItemAction(Actor* actor, Actor* item) : Action(actor, 50.0f), item(item) {;}
+	bool execute();
+private:
+	Actor* item;
+	friend class boost::serialization::access;
+	template<class Archive>
+	void serialize(Archive & ar, const unsigned int version) {
+		ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(Action);
+		ar & item;
+	}
+};
+
+class UnWieldItemAction : public Action {
+public:
+	UnWieldItemAction(Actor* actor) : Action(actor, 50.0f) {;}
+	bool execute();
+private:
+	friend class boost::serialization::access;
+	template<class Archive>
+	void serialize(Archive & ar, const unsigned int version) {
+		ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(Action);
+	}
+};
+
 struct ActionResult {
 	bool succeeded;
 	boost::optional<Action> alternativeAction;

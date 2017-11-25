@@ -12,7 +12,8 @@ void Attacker::attack(Actor* owner, Actor* target) {
 		if(attackRoll > target->destructible->armorClass) {
 			int dmg = getAttackBaseDamage();
 			if ( dmg - target->destructible->defense > 0 ) {
-				owner->s->message(colors::red, "%s attacks %s for %g hit points.", owner->name.c_str(), target->name.c_str(), dmg - target->destructible->defense);
+				if(owner->wornWeapon) owner->s->message(colors::red, "%s attacks %s for %g hit points with a blunt implement.", owner->name.c_str(), target->name.c_str(), dmg - target->destructible->defense);
+				else owner->s->message(colors::red, "%s attacks %s for %g hit points.", owner->name.c_str(), target->name.c_str(), dmg - target->destructible->defense);
 			} else {
 				owner->s->message(colors::lightGrey, "%s attacks %s but it has no effect!", owner->name.c_str(), target->name.c_str());
 			}
