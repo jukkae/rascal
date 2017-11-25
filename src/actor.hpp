@@ -39,7 +39,7 @@ public:
 	std::unique_ptr<Ai> ai;
 	std::unique_ptr<Pickable> pickable;
 	std::unique_ptr<Container> container;
-	Attacker* wornWeapon = nullptr;
+	Actor* wornWeapon = nullptr;
 
 	GameplayState* s; // temporary for messaging
 

@@ -27,7 +27,7 @@ bool MoveAction::execute() {
 	// look for living actors to attack
 	for (auto& a : actor->getActors()) {
 		if (a->destructible && !a->destructible->isDead() && a->x == targetX && a->y == targetY) {
-			if(actor->wornWeapon) actor->wornWeapon->attack(actor, a.get());
+			if(actor->wornWeapon) actor->wornWeapon->attacker->attack(actor, a.get());
 			else actor->attacker->attack(actor, a.get());
 			return true;
 		}
@@ -99,7 +99,7 @@ bool DropItemAction::execute() {
 
 bool WieldItemAction::execute() {
 	if(item->attacker) {
-		actor->wornWeapon = item->attacker.get();
+		actor->wornWeapon = item;
 		return true;
 	} else return false;
 }

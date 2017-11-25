@@ -71,7 +71,7 @@ void Gui::renderStats(sf::RenderWindow* window) {
 
 	std::string weaponString;
 	if(!player->wornWeapon) weaponString = "Wielding: nothing";
-	else weaponString = "Wielding a weapon";
+	else weaponString = "Wielding: " + player->wornWeapon->name;
 	sf::Text weaponText(weaponString, font::mainFont, 16);
 	weaponText.setFillColor(colors::lightBlue);
 	weaponText.setPosition((constants::SCREEN_WIDTH-40)*constants::CELL_WIDTH, (2+constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT)*constants::CELL_HEIGHT);
@@ -84,9 +84,9 @@ void Gui::renderStats(sf::RenderWindow* window) {
 		b = player->attacker->bonus;
 	}
 	else {
-		n = player->wornWeapon->numberOfDice;
-		d = player->wornWeapon->dice;
-		b = player->wornWeapon->bonus;
+		n = player->wornWeapon->attacker->numberOfDice;
+		d = player->wornWeapon->attacker->dice;
+		b = player->wornWeapon->attacker->bonus;
 	}
 	std::string atkString = "dm: " + std::to_string(n) + "d" + std::to_string(d) + "+" + std::to_string(b);
 	sf::Text atkText(atkString, font::mainFont, 16);
