@@ -7,15 +7,6 @@ public:
 	virtual void execute() = 0;
 };
 
-class DummyCommand : public EngineCommand {
-public:
-	DummyCommand(Engine* engine) : engine(engine) {;}
-	~DummyCommand() {}
-	void execute();
-private:
-	Engine* engine;
-};
-
 class NewGameCommand : public EngineCommand {
 public:
 	NewGameCommand(Engine* engine) : engine(engine) {;}
