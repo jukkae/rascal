@@ -14,9 +14,9 @@ OBJ := obj
 
 SOURCES := $(wildcard src/*.cpp)
 OBJECTS := $(patsubst $(SRC)/%.cpp, $(OBJ)/%.o, $(SOURCES))
-.PHONY: clean #run
+.PHONY: clean run
 
-all: $(OBJECTS)
+rascal: $(OBJECTS)
 	$(CXX) $^ -o $@ $(CPPFLAGS) $(LDFLAGS)
 
 $(OBJ)/%.o: $(SRC)/%.cpp
@@ -28,8 +28,8 @@ $(OBJ)/%.o: $(SRC)/%.cpp
 #compile-debug: clean $(OBJS)
 	#$(CXX) $(SOURCES) -o rascal $(CPPFLAGS) -Iinclude $(LDFLAGS) -I/usr/local/include -g -O0
 
-#clean:
-	#rm -rf *.o rascal save.txt rascal.dSYM
+clean:
+	rm -rf *.o rascal save.txt rascal.dSYM
 
-#run:
-	#./rascal
+run:
+	./rascal
