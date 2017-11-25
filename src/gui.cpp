@@ -77,9 +77,17 @@ void Gui::renderStats(sf::RenderWindow* window) {
 	weaponText.setPosition((constants::SCREEN_WIDTH-40)*constants::CELL_WIDTH, (2+constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT)*constants::CELL_HEIGHT);
 	window->draw(weaponText);
 
-	int n = player->attacker->numberOfDice;
-	int d = player->attacker->dice;
-	int b = player->attacker->bonus;
+	int n, d, b;
+	if(!player->wornWeapon) {
+		n = player->attacker->numberOfDice;
+		d = player->attacker->dice;
+		b = player->attacker->bonus;
+	}
+	else {
+		n = player->wornWeapon->numberOfDice;
+		d = player->wornWeapon->dice;
+		b = player->wornWeapon->bonus;
+	}
 	std::string atkString = "dm: " + std::to_string(n) + "d" + std::to_string(d) + "+" + std::to_string(b);
 	sf::Text atkText(atkString, font::mainFont, 16);
 	atkText.setFillColor(colors::lightBlue);
