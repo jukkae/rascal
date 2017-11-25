@@ -185,7 +185,7 @@ void GameplayState::nextLevel() {
 	for (auto& a : actors) a->setState(this);
 }
 
-bool GameplayState::pickTile(int* x, int* y, float maxRange) {
+bool GameplayState::pickTile(int* x, int* y, float maxRange) { // Should be moved over to renderer
 	while(true) {
 		sf::Event event;
 		while(window->pollEvent(event)) { // Dummy polling to keep macOS happy
@@ -209,7 +209,7 @@ bool GameplayState::pickTile(int* x, int* y, float maxRange) {
 			int realX = mouseLocation.x;
 			int realY = mouseLocation.y;
 			if(isInFov(realX, realY) && (maxRange == 0 || getPlayer()->getDistance(realX, realY) <= maxRange)) {
-				// TODO Highlight background for tile under cursor
+				// Highlight background for tile under cursor: Done globally
 				if(sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
 					*x = realX;
 					*y = realY;

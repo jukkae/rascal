@@ -85,7 +85,7 @@ void Renderer::renderHighlight(const Map* const map, sf::RenderWindow* window, c
 		rectangle.setFillColor(map->isWall(worldX, worldY) ? colors::multiply(colors::darkWall, coef) : colors::multiply(colors::darkGround, coef));
 	}
 	else {
-		rectangle.setFillColor(colors::black);
+		rectangle.setFillColor(colors::darkestGrey);
 	}
 
 	window->draw(rectangle);

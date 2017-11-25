@@ -16,6 +16,7 @@ sf::RenderWindow window(sf::VideoMode(width, height), "Rascal");
 Engine engine(&window);
 
 int main() {
+	window.setMouseCursorVisible(false);
 	while(window.isOpen()) {
 		sf::Event event;
         while (window.pollEvent(event)) {
