@@ -37,7 +37,7 @@ public:
 	int xpLevel;
 	int experience;
 	std::unique_ptr<Action> getNextAction(Actor* actor) override;
-	void increaseXp(int xp, GameplayState* state); // TODO yes, this is bad and I should feel bad
+	void increaseXp(Actor* actor, int xp);
 private:
 	void handleActionKey(Actor* owner, int ascii, GameplayState* state);
 

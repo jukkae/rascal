@@ -34,15 +34,14 @@ int PlayerAi::getNextLevelXp() const {
 	return LEVEL_UP_BASE + xpLevel * LEVEL_UP_FACTOR;
 }
 
-void PlayerAi::increaseXp(int xp, GameplayState* state) {
+void PlayerAi::increaseXp(Actor* owner, int xp) {
 	experience += xp;
 	if(experience >= getNextLevelXp()) {
 		experience -= getNextLevelXp();
 		++xpLevel;
-		state->message(colors::yellow, "You've reached level %d!", xpLevel);
-		Engine* engine = state->getEngine();
-		Actor* player = state->getPlayer();
-		std::unique_ptr<State> levelUpMenuState = std::make_unique<LevelUpMenuState>(engine, player);
+		owner->s->message(colors::yellow, "You've reached level %d!", xpLevel);
+		Engine* engine = owner->s->getEngine();
+		std::unique_ptr<State> levelUpMenuState = std::make_unique<LevelUpMenuState>(engine, owner);
 		engine->pushState(std::move(levelUpMenuState));
 	}
 }
