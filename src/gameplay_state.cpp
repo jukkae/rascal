@@ -145,6 +145,7 @@ Actor* GameplayState::getLiveActor(int x, int y) const {
 	return nullptr;
 }
 
+// Messaging system
 void GameplayState::message(sf::Color col, std::string text, ...) {
 	va_list args;
 	va_start(args, text);
@@ -152,6 +153,7 @@ void GameplayState::message(sf::Color col, std::string text, ...) {
 	va_end(args);
 }
 
+// Bulk: map helper?
 void GameplayState::nextLevel() {
 	++level;
 	if(level > 5) {
@@ -185,6 +187,8 @@ void GameplayState::nextLevel() {
 	for (auto& a : actors) a->setState(this);
 }
 
+// TODO this doesn't belong to gameplay state
+// --> UI / Renderer / IO
 bool GameplayState::pickTile(int* x, int* y, float maxRange) { // Should be moved over to renderer
 	while(true) {
 		sf::Event event;

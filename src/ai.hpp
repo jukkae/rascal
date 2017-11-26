@@ -37,7 +37,7 @@ public:
 	int xpLevel;
 	int experience;
 	std::unique_ptr<Action> getNextAction(Actor* actor) override;
-	void increaseXp(Actor* actor, int xp);
+	void increaseXp(Actor* owner, int xp);
 private:
 	void handleActionKey(Actor* owner, int ascii, GameplayState* state);
 
