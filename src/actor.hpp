@@ -78,6 +78,7 @@ private:
 		ar & container;
 		ar & actionsQueue;
 		ar & stairs;
+		ar & wornWeapon;
     }   
 };
 #endif /* ACTOR_HPP */
