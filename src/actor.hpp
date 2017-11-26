@@ -21,6 +21,7 @@ class GameplayState;
 #include "destructible.hpp"
 #include "pickable.hpp"
 #include "persistent.hpp"
+#include "status_effect.hpp" // does this have to be included?
 
 enum class Statistic { CONSTITUTION, STRENGTH, AGILITY, SPEED };
 
@@ -56,9 +57,11 @@ public:
 	Actor* getLiveActor(int x, int y);
 	void setState(GameplayState* state) { s = state; } // temporary for getting access to state's actors
 	void modifyStatistic(Statistic stat, float delta);
+	void addStatusEffect(std::unique_ptr<StatusEffect> statusEffect) { statusEffects.push_back(std::move(statusEffect)); }
 
 private:
 	std::deque<std::unique_ptr<Action>> actionsQueue;
+	std::vector<std::unique_ptr<StatusEffect>> statusEffects;
 
 	friend class boost::serialization::access;                                                                
     template<class Archive>                                                                                   
@@ -79,6 +82,7 @@ private:
 		ar & actionsQueue;
 		ar & stairs;
 		ar & wornWeapon;
+		ar & statusEffects;
     }   
 };
 #endif /* ACTOR_HPP */

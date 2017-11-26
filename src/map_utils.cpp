@@ -3,6 +3,7 @@
 #include "map_utils.hpp"
 #include "map.hpp"
 #include "gameplay_state.hpp"
+#include "status_effect.hpp" // TODO for testing
 #include <SFML/Graphics.hpp>
 
 void map_utils::addItems(GameplayState* gameplayState, Map* map) {
@@ -42,6 +43,7 @@ void map_utils::addPlayer(GameplayState* gameplayState, Map* map) {
 	player->attacker     = std::make_unique<Attacker>(1, 2, 1);
 	player->ai           = std::make_unique<PlayerAi>();
 	player->container    = std::make_unique<Container>(100);
+	player->addStatusEffect(std::move(std::make_unique<StatusEffect>()));
 	gameplayState->addActor(std::move(player));
 }
 
