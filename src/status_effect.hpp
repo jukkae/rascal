@@ -42,7 +42,7 @@ private:
 		ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(StatusEffect);
 		ar & time;
 	}
-};
+}; // TODO does not deserialize
 
 class TestStatusEffect : public TemporaryStatusEffect {
 public:
