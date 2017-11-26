@@ -43,7 +43,7 @@ void map_utils::addPlayer(GameplayState* gameplayState, Map* map) {
 	player->attacker     = std::make_unique<Attacker>(1, 2, 1);
 	player->ai           = std::make_unique<PlayerAi>();
 	player->container    = std::make_unique<Container>(100);
-	player->addStatusEffect(std::move(std::make_unique<StatusEffect>()));
+	player->addStatusEffect(std::make_unique<TestStatusEffect>(10000));
 	gameplayState->addActor(std::move(player));
 }
 
