@@ -22,7 +22,12 @@ float Actor::update(GameplayState* state) {
 		actionsQueue.pop_front();
 		if(success) {
 			float turnCost = 100.0f * actionCost / ai->speed;
-			for(auto& e : statusEffects) e->update(this, state, turnCost);
+			for(auto& e : statusEffects) {
+				e->update(this, state, turnCost);
+				if(!e->isAlive()) {
+					statusEffects.erase(std::remove(statusEffects.begin(), statusEffects.end(), e), statusEffects.end());
+				}
+			}
 			return turnCost;
 		} else {
 			if(ai->isPlayer()) {
