@@ -12,18 +12,21 @@ class GameplayState;
 
 class StatusEffect {
 public:
+	StatusEffect(std::string name = "") : name(name) {;}
 	virtual void update(Actor* owner, GameplayState* state, float deltaTime) = 0;
 	virtual bool isAlive() = 0;
+	std::string name;
 private:
 	friend class boost::serialization::access;
 	template<class Archive>
 	void serialize(Archive & ar, const unsigned int version) {
+		ar & name;
 	}
 };
 
 class TestStatusEffect : public StatusEffect {
 public:
-	TestStatusEffect(int time = 10000) : time(time) {;}
+	TestStatusEffect(int time = 10000) : StatusEffect("test"), time(time) {;}
 	void update(Actor* owner, GameplayState* state, float deltaTime) override;
 	bool isAlive() override;
 	int time;
