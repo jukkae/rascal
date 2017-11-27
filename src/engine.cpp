@@ -12,6 +12,7 @@
 #include "state.hpp"
 #include "gameplay_state.hpp"
 #include "main_menu_state.hpp"
+#include "status_effect.hpp"
 
 
 Engine::Engine(sf::RenderWindow* window) : window(window) {
@@ -99,6 +100,7 @@ void Engine::load() {
 
 	ia.register_type<HealthEffect>();
 	ia.register_type<AiChangeEffect>();
+	ia.register_type<TestStatusEffect>();
 
 	ia >> gameplayState;
 	(static_cast<GameplayState*>(gameplayState))->setEngine(this);
@@ -111,6 +113,7 @@ void Engine::save() {
 
 	oa.register_type<HealthEffect>();
 	oa.register_type<AiChangeEffect>();
+	oa.register_type<TestStatusEffect>();
 
 	oa << gameplayState;
 }
