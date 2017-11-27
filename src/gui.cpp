@@ -49,6 +49,7 @@ void Gui::render(sf::RenderWindow* window) {
 	renderXpBar(window);
 	renderMouseLook(state->getActors(), window);
 
+	renderStatusEffects(window);
 	renderStats(window);
 }
 
@@ -60,7 +61,7 @@ void Gui::renderXpBar(sf::RenderWindow* window) {
 }
 
 void Gui::renderStats(sf::RenderWindow* window) {
-	Actor* player = state->getPlayer();
+	Actor* player = state->getPlayer(); // TODO instead pass player - rather, the actor - as a parameter to both Gui and Renderer
 
 	int ac = player->destructible->armorClass;
 	std::string acString = "AC: " + std::to_string(ac);
@@ -93,6 +94,22 @@ void Gui::renderStats(sf::RenderWindow* window) {
 	atkText.setFillColor(colors::lightBlue);
 	atkText.setPosition((constants::SCREEN_WIDTH-40)*constants::CELL_WIDTH, (3+constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT)*constants::CELL_HEIGHT);
 	window->draw(atkText);
+}
+
+void Gui::renderStatusEffects(sf::RenderWindow* window) {
+	Actor* player = state->getPlayer();
+
+	if(player->getStatusEffects().size() > 0) {
+		int i = 0;
+		for (auto& e : player->getStatusEffects()) {
+			std::string effectStr = e->name;
+			sf::Text effectText(effectStr, font::mainFont, 16);
+			effectText.setFillColor(colors::lightBlue);
+			effectText.setPosition((constants::SCREEN_WIDTH-60)*constants::CELL_WIDTH, (1 + i +constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT)*constants::CELL_HEIGHT);
+			window->draw(effectText);
+			++i;
+		}
+	}
 }
 
 void Gui::renderMessageLog(sf::RenderWindow* window) {
