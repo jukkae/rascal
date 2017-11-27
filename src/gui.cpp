@@ -100,12 +100,16 @@ void Gui::renderStatusEffects(sf::RenderWindow* window) {
 	Actor* player = state->getPlayer();
 
 	if(player->getStatusEffects().size() > 0) {
-		int i = 0;
+		sf::Text effectsHeading("status effects:", font::mainFont, 16);
+		effectsHeading.setFillColor(colors::lightBlue);
+		effectsHeading.setPosition((constants::SCREEN_WIDTH-60)*constants::CELL_WIDTH, (1 + constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT)*constants::CELL_HEIGHT);
+		window->draw(effectsHeading);
+		int i = 1;
 		for (auto& e : player->getStatusEffects()) {
 			std::string effectStr = e->name;
 			sf::Text effectText(effectStr, font::mainFont, 16);
 			effectText.setFillColor(colors::lightBlue);
-			effectText.setPosition((constants::SCREEN_WIDTH-60)*constants::CELL_WIDTH, (1 + i +constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT)*constants::CELL_HEIGHT);
+			effectText.setPosition((constants::SCREEN_WIDTH-60)*constants::CELL_WIDTH, (1 + i + constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT)*constants::CELL_HEIGHT);
 			window->draw(effectText);
 			++i;
 		}
