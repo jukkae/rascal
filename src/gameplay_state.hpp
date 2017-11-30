@@ -23,7 +23,7 @@ public:
 
 	void initLoaded(Engine* engine);
 	void newGame(Engine* engine);
-	// TEMPORARY FUNCTIONS FOR REFACTORING PROCESS
+
 	int getLevel() { return level; }
 	void nextLevel();
 	int getTime() { return time; }
@@ -35,7 +35,6 @@ public:
 	bool canWalk(int x, int y);
 	Engine* getEngine() { return engine; }
 	void setEngine(Engine* e) { engine = e; }
-	void setWindow(sf::RenderWindow* w) { window = w; }
 
 	Actor* getNextActor() const { return actors.front().get(); }
 	Actor* getPlayer() const;
