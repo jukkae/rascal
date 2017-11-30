@@ -2,6 +2,7 @@
 #include "container.hpp"
 #include "destructible.hpp"
 #include "gameplay_state.hpp"
+#include "io.hpp"
 #include "persistent.hpp"
 #include "colors.hpp"
 
