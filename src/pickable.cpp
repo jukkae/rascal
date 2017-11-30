@@ -86,6 +86,15 @@ bool AiChangeEffect::applyTo(Actor* actor) {
 	return true;
 }
 
+StatusEffectEffect::StatusEffectEffect(std::unique_ptr<StatusEffect> statusEffect, std::string message):
+statusEffect(std::move(statusEffect)), message(message) {;}
+
+bool StatusEffectEffect::applyTo(Actor* actor) {
+	actor->addStatusEffect(std::move(statusEffect));
+	if(message != "") actor->s->message(colors::lightGrey, message, actor->name.c_str());
+	return true;
+}
+
 Pickable::Pickable(TargetSelector selector, std::unique_ptr<Effect> effect, int weight) : weight(weight), selector(selector), effect(std::move(effect)) {;}
 
 // owner is the Actor that this Pickable belongs to,
@@ -156,3 +165,4 @@ void Pickable::drop(Actor* owner, Actor* wearer) {
 //BOOST_CLASS_EXPORT(Effect)
 BOOST_CLASS_EXPORT_IMPLEMENT(HealthEffect)
 BOOST_CLASS_EXPORT_IMPLEMENT(AiChangeEffect)
+BOOST_CLASS_EXPORT_IMPLEMENT(StatusEffectEffect)

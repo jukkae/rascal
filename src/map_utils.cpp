@@ -115,11 +115,16 @@ void map_utils::addMonster(GameplayState* gameplayState, Map* map, int x, int y)
 
 std::unique_ptr<Actor> map_utils::makeItem(GameplayState* gameplayState, Map* map, int x, int y) {
 	int r = d100();
-	if(r < 50) {
+	if(r < 40) {
 		std::unique_ptr<Actor> stimpak = std::make_unique<Actor>(x, y, '!', "stimpak", sf::Color(128, 0, 128));
 		stimpak->blocks = false;
 		stimpak->pickable = std::make_unique<Pickable>(TargetSelector(TargetSelector::SelectorType::WEARER, 0), std::make_unique<HealthEffect>(4, "Damn, that does feel good!"));
 		return stimpak;
+	} else if(r < 50) {
+		std::unique_ptr<Actor> fakeStimpak = std::make_unique<Actor>(x, y, '!', "stimpak", sf::Color(128, 128, 128));
+		fakeStimpak->blocks = false;
+		fakeStimpak->pickable = std::make_unique<Pickable>(TargetSelector(TargetSelector::SelectorType::WEARER, 0), std::make_unique<StatusEffectEffect>(std::make_unique<PoisonedStatusEffect>(PoisonedStatusEffect()), "Damn, that does NOT feel good!"));
+		return fakeStimpak;
 	} else if(r < 60) {
 		std::unique_ptr<Actor> blasterBoltDevice = std::make_unique<Actor>(x, y, '?', "blaster bolt device", sf::Color(128, 128, 0));
 		blasterBoltDevice->blocks = false;

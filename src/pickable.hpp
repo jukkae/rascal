@@ -3,6 +3,7 @@
 
 #include "actor.hpp"
 #include "ai.hpp"
+#include "status_effect.hpp"
 
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
@@ -74,6 +75,23 @@ private:
 	}
 };
 
+class StatusEffectEffect : public Effect {
+public:
+	StatusEffectEffect(std::unique_ptr<StatusEffect> statusEffect = std::unique_ptr<StatusEffect>(), std::string message = "");
+	bool applyTo(Actor* actor) override;
+
+	std::unique_ptr<StatusEffect> statusEffect;
+	std::string message;
+private:
+	friend class boost::serialization::access;
+	template<class Archive>
+	void serialize(Archive & ar, const unsigned int version) {
+		ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(Effect);
+		ar & statusEffect;
+		ar & message;
+	}
+};
+
 class Pickable {
 public:
 	Pickable(TargetSelector selector = TargetSelector(TargetSelector::SelectorType::NONE, 0), std::unique_ptr<Effect> effect = std::unique_ptr<Effect>(), int weight = 1);
@@ -97,6 +115,7 @@ private:
 
 //BOOST_CLASS_EXPORT(Effect)
 BOOST_CLASS_EXPORT_KEY(HealthEffect)
-BOOST_CLASS_EXPORT_KEY(AiChangeEffect)	
+BOOST_CLASS_EXPORT_KEY(AiChangeEffect)
+BOOST_CLASS_EXPORT_KEY(StatusEffectEffect)
 
 #endif /* PICKABLE_HPP */

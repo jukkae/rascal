@@ -100,6 +100,7 @@ void Engine::load() {
 
 	ia.register_type<HealthEffect>();
 	ia.register_type<AiChangeEffect>();
+	ia.register_type<StatusEffectEffect>();
 	ia.register_type<TestStatusEffect>();
 	ia.register_type<PoisonedStatusEffect>();
 
@@ -114,6 +115,7 @@ void Engine::save() {
 
 	oa.register_type<HealthEffect>();
 	oa.register_type<AiChangeEffect>();
+	oa.register_type<StatusEffectEffect>();
 	oa.register_type<TestStatusEffect>();
 	oa.register_type<PoisonedStatusEffect>();
 
