@@ -7,7 +7,7 @@
 bool io::pickTile(Actor* actor, int* x, int* y, float maxRange) { // Should be moved over to renderer
 	while(true) {
 		sf::Event event;
-		while(window->pollEvent(event)) { // Dummy polling to keep macOS happy
+		while(window.pollEvent(event)) { // Dummy polling to keep macOS happy
 			render();
 			for(int cx = 0; cx < constants::SQUARE_SCREEN_WIDTH; ++cx) {
 				for(int cy = 0; cy < constants::SCREEN_HEIGHT; ++cy) {
@@ -19,8 +19,8 @@ bool io::pickTile(Actor* actor, int* x, int* y, float maxRange) { // Should be m
 					}
 				}
 			}
-			int mouseXPix = sf::Mouse::getPosition(*window).x;
-			int mouseYPix = sf::Mouse::getPosition(*window).y;
+			int mouseXPix = sf::Mouse::getPosition(window).x;
+			int mouseYPix = sf::Mouse::getPosition(window).y;
 			int xCells = mouseXPix / constants::SQUARE_CELL_WIDTH;
 			int yCells = mouseYPix / constants::SQUARE_CELL_HEIGHT;
 			Point mouseLocationScreen(xCells, yCells);
