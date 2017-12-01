@@ -45,15 +45,13 @@ public:
 	std::vector<std::unique_ptr<Actor>>& getActors() { return actors; }
 
 	void addActor(std::unique_ptr<Actor> actor) { actors.push_back(std::move(actor)); }
-
-	bool pickTile(int* x, int* y, float maxRange = 0.0f);
+	Renderer renderer; // TODO should be private
 private:
 	int time = 0;
 	int level = 1;
 	std::vector<std::unique_ptr<Actor>> actors;
 	Map map;
 	Gui gui;
-	Renderer renderer;
 
 	void updateTime();
 	void updateNextActor();

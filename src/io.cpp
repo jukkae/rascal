@@ -1,20 +1,21 @@
 #include "actor.hpp"
 #include "constants.hpp"
+#include "gameplay_state.hpp"
 #include "io.hpp"
 #include "point.hpp"
 #include <SFML/Graphics.hpp>
 
-bool io::pickTile(Actor* actor, int* x, int* y, float maxRange) { // Should be moved over to renderer
+bool io::pickTile(GameplayState* state, Renderer* renderer, Actor* actor, int* x, int* y, float maxRange) {
 	while(true) {
 		sf::Event event;
 		while(window.pollEvent(event)) { // Dummy polling to keep macOS happy
-			render();
+			state->render();
 			for(int cx = 0; cx < constants::SQUARE_SCREEN_WIDTH; ++cx) {
 				for(int cy = 0; cy < constants::SCREEN_HEIGHT; ++cy) {
-					Point location = renderer.getWorldCoordsFromScreenCoords(Point(cx, cy));
+					Point location = renderer->getWorldCoordsFromScreenCoords(Point(cx, cy));
 					int realX = location.x;
 					int realY = location.y;
-					if(isInFov(realX, realY) && (maxRange == 0 || actor->getDistance(realX, realY) <= maxRange)) {
+					if(state->isInFov(realX, realY) && (maxRange == 0 || actor->getDistance(realX, realY) <= maxRange)) {
 						// TODO Highlight background for tiles in range
 					}
 				}
@@ -24,10 +25,10 @@ bool io::pickTile(Actor* actor, int* x, int* y, float maxRange) { // Should be m
 			int xCells = mouseXPix / constants::SQUARE_CELL_WIDTH;
 			int yCells = mouseYPix / constants::SQUARE_CELL_HEIGHT;
 			Point mouseLocationScreen(xCells, yCells);
-			Point mouseLocation = renderer.getWorldCoordsFromScreenCoords(Point(mouseLocationScreen.x, mouseLocationScreen.y));
+			Point mouseLocation = renderer->getWorldCoordsFromScreenCoords(Point(mouseLocationScreen.x, mouseLocationScreen.y));
 			int realX = mouseLocation.x;
 			int realY = mouseLocation.y;
-			if(isInFov(realX, realY) && (maxRange == 0 || actor->getDistance(realX, realY) <= maxRange)) {
+			if(state->isInFov(realX, realY) && (maxRange == 0 || actor->getDistance(realX, realY) <= maxRange)) {
 				// Highlight background for tile under cursor: Done globally
 				if(sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
 					*x = realX;
