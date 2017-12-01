@@ -5,6 +5,7 @@
 #include "font.hpp"
 #include "gameplay_state.hpp"
 #include "gui.hpp"
+#include "io.hpp"
 #include "map.hpp"
 #include <stdarg.h>
 #include <sstream>
@@ -164,6 +165,7 @@ void Gui::renderMouseLook(std::vector<std::unique_ptr<Actor>>& actors, sf::Rende
 	Point screenCells(xCells, yCells);
 
 	Point location = state->getWorldCoordsFromScreenCoords(screenCells);
+	io::mousePosition = location; // TODO this is nasty to do here, but it's still cleaner than it was before
 	int x = location.x;
 	int y = location.y;
 

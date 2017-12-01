@@ -5,6 +5,7 @@
 #include "engine.hpp"
 #include "main.hpp"
 #include "constants.hpp"
+#include "io.hpp"
 
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
@@ -12,16 +13,17 @@
 
 int width = constants::CELL_WIDTH * constants::SCREEN_WIDTH;
 int height = constants::CELL_HEIGHT * constants::SCREEN_HEIGHT;
-sf::RenderWindow window(sf::VideoMode(width, height), "Rascal");
-Engine engine(&window);
+namespace io { sf::RenderWindow window(sf::VideoMode(width, height), "Rascal"); }
+namespace io { Point mousePosition(0,0); }
+Engine engine(&io::window);
 
 int main() {
-	window.setMouseCursorVisible(false);
-	while(window.isOpen()) {
+	io::window.setMouseCursorVisible(false);
+	while(io::window.isOpen()) {
 		sf::Event event;
-        while (window.pollEvent(event)) {
+        while (io::window.pollEvent(event)) {
             if (event.type == sf::Event::Closed)
-                window.close();
+                io::window.close();
 			else engine.addEvent(event);
         }
 		engine.update();

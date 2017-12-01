@@ -2,6 +2,7 @@
 #include "container.hpp"
 #include "destructible.hpp"
 #include "gameplay_state.hpp"
+#include "io.hpp"
 #include "persistent.hpp"
 #include "colors.hpp"
 
@@ -25,7 +26,9 @@ void TargetSelector::selectTargets(Actor* wearer, std::vector<Actor*>& list) {
 		{
 			int x, y;
 			wearer->s->message(colors::cyan, "Left-click to select an enemy,\nor right-click to cancel.");
-			if(wearer->s->pickTile(&x, &y, range)) {
+			if(io::waitForMouseClick(wearer->s)) {
+				x = io::mousePosition.x;
+				y = io::mousePosition.y;
 				Actor* actor = wearer->getLiveActor(x, y);
 				if(actor) list.push_back(actor);
 			}
@@ -46,8 +49,10 @@ void TargetSelector::selectTargets(Actor* wearer, std::vector<Actor*>& list) {
 		{
 			int x, y;
 			wearer->s->message(colors::cyan, "Left-click to select a tile,\nor right-click to cancel.");
-			if(wearer->s->pickTile(&x, &y)) {
-				for(auto& actor : wearer->getActors()) {
+			if(io::waitForMouseClick(wearer->s)) {
+				x = io::mousePosition.x;
+				y = io::mousePosition.y;
+				for(auto& actor : wearer->getActors()) { // TODO highlight tiles in range
 					if(actor->destructible && !actor->destructible->isDead() && actor->getDistance(x, y) <= range ) {
 						list.push_back(actor.get());
 					}

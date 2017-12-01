@@ -1,6 +1,7 @@
 #include "colors.hpp"
 #include "font.hpp"
 #include "gameplay_state.hpp"
+#include "io.hpp"
 #include "renderer.hpp"
 #include "map.hpp"
 #include "point.hpp"
