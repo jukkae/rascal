@@ -42,3 +42,18 @@ bool io::pickTile(GameplayState* state, Renderer* renderer, Actor* actor, int* x
 		}
 	}
 }
+
+bool io::waitForMouseClick(GameplayState* state) {
+	while(true) {
+		sf::Event event;
+		while(window.pollEvent(event)) { // Dummy polling to keep macOS happy
+			state->render();
+			if(sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+				return true;
+			}
+			if(sf::Mouse::isButtonPressed(sf::Mouse::Right)) {
+				return false;
+			}
+		}
+	}
+}
