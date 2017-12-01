@@ -10,7 +10,6 @@ class Renderer;
 namespace io {
 extern sf::RenderWindow window;
 extern Point mousePosition;
-bool pickTile(GameplayState* state, Renderer* renderer, Actor* actor, int* x, int* y, float maxRange = 0.0f);
 bool waitForMouseClick(GameplayState* state);
 } // namespace io
 #endif /* IO_HPP */
