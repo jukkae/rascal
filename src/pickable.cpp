@@ -52,7 +52,7 @@ void TargetSelector::selectTargets(Actor* wearer, std::vector<Actor*>& list) {
 			if(io::waitForMouseClick(wearer->s)) {
 				x = io::mousePosition.x;
 				y = io::mousePosition.y;
-				for(auto& actor : wearer->getActors()) {
+				for(auto& actor : wearer->getActors()) { // TODO highlight tiles in range
 					if(actor->destructible && !actor->destructible->isDead() && actor->getDistance(x, y) <= range ) {
 						list.push_back(actor.get());
 					}
