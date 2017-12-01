@@ -56,7 +56,7 @@ void map_utils::addStairs(GameplayState* gameplayState, Map* map) {
 		y = (map->height-1) * s / 100;
 	} while (map->isWall(x, y)); // should check for canWalk, but can't do that yet
 
-	std::unique_ptr<Actor> stairs = std::make_unique<Actor>(x, y, '<', "stairs (up)", sf::Color::White, 0, true);
+	std::unique_ptr<Actor> stairs = std::make_unique<Actor>(x, y, '<', "stairs (up)", sf::Color::White, boost::none, true);
     stairs->blocks = false;
     stairs->fovOnly = false;
 	gameplayState->addActor(std::move(stairs));

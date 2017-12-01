@@ -167,7 +167,7 @@ void GameplayState::nextLevel() {
 	// Clunky, not idiomatic
 	auto it = actors.begin();
 	while (it != actors.end()) {
-		if (!((*it)->isPlayer()) && !((*it)->isStairs())) {
+		if (!((*it)->isPlayer())) {
 			it = actors.erase(it);
 		}
 		else ++it;
