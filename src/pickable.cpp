@@ -25,11 +25,10 @@ void TargetSelector::selectTargets(Actor* wearer, std::vector<Actor*>& list) {
 		case SelectorType::SELECTED_MONSTER :
 		{
 			int x, y;
-			x = io::mousePosition.x;
-			y = io::mousePosition.y;
 			wearer->s->message(colors::cyan, "Left-click to select an enemy,\nor right-click to cancel.");
 			if(io::waitForMouseClick(wearer->s)) {
-				std::cout << "actor: " << wearer->x << ", " << wearer->y << ", clicked: " << x << ", " << y << "\n";
+				x = io::mousePosition.x;
+				y = io::mousePosition.y;
 				Actor* actor = wearer->getLiveActor(x, y);
 				if(actor) list.push_back(actor);
 			}
@@ -49,11 +48,10 @@ void TargetSelector::selectTargets(Actor* wearer, std::vector<Actor*>& list) {
 		case SelectorType::SELECTED_RANGE :
 		{
 			int x, y;
-			x = io::mousePosition.x;
-			y = io::mousePosition.y;
 			wearer->s->message(colors::cyan, "Left-click to select a tile,\nor right-click to cancel.");
 			if(io::waitForMouseClick(wearer->s)) {
-				std::cout << "actor: " << wearer->x << ", " << wearer->y << ", clicked: " << x << ", " << y << "\n";
+				x = io::mousePosition.x;
+				y = io::mousePosition.y;
 				for(auto& actor : wearer->getActors()) {
 					if(actor->destructible && !actor->destructible->isDead() && actor->getDistance(x, y) <= range ) {
 						list.push_back(actor.get());
