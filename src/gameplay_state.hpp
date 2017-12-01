@@ -42,15 +42,16 @@ public:
 	Actor* getClosestMonster(int x, int y, float range) const;
 	Actor* getLiveActor(int x, int y) const;
 	std::vector<std::unique_ptr<Actor>>& getActors() { return actors; }
+	void setWindow(sf::RenderWindow* w) { window = w; }
 
 	void addActor(std::unique_ptr<Actor> actor) { actors.push_back(std::move(actor)); }
-	Renderer renderer; // TODO should be private
 private:
 	int time = 0;
 	int level = 1;
 	std::vector<std::unique_ptr<Actor>> actors;
 	Map map;
 	Gui gui;
+	Renderer renderer;
 
 	void updateTime();
 	void updateNextActor();
