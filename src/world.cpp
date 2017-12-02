@@ -1,4 +1,5 @@
 #include "world.hpp"
+#include "gameplay_state.hpp"
 #include <iostream>
 
 World::World(int width, int height): width(width), height(height) {
@@ -26,5 +27,49 @@ bool World::canWalk(int x, int y) {
 		}
 	}
 	return true;
+}
+
+void World::update() {
+	Actor* activeActor = getNextActor();
+	if(activeActor->isPlayer()) {
+		state->handleEvents();
+	}
+	updateNextActor();
+}
+
+void World::updateNextActor() {
+	Actor* activeActor = getNextActor();
+
+	float actionTime = activeActor->update(state);
+	*activeActor->energy -= actionTime;
+
+    /*actors.erase(actors.begin());
+    auto it = std::lower_bound(actors.begin(), actors.end(), activeActor, [](const auto& lhs, const auto& rhs) { return lhs->energy > rhs->energy; });
+    actors.insert(it, std::move(activeActor));*/
+
+	sortActors();
+	updateTime();
+}
+
+void World::updateTime() {
+	if(!actors.front()->energy) return;
+	if(actors.front()->energy.get() > 0) return;
+	else {
+		Actor* next = std::find_if(actors.begin(), actors.end(), [](const auto& a) { return a->ai != nullptr; })->get();
+
+		float tuna = next->energy.get() * -1;
+		time += tuna;
+
+		for(auto& a : actors) {
+			if(a->ai != nullptr) *a->energy += tuna;
+		}
+	}
+}
+
+void World::sortActors() {
+    std::sort(actors.begin(), actors.end(), [](const auto& lhs, const auto& rhs)
+    {
+        return lhs->energy > rhs->energy;
+    });
 }
 

@@ -34,7 +34,6 @@ public:
 	Engine* getEngine() { return engine; }
 	void setEngine(Engine* e) { engine = e; }
 
-	Actor* getNextActor() const { return world.actors.front().get(); }
 	Actor* getPlayer() const { return world.getPlayer(); }
 	Actor* getClosestMonster(int x, int y, float range) const;
 	Actor* getLiveActor(int x, int y) const;
@@ -46,10 +45,6 @@ private:
 	Gui gui;
 	Renderer renderer;
 	World world;
-
-	void updateTime();
-	void updateNextActor();
-	void sortActors();
 
 	friend class boost::serialization::access;
 	template<class Archive>

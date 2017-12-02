@@ -11,6 +11,13 @@ public:
 	World(): World(120, 72) {;}
 	World(int width, int height);
 
+	void update();
+	Actor* getNextActor() const { return actors.front().get(); }
+	void updateNextActor();
+	void updateTime();
+	void sortActors();
+
+
 	Actor* getPlayer() const;
 	Actor* getStairs() const; // TODO up / down separately when we have persistent levels
 	void computeFov() { map.computeFov(); }

@@ -22,7 +22,7 @@ State(engine, window) {
 	// not really the correct place for following, but w/e
 	for (auto& a : world.actors) a->setState(this);
 	for (auto& a : world.actors) a->world = &world;
-	sortActors();
+	world.sortActors();
 }
 
 void GameplayState::initLoaded(Engine* engine) {
@@ -45,11 +45,7 @@ void GameplayState::update() {
 	auto previous = std::chrono::system_clock::now();
 	double frameLength = 1.0 / 60.0; // 60 Hz, in seconds
 	while(true) { // TODO events are not polled correctly
-		Actor* activeActor = getNextActor();
-		if(activeActor->isPlayer()) {
-			handleEvents();
-		}
-		updateNextActor();
+		world.update();
 
 		auto now = std::chrono::system_clock::now();
 		std::chrono::duration<double> elapsed = now - previous;
@@ -69,42 +65,6 @@ void GameplayState::render() {
 	gui.render(window);
 
 	window->display();
-}
-
-void GameplayState::updateNextActor() {
-	Actor* activeActor = getNextActor();
-
-	float actionTime = activeActor->update(this);
-	*activeActor->energy -= actionTime;
-
-    /*actors.erase(actors.begin());
-    auto it = std::lower_bound(actors.begin(), actors.end(), activeActor, [](const auto& lhs, const auto& rhs) { return lhs->energy > rhs->energy; });
-    actors.insert(it, std::move(activeActor));*/
-
-	sortActors();
-	updateTime();
-}
-
-void GameplayState::updateTime() {
-	if(!world.actors.front()->energy) return;
-	if(world.actors.front()->energy.get() > 0) return;
-	else {
-		Actor* next = std::find_if(world.actors.begin(), world.actors.end(), [](const auto& a) { return a->ai != nullptr; })->get();
-
-		float tuna = next->energy.get() * -1;
-		world.time += tuna;
-
-		for(auto& a : world.actors) {
-			if(a->ai != nullptr) *a->energy += tuna;
-		}
-	}
-}
-
-void GameplayState::sortActors() {
-    std::sort(world.actors.begin(), world.actors.end(), [](const auto& lhs, const auto& rhs)
-    {
-        return lhs->energy > rhs->energy;
-    });
 }
 
 Actor* GameplayState::getClosestMonster(int x, int y, float range) const {
@@ -167,7 +127,7 @@ void GameplayState::nextLevel() {
 	map_utils::addStairs(this, &world.map);
 	map_utils::addMcGuffin(this, &world.map, world.level);
 
-	sortActors();
+	world.sortActors();
 	for (auto& a : world.actors) a->setState(this);
 }
 
