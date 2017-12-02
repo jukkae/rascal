@@ -12,14 +12,12 @@ State(engine, window) {
 	renderer.setState(this);
 
 	newGame(engine);
-	world = World();
+	world = World(120, 72);
+	world.map.setState(this);
+	world.map.generateMap();
 
-	map = Map(120, 72);
-	map.setState(this);
-	map.generateMap();
-
-	map_utils::addItems(this, &map);
-	map_utils::addMonsters(this, &map);
+	map_utils::addItems(this, &world.map);
+	map_utils::addMonsters(this, &world.map);
 
 	// not really the correct place for following, but w/e
 	for (auto& a : actors) a->setState(this);
@@ -29,14 +27,14 @@ State(engine, window) {
 void GameplayState::initLoaded(Engine* engine) {
 	gui.setState(this);
 	renderer.setState(this);
-	map.setState(this);
+	world.map.setState(this);
 	for (auto& a : actors) a->setState(this);
 }
 
 void GameplayState::newGame(Engine* engine) {
-	map_utils::addPlayer(this, &map);
-	map_utils::addStairs(this, &map);
-	map_utils::addMcGuffin(this, &map, level);
+	map_utils::addPlayer(this, &world.map);
+	map_utils::addStairs(this, &world.map);
+	map_utils::addMcGuffin(this, &world.map, level);
 	gui.message(sf::Color::Green, "Welcome to year 20XXAD, you strange rascal!\nPrepare to fight or die!");
 }
 
@@ -59,7 +57,7 @@ void GameplayState::handleEvents() {
 void GameplayState::render() {
 	window->clear(sf::Color::Black);
 
-	renderer.render(&map, actors, window);
+	renderer.render(&world.map, actors, window);
 	gui.render(window);
 
 	window->display();
@@ -174,15 +172,15 @@ void GameplayState::nextLevel() {
 		else ++it;
 	}
 
-	map = Map(120, 72);
-	map.setState(this);
-	if(level == 3) map.generateMap(MapType::PILLARS);
-	else map.generateMap(MapType::BUILDING);
+	world.map = Map(120, 72);
+	world.map.setState(this);
+	if(level == 3) world.map.generateMap(MapType::PILLARS);
+	else world.map.generateMap(MapType::BUILDING);
 
-	map_utils::addItems(this, &map);
-	map_utils::addMonsters(this, &map);
-	map_utils::addStairs(this, &map);
-	map_utils::addMcGuffin(this, &map, level);
+	map_utils::addItems(this, &world.map);
+	map_utils::addMonsters(this, &world.map);
+	map_utils::addStairs(this, &world.map);
+	map_utils::addMcGuffin(this, &world.map, level);
 
 	sortActors();
 	for (auto& a : actors) a->setState(this);

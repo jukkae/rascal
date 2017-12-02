@@ -3,15 +3,18 @@
 
 #include <vector>
 #include "actor.hpp"
+#include "map.hpp"
 
-class Map;
 class World {
 public:
-	World();
+	World(): World(120, 72) {;}
+	World(int width, int height);
+	int width;
+	int height;
 	int time = 0;
 	int level = 1;
 	std::vector<std::unique_ptr<Actor>> actors;
-	Map* map;
+	Map map;
 private:
 	friend class boost::serialization::access;
     template<class Archive>

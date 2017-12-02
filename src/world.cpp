@@ -1,5 +1,6 @@
 #include "world.hpp"
 #include <iostream>
 
-World::World() {;}
-
+World::World(int width, int height): width(width), height(height) {
+	map = Map(width, height);
+}

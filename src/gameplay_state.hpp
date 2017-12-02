@@ -28,11 +28,11 @@ public:
 	int getLevel() { return level; }
 	void nextLevel();
 	int getTime() { return time; }
-	bool isInFov(int x, int y) { return map.isInFov(x, y); }
+	bool isInFov(int x, int y) { return world.map.isInFov(x, y); }
 	Point getWorldCoordsFromScreenCoords(Point& point) { return renderer.getWorldCoordsFromScreenCoords(point); }
 	void message(sf::Color col, std::string text, ...);
-	void computeFov() { map.computeFov(); }
-	bool isWall(int x, int y) { return map.isWall(x, y); }
+	void computeFov() { world.map.computeFov(); }
+	bool isWall(int x, int y) { return world.map.isWall(x, y); }
 	bool canWalk(int x, int y);
 	Engine* getEngine() { return engine; }
 	void setEngine(Engine* e) { engine = e; }
@@ -50,7 +50,6 @@ private:
 	int time = 0;
 	int level = 1;
 	std::vector<std::unique_ptr<Actor>> actors;
-	Map map;
 	Gui gui;
 	Renderer renderer;
 	World world;
@@ -75,7 +74,6 @@ namespace serialization {
 		boost::serialization::void_cast_register<GameplayState, State>();
 		ar & s->level;
 		ar & s->time;
-		ar & s->map;
 		ar & s->actors;
 		ar & s->gui;
 		ar & s->world;
@@ -90,7 +88,6 @@ namespace serialization {
 		::new(s)GameplayState(engine, window);
 		ar & s->level;
 		ar & s->time;
-		ar & s->map;
 		ar & s->actors;
 		ar & s->gui;
 		ar & s-> world;
