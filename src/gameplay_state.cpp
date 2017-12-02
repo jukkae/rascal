@@ -14,6 +14,7 @@ State(engine, window) {
 	gui.setState(this);
 	renderer.setState(this);
 	world.map.setState(this);
+	world.map.setWorld(&world);
 	world.map.generateMap();
 	newGame(engine);
 
@@ -46,7 +47,7 @@ void GameplayState::update() {
 	}
 	updateNextActor();
 	if(activeActor->isPlayer()) {
-		computeFov();
+		world.computeFov();
 		render();
 	}
 }
@@ -98,15 +99,6 @@ void GameplayState::sortActors() {
     {
         return lhs->energy > rhs->energy;
     });
-}
-
-bool GameplayState::canWalk(int x, int y) {
-	for(auto& actor : world.actors) {
-		if(actor->blocks && actor->x == x && actor->y == y) {
-			return false;
-		}
-	}
-	return true;
 }
 
 Actor* GameplayState::getClosestMonster(int x, int y, float range) const {

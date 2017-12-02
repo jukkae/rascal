@@ -17,6 +17,7 @@
 #include "state.hpp"
 #include "level_up_menu_state.hpp"
 #include "main_menu_state.hpp"
+#include "world.hpp"
 #include <math.h>
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
@@ -101,6 +102,7 @@ std::unique_ptr<Action> PlayerAi::getNextAction(Actor* actor) {
 
 std::unique_ptr<Action> MonsterAi::getNextAction(Actor* actor) {
 	GameplayState* state = actor->s;
+	World* world = actor->world;
 	Direction direction = Direction::NONE;
 	if (actor->destructible && actor->destructible->isDead()) return std::make_unique<WaitAction>(WaitAction(actor));
 
@@ -122,7 +124,7 @@ std::unique_ptr<Action> MonsterAi::getNextAction(Actor* actor) {
 			state->message(colors::white, "The %s threatens you!", actor->name.c_str());
 			dx = (int) (round(dx / distance));
 			dy = (int) (round(dy / distance));
-			if(state->canWalk(actor->x + stepDx, actor->y + stepDy)) { // uhh
+			if(world->canWalk(actor->x + stepDx, actor->y + stepDy)) { // uhh
 				if (stepDx ==  0 && stepDy ==  0) return std::make_unique<WaitAction>(WaitAction(actor));
 				if (stepDx ==  0 && stepDy == -1) direction = Direction::N;
 				if (stepDx ==  1 && stepDy == -1) direction = Direction::NE;
@@ -133,12 +135,12 @@ std::unique_ptr<Action> MonsterAi::getNextAction(Actor* actor) {
 				if (stepDx == -1 && stepDy ==  0) direction = Direction::W;
 				if (stepDx == -1 && stepDy == -1) direction = Direction::NW;
 				return std::make_unique<MoveAction>(MoveAction(actor, direction));
-			} else if (state->canWalk(actor->x + stepDx, actor->y)) { // Wall sliding
+			} else if (world->canWalk(actor->x + stepDx, actor->y)) { // Wall sliding
 				if (stepDx ==  0 && stepDy ==  0) return std::make_unique<WaitAction>(WaitAction(actor));
 				if (stepDx ==  1 && stepDy ==  0) direction = Direction::E;
 				if (stepDx == -1 && stepDy ==  0) direction = Direction::W;
 				return std::make_unique<MoveAction>(MoveAction(actor, direction));
-			} else if (state->canWalk(actor->x, actor->y + stepDy)) {
+			} else if (world->canWalk(actor->x, actor->y + stepDy)) {
 				if (stepDx ==  0 && stepDy ==  0) return std::make_unique<WaitAction>(WaitAction(actor));
 				if (stepDx ==  0 && stepDy == -1) direction = Direction::N;
 				if (stepDx ==  0 && stepDy ==  1) direction = Direction::S;

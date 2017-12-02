@@ -7,6 +7,7 @@
 
 bool MoveAction::execute() {
 	GameplayState* state = actor->s;
+	World* world = actor->world;
 	int targetX = actor->x;
 	int targetY = actor->y;
 
@@ -23,7 +24,7 @@ bool MoveAction::execute() {
 		default: break;
 	}
 
-	if (state->isWall(targetX, targetY)) return false;
+	if (world->isWall(targetX, targetY)) return false;
 
 	// look for living actors to attack
 	for (auto& a : actor->getActors()) {

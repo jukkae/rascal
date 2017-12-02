@@ -31,9 +31,6 @@ public:
 	bool isInFov(int x, int y) { return world.map.isInFov(x, y); }
 	Point getWorldCoordsFromScreenCoords(Point& point) { return renderer.getWorldCoordsFromScreenCoords(point); }
 	void message(sf::Color col, std::string text, ...);
-	void computeFov() { world.map.computeFov(); }
-	bool isWall(int x, int y) { return world.map.isWall(x, y); }
-	bool canWalk(int x, int y);
 	Engine* getEngine() { return engine; }
 	void setEngine(Engine* e) { engine = e; }
 

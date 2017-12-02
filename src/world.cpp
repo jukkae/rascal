@@ -19,3 +19,12 @@ Actor* World::getStairs() const {
     return nullptr;
 }
 
+bool World::canWalk(int x, int y) {
+	for(auto& actor : actors) {
+		if(actor->blocks && actor->x == x && actor->y == y) {
+			return false;
+		}
+	}
+	return true;
+}
+

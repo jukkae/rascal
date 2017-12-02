@@ -11,6 +11,7 @@
 #include "rect.hpp"
 class Actor;
 class GameplayState;
+class World;
 
 struct Tile {
 	bool explored;
@@ -75,9 +76,11 @@ public:
 	void computeFov(FovType fovType = FovType::CIRCLE);
 	void computeFovForOctant(int x, int y, int octant, FovType fovType = FovType::CIRCLE);
 	void setState(GameplayState* s) { state = s; }
+	void setWorld(World* w) { world = w; }
 
 private:
 	GameplayState* state;
+	World* world;
 	Vec<int> transformOctant(int row, int col, int octant);
 	friend class boost::serialization::access;
 	template<class Archive>
@@ -85,6 +88,7 @@ private:
 		ar & width;
 		ar & height;
 		ar & tiles;
+		ar & world;
 	}
 };
 #endif /* MAP_HPP */

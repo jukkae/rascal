@@ -13,6 +13,7 @@
 #include "pickable.hpp"
 #include "point.hpp"
 #include "rect.hpp"
+#include "world.hpp"
 
 #include <SFML/Graphics/Color.hpp>
 
@@ -124,7 +125,7 @@ bool Map::isWall(int x, int y) const {
 
 bool Map::canWalk(int x, int y) const {
 	if(isWall(x, y)) return false;
-	if(!state->canWalk(x, y)) return false;
+	if(!world->canWalk(x, y)) return false;
 	return true;
 }
 
