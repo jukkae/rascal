@@ -37,19 +37,18 @@ public:
 	Engine* getEngine() { return engine; }
 	void setEngine(Engine* e) { engine = e; }
 
-	Actor* getNextActor() const { return actors.front().get(); }
+	Actor* getNextActor() const { return world.actors.front().get(); }
 	Actor* getPlayer() const;
 	Actor* getStairs() const; // TODO check for up / down separately
 	Actor* getClosestMonster(int x, int y, float range) const;
 	Actor* getLiveActor(int x, int y) const;
-	std::vector<std::unique_ptr<Actor>>& getActors() { return actors; }
+	std::vector<std::unique_ptr<Actor>>& getActors() { return world.actors; }
 	void setWindow(sf::RenderWindow* w) { window = w; }
 
-	void addActor(std::unique_ptr<Actor> actor) { actors.push_back(std::move(actor)); }
+	void addActor(std::unique_ptr<Actor> actor) { world.actors.push_back(std::move(actor)); }
 private:
 	int time = 0;
 	int level = 1;
-	std::vector<std::unique_ptr<Actor>> actors;
 	Gui gui;
 	Renderer renderer;
 	World world;
@@ -74,7 +73,6 @@ namespace serialization {
 		boost::serialization::void_cast_register<GameplayState, State>();
 		ar & s->level;
 		ar & s->time;
-		ar & s->actors;
 		ar & s->gui;
 		ar & s->world;
 	}
@@ -88,7 +86,6 @@ namespace serialization {
 		::new(s)GameplayState(engine, window);
 		ar & s->level;
 		ar & s->time;
-		ar & s->actors;
 		ar & s->gui;
 		ar & s-> world;
 	}

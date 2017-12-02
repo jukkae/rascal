@@ -11,24 +11,25 @@ State(engine, window) {
 	gui.setState(this);
 	renderer.setState(this);
 
-	newGame(engine);
 	world = World(120, 72);
 	world.map.setState(this);
 	world.map.generateMap();
+	newGame(engine);
 
 	map_utils::addItems(this, &world.map);
 	map_utils::addMonsters(this, &world.map);
 
 	// not really the correct place for following, but w/e
-	for (auto& a : actors) a->setState(this);
+	for (auto& a : world.actors) a->setState(this);
 	sortActors();
+	for (auto& a : world.actors) std::cout << a->name << "\n";
 }
 
 void GameplayState::initLoaded(Engine* engine) {
 	gui.setState(this);
 	renderer.setState(this);
 	world.map.setState(this);
-	for (auto& a : actors) a->setState(this);
+	for (auto& a : world.actors) a->setState(this);
 }
 
 void GameplayState::newGame(Engine* engine) {
@@ -57,7 +58,7 @@ void GameplayState::handleEvents() {
 void GameplayState::render() {
 	window->clear(sf::Color::Black);
 
-	renderer.render(&world.map, actors, window);
+	renderer.render(&world, window);
 	gui.render(window);
 
 	window->display();
@@ -78,43 +79,43 @@ void GameplayState::updateNextActor() {
 }
 
 void GameplayState::updateTime() {
-	if(!actors.front()->energy) return;
-	if(actors.front()->energy.get() > 0) return;
+	if(!world.actors.front()->energy) return;
+	if(world.actors.front()->energy.get() > 0) return;
 	else {
-		Actor* next = std::find_if(actors.begin(), actors.end(), [](const auto& a) { return a->ai != nullptr; })->get();
+		Actor* next = std::find_if(world.actors.begin(), world.actors.end(), [](const auto& a) { return a->ai != nullptr; })->get();
 
 		float tuna = next->energy.get() * -1;
 		time += tuna;
 
-		for(auto& a : actors) {
+		for(auto& a : world.actors) {
 			if(a->ai != nullptr) *a->energy += tuna;
 		}
 	}
 }
 
 void GameplayState::sortActors() {
-    std::sort(actors.begin(), actors.end(), [](const auto& lhs, const auto& rhs)
+    std::sort(world.actors.begin(), world.actors.end(), [](const auto& lhs, const auto& rhs)
     {
         return lhs->energy > rhs->energy;
     });
 }
 
 Actor* GameplayState::getPlayer() const {
-	for(auto& actor : actors) {
+	for(auto& actor : world.actors) {
         if(actor->isPlayer()) return actor.get();
     }
     return nullptr;
 }
 
 Actor* GameplayState::getStairs() const {
-	for(auto& actor : actors) {
+	for(auto& actor : world.actors) {
         if(actor->isStairs()) return actor.get();
     }
     return nullptr;
 }
 
 bool GameplayState::canWalk(int x, int y) {
-	for(auto& actor : actors) {
+	for(auto& actor : world.actors) {
 		if(actor->blocks && actor->x == x && actor->y == y) {
 			return false;
 		}
@@ -125,7 +126,7 @@ bool GameplayState::canWalk(int x, int y) {
 Actor* GameplayState::getClosestMonster(int x, int y, float range) const {
 	Actor* closest = nullptr;
 	float bestDistance = std::numeric_limits<float>::max();
-	for (auto& actor : actors) {
+	for (auto& actor : world.actors) {
 		if(!actor->isPlayer() && actor->destructible && !actor->destructible->isDead()) {
 			float distance = actor->getDistance(x,y);
 			if(distance < bestDistance && (distance <= range || range == 0.0f)) {
@@ -138,7 +139,7 @@ Actor* GameplayState::getClosestMonster(int x, int y, float range) const {
 }
 
 Actor* GameplayState::getLiveActor(int x, int y) const {
-	for(auto& actor : actors) {
+	for(auto& actor : world.actors) {
 		if(actor->x == x && actor->y == y && actor->destructible && !actor->destructible->isDead()) return actor.get();
 	}
 	return nullptr;
@@ -164,10 +165,10 @@ void GameplayState::nextLevel() {
 	gui.message(sf::Color::Red, "After a rare moment of peace, you climb\nhigher. You will escape this hellhole.");
 
 	// Clunky, not idiomatic
-	auto it = actors.begin();
-	while (it != actors.end()) {
+	auto it = world.actors.begin();
+	while (it != world.actors.end()) {
 		if (!((*it)->isPlayer())) {
-			it = actors.erase(it);
+			it = world.actors.erase(it);
 		}
 		else ++it;
 	}
@@ -183,7 +184,7 @@ void GameplayState::nextLevel() {
 	map_utils::addMcGuffin(this, &world.map, level);
 
 	sortActors();
-	for (auto& a : actors) a->setState(this);
+	for (auto& a : world.actors) a->setState(this);
 }
 
 BOOST_CLASS_EXPORT(GameplayState)

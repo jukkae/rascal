@@ -25,8 +25,8 @@ $(OBJ)/%.o: $(SRC)/%.cpp
 #compile: clean $(OBJS)
 	#$(CXX) $(SOURCES) -o rascal $(CPPFLAGS) $(INCLUDEDIRS) -Iinclude $(LDFLAGS) -I/usr/local/include
 
-#compile-debug: clean $(OBJS)
-	#$(CXX) $(SOURCES) -o rascal $(CPPFLAGS) -Iinclude $(LDFLAGS) -I/usr/local/include -g -O0
+compile-debug: clean $(OBJS)
+	$(CXX) $(SOURCES) -o rascal $(CPPFLAGS) -Iinclude $(LDFLAGS) -I/usr/local/include -g -O0
 
 clean:
 	rm -rf *.o rascal save.txt rascal.dSYM obj/*.o

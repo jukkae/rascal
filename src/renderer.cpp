@@ -5,13 +5,16 @@
 #include "renderer.hpp"
 #include "map.hpp"
 #include "point.hpp"
+#include "world.hpp"
 
 Renderer::Renderer(int screenWidth, int screenHeight): screenWidth(screenWidth), screenHeight(screenHeight) {
 }
 
-void Renderer::render(const Map* const map, const std::vector<std::unique_ptr<Actor>>& actors, sf::RenderWindow* window) {
+void Renderer::render(const World* const world, sf::RenderWindow* window) {
 	//window.clear(sf::Color::Black);
 
+	const Map* const map = &world->map;
+	const std::vector<std::unique_ptr<Actor>>& actors = world->actors;
 	renderMap(map, window);
 	renderActors(map, actors, window);
 
