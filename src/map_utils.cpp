@@ -11,7 +11,7 @@ void map_utils::addItems(World* world, Map* map) {
 	for(int x = 0; x < map->width; ++x) {
 		for(int y = 0; y < map->height; ++y) {
 			int r = d100();
-			if (map->canWalk(x, y) && r <= 2) {
+			if (map->isWall(x, y) && r <= 2) { // can't use canWalk yet
 				map_utils::addItem(world, map, x, y);
 			}
 		}
@@ -22,7 +22,7 @@ void map_utils::addMonsters(World* world, Map* map) {
 	for(int x = 0; x < map->width; ++x) {
 		for(int y = 0; y < map->height; ++y) {
 			int r = d100();
-			if (map->canWalk(x, y) && r == 1) {
+			if (map->isWall(x, y) && r == 0) { // can't use canWalk yet
 				map_utils::addMonster(world, map, x, y);
 			}
 		}

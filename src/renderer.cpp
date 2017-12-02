@@ -164,8 +164,8 @@ void Renderer::renderActor(const Actor* const actor, sf::RenderWindow* window) {
 }
 
 Point Renderer::getWorldCoordsFromScreenCoords(const Point& point) const {
-	int cameraX = state->world.getPlayer()->x - (screenWidth/2); // TODO don't do this
-	int cameraY = state->world.getPlayer()->y - (screenHeight/2); // TODO don't do this
+	int cameraX = state->world->getPlayer()->x - (screenWidth/2); // TODO don't do this
+	int cameraY = state->world->getPlayer()->y - (screenHeight/2); // TODO don't do this
 
 	int worldX = point.x + cameraX;
 	int worldY = point.y + cameraY;
@@ -184,8 +184,8 @@ Point Renderer::getWorldCoordsFromScreenCoords(const Point& point, const Point& 
 }
 
 Point Renderer::getScreenCoordsFromWorldCoords(const Point& point) const {
-	int cameraX = state->world.getPlayer()->x - (screenWidth/2); // upper left corner of camera
-	int cameraY = state->world.getPlayer()->y - (screenHeight/2); // TODO don't do this
+	int cameraX = state->world->getPlayer()->x - (screenWidth/2); // upper left corner of camera
+	int cameraY = state->world->getPlayer()->y - (screenHeight/2); // TODO don't do this
 
 	int screenX = point.x - cameraX;
 	int screenY = point.y - cameraY;

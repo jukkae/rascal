@@ -33,7 +33,7 @@ public:
 
 	void setWindow(sf::RenderWindow* w) { window = w; }
 
-	World world; // TODO should be private
+	World* world = nullptr; // TODO should be private
 private:
 	Gui gui;
 	Renderer renderer;
