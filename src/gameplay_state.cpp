@@ -12,6 +12,7 @@ State(engine, window) {
 	renderer.setState(this);
 
 	newGame(engine);
+	world = World();
 
 	map = Map(120, 72);
 	map.setState(this);

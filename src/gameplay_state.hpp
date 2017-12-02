@@ -78,6 +78,7 @@ namespace serialization {
 		ar & s->map;
 		ar & s->actors;
 		ar & s->gui;
+		ar & s->world;
 	}
 
 	template<class Archive>
@@ -92,6 +93,7 @@ namespace serialization {
 		ar & s->map;
 		ar & s->actors;
 		ar & s->gui;
+		ar & s-> world;
 	}
 } // namespace boost
 } // namespace serialization
