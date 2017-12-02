@@ -9,7 +9,6 @@
 
 GameplayState::GameplayState(Engine* engine, sf::RenderWindow* window) :
 State(engine, window) {
-	// TODO items get stuck on the walls, no enemies anywhere
 	std::unique_ptr<World> w = std::make_unique<World>(120, 72);
 	levels.push_back(std::move(w));
 	world = levels.front().get();
