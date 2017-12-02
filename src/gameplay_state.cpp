@@ -97,6 +97,7 @@ void GameplayState::nextLevel() {
 
 	world.map = Map(120, 72);
 	world.map.setState(this);
+	world.map.setWorld(&world);
 	if(world.level == 3) world.map.generateMap(MapType::PILLARS);
 	else world.map.generateMap(MapType::BUILDING);
 
@@ -105,8 +106,9 @@ void GameplayState::nextLevel() {
 	map_utils::addStairs(&world, &world.map);
 	map_utils::addMcGuffin(&world, &world.map, world.level);
 
-	world.sortActors();
 	for (auto& a : world.actors) a->setState(this);
+	for (auto& a : world.actors) a->world = &world;
+	world.sortActors();
 }
 
 BOOST_CLASS_EXPORT(GameplayState)
