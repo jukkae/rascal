@@ -100,20 +100,6 @@ void GameplayState::sortActors() {
     });
 }
 
-Actor* GameplayState::getPlayer() const {
-	for(auto& actor : world.actors) {
-        if(actor->isPlayer()) return actor.get();
-    }
-    return nullptr;
-}
-
-Actor* GameplayState::getStairs() const {
-	for(auto& actor : world.actors) {
-        if(actor->isStairs()) return actor.get();
-    }
-    return nullptr;
-}
-
 bool GameplayState::canWalk(int x, int y) {
 	for(auto& actor : world.actors) {
 		if(actor->blocks && actor->x == x && actor->y == y) {

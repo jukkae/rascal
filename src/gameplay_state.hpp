@@ -38,8 +38,7 @@ public:
 	void setEngine(Engine* e) { engine = e; }
 
 	Actor* getNextActor() const { return world.actors.front().get(); }
-	Actor* getPlayer() const;
-	Actor* getStairs() const; // TODO check for up / down separately
+	Actor* getPlayer() const { return world.getPlayer(); }
 	Actor* getClosestMonster(int x, int y, float range) const;
 	Actor* getLiveActor(int x, int y) const;
 	std::vector<std::unique_ptr<Actor>>& getActors() { return world.actors; }

@@ -3,6 +3,7 @@
 #include "attacker.hpp"
 #include "colors.hpp"
 #include "gameplay_state.hpp"
+#include "world.hpp"
 
 bool MoveAction::execute() {
 	GameplayState* state = actor->s;
@@ -46,8 +47,9 @@ bool MoveAction::execute() {
 
 bool TraverseStairsAction::execute() {
 	GameplayState* state = actor->s;
+	World* world = actor->world;
 	if(down) {
-		if(state->getStairs()->x == actor->x && state->getStairs()->y == actor->y) {
+		if(world->getStairs()->x == actor->x && world->getStairs()->y == actor->y) {
 			state->nextLevel();
 			return true;
 		} else {
@@ -55,8 +57,8 @@ bool TraverseStairsAction::execute() {
 			return false;
 		}
 	}
-	else {
-		if(state->getStairs()->x == actor->x && state->getStairs()->y == actor->y) {
+	else { // TODO start debugging issues from here
+		if(world->getStairs()->x == actor->x && world->getStairs()->y == actor->y) {
 			state->nextLevel();
 			return true;
 		} else {

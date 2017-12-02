@@ -10,6 +10,10 @@ class World {
 public:
 	World(): World(120, 72) {;}
 	World(int width, int height);
+
+	Actor* getPlayer() const;
+	Actor* getStairs() const; // TODO up / down separately when we have persistent levels
+
 	int width;
 	int height;
 	int time = 0;
