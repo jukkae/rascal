@@ -8,16 +8,13 @@
 
 GameplayState::GameplayState(Engine* engine, sf::RenderWindow* window) :
 State(engine, window) {
+	world = World(120, 72);
+
 	gui.setState(this);
 	renderer.setState(this);
-
-	world = World(120, 72);
 	world.map.setState(this);
 	world.map.generateMap();
 	newGame(engine);
-
-	map_utils::addItems(this, &world.map);
-	map_utils::addMonsters(this, &world.map);
 
 	// not really the correct place for following, but w/e
 	for (auto& a : world.actors) a->setState(this);
@@ -35,6 +32,8 @@ void GameplayState::newGame(Engine* engine) {
 	map_utils::addPlayer(this, &world.map);
 	map_utils::addStairs(this, &world.map);
 	map_utils::addMcGuffin(this, &world.map, level);
+	map_utils::addItems(this, &world.map);
+	map_utils::addMonsters(this, &world.map);
 	gui.message(sf::Color::Green, "Welcome to year 20XXAD, you strange rascal!\nPrepare to fight or die!");
 }
 
