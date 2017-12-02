@@ -111,7 +111,7 @@ std::unique_ptr<Action> MonsterAi::getNextAction(Actor* actor) {
 	} else { --moveCount; }
 
 	if (moveCount > 0) {
-		Actor* player = state->getPlayer();
+		Actor* player = world->getPlayer();
 		int targetX = player->x;
 		int targetY = player->y;
 		int dx = targetX - actor->x;

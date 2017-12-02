@@ -34,7 +34,7 @@ void Gui::clear() {
 void Gui::render(World* world, sf::RenderWindow* window) {
 
 	renderMessageLog(window);
-	renderBar(1, 1, BAR_WIDTH, "HP", state->getPlayer()->destructible->hp, state->getPlayer()->destructible->maxHp, lightRed, darkerRed, window);
+	renderBar(1, 1, BAR_WIDTH, "HP", world->getPlayer()->destructible->hp, world->getPlayer()->destructible->maxHp, lightRed, darkerRed, window);
 
 	std::string dungeonLvlString = "Floor " + std::to_string(world->level);
 	sf::Text dlvl(dungeonLvlString, font::mainFont, 16);
@@ -48,22 +48,22 @@ void Gui::render(World* world, sf::RenderWindow* window) {
 	time.setFillColor(sf::Color::White);
 	window->draw(time);
 
-	renderXpBar(window);
-	renderMouseLook(state->getActors(), window);
+	renderXpBar(world, window);
+	renderMouseLook(world, window);
 
-	renderStatusEffects(window);
-	renderStats(window);
+	renderStatusEffects(world, window);
+	renderStats(world, window);
 }
 
-void Gui::renderXpBar(sf::RenderWindow* window) {
-	PlayerAi* ai = (PlayerAi*)state->getPlayer()->ai.get();
+void Gui::renderXpBar(World* world, sf::RenderWindow* window) {
+	PlayerAi* ai = (PlayerAi*)world->getPlayer()->ai.get();
 	char xpTxt[128];
 	sprintf(xpTxt, "XP(%d)", ai->xpLevel);
 	renderBar(1, 5, BAR_WIDTH, xpTxt, ai->experience, ai->getNextLevelXp(), lightViolet, darkerViolet, window);
 }
 
-void Gui::renderStats(sf::RenderWindow* window) {
-	Actor* player = state->getPlayer(); // TODO instead pass player - rather, the actor - as a parameter to both Gui and Renderer
+void Gui::renderStats(World* world, sf::RenderWindow* window) {
+	Actor* player = world->getPlayer(); // TODO instead pass player - rather, the actor - as a parameter to both Gui and Renderer
 
 	int ac = player->destructible->armorClass;
 	std::string acString = "AC: " + std::to_string(ac);
@@ -98,8 +98,8 @@ void Gui::renderStats(sf::RenderWindow* window) {
 	window->draw(atkText);
 }
 
-void Gui::renderStatusEffects(sf::RenderWindow* window) {
-	Actor* player = state->getPlayer();
+void Gui::renderStatusEffects(World* world, sf::RenderWindow* window) {
+	Actor* player = world->getPlayer();
 
 	if(player->getStatusEffects().size() > 0) {
 		sf::Text effectsHeading("status effects:", font::mainFont, 16);
@@ -158,7 +158,7 @@ void Gui::renderBar(int x, int y, int width, std::string name, float value, floa
 	window->draw(text);
 }
 
-void Gui::renderMouseLook(std::vector<std::unique_ptr<Actor>>& actors, sf::RenderWindow* window) {
+void Gui::renderMouseLook(World* world, sf::RenderWindow* window) {
 	int xPix = sf::Mouse::getPosition(*window).x;
 	int yPix = sf::Mouse::getPosition(*window).y;
 	int xCells = xPix / constants::SQUARE_CELL_WIDTH;
@@ -175,6 +175,7 @@ void Gui::renderMouseLook(std::vector<std::unique_ptr<Actor>>& actors, sf::Rende
 	}
 	std::string buf = "";
 	bool first = true;
+	std::vector<std::unique_ptr<Actor>>& actors = world->actors;
 	for(auto& actor : actors) {
 		if(actor->x == x && actor->y == y) {
 			if(!first) {

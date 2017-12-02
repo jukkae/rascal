@@ -101,11 +101,11 @@ void GameplayState::message(sf::Color col, std::string text, ...) {
 void GameplayState::nextLevel() {
 	++world.level;
 	if(world.level > 5) {
-		std::unique_ptr<State> victoryState = std::make_unique<VictoryState>(engine, getPlayer());
+		std::unique_ptr<State> victoryState = std::make_unique<VictoryState>(engine, world.getPlayer());
 		engine->pushState(std::move(victoryState));
 	}
 	gui.message(sf::Color::Magenta, "You take a moment to rest, and recover your strength.");
-	getPlayer()->destructible->heal(getPlayer()->destructible->maxHp/2);
+	world.getPlayer()->destructible->heal(world.getPlayer()->destructible->maxHp/2);
 	gui.message(sf::Color::Red, "After a rare moment of peace, you climb\nhigher. You will escape this hellhole.");
 
 	// Clunky, not idiomatic

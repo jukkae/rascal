@@ -32,17 +32,17 @@ public:
 	Engine* getEngine() { return engine; }
 	void setEngine(Engine* e) { engine = e; }
 
-	Actor* getPlayer() const { return world.getPlayer(); }
 	Actor* getClosestMonster(int x, int y, float range) const;
 	Actor* getLiveActor(int x, int y) const;
 	std::vector<std::unique_ptr<Actor>>& getActors() { return world.actors; }
 	void setWindow(sf::RenderWindow* w) { window = w; }
 
 	void addActor(std::unique_ptr<Actor> actor) { world.actors.push_back(std::move(actor)); }
+	
+	World world; // TODO should be private
 private:
 	Gui gui;
 	Renderer renderer;
-	World world;
 
 	friend class boost::serialization::access;
 	template<class Archive>

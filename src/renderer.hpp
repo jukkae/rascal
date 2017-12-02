@@ -22,10 +22,10 @@ private:
 	int screenHeight;
 	GameplayState* state;
 
-	void renderMap(const Map* const map, sf::RenderWindow* window);
-	void renderActors(const Map* const map, const std::vector<std::unique_ptr<Actor>>& actors, sf::RenderWindow* window);
+	void renderMap(const World* const world, sf::RenderWindow* window);
+	void renderActors(const World* const world, sf::RenderWindow* window);
 	void renderActor(const Actor* const actor, sf::RenderWindow* window);
-	void renderHighlight(const Map* const map, sf::RenderWindow* window, const Point& point);
+	void renderHighlight(const World* const world, sf::RenderWindow* window, const Point& point);
 
 	Point getScreenCoordsFromWorldCoords(const Point& point) const;
 	Point getWorldCoordsFromScreenCoords(const Point& point, const Point& player) const;

@@ -15,15 +15,16 @@ void Renderer::render(const World* const world, sf::RenderWindow* window) {
 
 	const Map* const map = &world->map;
 	const std::vector<std::unique_ptr<Actor>>& actors = world->actors;
-	renderMap(map, window);
-	renderActors(map, actors, window);
+	renderMap(world, window);
+	renderActors(world, window);
 
 	//window.display();
 }
 
-void Renderer::renderMap(const Map* const map, sf::RenderWindow* window) {
-	int cameraX = state->getPlayer()->x - (screenWidth/2);
-	int cameraY = state->getPlayer()->y - (screenHeight/2);
+void Renderer::renderMap(const World* const world, sf::RenderWindow* window) {
+	const Map* const map = &world->map;
+	int cameraX = world->getPlayer()->x - (screenWidth/2);
+	int cameraY = world->getPlayer()->y - (screenHeight/2);
 	int mapWidth = map->width;
 	int mapHeight = map->height;
 
@@ -35,7 +36,7 @@ void Renderer::renderMap(const Map* const map, sf::RenderWindow* window) {
 	for(int x = 0; x < screenWidth; ++x) {
 		for(int y = 0; y < screenHeight; ++y) {
 			if(x == mouseXcells && y == mouseYcells) {
-				renderHighlight(map, window, Point(x, y));
+				renderHighlight(world, window, Point(x, y));
 			}
 			else {
 				int worldX = x + cameraX;
@@ -63,11 +64,12 @@ void Renderer::renderMap(const Map* const map, sf::RenderWindow* window) {
 	}
 }
 
-void Renderer::renderHighlight(const Map* const map, sf::RenderWindow* window, const Point& point) {
+void Renderer::renderHighlight(const World* const world, sf::RenderWindow* window, const Point& point) {
+	const Map* const map = &world->map;
 	int x = point.x;
 	int y = point.y;
-	int cameraX = state->getPlayer()->x - (screenWidth/2);
-	int cameraY = state->getPlayer()->y - (screenHeight/2);
+	int cameraX = world->getPlayer()->x - (screenWidth/2);
+	int cameraY = world->getPlayer()->y - (screenHeight/2);
 	int mapWidth = map->width;
 	int mapHeight = map->height;
 
@@ -95,7 +97,9 @@ void Renderer::renderHighlight(const Map* const map, sf::RenderWindow* window, c
 	window->draw(rectangle);
 }
 
-void Renderer::renderActors(const Map* const map, const std::vector<std::unique_ptr<Actor>>& actors, sf::RenderWindow* window) {
+void Renderer::renderActors(const World* const world, sf::RenderWindow* window) {
+	const std::vector<std::unique_ptr<Actor>>& actors = world->actors;
+	const Map* const map = &world->map;
 	// Crude implementation of render layers
 	Actor* player;
 	std::vector<Actor*> corpses;
@@ -157,8 +161,8 @@ void Renderer::renderActor(const Actor* const actor, sf::RenderWindow* window) {
 }
 
 Point Renderer::getWorldCoordsFromScreenCoords(const Point& point) const {
-	int cameraX = state->getPlayer()->x - (screenWidth/2);
-	int cameraY = state->getPlayer()->y - (screenHeight/2);
+	int cameraX = state->world.getPlayer()->x - (screenWidth/2); // TODO don't do this
+	int cameraY = state->world.getPlayer()->y - (screenHeight/2); // TODO don't do this
 
 	int worldX = point.x + cameraX;
 	int worldY = point.y + cameraY;
@@ -177,8 +181,8 @@ Point Renderer::getWorldCoordsFromScreenCoords(const Point& point, const Point& 
 }
 
 Point Renderer::getScreenCoordsFromWorldCoords(const Point& point) const {
-	int cameraX = state->getPlayer()->x - (screenWidth/2); // upper left corner of camera
-	int cameraY = state->getPlayer()->y - (screenHeight/2);
+	int cameraX = state->world.getPlayer()->x - (screenWidth/2); // upper left corner of camera
+	int cameraY = state->world.getPlayer()->y - (screenHeight/2); // TODO don't do this
 
 	int screenX = point.x - cameraX;
 	int screenY = point.y - cameraY;

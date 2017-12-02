@@ -148,8 +148,8 @@ void Map::computeFov(FovType fovType) {
 			tiles[x + width*y].inFov = false;
 		}
 	}
-	int playerX = state->getPlayer()->x;
-	int playerY = state->getPlayer()->y;
+	int playerX = world->getPlayer()->x;
+	int playerY = world->getPlayer()->y;
 	for(int octant = 0; octant < 8; octant++) {
 		computeFovForOctant(playerX, playerY, octant, fovType);
 	}

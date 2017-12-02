@@ -32,7 +32,7 @@ void Destructible::die(Actor* owner) {
 	owner->col = colors::darkerRed;
 	owner->name = corpseName;
 	owner->blocks = false;
-	owner->s->getPlayer()->container->credits += 15; // TODO drop credits instead
+	owner->world->getPlayer()->container->credits += 15; // TODO drop credits instead
 }
 
 MonsterDestructible::MonsterDestructible(float maxHp, float defense, int xp, std::string corpseName, int armorClass) :
@@ -40,8 +40,8 @@ MonsterDestructible::MonsterDestructible(float maxHp, float defense, int xp, std
 
 void MonsterDestructible::die(Actor* owner) {
 	owner->s->message(colors::lightGrey, "%s is dead! You gain %d xp!", owner->name.c_str(), xp);
-	PlayerAi* ai = (PlayerAi*)owner->s->getPlayer()->ai.get();
-	ai->increaseXp(owner->s->getPlayer(), xp);
+	PlayerAi* ai = (PlayerAi*)owner->world->getPlayer()->ai.get();
+	ai->increaseXp(owner->world->getPlayer(), xp);
 
 	Destructible::die(owner);
 }
