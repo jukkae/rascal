@@ -50,9 +50,7 @@ void GameplayState::update() {
 			handleEvents();
 		}
 		updateNextActor();
-		if(activeActor->isPlayer()) {
-			world.computeFov();
-		}
+
 		auto now = std::chrono::system_clock::now();
 		std::chrono::duration<double> elapsed = now - previous;
 		if(elapsed.count() > frameLength) break;
