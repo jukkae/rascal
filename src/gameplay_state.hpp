@@ -31,9 +31,6 @@ public:
 	Engine* getEngine() { return engine; }
 	void setEngine(Engine* e) { engine = e; }
 
-	Actor* getClosestMonster(int x, int y, float range) const;
-	Actor* getLiveActor(int x, int y) const;
-	std::vector<std::unique_ptr<Actor>>& getActors() { return world.actors; }
 	void setWindow(sf::RenderWindow* w) { window = w; }
 
 	World world; // TODO should be private

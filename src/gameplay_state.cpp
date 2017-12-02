@@ -67,28 +67,6 @@ void GameplayState::render() {
 	window->display();
 }
 
-Actor* GameplayState::getClosestMonster(int x, int y, float range) const {
-	Actor* closest = nullptr;
-	float bestDistance = std::numeric_limits<float>::max();
-	for (auto& actor : world.actors) {
-		if(!actor->isPlayer() && actor->destructible && !actor->destructible->isDead()) {
-			float distance = actor->getDistance(x,y);
-			if(distance < bestDistance && (distance <= range || range == 0.0f)) {
-				bestDistance = distance;
-				closest = actor.get();
-			}
-		}
-	}
-	return closest;
-}
-
-Actor* GameplayState::getLiveActor(int x, int y) const {
-	for(auto& actor : world.actors) {
-		if(actor->x == x && actor->y == y && actor->destructible && !actor->destructible->isDead()) return actor.get();
-	}
-	return nullptr;
-}
-
 // Messaging system
 void GameplayState::message(sf::Color col, std::string text, ...) {
 	va_list args;

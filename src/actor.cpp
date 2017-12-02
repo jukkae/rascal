@@ -50,7 +50,7 @@ float Actor::getDistance(int cx, int cy) const {
 }
 
 std::vector<std::unique_ptr<Actor>>& Actor::getActors() {
-	return s->getActors();
+	return world->getActors();
 }
 
 
@@ -62,11 +62,11 @@ Actor* Actor::getPlayer() {
 }
 
 Actor* Actor::getClosestMonster(int x, int y, float range) {
-	return s->getClosestMonster(x, y, range);
+	return world->getClosestMonster(x, y, range);
 }
 
 Actor* Actor::getLiveActor(int x, int y) {
-	return s->getLiveActor(x, y);
+	return world->getLiveActor(x, y);
 }
 
 void Actor::modifyStatistic(Statistic stat, float delta) {
