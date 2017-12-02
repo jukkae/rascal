@@ -58,7 +58,7 @@ bool TraverseStairsAction::execute() {
 			return false;
 		}
 	}
-	else { // TODO start debugging issues from here
+	else {
 		if(world->getStairs()->x == actor->x && world->getStairs()->y == actor->y) {
 			state->nextLevel();
 			return true;

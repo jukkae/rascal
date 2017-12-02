@@ -73,7 +73,7 @@ void map_utils::addMcGuffin(World* world, Map* map, int level) {
 		y = (map->height-1) * s / 100;
 	} while (map->isWall(x, y)); // should check for canWalk, but can't do that yet
 
-	std::unique_ptr<Actor> mcGuffin = std::make_unique<Actor>(x, y, 'q', "phlebotinum link", sf::Color::White, 0, true);
+	std::unique_ptr<Actor> mcGuffin = std::make_unique<Actor>(x, y, 'q', "phlebotinum link", sf::Color::White, 0, false);
     mcGuffin->blocks = false;
 	mcGuffin->pickable = std::make_unique<Pickable>(TargetSelector(TargetSelector::SelectorType::NONE));
 	world->addActor(std::move(mcGuffin));
