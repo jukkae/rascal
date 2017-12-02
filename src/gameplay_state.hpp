@@ -25,9 +25,9 @@ public:
 	void initLoaded(Engine* engine);
 	void newGame(Engine* engine);
 
-	int getLevel() { return level; }
+	int getLevel() { return world.level; }
 	void nextLevel();
-	int getTime() { return time; }
+	int getTime() { return world.time; }
 	bool isInFov(int x, int y) { return world.map.isInFov(x, y); }
 	Point getWorldCoordsFromScreenCoords(Point& point) { return renderer.getWorldCoordsFromScreenCoords(point); }
 	void message(sf::Color col, std::string text, ...);
@@ -43,8 +43,6 @@ public:
 
 	void addActor(std::unique_ptr<Actor> actor) { world.actors.push_back(std::move(actor)); }
 private:
-	int time = 0;
-	int level = 1;
 	Gui gui;
 	Renderer renderer;
 	World world;
@@ -67,8 +65,6 @@ namespace serialization {
 	void save_construct_data(Archive & ar, const GameplayState* s, const unsigned int version)
 	{
 		boost::serialization::void_cast_register<GameplayState, State>();
-		ar & s->level;
-		ar & s->time;
 		ar & s->gui;
 		ar & s->world;
 	}
@@ -80,8 +76,6 @@ namespace serialization {
 		Engine* engine = nullptr;
 		sf::RenderWindow* window = nullptr;
 		::new(s)GameplayState(engine, window);
-		ar & s->level;
-		ar & s->time;
 		ar & s->gui;
 		ar & s-> world;
 	}

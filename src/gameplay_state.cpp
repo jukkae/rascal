@@ -35,7 +35,7 @@ void GameplayState::initLoaded(Engine* engine) {
 void GameplayState::newGame(Engine* engine) {
 	map_utils::addPlayer(this, &world.map);
 	map_utils::addStairs(this, &world.map);
-	map_utils::addMcGuffin(this, &world.map, level);
+	map_utils::addMcGuffin(this, &world.map, world.level);
 	map_utils::addItems(this, &world.map);
 	map_utils::addMonsters(this, &world.map);
 	gui.message(sf::Color::Green, "Welcome to year 20XXAD, you strange rascal!\nPrepare to fight or die!");
@@ -92,7 +92,7 @@ void GameplayState::updateTime() {
 		Actor* next = std::find_if(world.actors.begin(), world.actors.end(), [](const auto& a) { return a->ai != nullptr; })->get();
 
 		float tuna = next->energy.get() * -1;
-		time += tuna;
+		world.time += tuna;
 
 		for(auto& a : world.actors) {
 			if(a->ai != nullptr) *a->energy += tuna;
@@ -139,8 +139,8 @@ void GameplayState::message(sf::Color col, std::string text, ...) {
 
 // Bulk: map helper?
 void GameplayState::nextLevel() {
-	++level;
-	if(level > 5) {
+	++world.level;
+	if(world.level > 5) {
 		std::unique_ptr<State> victoryState = std::make_unique<VictoryState>(engine, getPlayer());
 		engine->pushState(std::move(victoryState));
 	}
@@ -159,13 +159,13 @@ void GameplayState::nextLevel() {
 
 	world.map = Map(120, 72);
 	world.map.setState(this);
-	if(level == 3) world.map.generateMap(MapType::PILLARS);
+	if(world.level == 3) world.map.generateMap(MapType::PILLARS);
 	else world.map.generateMap(MapType::BUILDING);
 
 	map_utils::addItems(this, &world.map);
 	map_utils::addMonsters(this, &world.map);
 	map_utils::addStairs(this, &world.map);
-	map_utils::addMcGuffin(this, &world.map, level);
+	map_utils::addMcGuffin(this, &world.map, world.level);
 
 	sortActors();
 	for (auto& a : world.actors) a->setState(this);
