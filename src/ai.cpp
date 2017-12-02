@@ -106,7 +106,7 @@ std::unique_ptr<Action> MonsterAi::getNextAction(Actor* actor) {
 	Direction direction = Direction::NONE;
 	if (actor->destructible && actor->destructible->isDead()) return std::make_unique<WaitAction>(WaitAction(actor));
 
-	if (actor->s->isInFov(actor->x, actor->y)) {
+	if (actor->world->isInFov(actor->x, actor->y)) {
 		moveCount = TRACKING_TURNS;
 	} else { --moveCount; }
 

@@ -170,7 +170,7 @@ void Gui::renderMouseLook(World* world, sf::RenderWindow* window) {
 	int x = location.x;
 	int y = location.y;
 
-	if(!state->isInFov(x, y)) {
+	if(!world->isInFov(x, y)) {
 		return;
 	}
 	std::string buf = "";

@@ -23,6 +23,8 @@ public:
 	void computeFov() { map.computeFov(); }
 	bool isWall(int x, int y) { return map.isWall(x, y); }
 	bool canWalk(int x, int y);
+	bool isInFov(int x, int y) { return map.isInFov(x, y); }
+
 
 
 	int width;
