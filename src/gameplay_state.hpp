@@ -10,6 +10,7 @@ class Engine;
 #include "point.hpp"
 #include "renderer.hpp"
 #include "persistent.hpp"
+#include "world.hpp"
 #include <SFML/Graphics.hpp>
 #include <boost/serialization/vector.hpp>
 
@@ -52,6 +53,7 @@ private:
 	Map map;
 	Gui gui;
 	Renderer renderer;
+	World world;
 
 	void updateTime();
 	void updateNextActor();
