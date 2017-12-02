@@ -18,6 +18,8 @@ public:
 	void setState(GameplayState* s) { state = s; }
 
 private:
+	int elapsedTime = 0; // TODO crap just for testing
+	bool goingUp = true; // TODO
 	int screenWidth;
 	int screenHeight;
 	GameplayState* state;

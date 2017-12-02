@@ -65,6 +65,9 @@ void Renderer::renderMap(const World* const world, sf::RenderWindow* window) {
 }
 
 void Renderer::renderHighlight(const World* const world, sf::RenderWindow* window, const Point& point) {
+	goingUp ? elapsedTime += 10 : elapsedTime -= 10;
+	if(elapsedTime >= 255 || elapsedTime <= 0) goingUp = !goingUp;
+
 	const Map* const map = &world->map;
 	int x = point.x;
 	int y = point.y;
@@ -76,7 +79,7 @@ void Renderer::renderHighlight(const World* const world, sf::RenderWindow* windo
 	int worldX = x + cameraX;
 	int worldY = y + cameraY;
 
-	float coef = 1.2;
+	float coef = 1.2 * (elapsedTime / 255.0);
 
 	sf::RectangleShape rectangle(sf::Vector2f(constants::SQUARE_CELL_WIDTH, constants::SQUARE_CELL_HEIGHT));
 	rectangle.setPosition(x * constants::SQUARE_CELL_WIDTH, y * constants::SQUARE_CELL_HEIGHT);
