@@ -78,9 +78,11 @@ void GameplayState::message(sf::Color col, std::string text, ...) {
 }
 
 // Bulk: map helper?
-void GameplayState::nextLevel() { // TODO broken
-	++world->level;
-	if(world->level > 5) {
+// FIXME ugly and brittle
+void GameplayState::nextLevel() {
+	std::unique_ptr<World> w = std::make_unique<World>(120, 72);
+	w->level = world->level + 1;
+	if(w->level > 5) {
 		std::unique_ptr<State> victoryState = std::make_unique<VictoryState>(engine, world->getPlayer());
 		engine->pushState(std::move(victoryState));
 	}
@@ -88,25 +90,32 @@ void GameplayState::nextLevel() { // TODO broken
 	world->getPlayer()->destructible->heal(world->getPlayer()->destructible->maxHp/2);
 	gui.message(sf::Color::Red, "After a rare moment of peace, you climb\nhigher. You will escape this hellhole.");
 
-	// Clunky, not idiomatic
+	std::unique_ptr<Actor> player;
 	auto it = world->actors.begin();
 	while (it != world->actors.end()) {
-		if (!((*it)->isPlayer())) {
+		if ((*it)->isPlayer()) {
+			player = std::move(*it); // i want to move(*it) move(*it)
 			it = world->actors.erase(it);
 		}
 		else ++it;
 	}
 
+	levels.push_back(std::move(w));
+	world = levels.back().get();
+	world->state = this;
+
 	world->map = Map(120, 72);
 	world->map.setState(this);
 	world->map.setWorld(world);
-	if(world->level == 3) world->map.generateMap(MapType::PILLARS);
+	if(world->level == 3) w->map.generateMap(MapType::PILLARS);
 	else world->map.generateMap(MapType::BUILDING);
 
 	map_utils::addItems(world, &world->map);
 	map_utils::addMonsters(world, &world->map);
 	map_utils::addStairs(world, &world->map);
 	map_utils::addMcGuffin(world, &world->map, world->level);
+
+	world->addActor(std::move(player));
 
 	for (auto& a : world->actors) a->setState(this);
 	for (auto& a : world->actors) a->world = world;
