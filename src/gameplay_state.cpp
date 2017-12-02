@@ -22,7 +22,6 @@ State(engine, window) {
 	// not really the correct place for following, but w/e
 	for (auto& a : world.actors) a->setState(this);
 	sortActors();
-	for (auto& a : world.actors) std::cout << a->name << "\n";
 }
 
 void GameplayState::initLoaded(Engine* engine) {
