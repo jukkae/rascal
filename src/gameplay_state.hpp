@@ -25,9 +25,7 @@ public:
 	void initLoaded(Engine* engine);
 	void newGame(Engine* engine);
 
-	int getLevel() { return world.level; }
 	void nextLevel();
-	int getTime() { return world.time; }
 	bool isInFov(int x, int y) { return world.map.isInFov(x, y); }
 	Point getWorldCoordsFromScreenCoords(Point& point) { return renderer.getWorldCoordsFromScreenCoords(point); }
 	void message(sf::Color col, std::string text, ...);

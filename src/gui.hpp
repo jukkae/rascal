@@ -6,6 +6,7 @@
 #include "persistent.hpp"
 #include <SFML/Graphics.hpp>
 class GameplayState;
+class World;
 
 class Gui {
 public:
@@ -14,7 +15,7 @@ public:
 	~Gui();
 	void clear();
 
-	void render(sf::RenderWindow* window);
+	void render(World* world, sf::RenderWindow* window);
 	void message(sf::Color col, std::string text, ...);
 	void message(sf::Color col, std::string text, va_list args);
 

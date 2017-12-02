@@ -7,6 +7,7 @@
 #include "gui.hpp"
 #include "io.hpp"
 #include "map.hpp"
+#include "world.hpp"
 #include <stdarg.h>
 #include <sstream>
 #include <SFML/Window/Mouse.hpp>
@@ -30,18 +31,18 @@ void Gui::clear() {
 	log.clear();
 }
 
-void Gui::render(sf::RenderWindow* window) {
+void Gui::render(World* world, sf::RenderWindow* window) {
 
 	renderMessageLog(window);
 	renderBar(1, 1, BAR_WIDTH, "HP", state->getPlayer()->destructible->hp, state->getPlayer()->destructible->maxHp, lightRed, darkerRed, window);
 
-	std::string dungeonLvlString = "Floor " + std::to_string(state->getLevel());
+	std::string dungeonLvlString = "Floor " + std::to_string(world->level);
 	sf::Text dlvl(dungeonLvlString, font::mainFont, 16);
 	dlvl.setPosition(3*constants::CELL_WIDTH, (3+constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT)*constants::CELL_HEIGHT);
 	dlvl.setFillColor(sf::Color::White);
 	window->draw(dlvl);
 
-	std::string timeString = "Time: " + std::to_string(state->getTime());
+	std::string timeString = "Time: " + std::to_string(world->time);
 	sf::Text time(timeString, font::mainFont, 16);
 	time.setPosition(3*constants::CELL_WIDTH, (4+constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT)*constants::CELL_HEIGHT);
 	time.setFillColor(sf::Color::White);

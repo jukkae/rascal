@@ -62,7 +62,7 @@ void GameplayState::render() {
 	window->clear(sf::Color::Black);
 
 	renderer.render(&world, window);
-	gui.render(window);
+	gui.render(&world, window);
 
 	window->display();
 }
