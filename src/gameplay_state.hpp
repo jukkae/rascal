@@ -37,7 +37,7 @@ public:
 private:
 	Gui gui;
 	Renderer renderer;
-	std::vector<World> levels;
+	std::vector<std::unique_ptr<World>> levels;
 
 	friend class boost::serialization::access;
 	template<class Archive>
