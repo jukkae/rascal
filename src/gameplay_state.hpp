@@ -37,6 +37,7 @@ public:
 private:
 	Gui gui;
 	Renderer renderer;
+	std::vector<World> levels;
 
 	friend class boost::serialization::access;
 	template<class Archive>
@@ -54,6 +55,7 @@ namespace serialization {
 		boost::serialization::void_cast_register<GameplayState, State>();
 		ar & s->gui;
 		ar & s->world;
+		ar & s->levels;
 	}
 
 	template<class Archive>
@@ -64,7 +66,8 @@ namespace serialization {
 		sf::RenderWindow* window = nullptr;
 		::new(s)GameplayState(engine, window);
 		ar & s->gui;
-		ar & s-> world;
+		ar & s->world;
+		ar & s->levels;
 	}
 } // namespace boost
 } // namespace serialization
