@@ -9,6 +9,7 @@
 GameplayState::GameplayState(Engine* engine, sf::RenderWindow* window) :
 State(engine, window) {
 	world = World(120, 72);
+	world.state = this;
 
 	gui.setState(this);
 	renderer.setState(this);
@@ -18,6 +19,7 @@ State(engine, window) {
 
 	// not really the correct place for following, but w/e
 	for (auto& a : world.actors) a->setState(this);
+	for (auto& a : world.actors) a->world = &world;
 	sortActors();
 }
 

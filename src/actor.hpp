@@ -25,6 +25,7 @@ class GameplayState;
 
 enum class Statistic { CONSTITUTION, STRENGTH, AGILITY, SPEED };
 
+class World;
 class Actor {
 public:
 	int x, y;
@@ -43,6 +44,7 @@ public:
 	Actor* wornWeapon = nullptr;
 
 	GameplayState* s; // temporary for messaging
+	World* world = nullptr;
 
 	Actor(int x = 0, int y = 0, int ch = 'x', std::string name = "", sf::Color col = sf::Color::White, boost::optional<float> energy = boost::none, bool stairs = false);
 	~Actor();
@@ -84,6 +86,7 @@ private:
 		ar & stairs;
 		ar & wornWeapon;
 		ar & statusEffects;
+		ar & world;
     }   
 };
 #endif /* ACTOR_HPP */
