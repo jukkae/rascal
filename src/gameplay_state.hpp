@@ -36,8 +36,6 @@ public:
 	std::vector<std::unique_ptr<Actor>>& getActors() { return world.actors; }
 	void setWindow(sf::RenderWindow* w) { window = w; }
 
-	void addActor(std::unique_ptr<Actor> actor) { world.actors.push_back(std::move(actor)); }
-	
 	World world; // TODO should be private
 private:
 	Gui gui;

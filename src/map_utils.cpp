@@ -1,34 +1,35 @@
+#include "attacker.hpp"
 #include "colors.hpp"
 #include "dice.hpp"
 #include "map_utils.hpp"
 #include "map.hpp"
-#include "gameplay_state.hpp"
+#include "world.hpp"
 #include "status_effect.hpp" // TODO for testing
 #include <SFML/Graphics.hpp>
 
-void map_utils::addItems(GameplayState* gameplayState, Map* map) {
+void map_utils::addItems(World* world, Map* map) {
 	for(int x = 0; x < map->width; ++x) {
 		for(int y = 0; y < map->height; ++y) {
 			int r = d100();
 			if (map->canWalk(x, y) && r <= 2) {
-				map_utils::addItem(gameplayState, map, x, y);
+				map_utils::addItem(world, map, x, y);
 			}
 		}
 	}
 }
 
-void map_utils::addMonsters(GameplayState* gameplayState, Map* map) {
+void map_utils::addMonsters(World* world, Map* map) {
 	for(int x = 0; x < map->width; ++x) {
 		for(int y = 0; y < map->height; ++y) {
 			int r = d100();
 			if (map->canWalk(x, y) && r == 1) {
-				map_utils::addMonster(gameplayState, map, x, y);
+				map_utils::addMonster(world, map, x, y);
 			}
 		}
 	}
 }
 
-void map_utils::addPlayer(GameplayState* gameplayState, Map* map) {
+void map_utils::addPlayer(World* world, Map* map) {
 	int x = 0;
 	int y = 0;
 	do {
@@ -43,10 +44,10 @@ void map_utils::addPlayer(GameplayState* gameplayState, Map* map) {
 	player->attacker     = std::make_unique<Attacker>(1, 2, 1);
 	player->ai           = std::make_unique<PlayerAi>();
 	player->container    = std::make_unique<Container>(100);
-	gameplayState->addActor(std::move(player));
+	world->addActor(std::move(player));
 }
 
-void map_utils::addStairs(GameplayState* gameplayState, Map* map) {
+void map_utils::addStairs(World* world, Map* map) {
 	int x = 0;
 	int y = 0;
 	do {
@@ -59,10 +60,10 @@ void map_utils::addStairs(GameplayState* gameplayState, Map* map) {
 	std::unique_ptr<Actor> stairs = std::make_unique<Actor>(x, y, '<', "stairs (up)", sf::Color::White, boost::none, true);
     stairs->blocks = false;
     stairs->fovOnly = false;
-	gameplayState->addActor(std::move(stairs));
+	world->addActor(std::move(stairs));
 }
 
-void map_utils::addMcGuffin(GameplayState* gameplayState, Map* map, int level) {
+void map_utils::addMcGuffin(World* world, Map* map, int level) {
 	int x = 0;
 	int y = 0;
 	do {
@@ -75,10 +76,10 @@ void map_utils::addMcGuffin(GameplayState* gameplayState, Map* map, int level) {
 	std::unique_ptr<Actor> mcGuffin = std::make_unique<Actor>(x, y, 'q', "phlebotinum link", sf::Color::White, 0, true);
     mcGuffin->blocks = false;
 	mcGuffin->pickable = std::make_unique<Pickable>(TargetSelector(TargetSelector::SelectorType::NONE));
-	gameplayState->addActor(std::move(mcGuffin));
+	world->addActor(std::move(mcGuffin));
 }
 
-std::unique_ptr<Actor> map_utils::makeMonster(GameplayState* gameplayState, Map* map, int x, int y) {
+std::unique_ptr<Actor> map_utils::makeMonster(World* world, Map* map, int x, int y) {
 	int r = d100();
 	if(r < 60) {
 		std::unique_ptr<Actor> punk = std::make_unique<Actor>(x, y, 'h', "punk", colors::desaturatedGreen, 1);
@@ -108,11 +109,11 @@ std::unique_ptr<Actor> map_utils::makeMonster(GameplayState* gameplayState, Map*
 	}
 }
 
-void map_utils::addMonster(GameplayState* gameplayState, Map* map, int x, int y) {
-	gameplayState->addActor(map_utils::makeMonster(gameplayState, map, x, y));
+void map_utils::addMonster(World* world, Map* map, int x, int y) {
+	world->addActor(map_utils::makeMonster(world, map, x, y));
 }
 
-std::unique_ptr<Actor> map_utils::makeItem(GameplayState* gameplayState, Map* map, int x, int y) {
+std::unique_ptr<Actor> map_utils::makeItem(World* world, Map* map, int x, int y) {
 	int r = d100();
 	if(r < 40) {
 		std::unique_ptr<Actor> stimpak = std::make_unique<Actor>(x, y, '!', "stimpak", sf::Color(128, 0, 128));
@@ -165,7 +166,7 @@ std::unique_ptr<Actor> map_utils::makeItem(GameplayState* gameplayState, Map* ma
 	}
 }
 
-void map_utils::addItem(GameplayState* gameplayState, Map* map, int x, int y) {
-	gameplayState->addActor(map_utils::makeItem(gameplayState, map, x, y));
+void map_utils::addItem(World* world, Map* map, int x, int y) {
+	world->addActor(map_utils::makeItem(world, map, x, y));
 }
 

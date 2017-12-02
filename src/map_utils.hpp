@@ -2,20 +2,20 @@
 #define MAP_UTILS_HPP
 
 class Map;
-class GameplayState;
 class Actor;
+class World;
 
 namespace map_utils {
-void addItems(GameplayState* gameplayState, Map* map);
-void addMonsters(GameplayState* gameplayState, Map* map);
-void addPlayer(GameplayState* gameplayState, Map* map);
-void addStairs(GameplayState* gameplayState, Map* map);
-void addMcGuffin(GameplayState* gameplayState, Map* map, int level);
+void addItems(World* world, Map* map);
+void addMonsters(World* world, Map* map);
+void addPlayer(World* world, Map* map);
+void addStairs(World* world, Map* map);
+void addMcGuffin(World* world, Map* map, int level);
 
-std::unique_ptr<Actor> makeMonster(GameplayState* gameplayState, Map* map, int x, int y);
-std::unique_ptr<Actor> makeItem(GameplayState* gameplayState, Map* map, int x, int y);
-void addMonster(GameplayState* gameplayState, Map* map, int x, int y);
-void addItem(GameplayState* gameplayState, Map* map, int x, int y);
+std::unique_ptr<Actor> makeMonster(World* world, Map* map, int x, int y);
+std::unique_ptr<Actor> makeItem(World* world, Map* map, int x, int y);
+void addMonster(World* world, Map* map, int x, int y);
+void addItem(World* world, Map* map, int x, int y);
 } // namespace map_utils
 
 #endif /* MAP_UTILS_HPP */

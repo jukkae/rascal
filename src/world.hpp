@@ -25,6 +25,8 @@ public:
 	bool canWalk(int x, int y);
 	bool isInFov(int x, int y) { return map.isInFov(x, y); }
 
+	void addActor(std::unique_ptr<Actor> actor) { actors.push_back(std::move(actor)); }
+
 
 
 	int width;

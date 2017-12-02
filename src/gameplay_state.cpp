@@ -33,11 +33,11 @@ void GameplayState::initLoaded(Engine* engine) {
 }
 
 void GameplayState::newGame(Engine* engine) {
-	map_utils::addPlayer(this, &world.map);
-	map_utils::addStairs(this, &world.map);
-	map_utils::addMcGuffin(this, &world.map, world.level);
-	map_utils::addItems(this, &world.map);
-	map_utils::addMonsters(this, &world.map);
+	map_utils::addPlayer(&world, &world.map);
+	map_utils::addStairs(&world, &world.map);
+	map_utils::addMcGuffin(&world, &world.map, world.level);
+	map_utils::addItems(&world, &world.map);
+	map_utils::addMonsters(&world, &world.map);
 	gui.message(sf::Color::Green, "Welcome to year 20XXAD, you strange rascal!\nPrepare to fight or die!");
 }
 
@@ -122,10 +122,10 @@ void GameplayState::nextLevel() {
 	if(world.level == 3) world.map.generateMap(MapType::PILLARS);
 	else world.map.generateMap(MapType::BUILDING);
 
-	map_utils::addItems(this, &world.map);
-	map_utils::addMonsters(this, &world.map);
-	map_utils::addStairs(this, &world.map);
-	map_utils::addMcGuffin(this, &world.map, world.level);
+	map_utils::addItems(&world, &world.map);
+	map_utils::addMonsters(&world, &world.map);
+	map_utils::addStairs(&world, &world.map);
+	map_utils::addMcGuffin(&world, &world.map, world.level);
 
 	world.sortActors();
 	for (auto& a : world.actors) a->setState(this);
