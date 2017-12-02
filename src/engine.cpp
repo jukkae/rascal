@@ -55,7 +55,6 @@ void Engine::newGame() {
 }
 
 void Engine::update() {
-
 	while(engineCommands.size() > 0) executeEngineCommand();
 	states.back()->update();
 }

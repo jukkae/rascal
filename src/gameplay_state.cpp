@@ -3,6 +3,7 @@
 #include "engine.hpp"
 #include "map_utils.hpp"
 #include "victory_state.hpp"
+#include <chrono>
 #include <SFML/Window/Mouse.hpp>
 #include <boost/optional/optional_io.hpp>
 
@@ -41,15 +42,22 @@ void GameplayState::newGame(Engine* engine) {
 }
 
 void GameplayState::update() {
-	Actor* activeActor = getNextActor();
-	if(activeActor->isPlayer()) {
-		handleEvents();
+	auto previous = std::chrono::system_clock::now();
+	double frameLength = 1.0 / 60.0; // 60 Hz, in seconds
+	while(true) { // TODO events are not polled correctly
+		Actor* activeActor = getNextActor();
+		if(activeActor->isPlayer()) {
+			handleEvents();
+		}
+		updateNextActor();
+		if(activeActor->isPlayer()) {
+			world.computeFov();
+		}
+		auto now = std::chrono::system_clock::now();
+		std::chrono::duration<double> elapsed = now - previous;
+		if(elapsed.count() > frameLength) break;
 	}
-	updateNextActor();
-	if(activeActor->isPlayer()) {
-		world.computeFov();
-		render();
-	}
+	render();
 }
 
 void GameplayState::handleEvents() {
