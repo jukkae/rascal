@@ -61,7 +61,7 @@ void GameplayState::update() {
 }
 
 void GameplayState::handleEvents() {
-	//inputHandler->handleEvents();
+	// TODO poll events from here eventually?
 }
 
 void GameplayState::render() {
