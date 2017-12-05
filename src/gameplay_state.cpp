@@ -107,7 +107,7 @@ void GameplayState::nextLevel() {
 	world->map = Map(120, 72);
 	world->map.setState(this);
 	world->map.setWorld(world);
-	if(world->level == 3) w->map.generateMap(MapType::PILLARS);
+	if(world->level == 3) world->map.generateMap(MapType::PILLARS);
 	else world->map.generateMap(MapType::BUILDING);
 
 	map_utils::addItems(world, &world->map);
