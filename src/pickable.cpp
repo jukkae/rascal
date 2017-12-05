@@ -5,6 +5,7 @@
 #include "io.hpp"
 #include "persistent.hpp"
 #include "colors.hpp"
+#include "world.hpp"
 
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
@@ -19,7 +20,8 @@ void TargetSelector::selectTargets(Actor* wearer, std::vector<Actor*>& list) {
 	switch(type) {
 		case SelectorType::CLOSEST_MONSTER :
 		{
-			Actor* closestMonster = wearer->getClosestMonster(wearer->x, wearer->y, range);
+			World* world = wearer->world;
+			Actor* closestMonster = world->getClosestMonster(wearer->x, wearer->y, range);
 			if(closestMonster) list.push_back(closestMonster);
 		} break;
 		case SelectorType::SELECTED_MONSTER :
