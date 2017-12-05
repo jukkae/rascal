@@ -53,14 +53,6 @@ std::vector<std::unique_ptr<Actor>>& Actor::getActors() {
 	return world->getActors();
 }
 
-
-Actor* Actor::getPlayer() {
-	for(auto& a : getActors()) {
-		if(a->isPlayer()) return a.get();
-	}
-	return nullptr;
-}
-
 Actor* Actor::getClosestMonster(int x, int y, float range) {
 	return world->getClosestMonster(x, y, range);
 }
