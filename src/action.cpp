@@ -131,3 +131,14 @@ bool UnWieldItemAction::execute() {
 		return true;
 	} else return false;
 }
+
+LookAction::LookAction(Actor* actor):
+	Action(actor, 50.0f), location(Point(actor->x, actor->y)) {;}
+
+LookAction::LookAction(Actor* actor, Point location):
+	Action(actor, 50.0f), location(location) {;}
+
+bool LookAction::execute() {
+	actor->s->message(colors::lightGrey, "You take a look around. The building is as bleak from inside.");
+	return true;
+}

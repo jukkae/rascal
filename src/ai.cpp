@@ -77,7 +77,12 @@ std::unique_ptr<Action> PlayerAi::getNextAction(Actor* actor) {
 					return std::make_unique<PickupAction>(PickupAction(actor));
 				}
 				case k::Period: {
-					return std::make_unique<WaitAction>(WaitAction(actor));
+					if(event.key.shift) {
+						return std::make_unique<LookAction>(LookAction(actor));
+					}
+					else {
+						return std::make_unique<WaitAction>(WaitAction(actor));
+					}
 				}
 				case 56: { // < key
 					if(event.key.shift) {

@@ -6,6 +6,7 @@ class GameplayState;
 struct ActionResult;
 
 #include "direction.hpp"
+#include "point.hpp"
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/serialization/export.hpp>
@@ -147,6 +148,21 @@ private:
 	template<class Archive>
 	void serialize(Archive & ar, const unsigned int version) {
 		ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(Action);
+	}
+};
+
+class LookAction : public Action {
+public:
+	LookAction(Actor* actor);
+	LookAction(Actor* actor, Point location);
+	bool execute();
+	Point location;
+private:
+	friend class boost::serialization::access;
+	template<class Archive>
+	void serialize(Archive & ar, const unsigned int version) {
+		ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(Action);
+		ar & location;
 	}
 };
 

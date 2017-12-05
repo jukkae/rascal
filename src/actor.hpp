@@ -29,7 +29,7 @@ enum class Statistic { CONSTITUTION, STRENGTH, AGILITY, SPEED };
 class World;
 class Actor {
 public:
-	int x, y;
+	int x, y; // FIXME reimplement in terms of Point
 	int ch; // ASCII code
 	sf::Color col; // color
 	std::string name;
