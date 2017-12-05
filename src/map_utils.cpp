@@ -39,7 +39,7 @@ void map_utils::addPlayer(World* world, Map* map) {
 	} while (map->isWall(x, y)); // should check for canWalk, but can't do that yet
 
 	std::unique_ptr<Actor> player = std::make_unique<Actor>(x, y, '@', "you", sf::Color::White, 2);
-	player->destructible = std::make_unique<PlayerDestructible>(100, 2, 0, "your corpse", /*11*/20);
+	player->destructible = std::make_unique<PlayerDestructible>(100, 2, 0, "your corpse", 11);
 	player->attacker     = std::make_unique<Attacker>(1, 2, 1);
 	player->ai           = std::make_unique<PlayerAi>();
 	player->container    = std::make_unique<Container>(100);
