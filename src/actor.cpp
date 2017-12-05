@@ -49,10 +49,6 @@ float Actor::getDistance(int cx, int cy) const {
 	return sqrtf(dx*dx + dy*dy);
 }
 
-std::vector<std::unique_ptr<Actor>>& Actor::getActors() {
-	return world->getActors();
-}
-
 void Actor::modifyStatistic(Statistic stat, float delta) {
 	switch(stat) {
 		case Statistic::CONSTITUTION:

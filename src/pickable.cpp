@@ -42,7 +42,8 @@ void TargetSelector::selectTargets(Actor* wearer, std::vector<Actor*>& list) {
 		} break;
 		case SelectorType::WEARER_RANGE :
 		{
-			for(auto& actor : wearer->getActors()) {
+			World* world = wearer->world;
+			for(auto& actor : world->getActors()) {
 				if(actor.get() != wearer && actor->destructible && !actor->destructible->isDead() && actor->getDistance(wearer->x, wearer->y) <= range) {
 					list.push_back(actor.get());
 				}
@@ -50,12 +51,13 @@ void TargetSelector::selectTargets(Actor* wearer, std::vector<Actor*>& list) {
 		} break;
 		case SelectorType::SELECTED_RANGE :
 		{
+			World* world = wearer->world;
 			int x, y;
 			wearer->s->message(colors::cyan, "Left-click to select a tile,\nor right-click to cancel.");
 			if(io::waitForMouseClick(wearer->s)) {
 				x = io::mousePosition.x;
 				y = io::mousePosition.y;
-				for(auto& actor : wearer->getActors()) { // TODO highlight tiles in range
+				for(auto& actor : world->getActors()) { // TODO highlight tiles in range
 					if(actor->destructible && !actor->destructible->isDead() && actor->getDistance(x, y) <= range ) {
 						list.push_back(actor.get());
 					}
@@ -108,16 +110,17 @@ Pickable::Pickable(TargetSelector selector, std::unique_ptr<Effect> effect, int 
 // owner is the Actor that this Pickable belongs to,
 // wearer is the Actor that has this Pickable in inventory.
 bool Pickable::pick(std::unique_ptr<Actor> owner, Actor* wearer) {
+	World* world = owner->world;
 	if(wearer->container && !wearer->container->isFull()) {
 		if(wearer->container->add(std::move(owner))) {
-			wearer->getActors().erase(
+			world->getActors().erase(
 				std::remove(
-					wearer->getActors().begin(),
-					wearer->getActors().end(),
+					world->getActors().begin(),
+					world->getActors().end(),
 					owner
 					//[&](auto const & p) { return p.get() == owner; }
 				),
-				wearer->getActors().end()
+				world->getActors().end()
 			);
 			return true;
 		}
