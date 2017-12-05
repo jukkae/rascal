@@ -79,6 +79,7 @@ void GameplayState::message(sf::Color col, std::string text, ...) {
 
 // Bulk: map helper?
 // FIXME ugly and brittle
+// TODO: only create new when doesn't exist
 void GameplayState::nextLevel() {
 	std::unique_ptr<World> w = std::make_unique<World>(120, 72);
 	w->level = world->level + 1;
@@ -125,7 +126,24 @@ void GameplayState::nextLevel() {
 // TODO
 void GameplayState::previousLevel() {
 	if(world->level <= 1) return;
-	else return;
+
+	std::unique_ptr<Actor> player;
+	auto it = world->actors.begin();
+	while (it != world->actors.end()) {
+		if ((*it)->isPlayer()) {
+			player = std::move(*it); // i want to move(*it) move(*it)
+			it = world->actors.erase(it);
+		}
+		else ++it;
+	}
+
+	world = levels.at(world->level-2).get();
+	world->addActor(std::move(player));
+	world->sortActors();
+	for(auto& a : world->getActors()) {
+		std::cout << a->name << "\n";
+	}
+	// TODO world doesn't find actor anymore!
 }
 
 BOOST_CLASS_EXPORT(GameplayState)
