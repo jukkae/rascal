@@ -26,12 +26,13 @@ void TargetSelector::selectTargets(Actor* wearer, std::vector<Actor*>& list) {
 		} break;
 		case SelectorType::SELECTED_MONSTER :
 		{
+			World* world = wearer->world;
 			int x, y;
 			wearer->s->message(colors::cyan, "Left-click to select an enemy,\nor right-click to cancel.");
 			if(io::waitForMouseClick(wearer->s)) {
 				x = io::mousePosition.x;
 				y = io::mousePosition.y;
-				Actor* actor = wearer->getLiveActor(x, y);
+				Actor* actor = world->getLiveActor(x, y);
 				if(actor) list.push_back(actor);
 			}
 		} break;

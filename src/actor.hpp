@@ -55,7 +55,6 @@ public:
 	bool isStairs() { return transporter.get(); }
 	void addAction(std::unique_ptr<Action> action) { actionsQueue.push_back(std::move(action)); }
 	std::vector<std::unique_ptr<Actor>>& getActors(); // temporary for refactoring
-	Actor* getLiveActor(int x, int y); // TODO access world
 	void setState(GameplayState* state) { s = state; } // temporary for getting access to state's actors
 	void modifyStatistic(Statistic stat, float delta);
 	void addStatusEffect(std::unique_ptr<StatusEffect> statusEffect) { statusEffects.push_back(std::move(statusEffect)); }

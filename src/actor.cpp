@@ -53,10 +53,6 @@ std::vector<std::unique_ptr<Actor>>& Actor::getActors() {
 	return world->getActors();
 }
 
-Actor* Actor::getLiveActor(int x, int y) {
-	return world->getLiveActor(x, y);
-}
-
 void Actor::modifyStatistic(Statistic stat, float delta) {
 	switch(stat) {
 		case Statistic::CONSTITUTION:
