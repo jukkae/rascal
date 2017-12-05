@@ -48,4 +48,5 @@ private:
 };
 
 BOOST_CLASS_EXPORT_KEY(PoisonedStatusEffect)
+// remember to register new types in engine.cpp
 #endif /* STATUS_EFFECT_HPP */
