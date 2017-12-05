@@ -139,11 +139,8 @@ void GameplayState::previousLevel() {
 
 	world = levels.at(world->level-2).get();
 	world->addActor(std::move(player));
+	for (auto& a : world->actors) a->world = world;
 	world->sortActors();
-	for(auto& a : world->getActors()) {
-		std::cout << a->name << "\n";
-	}
-	// TODO world doesn't find actor anymore!
 }
 
 BOOST_CLASS_EXPORT(GameplayState)
