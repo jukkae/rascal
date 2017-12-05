@@ -49,7 +49,7 @@ void Renderer::renderMap(const World* const world, sf::RenderWindow* window) {
 					rectangle.setFillColor(colors::black);
 				}
 				else if(map->tiles[worldX + mapWidth*worldY].inFov) {
-					if(map->tiles[worldX + mapWidth*worldY].terrain == Terrain::WATER) {
+					if(map->tiles[worldX + mapWidth*worldY].terrain == Terrain::WATER) { // TODO broken
 						rectangle.setFillColor(colors::lightBlue);
 					} else {
 						rectangle.setFillColor(map->isWall(worldX, worldY) ? colors::lightWall : colors::lightGround);
