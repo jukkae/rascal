@@ -4,7 +4,6 @@
 #include "map_utils.hpp"
 #include "map.hpp"
 #include "world.hpp"
-#include "status_effect.hpp" // TODO for testing
 #include <SFML/Graphics.hpp>
 
 void map_utils::addItems(World* world, Map* map) {

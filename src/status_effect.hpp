@@ -24,21 +24,6 @@ private:
 	}
 };
 
-class TestStatusEffect : public StatusEffect {
-public:
-	TestStatusEffect(int time = 10000) : StatusEffect("test"), time(time) {;}
-	void update(Actor* owner, GameplayState* state, float deltaTime) override;
-	bool isAlive() override;
-	int time;
-private:
-	friend class boost::serialization::access;
-	template<class Archive>
-	void serialize(Archive & ar, const unsigned int version) {
-		ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(StatusEffect);
-		ar & time;
-	}
-};
-
 class PoisonedStatusEffect : public StatusEffect {
 public:
 	PoisonedStatusEffect(int time = 10000, int interval = 1000, int damage = 5):
@@ -62,6 +47,5 @@ private:
 	}
 };
 
-BOOST_CLASS_EXPORT_KEY(TestStatusEffect)
 BOOST_CLASS_EXPORT_KEY(PoisonedStatusEffect)
 #endif /* STATUS_EFFECT_HPP */
