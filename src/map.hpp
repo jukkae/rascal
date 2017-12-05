@@ -13,12 +13,15 @@ class Actor;
 class GameplayState;
 class World;
 
+enum class Terrain { NORMAL, WATER };
+
 struct Tile {
 	bool explored;
 	bool inFov;
 	bool transparent;
 	bool walkable;
-	Tile() : explored(false), inFov(false), transparent(true), walkable(true) {;}
+	Terrain terrain;
+	Tile() : explored(false), inFov(false), transparent(true), walkable(true), terrain(Terrain::NORMAL) {;}
 
 	template<typename Archive>
 	void serialize(Archive & ar, const unsigned int version) {
@@ -26,6 +29,7 @@ struct Tile {
 		// ar & inFov; no serialization for dynamic properties!
 		ar & transparent;
 		ar & walkable;
+		ar & terrain;
 	}
 };
 
@@ -52,7 +56,7 @@ public:
 };
 
 enum class BreakDirection { HORIZONTAL, VERTICAL };
-enum class MapType { BUILDING, PILLARS };
+enum class MapType { BUILDING, WATER, PILLARS };
 
 class Map {
 public:
@@ -66,6 +70,7 @@ public:
 	void generateMap(MapType mapType = MapType::BUILDING);
 	void generateBuildingMap();
 	void generatePillarsMap();
+	void generateWaterMap();
 	std::vector<Rect> breakRooms(Rect area, BreakDirection direction = BreakDirection::HORIZONTAL);
 
 	void setWall(int x, int y);

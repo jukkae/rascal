@@ -36,6 +36,9 @@ void Map::generateMap(MapType mapType) {
 		case MapType::PILLARS:
 			generatePillarsMap();
 			break;
+		case MapType::WATER:
+			generateWaterMap();
+			break;
 		default:
 			break;
 	}
@@ -68,6 +71,26 @@ void Map::generateBuildingMap() {
 }
 
 void Map::generatePillarsMap() {
+	for(int x = 0; x < width; ++x) {
+		for(int y = 0; y < height; ++y) {
+			if(x % 3 == 0 && y % 3 == 0) tiles.at(x + y*width).walkable = false;
+		}
+	}
+	for(int x = 0; x < width; ++x) {
+		for(int y = 0; y < height; ++y) {
+			if(x == 0 || x == width - 1 || y == 0 || y == height - 1) {
+				tiles.at(x + y*width).walkable = false;
+			}
+		}
+	}
+}
+
+void Map::generateWaterMap() {
+	for(int x = 0; x < width; ++x) {
+		for(int y = 0; y < height; ++y) {
+			tiles.at(x + y*width).terrain = Terrain::WATER;
+		}
+	}
 	for(int x = 0; x < width; ++x) {
 		for(int y = 0; y < height; ++y) {
 			if(x % 3 == 0 && y % 3 == 0) tiles.at(x + y*width).walkable = false;
