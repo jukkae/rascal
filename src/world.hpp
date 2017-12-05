@@ -19,10 +19,10 @@ public:
 
 
 	Actor* getPlayer() const;
-	Actor* getStairs() const; // TODO up / down separately when we have persistent levels
 	Actor* getClosestMonster(int x, int y, float range) const;
 	Actor* getLiveActor(int x, int y) const;
 	std::vector<std::unique_ptr<Actor>>& getActors() { return actors; }
+	std::vector<Actor*> getActorsAt(int x, int y);
 
 
 	void computeFov() { map.computeFov(); }

@@ -13,13 +13,6 @@ Actor* World::getPlayer() const {
     return nullptr;
 }
 
-Actor* World::getStairs() const {
-	for(auto& actor : actors) {
-        if(actor->isStairs()) return actor.get();
-    }
-    return nullptr;
-}
-
 bool World::canWalk(int x, int y) {
 	for(auto& actor : actors) {
 		if(actor->blocks && actor->x == x && actor->y == y) {
@@ -95,3 +88,10 @@ Actor* World::getLiveActor(int x, int y) const {
 	return nullptr;
 }
 
+std::vector<Actor*> World::getActorsAt(int x, int y) {
+	std::vector<Actor*> v;
+	for(auto& actor : actors) {
+		if(actor->x == x && actor->y == y) v.push_back(actor.get());
+	}
+	return v;
+}

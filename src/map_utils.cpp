@@ -47,6 +47,7 @@ void map_utils::addPlayer(World* world, Map* map) {
 	world->addActor(std::move(player));
 }
 
+// TODO now just randomly sprinkle one upstairs, one downstairs
 void map_utils::addStairs(World* world, Map* map) {
 	int x = 0;
 	int y = 0;
@@ -61,7 +62,22 @@ void map_utils::addStairs(World* world, Map* map) {
     stairs->blocks = false;
     stairs->fovOnly = false;
 	stairs->transporter = std::make_unique<Transporter>();
+	stairs->transporter->direction = VerticalDirection::UP;
 	world->addActor(std::move(stairs));
+
+	do {
+		int r = d100();
+		int s = d100();
+		x = (map->width-1) * r / 100;
+		y = (map->height-1) * s / 100;
+	} while (map->isWall(x, y)); // should check for canWalk, but can't do that yet
+
+	std::unique_ptr<Actor> downstairs = std::make_unique<Actor>(x, y, '>', "stairs (down)", sf::Color::White, boost::none);
+    downstairs->blocks = false;
+    downstairs->fovOnly = false;
+	downstairs->transporter = std::make_unique<Transporter>();
+	downstairs->transporter->direction = VerticalDirection::DOWN;
+	world->addActor(std::move(downstairs));
 }
 
 void map_utils::addMcGuffin(World* world, Map* map, int level) {

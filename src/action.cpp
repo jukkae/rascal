@@ -49,24 +49,35 @@ bool MoveAction::execute() {
 bool TraverseStairsAction::execute() {
 	GameplayState* state = actor->s;
 	World* world = actor->world;
-	if(down) {
-		if(world->getStairs()->x == actor->x && world->getStairs()->y == actor->y) {
-			state->nextLevel();
-			return true;
-		} else {
-			state->message(colors::lightGrey, "There are no stairs down here.");
-			return false;
-		}
+	std::vector<Actor*> v = world->getActorsAt(actor->x, actor->y);
+	if(v.size() == 0) {
+		state->message(colors::lightGrey, "There are no stairs here.");
+		return false;
 	}
-	else {
-		if(world->getStairs()->x == actor->x && world->getStairs()->y == actor->y) {
-			state->nextLevel();
-			return true;
-		} else {
-			state->message(colors::lightGrey, "There are no stairs leading up here.");
-			return false;
-		}
+
+	// TODO logic broken
+	Actor* stairsUp = nullptr;
+	stairsUp =	*std::find_if(v.begin(), v.end(), [](const auto& a) {
+				return a->transporter ? a->transporter->direction == VerticalDirection::UP : false;
+			});
+
+	if(stairsUp) {
+		state->nextLevel();
+		return true;
 	}
+
+	Actor* stairsDown = nullptr;
+	stairsDown =	*std::find_if(v.begin(), v.end(), [](const auto& a) {
+						return a->transporter ? a->transporter->direction == VerticalDirection::DOWN : false;
+					});
+
+	if(stairsDown) {
+		state->nextLevel(); // TODO go down
+		return true;
+	}
+
+	state->message(colors::lightGrey, "There are no stairs here.");
+	return false;
 }
 
 bool PickupAction::execute() {
