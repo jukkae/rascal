@@ -2,6 +2,6 @@
 #define DIRECTION_HPP
 
 enum class Direction { N, NE, E, SE, S, SW, W, NW, NONE };
-enum class VerticalDirection { UP, DOWN, NONE }; // H and V directions are not interchangeble in general
+enum class VerticalDirection { UP, DOWN, UP_AND_DOWN, NONE }; // H and V directions are not interchangeble in general
 
 #endif /* DIRECTION_HPP */

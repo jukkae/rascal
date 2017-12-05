@@ -22,6 +22,7 @@ class GameplayState;
 #include "pickable.hpp"
 #include "persistent.hpp"
 #include "status_effect.hpp" // does this have to be included?
+#include "transporter.hpp"
 
 enum class Statistic { CONSTITUTION, STRENGTH, AGILITY, SPEED };
 
@@ -35,23 +36,23 @@ public:
 	boost::optional<float> energy; // Shouldn't be public
 	bool blocks; // does it block movement?
 	bool fovOnly; // visible only when in fov?
-	bool stairs; // is it stairs?
 	std::unique_ptr<Attacker> attacker;
 	std::unique_ptr<Destructible> destructible;
 	std::unique_ptr<Ai> ai;
 	std::unique_ptr<Pickable> pickable;
 	std::unique_ptr<Container> container;
+	std::unique_ptr<Transporter> transporter;
 	Actor* wornWeapon = nullptr;
 
 	GameplayState* s; // temporary for messaging
 	World* world = nullptr;
 
-	Actor(int x = 0, int y = 0, int ch = 'x', std::string name = "", sf::Color col = sf::Color::White, boost::optional<float> energy = boost::none, bool stairs = false);
+	Actor(int x = 0, int y = 0, int ch = 'x', std::string name = "", sf::Color col = sf::Color::White, boost::optional<float> energy = boost::none);
 	~Actor();
 	float update(GameplayState* state);
 	float getDistance(int cx, int cy) const;
 	bool isPlayer() { return ai ? this->ai->isPlayer() : false; }
-	bool isStairs() { return stairs; } // Bod, but better than what I had before
+	bool isStairs() { return transporter.get(); }
 	void addAction(std::unique_ptr<Action> action) { actionsQueue.push_back(std::move(action)); }
 	std::vector<std::unique_ptr<Actor>>& getActors(); // temporary for refactoring
 	Actor* getPlayer(); // TODO access world
@@ -83,7 +84,7 @@ private:
 		ar & pickable;
 		ar & container;
 		ar & actionsQueue;
-		ar & stairs;
+		ar & transporter;
 		ar & wornWeapon;
 		ar & statusEffects;
 		ar & world;
