@@ -122,4 +122,10 @@ void GameplayState::nextLevel() {
 	world->sortActors();
 }
 
+// TODO
+void GameplayState::previousLevel() {
+	if(world->level <= 1) return;
+	else return;
+}
+
 BOOST_CLASS_EXPORT(GameplayState)
