@@ -49,14 +49,18 @@ void Renderer::renderMap(const World* const world, sf::RenderWindow* window) {
 					rectangle.setFillColor(colors::black);
 				}
 				else if(map->tiles[worldX + mapWidth*worldY].inFov) {
-					if(map->tiles[worldX + mapWidth*worldY].terrain == Terrain::WATER) { // TODO broken
+					if(map->tiles[worldX + mapWidth*worldY].terrain == Terrain::WATER && map->tiles[worldX + mapWidth*worldY].walkable) {
 						rectangle.setFillColor(colors::lightBlue);
 					} else {
 						rectangle.setFillColor(map->isWall(worldX, worldY) ? colors::lightWall : colors::lightGround);
 					}
 				}
 				else if(map->isExplored(worldX, worldY)) {
-					rectangle.setFillColor(map->isWall(worldX, worldY) ? colors::darkWall : colors::darkGround);
+					if(map->tiles[worldX + mapWidth*worldY].terrain == Terrain::WATER && map->tiles[worldX + mapWidth*worldY].walkable) {
+						rectangle.setFillColor(colors::darkBlue);
+					} else {
+						rectangle.setFillColor(map->isWall(worldX, worldY) ? colors::darkWall : colors::darkGround);
+					}
 				}
 				else {
 					rectangle.setFillColor(colors::black);
