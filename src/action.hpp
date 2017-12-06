@@ -166,6 +166,20 @@ private:
 	}
 };
 
+class ShootAction : public Action {
+public:
+	ShootAction(Actor* actor, Point target);
+	bool execute();
+	Point target;
+private:
+	friend class boost::serialization::access;
+	template<class Archive>
+	void serialize(Archive & ar, const unsigned int version) {
+		ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(Action);
+		ar & target;
+	}
+};
+
 struct ActionResult {
 	bool succeeded;
 	boost::optional<Action> alternativeAction;

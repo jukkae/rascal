@@ -10,6 +10,7 @@
 #include "engine.hpp"
 #include "gameplay_state.hpp"
 #include "gui.hpp"
+#include "io.hpp"
 #include "inventory_menu_state.hpp"
 #include "map.hpp"
 #include "pickable.hpp"
@@ -83,6 +84,9 @@ std::unique_ptr<Action> PlayerAi::getNextAction(Actor* actor) {
 					else {
 						return std::make_unique<WaitAction>(WaitAction(actor));
 					}
+				}
+				case k::S: {
+					return std::make_unique<ShootAction>(ShootAction(actor, io::mousePosition));
 				}
 				case 56: { // < key
 					if(event.key.shift) {

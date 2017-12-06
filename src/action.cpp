@@ -29,7 +29,11 @@ bool MoveAction::execute() {
 	// look for living actors to attack
 	for (auto& a : world->getActors()) {
 		if (a->destructible && !a->destructible->isDead() && a->x == targetX && a->y == targetY) {
-			if(actor->wornWeapon) actor->wornWeapon->attacker->attack(actor, a.get());
+			if(actor->wornWeapon && actor->wornWeapon->rangedAttacker) {
+				state->message(colors::red, "You can't shoot from this distance!");
+				return false;
+			}
+			if(actor->wornWeapon && actor->wornWeapon->attacker) actor->wornWeapon->attacker->attack(actor, a.get());
 			else actor->attacker->attack(actor, a.get());
 			return true;
 		}
@@ -141,5 +145,17 @@ LookAction::LookAction(Actor* actor, Point location):
 
 bool LookAction::execute() {
 	actor->s->message(colors::lightGrey, "You take a look around. The building is as bleak from inside.");
+	return true;
+}
+
+ShootAction::ShootAction(Actor* actor, Point target):
+	Action(actor, 100.0f), target(target) {;}
+
+bool ShootAction::execute() {
+	if(!actor->wornWeapon || !actor->wornWeapon->rangedAttacker) {
+		actor->s->message(colors::lightRed, "Shoot with what?");
+		return false;
+	}
+	actor->s->message(colors::lightGrey, "You pull the trigger.");
 	return true;
 }
