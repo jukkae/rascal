@@ -86,10 +86,15 @@ void Gui::renderStats(World* world, sf::RenderWindow* window) {
 		d = player->attacker->dice;
 		b = player->attacker->bonus;
 	}
-	else {
+	else if(player->wornWeapon->attacker) {
 		n = player->wornWeapon->attacker->numberOfDice;
 		d = player->wornWeapon->attacker->dice;
 		b = player->wornWeapon->attacker->bonus;
+	}
+	else {
+		n = player->wornWeapon->rangedAttacker->numberOfDice;
+		d = player->wornWeapon->rangedAttacker->dice;
+		b = player->wornWeapon->rangedAttacker->bonus;
 	}
 	std::string atkString = "dm: " + std::to_string(n) + "d" + std::to_string(d) + "+" + std::to_string(b);
 	sf::Text atkText(atkString, font::mainFont, 16);

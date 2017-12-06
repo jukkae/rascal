@@ -114,12 +114,13 @@ bool UseItemAction::execute() {
 }
 
 bool DropItemAction::execute() {
+	// TODO see if item is worn, and if it is, drop
 	item->pickable->drop(item, actor);
 	return true;
 }
 
 bool WieldItemAction::execute() {
-	if(item->attacker) {
+	if(item->attacker || item->rangedAttacker) {
 		actor->wornWeapon = item;
 		return true;
 	} else return false;
