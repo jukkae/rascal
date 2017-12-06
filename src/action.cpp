@@ -166,6 +166,7 @@ bool ShootAction::execute() {
 		return false;
 	} else { // TODO shoot someone at random
 		// TODO check for range
+		// TODO check for LOS
 		// TODO require bullets
 		Actor* enemy = actors.front();
 		actor->wornWeapon->rangedAttacker->attack(actor, enemy);
