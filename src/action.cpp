@@ -156,6 +156,18 @@ bool ShootAction::execute() {
 		actor->s->message(colors::lightRed, "Shoot with what?");
 		return false;
 	}
-	actor->s->message(colors::lightGrey, "You pull the trigger.");
+
+	int worldX = target.x;
+	int worldY = target.y;
+
+	std::vector<Actor*> actors = actor->world->getActorsAt(worldX, worldY);
+	if(actors.empty()) {
+		actor->s->message(colors::lightRed, "There's nobody there!");
+		return false;
+	} else { // TODO shoot someone at random
+		// TODO check for range
+		Actor* enemy = actors.front();
+		actor->wornWeapon->rangedAttacker->attack(actor, enemy);
+	}
 	return true;
 }

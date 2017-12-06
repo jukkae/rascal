@@ -39,7 +39,8 @@ public:
 	RangedAttacker(int numberOfDice = 1, int dice = 0, int bonus = 0, float range = 0.0f):
 		numberOfDice(numberOfDice), dice(dice), bonus(bonus), range(range) {;}
 
-	void attack(Actor* owner, Point target);
+	void attack(Actor* owner, Actor* target);
+	int getAttackBaseDamage();
 
 	int numberOfDice;
 	int dice;
