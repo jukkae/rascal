@@ -12,6 +12,7 @@
 #include <boost/serialization/vector.hpp>
 #include <SFML/Graphics/Color.hpp>
 class Attacker;
+class RangedAttacker;
 class Destructible;
 class Pickable;
 class GameplayState;
@@ -37,6 +38,7 @@ public:
 	bool blocks; // does it block movement?
 	bool fovOnly; // visible only when in fov?
 	std::unique_ptr<Attacker> attacker;
+	std::unique_ptr<RangedAttacker> rangedAttacker;
 	std::unique_ptr<Destructible> destructible;
 	std::unique_ptr<Ai> ai;
 	std::unique_ptr<Pickable> pickable;
@@ -75,6 +77,7 @@ private:
 		ar & blocks;
 		ar & fovOnly;
 		ar & attacker;
+		ar & rangedAttacker;
 		ar & destructible;
 		ar & ai;
 		ar & pickable;

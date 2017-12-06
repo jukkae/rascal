@@ -50,3 +50,7 @@ int Attacker::getAttackBaseDamage() {
 	dmg += bonus;
 	return dmg;
 }
+
+void RangedAttacker::attack(Actor* owner, Point target) {
+
+}

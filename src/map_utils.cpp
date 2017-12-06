@@ -131,54 +131,60 @@ void map_utils::addMonster(World* world, Map* map, int x, int y) {
 
 std::unique_ptr<Actor> map_utils::makeItem(World* world, Map* map, int x, int y) {
 	int r = d100();
-	if(r < 40) {
+	if(r < 30) {
 		std::unique_ptr<Actor> stimpak = std::make_unique<Actor>(x, y, '!', "stimpak", sf::Color(128, 0, 128));
 		stimpak->blocks = false;
 		stimpak->pickable = std::make_unique<Pickable>(TargetSelector(TargetSelector::SelectorType::WEARER, 0), std::make_unique<HealthEffect>(4, "Damn, that does feel good!"));
 		return stimpak;
-	} else if(r < 50) {
+	} else if(r < 40) {
 		std::unique_ptr<Actor> fakeStimpak = std::make_unique<Actor>(x, y, '!', "stimpak", sf::Color(128, 128, 128));
 		fakeStimpak->blocks = false;
 		fakeStimpak->pickable = std::make_unique<Pickable>(TargetSelector(TargetSelector::SelectorType::WEARER, 0), std::make_unique<StatusEffectEffect>(std::make_unique<PoisonedStatusEffect>(PoisonedStatusEffect()), "Damn, that does NOT feel good!"));
 		return fakeStimpak;
-	} else if(r < 60) {
+	} else if(r < 50) {
 		std::unique_ptr<Actor> blasterBoltDevice = std::make_unique<Actor>(x, y, '?', "blaster bolt device", sf::Color(128, 128, 0));
 		blasterBoltDevice->blocks = false;
 		blasterBoltDevice->pickable = std::make_unique<Pickable>(TargetSelector(TargetSelector::SelectorType::CLOSEST_MONSTER, 5), std::make_unique<HealthEffect>(-20, "The %s is hit by a blast!\n The damage is %g hit points."));
 		return blasterBoltDevice;
-	} else if(r < 70) {
+	} else if(r < 60) {
 		std::unique_ptr<Actor> fragGrenade = std::make_unique<Actor>(x, y, '?', "fragmentation grenade", sf::Color(128, 255, 128));
 		fragGrenade->blocks = false;
 		fragGrenade->pickable = std::make_unique<Pickable>(TargetSelector(TargetSelector::SelectorType::SELECTED_RANGE, 3), std::make_unique<HealthEffect>(-12, "The grenade explodes, hurting the %s for %g hit points!"));
 		return fragGrenade;
-	} else if(r < 80) {
+	} else if(r < 70) {
 		std::unique_ptr<Actor> confusor = std::make_unique<Actor>(x, y, '?', "confusor", sf::Color(128, 128, 255));
 		confusor->blocks = false;
 		confusor->pickable = std::make_unique<Pickable>(TargetSelector(TargetSelector::SelectorType::SELECTED_MONSTER, 5), std::make_unique<AiChangeEffect>(std::make_unique<ConfusedMonsterAi>(10), "The eyes of the %s look vacant!"));
 		return confusor;
-	} else if(r < 85) {
+	} else if(r < 75) {
 		std::unique_ptr<Actor> teslaCoil = std::make_unique<Actor>(x, y, '#', "tesla coil", sf::Color(128, 128, 255));
 		teslaCoil->blocks = false;
 		teslaCoil->pickable = std::make_unique<Pickable>(TargetSelector(TargetSelector::SelectorType::WEARER_RANGE, 5), std::make_unique<HealthEffect>(-6, "The tesla coil sputters, emitting raw\n electricity, hurting %s for %g hp!"));
 		return teslaCoil;
-	} else if(r < 90) {
+	} else if(r < 80) {
 		std::unique_ptr<Actor> baton = std::make_unique<Actor>(x, y, '|', "stun baton", sf::Color(128, 128, 255));
 		baton->blocks = false;
 		baton->pickable = std::make_unique<Pickable>();
 		baton->attacker = std::make_unique<Attacker>(1, 8, 1);
 		return baton;
-	} else if(r < 95) {
+	} else if(r < 85) {
 		std::unique_ptr<Actor> knuckleduster = std::make_unique<Actor>(x, y, '|', "knuckle duster", sf::Color(128, 255, 128));
 		knuckleduster->blocks = false;
 		knuckleduster->pickable = std::make_unique<Pickable>();
 		knuckleduster->attacker = std::make_unique<Attacker>(2, 6, 2);
 		return knuckleduster;
-	} else {
+	} else if(r < 90) {
 		std::unique_ptr<Actor> rock = std::make_unique<Actor>(x, y, '|', "rock", sf::Color(255, 128, 128));
 		rock->blocks = false;
 		rock->pickable = std::make_unique<Pickable>();
 		rock->attacker = std::make_unique<Attacker>(1, 4, 0);
 		return rock;
+	} else {
+		std::unique_ptr<Actor> pistol = std::make_unique<Actor>(x, y, '\\', "pistol", sf::Color(255, 128, 255));
+		pistol->blocks = false;
+		pistol->pickable = std::make_unique<Pickable>();
+		pistol->rangedAttacker = std::make_unique<RangedAttacker>(1, 4, 0, 10.0);
+		return pistol;
 	}
 }
 
