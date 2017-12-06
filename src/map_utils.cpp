@@ -179,12 +179,18 @@ std::unique_ptr<Actor> map_utils::makeItem(World* world, Map* map, int x, int y)
 		rock->pickable = std::make_unique<Pickable>();
 		rock->attacker = std::make_unique<Attacker>(1, 4, 0);
 		return rock;
-	} else {
+	} else if(r < 95) {
 		std::unique_ptr<Actor> pistol = std::make_unique<Actor>(x, y, '\\', "pistol", sf::Color(255, 128, 255));
 		pistol->blocks = false;
 		pistol->pickable = std::make_unique<Pickable>();
 		pistol->rangedAttacker = std::make_unique<RangedAttacker>(1, 4, 0, 10.0);
 		return pistol;
+	} else {
+		std::unique_ptr<Actor> rifle = std::make_unique<Actor>(x, y, '\\', "rifle", sf::Color(128, 255, 255));
+		rifle->blocks = false;
+		rifle->pickable = std::make_unique<Pickable>();
+		rifle->rangedAttacker = std::make_unique<RangedAttacker>(2, 6, 0, 10.0);
+		return rifle;
 	}
 }
 
