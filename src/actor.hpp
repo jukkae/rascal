@@ -3,6 +3,7 @@
 
 #include <string>
 #include <queue>
+#include <experimental/optional>
 #include <boost/optional.hpp>
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
@@ -18,6 +19,7 @@ class Pickable;
 class GameplayState;
 
 #include "ai.hpp"
+#include "animation.hpp"
 #include "container.hpp" // must be included for serialization
 #include "destructible.hpp"
 #include "pickable.hpp"
@@ -45,6 +47,7 @@ public:
 	std::unique_ptr<Container> container;
 	std::unique_ptr<Transporter> transporter;
 	Actor* wornWeapon = nullptr;
+	std::experimental::optional<Animation> animation;
 
 	GameplayState* s; // temporary for messaging TODO remove
 	World* world = nullptr;
