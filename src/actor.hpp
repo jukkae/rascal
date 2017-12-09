@@ -90,6 +90,7 @@ private:
 		ar & wornWeapon;
 		ar & statusEffects;
 		ar & world;
+		ar & animation;
     }   
 };
 #endif /* ACTOR_HPP */
