@@ -1,3 +1,4 @@
+#include "animation.hpp"
 #include "colors.hpp"
 #include "font.hpp"
 #include "gameplay_state.hpp"
@@ -47,10 +48,18 @@ void Renderer::renderMap(const World* const world, sf::RenderWindow* window) {
 
 				if(worldX < 0 || worldX >= mapWidth || worldY < 0 || worldY >= mapHeight) {
 					rectangle.setFillColor(colors::black);
-				}
+				} // TODO this code is getting bad
 				else if(map->tiles[worldX + mapWidth*worldY].inFov) {
 					if(map->tiles[worldX + mapWidth*worldY].terrain == Terrain::WATER && map->tiles[worldX + mapWidth*worldY].walkable) {
-						rectangle.setFillColor(colors::lightBlue);
+						if(map->tiles[worldX + mapWidth*worldY].animation) {
+							Animation& animation = const_cast<Animation&>(*map->tiles[worldX + mapWidth*worldY].animation); // TODO i know i know
+							int index = animation.phase;
+							animation.phase++;
+							if(animation.phase >= animation.colors.size()) animation.phase = 0;
+							sf::Color color = animation.colors.at(index);
+							rectangle.setFillColor(color);
+						}
+						//rectangle.setFillColor(colors::lightBlue);
 					} else {
 						rectangle.setFillColor(map->isWall(worldX, worldY) ? colors::lightWall : colors::lightGround);
 					}

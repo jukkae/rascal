@@ -89,6 +89,15 @@ void Map::generateWaterMap() {
 	for(int x = 0; x < width; ++x) {
 		for(int y = 0; y < height; ++y) {
 			tiles.at(x + y*width).terrain = Terrain::WATER;
+			Animation anim;
+			anim.chars = std::vector<char>(); // empty on purpose
+			anim.colors = std::vector<sf::Color>();
+			anim.colors.push_back(sf::Color::White);
+			anim.colors.push_back(sf::Color::Red); // TODO
+			anim.charFreq = 1;
+			anim.colFreq = 1;
+			anim.phase = 0.0f;
+			tiles.at(x + y*width).animation = anim;
 		}
 	}
 	for(int x = 0; x < width; ++x) {

@@ -4,11 +4,13 @@
 #include <vector>
 #include <fstream>
 #include <sstream>
+#include <experimental/optional>
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/serialization/export.hpp>
 #include "vec.hpp"
 #include "rect.hpp"
+#include "animation.hpp"
 class Actor;
 class GameplayState;
 class World;
@@ -21,6 +23,7 @@ struct Tile {
 	bool transparent;
 	bool walkable;
 	Terrain terrain;
+	std::experimental::optional<Animation> animation;
 	Tile() : explored(false), inFov(false), transparent(true), walkable(true), terrain(Terrain::NORMAL) {;}
 
 	template<typename Archive>
@@ -30,6 +33,7 @@ struct Tile {
 		ar & transparent;
 		ar & walkable;
 		ar & terrain;
+		// ar & animation; TODO fix serialization
 	}
 };
 

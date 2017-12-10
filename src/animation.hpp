@@ -8,6 +8,7 @@ struct Animation {
 	std::vector<sf::Color> colors;
 	int charFreq;
 	int colFreq;
+	int phase;
 
 	template<typename Archive>
 	void serialize(Archive & ar, const unsigned int version) {
@@ -15,6 +16,7 @@ struct Animation {
 		ar & colors;
 		ar & charFreq;
 		ar & colFreq;
+		ar & phase;
 	}
 };
 
