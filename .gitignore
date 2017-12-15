@@ -12,3 +12,4 @@ frameworks/
 *.la
 *.lai
 *.dylib
+*.app
