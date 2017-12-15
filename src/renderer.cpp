@@ -53,9 +53,9 @@ void Renderer::renderMap(const World* const world, sf::RenderWindow* window) {
 					if(map->tiles[worldX + mapWidth*worldY].terrain == Terrain::WATER && map->tiles[worldX + mapWidth*worldY].walkable) {
 						if(map->tiles[worldX + mapWidth*worldY].animation) {
 							Animation& animation = const_cast<Animation&>(*map->tiles[worldX + mapWidth*worldY].animation); // TODO i know i know
-							int index = animation.phase;
+							int index = animation.phase / animation.colFreq;
 							animation.phase++;
-							if(animation.phase >= animation.colors.size()) animation.phase = 0;
+							if(animation.phase >= animation.colors.size() * animation.colFreq) animation.phase = 0;
 							sf::Color color = animation.colors.at(index);
 							rectangle.setFillColor(color);
 						}

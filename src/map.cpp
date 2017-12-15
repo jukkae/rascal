@@ -92,10 +92,10 @@ void Map::generateWaterMap() {
 			Animation anim;
 			anim.chars = std::vector<char>(); // empty on purpose
 			anim.colors = std::vector<sf::Color>();
-			anim.colors.push_back(sf::Color::White);
-			anim.colors.push_back(sf::Color::Red); // TODO
+			anim.colors.push_back(colors::lightBlue);
+			anim.colors.push_back(colors::lighterBlue); // TODO
 			anim.charFreq = 1;
-			anim.colFreq = 1;
+			anim.colFreq = 10;
 			anim.phase = 0.0f;
 			tiles.at(x + y*width).animation = anim;
 		}
