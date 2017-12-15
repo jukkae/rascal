@@ -34,8 +34,6 @@ clean:
 run:
 	./rascal
 
-# bundle: first make, then make appbundle, then make bundle-deps, then copy assets
-# also copy extlibs for sfml
 APPNAME=Rascal
 APPBUNDLE=$(APPNAME).app
 APPBUNDLECONTENTS=$(APPBUNDLE)/Contents
@@ -73,7 +71,6 @@ macosx/$(APPNAME).icns: macosx/$(APPNAME)Icon.png
 	cp macosx/$(APPNAME)Icon.png macosx/$(APPNAME).iconset/icon_512x512@2x.png
 	iconutil -c icns -o macosx/$(APPNAME).icns macosx/$(APPNAME).iconset
 	rm -r macosx/$(APPNAME).iconset
-
 
 bundle-deps:
 	cp -r ./assets/ $(APPBUNDLE)/Contents/Resources/Assets/
