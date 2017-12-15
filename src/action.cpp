@@ -118,7 +118,9 @@ bool UseItemAction::execute() {
 }
 
 bool DropItemAction::execute() {
-	// TODO see if item is worn, and if it is, drop
+	if(actor->wornWeapon == item) { // TODO order of actions is wrong
+		actor->addAction(std::make_unique<UnWieldItemAction>(UnWieldItemAction(actor)));
+	}
 	item->pickable->drop(item, actor);
 	return true;
 }
