@@ -3,7 +3,7 @@
 CXX=clang
 CPPFLAGS=-Wall -std=c++1z
 INCLUDEDIRS=-I./include
-LDFLAGS=-lc++ -lboost_serialization -framework SFML -framework sfml-window -framework sfml-graphics -framework sfml-system -rpath @executable_path/../Frameworks  
+LDFLAGS=-lc++ -lboost_serialization -framework SFML -framework sfml-window -framework sfml-graphics -framework sfml-system -framework CoreFoundation -rpath @executable_path/../Resources/Frameworks
 
 SRC := src
 OBJ := obj
@@ -51,6 +51,7 @@ appbundle: macosx/$(APPNAME).icns
 	mkdir $(APPBUNDLE)/Contents/Resources
 	mkdir $(APPBUNDLE)/Contents/Resources/Libs
 	mkdir $(APPBUNDLE)/Contents/Resources/Frameworks
+	mkdir $(APPBUNDLE)/Contents/Frameworks
 	mkdir $(APPBUNDLE)/Contents/Resources/Assets/
 	cp macosx/Info.plist $(APPBUNDLECONTENTS)/
 	cp macosx/PkgInfo $(APPBUNDLECONTENTS)/
@@ -75,10 +76,12 @@ macosx/$(APPNAME).icns: macosx/$(APPNAME)Icon.png
 
 
 bundle-deps:
+	cp -r ./assets/ $(APPBUNDLE)/Contents/Resources/Assets/
 	cp -r ./frameworks/ $(APPBUNDLE)/Contents/Resources/Frameworks/
-	cp ./macosx/freetype.framework -r $(APPBUNDLE)/Contents/Resources/Frameworks/
-	../macdylibbundler/dylibbundler -b -x ./Rascal.app/Contents/MacOS/Rascal -d ./Rascal.app/Contents/Resources/Libs -od
-	install_name_tool -change @rpath/SFML.framework/Versions/2.4.2/SFML @executable_path/../Frameworks/SFML.framework/Versions/2.4.2/SFML Rascal
-	install_name_tool -change @rpath/sfml-window.framework/Versions/2.4.2/sfml-window @executable_path/../Frameworks/sfml-window.framework/Versions/2.4.2/sfml-window Rascal
-	install_name_tool -change @rpath/sfml-graphics.framework/Versions/2.4.2/sfml-graphics @executable_path/../Frameworks/sfml-graphics.framework/Versions/2.4.2/sfml-graphics Rascal
-	install_name_tool -change @rpath/sfml-system.framework/Versions/2.4.2/sfml-system @executable_path/../Frameworks/sfml-system.framework/Versions/2.4.2/sfml-system Rascal
+	cp -r ./macosx/freetype.framework/ $(APPBUNDLE)/Contents/Resources/Frameworks/freetype.framework/
+	cp -r ./macosx/freetype.framework/ $(APPBUNDLE)/Contents/Frameworks/freetype.framework/
+	../macdylibbundler/dylibbundler -b -x ./Rascal.app/Contents/MacOS/Rascal -d ./Rascal.app/Contents/Resources/Libs -od -p @executable_path/../Resources/Libs
+	install_name_tool -change @executable_path/../Frameworks/SFML.framework/Versions/2.4.2/SFML @executable_path/../Resources/Frameworks/SFML.framework/Versions/2.4.2/SFML ./Rascal.app/Contents/MacOS/Rascal
+	install_name_tool -change @executable_path/../Frameworks/sfml-window.framework/Versions/2.4.2/sfml-window @executable_path/../Resources/Frameworks/sfml-window.framework/Versions/2.4.2/sfml-window ./Rascal.app/Contents/MacOS/Rascal
+	install_name_tool -change @executable_path/../Frameworks/sfml-graphics.framework/Versions/2.4.2/sfml-graphics @executable_path/../Resources/Frameworks/sfml-graphics.framework/Versions/2.4.2/sfml-graphics ./Rascal.app/Contents/MacOS/Rascal
+	install_name_tool -change @executable_path/../Frameworks/sfml-system.framework/Versions/2.4.2/sfml-system @executable_path/../Resources/Frameworks/sfml-system.framework/Versions/2.4.2/sfml-system ./Rascal.app/Contents/MacOS/Rascal
