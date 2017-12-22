@@ -38,6 +38,8 @@ clean:
 run:
 	./rascal
 
+bundle: build-for-bundle appbundle bundle-deps
+
 APPNAME=Rascal
 APPBUNDLE=$(APPNAME).app
 APPBUNDLECONTENTS=$(APPBUNDLE)/Contents
