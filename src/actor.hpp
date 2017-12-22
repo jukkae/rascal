@@ -68,10 +68,10 @@ private:
 	std::deque<std::unique_ptr<Action>> actionsQueue;
 	std::vector<std::unique_ptr<StatusEffect>> statusEffects;
 
-	friend class boost::serialization::access;                                                                
-    template<class Archive>                                                                                   
-    void serialize(Archive & ar, const unsigned int version) {                                                
-        ar & x;
+	friend class boost::serialization::access;
+	template<class Archive>
+	void serialize(Archive & ar, const unsigned int version) {
+		ar & x;
 		ar & y;
 		ar & ch;
 		ar & col;
