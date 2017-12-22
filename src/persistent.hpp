@@ -30,7 +30,13 @@ void save (
 	const std::experimental::optional<T> & t,
 	const unsigned int file_version
 ) {
-// TODO
+	const bool isInitialized = t ? true : false;
+	ar << boost::serialization::make_nvp("initialized", isInitialized);
+	if (isInitialized){
+		const boost::serialization::item_version_type item_version(version<T>::value);
+		ar << BOOST_SERIALIZATION_NVP(item_version);
+		ar << boost::serialization::make_nvp("value", *t);
+	}
 }
 
 template<class Archive, class T>
@@ -39,7 +45,24 @@ void load (
 	std::experimental::optional<T> & t,
 	const unsigned int file_version
 ) {
-// TODO
+	bool isInitialized;
+	ar >> boost::serialization::make_nvp("initialized", isInitialized);
+	if (isInitialized){
+		boost::serialization::item_version_type item_version(0);
+		boost::archive::library_version_type library_version(
+			ar.get_library_version()
+		);
+		if(boost::archive::library_version_type(3) < library_version){
+			// item_version is handled as an attribute so it doesnt need an NVP
+			ar >> BOOST_SERIALIZATION_NVP(item_version);
+		}
+		detail::stack_construct<Archive, T> aux(ar, item_version);
+		ar >> boost::serialization::make_nvp("value", aux.reference());
+		t = aux.reference();
+	}
+	else {
+		// t.reset(); // should be uninitialized anywaw
+	}
 }
 
 template<class Archive, class T>
