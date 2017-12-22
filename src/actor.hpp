@@ -34,7 +34,7 @@ class Actor {
 public:
 	int x, y; // FIXME reimplement in terms of Point
 	int ch; // ASCII code // TODO
-	sf::Color col; // color
+	sf::Color col; // color // TODO animation (?)
 	std::string name;
 	boost::optional<float> energy; // Shouldn't be public
 	bool blocks; // does it block movement?
