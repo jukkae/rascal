@@ -33,7 +33,7 @@ struct Tile {
 		ar & transparent;
 		ar & walkable;
 		ar & terrain;
-		// ar & animation; TODO fix serialization
+		ar & animation;
 	}
 };
 
