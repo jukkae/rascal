@@ -4,6 +4,7 @@ CXX=clang
 CPPFLAGS=-Wall -std=c++1z
 INCLUDEDIRS=-I./include
 LDFLAGS=-lc++ -lboost_serialization -framework SFML -framework sfml-window -framework sfml-graphics -framework sfml-system -framework CoreFoundation -rpath @executable_path/../Resources/Frameworks
+BUNDLE_BUILD=-DBUNDLE_BUILD
 
 SRC := src
 OBJ := obj
@@ -27,6 +28,9 @@ $(OBJ)/%.o: $(SRC)/%.cpp
 
 compile-debug: clean $(OBJS)
 	$(CXX) $(SOURCES) -o rascal $(CPPFLAGS) -Iinclude $(LDFLAGS) -I/usr/local/include -g -O0
+
+build-for-bundle: clean $(OBJS)
+	$(CXX) $(SOURCES) -o rascal $(CPPFLAGS) -Iinclude $(LDFLAGS) -I/usr/local/include $(BUNDLE_BUILD)
 
 clean:
 	rm -rf *.o rascal save.txt rascal.dSYM obj/*.o

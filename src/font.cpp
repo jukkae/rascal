@@ -9,6 +9,9 @@ sf::Font font::mainFont;
 sf::Font font::squareFont;
 
 extern void font::load() {
+#ifdef BUNDLE_BUILD
+	//std::cout << "BUNDLE BUILD DETECTED\n";
+#endif
 #ifdef __APPLE__
 	// FIXME this ifdef only when building appbundle!
 	CFBundleRef mainBundle = CFBundleGetMainBundle();
