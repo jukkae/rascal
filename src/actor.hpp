@@ -36,7 +36,7 @@ public:
 	int ch; // ASCII code // TODO
 	sf::Color col; // color // TODO animation (?)
 	std::string name;
-	boost::optional<float> energy; // Shouldn't be public
+	boost::optional<float> energy; // Shouldn't be public // TODO should be std::optional
 	bool blocks; // does it block movement?
 	bool fovOnly; // visible only when in fov?
 	std::unique_ptr<Attacker> attacker;
