@@ -10,6 +10,7 @@ void addItems(World* world, Map* map);
 void addMonsters(World* world, Map* map);
 void addPlayer(World* world, Map* map);
 void addStairs(World* world, Map* map);
+void addStairs(World* world, Map* map, int dsX, int dsY); // TODO temp
 void addMcGuffin(World* world, Map* map, int level);
 
 std::unique_ptr<Actor> makeMonster(World* world, Map* map, int x, int y);

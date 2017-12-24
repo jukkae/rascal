@@ -80,6 +80,21 @@ void GameplayState::message(sf::Color col, std::string text, ...) {
 // Bulk: map helper?
 // FIXME ugly and brittle
 void GameplayState::nextLevel() {
+	Actor* downstairs = nullptr;
+	for(auto& a : world->actors) {
+		if(a->name == "stairs (up)") { 
+			downstairs = a.get();
+			std::cout << "upstairs found!\n";
+		}
+	}
+	int downstairsX = 0;
+	int downstairsY = 0;
+	if(downstairs) {
+		downstairsX = downstairs->x;
+		downstairsY = downstairs->y;
+		std::cout << "ds: " << downstairsX << ", " << downstairsY << "\n";
+	}
+
 	if(levels.size() > world->level) {
 		std::unique_ptr<Actor> player;
 		auto it = world->actors.begin();
@@ -130,9 +145,14 @@ void GameplayState::nextLevel() {
 
 	map_utils::addItems(world, &world->map);
 	map_utils::addMonsters(world, &world->map);
-	map_utils::addStairs(world, &world->map);
+	if(downstairs) {
+		map_utils::addStairs(world, &world->map, downstairsX, downstairsY);
+	} else {
+		map_utils::addStairs(world, &world->map);
+	}
 	map_utils::addMcGuffin(world, &world->map, world->level);
 
+	std::cout << "player pos: " << player->x << ", " << player->y << "\n";
 	world->addActor(std::move(player));
 
 	for (auto& a : world->actors) a->setState(this);
