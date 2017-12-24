@@ -112,6 +112,7 @@ void GameplayState::nextLevel() {
 
 	std::unique_ptr<World> w = std::make_unique<World>(120, 72);
 	w->level = world->level + 1;
+	w->time = world->time;
 	if(w->level > 5) {
 		std::unique_ptr<State> victoryState = std::make_unique<VictoryState>(engine, world->getPlayer());
 		engine->pushState(std::move(victoryState));
