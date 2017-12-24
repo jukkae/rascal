@@ -2,7 +2,6 @@
 
 CXX=clang
 CPPFLAGS=-Wall -std=c++1z
-INCLUDEDIRS=-I./include
 LDFLAGS=-lc++ -lboost_serialization -framework SFML -framework sfml-window -framework sfml-graphics -framework sfml-system -framework CoreFoundation -rpath @executable_path/../Resources/Frameworks
 BUNDLE_BUILD=-DBUNDLE_BUILD
 
