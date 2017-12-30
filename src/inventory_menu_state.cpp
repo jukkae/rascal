@@ -15,7 +15,7 @@ actor(actor) {
 
 	std::sort(inventoryContents.begin(), inventoryContents.end(), [](const Actor* lhs, const Actor* rhs)
 		{
-			return lhs->name < rhs->name;
+			return lhs->name < rhs->name; // TODO this line segfaults after drops sometimes
 		}
 	);
 

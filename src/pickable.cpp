@@ -147,7 +147,7 @@ bool Pickable::use(Actor* owner, Actor* wearer) {
 }
 
 void Pickable::drop(Actor* owner, Actor* wearer) {
-	if(wearer->container) {
+	if(wearer->container) { // TODO method of finding is sketchy af and segfaults...
 		std::string ownerName = owner->name;
 		const auto it = std::remove_if(
 				wearer->container->inventory.begin(),
@@ -157,7 +157,7 @@ void Pickable::drop(Actor* owner, Actor* wearer) {
 
 		wearer->container->inventory.erase(it);
 
-		item->x = wearer->x;
+		item->x = wearer->x; // ...here: item is nullptr sometimes
 		item->y = wearer->y;
 		wearer->world->addActor(std::move(item));
 		wearer->s->message(colors::lightGrey, "%s drops a %s.", wearer->name.c_str(), ownerName.c_str());
