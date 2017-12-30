@@ -32,7 +32,7 @@ void GameOverState::handleEvents() {
 			switch(event.key.code) {
 				case k::Return: {
 					std::unique_ptr<State> mainMenuState = std::make_unique<MainMenuState>(engine, window);
-					changeState(std::move(mainMenuState));
+					changeState(std::move(mainMenuState)); // TODO THIS segfaults
 					break;
 				}
 				default: break;
@@ -53,12 +53,8 @@ void GameOverState::update() {
 void GameOverState::render() {
 	int x = 2;
 	int y = 2;
-	// TODO segfaults come from *text*...
-	//sf::Text text(description, font::mainFont, 16);
-	//text.setPosition(x * constants::CELL_WIDTH, y * constants::CELL_HEIGHT);
-	//text.setFillColor(colors::brightBlue);
-	//std::cout << font::mainFont.getInfo().family << "\n"; WORKS
-	//window->draw(text);
-	// might be due to having two sets of headers and binaries of sfml?
-	// sf::RenderTarget::setActive // draw functions
+	sf::Text text(description, font::mainFont, 16);
+	text.setPosition(x * constants::CELL_WIDTH, y * constants::CELL_HEIGHT);
+	text.setFillColor(colors::brightBlue);
+	window->draw(text);
 }
