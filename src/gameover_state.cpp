@@ -32,7 +32,7 @@ void GameOverState::handleEvents() {
 			switch(event.key.code) {
 				case k::Return: {
 					std::unique_ptr<State> mainMenuState = std::make_unique<MainMenuState>(engine, window);
-					changeState(std::move(mainMenuState)); // TODO THIS segfaults
+					changeState(std::move(mainMenuState));
 					break;
 				}
 				default: break;
