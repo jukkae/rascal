@@ -1,6 +1,8 @@
 #ifndef ENGINE_COMMAND_HPP
 #define ENGINE_COMMAND_HPP
+#include <memory> // for unique_ptr
 class Engine;
+class State;
 class EngineCommand {
 public:
 	virtual ~EngineCommand() {}
@@ -32,5 +34,15 @@ public:
 	void execute();
 private:
 	Engine* engine;
+};
+
+class ChangeStateCommand : public EngineCommand {
+public:
+	ChangeStateCommand(Engine* engine, std::unique_ptr<State> state);
+	//~ChangeStateCommand() {} // FIXME can't delete
+	void execute();
+private:
+	Engine* engine;
+	std::unique_ptr<State> state;
 };
 #endif /* ENGINE_COMMAND_HPP */

@@ -75,8 +75,7 @@ void Engine::pushState(std::unique_ptr<State> state) {
 
 
 void Engine::changeState(std::unique_ptr<State> state) {
-	popState();
-	pushState(std::move(state));
+	engineCommands.push(std::make_unique<ChangeStateCommand>(this, std::move(state)));
 }
 
 void Engine::popState() {
