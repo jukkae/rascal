@@ -12,7 +12,6 @@ public:
 class NewGameCommand : public EngineCommand {
 public:
 	NewGameCommand(Engine* engine) : engine(engine) {;}
-	~NewGameCommand() {}
 	void execute();
 private:
 	Engine* engine;
@@ -21,7 +20,6 @@ private:
 class ContinueCommand : public EngineCommand {
 public:
 	ContinueCommand(Engine* engine) : engine(engine) {;}
-	~ContinueCommand() {}
 	void execute();
 private:
 	Engine* engine;
@@ -30,7 +28,6 @@ private:
 class ExitCommand : public EngineCommand {
 public:
 	ExitCommand(Engine* engine) : engine(engine) {;}
-	~ExitCommand() {}
 	void execute();
 private:
 	Engine* engine;
@@ -39,7 +36,6 @@ private:
 class ChangeStateCommand : public EngineCommand {
 public:
 	ChangeStateCommand(Engine* engine, std::unique_ptr<State> state);
-	//~ChangeStateCommand() {} // FIXME can't delete
 	void execute();
 private:
 	Engine* engine;
