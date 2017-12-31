@@ -15,5 +15,6 @@ extern Point mousePosition; // note: already in WORLD coordinates!
 
 bool waitForMouseClick(GameplayState* state);
 bool fileExists(std::string name);
+bool removeFile(std::string name);
 } // namespace io
 #endif /* IO_HPP */

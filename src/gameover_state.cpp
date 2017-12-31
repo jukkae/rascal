@@ -7,7 +7,6 @@
 #include "io.hpp"
 #include "main_menu_state.hpp"
 #include <iostream>
-#include <stdio.h>
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
@@ -19,7 +18,7 @@ State(engine, engine->getWindow())
 	description = "you died at level ";
 	description.append(std::to_string(((PlayerAi*)actor->ai.get())->xpLevel));
 	if(io::fileExists(constants::SAVE_FILE_NAME)) {
-		remove(constants::SAVE_FILE_NAME.c_str());
+		io::removeFile(constants::SAVE_FILE_NAME);
 	}
 }
 

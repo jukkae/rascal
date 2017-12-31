@@ -5,6 +5,7 @@
 #include "point.hpp"
 #include <SFML/Graphics.hpp>
 #include <sys/stat.h>
+#include <stdio.h>
 
 bool io::waitForMouseClick(GameplayState* state) {
 	while(true) {
@@ -26,5 +27,11 @@ bool io::fileExists(std::string name) {
 	int result = stat (name.c_str(), &buf);
 
 	if(result == 0) return true;
-	else return false; // FIXME need to check for errors?
+	else return false;
+}
+
+bool io::removeFile(std::string name) {
+	int result = remove(name.c_str());
+	if(result == 0) return true;
+	else return false;
 }
