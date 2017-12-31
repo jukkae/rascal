@@ -1,7 +1,7 @@
 #ifndef STATE_HPP
 #define STATE_HPP
-#include "boost/serialization/base_object.hpp"
-#include "boost/serialization/assume_abstract.hpp"
+#include <boost/serialization/base_object.hpp>
+#include <boost/serialization/assume_abstract.hpp>
 #include "engine.hpp"
 #include <SFML/Window.hpp>
 class State {

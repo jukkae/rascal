@@ -11,7 +11,7 @@
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/serialization/export.hpp>
 #include <boost/serialization/vector.hpp>
-#include "boost/optional.hpp"
+#include <boost/optional.hpp>
 
 
 TargetSelector::TargetSelector(SelectorType type, float range) : type(type), range(range) {;}

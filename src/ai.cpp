@@ -24,7 +24,7 @@
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/serialization/export.hpp>
 #include <boost/serialization/vector.hpp>
-#include "boost/optional.hpp"
+#include <boost/optional.hpp>
 #include <SFML/Window.hpp>
 
 static const int TRACKING_TURNS = 3;
