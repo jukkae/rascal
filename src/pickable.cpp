@@ -152,11 +152,9 @@ void Pickable::drop(Actor* owner, Actor* wearer) {
 		const auto it = std::remove_if(
 				wearer->container->inventory.begin(),
 				wearer->container->inventory.end(),
-				[&] (const std::unique_ptr<Actor>& a) { return a->name == ownerName; });
+				[&] (const std::unique_ptr<Actor>& a) { return owner == a.get(); }); // TODO 'it' sometimes bad
 		std::unique_ptr<Actor> item = std::move(*it);
-
 		wearer->container->inventory.erase(it);
-
 		item->x = wearer->x; // ...here: item is nullptr sometimes
 		item->y = wearer->y;
 		wearer->world->addActor(std::move(item));
