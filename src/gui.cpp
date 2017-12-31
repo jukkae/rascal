@@ -25,8 +25,6 @@ static const sf::Color lightGrey(159, 159, 159);
 Gui::Gui() {
 }
 
-Gui::~Gui() {}
-
 void Gui::clear() {
 	log.clear();
 }
@@ -208,10 +206,6 @@ void Gui::renderMouseLook(World* world, sf::RenderWindow* window) {
 Gui::Message::Message(std::string text, sf::Color col) :
 col(col) {
 	this->text = text;
-}
-
-
-Gui::Message::~Message() {
 }
 
 void Gui::message(sf::Color col, std::string text, va_list args) {

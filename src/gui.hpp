@@ -12,7 +12,6 @@ class Gui {
 public:
 	Gui();
 
-	~Gui();
 	void clear();
 
 	void render(World* world, sf::RenderWindow* window);
@@ -26,7 +25,6 @@ protected:
 		sf::Color col;
 
 		Message(std::string text = "", sf::Color col = sf::Color::White);
-		~Message();
 
 		template<typename Archive>
 		void serialize(Archive & ar, const unsigned int version) {
