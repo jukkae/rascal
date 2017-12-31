@@ -11,3 +11,6 @@ Currently macOS only.
 
 ## Acknowledgments
 Current macOS builds include SFML and boost libraries.
+
+Current builds include Square typeface by Wouter van Oortmerssen licensed under CC BY 3.0. Typeface available at <http://strlen.com/square/>.
+Current builds include Fixedsys Excelsior typeface by Darien Valentine released into public domain.
