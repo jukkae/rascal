@@ -164,15 +164,6 @@ void Pickable::drop(Actor* owner, Actor* wearer) {
 	}
 }
 
-//template void Effect::serialize(boost::archive::text_iarchive& arch, const unsigned int version);
-//template void Effect::serialize(boost::archive::text_oarchive& arch, const unsigned int version);
-//template void HealthEffect::serialize(boost::archive::text_iarchive& arch, const unsigned int version);
-//template void HealthEffect::serialize(boost::archive::text_oarchive& arch, const unsigned int version);
-//template void AiChangeEffect::serialize(boost::archive::text_iarchive& arch, const unsigned int version);
-//template void AiChangeEffect::serialize(boost::archive::text_oarchive& arch, const unsigned int version);
-//template void Pickable::serialize(boost::archive::text_iarchive& arch, const unsigned int version);
-//template void Pickable::serialize(boost::archive::text_oarchive& arch, const unsigned int version);
-
 //BOOST_CLASS_EXPORT(Effect)
 BOOST_CLASS_EXPORT_IMPLEMENT(HealthEffect)
 BOOST_CLASS_EXPORT_IMPLEMENT(AiChangeEffect)
