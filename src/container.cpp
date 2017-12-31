@@ -3,10 +3,6 @@
 
 Container::Container(int capacity) : capacity(capacity) {;}
 
-Container::~Container() {
-	inventory.clear();
-}
-
 bool Container::add(std::unique_ptr<Actor> actor) {
 	if(capacity > 0 && inventory.size() >= capacity) { return false; }
 	inventory.push_back(std::move(actor));

@@ -15,7 +15,6 @@ public:
 	int credits = 0;
 
 	Container(int capacity = 0);
-	~Container();
 	bool isFull() { return capacity > 0 && getContentsWeight() >= capacity; }
 	int getContentsWeight();
 	bool add(std::unique_ptr<Actor> actor);
