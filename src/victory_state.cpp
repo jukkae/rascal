@@ -3,7 +3,7 @@
 #include "font.hpp"
 #include "colors.hpp"
 #include "constants.hpp"
-#include <sys/stat.h>
+#include "io.hpp"
 
 VictoryState::VictoryState(Engine* engine, Actor* actor) :
 State(engine, engine->getWindow())
@@ -16,8 +16,8 @@ State(engine, engine->getWindow())
 	for(auto& i : actor->container->inventory) { if (i->name == "phlebotinum link") numberOfMacGuffins++; }
 	description.append(std::to_string(numberOfMacGuffins));
 	description.append(" phlebotinum links");
-	struct stat buffer;
-	if(stat (constants::SAVE_FILE_NAME.c_str(), &buffer) == 0) { // If file exists
+
+	if(io::fileExists(constants::SAVE_FILE_NAME)) { // If file exists
 		remove(constants::SAVE_FILE_NAME.c_str());
 	}
 

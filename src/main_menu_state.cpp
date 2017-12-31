@@ -3,12 +3,12 @@
 #include "constants.hpp"
 #include "engine.hpp"
 #include "font.hpp"
+#include "io.hpp"
 
 #include <fstream>
 #include <string>
 #include <sstream>
 #include <iostream>
-#include <sys/stat.h>
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
@@ -23,9 +23,7 @@ State(engine, engine->getWindow())
 
 	menuItems.push_back(newGame);
 
-	struct stat buf;
-	int result = stat (constants::SAVE_FILE_NAME.c_str(), &buf);
-	if(result == 0 || forceShowContinue) { // 
+	if(io::fileExists(constants::SAVE_FILE_NAME) || forceShowContinue) {
 		menuItems.push_back(cont);
 	}
 	menuItems.push_back(exit);
