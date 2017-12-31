@@ -5,7 +5,7 @@
 #include "point.hpp"
 #include <SFML/Graphics.hpp>
 #include <sys/stat.h>
-#include <stdio.h>
+#include <cstdio>
 
 bool io::waitForMouseClick(GameplayState* state) {
 	while(true) {
