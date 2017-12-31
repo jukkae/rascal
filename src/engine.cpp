@@ -25,7 +25,6 @@ Engine::Engine(sf::RenderWindow* window) : window(window) {
 	}
 	else { // FIXME urgh
 		load();
-		//(static_cast<GameplayState&>(*gps)).initLoaded(this);
 		(static_cast<GameplayState&>(*gameplayState)).initLoaded(this);
 		showContinueInMenu = true;
 		gps = std::unique_ptr<GameplayState>(static_cast<GameplayState*>(gameplayState));
