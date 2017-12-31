@@ -25,9 +25,6 @@ Map::Map(int width, int height) : width(width), height(height) {
 	}
 }
 
-Map::~Map() {
-}
-
 void Map::generateMap(MapType mapType) {
 	switch(mapType) {
 		case MapType::BUILDING:

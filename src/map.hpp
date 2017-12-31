@@ -69,7 +69,6 @@ public:
 
 	Map();
 	Map(int width, int height);
-	~Map();
 
 	void generateMap(MapType mapType = MapType::BUILDING);
 	void generateBuildingMap();
