@@ -12,5 +12,6 @@ namespace io {
 extern sf::RenderWindow window;
 extern Point mousePosition; // note: already in WORLD coordinates!
 bool waitForMouseClick(GameplayState* state);
+bool fileExists(std::string name);
 } // namespace io
 #endif /* IO_HPP */

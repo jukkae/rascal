@@ -4,6 +4,7 @@
 #include "io.hpp"
 #include "point.hpp"
 #include <SFML/Graphics.hpp>
+#include <sys/stat.h>
 
 bool io::waitForMouseClick(GameplayState* state) {
 	while(true) {
@@ -18,4 +19,12 @@ bool io::waitForMouseClick(GameplayState* state) {
 			}
 		}
 	}
+}
+
+bool io::fileExists(std::string name) {
+	struct stat buf;
+	int result = stat (name.c_str(), &buf);
+
+	if(result == 0) return true;
+	else return false; // FIXME need to check for errors?
 }

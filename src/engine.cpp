@@ -1,6 +1,5 @@
 #include <algorithm>
 #include <limits>
-#include <sys/stat.h>
 #include <stdio.h>
 #include "ai.hpp"
 #include "constants.hpp"
@@ -8,6 +7,7 @@
 #include "destructible.hpp"
 #include "engine.hpp"
 #include "font.hpp"
+#include "io.hpp"
 #include "pickable.hpp"
 #include "state.hpp"
 #include "gameplay_state.hpp"
@@ -19,11 +19,8 @@ Engine::Engine(sf::RenderWindow* window) : window(window) {
 	font::load();
 	std::unique_ptr<State> gps = std::make_unique<GameplayState>(this, window);
 
-	struct stat buf;
-	int result = stat (constants::SAVE_FILE_NAME.c_str(), &buf);
-
 	bool showContinueInMenu = false;
-	if(result != 0) { // If file doesn't exist
+	if(!io::fileExists(constants::SAVE_FILE_NAME)) {
 		gameplayState = gps.get();
 	}
 	else { // FIXME urgh
@@ -44,8 +41,7 @@ Engine::~Engine() {
 }
 
 void Engine::newGame() {
-	struct stat buffer;
-	if(stat (constants::SAVE_FILE_NAME.c_str(), &buffer) == 0) { // If file does exist
+	if(io::fileExists(constants::SAVE_FILE_NAME)) {
 		remove(constants::SAVE_FILE_NAME.c_str());
 	}
 
