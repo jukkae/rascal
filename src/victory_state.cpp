@@ -10,6 +10,12 @@ State(engine, engine->getWindow())
 {
 	description = "you won at level ";
 	description.append(std::to_string(((PlayerAi*)actor->ai.get())->xpLevel));
+	description.append("\n");
+	description.append("you had ");
+	int numberOfMacGuffins = 0;
+	for(auto& i : actor->container->inventory) { if (i->name == "phlebotinum link") numberOfMacGuffins++; }
+	description.append(std::to_string(numberOfMacGuffins));
+	description.append(" phlebotinum links");
 	struct stat buffer;
 	if(stat (constants::SAVE_FILE_NAME.c_str(), &buffer) == 0) { // If file exists
 		remove(constants::SAVE_FILE_NAME.c_str());
