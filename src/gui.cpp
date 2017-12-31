@@ -8,7 +8,7 @@
 #include "io.hpp"
 #include "map.hpp"
 #include "world.hpp"
-#include <stdarg.h>
+#include <cstdarg>
 #include <sstream>
 #include <SFML/Window/Mouse.hpp>
 

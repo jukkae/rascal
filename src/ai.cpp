@@ -19,7 +19,7 @@
 #include "level_up_menu_state.hpp"
 #include "main_menu_state.hpp"
 #include "world.hpp"
-#include <math.h>
+#include <cmath>
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/serialization/export.hpp>

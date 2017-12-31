@@ -1,6 +1,6 @@
 #include <algorithm>
 #include <limits>
-#include <stdio.h>
+#include <cstdio>
 #include "ai.hpp"
 #include "constants.hpp"
 #include "container.hpp"

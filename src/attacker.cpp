@@ -1,4 +1,4 @@
-#include <stdio.h>
+#include <cstdio>
 #include "attacker.hpp"
 #include "actor.hpp"
 #include "dice.hpp"

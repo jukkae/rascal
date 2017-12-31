@@ -1,4 +1,4 @@
-#include <stdio.h>
+#include <cstdio>
 #include "destructible.hpp"
 #include "engine.hpp"
 #include "gameplay_state.hpp"
