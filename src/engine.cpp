@@ -42,7 +42,7 @@ Engine::~Engine() {
 
 void Engine::newGame() {
 	if(io::fileExists(constants::SAVE_FILE_NAME)) {
-		remove(constants::SAVE_FILE_NAME.c_str());
+		io::remove(constants::SAVE_FILE_NAME);
 	}
 
 	std::unique_ptr<State> gps = std::make_unique<GameplayState>(this, window);
