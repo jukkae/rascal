@@ -18,7 +18,7 @@ State(engine, engine->getWindow())
 	description.append(" phlebotinum links");
 
 	if(io::fileExists(constants::SAVE_FILE_NAME)) { // If file exists
-		io::remove(constants::SAVE_FILE_NAME);
+		io::removeFile(constants::SAVE_FILE_NAME);
 	}
 
 }
