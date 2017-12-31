@@ -2,8 +2,10 @@
 #include <iostream>
 
 #ifdef __APPLE__
-#include "CoreFoundation/CoreFoundation.h"
-#endif
+# ifdef BUNDLE_BUILD
+# include "CoreFoundation/CoreFoundation.h"
+# endif /* BUNDLE_BULD */
+#endif /* __APPLE__ */
 
 sf::Font font::mainFont;
 sf::Font font::squareFont;
