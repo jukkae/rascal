@@ -39,7 +39,7 @@ build-for-bundle: clean $(OBJS)
 	$(CXX) $(SOURCES) -o rascal $(CPPFLAGS) -Iinclude $(LDFLAGS) -I/usr/local/include $(BUNDLE_BUILD)
 
 clean:
-	rm -rf *.o rascal save.txt rascal.dSYM obj/*.o
+	rm -rf *.o rascal save.txt rascal.dSYM obj/*.o *.gch
 
 run:
 	./rascal
