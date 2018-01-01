@@ -14,5 +14,5 @@ macosx/
 *.lai
 *.dylib
 *.app
-*.gch
+*.pch
 *.zip

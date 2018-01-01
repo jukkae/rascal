@@ -7,7 +7,7 @@ BUNDLE_BUILD=-DBUNDLE_BUILD
 
 # precompile headers
 PCH_SRC=src/precompile.hpp
-PCH_OUT=precompile.hpp.gch
+PCH_OUT=precompile.hpp.pch
 
 SRC := src
 OBJ := obj
@@ -24,10 +24,10 @@ rascal: $(OBJECTS)
 	$(CXX) $^ -o $@ $(CPPFLAGS) $(LDFLAGS)
 
 $(OBJ)/%.o: $(SRC)/%.cpp $(PCH_OUT)
-	$(CXX) -I$(SRC) -include $(PCH_SRC) -c $< -o $@ $(CPPFLAGS)
+	$(CXX) -I$(SRC) -include $(PCH_SRC) -c $< -o $@ $(CPPFLAGS) -include-pch $(PCH_OUT)
 
 $(PCH_OUT): $(PCH_SRC)
-	$(CXX) $(CXXFLAGS) -o $@ $<
+	$(CXX)++ -x c++-header -std=c++1z  $(CXXFLAGS) -Xclang -emit-pch -o $@ $<
 
 #compile: clean $(OBJS)
 	#$(CXX) $(SOURCES) -o rascal $(CPPFLAGS) $(INCLUDEDIRS) -Iinclude $(LDFLAGS) -I/usr/local/include
@@ -39,7 +39,7 @@ build-for-bundle: clean $(OBJS)
 	$(CXX) $(SOURCES) -o rascal $(CPPFLAGS) -Iinclude $(LDFLAGS) -I/usr/local/include $(BUNDLE_BUILD)
 
 clean:
-	rm -rf *.o rascal save.txt rascal.dSYM obj/*.o *.gch
+	rm -rf *.o rascal save.txt rascal.dSYM obj/*.o *.pch
 
 run:
 	./rascal
