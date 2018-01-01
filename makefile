@@ -5,6 +5,10 @@ CPPFLAGS=-Wall -std=c++1z
 LDFLAGS=-lc++ -lboost_serialization -framework SFML -framework sfml-window -framework sfml-graphics -framework sfml-system -framework CoreFoundation -rpath @executable_path/../Resources/Frameworks
 BUNDLE_BUILD=-DBUNDLE_BUILD
 
+# precompile headers
+PCH_SRC=src/precompile.hpp
+PCH_OUT=precompile.hpp.gch
+
 SRC := src
 OBJ := obj
 
@@ -19,8 +23,11 @@ OBJECTS := $(patsubst $(SRC)/%.cpp, $(OBJ)/%.o, $(SOURCES))
 rascal: $(OBJECTS)
 	$(CXX) $^ -o $@ $(CPPFLAGS) $(LDFLAGS)
 
-$(OBJ)/%.o: $(SRC)/%.cpp
-	$(CXX) -I$(SRC) -c $< -o $@ $(CPPFLAGS)
+$(OBJ)/%.o: $(SRC)/%.cpp $(PCH_OUT)
+	$(CXX) -I$(SRC) -include $(PCH_SRC) -c $< -o $@ $(CPPFLAGS)
+
+$(PCH_OUT): $(PCH_SRC)
+	$(CXX) $(CXXFLAGS) -o $@ $<
 
 #compile: clean $(OBJS)
 	#$(CXX) $(SOURCES) -o rascal $(CPPFLAGS) $(INCLUDEDIRS) -Iinclude $(LDFLAGS) -I/usr/local/include
