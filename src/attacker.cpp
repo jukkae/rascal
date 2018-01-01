@@ -52,6 +52,12 @@ int Attacker::getAttackBaseDamage() {
 }
 
 void RangedAttacker::attack(Actor* owner, Actor* target) {
+	std::cout << "rounds: " << rounds << "\n";
+	if(rounds < 1) {
+		owner->s->message(colors::red, "Out of rounds!");
+		return;
+	}
+	--rounds;
 	if(target->destructible && !target->destructible->isDead()) {
 		int attackRoll = d20();
 		if(attackRoll > target->destructible->armorClass) {
