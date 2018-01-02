@@ -14,8 +14,9 @@ void Attacker::attack(Actor* owner, Actor* target) {
 			if ( dmg - target->destructible->defense > 0 ) {
 				if(owner->wornWeapon) {
 					owner->s->message(colors::red, "%s attacks %s for %g hit points with a %s.", owner->name.c_str(), target->name.c_str(), dmg - target->destructible->defense, owner->wornWeapon->name.c_str());
-					if(owner->wornWeapon->attacker->effect) {
-						std::cout << "FX" << "\n";
+					if(effect) {
+						std::unique_ptr<Effect> ef = std::make_unique<MoveEffect>(Direction::NONE, 1, "The %s is kicked back!"); // TODO actually use the prototype object
+						ef->applyTo(target);
 					}
 				}
 				else owner->s->message(colors::red, "%s attacks %s for %g hit points.", owner->name.c_str(), target->name.c_str(), dmg - target->destructible->defense);
