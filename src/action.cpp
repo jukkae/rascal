@@ -163,12 +163,13 @@ bool ShootAction::execute() {
 	int worldY = target.y;
 
 	std::vector<Actor*> actors = actor->world->getActorsAt(worldX, worldY);
-	if(actors.empty()) {
+	if(actor->getDistance(worldX, worldY) > actor->wornWeapon->rangedAttacker->range) {
+		actor->s->message(colors::lightRed, "You can't shoot that far");
+		return false;
+	}
+	else if(actors.empty()) {
 		actor->s->message(colors::lightRed, "There's nobody there!");
 		return false;
-	} else if(false) {
-		actor->s->message(colors::lightRed, "You can't shoot that far");
-		// TODO check for range
 	} else {
 		// TODO shoot someone at random
 		// TODO check for LOS
