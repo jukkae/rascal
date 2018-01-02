@@ -173,7 +173,7 @@ bool ShootAction::execute() {
 	} else {
 		// TODO check for LOS
 		// Actor* enemy = actors.front(); // includes dead enemies too
-		Actor* enemy = actor->world->getLiveActor(worldX, worldY);
+		Actor* enemy = actor->world->getLiveActor(worldX, worldY); // TODO will fail if trying to shoot into non-live actors
 		actor->wornWeapon->rangedAttacker->attack(actor, enemy);
 	}
 	return true;
