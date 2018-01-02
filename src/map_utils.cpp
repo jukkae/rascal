@@ -199,6 +199,7 @@ std::unique_ptr<Actor> map_utils::makeItem(World* world, Map* map, int x, int y)
 		knuckleduster->blocks = false;
 		knuckleduster->pickable = std::make_unique<Pickable>();
 		knuckleduster->attacker = std::make_unique<Attacker>(2, 6, 2);
+		knuckleduster->attacker->effect = std::make_unique<MoveEffect>(Direction::NONE, 1, "The %s is kicked back!"); // TODO this must obvs be created on the fly
 		return knuckleduster;
 	} else if(r < 90) {
 		std::unique_ptr<Actor> rock = std::make_unique<Actor>(x, y, '|', "rock", sf::Color(255, 128, 128));

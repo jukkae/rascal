@@ -2,6 +2,7 @@
 #define ATTACKER_HPP
 class Actor;
 #include "point.hpp"
+#include "pickable.hpp"
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/serialization/export.hpp>
@@ -23,6 +24,7 @@ public :
 	int numberOfDice;
 	int dice;
 	int bonus;
+	std::unique_ptr<Effect> effect;
 private:
 	friend class boost::serialization::access;
 	template<class Archive>
@@ -30,6 +32,7 @@ private:
 		ar & numberOfDice;
 		ar & dice;
 		ar & bonus;
+		ar & effect;
 	}
 };
 
