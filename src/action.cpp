@@ -171,9 +171,9 @@ bool ShootAction::execute() {
 		actor->s->message(colors::lightRed, "There's nobody there!");
 		return false;
 	} else {
-		// TODO shoot someone at random
 		// TODO check for LOS
-		Actor* enemy = actors.front();
+		// Actor* enemy = actors.front(); // includes dead enemies too
+		Actor* enemy = actor->world->getLiveActor(worldX, worldY);
 		actor->wornWeapon->rangedAttacker->attack(actor, enemy);
 	}
 	return true;
