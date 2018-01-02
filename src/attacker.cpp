@@ -54,7 +54,7 @@ int Attacker::getAttackBaseDamage() {
 void RangedAttacker::attack(Actor* owner, Actor* target) {
 	std::cout << "rounds: " << rounds << "\n";
 	if(rounds < 1) {
-		owner->s->message(colors::red, "Out of rounds!");
+		owner->s->message(colors::red, "Out of rounds!"); // TODO should move check elsewhere?
 		return;
 	}
 	--rounds;

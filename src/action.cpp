@@ -166,10 +166,12 @@ bool ShootAction::execute() {
 	if(actors.empty()) {
 		actor->s->message(colors::lightRed, "There's nobody there!");
 		return false;
-	} else { // TODO shoot someone at random
+	} else if(false) {
+		actor->s->message(colors::lightRed, "You can't shoot that far");
 		// TODO check for range
+	} else {
+		// TODO shoot someone at random
 		// TODO check for LOS
-		// TODO require bullets
 		Actor* enemy = actors.front();
 		actor->wornWeapon->rangedAttacker->attack(actor, enemy);
 	}
