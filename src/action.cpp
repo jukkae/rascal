@@ -162,18 +162,16 @@ bool ShootAction::execute() {
 	int worldX = target.x;
 	int worldY = target.y;
 
-	std::vector<Actor*> actors = actor->world->getActorsAt(worldX, worldY);
+	Actor* enemy = actor->world->getLiveActor(worldX, worldY); // get some live actor at target
 	if(actor->getDistance(worldX, worldY) > actor->wornWeapon->rangedAttacker->range) {
 		actor->s->message(colors::lightRed, "You can't shoot that far");
 		return false;
 	}
-	else if(actors.empty()) {
+	else if(!enemy) {
 		actor->s->message(colors::lightRed, "There's nobody there!");
 		return false;
 	} else {
 		// TODO check for LOS
-		// Actor* enemy = actors.front(); // includes dead enemies too
-		Actor* enemy = actor->world->getLiveActor(worldX, worldY); // TODO will fail if trying to shoot into non-live actors
 		actor->wornWeapon->rangedAttacker->attack(actor, enemy);
 	}
 	return true;
