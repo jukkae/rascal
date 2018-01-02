@@ -3,6 +3,7 @@
 
 #include "actor.hpp"
 #include "ai.hpp"
+#include "direction.hpp"
 #include "status_effect.hpp"
 
 #include <boost/archive/text_oarchive.hpp>
@@ -92,6 +93,25 @@ private:
 	}
 };
 
+class MoveEffect : public Effect {
+public:
+	MoveEffect(Direction direction = Direction::NONE, float distance = 1, std::string message = "");
+	bool applyTo(Actor* actor) override;
+
+	Direction direction;
+	float distance; // FIXME not implemented yet
+	std::string message;
+private:
+	friend class boost::serialization::access;
+	template<class Archive>
+	void serialize(Archive & ar, const unsigned int version) {
+		ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(Effect);
+		ar & direction;
+		ar & distance;
+		ar & message;
+	}
+};
+
 class Pickable {
 public:
 	Pickable(TargetSelector selector = TargetSelector(TargetSelector::SelectorType::NONE, 0), std::unique_ptr<Effect> effect = std::unique_ptr<Effect>(), int weight = 1);
@@ -117,5 +137,6 @@ private:
 BOOST_CLASS_EXPORT_KEY(HealthEffect)
 BOOST_CLASS_EXPORT_KEY(AiChangeEffect)
 BOOST_CLASS_EXPORT_KEY(StatusEffectEffect)
+BOOST_CLASS_EXPORT_KEY(MoveEffect)
 
 #endif /* PICKABLE_HPP */

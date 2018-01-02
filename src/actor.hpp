@@ -63,6 +63,7 @@ public:
 	void modifyStatistic(Statistic stat, float delta);
 	void addStatusEffect(std::unique_ptr<StatusEffect> statusEffect) { statusEffects.push_back(std::move(statusEffect)); }
 	std::vector<std::unique_ptr<StatusEffect>>& getStatusEffects() { return statusEffects; }
+	bool tryToMove(Direction direction, float distance) { return false; } // TODO implement
 
 private:
 	std::deque<std::unique_ptr<Action>> actionsQueue;

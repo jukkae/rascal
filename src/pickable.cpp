@@ -105,6 +105,15 @@ bool StatusEffectEffect::applyTo(Actor* actor) {
 	return true;
 }
 
+MoveEffect::MoveEffect(Direction direction, float distance, std::string message):
+direction(direction), distance(distance), message(message) {;}
+
+bool MoveEffect::applyTo(Actor* actor) { // TODO finish implementation
+	actor->tryToMove(direction, distance);
+	if(message != "") actor->s->message(colors::lightGrey, message, actor->name.c_str());
+	return true;
+}
+
 Pickable::Pickable(TargetSelector selector, std::unique_ptr<Effect> effect, int weight) : weight(weight), selector(selector), effect(std::move(effect)) {;}
 
 // owner is the Actor that this Pickable belongs to,
@@ -164,7 +173,9 @@ void Pickable::drop(Actor* owner, Actor* wearer) {
 	}
 }
 
+// Remember to register in engine.cpp
 //BOOST_CLASS_EXPORT(Effect)
 BOOST_CLASS_EXPORT_IMPLEMENT(HealthEffect)
 BOOST_CLASS_EXPORT_IMPLEMENT(AiChangeEffect)
 BOOST_CLASS_EXPORT_IMPLEMENT(StatusEffectEffect)
+BOOST_CLASS_EXPORT_IMPLEMENT(MoveEffect)
