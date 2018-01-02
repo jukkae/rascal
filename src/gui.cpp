@@ -72,7 +72,10 @@ void Gui::renderStats(World* world, sf::RenderWindow* window) {
 
 	std::string weaponString;
 	if(!player->wornWeapon) weaponString = "Wielding: nothing";
-	else weaponString = "Wielding: " + player->wornWeapon->name;
+	else { // FIXME i know it's bad
+		weaponString = "Wielding: " + player->wornWeapon->name;
+		if(player->wornWeapon->rangedAttacker) weaponString.append(" (").append(std::to_string(player->wornWeapon->rangedAttacker->rounds)).append("/").append(std::to_string(player->wornWeapon->rangedAttacker->capacity)).append(")");
+	}
 	sf::Text weaponText(weaponString, font::mainFont, 16);
 	weaponText.setFillColor(colors::lightBlue);
 	weaponText.setPosition((constants::SCREEN_WIDTH-40)*constants::CELL_WIDTH, (2+constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT)*constants::CELL_HEIGHT);
