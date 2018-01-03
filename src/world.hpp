@@ -3,6 +3,7 @@
 
 #include <vector>
 #include "actor.hpp"
+#include "event.hpp"
 #include "map.hpp"
 
 class GameplayState;
@@ -32,7 +33,7 @@ public:
 
 	void addActor(std::unique_ptr<Actor> actor) { actors.push_back(std::move(actor)); }
 
-
+	void notify(Event e) { std::cout << e.message; }
 
 	int width;
 	int height;

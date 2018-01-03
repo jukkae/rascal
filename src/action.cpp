@@ -2,6 +2,7 @@
 #include "actor.hpp"
 #include "attacker.hpp"
 #include "colors.hpp"
+#include "event.hpp"
 #include "gameplay_state.hpp"
 #include "world.hpp"
 
@@ -50,6 +51,8 @@ bool MoveAction::execute() {
 		bool corpseOrItem = (a->destructible && a->destructible->isDead()) || a->pickable;
 		if(corpseOrItem && a->x == targetX && a->y == targetY) {
 			state->message(colors::lightGrey, "There's a %s here!", a->name.c_str());
+			Event e;
+			world->notify(e);
 			//Event e(EventType::ITEM_FOUND, a->name);
 			//world->notify(e);
 			//in world: state->notify(e);
