@@ -33,7 +33,7 @@ public:
 
 	void addActor(std::unique_ptr<Actor> actor) { actors.push_back(std::move(actor)); }
 
-	void notify(Event e) { std::cout << e.message; }
+	void notify(Event& e) { std::cout << e.getMessage(); }
 
 	int width;
 	int height;

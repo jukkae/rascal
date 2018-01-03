@@ -51,8 +51,10 @@ bool MoveAction::execute() {
 		bool corpseOrItem = (a->destructible && a->destructible->isDead()) || a->pickable;
 		if(corpseOrItem && a->x == targetX && a->y == targetY) {
 			state->message(colors::lightGrey, "There's a %s here!", a->name.c_str());
-			Event e;
+			ItemFoundEvent e;
 			world->notify(e);
+			Event f;
+			world->notify(f);
 			//Event e(EventType::ITEM_FOUND, a->name);
 			//world->notify(e);
 			//in world: state->notify(e);
