@@ -98,5 +98,6 @@ std::vector<Actor*> World::getActorsAt(int x, int y) {
 
 //TODO
 void World::notify(Event& e) {
+	e.time = time;
 	if(state) state->notify(e);
 }
