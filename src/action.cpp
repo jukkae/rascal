@@ -58,7 +58,8 @@ bool TraverseStairsAction::execute() {
 	World* world = actor->world;
 	std::vector<Actor*> v = world->getActorsAt(actor->x, actor->y);
 	if(v.empty()) {
-		state->message(colors::lightGrey, "There are no stairs here.");
+		ActionFailureEvent e(actor, "There are no stairs here!");
+		world->notify(e);
 		return false;
 	}
 
@@ -73,7 +74,8 @@ bool TraverseStairsAction::execute() {
 			state->previousLevel();
 			return true;
 		} else {
-			state->message(colors::lightGrey, "There are no stairs down here.");
+			ActionFailureEvent e(actor, "There are no stairs down here!");
+			world->notify(e);
 			return false;
 		}
 	} else {
@@ -87,7 +89,8 @@ bool TraverseStairsAction::execute() {
 			state->nextLevel();
 			return true;
 		} else {
-			state->message(colors::lightGrey, "There are no stairs up here.");
+			ActionFailureEvent e(actor, "There are no stairs up here!");
+			world->notify(e);
 			return false;
 		}
 	}
@@ -101,7 +104,8 @@ bool PickupAction::execute() {
 			std::string itemName = a->name;
 			if(actor->container->isFull()) {
 				found = true;
-				actor->s->message(colors::red, "Your inventory is full.");
+				ActionFailureEvent e(actor, "Your inventory is full!");
+				world->notify(e);
 				return false;
 			}
 			if(a->pickable->pick(std::move(a), actor)) {
@@ -111,7 +115,10 @@ bool PickupAction::execute() {
 			}
 		}
 	}
-	if(!found) { actor->s->message(colors::lightGrey, "There's nothing here that you can pick up."); }
+	if(!found) {
+		ActionFailureEvent e(actor, "There's nothing here that you can pick up!");
+		world->notify(e);
+	}
 	return false;
 }
 
@@ -157,8 +164,10 @@ ShootAction::ShootAction(Actor* actor, Point target):
 	Action(actor, 100.0f), target(target) {;}
 
 bool ShootAction::execute() {
+	World* world = actor->world;
 	if(!actor->wornWeapon || !actor->wornWeapon->rangedAttacker) {
-		actor->s->message(colors::lightRed, "Shoot with what?");
+		ActionFailureEvent e(actor, "Shoot with what?");
+		world->notify(e);
 		return false;
 	}
 
@@ -167,15 +176,18 @@ bool ShootAction::execute() {
 
 	Actor* enemy = actor->world->getLiveActor(worldX, worldY); // get some live actor at target
 	if(actor->wornWeapon->rangedAttacker->rounds <= 0) {
-		actor->s->message(colors::red, "Out of rounds!");
+		ActionFailureEvent e(actor, "Out of rounds!");
+		world->notify(e);
 		return false;
 	}
 	if(actor->getDistance(worldX, worldY) > actor->wornWeapon->rangedAttacker->range) {
-		actor->s->message(colors::lightRed, "You can't shoot that far");
+		ActionFailureEvent e(actor, "Out of range!");
+		world->notify(e);
 		return false;
 	}
 	else if(!enemy) {
-		actor->s->message(colors::lightRed, "There's nobody there!");
+		ActionFailureEvent e(actor, "There's nobody there!");
+		world->notify(e);
 		return false;
 	} else {
 		// TODO check for LOS
