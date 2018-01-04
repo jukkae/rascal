@@ -270,5 +270,8 @@ bool Gui::isInteresting(Event& event) {
 	if(auto e = dynamic_cast<MeleeHitEvent*>(&event)) {
 		return true;
 	}
+	if(auto e = dynamic_cast<RangedHitEvent*>(&event)) {
+		return true;
+	}
 	return false;
 }

@@ -32,21 +32,42 @@ Message messaging::createMessageFromEvent(Event& event) {
 	if(auto e = dynamic_cast<ItemFoundEvent*>(&event)) {
 		fmt = "%d: There's a %s here!";
 		messageText = formatString(fmt, e->time, e->item->name.c_str());
+			color = colors::green;
 	}
 
 	if(auto e = dynamic_cast<MeleeHitEvent*>(&event)) {
 		if(!e->hit) {
 			fmt = "%d: %s misses %s.";
 			messageText = formatString(fmt, e->time, e->hitter->name.c_str(), e->hittee->name.c_str());
+			color = colors::grey;
 		} else if(e->damage <= 0) {
 			fmt = "%d: %s hits %s, but it seems to have no effect.";
 			messageText = formatString(fmt, e->time, e->hitter->name.c_str(), e->hittee->name.c_str());
+			color = colors::red;
 		} else if(e->weapon) {
 			fmt = "%d: %s attacks %s for %d hit points with a %s.";
 			messageText = formatString(fmt, e->time, e->hitter->name.c_str(), e->hittee->name.c_str(), e->damage, e->weapon->name.c_str());
+			color = colors::red;
 		} else {
 			fmt = "%d: %s attacks %s for %d hit points.";
 			messageText = formatString(fmt, e->time, e->hitter->name.c_str(), e->hittee->name.c_str(), e->damage);
+			color = colors::red;
+		}
+	}
+
+	if(auto e = dynamic_cast<RangedHitEvent*>(&event)) {
+		if(!e->hit) {
+			fmt = "%d: %s misses %s. Bullet ricochets harmlessly!";
+			messageText = formatString(fmt, e->time, e->hitter->name.c_str(), e->hittee->name.c_str());
+			color = colors::grey;
+		} else if(e->damage <= 0) {
+			fmt = "%d: %s hits %s, but it seems to have no effect.";
+			messageText = formatString(fmt, e->time, e->hitter->name.c_str(), e->hittee->name.c_str());
+			color = colors::red;
+		} else if(e->weapon) {
+			fmt = "%d: %s shoots %s for %d hit points with a %s.";
+			messageText = formatString(fmt, e->time, e->hitter->name.c_str(), e->hittee->name.c_str(), e->damage, e->weapon->name.c_str());
+			color = colors::red;
 		}
 	}
 

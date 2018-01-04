@@ -57,28 +57,28 @@ int Attacker::getAttackBaseDamage() {
 
 void RangedAttacker::attack(Actor* owner, Actor* target) {
 	RangedHitEvent e(owner, target);
-	if(rounds <= 0) {
-		owner->s->message(colors::red, "Out of rounds!"); // TODO should move check elsewhere?
-		return;
-	}
 	--rounds;
 	if(target->destructible && !target->destructible->isDead()) {
 		int attackRoll = d20();
 		if(attackRoll > target->destructible->armorClass) {
+			e.hit = true;
 			int dmg = getAttackBaseDamage();
 			if ( dmg - target->destructible->defense > 0 ) {
-				if(owner->wornWeapon) owner->s->message(colors::red, "%s shoots %s for %g hit points with a %s.", owner->name.c_str(), target->name.c_str(), dmg - target->destructible->defense, owner->wornWeapon->name.c_str());
-				else owner->s->message(colors::red, "%s shoots %s for %g hit points.", owner->name.c_str(), target->name.c_str(), dmg - target->destructible->defense);
+				if(owner->wornWeapon) {
+					e.damage = dmg - target->destructible->defense;
+					e.weapon = owner->wornWeapon;
+				}
 			} else {
-				owner->s->message(colors::lightGrey, "%s shoots %s but it has no effect!", owner->name.c_str(), target->name.c_str());
+				e.damage = dmg - target->destructible->defense;
+				e.weapon = owner->wornWeapon;
 			}
+			owner->world->notify(e);
 			target->destructible->takeDamage(target, dmg);
-		} else {
-			owner->s->message(colors::lightGrey, "%s misses %s!", owner->name.c_str(), target->name.c_str());
 		}
 	}
 	else {
-		owner->s->message(colors::lightGrey, "%s shoots %s in vain.", owner->name.c_str(), target->name.c_str());
+		owner->world->notify(e);
+		//TODO shooting at dead bodies
 	}
 }
 
