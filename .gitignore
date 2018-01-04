@@ -16,3 +16,4 @@ macosx/
 *.app
 *.pch
 *.zip
+tags
