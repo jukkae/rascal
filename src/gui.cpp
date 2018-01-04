@@ -207,12 +207,6 @@ void Gui::renderMouseLook(World* world, sf::RenderWindow* window) {
 	window->draw(text);
 }
 
-
-Message::Message(std::string text, sf::Color col) :
-col(col) {
-	this->text = text;
-}
-
 void Gui::message(sf::Color col, std::string text, va_list args) {
 std::string buf = "";
 char dest[1024*16]; // maybe something a bit more sane would be in order at some point
