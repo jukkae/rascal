@@ -267,5 +267,8 @@ bool Gui::isInteresting(Event& event) {
 	if(auto e = dynamic_cast<ItemFoundEvent*>(&event)) {
 		if(e->finder->isPlayer()) return true;
 	}
+	if(auto e = dynamic_cast<MeleeHitEvent*>(&event)) {
+		return true;
+	}
 	return false;
 }

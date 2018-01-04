@@ -3,6 +3,7 @@
 #include "actor.hpp"
 #include "dice.hpp"
 #include "destructible.hpp"
+#include "event.hpp"
 #include "gameplay_state.hpp"
 #include "colors.hpp"
 
@@ -13,7 +14,10 @@ void Attacker::attack(Actor* owner, Actor* target) {
 			int dmg = getAttackBaseDamage();
 			if ( dmg - target->destructible->defense > 0 ) {
 				if(owner->wornWeapon) {
-					owner->s->message(colors::red, "%s attacks %s for %g hit points with a %s.", owner->name.c_str(), target->name.c_str(), dmg - target->destructible->defense, owner->wornWeapon->name.c_str());
+					int damage = dmg - target->destructible->defense;
+					MeleeHitEvent e(owner, target, owner->wornWeapon, damage);
+					owner->world->notify(e);
+
 					if(effect) {
 						std::unique_ptr<Effect> ef = std::make_unique<MoveEffect>(Direction::NONE, 1, "The %s is kicked back!"); // TODO actually use the prototype object
 						ef->applyTo(target);

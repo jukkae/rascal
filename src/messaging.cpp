@@ -27,12 +27,14 @@ std::string messaging::formatString(std::string text, ...) {
 
 Message messaging::createMessageFromEvent(Event& event) {
 	if(auto e = dynamic_cast<ItemFoundEvent*>(&event)) {
-		//std::string messageText = e->getMessage().append((e->getItemName())); //TODO fix format string and line breaks: Messages should not care about line breaking
-
-		// std::string messageText = formatString(e->getMessage(), e->getItemName().c_str());
 		std::string fmt = "There's a %s here!";
 		std::string messageText = formatString(fmt, e->item->name.c_str());
 		return Message(messageText, colors::green);
+	}
+	if(auto e = dynamic_cast<MeleeHitEvent*>(&event)) {
+		std::string fmt = "%s attacks %s for %g hit points with a %s.";
+		std::string messageText = formatString(fmt, e->hitter->name.c_str(), e->hittee->name.c_str(), e->damage, e->weapon->name.c_str());
+		return Message(messageText, colors::red);
 	}
 	else return Message("UNKNOWN EVENT", colors::white);
 }
