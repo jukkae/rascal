@@ -210,7 +210,7 @@ void Gui::renderMouseLook(World* world, sf::RenderWindow* window) {
 
 Message::Message(std::string text, sf::Color col) :
 col(col) {
-this->text = text;
+	this->text = text;
 }
 
 void Gui::message(sf::Color col, std::string text, va_list args) {
@@ -249,10 +249,24 @@ void Gui::message(sf::Color col, std::string text, ...) {
 	}
 }
 
+void Gui::message(Message m) {
+	std::istringstream iss (m.text); // TODO fix formatting and line breaks
+	std::string line;
+	while (std::getline(iss, line, '\n')) {
+		// make room for the message
+		if(log.size() == MSG_HEIGHT) {
+			log.erase(log.begin());
+		}
+		Message msg(line, m.col);
+		log.push_back(msg);
+	}
+}
+
 void Gui::notify(Event& event) {
-	if(auto f = dynamic_cast<ItemFoundEvent*>(&event)) {
+	/*if(auto f = dynamic_cast<ItemFoundEvent*>(&event)) {
 		message(colors::white, f->getMessage(), f->getItemName().c_str());
 	}
-	else message(colors::white, event.getMessage());
+	else message(colors::white, event.getMessage());*/
 	Message m = messaging::createMessageFromEvent(event);
+	message(m);
 }

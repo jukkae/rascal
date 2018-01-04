@@ -31,6 +31,7 @@ public:
 	void render(World* world, sf::RenderWindow* window);
 	void message(sf::Color col, std::string text, ...);
 	void message(sf::Color col, std::string text, va_list args);
+	void message(Message m); // TODO reference instead of value?
 
 	void setState(GameplayState* s) { state = s; }
 
