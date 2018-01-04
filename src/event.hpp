@@ -37,4 +37,11 @@ struct RangedHitEvent : public Event {
 	int damage;
 	bool hit;
 };
+
+struct ActionFailureEvent : public Event {
+	ActionFailureEvent(Actor* actor = nullptr, std::string failureMessage = ""): failureMessage(failureMessage) {;}
+
+	Actor* actor;
+	std::string failureMessage; //TODO ultimately, again, this is GUI's responsibility
+};
 #endif /* EVENT_HPP */

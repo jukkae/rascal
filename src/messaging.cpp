@@ -71,5 +71,10 @@ Message messaging::createMessageFromEvent(Event& event) {
 		}
 	}
 
+	if(auto e = dynamic_cast<ActionFailureEvent*>(&event)) {
+		messageText = e->failureMessage;
+		color = colors::lightRed;
+	}
+
 	return Message(messageText, color);
 }

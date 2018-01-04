@@ -264,6 +264,9 @@ void Gui::notify(Event& event) {
 }
 
 bool Gui::isInteresting(Event& event) {
+	if(auto e = dynamic_cast<ActionFailureEvent*>(&event)) {
+		if(e->actor->isPlayer()) return true;
+	}
 	if(auto e = dynamic_cast<ItemFoundEvent*>(&event)) {
 		if(e->finder->isPlayer()) return true;
 	}

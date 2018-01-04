@@ -31,7 +31,8 @@ bool MoveAction::execute() {
 	for (auto& a : world->getActors()) {
 		if (a->destructible && !a->destructible->isDead() && a->x == targetX && a->y == targetY) {
 			if(actor->wornWeapon && actor->wornWeapon->rangedAttacker) {
-				state->message(colors::red, "You can't shoot from this distance!");
+				ActionFailureEvent e(actor, "You can't shoot from this far away!");
+				world->notify(e);
 				return false;
 			}
 			if(actor->wornWeapon && actor->wornWeapon->attacker) actor->wornWeapon->attacker->attack(actor, a.get());
