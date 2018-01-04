@@ -31,9 +31,15 @@ Message messaging::createMessageFromEvent(Event& event) {
 		return Message(messageText, colors::green);
 	}
 	if(auto e = dynamic_cast<MeleeHitEvent*>(&event)) {
-		std::string fmt = "%d: %s attacks %s for %d hit points with a %s.";
-		std::string messageText = formatString(fmt, e->time, e->hitter->name.c_str(), e->hittee->name.c_str(), e->damage, e->weapon->name.c_str());
-		return Message(messageText, colors::red);
+		if(e->weapon) {
+			std::string fmt = "%d: %s attacks %s for %d hit points with a %s.";
+			std::string messageText = formatString(fmt, e->time, e->hitter->name.c_str(), e->hittee->name.c_str(), e->damage, e->weapon->name.c_str());
+			return Message(messageText, colors::red);
+		} else {
+			std::string fmt = "%d: %s attacks %s for %d hit points.";
+			std::string messageText = formatString(fmt, e->time, e->hitter->name.c_str(), e->hittee->name.c_str(), e->damage);
+			return Message(messageText, colors::red);
+		}
 	}
 	else return Message("UNKNOWN EVENT", colors::white);
 }

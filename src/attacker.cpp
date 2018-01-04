@@ -13,17 +13,14 @@ void Attacker::attack(Actor* owner, Actor* target) {
 		if(attackRoll > target->destructible->armorClass) {
 			int dmg = getAttackBaseDamage();
 			if ( dmg - target->destructible->defense > 0 ) {
-				if(owner->wornWeapon) {
-					int damage = dmg - target->destructible->defense;
-					MeleeHitEvent e(owner, target, owner->wornWeapon, damage);
-					owner->world->notify(e);
+				int damage = dmg - target->destructible->defense;
+				MeleeHitEvent e(owner, target, owner->wornWeapon, damage);
+				owner->world->notify(e);
 
-					if(effect) {
-						std::unique_ptr<Effect> ef = std::make_unique<MoveEffect>(Direction::NONE, 1, "The %s is kicked back!"); // TODO actually use the prototype object
-						ef->applyTo(target);
-					}
+				if(effect) {
+					std::unique_ptr<Effect> ef = std::make_unique<MoveEffect>(Direction::NONE, 1, "The %s is kicked back!"); // TODO actually use the prototype object
+					ef->applyTo(target);
 				}
-				else owner->s->message(colors::red, "%s attacks %s for %g hit points.", owner->name.c_str(), target->name.c_str(), dmg - target->destructible->defense);
 			} else {
 				owner->s->message(colors::lightGrey, "%s attacks %s but it has no effect!", owner->name.c_str(), target->name.c_str());
 			}
