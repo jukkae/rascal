@@ -53,4 +53,11 @@ struct RequestDescriptionEvent : public Event {
 	Point location;
 	//TODO request description of a) surroundings and b) actors
 };
+
+struct DeathEvent : public Event {
+	DeathEvent(Actor* actor = nullptr, std::string description = ""): actor(actor), description(description) {;}
+
+	Actor* actor;
+	std::string description;
+}
 #endif /* EVENT_HPP */

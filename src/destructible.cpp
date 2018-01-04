@@ -1,6 +1,7 @@
 #include <cstdio>
 #include "destructible.hpp"
 #include "engine.hpp"
+#include "event.hpp"
 #include "gameplay_state.hpp"
 #include "gameover_state.hpp"
 #include "colors.hpp"
@@ -39,6 +40,7 @@ MonsterDestructible::MonsterDestructible(float maxHp, float defense, int xp, std
 	Destructible(maxHp, defense, xp, corpseName, armorClass) {;}
 
 void MonsterDestructible::die(Actor* owner) {
+	//TODO DeathEvent
 	owner->s->message(colors::lightGrey, "%s is dead! You gain %d xp!", owner->name.c_str(), xp);
 	PlayerAi* ai = (PlayerAi*)owner->world->getPlayer()->ai.get();
 	ai->increaseXp(owner->world->getPlayer(), xp);
