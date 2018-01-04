@@ -56,6 +56,7 @@ int Attacker::getAttackBaseDamage() {
 }
 
 void RangedAttacker::attack(Actor* owner, Actor* target) {
+	RangedHitEvent e(owner, target);
 	if(rounds <= 0) {
 		owner->s->message(colors::red, "Out of rounds!"); // TODO should move check elsewhere?
 		return;

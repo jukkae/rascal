@@ -165,6 +165,9 @@ bool ShootAction::execute() {
 	int worldY = target.y;
 
 	Actor* enemy = actor->world->getLiveActor(worldX, worldY); // get some live actor at target
+	if(actor->wornWeapon->rangedAttacker->rounds <= 0) {
+		actor->s->message(colors::red, "Out of rounds!");
+	}
 	if(actor->getDistance(worldX, worldY) > actor->wornWeapon->rangedAttacker->range) {
 		actor->s->message(colors::lightRed, "You can't shoot that far");
 		return false;

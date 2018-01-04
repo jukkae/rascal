@@ -49,5 +49,6 @@ Message messaging::createMessageFromEvent(Event& event) {
 			messageText = formatString(fmt, e->time, e->hitter->name.c_str(), e->hittee->name.c_str(), e->damage);
 		}
 	}
+
 	return Message(messageText, color);
 }
