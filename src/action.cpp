@@ -156,7 +156,8 @@ LookAction::LookAction(Actor* actor, Point location):
 	Action(actor, 50.0f), location(location) {;}
 
 bool LookAction::execute() {
-	actor->s->message(colors::lightGrey, "You take a look around. The building is as bleak from inside.");
+	RequestDescriptionEvent e(actor, location);
+	actor->world->notify(e);
 	return true;
 }
 

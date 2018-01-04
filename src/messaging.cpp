@@ -76,5 +76,10 @@ Message messaging::createMessageFromEvent(Event& event) {
 		color = colors::lightRed;
 	}
 
+	if(auto e = dynamic_cast<RequestDescriptionEvent*>(&event)) {
+		messageText = "You take a look around. It's bleak."; // TODO obvs more stuff
+		color = colors::grey;
+	}
+
 	return Message(messageText, color);
 }

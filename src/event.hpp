@@ -1,6 +1,7 @@
 #ifndef EVENT_HPP
 #define EVENT_HPP
 
+#include "point.hpp"
 class Actor;
 
 struct Event {
@@ -43,5 +44,13 @@ struct ActionFailureEvent : public Event {
 
 	Actor* actor;
 	std::string failureMessage; //TODO ultimately, again, this is GUI's responsibility
+};
+
+struct RequestDescriptionEvent : public Event {
+	RequestDescriptionEvent(Actor* actor = nullptr, Point location = Point(0, 0)): actor(actor), location(location) {;}
+
+	Actor* actor;
+	Point location;
+	//TODO request description of a) surroundings and b) actors
 };
 #endif /* EVENT_HPP */
