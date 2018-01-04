@@ -70,8 +70,9 @@ void GameplayState::render() {
 	window->display();
 }
 
-void GameplayState::notify(Event& e) {
+void GameplayState::notify(Event& event) {
 	std::cout << "state sees event" << "\n"; //TODO
+	gui.notify(event);
 }
 
 void GameplayState::message(sf::Color col, std::string text, ...) {

@@ -2,6 +2,7 @@
 #include "colors.hpp"
 #include "constants.hpp"
 #include "destructible.hpp"
+#include "event.hpp"
 #include "font.hpp"
 #include "gameplay_state.hpp"
 #include "gui.hpp"
@@ -245,4 +246,8 @@ void Gui::message(sf::Color col, std::string text, ...) {
 		Message msg(line, col);
 		log.push_back(msg);
 	}
+}
+
+void Gui::notify(Event& event) {
+	message(colors::white, event.getMessage());
 }

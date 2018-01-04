@@ -7,6 +7,7 @@
 #include <SFML/Graphics.hpp>
 class GameplayState;
 class World;
+class Event;
 
 class Gui {
 public:
@@ -19,6 +20,8 @@ public:
 	void message(sf::Color col, std::string text, va_list args);
 
 	void setState(GameplayState* s) { state = s; }
+
+	void notify(Event& event);
 protected:
 	struct Message {
 		std::string text;
