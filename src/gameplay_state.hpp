@@ -14,6 +14,7 @@ class Engine;
 #include <SFML/Graphics.hpp>
 #include <boost/serialization/vector.hpp>
 
+class Event;
 class GameplayState : public State {
 public:
 	GameplayState(Engine* engine, sf::RenderWindow* window);
@@ -28,10 +29,11 @@ public:
 	void nextLevel();
 	void previousLevel();
 	Point getWorldCoordsFromScreenCoords(Point& point) { return renderer.getWorldCoordsFromScreenCoords(point); }
+
+	void notify(Event& e);
 	void message(sf::Color col, std::string text, ...);
 	Engine* getEngine() { return engine; }
 	void setEngine(Engine* e) { engine = e; }
-
 	void setWindow(sf::RenderWindow* w) { window = w; }
 
 	World* world = nullptr; // TODO should be private

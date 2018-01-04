@@ -1,6 +1,7 @@
 #include "constants.hpp"
 #include "gameplay_state.hpp"
 #include "engine.hpp"
+#include "event.hpp"
 #include "map_utils.hpp"
 #include "victory_state.hpp"
 #include <chrono>
@@ -69,7 +70,10 @@ void GameplayState::render() {
 	window->display();
 }
 
-// Messaging system
+void GameplayState::notify(Event& e) {
+	std::cout << "state sees event" << "\n"; //TODO
+}
+
 void GameplayState::message(sf::Color col, std::string text, ...) {
 	va_list args;
 	va_start(args, text);

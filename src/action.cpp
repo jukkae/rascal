@@ -55,8 +55,6 @@ bool MoveAction::execute() {
 			world->notify(e);
 			Event f;
 			world->notify(f);
-			//Event e(EventType::ITEM_FOUND, a->name);
-			//world->notify(e);
 			//in world: state->notify(e);
 			//in state: for(observer o : observers) o->notify(e);
 		}
