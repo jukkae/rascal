@@ -17,12 +17,13 @@ struct ItemFoundEvent : public Event {
 };
 
 struct MeleeHitEvent : public Event {
-	MeleeHitEvent(Actor* hitter = nullptr, Actor* hittee = nullptr, Actor* weapon = nullptr, int damage = 0):
-	hitter(hitter), hittee(hittee), weapon(weapon), damage(damage) {;}
+	MeleeHitEvent(Actor* hitter = nullptr, Actor* hittee = nullptr, Actor* weapon = nullptr, int damage = 0, bool hit = false):
+	hitter(hitter), hittee(hittee), weapon(weapon), damage(damage), hit(hit) {;}
 
 	Actor* hitter;
 	Actor* hittee; //:D
 	Actor* weapon;
 	int damage;
+	bool hit;
 };
 #endif /* EVENT_HPP */

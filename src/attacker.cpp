@@ -13,7 +13,7 @@ void Attacker::attack(Actor* owner, Actor* target) {
 		if(attackRoll > target->destructible->armorClass) {
 			int dmg = getAttackBaseDamage();
 			int damage = dmg - target->destructible->defense;
-			MeleeHitEvent e(owner, target, owner->wornWeapon, damage);
+			MeleeHitEvent e(owner, target, owner->wornWeapon, damage, true);
 			owner->world->notify(e);
 
 			if(effect) {
@@ -22,11 +22,12 @@ void Attacker::attack(Actor* owner, Actor* target) {
 			}
 			target->destructible->takeDamage(target, dmg);
 		} else {
-			owner->s->message(colors::lightGrey, "%s misses %s!", owner->name.c_str(), target->name.c_str());
+			MeleeHitEvent e(owner, target, nullptr, 0, false);
+			owner->world->notify(e);
 		}
 	}
 	else {
-		owner->s->message(colors::lightGrey, "%s attacks %s in vain.", owner->name.c_str(), target->name.c_str());
+		//TODO hitting a dead corpse
 	}
 }
 

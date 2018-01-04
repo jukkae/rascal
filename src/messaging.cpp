@@ -25,25 +25,29 @@ std::string messaging::formatString(std::string text, ...) {
 
 
 Message messaging::createMessageFromEvent(Event& event) {
+	std::string fmt;
+	std::string messageText = "UNKNOWN EVENT";
+	sf::Color color = colors::white;
+
 	if(auto e = dynamic_cast<ItemFoundEvent*>(&event)) {
-		std::string fmt = "%d: There's a %s here!";
-		std::string messageText = formatString(fmt, e->time, e->item->name.c_str());
-		return Message(messageText, colors::green);
+		fmt = "%d: There's a %s here!";
+		messageText = formatString(fmt, e->time, e->item->name.c_str());
 	}
+
 	if(auto e = dynamic_cast<MeleeHitEvent*>(&event)) {
-		if(e->damage <= 0) {
-			std::string fmt = "%d: %s hits %s, but it seems to have no effect.";
-			std::string messageText = formatString(fmt, e->time, e->hitter->name.c_str(), e->hittee->name.c_str());
-			return Message(messageText, colors::red);
+		if(!e->hit) {
+			fmt = "%d: %s misses %s.";
+			messageText = formatString(fmt, e->time, e->hitter->name.c_str(), e->hittee->name.c_str());
+		} else if(e->damage <= 0) {
+			fmt = "%d: %s hits %s, but it seems to have no effect.";
+			messageText = formatString(fmt, e->time, e->hitter->name.c_str(), e->hittee->name.c_str());
 		} else if(e->weapon) {
-			std::string fmt = "%d: %s attacks %s for %d hit points with a %s.";
-			std::string messageText = formatString(fmt, e->time, e->hitter->name.c_str(), e->hittee->name.c_str(), e->damage, e->weapon->name.c_str());
-			return Message(messageText, colors::red);
+			fmt = "%d: %s attacks %s for %d hit points with a %s.";
+			messageText = formatString(fmt, e->time, e->hitter->name.c_str(), e->hittee->name.c_str(), e->damage, e->weapon->name.c_str());
 		} else {
-			std::string fmt = "%d: %s attacks %s for %d hit points.";
-			std::string messageText = formatString(fmt, e->time, e->hitter->name.c_str(), e->hittee->name.c_str(), e->damage);
-			return Message(messageText, colors::red);
+			fmt = "%d: %s attacks %s for %d hit points.";
+			messageText = formatString(fmt, e->time, e->hitter->name.c_str(), e->hittee->name.c_str(), e->damage);
 		}
 	}
-	else return Message("UNKNOWN EVENT", colors::white);
+	return Message(messageText, color);
 }
