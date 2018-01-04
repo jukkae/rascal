@@ -6,7 +6,7 @@
 
 Message messaging::createMessageFromEvent(Event& event) {
 	if(auto e = dynamic_cast<ItemFoundEvent*>(&event)) {
-		std::string messageText = e->getMessage().append((e->getItemName())); //TODO fix format string
+		std::string messageText = e->getMessage().append((e->getItemName())); //TODO fix format string and line breaks: Messages should not care about line breaking
 		return Message(messageText, colors::green);
 	}
 	else return Message(event.getMessage(), colors::white);
