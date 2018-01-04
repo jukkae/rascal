@@ -1,5 +1,7 @@
 #ifndef MESSAGING_HPP
 #define MESSAGING_HPP
+#include "colors.hpp"
+#include <string> // bad
 
 struct Message {
 	std::string text;
