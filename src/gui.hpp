@@ -7,7 +7,7 @@
 #include <SFML/Graphics.hpp>
 class GameplayState;
 class World;
-class Event;
+struct Event;
 
 class Gui {
 public:

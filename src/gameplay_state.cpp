@@ -71,8 +71,9 @@ void GameplayState::render() {
 }
 
 void GameplayState::notify(Event& event) {
-	std::cout << "state sees event" << "\n"; //TODO
 	gui.notify(event);
+	//renderer.notify(event);
+	//audioSystem.notify(event);
 }
 
 void GameplayState::message(sf::Color col, std::string text, ...) {

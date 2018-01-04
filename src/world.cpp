@@ -96,7 +96,7 @@ std::vector<Actor*> World::getActorsAt(int x, int y) {
 	return v;
 }
 
-// TODO
+//TODO
 void World::notify(Event& e) {
 	std::cout << e.getMessage();
 	if(state) state->notify(e);

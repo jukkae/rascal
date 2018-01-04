@@ -32,13 +32,6 @@ bool MoveAction::execute() {
 		if (a->destructible && !a->destructible->isDead() && a->x == targetX && a->y == targetY) {
 			if(actor->wornWeapon && actor->wornWeapon->rangedAttacker) {
 				state->message(colors::red, "You can't shoot from this distance!");
-				// TODO TODO TODO
-				//1. create event, pass to observers?
-				//2. create event, pass to world
-				//	-> world passes event to state
-				//	-> state passes event to gui
-				//	-> state passes event to renderer
-				//	-> state passes event to audio system
 				return false;
 			}
 			if(actor->wornWeapon && actor->wornWeapon->attacker) actor->wornWeapon->attacker->attack(actor, a.get());
@@ -50,13 +43,8 @@ bool MoveAction::execute() {
 	for (auto& a : world->getActors()) {
 		bool corpseOrItem = (a->destructible && a->destructible->isDead()) || a->pickable;
 		if(corpseOrItem && a->x == targetX && a->y == targetY) {
-			state->message(colors::lightGrey, "There's a %s here!", a->name.c_str());
-			ItemFoundEvent e;
+			ItemFoundEvent e("There's a %s here!", a->name);;
 			world->notify(e);
-			Event f;
-			world->notify(f);
-			//in world: state->notify(e);
-			//in state: for(observer o : observers) o->notify(e);
 		}
 	}
 	actor->x = targetX;

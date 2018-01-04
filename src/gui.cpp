@@ -249,5 +249,8 @@ void Gui::message(sf::Color col, std::string text, ...) {
 }
 
 void Gui::notify(Event& event) {
-	message(colors::white, event.getMessage());
+	if(auto f = dynamic_cast<ItemFoundEvent*>(&event)) {
+		message(colors::white, f->getMessage(), f->getItemName().c_str());
+	}
+	else message(colors::white, event.getMessage());
 }
