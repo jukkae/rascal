@@ -9,6 +9,19 @@ class GameplayState;
 class World;
 struct Event;
 
+struct Message {
+	std::string text;
+	sf::Color col;
+
+	Message(std::string text = "", sf::Color col = sf::Color::White);
+
+	template<typename Archive>
+	void serialize(Archive & ar, const unsigned int version) {
+		ar & text;
+		ar & col;
+	}
+};
+
 class Gui {
 public:
 	Gui();
@@ -23,18 +36,6 @@ public:
 
 	void notify(Event& event);
 protected:
-	struct Message {
-		std::string text;
-		sf::Color col;
-
-		Message(std::string text = "", sf::Color col = sf::Color::White);
-
-		template<typename Archive>
-		void serialize(Archive & ar, const unsigned int version) {
-			ar & text;
-			ar & col;
-		}
-	};
 
 	std::vector<Message> log;
 

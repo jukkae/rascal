@@ -8,6 +8,7 @@
 #include "gui.hpp"
 #include "io.hpp"
 #include "map.hpp"
+#include "messaging.hpp"
 #include "world.hpp"
 #include <cstdarg>
 #include <sstream>
@@ -207,18 +208,18 @@ void Gui::renderMouseLook(World* world, sf::RenderWindow* window) {
 }
 
 
-Gui::Message::Message(std::string text, sf::Color col) :
+Message::Message(std::string text, sf::Color col) :
 col(col) {
-	this->text = text;
+this->text = text;
 }
 
 void Gui::message(sf::Color col, std::string text, va_list args) {
-	std::string buf = "";
-	char dest[1024*16]; // maybe something a bit more sane would be in order at some point
-	vsnprintf(dest, 1024*16, text.c_str(), args); // FIXME
+std::string buf = "";
+char dest[1024*16]; // maybe something a bit more sane would be in order at some point
+vsnprintf(dest, 1024*16, text.c_str(), args); // FIXME
 
-	std::istringstream iss (dest);
-	std::string line;
+std::istringstream iss (dest);
+std::string line;
 	while (std::getline(iss, line, '\n')) {
 		// make room for the message
 		if(log.size() == MSG_HEIGHT) {
@@ -253,4 +254,5 @@ void Gui::notify(Event& event) {
 		message(colors::white, f->getMessage(), f->getItemName().c_str());
 	}
 	else message(colors::white, event.getMessage());
+	Message m = messaging::createMessageFromEvent(event);
 }
