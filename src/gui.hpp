@@ -36,6 +36,7 @@ protected:
 	void renderStatusEffects(World* world, sf::RenderWindow* window);
 
 private:
+	bool isInteresting(Event& event);
 	GameplayState* state;
 	friend class boost::serialization::access;
 	template<class Archive>

@@ -257,6 +257,15 @@ void Gui::message(Message m) {
 }
 
 void Gui::notify(Event& event) {
-	Message m = messaging::createMessageFromEvent(event);
-	message(m);
+	if(isInteresting(event)) {
+		Message m = messaging::createMessageFromEvent(event);
+		message(m);
+	}
+}
+
+bool Gui::isInteresting(Event& event) {
+	if(auto e = dynamic_cast<ItemFoundEvent*>(&event)) {
+		if(e->finder->isPlayer()) return true;
+	}
+	return false;
 }

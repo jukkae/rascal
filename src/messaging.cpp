@@ -1,5 +1,6 @@
 #include "messaging.hpp"
 
+#include "actor.hpp"
 #include "colors.hpp"
 #include "event.hpp"
 
@@ -28,8 +29,10 @@ Message messaging::createMessageFromEvent(Event& event) {
 	if(auto e = dynamic_cast<ItemFoundEvent*>(&event)) {
 		//std::string messageText = e->getMessage().append((e->getItemName())); //TODO fix format string and line breaks: Messages should not care about line breaking
 
-		std::string messageText = formatString(e->getMessage(), e->getItemName().c_str());
+		// std::string messageText = formatString(e->getMessage(), e->getItemName().c_str());
+		std::string fmt = "There's a %s here!";
+		std::string messageText = formatString(fmt, e->item->name.c_str());
 		return Message(messageText, colors::green);
 	}
-	else return Message(event.getMessage(), colors::white);
+	else return Message("UNKNOWN EVENT", colors::white);
 }
