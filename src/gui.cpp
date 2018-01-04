@@ -257,10 +257,6 @@ void Gui::message(Message m) {
 }
 
 void Gui::notify(Event& event) {
-	/*if(auto f = dynamic_cast<ItemFoundEvent*>(&event)) {
-		message(colors::white, f->getMessage(), f->getItemName().c_str());
-	}
-	else message(colors::white, event.getMessage());*/
 	Message m = messaging::createMessageFromEvent(event);
 	message(m);
 }
