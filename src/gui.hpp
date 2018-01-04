@@ -3,24 +3,12 @@
 
 #include "actor.hpp" // must be included for serialization
 #include "constants.hpp"
+#include "messaging.hpp"
 #include "persistent.hpp"
 #include <SFML/Graphics.hpp>
 class GameplayState;
 class World;
 struct Event;
-
-struct Message {
-	std::string text;
-	sf::Color col;
-
-	Message(std::string text = "", sf::Color col = sf::Color::White);
-
-	template<typename Archive>
-	void serialize(Archive & ar, const unsigned int version) {
-		ar & text;
-		ar & col;
-	}
-};
 
 class Gui {
 public:
