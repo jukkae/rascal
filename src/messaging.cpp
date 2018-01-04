@@ -1,7 +1,7 @@
 #include "messaging.hpp"
 
 #include "colors.hpp"
-#include "gui.hpp"
+#include "gui.hpp" // TODO only included for Message struct -> move that here
 #include "event.hpp"
 
 Message messaging::createMessageFromEvent(Event& event) {
