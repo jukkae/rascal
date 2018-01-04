@@ -43,7 +43,7 @@ bool MoveAction::execute() {
 	for (auto& a : world->getActors()) {
 		bool corpseOrItem = (a->destructible && a->destructible->isDead()) || a->pickable;
 		if(corpseOrItem && a->x == targetX && a->y == targetY) {
-			ItemFoundEvent e("There's a %s here!", a->name);;
+			ItemFoundEvent e("There's a %s here!", a->name); // TODO also send this actor and filter out non-players
 			world->notify(e);
 		}
 	}
