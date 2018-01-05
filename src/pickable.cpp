@@ -74,48 +74,53 @@ void TargetSelector::selectTargets(Actor* wearer, std::vector<Actor*>& list) {
 	}
 }
 
-HealthEffect::HealthEffect(float amount, std::string message) : amount(amount), message(message) {;}
+HealthEffect::HealthEffect(float amount) : amount(amount) {;}
 
 bool HealthEffect::applyTo(Actor* actor) {
 	if(!actor->destructible) return false;
 	if(amount > 0) {
 		float pointsHealed = actor->destructible->heal(amount);
 		if(pointsHealed > 0) {
-			if(message != "") actor->s->message(colors::lightGrey, message, actor->name.c_str(), pointsHealed);
+			//TODO fire event
+			// if(message != "") actor->s->message(colors::lightGrey, message, actor->name.c_str(), pointsHealed);
 			return true;
 		}
 	} else {
-		if(message != "" && -amount-actor->destructible->defense > 0) {
-			actor->s->message(colors::lightGrey, message, actor->name.c_str(), -amount-actor->destructible->defense);
-		}
+		//TODO fire event
+		// if(message != "" && -amount-actor->destructible->defense > 0) {
+			// actor->s->message(colors::lightGrey, message, actor->name.c_str(), -amount-actor->destructible->defense);
+		// }
 		if(actor->destructible->takeDamage(actor, -amount) > 0) return true;
 	}
 	return false;
 }
 
-AiChangeEffect::AiChangeEffect(std::unique_ptr<TemporaryAi> newAi, std::string message) : newAi(std::move(newAi)), message(message) {;}
+AiChangeEffect::AiChangeEffect(std::unique_ptr<TemporaryAi> newAi) : newAi(std::move(newAi)) {;}
 
 bool AiChangeEffect::applyTo(Actor* actor) {
 	newAi->applyTo(actor);
-	if(message != "") actor->s->message(colors::lightGrey, message, actor->name.c_str());
+	//TODO fire event
+	// if(message != "") actor->s->message(colors::lightGrey, message, actor->name.c_str());
 	return true;
 }
 
-StatusEffectEffect::StatusEffectEffect(std::unique_ptr<StatusEffect> statusEffect, std::string message):
-statusEffect(std::move(statusEffect)), message(message) {;}
+StatusEffectEffect::StatusEffectEffect(std::unique_ptr<StatusEffect> statusEffect):
+statusEffect(std::move(statusEffect)) {;}
 
 bool StatusEffectEffect::applyTo(Actor* actor) {
 	actor->addStatusEffect(std::move(statusEffect));
-	if(message != "") actor->s->message(colors::lightGrey, message, actor->name.c_str());
+	//TODO fire event
+	// if(message != "") actor->s->message(colors::lightGrey, message, actor->name.c_str());
 	return true;
 }
 
-MoveEffect::MoveEffect(Direction direction, float distance, std::string message):
-direction(direction), distance(distance), message(message) {;}
+MoveEffect::MoveEffect(Direction direction, float distance):
+direction(direction), distance(distance) {;}
 
 bool MoveEffect::applyTo(Actor* actor) { // TODO finish implementation
 	actor->tryToMove(direction, distance);
-	if(message != "") actor->s->message(colors::lightGrey, message, actor->name.c_str());
+	//TODO fire event
+	// if(message != "") actor->s->message(colors::lightGrey, message, actor->name.c_str());
 	return true;
 }
 
@@ -174,7 +179,7 @@ void Pickable::drop(Actor* owner, Actor* wearer) {
 		item->x = wearer->x;
 		item->y = wearer->y;
 		wearer->world->addActor(std::move(item));
-		wearer->s->message(colors::lightGrey, "%s drops a %s.", wearer->name.c_str(), ownerName.c_str());
+		// wearer->s->message(colors::lightGrey, "%s drops a %s.", wearer->name.c_str(), ownerName.c_str()); //TODO fire ActionResultEvent, maybe from action
 	}
 }
 

@@ -17,7 +17,7 @@ void Attacker::attack(Actor* owner, Actor* target) {
 			owner->world->notify(e);
 
 			if(effect) {
-				std::unique_ptr<Effect> ef = std::make_unique<MoveEffect>(Direction::NONE, 1, "The %s is kicked back!"); // TODO actually use the prototype object
+				std::unique_ptr<Effect> ef = std::make_unique<MoveEffect>(Direction::NONE, 1); // TODO actually use the prototype object
 				ef->applyTo(target);
 			}
 			target->destructible->takeDamage(target, dmg);
