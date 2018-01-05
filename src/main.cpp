@@ -3,7 +3,6 @@
 #include <iostream>
 
 #include "engine.hpp"
-#include "main.hpp"
 #include "constants.hpp"
 #include "io.hpp"
 
