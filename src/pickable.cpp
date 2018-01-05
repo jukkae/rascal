@@ -28,7 +28,8 @@ void TargetSelector::selectTargets(Actor* wearer, std::vector<Actor*>& list) {
 		{
 			World* world = wearer->world;
 			int x, y;
-			wearer->s->message(colors::cyan, "Left-click to select an enemy,\nor right-click to cancel.");
+			UiEvent e("Left-click to select an enemy,\nor right-click to cancel.");
+			world->notify(e);
 			if(io::waitForMouseClick(wearer->s)) {
 				x = io::mousePosition.x;
 				y = io::mousePosition.y;
@@ -53,7 +54,8 @@ void TargetSelector::selectTargets(Actor* wearer, std::vector<Actor*>& list) {
 		{
 			World* world = wearer->world;
 			int x, y;
-			wearer->s->message(colors::cyan, "Left-click to select a tile,\nor right-click to cancel.");
+			UiEvent e("Left-click to select a tile,\nor right-click to cancel.");
+			world->notify(e);
 			if(io::waitForMouseClick(wearer->s)) {
 				x = io::mousePosition.x;
 				y = io::mousePosition.y;

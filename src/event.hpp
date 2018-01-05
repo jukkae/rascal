@@ -83,4 +83,10 @@ struct PlayerStatChangeEvent : public Event {
 	bool levelUp; //i know i know
 	int xpLevel; //yeah bad
 };
+
+struct UiEvent : public Event { // This is, in effect, just a direct request to Gui::message()
+	UiEvent(std::string text): text(text) {;}
+
+	std::string text;
+};
 #endif /* EVENT_HPP */

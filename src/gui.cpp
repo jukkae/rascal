@@ -291,5 +291,8 @@ bool Gui::isInteresting(Event& event) {
 	if(auto e = dynamic_cast<PlayerStatChangeEvent*>(&event)) {
 		return true;
 	}
+	if(auto e = dynamic_cast<UiEvent*>(&event)) {
+		return true;
+	}
 	return false;
 }

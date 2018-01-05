@@ -88,6 +88,11 @@ Message messaging::createMessageFromEvent(Event& event) {
 		color = colors::grey;
 	}
 
+	if(auto e = dynamic_cast<UiEvent*>(&event)) {
+		messageText = e->text;
+		color = colors::cyan;
+	}
+
 	if(auto e = dynamic_cast<DeathEvent*>(&event)) {
 		if(e->xp == 0) {
 			fmt = "%d: %s is dead!";
