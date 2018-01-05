@@ -145,6 +145,7 @@ Message messaging::createMessageFromEvent(Event& event) {
 
 	if(auto e = dynamic_cast<StatusEffectChangeEvent*>(&event)) {
 		if(auto fx = dynamic_cast<PoisonedStatusEffect*>(e->effect)) {
+			ignore(fx);
 			fmt = "%d: The %s feels bad";
 			messageText = formatString(fmt, e->time, e->actor->name.c_str());
 			color = colors::blue;
