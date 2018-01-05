@@ -45,9 +45,8 @@ private:
 class HealthEffect : public Effect {
 public:
 	float amount;
-	std::string message;
 
-	HealthEffect(float amount = 0, std::string message = "");
+	HealthEffect(float amount = 0);
 	bool applyTo(Actor* actor) override;
 private:
 	friend class boost::serialization::access;
@@ -55,16 +54,14 @@ private:
 	void serialize(Archive & ar, const unsigned int version) {
 		ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(Effect);
 		ar & amount;
-		ar & message;
 	}
 };
 
 class AiChangeEffect : public Effect {
 public:
 	std::unique_ptr<TemporaryAi> newAi;
-	std::string message;
 
-	AiChangeEffect(std::unique_ptr<TemporaryAi> newAi = std::unique_ptr<TemporaryAi>(), std::string message = "");
+	AiChangeEffect(std::unique_ptr<TemporaryAi> newAi = std::unique_ptr<TemporaryAi>());
 	bool applyTo(Actor* actor) override;
 private:
 	friend class boost::serialization::access;
@@ -72,35 +69,31 @@ private:
 	void serialize(Archive & ar, const unsigned int version) {
 		ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(Effect);
 		ar & newAi;
-		ar & message;
 	}
 };
 
 class StatusEffectEffect : public Effect {
 public:
-	StatusEffectEffect(std::unique_ptr<StatusEffect> statusEffect = std::unique_ptr<StatusEffect>(), std::string message = "");
+	StatusEffectEffect(std::unique_ptr<StatusEffect> statusEffect = std::unique_ptr<StatusEffect>());
 	bool applyTo(Actor* actor) override;
 
 	std::unique_ptr<StatusEffect> statusEffect;
-	std::string message;
 private:
 	friend class boost::serialization::access;
 	template<class Archive>
 	void serialize(Archive & ar, const unsigned int version) {
 		ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(Effect);
 		ar & statusEffect;
-		ar & message;
 	}
 };
 
 class MoveEffect : public Effect {
 public:
-	MoveEffect(Direction direction = Direction::NONE, float distance = 1, std::string message = "");
+	MoveEffect(Direction direction = Direction::NONE, float distance = 1);
 	bool applyTo(Actor* actor) override;
 
 	Direction direction;
 	float distance; // FIXME not implemented yet
-	std::string message;
 private:
 	friend class boost::serialization::access;
 	template<class Archive>
@@ -108,7 +101,6 @@ private:
 		ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(Effect);
 		ar & direction;
 		ar & distance;
-		ar & message;
 	}
 };
 
