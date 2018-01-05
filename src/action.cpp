@@ -131,6 +131,8 @@ bool DropItemAction::execute() {
 	if(actor->wornWeapon == item) { // TODO order of actions is wrong
 		actor->addAction(std::make_unique<UnWieldItemAction>(UnWieldItemAction(actor)));
 	}
+	ActionSuccessEvent e(item, "You drop what you were holding!"); // TODO player-specific
+	actor->world->notify(e);
 	item->pickable->drop(item, actor);
 	return true;
 }

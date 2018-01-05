@@ -177,7 +177,6 @@ void Pickable::drop(Actor* owner, Actor* wearer) {
 		item->x = wearer->x;
 		item->y = wearer->y;
 		wearer->world->addActor(std::move(item));
-		// wearer->s->message(colors::lightGrey, "%s drops a %s.", wearer->name.c_str(), ownerName.c_str()); //TODO fire ActionResultEvent, maybe from action
 	}
 }
 
