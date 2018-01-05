@@ -308,5 +308,9 @@ bool Gui::isInteresting(Event& event) {
 		ignore(e);
 		/* if(e->actor->isPlayer()) */ return true;
 	}
+	if(auto e = dynamic_cast<PickableHealthEffectEvent*>(&event)) {
+		ignore(e);
+		/* if(e->actor->isPlayer()) */ return true;
+	}
 	return false;
 }

@@ -113,6 +113,18 @@ Message messaging::createMessageFromEvent(Event& event) {
 		}
 	}
 
+	if(auto e = dynamic_cast<PickableHealthEffectEvent*>(&event)) {
+		if(e->amount >= 0) {
+			fmt = "%d: %s gains %d hp!";
+			messageText = formatString(fmt, e->time, e->actor->name.c_str(), e->amount);
+			color = colors::green;
+		} else {
+			fmt = "%d: %s is harmed for %d hp!";
+			messageText = formatString(fmt, e->time, e->actor->name.c_str(), -e->amount);
+			color = colors::red;
+		}
+	}
+
 	if(auto e = dynamic_cast<PlayerDeathEvent*>(&event)) {
 		fmt = "%d: You are dead!";
 		messageText = formatString(fmt, e->time);

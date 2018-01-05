@@ -81,15 +81,13 @@ bool HealthEffect::applyTo(Actor* actor) {
 	if(amount > 0) {
 		float pointsHealed = actor->destructible->heal(amount);
 		if(pointsHealed > 0) {
-			//TODO fire event
-			// if(message != "") actor->s->message(colors::lightGrey, message, actor->name.c_str(), pointsHealed);
+			PickableHealthEffectEvent e(actor, pointsHealed);
+			actor->world->notify(e);
 			return true;
 		}
 	} else {
-		//TODO fire event
-		// if(message != "" && -amount-actor->destructible->defense > 0) {
-			// actor->s->message(colors::lightGrey, message, actor->name.c_str(), -amount-actor->destructible->defense);
-		// }
+		PickableHealthEffectEvent e(actor, amount-actor->destructible->defense);
+		actor->world->notify(e);
 		if(actor->destructible->takeDamage(actor, -amount) > 0) return true;
 	}
 	return false;

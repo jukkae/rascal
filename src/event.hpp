@@ -96,4 +96,11 @@ struct StatusEffectEvent : public Event {
 	Actor* actor;
 	std::string text;
 };
+
+struct PickableHealthEffectEvent : public Event {
+	PickableHealthEffectEvent(Actor* actor = nullptr, int amount = 0): actor(actor), amount(amount) {;}
+
+	Actor* actor;
+	int amount;
+};
 #endif /* EVENT_HPP */
