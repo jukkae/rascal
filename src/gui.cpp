@@ -6,6 +6,7 @@
 #include "font.hpp"
 #include "gameplay_state.hpp"
 #include "gui.hpp"
+#include "ignore.hpp"
 #include "io.hpp"
 #include "map.hpp"
 #include "messaging.hpp"
@@ -265,36 +266,46 @@ void Gui::notify(Event& event) {
 
 bool Gui::isInteresting(Event& event) {
 	if(auto e = dynamic_cast<ActionFailureEvent*>(&event)) {
+		ignore(e);
 		/* if(e->actor->isPlayer()) */ return true;
 	}
 	if(auto e = dynamic_cast<ActionSuccessEvent*>(&event)) {
+		ignore(e);
 		/* if(e->actor->isPlayer()) */ return true;
 	}
 	if(auto e = dynamic_cast<ItemFoundEvent*>(&event)) {
 		if(e->finder->isPlayer()) return true;
 	}
 	if(auto e = dynamic_cast<MeleeHitEvent*>(&event)) {
+		ignore(e);
 		return true;
 	}
 	if(auto e = dynamic_cast<RangedHitEvent*>(&event)) {
+		ignore(e);
 		return true;
 	}
 	if(auto e = dynamic_cast<RequestDescriptionEvent*>(&event)) {
+		ignore(e);
 		return true;
 	}
 	if(auto e = dynamic_cast<DeathEvent*>(&event)) {
+		ignore(e);
 		return true;
 	}
 	if(auto e = dynamic_cast<PlayerDeathEvent*>(&event)) {
+		ignore(e);
 		return true;
 	}
 	if(auto e = dynamic_cast<PlayerStatChangeEvent*>(&event)) {
+		ignore(e);
 		return true;
 	}
 	if(auto e = dynamic_cast<UiEvent*>(&event)) {
+		ignore(e);
 		return true;
 	}
 	if(auto e = dynamic_cast<StatusEffectEvent*>(&event)) {
+		ignore(e);
 		/* if(e->actor->isPlayer()) */ return true;
 	}
 	return false;

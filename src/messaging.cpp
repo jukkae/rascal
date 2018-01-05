@@ -2,6 +2,7 @@
 
 #include "actor.hpp"
 #include "event.hpp"
+#include "ignore.hpp"
 
 std::string messaging::formatString(std::string text, ...) {
 	va_list ap;
@@ -84,6 +85,7 @@ Message messaging::createMessageFromEvent(Event& event) {
 	}
 
 	if(auto e = dynamic_cast<RequestDescriptionEvent*>(&event)) {
+		ignore(e);
 		messageText = "You take a look around. It's bleak."; // TODO obvs more stuff; time!
 		color = colors::grey;
 	}
