@@ -316,5 +316,9 @@ bool Gui::isInteresting(Event& event) {
 		ignore(e);
 		return true;
 	}
+	if(auto e = dynamic_cast<StatusEffectChangeEvent*>(&event)) {
+		ignore(e);
+		return true;
+	}
 	return false;
 }

@@ -106,9 +106,9 @@ StatusEffectEffect::StatusEffectEffect(std::unique_ptr<StatusEffect> statusEffec
 statusEffect(std::move(statusEffect)) {;}
 
 bool StatusEffectEffect::applyTo(Actor* actor) {
+	StatusEffectChangeEvent e(actor, statusEffect.get());
+	actor->world->notify(e);
 	actor->addStatusEffect(std::move(statusEffect));
-	//TODO fire event
-	// if(message != "") actor->s->message(colors::lightGrey, message, actor->name.c_str());
 	return true;
 }
 

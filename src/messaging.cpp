@@ -143,5 +143,17 @@ Message messaging::createMessageFromEvent(Event& event) {
 		color = colors::blue;
 	}
 
+	if(auto e = dynamic_cast<StatusEffectChangeEvent*>(&event)) {
+		if(auto fx = dynamic_cast<PoisonedStatusEffect*>(e->effect)) {
+			fmt = "%d: The %s feels bad";
+			messageText = formatString(fmt, e->time, e->actor->name.c_str());
+			color = colors::blue;
+		} else {
+			fmt = "%d: The %s feels a bit different";
+			messageText = formatString(fmt, e->time, e->actor->name.c_str());
+			color = colors::blue;
+		}
+	}
+
 	return Message(messageText, color);
 }

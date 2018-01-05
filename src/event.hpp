@@ -3,6 +3,7 @@
 
 #include "point.hpp"
 class Actor;
+class StatusEffect;
 
 struct Event {
 	int time = 0; //set by world
@@ -108,5 +109,12 @@ struct AiChangeEvent : public Event { // Yes I know this is getting ridiculous
 	AiChangeEvent(Actor* actor = nullptr): actor(actor) {;}
 
 	Actor* actor;
+};
+
+struct StatusEffectChangeEvent : public Event {
+	StatusEffectChangeEvent(Actor* actor = nullptr, StatusEffect* effect = nullptr): actor(actor), effect(effect) {;}
+
+	Actor* actor;
+	StatusEffect* effect;
 };
 #endif /* EVENT_HPP */
