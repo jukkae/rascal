@@ -77,8 +77,20 @@ Message messaging::createMessageFromEvent(Event& event) {
 	}
 
 	if(auto e = dynamic_cast<RequestDescriptionEvent*>(&event)) {
-		messageText = "You take a look around. It's bleak."; // TODO obvs more stuff
+		messageText = "You take a look around. It's bleak."; // TODO obvs more stuff; time!
 		color = colors::grey;
+	}
+
+	if(auto e = dynamic_cast<DeathEvent*>(&event)) {
+		if(e->xp == 0) {
+			fmt = "%d: %s is dead!";
+			messageText = formatString(fmt, e->time, e->actor->name.c_str());
+			color = colors::lightGrey;
+		} else {
+			fmt = "%d: %s is dead! You gain %d xp!";
+			messageText = formatString(fmt, e->time, e->actor->name.c_str(), e->xp);
+			color = colors::lightGrey;
+		}
 	}
 
 	return Message(messageText, color);

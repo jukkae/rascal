@@ -279,5 +279,8 @@ bool Gui::isInteresting(Event& event) {
 	if(auto e = dynamic_cast<RequestDescriptionEvent*>(&event)) {
 		return true;
 	}
+	if(auto e = dynamic_cast<DeathEvent*>(&event)) {
+		return true;
+	}
 	return false;
 }

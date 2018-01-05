@@ -40,8 +40,8 @@ MonsterDestructible::MonsterDestructible(float maxHp, float defense, int xp, std
 	Destructible(maxHp, defense, xp, corpseName, armorClass) {;}
 
 void MonsterDestructible::die(Actor* owner) {
-	//TODO DeathEvent
-	owner->s->message(colors::lightGrey, "%s is dead! You gain %d xp!", owner->name.c_str(), xp);
+	DeathEvent e(owner, "", xp);
+	owner->world->notify(e);
 	PlayerAi* ai = (PlayerAi*)owner->world->getPlayer()->ai.get();
 	ai->increaseXp(owner->world->getPlayer(), xp);
 
