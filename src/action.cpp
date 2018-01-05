@@ -7,7 +7,6 @@
 #include "world.hpp"
 
 bool MoveAction::execute() {
-	GameplayState* state = actor->s;
 	World* world = actor->world;
 	int targetX = actor->x;
 	int targetY = actor->y;
