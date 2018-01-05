@@ -41,10 +41,8 @@ void PlayerAi::increaseXp(Actor* owner, int xp) {
 	if(experience >= getNextLevelXp()) {
 		experience -= getNextLevelXp();
 		++xpLevel;
-		owner->s->message(colors::yellow, "You've reached level %d!", xpLevel);
-		Engine* engine = owner->s->getEngine();
-		std::unique_ptr<State> levelUpMenuState = std::make_unique<LevelUpMenuState>(engine, owner);
-		engine->pushState(std::move(levelUpMenuState));
+		PlayerStatChangeEvent e(owner, true, xpLevel);
+		owner->world->notify(e);
 	}
 }
 

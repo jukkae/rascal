@@ -75,4 +75,12 @@ struct PlayerDeathEvent : public Event {
 
 	Actor* actor;
 };
+
+struct PlayerStatChangeEvent : public Event {
+	PlayerStatChangeEvent(Actor* actor = nullptr, bool levelUp = true, int xpLevel = 0): actor(actor), levelUp(levelUp), xpLevel(xpLevel) {;}
+
+	Actor* actor;
+	bool levelUp; //i know i know
+	int xpLevel; //yeah bad
+};
 #endif /* EVENT_HPP */

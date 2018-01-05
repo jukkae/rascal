@@ -1,6 +1,7 @@
 #include "constants.hpp"
 #include "gameplay_state.hpp"
 #include "gameover_state.hpp"
+#include "level_up_menu_state.hpp"
 #include "engine.hpp"
 #include "event.hpp"
 #include "map_utils.hpp"
@@ -72,14 +73,18 @@ void GameplayState::render() {
 }
 
 void GameplayState::notify(Event& event) {
+	//TODO proper filtering
 	if(auto e = dynamic_cast<PlayerDeathEvent*>(&event)) {
 		std::unique_ptr<State> gameOverState = std::make_unique<GameOverState>(engine, e->actor);
-		engine->changeState(std::move(gameOverState));
-	} else {
-		gui.notify(event);
-		//renderer.notify(event);
-		//audioSystem.notify(event);
+		engine->pushState(std::move(gameOverState));
+	} 
+	if(auto e = dynamic_cast<PlayerStatChangeEvent*>(&event)) {
+		std::unique_ptr<State> levelUpMenuState = std::make_unique<LevelUpMenuState>(engine, e->actor);
+		engine->pushState(std::move(levelUpMenuState));
 	}
+	gui.notify(event);
+	//renderer.notify(event);
+	//audioSystem.notify(event);
 }
 
 void GameplayState::message(sf::Color col, std::string text, ...) {

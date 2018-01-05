@@ -106,5 +106,11 @@ Message messaging::createMessageFromEvent(Event& event) {
 		color = colors::red;
 	}
 
+	if(auto e = dynamic_cast<PlayerStatChangeEvent*>(&event)) {
+		fmt = "%d: You've reached level %d!";
+		messageText = formatString(fmt, e->time, e->xpLevel);
+		color = colors::yellow;
+	}
+
 	return Message(messageText, color);
 }

@@ -288,5 +288,8 @@ bool Gui::isInteresting(Event& event) {
 	if(auto e = dynamic_cast<PlayerDeathEvent*>(&event)) {
 		return true;
 	}
+	if(auto e = dynamic_cast<PlayerStatChangeEvent*>(&event)) {
+		return true;
+	}
 	return false;
 }
