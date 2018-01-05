@@ -93,6 +93,12 @@ Message messaging::createMessageFromEvent(Event& event) {
 		color = colors::cyan;
 	}
 
+	if(auto e = dynamic_cast<StatusEffectEvent*>(&event)) {
+		fmt = "%d: %s";
+		messageText = formatString(fmt, e->time, e->text.c_str());
+		color = colors::red; //TODO now red for poison dmg
+	}
+
 	if(auto e = dynamic_cast<DeathEvent*>(&event)) {
 		if(e->xp == 0) {
 			fmt = "%d: %s is dead!";

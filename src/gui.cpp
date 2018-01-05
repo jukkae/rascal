@@ -294,5 +294,8 @@ bool Gui::isInteresting(Event& event) {
 	if(auto e = dynamic_cast<UiEvent*>(&event)) {
 		return true;
 	}
+	if(auto e = dynamic_cast<StatusEffectEvent*>(&event)) {
+		/* if(e->actor->isPlayer()) */ return true;
+	}
 	return false;
 }

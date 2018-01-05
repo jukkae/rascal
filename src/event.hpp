@@ -89,4 +89,11 @@ struct UiEvent : public Event { // This is, in effect, just a direct request to 
 
 	std::string text;
 };
+
+struct StatusEffectEvent : public Event {
+	StatusEffectEvent(Actor* actor = nullptr, std::string text = ""): actor(actor), text(text) {;}
+
+	Actor* actor;
+	std::string text;
+};
 #endif /* EVENT_HPP */

@@ -1,6 +1,7 @@
 #include "status_effect.hpp"
 #include "colors.hpp"
 #include "destructible.hpp"
+#include "event.hpp"
 #include "gameplay_state.hpp"
 
 void PoisonedStatusEffect::update(Actor* owner, GameplayState* state, float deltaTime) {
@@ -9,8 +10,9 @@ void PoisonedStatusEffect::update(Actor* owner, GameplayState* state, float delt
 		++counter;
 		if(counter % interval == 0) {
 			counter = 0;
+			StatusEffectEvent e(owner, "you take damage from the poison!");
+			owner->world->notify(e);
 			owner->destructible->takeDamage(owner, damage);
-			owner->s->message(colors::red, "you take damage from the poison!");
 		}
 	}
 }
