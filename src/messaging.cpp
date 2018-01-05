@@ -155,5 +155,12 @@ Message messaging::createMessageFromEvent(Event& event) {
 		}
 	}
 
+	if(auto e = dynamic_cast<GenericActorEvent*>(&event)) {
+		std::string text = formatString(e->formatString, e->actor->name.c_str());
+		fmt = "%d: %s";
+		messageText = formatString(fmt, e->time, text.c_str());
+		color = colors::blue;
+	}
+
 	return Message(messageText, color);
 }

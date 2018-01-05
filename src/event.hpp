@@ -117,4 +117,11 @@ struct StatusEffectChangeEvent : public Event {
 	Actor* actor;
 	StatusEffect* effect;
 };
+
+struct GenericActorEvent : public Event { // temp
+	GenericActorEvent(Actor* actor = nullptr, std::string formatString = ""): actor(actor), formatString(formatString) {;}
+
+	Actor* actor;
+	std::string formatString;
+};
 #endif /* EVENT_HPP */

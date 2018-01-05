@@ -320,5 +320,9 @@ bool Gui::isInteresting(Event& event) {
 		ignore(e);
 		return true;
 	}
+	if(auto e = dynamic_cast<GenericActorEvent*>(&event)) {
+		ignore(e);
+		return true;
+	}
 	return false;
 }

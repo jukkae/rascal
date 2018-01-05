@@ -116,9 +116,9 @@ MoveEffect::MoveEffect(Direction direction, float distance):
 direction(direction), distance(distance) {;}
 
 bool MoveEffect::applyTo(Actor* actor) { // TODO finish implementation
+	GenericActorEvent e(actor, "The %s is pushed back!");
+	actor->world->notify(e);
 	actor->tryToMove(direction, distance);
-	//TODO fire event
-	// if(message != "") actor->s->message(colors::lightGrey, message, actor->name.c_str());
 	return true;
 }
 
