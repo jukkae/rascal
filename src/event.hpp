@@ -39,6 +39,13 @@ struct RangedHitEvent : public Event {
 	bool hit;
 };
 
+struct ActionSuccessEvent : public Event {
+	ActionSuccessEvent(Actor* actor = nullptr, std::string successMessage = ""): successMessage(successMessage) {;}
+
+	Actor* actor;
+	std::string successMessage; //TODO ultimately, again, this is GUI's responsibility
+};
+
 struct ActionFailureEvent : public Event {
 	ActionFailureEvent(Actor* actor = nullptr, std::string failureMessage = ""): failureMessage(failureMessage) {;}
 

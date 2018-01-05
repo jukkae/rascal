@@ -75,11 +75,11 @@ void GameplayState::notify(Event& event) {
 	if(auto e = dynamic_cast<PlayerDeathEvent*>(&event)) {
 		std::unique_ptr<State> gameOverState = std::make_unique<GameOverState>(engine, e->actor);
 		engine->changeState(std::move(gameOverState));
+	} else {
+		gui.notify(event);
+		//renderer.notify(event);
+		//audioSystem.notify(event);
 	}
-
-	gui.notify(event);
-	//renderer.notify(event);
-	//audioSystem.notify(event);
 }
 
 void GameplayState::message(sf::Color col, std::string text, ...) {

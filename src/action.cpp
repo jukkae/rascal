@@ -110,7 +110,8 @@ bool PickupAction::execute() {
 			}
 			if(a->pickable->pick(std::move(a), actor)) {
 				found = true;
-				actor->s->message(colors::green, "You pick up the %s.", itemName.c_str());
+				ActionSuccessEvent e(actor, std::string("You pick up the ").append(itemName));
+				world->notify(e);
 				return true;
 			}
 		}

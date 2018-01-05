@@ -39,7 +39,7 @@ Engine::Engine(sf::RenderWindow* window) : window(window) {
 Engine::~Engine() {
 }
 
-void Engine::newGame() {
+void Engine::newGame() { //TODO segfaults after having died
 	if(io::fileExists(constants::SAVE_FILE_NAME)) {
 		io::removeFile(constants::SAVE_FILE_NAME);
 	}

@@ -72,8 +72,15 @@ Message messaging::createMessageFromEvent(Event& event) {
 	}
 
 	if(auto e = dynamic_cast<ActionFailureEvent*>(&event)) {
-		messageText = e->failureMessage;
+		fmt = "%d: %s";
+		messageText = formatString(fmt, e->time, e->failureMessage.c_str());
 		color = colors::lightRed;
+	}
+
+	if(auto e = dynamic_cast<ActionSuccessEvent*>(&event)) {
+		fmt = "%d: %s";
+		messageText = formatString(fmt, e->time, e->successMessage.c_str());
+		color = colors::green;
 	}
 
 	if(auto e = dynamic_cast<RequestDescriptionEvent*>(&event)) {
