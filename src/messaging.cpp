@@ -137,5 +137,11 @@ Message messaging::createMessageFromEvent(Event& event) {
 		color = colors::yellow;
 	}
 
+	if(auto e = dynamic_cast<AiChangeEvent*>(&event)) {
+		fmt = "%d: The eyes of the %s look vacant!";
+		messageText = formatString(fmt, e->time, e->actor->name.c_str());
+		color = colors::blue;
+	}
+
 	return Message(messageText, color);
 }

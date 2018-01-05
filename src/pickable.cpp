@@ -97,8 +97,8 @@ AiChangeEffect::AiChangeEffect(std::unique_ptr<TemporaryAi> newAi) : newAi(std::
 
 bool AiChangeEffect::applyTo(Actor* actor) {
 	newAi->applyTo(actor);
-	//TODO fire event
-	// if(message != "") actor->s->message(colors::lightGrey, message, actor->name.c_str());
+	AiChangeEvent e(actor);
+	actor->world->notify(e);
 	return true;
 }
 

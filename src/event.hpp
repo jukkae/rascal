@@ -103,4 +103,10 @@ struct PickableHealthEffectEvent : public Event {
 	Actor* actor;
 	int amount;
 };
+
+struct AiChangeEvent : public Event { // Yes I know this is getting ridiculous
+	AiChangeEvent(Actor* actor = nullptr): actor(actor) {;}
+
+	Actor* actor;
+};
 #endif /* EVENT_HPP */
