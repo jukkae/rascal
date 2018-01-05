@@ -116,7 +116,7 @@ std::unique_ptr<Action> MonsterAi::getNextAction(Actor* actor) {
 	if (actor->destructible && actor->destructible->isDead()) return std::make_unique<WaitAction>(WaitAction(actor));
 
 	if (actor->world->isInFov(actor->x, actor->y)) {
-		moveCount = TRACKING_TURNS;
+		moveCount = TRACKING_TURNS; //TODO also track if was in FOV, and fire event when first seeing player
 	} else { --moveCount; }
 
 	if (moveCount > 0) {
@@ -130,7 +130,6 @@ std::unique_ptr<Action> MonsterAi::getNextAction(Actor* actor) {
 		float distance = sqrtf(dx*dx + dy*dy);
 
 		if(distance >= 2) {
-			state->message(colors::white, "The %s threatens you!", actor->name.c_str());
 			dx = (int) (round(dx / distance));
 			dy = (int) (round(dy / distance));
 			if(world->canWalk(actor->x + stepDx, actor->y + stepDy)) { // uhh
