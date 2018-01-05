@@ -68,7 +68,10 @@ void TargetSelector::selectTargets(Actor* wearer, std::vector<Actor*>& list) {
 		} break;
 		default: break;
 	}
-	if(list.size() == 0) wearer->s->message(colors::lightGrey, "Zork! No enemy close enough!");
+	if(list.size() == 0) {
+		ActionFailureEvent e(wearer, "Zork! No enemy close enough!");
+		wearer->world->notify(e);
+	}
 }
 
 HealthEffect::HealthEffect(float amount, std::string message) : amount(amount), message(message) {;}
