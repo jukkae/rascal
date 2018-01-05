@@ -108,7 +108,6 @@ std::unique_ptr<Action> PlayerAi::getNextAction(Actor* actor) {
 }
 
 std::unique_ptr<Action> MonsterAi::getNextAction(Actor* actor) {
-	GameplayState* state = actor->s;
 	World* world = actor->world;
 	Direction direction = Direction::NONE;
 	if (actor->destructible && actor->destructible->isDead()) return std::make_unique<WaitAction>(WaitAction(actor));
