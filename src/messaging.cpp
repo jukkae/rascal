@@ -93,5 +93,11 @@ Message messaging::createMessageFromEvent(Event& event) {
 		}
 	}
 
+	if(auto e = dynamic_cast<PlayerDeathEvent*>(&event)) {
+		fmt = "%d: You are dead!";
+		messageText = formatString(fmt, e->time);
+		color = colors::red;
+	}
+
 	return Message(messageText, color);
 }

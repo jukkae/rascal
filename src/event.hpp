@@ -62,4 +62,10 @@ struct DeathEvent : public Event {
 	std::string description;
 	int xp;
 };
+
+struct PlayerDeathEvent : public Event {
+	PlayerDeathEvent(Actor* actor = nullptr): actor(actor) {;}
+
+	Actor* actor;
+};
 #endif /* EVENT_HPP */

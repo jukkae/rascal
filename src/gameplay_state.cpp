@@ -1,5 +1,6 @@
 #include "constants.hpp"
 #include "gameplay_state.hpp"
+#include "gameover_state.hpp"
 #include "engine.hpp"
 #include "event.hpp"
 #include "map_utils.hpp"
@@ -71,6 +72,11 @@ void GameplayState::render() {
 }
 
 void GameplayState::notify(Event& event) {
+	if(auto e = dynamic_cast<PlayerDeathEvent*>(&event)) {
+		std::unique_ptr<State> gameOverState = std::make_unique<GameOverState>(engine, e->actor);
+		engine->changeState(std::move(gameOverState));
+	}
+
 	gui.notify(event);
 	//renderer.notify(event);
 	//audioSystem.notify(event);

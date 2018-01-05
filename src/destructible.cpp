@@ -52,11 +52,9 @@ PlayerDestructible::PlayerDestructible(float maxHp, float defense, int xp, std::
 	Destructible(maxHp, defense, xp, corpseName, armorClass) {;}
 
 void PlayerDestructible::die(Actor* owner) {
-	owner->s->message(colors::red, "You died!");
+	PlayerDeathEvent e(owner);
+	owner->world->notify(e);
 	Destructible::die(owner);
-	Engine* engine = owner->s->getEngine();
-	std::unique_ptr<State> gameOverState = std::make_unique<GameOverState>(engine, owner);
-	engine->pushState(std::move(gameOverState));
 }
 
 template void PlayerDestructible::serialize(boost::archive::text_iarchive& arch, const unsigned int version);
