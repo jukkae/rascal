@@ -3,7 +3,6 @@
 
 //Use to silence compiler warnings and be explicit about not using it
 template <typename T>
-void ignore(T &&)
-{ }
+inline void ignore(T&&) { }
 
 #endif /* IGNORE_HPP */
