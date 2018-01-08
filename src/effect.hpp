@@ -68,7 +68,7 @@ public:
 	bool applyTo(Actor* actor) override;
 
 	Direction direction;
-	float distance; // FIXME not implemented yet
+	float distance;
 private:
 	friend class boost::serialization::access;
 	template<class Archive>

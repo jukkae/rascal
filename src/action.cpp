@@ -36,9 +36,13 @@ bool MoveAction::execute() {
 			}
 			if(actor->wornWeapon && actor->wornWeapon->attacker) { 
 				bool atkResult = actor->wornWeapon->attacker->attack(actor, a.get());
-				if(atkResult && actor->wornWeapon->attacker->effect) {
+				if(atkResult && actor->wornWeapon->attacker->effectGenerator) {
 					//TODO handle all different effects
-					std::unique_ptr<Effect> ef = std::make_unique<MoveEffect>(direction, 5); // TODO actually use the prototype object
+					std::unique_ptr<Effect> ef = actor->wornWeapon->attacker->effectGenerator->generateEffect();
+					if(auto e = dynamic_cast<MoveEffect*>(ef.get())) {
+						e->direction = direction;
+						e->distance = 5.0f;
+					}
 					ef->applyTo(a.get());
 				}
 			}
