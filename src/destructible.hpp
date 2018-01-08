@@ -2,6 +2,7 @@
 #define DESTRUCTIBLE_HPP
 
 #include "actor.hpp" // must be included for serialization
+#include "damage.hpp"
 
 class Destructible {
 public:
@@ -16,7 +17,7 @@ public:
 	virtual ~Destructible() {};
 
 	inline bool isDead() { return hp <= 0; }
-	float takeDamage(Actor* owner, float damage);
+	float takeDamage(Actor* owner, float damage, DamageType type = DamageType::NORMAL);
 	float heal(float amount);
 	virtual void die(Actor* owner);
 

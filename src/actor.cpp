@@ -3,6 +3,8 @@
 #include "ai.hpp"
 #include "attacker.hpp"
 #include "constants.hpp"
+#include "damage.hpp"
+#include "event.hpp"
 #include "gameplay_state.hpp"
 
 
@@ -88,7 +90,12 @@ bool Actor::tryToMove(Direction direction, float distance) {
 			default: break;
 		}
 
-		if (world->isWall(targetX, targetY)) return false;
+		if (world->isWall(targetX, targetY)) {
+			destructible->takeDamage(this, distance, DamageType::CRUSHING);
+			GenericActorEvent e(this, "%s gets crushed against the wall!");
+			world->notify(e);
+			return false;
+		}
 		//TODO also fail on blocking actors
 		x = targetX;
 		y = targetY;

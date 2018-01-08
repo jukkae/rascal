@@ -115,7 +115,7 @@ bool StatusEffectEffect::applyTo(Actor* actor) {
 MoveEffect::MoveEffect(Direction direction, float distance):
 direction(direction), distance(distance) {;}
 
-bool MoveEffect::applyTo(Actor* actor) { // TODO finish implementation
+bool MoveEffect::applyTo(Actor* actor) {
 	GenericActorEvent e(actor, "The %s is pushed back!");
 	actor->world->notify(e);
 	actor->tryToMove(direction, distance);
