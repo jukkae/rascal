@@ -47,6 +47,7 @@ private:
 	}
 };
 
+//TODO templated class
 class StatusEffectEffect : public Effect {
 public:
 	StatusEffectEffect(std::unique_ptr<StatusEffect> statusEffect = std::unique_ptr<StatusEffect>());
@@ -90,6 +91,7 @@ private:
 };
 BOOST_SERIALIZATION_ASSUME_ABSTRACT(EffectGenerator)
 
+//FIXME look into automatically registering template instantiations?
 template <class T>
 class EffectGeneratorFor : public EffectGenerator {
 public:
