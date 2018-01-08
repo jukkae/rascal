@@ -79,6 +79,17 @@ private:
 	}
 };
 
+class EffectGenerator {
+public:
+	virtual std::unique_ptr<Effect> generateEffect() = 0;
+};
+
+template <class T>
+class EffectGeneratorFor : public EffectGenerator {
+public:
+	virtual std::unique_ptr<Effect> generateEffect() override { return std::make_unique<T>(); }
+};
+
 //BOOST_CLASS_EXPORT(Effect)
 BOOST_CLASS_EXPORT_KEY(HealthEffect)
 BOOST_CLASS_EXPORT_KEY(AiChangeEffect)
