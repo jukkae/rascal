@@ -82,12 +82,24 @@ private:
 class EffectGenerator {
 public:
 	virtual std::unique_ptr<Effect> generateEffect() = 0;
+private:
+	friend class boost::serialization::access;
+	template<class Archive>
+	void serialize(Archive & ar, const unsigned int version) {
+	}
 };
+BOOST_SERIALIZATION_ASSUME_ABSTRACT(EffectGenerator)
 
 template <class T>
 class EffectGeneratorFor : public EffectGenerator {
 public:
 	virtual std::unique_ptr<Effect> generateEffect() override { return std::make_unique<T>(); }
+private:
+	friend class boost::serialization::access;
+	template<class Archive>
+	void serialize(Archive & ar, const unsigned int version) {
+		ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(EffectGenerator);
+	}
 };
 
 //BOOST_CLASS_EXPORT(Effect)
