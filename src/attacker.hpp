@@ -15,7 +15,7 @@ public :
 	Attacker(int numberOfDice = 1, int dice = 0, int bonus = 0):
 		numberOfDice(numberOfDice), dice(dice), bonus(bonus) {;} // default 1d0+0
 
-	void attack(Actor* owner, Actor* target);
+	bool attack(Actor* owner, Actor* target);
 	int getAttackBaseDamage();
 
 	void increase(int delta) { bonus += delta; } // sb. checked & modified

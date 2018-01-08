@@ -7,7 +7,7 @@
 #include "gameplay_state.hpp"
 #include "colors.hpp"
 
-void Attacker::attack(Actor* owner, Actor* target) {
+bool Attacker::attack(Actor* owner, Actor* target) {
 	if(target->destructible && !target->destructible->isDead()) {
 		int attackRoll = d20();
 		if(attackRoll > target->destructible->armorClass) {
@@ -17,12 +17,15 @@ void Attacker::attack(Actor* owner, Actor* target) {
 			owner->world->notify(e);
 
 			target->destructible->takeDamage(target, dmg);
+			return true;
 		} else {
 			MeleeHitEvent e(owner, target, nullptr, 0, false);
 			owner->world->notify(e);
+			return false;
 		}
 	}
 	else {
+		return false;
 		//TODO hitting a dead corpse
 	}
 }
