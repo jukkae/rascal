@@ -102,7 +102,6 @@ bool Actor::tryToMove(Direction direction, float distance) {
 			world->notify(e);
 			return false;
 		}
-		//TODO also fail on blocking actors
 		x = targetX;
 		y = targetY;
 
