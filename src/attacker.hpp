@@ -1,6 +1,7 @@
 #ifndef ATTACKER_HPP
 #define ATTACKER_HPP
 class Actor;
+#include "effect.hpp"
 #include "point.hpp"
 #include "pickable.hpp"
 #include <boost/archive/text_oarchive.hpp>
@@ -15,7 +16,7 @@ public :
 	Attacker(int numberOfDice = 1, int dice = 0, int bonus = 0):
 		numberOfDice(numberOfDice), dice(dice), bonus(bonus) {;} // default 1d0+0
 
-	void attack(Actor* owner, Actor* target);
+	bool attack(Actor* owner, Actor* target);
 	int getAttackBaseDamage();
 
 	void increase(int delta) { bonus += delta; } // sb. checked & modified
@@ -24,7 +25,7 @@ public :
 	int numberOfDice;
 	int dice;
 	int bonus;
-	std::unique_ptr<Effect> effect;
+	std::unique_ptr<EffectGenerator> effectGenerator;
 private:
 	friend class boost::serialization::access;
 	template<class Archive>
@@ -32,7 +33,7 @@ private:
 		ar & numberOfDice;
 		ar & dice;
 		ar & bonus;
-		ar & effect;
+		ar & effectGenerator;
 	}
 };
 

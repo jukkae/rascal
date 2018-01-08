@@ -5,6 +5,7 @@
 #include "constants.hpp"
 #include "container.hpp"
 #include "destructible.hpp"
+#include "effect.hpp"
 #include "engine.hpp"
 #include "font.hpp"
 #include "io.hpp"
@@ -98,6 +99,8 @@ void Engine::load() {
 
 	ia.register_type<PoisonedStatusEffect>();
 
+	ia.template register_type<EffectGeneratorFor<MoveEffect>>();
+
 	ia >> gameplayState;
 	(static_cast<GameplayState*>(gameplayState))->setEngine(this);
 	(static_cast<GameplayState*>(gameplayState))->setWindow(window);
@@ -113,6 +116,8 @@ void Engine::save() {
 	oa.register_type<MoveEffect>();
 
 	oa.register_type<PoisonedStatusEffect>();
+
+	oa.template register_type<EffectGeneratorFor<MoveEffect>>();
 
 	oa << gameplayState;
 }

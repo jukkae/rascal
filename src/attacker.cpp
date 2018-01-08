@@ -7,7 +7,7 @@
 #include "gameplay_state.hpp"
 #include "colors.hpp"
 
-void Attacker::attack(Actor* owner, Actor* target) {
+bool Attacker::attack(Actor* owner, Actor* target) {
 	if(target->destructible && !target->destructible->isDead()) {
 		int attackRoll = d20();
 		if(attackRoll > target->destructible->armorClass) {
@@ -16,17 +16,16 @@ void Attacker::attack(Actor* owner, Actor* target) {
 			MeleeHitEvent e(owner, target, owner->wornWeapon, damage, true);
 			owner->world->notify(e);
 
-			if(effect) {
-				std::unique_ptr<Effect> ef = std::make_unique<MoveEffect>(Direction::NONE, 1); // TODO actually use the prototype object
-				ef->applyTo(target);
-			}
 			target->destructible->takeDamage(target, dmg);
+			return true;
 		} else {
 			MeleeHitEvent e(owner, target, nullptr, 0, false);
 			owner->world->notify(e);
+			return false;
 		}
 	}
 	else {
+		return false;
 		//TODO hitting a dead corpse
 	}
 }

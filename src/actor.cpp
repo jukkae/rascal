@@ -3,6 +3,8 @@
 #include "ai.hpp"
 #include "attacker.hpp"
 #include "constants.hpp"
+#include "damage.hpp"
+#include "event.hpp"
 #include "gameplay_state.hpp"
 
 
@@ -66,4 +68,44 @@ void Actor::modifyStatistic(Statistic stat, float delta) {
 			break;
 		default: break;
 	}
+}
+
+bool Actor::tryToMove(Direction direction, float distance) {
+	if(distance <= 0) return false;
+
+	while(distance > 0) {
+		int targetX = x;
+		int targetY = y;
+
+		switch(direction) {
+			case Direction::N:  targetY -= 1;               break;
+			case Direction::NE: targetY -= 1; targetX += 1; break;
+			case Direction::E:                targetX += 1; break;
+			case Direction::SE: targetY += 1; targetX += 1; break;
+			case Direction::S:  targetY += 1;               break;
+			case Direction::SW: targetY += 1; targetX -= 1; break;
+			case Direction::W:                targetX -= 1; break;
+			case Direction::NW: targetY -= 1; targetX -= 1; break;
+			case Direction::NONE: return false;
+			default: break;
+		}
+
+		if (world->isWall(targetX, targetY)) {
+			destructible->takeDamage(this, distance, DamageType::CRUSHING);
+			GenericActorEvent e(this, "%s gets crushed against the wall!");
+			world->notify(e);
+			return false;
+		}
+
+		if (world->getLiveActor(targetX, targetY)) {
+			GenericActorEvent e(this, "%s gently bumps into someone.");
+			world->notify(e);
+			return false;
+		}
+		x = targetX;
+		y = targetY;
+
+		--distance;
+	}
+	return true;
 }

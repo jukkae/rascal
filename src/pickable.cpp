@@ -74,54 +74,6 @@ void TargetSelector::selectTargets(Actor* wearer, std::vector<Actor*>& list) {
 	}
 }
 
-HealthEffect::HealthEffect(float amount) : amount(amount) {;}
-
-bool HealthEffect::applyTo(Actor* actor) {
-	if(!actor->destructible) return false;
-	if(amount > 0) {
-		float pointsHealed = actor->destructible->heal(amount);
-		if(pointsHealed > 0) {
-			PickableHealthEffectEvent e(actor, pointsHealed);
-			actor->world->notify(e);
-			return true;
-		}
-	} else {
-		PickableHealthEffectEvent e(actor, amount-actor->destructible->defense);
-		actor->world->notify(e);
-		if(actor->destructible->takeDamage(actor, -amount) > 0) return true;
-	}
-	return false;
-}
-
-AiChangeEffect::AiChangeEffect(std::unique_ptr<TemporaryAi> newAi) : newAi(std::move(newAi)) {;}
-
-bool AiChangeEffect::applyTo(Actor* actor) {
-	newAi->applyTo(actor);
-	AiChangeEvent e(actor);
-	actor->world->notify(e);
-	return true;
-}
-
-StatusEffectEffect::StatusEffectEffect(std::unique_ptr<StatusEffect> statusEffect):
-statusEffect(std::move(statusEffect)) {;}
-
-bool StatusEffectEffect::applyTo(Actor* actor) {
-	StatusEffectChangeEvent e(actor, statusEffect.get());
-	actor->world->notify(e);
-	actor->addStatusEffect(std::move(statusEffect));
-	return true;
-}
-
-MoveEffect::MoveEffect(Direction direction, float distance):
-direction(direction), distance(distance) {;}
-
-bool MoveEffect::applyTo(Actor* actor) { // TODO finish implementation
-	GenericActorEvent e(actor, "The %s is pushed back!");
-	actor->world->notify(e);
-	actor->tryToMove(direction, distance);
-	return true;
-}
-
 Pickable::Pickable(TargetSelector selector, std::unique_ptr<Effect> effect, int weight) : weight(weight), selector(selector), effect(std::move(effect)) {;}
 
 // owner is the Actor that this Pickable belongs to,
@@ -179,10 +131,3 @@ void Pickable::drop(Actor* owner, Actor* wearer) {
 		wearer->world->addActor(std::move(item));
 	}
 }
-
-// Remember to register in engine.cpp
-//BOOST_CLASS_EXPORT(Effect)
-BOOST_CLASS_EXPORT_IMPLEMENT(HealthEffect)
-BOOST_CLASS_EXPORT_IMPLEMENT(AiChangeEffect)
-BOOST_CLASS_EXPORT_IMPLEMENT(StatusEffectEffect)
-BOOST_CLASS_EXPORT_IMPLEMENT(MoveEffect)

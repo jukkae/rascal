@@ -10,8 +10,8 @@
 Destructible::Destructible(float maxHp, float defense, int xp, std::string corpseName, int armorClass) :
 	maxHp(maxHp), hp(maxHp), defense(defense), xp(xp), corpseName(corpseName), armorClass(armorClass) {;}
 
-float Destructible::takeDamage(Actor* owner, float damage) {
-	damage -= defense;
+float Destructible::takeDamage(Actor* owner, float damage, DamageType type) {
+	if(type == DamageType::NORMAL) damage -= defense;
 	if(damage > 0) {
 		hp -= damage;
 		if(hp <= 0) die(owner);

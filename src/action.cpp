@@ -34,7 +34,18 @@ bool MoveAction::execute() {
 				world->notify(e);
 				return false;
 			}
-			if(actor->wornWeapon && actor->wornWeapon->attacker) actor->wornWeapon->attacker->attack(actor, a.get());
+			if(actor->wornWeapon && actor->wornWeapon->attacker) { 
+				bool atkResult = actor->wornWeapon->attacker->attack(actor, a.get());
+				if(atkResult && actor->wornWeapon->attacker->effectGenerator) {
+					//TODO handle all different effects
+					std::unique_ptr<Effect> ef = actor->wornWeapon->attacker->effectGenerator->generateEffect();
+					if(auto e = dynamic_cast<MoveEffect*>(ef.get())) {
+						e->direction = direction;
+						e->distance = 5.0f;
+					}
+					ef->applyTo(a.get());
+				}
+			}
 			else actor->attacker->attack(actor, a.get());
 			return true;
 		}
