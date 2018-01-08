@@ -36,7 +36,6 @@ bool MoveAction::execute() {
 			}
 			if(actor->wornWeapon && actor->wornWeapon->attacker) { 
 				bool atkResult = actor->wornWeapon->attacker->attack(actor, a.get());
-				//TODO order of things?
 				if(atkResult && actor->wornWeapon->attacker->effect) {
 					//TODO handle all different effects
 					std::unique_ptr<Effect> ef = std::make_unique<MoveEffect>(direction, 5); // TODO actually use the prototype object
