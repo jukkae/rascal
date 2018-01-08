@@ -89,6 +89,7 @@ bool Actor::tryToMove(Direction direction, float distance) {
 		}
 
 		if (world->isWall(targetX, targetY)) return false;
+		//TODO also fail on blocking actors
 		x = targetX;
 		y = targetY;
 
