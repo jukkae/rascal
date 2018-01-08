@@ -2,10 +2,10 @@
 #define WORLD_HPP
 
 #include <vector>
-#include "actor.hpp"
-#include "event.hpp"
 #include "map.hpp"
 
+class Actor;
+struct Event;
 class GameplayState;
 class World {
 public:

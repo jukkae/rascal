@@ -8,6 +8,7 @@
 #include "destructible.hpp"
 #include "dice.hpp"
 #include "engine.hpp"
+#include "event.hpp"
 #include "gameplay_state.hpp"
 #include "gui.hpp"
 #include "io.hpp"

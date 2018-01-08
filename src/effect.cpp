@@ -1,6 +1,7 @@
 #include "effect.hpp"
 
 #include "actor.hpp"
+#include "event.hpp"
 #include "world.hpp"
 
 HealthEffect::HealthEffect(float amount) : amount(amount) {;}
