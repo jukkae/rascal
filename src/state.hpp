@@ -7,6 +7,7 @@
 class State {
 public:
 	State(Engine* engine, sf::RenderWindow* window): engine(engine), window(window) {;}
+	virtual ~State() {}
 
 	virtual void handleEvents() = 0;
 	virtual void update() = 0;
