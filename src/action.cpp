@@ -34,7 +34,16 @@ bool MoveAction::execute() {
 				world->notify(e);
 				return false;
 			}
-			if(actor->wornWeapon && actor->wornWeapon->attacker) actor->wornWeapon->attacker->attack(actor, a.get());
+			if(actor->wornWeapon && actor->wornWeapon->attacker) { 
+				actor->wornWeapon->attacker->attack(actor, a.get());
+				//TODO get result and only on success apply effect
+				//TODO order of things?
+				if(actor->wornWeapon->attacker->effect) {
+					//TODO handle all different effects
+					std::unique_ptr<Effect> ef = std::make_unique<MoveEffect>(direction, 5); // TODO actually use the prototype object
+					ef->applyTo(a.get());
+				}
+			}
 			else actor->attacker->attack(actor, a.get());
 			return true;
 		}

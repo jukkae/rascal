@@ -67,3 +67,32 @@ void Actor::modifyStatistic(Statistic stat, float delta) {
 		default: break;
 	}
 }
+
+bool Actor::tryToMove(Direction direction, float distance) {
+	if(distance <= 0) return false;
+
+	while(distance > 0) {
+		int targetX = x;
+		int targetY = y;
+
+		switch(direction) {
+			case Direction::N:  targetY -= 1;               break;
+			case Direction::NE: targetY -= 1; targetX += 1; break;
+			case Direction::E:                targetX += 1; break;
+			case Direction::SE: targetY += 1; targetX += 1; break;
+			case Direction::S:  targetY += 1;               break;
+			case Direction::SW: targetY += 1; targetX -= 1; break;
+			case Direction::W:                targetX -= 1; break;
+			case Direction::NW: targetY -= 1; targetX -= 1; break;
+			case Direction::NONE: return false;
+			default: break;
+		}
+
+		if (world->isWall(targetX, targetY)) return false;
+		x = targetX;
+		y = targetY;
+
+		--distance;
+	}
+	return true;
+}
