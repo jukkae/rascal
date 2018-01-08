@@ -2,7 +2,6 @@
 #define ACTION_HPP
 
 class Actor;
-class GameplayState;
 struct ActionResult;
 
 #include "direction.hpp"

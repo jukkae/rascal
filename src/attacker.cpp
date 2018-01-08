@@ -3,6 +3,7 @@
 #include "actor.hpp"
 #include "dice.hpp"
 #include "destructible.hpp"
+#include "effect.hpp"
 #include "event.hpp"
 #include "gameplay_state.hpp"
 #include "colors.hpp"

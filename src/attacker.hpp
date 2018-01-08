@@ -1,9 +1,8 @@
 #ifndef ATTACKER_HPP
 #define ATTACKER_HPP
 class Actor;
-#include "effect.hpp"
-#include "point.hpp"
-#include "pickable.hpp"
+class Effect;
+class EffectGenerator;
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/serialization/export.hpp>

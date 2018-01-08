@@ -1,3 +1,4 @@
+#include "actor.hpp"
 #include "attacker.hpp"
 #include "colors.hpp"
 #include "dice.hpp"
