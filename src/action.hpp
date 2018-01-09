@@ -1,10 +1,9 @@
 #ifndef ACTION_HPP
 #define ACTION_HPP
 
-class Actor;
-class GameplayState;
 struct ActionResult;
 
+#include "actor.hpp"
 #include "direction.hpp"
 #include "point.hpp"
 #include <boost/archive/text_oarchive.hpp>
@@ -17,6 +16,7 @@ struct ActionResult;
 class Action {
 public:
 	Action(Actor* actor, float length = 100.0f) : actor(actor), length(length) {;}
+	virtual ~Action() {}
 	virtual bool execute() = 0;
 	float getLength() { return length; }
 protected:

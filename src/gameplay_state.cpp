@@ -1,11 +1,19 @@
+#include "ai.hpp"
+#include "attacker.hpp"
 #include "constants.hpp"
+#include "container.hpp"
 #include "gameplay_state.hpp"
 #include "gameover_state.hpp"
 #include "level_up_menu_state.hpp"
+#include "destructible.hpp"
+#include "effect.hpp"
 #include "engine.hpp"
 #include "event.hpp"
 #include "map_utils.hpp"
+#include "pickable.hpp"
+#include "transporter.hpp"
 #include "victory_state.hpp"
+#include "world.hpp"
 #include <chrono>
 #include <SFML/Window/Mouse.hpp>
 #include <boost/optional/optional_io.hpp>
@@ -19,7 +27,6 @@ State(engine, window) {
 
 	gui.setState(this);
 	renderer.setState(this);
-	world->map.setState(this);
 	world->map.setWorld(world);
 	world->map.generateMap();
 	newGame(engine);
@@ -33,7 +40,6 @@ State(engine, window) {
 void GameplayState::initLoaded(Engine* engine) {
 	gui.setState(this);
 	renderer.setState(this);
-	world->map.setState(this);
 	for (auto& a : world->actors) a->setState(this);
 }
 
@@ -153,7 +159,6 @@ void GameplayState::nextLevel() {
 	world->state = this;
 
 	world->map = Map(120, 72);
-	world->map.setState(this);
 	world->map.setWorld(world);
 	if(world->level == 2) world->map.generateMap(MapType::WATER);
 	if(world->level == 3) world->map.generateMap(MapType::PILLARS);

@@ -1,7 +1,7 @@
 #ifndef DESTRUCTIBLE_HPP
 #define DESTRUCTIBLE_HPP
 
-#include "actor.hpp" // must be included for serialization
+class Actor;
 #include "damage.hpp"
 
 class Destructible {

@@ -1,20 +1,14 @@
 #ifndef PICKABLE_HPP
 #define PICKABLE_HPP
 
-#include "actor.hpp"
-#include "ai.hpp"
-#include "direction.hpp"
-#include "effect.hpp"
-#include "status_effect.hpp"
-
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/serialization/export.hpp>
 #include <boost/serialization/assume_abstract.hpp>
 #include <boost/serialization/base_object.hpp>
 
-#include "persistent.hpp"
-
+class Actor;
+class Effect;
 class TargetSelector {
 public:
 	enum class SelectorType { CLOSEST_MONSTER, SELECTED_MONSTER, WEARER, WEARER_RANGE, SELECTED_RANGE, NONE };

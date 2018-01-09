@@ -1,9 +1,16 @@
+#include "actor.hpp"
+#include "ai.hpp"
 #include "attacker.hpp"
 #include "colors.hpp"
+#include "container.hpp"
 #include "dice.hpp"
+#include "destructible.hpp"
 #include "effect.hpp"
 #include "map_utils.hpp"
 #include "map.hpp"
+#include "pickable.hpp"
+#include "status_effect.hpp"
+#include "transporter.hpp"
 #include "world.hpp"
 #include <SFML/Graphics.hpp>
 

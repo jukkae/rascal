@@ -3,9 +3,16 @@
 #include "ai.hpp"
 #include "attacker.hpp"
 #include "constants.hpp"
+#include "container.hpp"
 #include "damage.hpp"
+#include "destructible.hpp"
+#include "effect.hpp"
 #include "event.hpp"
 #include "gameplay_state.hpp"
+#include "pickable.hpp"
+#include "status_effect.hpp"
+#include "transporter.hpp"
+#include "world.hpp"
 
 
 Actor::Actor(int x, int y, int ch, std::string name, sf::Color col, boost::optional<float> energy) :
@@ -109,3 +116,5 @@ bool Actor::tryToMove(Direction direction, float distance) {
 	}
 	return true;
 }
+
+bool Actor::isPlayer() { return ai ? this->ai->isPlayer() : false; }

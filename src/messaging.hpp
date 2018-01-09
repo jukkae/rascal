@@ -1,7 +1,7 @@
 #ifndef MESSAGING_HPP
 #define MESSAGING_HPP
-#include "colors.hpp"
 #include <string> // bad
+#include "persistent.hpp"
 
 struct Message {
 	std::string text;

@@ -1,8 +1,10 @@
 #include "actor.hpp"
 #include "constants.hpp"
+#include "effect.hpp"
 #include "gameplay_state.hpp"
 #include "io.hpp"
 #include "point.hpp"
+#include "status_effect.hpp"
 #include <SFML/Graphics.hpp>
 #include <sys/stat.h>
 #include <cstdio>

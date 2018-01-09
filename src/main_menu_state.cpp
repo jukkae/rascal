@@ -2,6 +2,7 @@
 #include "colors.hpp"
 #include "constants.hpp"
 #include "engine.hpp"
+#include "engine_command.hpp"
 #include "font.hpp"
 #include "io.hpp"
 

@@ -7,12 +7,14 @@
 #include "constants.hpp"
 #include "destructible.hpp"
 #include "dice.hpp"
-#include "gameplay_state.hpp"
+#include "effect.hpp"
 #include "map.hpp"
 #include "map_utils.hpp"
 #include "pickable.hpp"
 #include "point.hpp"
 #include "rect.hpp"
+#include "status_effect.hpp"
+#include "vec.hpp"
 #include "world.hpp"
 
 #include <SFML/Graphics/Color.hpp>

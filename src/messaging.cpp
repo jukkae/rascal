@@ -1,6 +1,8 @@
 #include "messaging.hpp"
 
 #include "actor.hpp"
+#include "colors.hpp"
+#include "effect.hpp"
 #include "event.hpp"
 #include "ignore.hpp"
 

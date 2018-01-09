@@ -1,19 +1,14 @@
 #ifndef ENGINE_HPP
 #define ENGINE_HPP
-class Actor;
 class State;
 #include <queue>
 #include <string>
 
-#include "renderer.hpp"
-#include "gui.hpp"
-#include "attacker.hpp"
-#include "engine_command.hpp"
-#include "persistent.hpp"
 #include <SFML/Window/Event.hpp>
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
 
+class EngineCommand;
 class Engine {
 public:
 	Engine(sf::RenderWindow* window);

@@ -1,5 +1,8 @@
 #include "container.hpp"
 #include "actor.hpp"
+#include "effect.hpp"
+#include "pickable.hpp"
+#include "status_effect.hpp"
 
 Container::Container(int capacity) : capacity(capacity) {;}
 

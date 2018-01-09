@@ -1,8 +1,13 @@
 #include "victory_state.hpp"
+#include "actor.hpp"
+#include "ai.hpp"
+#include "effect.hpp"
 #include "main_menu_state.hpp"
 #include "font.hpp"
 #include "colors.hpp"
 #include "constants.hpp"
+#include "container.hpp"
+#include "status_effect.hpp"
 #include "io.hpp"
 
 VictoryState::VictoryState(Engine* engine, Actor* actor) :

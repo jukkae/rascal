@@ -1,12 +1,14 @@
 #include <algorithm>
 #include <limits>
 #include <cstdio>
+#include "actor.hpp"
 #include "ai.hpp"
 #include "constants.hpp"
 #include "container.hpp"
 #include "destructible.hpp"
 #include "effect.hpp"
 #include "engine.hpp"
+#include "engine_command.hpp"
 #include "font.hpp"
 #include "io.hpp"
 #include "pickable.hpp"
@@ -14,6 +16,7 @@
 #include "gameplay_state.hpp"
 #include "main_menu_state.hpp"
 #include "status_effect.hpp"
+#include "world.hpp"
 
 
 Engine::Engine(sf::RenderWindow* window) : window(window) {

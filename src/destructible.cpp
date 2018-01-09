@@ -1,10 +1,15 @@
 #include <cstdio>
+#include "actor.hpp"
+#include "ai.hpp"
+#include "container.hpp"
 #include "destructible.hpp"
+#include "effect.hpp"
 #include "engine.hpp"
 #include "event.hpp"
 #include "gameplay_state.hpp"
 #include "gameover_state.hpp"
 #include "colors.hpp"
+#include "world.hpp"
 #include <SFML/Graphics/Color.hpp>
 
 Destructible::Destructible(float maxHp, float defense, int xp, std::string corpseName, int armorClass) :

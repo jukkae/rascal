@@ -13,6 +13,7 @@ class GameplayState;
 class StatusEffect {
 public:
 	StatusEffect(std::string name = "") : name(name) {;}
+	virtual ~StatusEffect() {}
 	virtual void update(Actor* owner, GameplayState* state, float deltaTime) = 0;
 	virtual bool isAlive() = 0;
 	std::string name;

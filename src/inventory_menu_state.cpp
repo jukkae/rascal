@@ -2,10 +2,15 @@
 #include <algorithm>
 #include "inventory_menu_state.hpp"
 #include "engine.hpp"
+#include "engine_command.hpp"
 #include "action.hpp"
 #include "actor.hpp"
 #include "colors.hpp"
+#include "constants.hpp"
+#include "container.hpp"
+#include "effect.hpp"
 #include "font.hpp"
+#include "status_effect.hpp"
 
 InventoryMenuState::InventoryMenuState(Engine* engine, Actor* actor) :
 State(engine, engine->getWindow()),

@@ -2,8 +2,13 @@
 #include "actor.hpp"
 #include "attacker.hpp"
 #include "colors.hpp"
+#include "container.hpp"
+#include "destructible.hpp"
+#include "effect.hpp"
 #include "event.hpp"
 #include "gameplay_state.hpp"
+#include "pickable.hpp"
+#include "transporter.hpp"
 #include "world.hpp"
 
 bool MoveAction::execute() {

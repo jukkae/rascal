@@ -12,20 +12,19 @@
 #include <boost/serialization/deque.hpp>
 #include <boost/serialization/vector.hpp>
 #include <SFML/Graphics/Color.hpp>
+class Action;
+class Ai;
 class Attacker;
+class Container;
 class RangedAttacker;
 class Destructible;
 class Pickable;
-class GameplayState;
+class StatusEffect;
+class Transporter;
 
-#include "ai.hpp"
 #include "animation.hpp"
-#include "container.hpp" // must be included for serialization
-#include "destructible.hpp"
-#include "pickable.hpp"
-#include "persistent.hpp"
-#include "status_effect.hpp" // does this have to be included?
-#include "transporter.hpp"
+#include "direction.hpp"
+#include "gameplay_state.hpp"
 
 enum class Statistic { CONSTITUTION, STRENGTH, AGILITY, SPEED };
 
@@ -56,7 +55,7 @@ public:
 	~Actor();
 	float update(GameplayState* state);
 	float getDistance(int cx, int cy) const; // TODO doesn't belong here i suppose
-	bool isPlayer() { return ai ? this->ai->isPlayer() : false; }
+	bool isPlayer();
 	bool isStairs() { return transporter.get(); }
 	void addAction(std::unique_ptr<Action> action) { actionsQueue.push_back(std::move(action)); }
 	void setState(GameplayState* state) { s = state; } // temporary for getting access to state's actors TODO

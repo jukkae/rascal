@@ -2,11 +2,14 @@
 
 #include <iostream>
 #include "engine.hpp"
+#include "engine_command.hpp"
 #include "actor.hpp"
 #include "ai.hpp"
 #include "colors.hpp"
 #include "constants.hpp"
+#include "effect.hpp"
 #include "font.hpp"
+#include "status_effect.hpp"
 #include <SFML/System.hpp>
 #include <SFML/Window.hpp>
 
