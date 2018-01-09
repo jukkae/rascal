@@ -1,6 +1,5 @@
 #ifndef GAME_OVER_STATE_HPP
 #define GAME_OVER_STATE_HPP
-#include "constants.hpp"
 #include "state.hpp"
 #include <string>
 #include <vector>
