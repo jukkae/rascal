@@ -3,7 +3,8 @@
 
 class Actor;
 class StatusEffect;
-#include "ai.hpp"
+class Ai;
+class TemporaryAi;
 #include "direction.hpp"
 
 class Effect {

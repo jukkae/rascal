@@ -1,5 +1,6 @@
 #include <cstdio>
 #include "actor.hpp"
+#include "ai.hpp"
 #include "container.hpp"
 #include "destructible.hpp"
 #include "effect.hpp"

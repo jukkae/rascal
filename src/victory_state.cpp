@@ -1,5 +1,6 @@
 #include "victory_state.hpp"
 #include "actor.hpp"
+#include "ai.hpp"
 #include "effect.hpp"
 #include "main_menu_state.hpp"
 #include "font.hpp"

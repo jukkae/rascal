@@ -1,4 +1,5 @@
 #include "actor.hpp"
+#include "ai.hpp"
 #include "attacker.hpp"
 #include "colors.hpp"
 #include "container.hpp"

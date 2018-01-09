@@ -1,6 +1,7 @@
 #include "effect.hpp"
 
 #include "actor.hpp"
+#include "ai.hpp"
 #include "destructible.hpp"
 #include "event.hpp"
 #include "world.hpp"
