@@ -111,3 +111,5 @@ bool Actor::tryToMove(Direction direction, float distance) {
 	}
 	return true;
 }
+
+bool Actor::isPlayer() { return ai ? this->ai->isPlayer() : false; }

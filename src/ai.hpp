@@ -1,10 +1,10 @@
 #ifndef AI_HPP
 #define AI_HPP
 
-class Actor;
 class GameplayState;
 
 #include "action.hpp"
+#include "actor.hpp"
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/serialization/export.hpp>

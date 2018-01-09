@@ -12,13 +12,14 @@
 #include <boost/serialization/deque.hpp>
 #include <boost/serialization/vector.hpp>
 #include <SFML/Graphics/Color.hpp>
+class Action;
+class Ai;
 class Attacker;
 class RangedAttacker;
 class Destructible;
 class Pickable;
 class GameplayState;
 
-#include "ai.hpp"
 #include "animation.hpp"
 #include "container.hpp" // must be included for serialization
 #include "destructible.hpp"
@@ -55,7 +56,7 @@ public:
 	~Actor();
 	float update(GameplayState* state);
 	float getDistance(int cx, int cy) const; // TODO doesn't belong here i suppose
-	bool isPlayer() { return ai ? this->ai->isPlayer() : false; }
+	bool isPlayer();
 	bool isStairs() { return transporter.get(); }
 	void addAction(std::unique_ptr<Action> action) { actionsQueue.push_back(std::move(action)); }
 	void setState(GameplayState* state) { s = state; } // temporary for getting access to state's actors TODO
