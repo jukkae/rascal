@@ -18,11 +18,11 @@ class Attacker;
 class RangedAttacker;
 class Destructible;
 class Pickable;
-class GameplayState;
 
 #include "animation.hpp"
 #include "container.hpp" // must be included for serialization
 #include "destructible.hpp"
+#include "gameplay_state.hpp"
 #include "pickable.hpp"
 #include "status_effect.hpp" // does this have to be included?
 #include "transporter.hpp"
