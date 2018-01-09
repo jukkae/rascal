@@ -7,8 +7,6 @@
 #include <boost/serialization/assume_abstract.hpp>
 #include <boost/serialization/base_object.hpp>
 
-#include "persistent.hpp"
-
 class Actor;
 class Effect;
 class TargetSelector {
