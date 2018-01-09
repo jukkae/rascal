@@ -16,6 +16,7 @@ struct ActionResult;
 class Action {
 public:
 	Action(Actor* actor, float length = 100.0f) : actor(actor), length(length) {;}
+	virtual ~Action() {}
 	virtual bool execute() = 0;
 	float getLength() { return length; }
 protected:
