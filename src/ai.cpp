@@ -7,6 +7,7 @@
 #include "container.hpp"
 #include "destructible.hpp"
 #include "dice.hpp"
+#include "effect.hpp"
 #include "engine.hpp"
 #include "event.hpp"
 #include "gameplay_state.hpp"

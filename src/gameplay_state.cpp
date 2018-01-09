@@ -3,6 +3,7 @@
 #include "gameplay_state.hpp"
 #include "gameover_state.hpp"
 #include "level_up_menu_state.hpp"
+#include "effect.hpp"
 #include "engine.hpp"
 #include "event.hpp"
 #include "map_utils.hpp"

@@ -7,6 +7,7 @@
 #include "constants.hpp"
 #include "destructible.hpp"
 #include "dice.hpp"
+#include "effect.hpp"
 #include "gameplay_state.hpp"
 #include "map.hpp"
 #include "map_utils.hpp"

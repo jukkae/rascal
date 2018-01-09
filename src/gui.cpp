@@ -3,6 +3,7 @@
 #include "colors.hpp"
 #include "constants.hpp"
 #include "destructible.hpp"
+#include "effect.hpp"
 #include "event.hpp"
 #include "font.hpp"
 #include "gameplay_state.hpp"
