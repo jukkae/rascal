@@ -1,3 +1,4 @@
+#include "actor.hpp"
 #include "animation.hpp"
 #include "colors.hpp"
 #include "effect.hpp"

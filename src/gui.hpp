@@ -1,7 +1,6 @@
 #ifndef GUI_HPP
 #define GUI_HPP
 
-#include "actor.hpp" // must be included for serialization
 #include "constants.hpp"
 #include "messaging.hpp"
 #include "persistent.hpp"
