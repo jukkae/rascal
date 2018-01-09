@@ -7,6 +7,7 @@
 #include "effect.hpp"
 #include "event.hpp"
 #include "gameplay_state.hpp"
+#include "status_effect.hpp"
 #include "transporter.hpp"
 #include "world.hpp"
 

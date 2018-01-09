@@ -18,6 +18,7 @@ class Attacker;
 class RangedAttacker;
 class Destructible;
 class Pickable;
+class StatusEffect;
 class Transporter;
 
 #include "animation.hpp"
