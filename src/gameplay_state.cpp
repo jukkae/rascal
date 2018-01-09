@@ -27,7 +27,6 @@ State(engine, window) {
 
 	gui.setState(this);
 	renderer.setState(this);
-	world->map.setState(this);
 	world->map.setWorld(world);
 	world->map.generateMap();
 	newGame(engine);
@@ -41,7 +40,6 @@ State(engine, window) {
 void GameplayState::initLoaded(Engine* engine) {
 	gui.setState(this);
 	renderer.setState(this);
-	world->map.setState(this);
 	for (auto& a : world->actors) a->setState(this);
 }
 
@@ -161,7 +159,6 @@ void GameplayState::nextLevel() {
 	world->state = this;
 
 	world->map = Map(120, 72);
-	world->map.setState(this);
 	world->map.setWorld(world);
 	if(world->level == 2) world->map.generateMap(MapType::WATER);
 	if(world->level == 3) world->map.generateMap(MapType::PILLARS);

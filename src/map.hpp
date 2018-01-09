@@ -9,7 +9,6 @@
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/serialization/export.hpp>
 #include "animation.hpp"
-class GameplayState;
 class World;
 struct Rect;
 template<class T>
@@ -83,11 +82,9 @@ public:
 	bool isExplored(int x, int y) const;
 	void computeFov(FovType fovType = FovType::CIRCLE);
 	void computeFovForOctant(int x, int y, int octant, FovType fovType = FovType::CIRCLE);
-	void setState(GameplayState* s) { state = s; }
 	void setWorld(World* w) { world = w; }
 
 private:
-	GameplayState* state;
 	World* world;
 	Vec<int> transformOctant(int row, int col, int octant);
 	friend class boost::serialization::access;
