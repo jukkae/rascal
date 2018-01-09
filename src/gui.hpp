@@ -2,7 +2,6 @@
 #define GUI_HPP
 
 #include "messaging.hpp"
-#include "persistent.hpp"
 #include <SFML/Graphics.hpp>
 class GameplayState;
 class World;
