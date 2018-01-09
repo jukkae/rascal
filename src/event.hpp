@@ -2,8 +2,8 @@
 #define EVENT_HPP
 
 #include "point.hpp"
-class Actor;
-class StatusEffect;
+#include "actor.hpp"
+#include "status_effect.hpp"
 
 struct Event {
 	int time = 0; //set by world
