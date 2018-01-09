@@ -137,6 +137,15 @@ std::unique_ptr<Actor> map_utils::makeMonster(World* world, Map* map, int x, int
 		punk->destructible = std::make_unique<MonsterDestructible>(10, 0, 50, "dead punk", 10);
 		punk->attacker = std::make_unique<Attacker>(1, 3, 0);
 		punk->ai = std::make_unique<MonsterAi>();
+
+		punk->container = std::make_unique<Container>(10);
+
+		std::unique_ptr<Actor> stimpak = std::make_unique<Actor>(x, y, '!', "super stimpak", sf::Color(128, 128, 128));
+		stimpak->blocks = false;
+		stimpak->pickable = std::make_unique<Pickable>(TargetSelector(TargetSelector::SelectorType::WEARER, 0), std::make_unique<HealthEffect>(8));
+
+		punk->container->add(std::move(stimpak));
+
 		return punk;
 	} else if (r < 80) {
 		std::unique_ptr<Actor> fighter = std::make_unique<Actor>(x, y, 'H', "fighter", colors::darkGreen, 1);
