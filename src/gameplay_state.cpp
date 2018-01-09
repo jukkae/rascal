@@ -6,6 +6,7 @@
 #include "event.hpp"
 #include "map_utils.hpp"
 #include "victory_state.hpp"
+#include "world.hpp"
 #include <chrono>
 #include <SFML/Window/Mouse.hpp>
 #include <boost/optional/optional_io.hpp>

@@ -14,6 +14,7 @@
 #include "gameplay_state.hpp"
 #include "main_menu_state.hpp"
 #include "status_effect.hpp"
+#include "world.hpp"
 
 
 Engine::Engine(sf::RenderWindow* window) : window(window) {

@@ -7,6 +7,7 @@
 #include "event.hpp"
 #include "gameplay_state.hpp"
 #include "colors.hpp"
+#include "world.hpp"
 
 bool Attacker::attack(Actor* owner, Actor* target) {
 	if(target->destructible && !target->destructible->isDead()) {

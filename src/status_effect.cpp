@@ -3,6 +3,7 @@
 #include "destructible.hpp"
 #include "event.hpp"
 #include "gameplay_state.hpp"
+#include "world.hpp"
 
 void PoisonedStatusEffect::update(Actor* owner, GameplayState* state, float deltaTime) {
 	time -= deltaTime;

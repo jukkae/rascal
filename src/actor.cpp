@@ -6,6 +6,7 @@
 #include "damage.hpp"
 #include "event.hpp"
 #include "gameplay_state.hpp"
+#include "world.hpp"
 
 
 Actor::Actor(int x, int y, int ch, std::string name, sf::Color col, boost::optional<float> energy) :
