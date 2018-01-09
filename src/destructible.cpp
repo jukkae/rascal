@@ -1,4 +1,5 @@
 #include <cstdio>
+#include "actor.hpp"
 #include "destructible.hpp"
 #include "engine.hpp"
 #include "event.hpp"
