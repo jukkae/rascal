@@ -1,6 +1,7 @@
 #include "actor.hpp"
 #include "attacker.hpp"
 #include "colors.hpp"
+#include "container.hpp"
 #include "dice.hpp"
 #include "destructible.hpp"
 #include "effect.hpp"

@@ -7,6 +7,7 @@
 #include "actor.hpp"
 #include "colors.hpp"
 #include "constants.hpp"
+#include "container.hpp"
 #include "effect.hpp"
 #include "font.hpp"
 #include "status_effect.hpp"

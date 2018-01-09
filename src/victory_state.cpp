@@ -5,6 +5,7 @@
 #include "font.hpp"
 #include "colors.hpp"
 #include "constants.hpp"
+#include "container.hpp"
 #include "status_effect.hpp"
 #include "io.hpp"
 

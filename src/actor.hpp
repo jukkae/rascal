@@ -15,6 +15,7 @@
 class Action;
 class Ai;
 class Attacker;
+class Container;
 class RangedAttacker;
 class Destructible;
 class Pickable;
@@ -22,7 +23,6 @@ class StatusEffect;
 class Transporter;
 
 #include "animation.hpp"
-#include "container.hpp" // must be included for serialization
 #include "direction.hpp"
 #include "gameplay_state.hpp"
 

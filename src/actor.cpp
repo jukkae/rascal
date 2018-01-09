@@ -3,6 +3,7 @@
 #include "ai.hpp"
 #include "attacker.hpp"
 #include "constants.hpp"
+#include "container.hpp"
 #include "damage.hpp"
 #include "destructible.hpp"
 #include "effect.hpp"
