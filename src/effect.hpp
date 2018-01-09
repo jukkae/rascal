@@ -8,6 +8,7 @@ class StatusEffect;
 
 class Effect {
 public:
+	virtual ~Effect() {}
 	virtual bool applyTo(Actor* actor) = 0;
 private:
 	friend class boost::serialization::access;
@@ -83,6 +84,7 @@ private:
 class EffectGenerator {
 public:
 	virtual std::unique_ptr<Effect> generateEffect() = 0;
+	virtual ~EffectGenerator() {}
 private:
 	friend class boost::serialization::access;
 	template<class Archive>
