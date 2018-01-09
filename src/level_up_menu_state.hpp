@@ -1,6 +1,5 @@
 #ifndef LEVEL_UP_MENU_STATE
 #define LEVEL_UP_MENU_STATE
-#include "constants.hpp"
 #include "state.hpp"
 #include <string>
 #include <vector>
