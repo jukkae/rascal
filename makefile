@@ -18,7 +18,7 @@ OBJ := obj
 
 SOURCES := $(wildcard src/*.cpp)
 OBJECTS := $(patsubst $(SRC)/%.cpp, $(OBJ)/%.o, $(SOURCES))
-.PHONY: clean run bundle-deps
+.PHONY: clean run bundle-deps header-check
 
 rascal: $(OBJECTS)
 	$(CXX) $^ -o $@ $(CPPFLAGS) $(LDFLAGS)
@@ -43,6 +43,9 @@ clean:
 
 run:
 	./rascal
+
+header-check:
+	cppclean src || true
 
 bundle: build-for-bundle appbundle bundle-deps
 
