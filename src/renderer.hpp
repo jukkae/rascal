@@ -6,7 +6,6 @@
 #include <SFML/Graphics.hpp>
 
 class GameplayState;
-class Map;
 class World;
 struct Point;
 class Renderer {
