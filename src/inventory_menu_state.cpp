@@ -2,6 +2,7 @@
 #include <algorithm>
 #include "inventory_menu_state.hpp"
 #include "engine.hpp"
+#include "engine_command.hpp"
 #include "action.hpp"
 #include "actor.hpp"
 #include "colors.hpp"

@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include "engine.hpp"
+#include "engine_command.hpp"
 #include "actor.hpp"
 #include "ai.hpp"
 #include "colors.hpp"

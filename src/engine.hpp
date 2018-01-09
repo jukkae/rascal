@@ -4,7 +4,6 @@ class State;
 #include <queue>
 #include <string>
 
-#include "engine_command.hpp"
 #include <SFML/Window/Event.hpp>
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
