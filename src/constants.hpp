@@ -17,6 +17,6 @@ namespace constants {
 	static std::string const SAVE_FILE_NAME = "save.txt";
 	static int const DEFAULT_MAP_WIDTH = 120;
 	static int const DEFAULT_MAP_HEIGHT = 72;
-	static int const DEFAULT_FOV_RADIUS = 10;
+	static int const DEFAULT_FOV_RADIUS = 25;
 }
 #endif /* CONSTANTS_HPP */

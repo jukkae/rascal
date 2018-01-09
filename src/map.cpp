@@ -174,6 +174,8 @@ bool Map::isInFov(int x, int y) const {
 }
 
 void Map::computeFov(int x, int y, int radius, FovType fovType) {
+	//Low-hanging fruit optimization:
+	//Only loop through possible values
 	for(int i = 0; i < width; ++i) {
 		for(int j = 0; j < height; ++j) {
 			tiles[i + width*j].inFov = false;
