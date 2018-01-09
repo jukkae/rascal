@@ -9,6 +9,7 @@
 #include "constants.hpp"
 #include "effect.hpp"
 #include "font.hpp"
+#include "status_effect.hpp"
 
 InventoryMenuState::InventoryMenuState(Engine* engine, Actor* actor) :
 State(engine, engine->getWindow()),

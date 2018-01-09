@@ -5,6 +5,7 @@
 #include "font.hpp"
 #include "colors.hpp"
 #include "constants.hpp"
+#include "status_effect.hpp"
 #include "io.hpp"
 
 VictoryState::VictoryState(Engine* engine, Actor* actor) :

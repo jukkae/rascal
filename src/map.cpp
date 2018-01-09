@@ -14,6 +14,7 @@
 #include "pickable.hpp"
 #include "point.hpp"
 #include "rect.hpp"
+#include "status_effect.hpp"
 #include "world.hpp"
 
 #include <SFML/Graphics/Color.hpp>

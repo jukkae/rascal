@@ -9,6 +9,7 @@
 #include "constants.hpp"
 #include "effect.hpp"
 #include "font.hpp"
+#include "status_effect.hpp"
 #include <SFML/System.hpp>
 #include <SFML/Window.hpp>
 

@@ -6,6 +6,7 @@
 #include "gameplay_state.hpp"
 #include "io.hpp"
 #include "renderer.hpp"
+#include "status_effect.hpp"
 #include "map.hpp"
 #include "point.hpp"
 #include "world.hpp"

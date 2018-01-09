@@ -27,7 +27,6 @@ class Transporter;
 #include "direction.hpp"
 #include "gameplay_state.hpp"
 #include "pickable.hpp"
-#include "status_effect.hpp" // does this have to be included?
 
 enum class Statistic { CONSTITUTION, STRENGTH, AGILITY, SPEED };
 
