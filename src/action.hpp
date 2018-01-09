@@ -1,9 +1,9 @@
 #ifndef ACTION_HPP
 #define ACTION_HPP
 
-class Actor;
 struct ActionResult;
 
+#include "actor.hpp"
 #include "direction.hpp"
 #include "point.hpp"
 #include <boost/archive/text_oarchive.hpp>
