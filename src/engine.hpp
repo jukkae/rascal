@@ -9,6 +9,7 @@ class State;
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
 
+class EngineCommand;
 class Engine {
 public:
 	Engine(sf::RenderWindow* window);
