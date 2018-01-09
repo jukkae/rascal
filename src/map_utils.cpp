@@ -19,7 +19,7 @@ void map_utils::addItems(World* world, Map* map) {
 		for(int y = 0; y < map->height; ++y) {
 			int r = d100();
 			if (!map->isWall(x, y) && r <= 2) { // can't use canWalk yet
-				map_utils::addItem(world, map, x, y);
+				world->addActor(map_utils::makeItem(world, map, x, y));
 			}
 		}
 	}
@@ -30,7 +30,7 @@ void map_utils::addMonsters(World* world, Map* map, int difficulty) {
 		for(int y = 0; y < map->height; ++y) {
 			int r = d100();
 			if (!map->isWall(x, y) && r == 1) { // can't use canWalk yet
-				map_utils::addMonster(world, map, x, y, difficulty);
+				world->addActor(map_utils::makeMonster(world, map, x, y, difficulty));
 			}
 		}
 	}
@@ -160,10 +160,6 @@ std::unique_ptr<Actor> map_utils::makeMonster(World* world, Map* map, int x, int
 	}
 }
 
-void map_utils::addMonster(World* world, Map* map, int x, int y, int difficulty) {
-	world->addActor(map_utils::makeMonster(world, map, x, y, difficulty));
-}
-
 std::unique_ptr<Actor> map_utils::makeItem(World* world, Map* map, int x, int y) {
 	int r = d100();
 	if(r < 30) {
@@ -229,8 +225,3 @@ std::unique_ptr<Actor> map_utils::makeItem(World* world, Map* map, int x, int y)
 		return rifle;
 	}
 }
-
-void map_utils::addItem(World* world, Map* map, int x, int y) {
-	world->addActor(map_utils::makeItem(world, map, x, y));
-}
-
