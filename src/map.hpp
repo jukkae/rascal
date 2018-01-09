@@ -9,6 +9,7 @@
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/serialization/export.hpp>
 #include "animation.hpp"
+#include "constants.hpp"
 class World;
 struct Rect;
 template<class T>
@@ -80,8 +81,8 @@ public:
 	bool canWalk(int x, int y) const;
 	bool isInFov(int x, int y) const;
 	bool isExplored(int x, int y) const;
-	void computeFov(FovType fovType = FovType::CIRCLE);
-	void computeFovForOctant(int x, int y, int octant, FovType fovType = FovType::CIRCLE);
+	void computeFov(int x, int y, int radius = constants::DEFAULT_FOV_RADIUS, FovType fovType = FovType::CIRCLE);
+	void computeFovForOctant(int x, int y, int octant, int radius = constants::DEFAULT_FOV_RADIUS, FovType fovType = FovType::CIRCLE);
 	void setWorld(World* w) { world = w; }
 
 private:
