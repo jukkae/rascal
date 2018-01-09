@@ -23,7 +23,6 @@ class GameplayState;
 #include "container.hpp" // must be included for serialization
 #include "destructible.hpp"
 #include "pickable.hpp"
-#include "persistent.hpp"
 #include "status_effect.hpp" // does this have to be included?
 #include "transporter.hpp"
 
