@@ -1,7 +1,6 @@
 #ifndef ATTACKER_HPP
 #define ATTACKER_HPP
 class Actor;
-class Effect;
 class EffectGenerator;
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>

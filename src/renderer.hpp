@@ -2,7 +2,6 @@
 #define RENDERER_HPP
 #include <vector>
 #include "constants.hpp"
-#include "point.hpp"
 #include <SFML/Graphics.hpp>
 
 class Actor;
