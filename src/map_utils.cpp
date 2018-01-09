@@ -5,6 +5,7 @@
 #include "effect.hpp"
 #include "map_utils.hpp"
 #include "map.hpp"
+#include "transporter.hpp"
 #include "world.hpp"
 #include <SFML/Graphics.hpp>
 
