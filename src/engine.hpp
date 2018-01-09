@@ -5,7 +5,6 @@ class State;
 #include <string>
 
 #include "engine_command.hpp"
-#include "persistent.hpp"
 #include <SFML/Window/Event.hpp>
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
