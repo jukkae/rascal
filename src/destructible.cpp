@@ -1,6 +1,7 @@
 #include <cstdio>
 #include "actor.hpp"
 #include "destructible.hpp"
+#include "effect.hpp"
 #include "engine.hpp"
 #include "event.hpp"
 #include "gameplay_state.hpp"

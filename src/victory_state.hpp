@@ -5,6 +5,7 @@
 #include <SFML/Graphics.hpp>
 
 class Engine;
+class Actor;
 class VictoryState : public State {
 public:
 	VictoryState(Engine* engine, Actor* actor);

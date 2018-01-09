@@ -1,6 +1,7 @@
 #include "status_effect.hpp"
 #include "colors.hpp"
 #include "destructible.hpp"
+#include "effect.hpp"
 #include "event.hpp"
 #include "gameplay_state.hpp"
 #include "world.hpp"

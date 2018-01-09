@@ -1,3 +1,4 @@
+#include "attacker.hpp"
 #include "constants.hpp"
 #include "gameplay_state.hpp"
 #include "gameover_state.hpp"

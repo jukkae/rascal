@@ -3,6 +3,7 @@
 #include "ai.hpp"
 #include "colors.hpp"
 #include "constants.hpp"
+#include "effect.hpp"
 #include "font.hpp"
 #include "io.hpp"
 #include "main_menu_state.hpp"

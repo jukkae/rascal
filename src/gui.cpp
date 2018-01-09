@@ -1,4 +1,5 @@
 #include "ai.hpp"
+#include "attacker.hpp"
 #include "colors.hpp"
 #include "constants.hpp"
 #include "destructible.hpp"

@@ -6,6 +6,7 @@
 #include "ai.hpp"
 #include "colors.hpp"
 #include "constants.hpp"
+#include "effect.hpp"
 #include "font.hpp"
 #include <SFML/System.hpp>
 #include <SFML/Window.hpp>
