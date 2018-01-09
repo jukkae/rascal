@@ -3,7 +3,6 @@
 
 class Actor;
 class StatusEffect;
-class Ai;
 class TemporaryAi;
 #include "direction.hpp"
 

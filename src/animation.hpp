@@ -1,7 +1,6 @@
 #ifndef ANIMATION_HPP
 #define ANIMATION_HPP
 #include <vector>
-#include "colors.hpp"
 
 struct Animation {
 	std::vector<char> chars;
