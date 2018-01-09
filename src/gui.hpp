@@ -1,7 +1,6 @@
 #ifndef GUI_HPP
 #define GUI_HPP
 
-#include "constants.hpp"
 #include "messaging.hpp"
 #include "persistent.hpp"
 #include <SFML/Graphics.hpp>
