@@ -118,6 +118,10 @@ std::unique_ptr<Action> MonsterAi::getNextAction(Actor* actor) {
 		aiState = AiState::FRIGHTENED;
 	}
 
+	if(actor->destructible->hp >= actor->destructible->maxHp * 0.6) {
+		aiState = AiState::NORMAL;
+	}
+
 	if(aiState == AiState::NORMAL) {
 		if (actor->world->isInFov(actor->x, actor->y)) {
 			moveCount = TRACKING_TURNS; //TODO also track if was in FOV, and fire event when first seeing player
