@@ -26,7 +26,6 @@ class Transporter;
 #include "destructible.hpp"
 #include "direction.hpp"
 #include "gameplay_state.hpp"
-#include "pickable.hpp"
 
 enum class Statistic { CONSTITUTION, STRENGTH, AGILITY, SPEED };
 

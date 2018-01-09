@@ -5,6 +5,7 @@
 #include "effect.hpp"
 #include "event.hpp"
 #include "gameplay_state.hpp"
+#include "pickable.hpp"
 #include "transporter.hpp"
 #include "world.hpp"
 

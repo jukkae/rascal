@@ -5,6 +5,7 @@
 #include "effect.hpp"
 #include "map_utils.hpp"
 #include "map.hpp"
+#include "pickable.hpp"
 #include "status_effect.hpp"
 #include "transporter.hpp"
 #include "world.hpp"

@@ -7,6 +7,7 @@
 #include "engine.hpp"
 #include "event.hpp"
 #include "map_utils.hpp"
+#include "pickable.hpp"
 #include "transporter.hpp"
 #include "victory_state.hpp"
 #include "world.hpp"
