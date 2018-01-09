@@ -1,6 +1,7 @@
 #include "messaging.hpp"
 
 #include "actor.hpp"
+#include "effect.hpp"
 #include "event.hpp"
 #include "ignore.hpp"
 

@@ -1,5 +1,6 @@
 #include "container.hpp"
 #include "actor.hpp"
+#include "effect.hpp"
 
 Container::Container(int capacity) : capacity(capacity) {;}
 
