@@ -1,7 +1,6 @@
 #ifndef INVENTORY_MENU_STATE_HPP
 #define INVENTORY_MENU_STATE_HPP
 #include "state.hpp"
-#include "constants.hpp"
 #include <vector>
 #include <SFML/Graphics.hpp>
 

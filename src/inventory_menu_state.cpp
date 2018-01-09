@@ -5,6 +5,7 @@
 #include "action.hpp"
 #include "actor.hpp"
 #include "colors.hpp"
+#include "constants.hpp"
 #include "font.hpp"
 
 InventoryMenuState::InventoryMenuState(Engine* engine, Actor* actor) :
