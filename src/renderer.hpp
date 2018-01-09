@@ -5,6 +5,7 @@
 #include "point.hpp"
 #include <SFML/Graphics.hpp>
 
+class Actor;
 class GameplayState;
 class World;
 struct Point;

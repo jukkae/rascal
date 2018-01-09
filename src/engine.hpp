@@ -1,6 +1,5 @@
 #ifndef ENGINE_HPP
 #define ENGINE_HPP
-class Actor;
 class State;
 #include <queue>
 #include <string>
