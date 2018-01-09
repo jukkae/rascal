@@ -11,7 +11,6 @@
 #include "vec.hpp"
 #include "rect.hpp"
 #include "animation.hpp"
-class Actor;
 class GameplayState;
 class World;
 
