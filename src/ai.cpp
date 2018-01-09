@@ -115,7 +115,7 @@ std::unique_ptr<Action> MonsterAi::getNextAction(Actor* actor) {
 	if (actor->destructible && actor->destructible->isDead()) return std::make_unique<WaitAction>(WaitAction(actor));
 
 	if(actor->destructible->hp <= actor->destructible->maxHp * 0.3) {
-		aiState = AiState::FRIGHTENED;
+		aiState = AiState::FRIGHTENED; //TODO implement in terms of morale
 	}
 
 	if(actor->destructible->hp >= actor->destructible->maxHp * 0.6) {
