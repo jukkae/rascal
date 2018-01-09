@@ -4,6 +4,7 @@
 #include "attacker.hpp"
 #include "constants.hpp"
 #include "damage.hpp"
+#include "destructible.hpp"
 #include "effect.hpp"
 #include "event.hpp"
 #include "gameplay_state.hpp"

@@ -2,6 +2,7 @@
 #include "attacker.hpp"
 #include "colors.hpp"
 #include "dice.hpp"
+#include "destructible.hpp"
 #include "effect.hpp"
 #include "map_utils.hpp"
 #include "map.hpp"

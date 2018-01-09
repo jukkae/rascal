@@ -1,6 +1,7 @@
 #include "actor.hpp"
 #include "animation.hpp"
 #include "colors.hpp"
+#include "destructible.hpp"
 #include "effect.hpp"
 #include "font.hpp"
 #include "gameplay_state.hpp"

@@ -23,7 +23,6 @@ class Transporter;
 
 #include "animation.hpp"
 #include "container.hpp" // must be included for serialization
-#include "destructible.hpp"
 #include "direction.hpp"
 #include "gameplay_state.hpp"
 
