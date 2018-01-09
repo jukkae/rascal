@@ -8,11 +8,12 @@
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/serialization/export.hpp>
-#include "vec.hpp"
 #include "animation.hpp"
 class GameplayState;
 class World;
 struct Rect;
+template<class T>
+struct Vec;
 
 enum class Terrain { NORMAL, WATER };
 
