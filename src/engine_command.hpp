@@ -1,7 +1,7 @@
 #ifndef ENGINE_COMMAND_HPP
 #define ENGINE_COMMAND_HPP
 #include <memory> // for unique_ptr
-class Engine;
+#include "engine.hpp"
 class State;
 class EngineCommand {
 public:
