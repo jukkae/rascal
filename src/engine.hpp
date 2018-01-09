@@ -4,7 +4,6 @@ class State;
 #include <queue>
 #include <string>
 
-#include "gui.hpp"
 #include "attacker.hpp"
 #include "engine_command.hpp"
 #include "persistent.hpp"
