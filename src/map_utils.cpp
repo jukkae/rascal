@@ -19,7 +19,7 @@ void map_utils::addItems(World* world, Map* map) {
 		for(int y = 0; y < map->height; ++y) {
 			int r = d100();
 			if (!map->isWall(x, y) && r == 1) { // can't use canWalk yet
-				world->addActor(map_utils::makeItem(world, map, x, y));
+				world->addActor(item::makeItem(world, map, x, y));
 			}
 		}
 	}
@@ -31,7 +31,7 @@ void map_utils::addMonsters(World* world, Map* map, int difficulty) {
 			int r = d100();
 			int s = d3();
 			if (!map->isWall(x, y) && r == 1 && s == 1) { // can't use canWalk yet
-				world->addActor(map_utils::makeMonster(world, map, x, y, difficulty));
+				world->addActor(npc::makeMonster(world, map, x, y, difficulty));
 			}
 		}
 	}
@@ -131,7 +131,7 @@ void map_utils::addMcGuffin(World* world, Map* map, int level) {
 	world->addActor(std::move(mcGuffin));
 }
 
-std::unique_ptr<Actor> map_utils::makeMonster(World* world, Map* map, int x, int y, int difficulty) {
+std::unique_ptr<Actor> npc::makeMonster(World* world, Map* map, int x, int y, int difficulty) {
 	int r = d100() - 10 + (10 * difficulty);
 	if(r < 70) {
 		std::unique_ptr<Actor> punk = std::make_unique<Actor>(x, y, 'h', "punk", colors::desaturatedGreen, 1);
@@ -171,7 +171,7 @@ std::unique_ptr<Actor> map_utils::makeMonster(World* world, Map* map, int x, int
 	}
 }
 
-std::unique_ptr<Actor> map_utils::makeItem(World* world, Map* map, int x, int y) {
+std::unique_ptr<Actor> item::makeItem(World* world, Map* map, int x, int y) {
 	int r = d100();
 	if(r < 30) {
 		std::unique_ptr<Actor> stimpak = std::make_unique<Actor>(x, y, '!', "stimpak", sf::Color(128, 0, 128));
