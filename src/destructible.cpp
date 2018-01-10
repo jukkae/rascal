@@ -40,7 +40,7 @@ void Destructible::die(Actor* owner) {
 	owner->name = corpseName;
 	owner->blocks = false;
 	if(owner->container) {
-		while(owner->container->inventory.size() > 0) { //TODO picking up loot segfaults
+		while(owner->container->inventory.size() > 0) {
 			owner->container->inventory.at(0)->pickable->drop(owner->container->inventory.at(0).get(), owner);
 		}
 	}
