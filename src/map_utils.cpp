@@ -143,7 +143,7 @@ std::unique_ptr<Actor> map_utils::makeMonster(World* world, Map* map, int x, int
 		std::unique_ptr<Actor> stimpak = std::make_unique<Actor>(x, y, '!', "super stimpak", sf::Color(128, 128, 128));
 		stimpak->blocks = false;
 		stimpak->pickable = std::make_unique<Pickable>(TargetSelector(TargetSelector::SelectorType::WEARER, 0), std::make_unique<HealthEffect>(8));
-		stimpak->world = world;
+		stimpak->world = world; //FIXME that I need to do this is bad and error-prone. Figure out better ways of actor creation.
 
 		punk->container->add(std::move(stimpak));
 
