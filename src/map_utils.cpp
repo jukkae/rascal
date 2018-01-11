@@ -228,11 +228,16 @@ std::unique_ptr<Actor> item::makeItem(World* world, Map* map, int x, int y) {
 		pistol->pickable = std::make_unique<Pickable>();
 		pistol->rangedAttacker = std::make_unique<RangedAttacker>(1, 4, 0, 10.0);
 		return pistol;
-	} else {
+	} else if(r < 98){
 		std::unique_ptr<Actor> rifle = std::make_unique<Actor>(x, y, '\\', "rifle", sf::Color(128, 255, 255));
 		rifle->blocks = false;
 		rifle->pickable = std::make_unique<Pickable>();
 		rifle->rangedAttacker = std::make_unique<RangedAttacker>(2, 6, 0, 10.0);
 		return rifle;
+	} else {
+		std::unique_ptr<Actor> navcomp = std::make_unique<Actor>(x, y, 'q', "navigation computer", sf::Color::Blue, 0);
+		navcomp->blocks = false;
+		navcomp->pickable = std::make_unique<Pickable>(TargetSelector(TargetSelector::SelectorType::NONE));
+		return navcomp;
 	}
 }

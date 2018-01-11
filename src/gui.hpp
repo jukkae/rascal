@@ -31,6 +31,7 @@ protected:
 	void renderMouseLook(World* world, sf::RenderWindow* window);
 	void renderStats(World* world, sf::RenderWindow* window);
 	void renderStatusEffects(World* world, sf::RenderWindow* window);
+	void renderNav(World* world, sf::RenderWindow* window);
 
 private:
 	bool isInteresting(Event& event);
