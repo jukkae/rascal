@@ -234,6 +234,11 @@ std::unique_ptr<Actor> item::makeItem(World* world, Map* map, int x, int y) {
 		rifle->pickable = std::make_unique<Pickable>();
 		rifle->rangedAttacker = std::make_unique<RangedAttacker>(2, 6, 0, 10.0);
 		return rifle;
+	} else if(r < 99){
+		std::unique_ptr<Actor> armor = std::make_unique<Actor>(x, y, '[', "combat armor", sf::Color(128, 255, 255));
+		armor->blocks = false;
+		armor->pickable = std::make_unique<Pickable>();
+		return armor;
 	} else {
 		std::unique_ptr<Actor> navcomp = std::make_unique<Actor>(x, y, 'q', "navigation computer", sf::Color::Blue, 0);
 		navcomp->blocks = false;
