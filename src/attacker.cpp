@@ -15,7 +15,11 @@ bool Attacker::attack(Actor* owner, Actor* target) {
 		if(attackRoll > target->destructible->armorClass) {
 			int dmg = getAttackBaseDamage();
 			int damage = dmg - target->destructible->defense;
-			if(target->wornArmor) { //TODO
+			if(target->wornArmor && target->wornArmor->name == "leather armor") { //TODO yeah i know, and this should happen over at target's side anyway
+				--damage;
+			}
+			if(target->wornArmor && target->wornArmor->name == "combat armor") { //TODO
+				--damage;
 				--damage;
 			}
 			MeleeHitEvent e(owner, target, owner->wornWeapon, damage, true);

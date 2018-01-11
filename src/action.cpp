@@ -161,7 +161,7 @@ bool WieldItemAction::execute() {
 		actor->wornWeapon = item;
 		return true;
 	}
-	if(item->name == "combat armor") { // TODO yeah i know
+	if(item->name == "combat armor" || item->name == "leather armor") { // TODO yeah i know
 		actor->wornArmor = item;
 		return true;
 	}
