@@ -147,6 +147,9 @@ bool DropItemAction::execute() {
 	if(actor->wornWeapon == item) { // TODO order of actions is wrong
 		actor->addAction(std::make_unique<UnWieldItemAction>(UnWieldItemAction(actor)));
 	}
+	if(actor->wornArmor == item) {
+		actor->addAction(std::make_unique<UnWieldItemAction>(UnWieldItemAction(actor)));
+	}
 	ActionSuccessEvent e(item, "You drop what you were holding!"); // TODO player-specific
 	actor->world->notify(e);
 	item->pickable->drop(item, actor);
@@ -157,14 +160,24 @@ bool WieldItemAction::execute() {
 	if(item->attacker || item->rangedAttacker) {
 		actor->wornWeapon = item;
 		return true;
-	} else return false;
+	}
+	if(item->name == "combat armor") { // TODO yeah i know
+		actor->wornArmor = item;
+		return true;
+	}
+	else return false;
 }
 
 bool UnWieldItemAction::execute() {
 	if(actor->wornWeapon) {
 		actor->wornWeapon = nullptr;
 		return true;
-	} else return false;
+	}
+	if(actor->wornArmor) {
+		actor->wornArmor = nullptr;
+		return true;
+	}
+	else return false;
 }
 
 LookAction::LookAction(Actor* actor):

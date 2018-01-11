@@ -46,6 +46,7 @@ public:
 	std::unique_ptr<Container> container;
 	std::unique_ptr<Transporter> transporter;
 	Actor* wornWeapon = nullptr;
+	Actor* wornArmor = nullptr;
 	std::experimental::optional<Animation> animation;
 
 	GameplayState* s; // temporary for messaging TODO remove

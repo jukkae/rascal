@@ -15,6 +15,9 @@ bool Attacker::attack(Actor* owner, Actor* target) {
 		if(attackRoll > target->destructible->armorClass) {
 			int dmg = getAttackBaseDamage();
 			int damage = dmg - target->destructible->defense;
+			if(target->wornArmor) { //TODO
+				--damage;
+			}
 			MeleeHitEvent e(owner, target, owner->wornWeapon, damage, true);
 			owner->world->notify(e);
 
