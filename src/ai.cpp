@@ -114,25 +114,57 @@ std::unique_ptr<Action> MonsterAi::getNextAction(Actor* actor) {
 	Direction direction = Direction::NONE;
 	if (actor->destructible && actor->destructible->isDead()) return std::make_unique<WaitAction>(WaitAction(actor));
 
-	if (actor->world->isInFov(actor->x, actor->y)) {
-		moveCount = TRACKING_TURNS; //TODO also track if was in FOV, and fire event when first seeing player
-	} else { --moveCount; }
+	if(actor->destructible->hp <= actor->destructible->maxHp * 0.3) {
+		aiState = AiState::FRIGHTENED; //TODO implement in terms of morale
+	}
 
-	if (moveCount > 0) {
-		Actor* player = world->getPlayer();
-		int targetX = player->x;
-		int targetY = player->y;
-		int dx = targetX - actor->x;
-		int dy = targetY - actor->y;
-		int stepDx = (dx == 0 ? 0 : (dx > 0 ? 1 : -1));
-		int stepDy = (dy == 0 ? 0 : (dy > 0 ? 1 : -1));
-		float distance = sqrtf(dx*dx + dy*dy);
+	if(actor->destructible->hp >= actor->destructible->maxHp * 0.6) {
+		aiState = AiState::NORMAL;
+	}
 
-		if(distance >= 2) {
-			dx = (int) (round(dx / distance));
-			dy = (int) (round(dy / distance));
-			if(world->canWalk(actor->x + stepDx, actor->y + stepDy)) { // uhh
+	if(aiState == AiState::NORMAL) {
+		if (actor->world->isInFov(actor->x, actor->y)) {
+			moveCount = TRACKING_TURNS; //TODO also track if was in FOV, and fire event when first seeing player
+		} else { --moveCount; }
+
+		if (moveCount > 0) {
+			Actor* player = world->getPlayer();
+			int targetX = player->x;
+			int targetY = player->y;
+			int dx = targetX - actor->x;
+			int dy = targetY - actor->y;
+			int stepDx = (dx == 0 ? 0 : (dx > 0 ? 1 : -1));
+			int stepDy = (dy == 0 ? 0 : (dy > 0 ? 1 : -1));
+			float distance = sqrtf(dx*dx + dy*dy);
+
+			if(distance >= 2) {
+				dx = (int) (round(dx / distance));
+				dy = (int) (round(dy / distance));
+				if(world->canWalk(actor->x + stepDx, actor->y + stepDy)) { // uhh
+					if (stepDx ==  0 && stepDy ==  0) return std::make_unique<WaitAction>(WaitAction(actor));
+					if (stepDx ==  0 && stepDy == -1) direction = Direction::N;
+					if (stepDx ==  1 && stepDy == -1) direction = Direction::NE;
+					if (stepDx ==  1 && stepDy ==  0) direction = Direction::E;
+					if (stepDx ==  1 && stepDy ==  1) direction = Direction::SE;
+					if (stepDx ==  0 && stepDy ==  1) direction = Direction::S;
+					if (stepDx == -1 && stepDy ==  1) direction = Direction::SW;
+					if (stepDx == -1 && stepDy ==  0) direction = Direction::W;
+					if (stepDx == -1 && stepDy == -1) direction = Direction::NW;
+					return std::make_unique<MoveAction>(MoveAction(actor, direction));
+				} else if (world->canWalk(actor->x + stepDx, actor->y)) { // Wall sliding
+					if (stepDx ==  0 && stepDy ==  0) return std::make_unique<WaitAction>(WaitAction(actor));
+					if (stepDx ==  1 && stepDy ==  0) direction = Direction::E;
+					if (stepDx == -1 && stepDy ==  0) direction = Direction::W;
+					return std::make_unique<MoveAction>(MoveAction(actor, direction));
+				} else if (world->canWalk(actor->x, actor->y + stepDy)) {
+					if (stepDx ==  0 && stepDy ==  0) return std::make_unique<WaitAction>(WaitAction(actor));
+					if (stepDx ==  0 && stepDy == -1) direction = Direction::N;
+					if (stepDx ==  0 && stepDy ==  1) direction = Direction::S;
+					return std::make_unique<MoveAction>(MoveAction(actor, direction));
+				}
+			} else { // Melee range
 				if (stepDx ==  0 && stepDy ==  0) return std::make_unique<WaitAction>(WaitAction(actor));
+
 				if (stepDx ==  0 && stepDy == -1) direction = Direction::N;
 				if (stepDx ==  1 && stepDy == -1) direction = Direction::NE;
 				if (stepDx ==  1 && stepDy ==  0) direction = Direction::E;
@@ -142,32 +174,27 @@ std::unique_ptr<Action> MonsterAi::getNextAction(Actor* actor) {
 				if (stepDx == -1 && stepDy ==  0) direction = Direction::W;
 				if (stepDx == -1 && stepDy == -1) direction = Direction::NW;
 				return std::make_unique<MoveAction>(MoveAction(actor, direction));
-			} else if (world->canWalk(actor->x + stepDx, actor->y)) { // Wall sliding
-				if (stepDx ==  0 && stepDy ==  0) return std::make_unique<WaitAction>(WaitAction(actor));
-				if (stepDx ==  1 && stepDy ==  0) direction = Direction::E;
-				if (stepDx == -1 && stepDy ==  0) direction = Direction::W;
-				return std::make_unique<MoveAction>(MoveAction(actor, direction));
-			} else if (world->canWalk(actor->x, actor->y + stepDy)) {
-				if (stepDx ==  0 && stepDy ==  0) return std::make_unique<WaitAction>(WaitAction(actor));
-				if (stepDx ==  0 && stepDy == -1) direction = Direction::N;
-				if (stepDx ==  0 && stepDy ==  1) direction = Direction::S;
-				return std::make_unique<MoveAction>(MoveAction(actor, direction));
 			}
-		} else { // Melee range
-			if (stepDx ==  0 && stepDy ==  0) return std::make_unique<WaitAction>(WaitAction(actor));
-
-			if (stepDx ==  0 && stepDy == -1) direction = Direction::N;
-			if (stepDx ==  1 && stepDy == -1) direction = Direction::NE;
-			if (stepDx ==  1 && stepDy ==  0) direction = Direction::E;
-			if (stepDx ==  1 && stepDy ==  1) direction = Direction::SE;
-			if (stepDx ==  0 && stepDy ==  1) direction = Direction::S;
-			if (stepDx == -1 && stepDy ==  1) direction = Direction::SW;
-			if (stepDx == -1 && stepDy ==  0) direction = Direction::W;
-			if (stepDx == -1 && stepDy == -1) direction = Direction::NW;
-			return std::make_unique<MoveAction>(MoveAction(actor, direction));
 		}
+		return std::make_unique<WaitAction>(WaitAction(actor));
+	} else {
+		Actor* player = world->getPlayer();
+		int targetX = player->x;
+		int targetY = player->y;
+		int dx = targetX - actor->x;
+		int dy = targetY - actor->y;
+		int stepDx = (dx == 0 ? 0 : (dx > 0 ? -1 : 1));
+		int stepDy = (dy == 0 ? 0 : (dy > 0 ? -1 : 1));
+		if (stepDx ==  0 && stepDy == -1) direction = Direction::N;
+		if (stepDx ==  1 && stepDy == -1) direction = Direction::NE;
+		if (stepDx ==  1 && stepDy ==  0) direction = Direction::E;
+		if (stepDx ==  1 && stepDy ==  1) direction = Direction::SE;
+		if (stepDx ==  0 && stepDy ==  1) direction = Direction::S;
+		if (stepDx == -1 && stepDy ==  1) direction = Direction::SW;
+		if (stepDx == -1 && stepDy ==  0) direction = Direction::W;
+		if (stepDx == -1 && stepDy == -1) direction = Direction::NW;
+		return std::make_unique<MoveAction>(MoveAction(actor, direction));
 	}
-	return std::make_unique<WaitAction>(WaitAction(actor));
 }
 
 void TemporaryAi::decreaseTurns(Actor* owner) {

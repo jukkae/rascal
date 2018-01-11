@@ -9,6 +9,7 @@
 #include "gameplay_state.hpp"
 #include "gameover_state.hpp"
 #include "colors.hpp"
+#include "pickable.hpp"
 #include "world.hpp"
 #include <SFML/Graphics/Color.hpp>
 
@@ -38,6 +39,11 @@ void Destructible::die(Actor* owner) {
 	owner->col = colors::darkerRed;
 	owner->name = corpseName;
 	owner->blocks = false;
+	if(owner->container) {
+		while(owner->container->inventory.size() > 0) {
+			owner->container->inventory.at(0)->pickable->drop(owner->container->inventory.at(0).get(), owner);
+		}
+	}
 	owner->world->getPlayer()->container->credits += 15; // TODO drop credits instead
 }
 

@@ -2,6 +2,7 @@
 #include "attacker.hpp"
 #include "colors.hpp"
 #include "constants.hpp"
+#include "container.hpp"
 #include "destructible.hpp"
 #include "effect.hpp"
 #include "event.hpp"
@@ -56,6 +57,7 @@ void Gui::render(World* world, sf::RenderWindow* window) {
 
 	renderStatusEffects(world, window);
 	renderStats(world, window);
+	renderNav(world, window);
 }
 
 void Gui::renderXpBar(World* world, sf::RenderWindow* window) {
@@ -107,6 +109,22 @@ void Gui::renderStats(World* world, sf::RenderWindow* window) {
 	atkText.setFillColor(colors::lightBlue);
 	atkText.setPosition((constants::SCREEN_WIDTH-40)*constants::CELL_WIDTH, (3+constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT)*constants::CELL_HEIGHT);
 	window->draw(atkText);
+}
+
+void Gui::renderNav(World* world, sf::RenderWindow* window) {
+	Actor* player = world->getPlayer(); // TODO instead pass player - rather, the actor - as a parameter to both Gui and Renderer
+	if(std::any_of(
+		player->container->inventory.begin(),
+		player->container->inventory.end(),
+		[&] (const std::unique_ptr<Actor>& a) { return a->name == "navigation computer"; }
+	)) {
+		std::string location = std::to_string(player->x) + ", " + std::to_string(player->y);
+		sf::Text locText(location, font::mainFont, 16);
+		locText.setFillColor(colors::lightBlue);
+		locText.setPosition((constants::SCREEN_WIDTH-20)*constants::CELL_WIDTH, (3+constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT)*constants::CELL_HEIGHT);
+		window->draw(locText);
+	}
+
 }
 
 void Gui::renderStatusEffects(World* world, sf::RenderWindow* window) {

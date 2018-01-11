@@ -173,28 +173,26 @@ bool Map::isInFov(int x, int y) const {
 	//return isInFovNew(x, y);
 }
 
-void Map::computeFov(FovType fovType) {
-	for(int x = 0; x < width; x++) {
-		for(int y = 0; y < height; y++) {
-			tiles[x + width*y].inFov = false;
+void Map::computeFov(int x, int y, int radius, FovType fovType) {
+	//Low-hanging fruit optimization:
+	//Only loop through possible values
+	for(int i = 0; i < width; ++i) {
+		for(int j = 0; j < height; ++j) {
+			tiles[i + width*j].inFov = false;
 		}
 	}
-	if(world->getPlayer()) {
-		int playerX = world->getPlayer()->x;
-		int playerY = world->getPlayer()->y;
-		for(int octant = 0; octant < 8; octant++) {
-			computeFovForOctant(playerX, playerY, octant, fovType);
-		}
+	for(int octant = 0; octant < 8; octant++) {
+		computeFovForOctant(x, y, octant, radius, fovType);
 	}
 }
 
-void Map::computeFovForOctant(int x, int y, int octant, FovType fovType) {
+void Map::computeFovForOctant(int x, int y, int octant, int radius, FovType fovType) {
 	ShadowLine shadowLine;
 	bool fullShadow = false;
-	for(int row = 0; row < constants::DEFAULT_FOV_RADIUS; row++) {
+	for(int row = 0; row < radius; row++) {
 		for(int col = 0; col <= row; col++) {
 			if(fovType == FovType::CIRCLE) {
-				if(sqrt(row*row + col*col) > constants::DEFAULT_FOV_RADIUS) break;
+				if(sqrt(row*row + col*col) > radius) break;
 			} // else if fovType == FovType::SQUARE
 			int xPos = x + transformOctant(row, col, octant).x;
 			int yPos = y + transformOctant(row, col, octant).y;

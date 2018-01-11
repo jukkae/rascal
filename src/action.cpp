@@ -35,7 +35,7 @@ bool MoveAction::execute() {
 	for (auto& a : world->getActors()) {
 		if (a->destructible && !a->destructible->isDead() && a->x == targetX && a->y == targetY) {
 			if(actor->wornWeapon && actor->wornWeapon->rangedAttacker) {
-				ActionFailureEvent e(actor, "You can't shoot from this far away!");
+				ActionFailureEvent e(actor, "You can't punch when wielding a ranged weapon!");
 				world->notify(e);
 				return false;
 			}
@@ -190,6 +190,9 @@ bool ShootAction::execute() {
 		return false;
 	}
 
+	int ax = actor->x;
+	int ay = actor->y;
+
 	int worldX = target.x;
 	int worldY = target.y;
 
@@ -201,6 +204,20 @@ bool ShootAction::execute() {
 	}
 	if(actor->getDistance(worldX, worldY) > actor->wornWeapon->rangedAttacker->range) {
 		ActionFailureEvent e(actor, "Out of range!");
+		world->notify(e);
+		return false;
+	}
+	if( //TODO brittle and ugly, lift to function
+			world->getLiveActor(ax-1, ay-1) ||
+			world->getLiveActor(ax-1, ay  ) ||
+			world->getLiveActor(ax-1, ay+1) ||
+			world->getLiveActor(ax,   ay-1) ||
+			world->getLiveActor(ax,   ay+1) ||
+			world->getLiveActor(ax+1, ay-1) ||
+			world->getLiveActor(ax+1, ay  ) ||
+			world->getLiveActor(ax+1, ay+1)
+	) {
+		ActionFailureEvent e(actor, "Can't shoot when someone's grappling right next to you!");
 		world->notify(e);
 		return false;
 	}

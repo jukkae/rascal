@@ -25,7 +25,7 @@ Actor::~Actor() {
 
 float Actor::update(GameplayState* state) {
 	if(ai) {
-		if(isPlayer()) world->computeFov(); // Have player request fov computation
+		if(isPlayer()) world->computeFov(x, y);
 		if(actionsQueue.empty()) actionsQueue.push_back(ai->getNextAction(this));
 		float actionCost = actionsQueue.front()->getLength();
 		bool success = actionsQueue.front()->execute();
@@ -38,11 +38,11 @@ float Actor::update(GameplayState* state) {
 					statusEffects.erase(std::remove(statusEffects.begin(), statusEffects.end(), e), statusEffects.end());
 				}
 			}
-			if(isPlayer()) world->computeFov(); // Have player request fov computation also after
+			if(isPlayer()) world->computeFov(x, y);
 			return turnCost;
 		} else {
 			if(ai->isPlayer()) {
-				if(isPlayer()) world->computeFov(); // Have player request fov computation
+				if(isPlayer()) world->computeFov(x, y);
 				return 0;
 			} else {
 				return constants::DEFAULT_TURN_LENGTH;

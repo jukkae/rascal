@@ -18,19 +18,20 @@ void map_utils::addItems(World* world, Map* map) {
 	for(int x = 0; x < map->width; ++x) {
 		for(int y = 0; y < map->height; ++y) {
 			int r = d100();
-			if (!map->isWall(x, y) && r <= 2) { // can't use canWalk yet
-				map_utils::addItem(world, map, x, y);
+			if (!map->isWall(x, y) && r == 1) { // can't use canWalk yet
+				world->addActor(item::makeItem(world, map, x, y));
 			}
 		}
 	}
 }
 
-void map_utils::addMonsters(World* world, Map* map) {
+void map_utils::addMonsters(World* world, Map* map, int difficulty) {
 	for(int x = 0; x < map->width; ++x) {
 		for(int y = 0; y < map->height; ++y) {
 			int r = d100();
-			if (!map->isWall(x, y) && r == 1) { // can't use canWalk yet
-				map_utils::addMonster(world, map, x, y);
+			int s = d3();
+			if (!map->isWall(x, y) && r == 1 && s == 1) { // can't use canWalk yet
+				world->addActor(npc::makeMonster(world, map, x, y, difficulty));
 			}
 		}
 	}
@@ -130,21 +131,31 @@ void map_utils::addMcGuffin(World* world, Map* map, int level) {
 	world->addActor(std::move(mcGuffin));
 }
 
-std::unique_ptr<Actor> map_utils::makeMonster(World* world, Map* map, int x, int y) {
-	int r = d100();
-	if(r < 60) {
+std::unique_ptr<Actor> npc::makeMonster(World* world, Map* map, int x, int y, int difficulty) {
+	int r = d100() - 10 + (10 * difficulty);
+	if(r < 70) {
 		std::unique_ptr<Actor> punk = std::make_unique<Actor>(x, y, 'h', "punk", colors::desaturatedGreen, 1);
 		punk->destructible = std::make_unique<MonsterDestructible>(10, 0, 50, "dead punk", 10);
 		punk->attacker = std::make_unique<Attacker>(1, 3, 0);
 		punk->ai = std::make_unique<MonsterAi>();
+
+		punk->container = std::make_unique<Container>(10);
+
+		std::unique_ptr<Actor> stimpak = std::make_unique<Actor>(x, y, '!', "super stimpak", sf::Color(128, 128, 128));
+		stimpak->blocks = false;
+		stimpak->pickable = std::make_unique<Pickable>(TargetSelector(TargetSelector::SelectorType::WEARER, 0), std::make_unique<HealthEffect>(8));
+		stimpak->world = world; //FIXME that I need to do this is bad and error-prone. Figure out better ways of actor creation.
+
+		punk->container->add(std::move(stimpak));
+
 		return punk;
-	} else if (r < 70) {
+	} else if (r < 80) {
 		std::unique_ptr<Actor> fighter = std::make_unique<Actor>(x, y, 'H', "fighter", colors::darkGreen, 1);
 		fighter->destructible = std::make_unique<MonsterDestructible>(16, 1, 100, "fighter carcass", 12);
 		fighter->attacker = std::make_unique<Attacker>(1, 6, 0);
 		fighter->ai = std::make_unique<MonsterAi>();
 		return fighter;
-	} else if (r < 80) {
+	} else if (r < 90) {
 		std::unique_ptr<Actor> guard = std::make_unique<Actor>(x, y, 'h', "guard", colors::darkGreen, 1);
 		guard->destructible = std::make_unique<MonsterDestructible>(6, 1, 100, "guard body", 17);
 		guard->attacker = std::make_unique<Attacker>(1, 2, 0);
@@ -160,11 +171,7 @@ std::unique_ptr<Actor> map_utils::makeMonster(World* world, Map* map, int x, int
 	}
 }
 
-void map_utils::addMonster(World* world, Map* map, int x, int y) {
-	world->addActor(map_utils::makeMonster(world, map, x, y));
-}
-
-std::unique_ptr<Actor> map_utils::makeItem(World* world, Map* map, int x, int y) {
+std::unique_ptr<Actor> item::makeItem(World* world, Map* map, int x, int y) {
 	int r = d100();
 	if(r < 30) {
 		std::unique_ptr<Actor> stimpak = std::make_unique<Actor>(x, y, '!', "stimpak", sf::Color(128, 0, 128));
@@ -221,16 +228,21 @@ std::unique_ptr<Actor> map_utils::makeItem(World* world, Map* map, int x, int y)
 		pistol->pickable = std::make_unique<Pickable>();
 		pistol->rangedAttacker = std::make_unique<RangedAttacker>(1, 4, 0, 10.0);
 		return pistol;
-	} else {
+	} else if(r < 98){
 		std::unique_ptr<Actor> rifle = std::make_unique<Actor>(x, y, '\\', "rifle", sf::Color(128, 255, 255));
 		rifle->blocks = false;
 		rifle->pickable = std::make_unique<Pickable>();
 		rifle->rangedAttacker = std::make_unique<RangedAttacker>(2, 6, 0, 10.0);
 		return rifle;
+	} else if(r < 99){
+		std::unique_ptr<Actor> armor = std::make_unique<Actor>(x, y, '[', "combat armor", sf::Color(128, 255, 255));
+		armor->blocks = false;
+		armor->pickable = std::make_unique<Pickable>();
+		return armor;
+	} else {
+		std::unique_ptr<Actor> navcomp = std::make_unique<Actor>(x, y, 'q', "navigation computer", sf::Color::Blue, 0);
+		navcomp->blocks = false;
+		navcomp->pickable = std::make_unique<Pickable>(TargetSelector(TargetSelector::SelectorType::NONE));
+		return navcomp;
 	}
 }
-
-void map_utils::addItem(World* world, Map* map, int x, int y) {
-	world->addActor(map_utils::makeItem(world, map, x, y));
-}
-
