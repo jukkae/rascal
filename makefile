@@ -33,10 +33,10 @@ $(PCH_OUT): $(PCH_SRC)
 	#$(CXX) $(SOURCES) -o rascal $(CPPFLAGS) $(INCLUDEDIRS) -Iinclude $(LDFLAGS) -I/usr/local/include
 
 compile-debug: clean $(OBJS)
-	$(CXX) $(SOURCES) -o rascal $(CPPFLAGS) -Iinclude $(LDFLAGS) -I/usr/local/include -g -O0
+	$(CXX) $(SOURCES) -o rascal $(CPPFLAGS) -I$(SRC) -include $(PCH_SRC) -Iinclude $(LDFLAGS) -I/usr/local/include -g -O0
 
 build-for-bundle: clean $(OBJS)
-	$(CXX) $(SOURCES) -o rascal $(CPPFLAGS) -Iinclude $(LDFLAGS) -I/usr/local/include $(BUNDLE_BUILD)
+	$(CXX) $(SOURCES) -o rascal $(CPPFLAGS) -I$(SRC) -include $(PCH_SRC) -Iinclude $(LDFLAGS) -I/usr/local/include $(BUNDLE_BUILD)
 
 clean:
 	rm -rf *.o rascal save.txt rascal.dSYM obj/*.o *.pch
