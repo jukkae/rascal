@@ -70,7 +70,7 @@ void Gui::renderXpBar(World* world, sf::RenderWindow* window) {
 void Gui::renderStats(World* world, sf::RenderWindow* window) {
 	Actor* player = world->getPlayer(); // TODO instead pass player - rather, the actor - as a parameter to both Gui and Renderer
 
-	int ac = player->destructible->armorClass;
+	int ac = player->getAC();
 	std::string acString = "AC: " + std::to_string(ac);
 	sf::Text acText(acString, font::mainFont, 16);
 	acText.setFillColor(colors::lightBlue);

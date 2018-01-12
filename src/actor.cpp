@@ -130,3 +130,10 @@ bool Actor::tryToMove(Direction direction, float distance) {
 }
 
 bool Actor::isPlayer() { return ai ? this->ai->isPlayer() : false; }
+
+int Actor::getAC() {
+	int ac = 0;
+	if(body) ac = 10 + body->getModifier(body->agility);
+	if(wornArmor) ++ac; //FIXME
+	return ac;
+}

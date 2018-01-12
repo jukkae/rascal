@@ -49,7 +49,7 @@ void map_utils::addPlayer(World* world, Map* map) {
 	} while (map->isWall(x, y)); // should check for canWalk, but can't do that yet
 
 	std::unique_ptr<Actor> player = std::make_unique<Actor>(x, y, '@', "you", sf::Color::White, 2);
-	player->destructible = std::make_unique<PlayerDestructible>(100, 2, 0, "your corpse", 11);
+	player->destructible = std::make_unique<PlayerDestructible>(100, 2, 0, "your corpse");
 	player->attacker     = std::make_unique<Attacker>(1, 2, 1);
 	player->ai           = std::make_unique<PlayerAi>();
 	player->container    = std::make_unique<Container>(100);
@@ -137,7 +137,7 @@ std::unique_ptr<Actor> npc::makeMonster(World* world, Map* map, int x, int y, in
 	int r = d100() - 10 + (10 * difficulty);
 	if(r < 70) {
 		std::unique_ptr<Actor> punk = std::make_unique<Actor>(x, y, 'h', "punk", colors::desaturatedGreen, 1);
-		punk->destructible = std::make_unique<MonsterDestructible>(10, 0, 50, "dead punk", 10);
+		punk->destructible = std::make_unique<MonsterDestructible>(10, 0, 50, "dead punk");
 		punk->attacker = std::make_unique<Attacker>(1, 3, 0);
 		punk->ai = std::make_unique<MonsterAi>();
 		punk->body = std::make_unique<Body>();
@@ -153,14 +153,14 @@ std::unique_ptr<Actor> npc::makeMonster(World* world, Map* map, int x, int y, in
 		return punk;
 	} else if (r < 80) {
 		std::unique_ptr<Actor> fighter = std::make_unique<Actor>(x, y, 'H', "fighter", colors::darkGreen, 1);
-		fighter->destructible = std::make_unique<MonsterDestructible>(16, 1, 100, "fighter carcass", 12);
+		fighter->destructible = std::make_unique<MonsterDestructible>(16, 1, 100, "fighter carcass");
 		fighter->attacker = std::make_unique<Attacker>(1, 6, 0);
 		fighter->ai = std::make_unique<MonsterAi>();
 		fighter->body = std::make_unique<Body>();
 		return fighter;
 	} else if (r < 90) {
 		std::unique_ptr<Actor> guard = std::make_unique<Actor>(x, y, 'h', "guard", colors::darkGreen, 1);
-		guard->destructible = std::make_unique<MonsterDestructible>(6, 1, 100, "guard body", 17);
+		guard->destructible = std::make_unique<MonsterDestructible>(6, 1, 100, "guard body");
 		guard->attacker = std::make_unique<Attacker>(1, 2, 0);
 		guard->ai = std::make_unique<MonsterAi>(200);
 		guard->body = std::make_unique<Body>();
@@ -168,7 +168,7 @@ std::unique_ptr<Actor> npc::makeMonster(World* world, Map* map, int x, int y, in
 	}
 	else {
 		std::unique_ptr<Actor> boxer = std::make_unique<Actor>(x, y, 'H', "boxer", colors::darkerGreen, 1);
-		boxer->destructible = std::make_unique<MonsterDestructible>(4, 0, 70, "boxer carcass", 15);
+		boxer->destructible = std::make_unique<MonsterDestructible>(4, 0, 70, "boxer carcass");
 		boxer->attacker = std::make_unique<Attacker>(1, 6, 2);
 		boxer->ai = std::make_unique<MonsterAi>();
 		boxer->body = std::make_unique<Body>();

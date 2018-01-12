@@ -67,6 +67,7 @@ public:
 	void removeStatusEffect() { if(statusEffects.size() > 0) statusEffects.erase(statusEffects.begin()); } // TODO crap, remove by type
 	std::vector<std::unique_ptr<StatusEffect>>& getStatusEffects() { return statusEffects; }
 	bool tryToMove(Direction direction, float distance);
+	int getAC();
 
 private:
 	std::deque<std::unique_ptr<Action>> actionsQueue;

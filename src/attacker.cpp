@@ -12,16 +12,9 @@
 bool Attacker::attack(Actor* owner, Actor* target) {
 	if(target->destructible && !target->destructible->isDead()) {
 		int attackRoll = d20();
-		if(attackRoll > target->destructible->armorClass) {
+		if(attackRoll > target->getAC()) {
 			int dmg = getAttackBaseDamage();
 			int damage = dmg - target->destructible->defense;
-			if(target->wornArmor && target->wornArmor->name == "leather armor") { //TODO yeah i know, and this should happen over at target's side anyway
-				--damage;
-			}
-			if(target->wornArmor && target->wornArmor->name == "combat armor") { //TODO
-				--damage;
-				--damage;
-			}
 			MeleeHitEvent e(owner, target, owner->wornWeapon, damage, true);
 			owner->world->notify(e);
 
@@ -68,7 +61,7 @@ void RangedAttacker::attack(Actor* owner, Actor* target) {
 	--rounds;
 	if(target->destructible && !target->destructible->isDead()) {
 		int attackRoll = d20();
-		if(attackRoll > target->destructible->armorClass) {
+		if(attackRoll > target->getAC()) {
 			e.hit = true;
 			int dmg = getAttackBaseDamage();
 			if ( dmg - target->destructible->defense > 0 ) {
