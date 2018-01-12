@@ -44,6 +44,16 @@ bool StatusEffectEffect::applyTo(Actor* actor) {
 	return true;
 }
 
+StatusEffectRemovalEffect::StatusEffectRemovalEffect(std::unique_ptr<StatusEffect> statusEffect):
+statusEffect(std::move(statusEffect)) {;}
+
+bool StatusEffectRemovalEffect::applyTo(Actor* actor) {
+	StatusEffectChangeEvent e(actor, statusEffect.get());
+	actor->world->notify(e);
+	actor->removeStatusEffect(); //TODO wrong event, no params
+	return true;
+}
+
 MoveEffect::MoveEffect(Direction direction, float distance):
 direction(direction), distance(distance) {;}
 
@@ -59,4 +69,5 @@ bool MoveEffect::applyTo(Actor* actor) {
 BOOST_CLASS_EXPORT_IMPLEMENT(HealthEffect)
 BOOST_CLASS_EXPORT_IMPLEMENT(AiChangeEffect)
 BOOST_CLASS_EXPORT_IMPLEMENT(StatusEffectEffect)
+BOOST_CLASS_EXPORT_IMPLEMENT(StatusEffectRemovalEffect)
 BOOST_CLASS_EXPORT_IMPLEMENT(MoveEffect)
