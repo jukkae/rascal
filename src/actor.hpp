@@ -64,6 +64,7 @@ public:
 	void setState(GameplayState* state) { s = state; } // temporary for getting access to state's actors TODO
 	void modifyStatistic(Statistic stat, float delta); // TODO move to body
 	void addStatusEffect(std::unique_ptr<StatusEffect> statusEffect) { statusEffects.push_back(std::move(statusEffect)); }
+	void removeStatusEffect() { if(statusEffects.size() > 0) statusEffects.erase(statusEffects.begin()); } // TODO crap, remove by type
 	std::vector<std::unique_ptr<StatusEffect>>& getStatusEffects() { return statusEffects; }
 	bool tryToMove(Direction direction, float distance);
 

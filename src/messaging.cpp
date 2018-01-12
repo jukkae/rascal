@@ -146,13 +146,19 @@ Message messaging::createMessageFromEvent(Event& event) {
 	}
 
 	if(auto e = dynamic_cast<StatusEffectChangeEvent*>(&event)) {
-		if(auto fx = dynamic_cast<PoisonedStatusEffect*>(e->effect)) {
-			ignore(fx);
-			fmt = "%d: The %s feels bad";
-			messageText = formatString(fmt, e->time, e->actor->name.c_str());
-			color = colors::blue;
+		if(e->activity == status_effect::Activity::ADD) {
+			if(auto fx = dynamic_cast<PoisonedStatusEffect*>(e->effect)) {
+				ignore(fx);
+				fmt = "%d: The %s feels bad";
+				messageText = formatString(fmt, e->time, e->actor->name.c_str());
+				color = colors::blue;
+			} else {
+				fmt = "%d: The %s feels a bit different";
+				messageText = formatString(fmt, e->time, e->actor->name.c_str());
+				color = colors::blue;
+			}
 		} else {
-			fmt = "%d: The %s feels a bit different";
+			fmt = "%d: The %s feels a bit more normal";
 			messageText = formatString(fmt, e->time, e->actor->name.c_str());
 			color = colors::blue;
 		}
