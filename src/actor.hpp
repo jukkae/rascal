@@ -27,7 +27,7 @@ class Transporter;
 #include "direction.hpp"
 #include "gameplay_state.hpp"
 
-enum class Statistic { CONSTITUTION, STRENGTH, AGILITY, SPEED };
+enum class Statistic { STRENGTH, PERCEPTION, ENDURANCE, CHARISMA, INTELLIGENCE, AGILITY, LUCK };
 
 class World;
 class Actor {
@@ -62,7 +62,7 @@ public:
 	bool isStairs() { return transporter.get(); }
 	void addAction(std::unique_ptr<Action> action) { actionsQueue.push_back(std::move(action)); }
 	void setState(GameplayState* state) { s = state; } // temporary for getting access to state's actors TODO
-	void modifyStatistic(Statistic stat, float delta); // TODO move to body
+	void modifyStatistic(Statistic stat, int delta); // TODO move to body
 	void addStatusEffect(std::unique_ptr<StatusEffect> statusEffect) { statusEffects.push_back(std::move(statusEffect)); }
 	void removeStatusEffect() { if(statusEffects.size() > 0) statusEffects.erase(statusEffects.begin()); } // TODO crap, remove by type
 	std::vector<std::unique_ptr<StatusEffect>>& getStatusEffects() { return statusEffects; }

@@ -33,6 +33,7 @@ float Actor::update(GameplayState* state) {
 		actionsQueue.pop_front();
 		if(success) {
 			float turnCost = 100.0f * actionCost / ai->speed;
+			if(body) turnCost = turnCost * 10.0f / body->agility;
 			for(auto& e : statusEffects) {
 				e->update(this, state, turnCost);
 				if(!e->isAlive()) {
@@ -59,22 +60,32 @@ float Actor::getDistance(int cx, int cy) const {
 	return sqrtf(dx*dx + dy*dy);
 }
 
-void Actor::modifyStatistic(Statistic stat, float delta) {
-	switch(stat) {
-		case Statistic::CONSTITUTION:
-			destructible->maxHp += delta;
-			destructible->hp += delta;
-			break;
-		case Statistic::STRENGTH:
-			attacker->increase(delta);
-			break;
-		case Statistic::AGILITY:
-			destructible->defense += delta;
-			break;
-		case Statistic::SPEED:
-			ai->speed += delta;
-			break;
-		default: break;
+void Actor::modifyStatistic(Statistic stat, int delta) {
+	if(body) {
+		switch(stat) {
+			case Statistic::STRENGTH:
+				body->strength += delta;
+				break;
+			case Statistic::PERCEPTION:
+				body->perception += delta;
+				break;
+			case Statistic::ENDURANCE:
+				body->endurance += delta;
+				break;
+			case Statistic::CHARISMA:
+				body->charisma += delta;
+				break;
+			case Statistic::INTELLIGENCE:
+				body->intelligence += delta;
+				break;
+			case Statistic::AGILITY:
+				body->agility += delta;
+				break;
+			case Statistic::LUCK:
+				body->luck += delta;
+				break;
+			default: break;
+		}
 	}
 }
 

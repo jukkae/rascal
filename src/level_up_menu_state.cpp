@@ -16,10 +16,13 @@
 LevelUpMenuState::LevelUpMenuState(Engine* engine, Actor* actor) : 
 State(engine, engine->getWindow()),
 actor(actor) {
-	menuContents.push_back({MenuItemType::CONSTITUTION, "constitution"});
 	menuContents.push_back({MenuItemType::STRENGTH, "strength"});
+	menuContents.push_back({MenuItemType::PERCEPTION, "perception"});
+	menuContents.push_back({MenuItemType::ENDURANCE, "endurance"});
+	menuContents.push_back({MenuItemType::CHARISMA, "charisma"});
+	menuContents.push_back({MenuItemType::INTELLIGENCE, "intelligence"});
 	menuContents.push_back({MenuItemType::AGILITY, "agility"});
-	menuContents.push_back({MenuItemType::SPEED, "speed"});
+	menuContents.push_back({MenuItemType::LUCK, "luck"});
 	selectedItem = 0;
 }
 
@@ -74,17 +77,26 @@ void LevelUpMenuState::render() {
 
 void LevelUpMenuState::handleItem(MenuItem item) {
 	switch(item.type) {
-		case MenuItemType::CONSTITUTION:
-			actor->modifyStatistic(Statistic::CONSTITUTION, 20.0f);
-			break;
 		case MenuItemType::STRENGTH:
-			actor->modifyStatistic(Statistic::STRENGTH, 1.0f);
+			actor->modifyStatistic(Statistic::STRENGTH, 1);
+			break;
+		case MenuItemType::PERCEPTION:
+			actor->modifyStatistic(Statistic::PERCEPTION, 1);
+			break;
+		case MenuItemType::ENDURANCE:
+			actor->modifyStatistic(Statistic::ENDURANCE, 1);
+			break;
+		case MenuItemType::CHARISMA:
+			actor->modifyStatistic(Statistic::CHARISMA, 1);
+			break;
+		case MenuItemType::INTELLIGENCE:
+			actor->modifyStatistic(Statistic::INTELLIGENCE, 1);
 			break;
 		case MenuItemType::AGILITY:
-			actor->modifyStatistic(Statistic::AGILITY, 1.0f);
+			actor->modifyStatistic(Statistic::AGILITY, 1);
 			break;
-		case MenuItemType::SPEED:
-			actor->modifyStatistic(Statistic::SPEED, 10.0f);
+		case MenuItemType::LUCK:
+			actor->modifyStatistic(Statistic::LUCK, 1);
 			break;
 		default: break;
 	}

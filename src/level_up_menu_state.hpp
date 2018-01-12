@@ -8,7 +8,7 @@
 class Engine;
 class Actor;
 
-enum class MenuItemType { NONE, CONSTITUTION, STRENGTH, AGILITY, SPEED };
+enum class MenuItemType { NONE, STRENGTH, PERCEPTION, ENDURANCE, CHARISMA, INTELLIGENCE, AGILITY, LUCK };
 struct MenuItem {
 	MenuItemType type;
 	std::string label;
