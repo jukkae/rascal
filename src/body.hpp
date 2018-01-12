@@ -19,6 +19,8 @@ class Body {
 	//SPECIAL stats as a base, but with different range and bonuses
 public:
 	Body(int s = 10, int p = 10, int e = 10, int c = 10, int i = 10, int a = 10, int l = 10);
+	int getModifier(int attribute);
+
 	int strength;
 	int perception;
 	int endurance;
