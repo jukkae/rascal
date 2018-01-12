@@ -1,5 +1,6 @@
 #include "ai.hpp"
 #include "attacker.hpp"
+#include "body.hpp"
 #include "constants.hpp"
 #include "container.hpp"
 #include "gameplay_state.hpp"

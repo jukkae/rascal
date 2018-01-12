@@ -15,6 +15,7 @@
 class Action;
 class Ai;
 class Attacker;
+class Body;
 class Container;
 class RangedAttacker;
 class Destructible;
@@ -38,6 +39,7 @@ public:
 	boost::optional<float> energy; // Shouldn't be public // TODO should be std::optional
 	bool blocks; // does it block movement?
 	bool fovOnly; // visible only when in fov?
+	std::unique_ptr<Body> body;
 	std::unique_ptr<Attacker> attacker;
 	std::unique_ptr<RangedAttacker> rangedAttacker;
 	std::unique_ptr<Destructible> destructible;
@@ -60,7 +62,7 @@ public:
 	bool isStairs() { return transporter.get(); }
 	void addAction(std::unique_ptr<Action> action) { actionsQueue.push_back(std::move(action)); }
 	void setState(GameplayState* state) { s = state; } // temporary for getting access to state's actors TODO
-	void modifyStatistic(Statistic stat, float delta);
+	void modifyStatistic(Statistic stat, float delta); // TODO move to body
 	void addStatusEffect(std::unique_ptr<StatusEffect> statusEffect) { statusEffects.push_back(std::move(statusEffect)); }
 	std::vector<std::unique_ptr<StatusEffect>>& getStatusEffects() { return statusEffects; }
 	bool tryToMove(Direction direction, float distance);
@@ -80,6 +82,7 @@ private:
 		ar & energy;
 		ar & blocks;
 		ar & fovOnly;
+		ar & body;
 		ar & attacker;
 		ar & rangedAttacker;
 		ar & destructible;

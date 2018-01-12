@@ -2,6 +2,7 @@
 #include "actor.hpp"
 #include "ai.hpp"
 #include "attacker.hpp"
+#include "body.hpp"
 #include "constants.hpp"
 #include "container.hpp"
 #include "damage.hpp"
