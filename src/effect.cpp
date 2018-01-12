@@ -48,7 +48,7 @@ StatusEffectRemovalEffect::StatusEffectRemovalEffect(std::unique_ptr<StatusEffec
 statusEffect(std::move(statusEffect)) {;}
 
 bool StatusEffectRemovalEffect::applyTo(Actor* actor) {
-	StatusEffectChangeEvent e(actor, statusEffect.get());
+	StatusEffectChangeEvent e(actor, statusEffect.get(), status_effect::Activity::REMOVE);
 	actor->world->notify(e);
 	actor->removeStatusEffect(); //TODO wrong event, no params
 	return true;

@@ -111,11 +111,18 @@ struct AiChangeEvent : public Event { // Yes I know this is getting ridiculous
 	Actor* actor;
 };
 
+namespace status_effect {
+enum class Activity { ADD, REMOVE };
+}; // namespace status_effect
 struct StatusEffectChangeEvent : public Event {
-	StatusEffectChangeEvent(Actor* actor = nullptr, StatusEffect* effect = nullptr): actor(actor), effect(effect) {;}
+	StatusEffectChangeEvent(Actor* actor = nullptr,
+			StatusEffect* effect = nullptr,
+			status_effect::Activity activity = status_effect::Activity::ADD):
+		actor(actor), effect(effect), activity(activity) {;}
 
 	Actor* actor;
 	StatusEffect* effect;
+	status_effect::Activity activity;
 };
 
 struct GenericActorEvent : public Event { // temp
