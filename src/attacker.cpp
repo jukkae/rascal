@@ -9,11 +9,11 @@
 #include "colors.hpp"
 #include "world.hpp"
 
-bool Attacker::attack(Actor* owner, Actor* target) {
+bool Attacker::attack(Actor* owner, Actor* target, int toHitBonus, int toDamageBonus) {
 	if(target->destructible && !target->destructible->isDead()) {
-		int attackRoll = d20();
+		int attackRoll = d20() + toHitBonus;
 		if(attackRoll > target->getAC()) {
-			int dmg = getAttackBaseDamage();
+			int dmg = getAttackBaseDamage() + toDamageBonus;
 			int damage = dmg - target->destructible->defense;
 			MeleeHitEvent e(owner, target, owner->wornWeapon, damage, true);
 			owner->world->notify(e);
@@ -56,14 +56,14 @@ int Attacker::getAttackBaseDamage() {
 	return dmg;
 }
 
-void RangedAttacker::attack(Actor* owner, Actor* target) {
+void RangedAttacker::attack(Actor* owner, Actor* target, int toHitBonus, int toDamageBonus) {
 	RangedHitEvent e(owner, target);
 	--rounds;
 	if(target->destructible && !target->destructible->isDead()) {
-		int attackRoll = d20();
+		int attackRoll = d20() + toHitBonus;
 		if(attackRoll > target->getAC()) {
 			e.hit = true;
-			int dmg = getAttackBaseDamage();
+			int dmg = getAttackBaseDamage() + toDamageBonus;
 			if ( dmg - target->destructible->defense > 0 ) {
 				if(owner->wornWeapon) {
 					e.damage = dmg - target->destructible->defense;

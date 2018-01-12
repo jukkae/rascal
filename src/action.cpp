@@ -1,6 +1,7 @@
 #include "action.hpp"
 #include "actor.hpp"
 #include "attacker.hpp"
+#include "body.hpp"
 #include "colors.hpp"
 #include "container.hpp"
 #include "destructible.hpp"
@@ -40,7 +41,14 @@ bool MoveAction::execute() {
 				return false;
 			}
 			if(actor->wornWeapon && actor->wornWeapon->attacker) { 
-				bool atkResult = actor->wornWeapon->attacker->attack(actor, a.get());
+				bool atkResult;
+				if(actor->body) {
+					int toHitBonus = actor->body->getModifier(actor->body->agility);
+					int toDamageBonus = actor->body->getModifier(actor->body->strength);
+					atkResult = actor->wornWeapon->attacker->attack(actor, a.get(), toHitBonus, toDamageBonus);
+				} else {
+					atkResult = actor->wornWeapon->attacker->attack(actor, a.get());
+				}
 				if(atkResult && actor->wornWeapon->attacker->effectGenerator) {
 					//TODO handle all different effects
 					std::unique_ptr<Effect> ef = actor->wornWeapon->attacker->effectGenerator->generateEffect();
@@ -51,7 +59,15 @@ bool MoveAction::execute() {
 					ef->applyTo(a.get());
 				}
 			}
-			else actor->attacker->attack(actor, a.get());
+			else {
+				if(actor->body) {
+					int toHitBonus = actor->body->getModifier(actor->body->agility);
+					int toDamageBonus = actor->body->getModifier(actor->body->strength);
+					actor->attacker->attack(actor, a.get(), toHitBonus, toDamageBonus);
+				} else {
+					actor->attacker->attack(actor, a.get());
+				}
+			}
 			return true;
 		}
 	}
@@ -240,7 +256,13 @@ bool ShootAction::execute() {
 		return false;
 	} else {
 		// TODO check for LOS
-		actor->wornWeapon->rangedAttacker->attack(actor, enemy);
+		if(actor->body) {
+			int toHitBonus = actor->body->getModifier(actor->body->agility);
+			int toDamageBonus = actor->body->getModifier(actor->body->agility);
+			actor->wornWeapon->rangedAttacker->attack(actor, enemy, toHitBonus, toDamageBonus);
+		} else {
+			actor->wornWeapon->rangedAttacker->attack(actor, enemy);
+		}
 	}
 	return true;
 }
