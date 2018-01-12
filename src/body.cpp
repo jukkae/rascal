@@ -25,10 +25,11 @@ luck(l)
 	bodyParts.push_back(BodyPart::HEAD);
 };
 
-Body::getModifier(int attribute) {
+int Body::getModifier(int attribute) {
 	if(attribute <= 3 ) return -2;
 	if(attribute <= 7 ) return -1;
 	if(attribute <= 13) return  0;
 	if(attribute <= 17) return  1;
 	if(attribute >= 18) return  2;
+	return 0;
 }

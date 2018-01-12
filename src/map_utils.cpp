@@ -1,6 +1,7 @@
 #include "actor.hpp"
 #include "ai.hpp"
 #include "attacker.hpp"
+#include "body.hpp"
 #include "colors.hpp"
 #include "container.hpp"
 #include "dice.hpp"
@@ -52,6 +53,8 @@ void map_utils::addPlayer(World* world, Map* map) {
 	player->attacker     = std::make_unique<Attacker>(1, 2, 1);
 	player->ai           = std::make_unique<PlayerAi>();
 	player->container    = std::make_unique<Container>(100);
+	player->body         = std::make_unique<Body>();
+	player->body->agility = 18; //TODO for testing
 	world->addActor(std::move(player));
 }
 

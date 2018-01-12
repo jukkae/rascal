@@ -1,6 +1,7 @@
 #include <cstdio>
 #include "actor.hpp"
 #include "ai.hpp"
+#include "body.hpp"
 #include "container.hpp"
 #include "destructible.hpp"
 #include "effect.hpp"
@@ -19,6 +20,10 @@ Destructible::Destructible(float maxHp, float defense, int xp, std::string corps
 float Destructible::takeDamage(Actor* owner, float damage, DamageType type) {
 	if(type == DamageType::NORMAL) damage -= defense;
 	if(damage > 0) {
+		if(owner->body) {
+			int mod = owner->body->getModifier(owner->body->agility);
+			damage -= mod;
+		}
 		hp -= damage;
 		if(hp <= 0) die(owner);
 	} else damage = 0;
