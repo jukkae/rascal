@@ -186,7 +186,11 @@ void InventoryMenuState::renderStats() {
 		window->draw(luckText);
 
 	} else {
-
+		std::string no = "You have no body. How about that?";
+		sf::Text noText(no, font::mainFont, 16);
+		noText.setPosition(x*constants::CELL_WIDTH, (y+1)*constants::CELL_HEIGHT);
+		noText.setFillColor(colors::brightBlue);
+		window->draw(noText);
 	}
 }
 
