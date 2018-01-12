@@ -1,5 +1,7 @@
 #include "body.hpp"
 
+#include "dice.hpp"
+
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/serialization/export.hpp>
@@ -32,4 +34,15 @@ int Body::getModifier(int attribute) {
 	if(attribute <= 17) return  1;
 	if(attribute >= 18) return  2;
 	return 0;
+}
+
+Body Body::createRandomBody() {
+	int s = d6() + d6() + d6();
+	int p = d6() + d6() + d6();
+	int e = d6() + d6() + d6();
+	int c = d6() + d6() + d6();
+	int i = d6() + d6() + d6();
+	int a = d6() + d6() + d6();
+	int l = d6() + d6() + d6();
+	return Body(s, p, e, c, i, a, l);
 }

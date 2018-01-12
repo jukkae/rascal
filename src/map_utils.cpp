@@ -53,8 +53,7 @@ void map_utils::addPlayer(World* world, Map* map) {
 	player->attacker     = std::make_unique<Attacker>(1, 2, 1);
 	player->ai           = std::make_unique<PlayerAi>();
 	player->container    = std::make_unique<Container>(100);
-	player->body         = std::make_unique<Body>();
-	player->body->agility = 18; //TODO for testing
+	player->body         = std::make_unique<Body>(Body::createRandomBody());
 	world->addActor(std::move(player));
 }
 
