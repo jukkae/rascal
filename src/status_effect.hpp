@@ -10,6 +10,8 @@
 class Actor;
 class GameplayState;
 
+#include "attribute.hpp"
+
 class StatusEffect {
 public:
 	StatusEffect(std::string name = "") : name(name) {;}
@@ -27,7 +29,7 @@ private:
 
 class PoisonedStatusEffect : public StatusEffect {
 public:
-	PoisonedStatusEffect(int time = 10000, int interval = 1000, int damage = 1):
+	PoisonedStatusEffect(int time = 10000, int interval = 1000, int damage = 2):
 	StatusEffect("poisoned"), time(time), interval(interval), damage(damage) {;}
 
 	void update(Actor* owner, GameplayState* state, float deltaTime) override;

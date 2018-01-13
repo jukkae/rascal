@@ -5,6 +5,7 @@
 #include "engine_command.hpp"
 #include "actor.hpp"
 #include "ai.hpp"
+#include "attribute.hpp"
 #include "colors.hpp"
 #include "constants.hpp"
 #include "effect.hpp"
@@ -78,25 +79,25 @@ void LevelUpMenuState::render() {
 void LevelUpMenuState::handleItem(MenuItem item) {
 	switch(item.type) {
 		case MenuItemType::STRENGTH:
-			actor->modifyStatistic(Statistic::STRENGTH, 1);
+			actor->modifyAttribute(Attribute::STRENGTH, 1);
 			break;
 		case MenuItemType::PERCEPTION:
-			actor->modifyStatistic(Statistic::PERCEPTION, 1);
+			actor->modifyAttribute(Attribute::PERCEPTION, 1);
 			break;
 		case MenuItemType::ENDURANCE:
-			actor->modifyStatistic(Statistic::ENDURANCE, 1);
+			actor->modifyAttribute(Attribute::ENDURANCE, 1);
 			break;
 		case MenuItemType::CHARISMA:
-			actor->modifyStatistic(Statistic::CHARISMA, 1);
+			actor->modifyAttribute(Attribute::CHARISMA, 1);
 			break;
 		case MenuItemType::INTELLIGENCE:
-			actor->modifyStatistic(Statistic::INTELLIGENCE, 1);
+			actor->modifyAttribute(Attribute::INTELLIGENCE, 1);
 			break;
 		case MenuItemType::AGILITY:
-			actor->modifyStatistic(Statistic::AGILITY, 1);
+			actor->modifyAttribute(Attribute::AGILITY, 1);
 			break;
 		case MenuItemType::LUCK:
-			actor->modifyStatistic(Statistic::LUCK, 1);
+			actor->modifyAttribute(Attribute::LUCK, 1);
 			break;
 		default: break;
 	}

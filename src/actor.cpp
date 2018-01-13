@@ -61,28 +61,28 @@ float Actor::getDistance(int cx, int cy) const {
 	return sqrtf(dx*dx + dy*dy);
 }
 
-void Actor::modifyStatistic(Statistic stat, int delta) {
+void Actor::modifyAttribute(Attribute attribute, int delta) {
 	if(body) {
-		switch(stat) {
-			case Statistic::STRENGTH:
+		switch(attribute) {
+			case Attribute::STRENGTH:
 				body->strength += delta;
 				break;
-			case Statistic::PERCEPTION:
+			case Attribute::PERCEPTION:
 				body->perception += delta;
 				break;
-			case Statistic::ENDURANCE:
+			case Attribute::ENDURANCE:
 				body->endurance += delta;
 				break;
-			case Statistic::CHARISMA:
+			case Attribute::CHARISMA:
 				body->charisma += delta;
 				break;
-			case Statistic::INTELLIGENCE:
+			case Attribute::INTELLIGENCE:
 				body->intelligence += delta;
 				break;
-			case Statistic::AGILITY:
+			case Attribute::AGILITY:
 				body->agility += delta;
 				break;
-			case Statistic::LUCK:
+			case Attribute::LUCK:
 				body->luck += delta;
 				break;
 			default: break;
