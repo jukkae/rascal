@@ -221,13 +221,14 @@ std::unique_ptr<Actor> item::makeItem(World* world, Map* map, int x, int y) {
 		baton->blocks = false;
 		baton->pickable = std::make_unique<Pickable>();
 		baton->attacker = std::make_unique<Attacker>(1, 8, 1);
+		baton->attacker->effectGenerator = std::make_unique<EffectGeneratorFor<StatusEffectEffect>>();
 		return baton;
 	} else if(r < 85) {
 		std::unique_ptr<Actor> knuckleduster = std::make_unique<Actor>(x, y, '|', "knuckle duster", sf::Color(128, 255, 128));
 		knuckleduster->blocks = false;
 		knuckleduster->pickable = std::make_unique<Pickable>();
 		knuckleduster->attacker = std::make_unique<Attacker>(2, 6, 2);
-		knuckleduster->attacker->effectGenerator = std::make_unique<EffectGeneratorFor<MoveEffect>>(); // TODO this must obvs be created on the fly
+		knuckleduster->attacker->effectGenerator = std::make_unique<EffectGeneratorFor<MoveEffect>>();
 		return knuckleduster;
 	} else if(r < 90) {
 		std::unique_ptr<Actor> rock = std::make_unique<Actor>(x, y, '|', "rock", sf::Color(255, 128, 128));

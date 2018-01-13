@@ -90,6 +90,39 @@ void Actor::modifyAttribute(Attribute attribute, int delta) {
 	}
 }
 
+int Actor::getAttributeWithModifiers(Attribute attribute) {
+	int value = 0;
+	if(body) {
+		switch(attribute) {
+			case Attribute::STRENGTH:
+				value = body->strength;
+			case Attribute::PERCEPTION:
+				value = body->perception;
+			case Attribute::ENDURANCE:
+				value = body->endurance;
+			case Attribute::CHARISMA:
+				value = body->charisma;
+			case Attribute::INTELLIGENCE:
+				value = body->intelligence;
+			case Attribute::AGILITY:
+				value = body->agility;
+			case Attribute::LUCK:
+				value = body->luck;
+			default: break;
+		}
+	}
+	for(auto& ef : statusEffects) {
+		if(auto e = dynamic_cast<AttributeModifierStatusEffect*>(ef.get())) {
+			if(e->isAlive()) {
+				if(attribute == e->attribute) {
+					value += e->modifier;
+				}
+			}
+		}
+	}
+	return value;
+}
+
 bool Actor::tryToMove(Direction direction, float distance) {
 	if(distance <= 0) return false;
 

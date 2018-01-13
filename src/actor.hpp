@@ -62,6 +62,7 @@ public:
 	void addAction(std::unique_ptr<Action> action) { actionsQueue.push_back(std::move(action)); }
 	void setState(GameplayState* state) { s = state; } // temporary for getting access to state's actors TODO
 	void modifyAttribute(Attribute attribute, int delta); // TODO move to body
+	int getAttributeWithModifiers(Attribute attribute);
 	void addStatusEffect(std::unique_ptr<StatusEffect> statusEffect) { statusEffects.push_back(std::move(statusEffect)); }
 	void removeStatusEffect() { if(statusEffects.size() > 0) statusEffects.erase(statusEffects.begin()); } // TODO crap, remove by type
 	std::vector<std::unique_ptr<StatusEffect>>& getStatusEffects() { return statusEffects; }

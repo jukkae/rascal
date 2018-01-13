@@ -102,8 +102,10 @@ void Engine::load() {
 	ia.register_type<MoveEffect>();
 
 	ia.register_type<PoisonedStatusEffect>();
+	ia.register_type<AttributeModifierStatusEffect>();
 
 	ia.template register_type<EffectGeneratorFor<MoveEffect>>();
+	ia.template register_type<EffectGeneratorFor<StatusEffectEffect>>();
 
 	ia >> gameplayState;
 	(static_cast<GameplayState*>(gameplayState))->setEngine(this);
@@ -121,8 +123,10 @@ void Engine::save() {
 	oa.register_type<MoveEffect>();
 
 	oa.register_type<PoisonedStatusEffect>();
+	oa.register_type<AttributeModifierStatusEffect>();
 
 	oa.template register_type<EffectGeneratorFor<MoveEffect>>();
+	oa.template register_type<EffectGeneratorFor<StatusEffectEffect>>();
 
 	oa << gameplayState;
 }
