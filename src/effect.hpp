@@ -5,6 +5,7 @@ class Actor;
 class StatusEffect;
 class TemporaryAi;
 #include "direction.hpp"
+#include "status_effect.hpp"
 
 class Effect {
 public:
@@ -119,6 +120,24 @@ private:
 	template<class Archive>
 	void serialize(Archive & ar, const unsigned int version) {
 		ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(EffectGenerator);
+	}
+};
+
+template<>
+class EffectGeneratorFor<StatusEffectEffect> : public EffectGenerator {
+public:
+	EffectGeneratorFor<StatusEffectEffect>(Attribute attribute = Attribute::NONE): attribute(attribute) {;}
+
+	virtual std::unique_ptr<Effect> generateEffect() override { return std::make_unique<StatusEffectEffect>(
+			std::make_unique<AttributeModifierStatusEffect>(AttributeModifierStatusEffect(10000, attribute))
+			); }
+private:
+	Attribute attribute;
+	friend class boost::serialization::access;
+	template<class Archive>
+	void serialize(Archive & ar, const unsigned int version) {
+		ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(EffectGenerator);
+		ar & attribute;
 	}
 };
 
