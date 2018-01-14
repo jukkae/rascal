@@ -34,7 +34,7 @@ float Actor::update(GameplayState* state) {
 		actionsQueue.pop_front();
 		if(success) {
 			float turnCost = 100.0f * actionCost / ai->speed;
-			if(body) turnCost = turnCost * 10.0f / body->agility;
+			if(body) turnCost = turnCost * 10.0f / getAttributeWithModifiers(Attribute::SPEED);
 			for(auto& e : statusEffects) {
 				e->update(this, state, turnCost);
 			}
