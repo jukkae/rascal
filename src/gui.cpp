@@ -1,5 +1,6 @@
 #include "ai.hpp"
 #include "attacker.hpp"
+#include "body.hpp"
 #include "colors.hpp"
 #include "constants.hpp"
 #include "container.hpp"
@@ -109,6 +110,12 @@ void Gui::renderStats(World* world, sf::RenderWindow* window) {
 	atkText.setFillColor(colors::lightBlue);
 	atkText.setPosition((constants::SCREEN_WIDTH-40)*constants::CELL_WIDTH, (3+constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT)*constants::CELL_HEIGHT);
 	window->draw(atkText);
+
+	std::string atkBonusString = "str bon: " + std::to_string(player->body->getModifier(player->body->strength)) + " agi bon:" + std::to_string(player->body->getModifier(player->body->agility));
+	sf::Text atkBonusText(atkBonusString, font::mainFont, 16);
+	atkBonusText.setFillColor(colors::lightBlue);
+	atkBonusText.setPosition((constants::SCREEN_WIDTH-40)*constants::CELL_WIDTH, (4+constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT)*constants::CELL_HEIGHT);
+	window->draw(atkBonusText);
 }
 
 void Gui::renderNav(World* world, sf::RenderWindow* window) {
