@@ -1,6 +1,8 @@
 #include "level_up_menu_state.hpp"
 
 #include <iostream>
+#include "body.hpp"
+#include "destructible.hpp"
 #include "engine.hpp"
 #include "engine_command.hpp"
 #include "actor.hpp"
@@ -8,6 +10,7 @@
 #include "attribute.hpp"
 #include "colors.hpp"
 #include "constants.hpp"
+#include "dice.hpp"
 #include "effect.hpp"
 #include "font.hpp"
 #include "status_effect.hpp"
@@ -79,4 +82,12 @@ void LevelUpMenuState::render() {
 
 void LevelUpMenuState::handleItem(MenuItem item) {
 	actor->modifyAttribute(item.attribute, 1);
+	if(auto a = dynamic_cast<PlayerAi*>(actor->ai.get())) {
+		int newLevel = a->xpLevel;
+		int prevHp = actor->destructible->maxHp;
+		int dice = 3 + newLevel + actor->body->getModifier(actor->body->endurance);
+		int newHp = 0;
+		for(int i = 0; i < dice; ++i) newHp += d4();
+		if(newHp > prevHp) actor->destructible->maxHp = newHp;
+	}
 }
