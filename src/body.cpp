@@ -10,14 +10,15 @@
 #include <vector>
 #include "persistent.hpp"
 
-Body::Body(int s, int p, int e, int c, int i, int a, int l):
+Body::Body(int s, int p, int e, int c, int i, int a, int l, int spd):
 strength(s),
 perception(p),
 endurance(e),
 charisma(c),
 intelligence(i),
 agility(a),
-luck(l)
+luck(l),
+speed(spd)
 {
 	bodyParts.push_back(BodyPart::HAND_L);
 	bodyParts.push_back(BodyPart::HAND_R);
@@ -44,5 +45,6 @@ Body Body::createRandomBody() {
 	int i = d6() + d6() + d6();
 	int a = d6() + d6() + d6();
 	int l = d6() + d6() + d6();
-	return Body(s, p, e, c, i, a, l);
+	int spd = 10; //default to normal speed
+	return Body(s, p, e, c, i, a, l, spd);
 }

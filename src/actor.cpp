@@ -85,6 +85,9 @@ void Actor::modifyAttribute(Attribute attribute, int delta) {
 			case Attribute::LUCK:
 				body->luck += delta;
 				break;
+			case Attribute::SPEED:
+				body->speed += delta;
+				break;
 			default: break;
 		}
 	}
@@ -108,6 +111,8 @@ int Actor::getAttributeWithModifiers(Attribute attribute) {
 				value = body->agility;
 			case Attribute::LUCK:
 				value = body->luck;
+			case Attribute::SPEED:
+				value = body->speed;
 			default: break;
 		}
 	}
