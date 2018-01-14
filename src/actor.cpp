@@ -36,11 +36,11 @@ float Actor::update(GameplayState* state) {
 			float turnCost = 100.0f * actionCost / ai->speed;
 			if(body) turnCost = turnCost * 10.0f / body->agility;
 			for(auto& e : statusEffects) {
-				e->update(this, state, turnCost); //FIXME crashes sometimes?
-				if(!e->isAlive()) {
-					statusEffects.erase(std::remove(statusEffects.begin(), statusEffects.end(), e), statusEffects.end());
-				}
+				e->update(this, state, turnCost);
 			}
+			statusEffects.erase(std::remove_if(statusEffects.begin(), statusEffects.end(),
+						[](auto& e){ return !e->isAlive(); }), statusEffects.end());
+
 			if(isPlayer()) world->computeFov(x, y, fovRadius);
 			return turnCost;
 		} else {
