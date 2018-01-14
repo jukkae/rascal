@@ -16,9 +16,9 @@ enum class BodyType {
 };
 
 class Body {
-	//SPECIAL stats as a base, but with different range and bonuses
+	//SPECIAL stats as a base, but with different range and bonuses, and speed added
 public:
-	Body(int s = 10, int p = 10, int e = 10, int c = 10, int i = 10, int a = 10, int l = 10);
+	Body(int s = 10, int p = 10, int e = 10, int c = 10, int i = 10, int a = 10, int l = 10, int spd = 10); //spd :D
 
 	static Body createRandomBody();
 	int getModifier(int attribute);
@@ -30,6 +30,7 @@ public:
 	int intelligence;
 	int agility;
 	int luck;
+	int speed;
 	std::vector<BodyPart> bodyParts;
 	BodyType bodyType = BodyType::BIOLOGICAL;
 
@@ -44,6 +45,7 @@ private:
 		ar & intelligence;
 		ar & agility;
 		ar & luck;
+		ar & speed;
 		ar & bodyParts;
 		ar & bodyType;
     }

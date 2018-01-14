@@ -17,13 +17,14 @@
 LevelUpMenuState::LevelUpMenuState(Engine* engine, Actor* actor) : 
 State(engine, engine->getWindow()),
 actor(actor) {
-	menuContents.push_back({MenuItemType::STRENGTH, "strength"});
-	menuContents.push_back({MenuItemType::PERCEPTION, "perception"});
-	menuContents.push_back({MenuItemType::ENDURANCE, "endurance"});
-	menuContents.push_back({MenuItemType::CHARISMA, "charisma"});
-	menuContents.push_back({MenuItemType::INTELLIGENCE, "intelligence"});
-	menuContents.push_back({MenuItemType::AGILITY, "agility"});
-	menuContents.push_back({MenuItemType::LUCK, "luck"});
+	menuContents.push_back({Attribute::STRENGTH, "strength"});
+	menuContents.push_back({Attribute::PERCEPTION, "perception"});
+	menuContents.push_back({Attribute::ENDURANCE, "endurance"});
+	menuContents.push_back({Attribute::CHARISMA, "charisma"});
+	menuContents.push_back({Attribute::INTELLIGENCE, "intelligence"});
+	menuContents.push_back({Attribute::AGILITY, "agility"});
+	menuContents.push_back({Attribute::LUCK, "luck"});
+	menuContents.push_back({Attribute::SPEED, "speed"});
 	selectedItem = 0;
 }
 
@@ -77,28 +78,5 @@ void LevelUpMenuState::render() {
 }
 
 void LevelUpMenuState::handleItem(MenuItem item) {
-	switch(item.type) {
-		case MenuItemType::STRENGTH:
-			actor->modifyAttribute(Attribute::STRENGTH, 1);
-			break;
-		case MenuItemType::PERCEPTION:
-			actor->modifyAttribute(Attribute::PERCEPTION, 1);
-			break;
-		case MenuItemType::ENDURANCE:
-			actor->modifyAttribute(Attribute::ENDURANCE, 1);
-			break;
-		case MenuItemType::CHARISMA:
-			actor->modifyAttribute(Attribute::CHARISMA, 1);
-			break;
-		case MenuItemType::INTELLIGENCE:
-			actor->modifyAttribute(Attribute::INTELLIGENCE, 1);
-			break;
-		case MenuItemType::AGILITY:
-			actor->modifyAttribute(Attribute::AGILITY, 1);
-			break;
-		case MenuItemType::LUCK:
-			actor->modifyAttribute(Attribute::LUCK, 1);
-			break;
-		default: break;
-	}
+	actor->modifyAttribute(item.attribute, 1);
 }

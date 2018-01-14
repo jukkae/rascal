@@ -185,6 +185,12 @@ void InventoryMenuState::renderStats() {
 		luckText.setFillColor(colors::brightBlue);
 		window->draw(luckText);
 
+		std::string speed = "       Speed: " + std::to_string(b->speed);
+		sf::Text speedText(speed, font::mainFont, 16);
+		speedText.setPosition(x*constants::CELL_WIDTH, (y+8)*constants::CELL_HEIGHT);
+		speedText.setFillColor(colors::brightBlue);
+		window->draw(speedText);
+
 	} else {
 		std::string no = "You have no body. How about that?";
 		sf::Text noText(no, font::mainFont, 16);
