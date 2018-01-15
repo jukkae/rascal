@@ -33,6 +33,9 @@ public:
 	int speed;
 	std::vector<BodyPart> bodyParts;
 	BodyType bodyType = BodyType::BIOLOGICAL;
+	//Skills, perks, traits, whatever
+	//Radiation load
+	//Hunger
 
 private:
 	friend class boost::serialization::access;
