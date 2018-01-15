@@ -59,15 +59,16 @@ void InventoryMenuState::handleEvents() {
 					break;
 				case k::W:
 					if(inventoryContents.size() > 0) {
-						actor->addAction(std::make_unique<WieldItemAction>(WieldItemAction(actor, piles.at(selectedItem).at(0))));
-						engine->addEngineCommand(ContinueCommand(engine));
+						if(piles.at(selectedItem).at(0) == actor->wornWeapon || piles.at(selectedItem).at(0) == actor->wornArmor) {
+							actor->addAction(std::make_unique<UnWieldItemAction>(UnWieldItemAction(actor)));
+							engine->addEngineCommand(ContinueCommand(engine));
+						} else {
+							actor->addAction(std::make_unique<WieldItemAction>(WieldItemAction(actor, piles.at(selectedItem).at(0))));
+							engine->addEngineCommand(ContinueCommand(engine));
+						}
 					}
 					break;
 				case k::E:
-					if(inventoryContents.size() > 0) {
-						actor->addAction(std::make_unique<UnWieldItemAction>(UnWieldItemAction(actor)));
-						engine->addEngineCommand(ContinueCommand(engine));
-					}
 					break;
 				case k::Escape:
 					engine->addEngineCommand(ContinueCommand(engine));
@@ -119,7 +120,7 @@ void InventoryMenuState::render() {
 	weightText.setFillColor(colors::brightBlue);
 	window->draw(weightText);
 
-	std::string commandsString = "(u)se - (d)rop - (w)ield - unwi(e)ld - esc to close";
+	std::string commandsString = "(u)se - (d)rop - (w)ield/un(w)ield - esc to close";
 	sf::Text commandsText(commandsString, font::mainFont, 16);
 	commandsText.setPosition(2*constants::CELL_WIDTH, (y+4)*constants::CELL_HEIGHT);
 	commandsText.setFillColor(colors::brightBlue);
