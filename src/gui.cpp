@@ -111,7 +111,9 @@ void Gui::renderStats(World* world, sf::RenderWindow* window) {
 	atkText.setPosition((constants::SCREEN_WIDTH-40)*constants::CELL_WIDTH, (3+constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT)*constants::CELL_HEIGHT);
 	window->draw(atkText);
 
-	std::string atkBonusString = "str bon: " + std::to_string(player->body->getModifier(player->body->strength)) + " agi bon:" + std::to_string(player->body->getModifier(player->body->agility));
+	std::string atkBonusString = "s:" + std::to_string(player->body->getModifier(player->body->strength))
+		+ " a:" + std::to_string(player->body->getModifier(player->body->agility))
+		+ " i:" + std::to_string(player->body->getModifier(player->body->intelligence));
 	sf::Text atkBonusText(atkBonusString, font::mainFont, 16);
 	atkBonusText.setFillColor(colors::lightBlue);
 	atkBonusText.setPosition((constants::SCREEN_WIDTH-40)*constants::CELL_WIDTH, (4+constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT)*constants::CELL_HEIGHT);

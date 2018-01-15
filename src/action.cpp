@@ -257,7 +257,7 @@ bool ShootAction::execute() {
 	} else {
 		// TODO check for LOS
 		if(actor->body) {
-			int toHitBonus = actor->body->getModifier(actor->body->agility);
+			int toHitBonus = actor->body->getModifier(actor->body->intelligence);
 			int toDamageBonus = actor->body->getModifier(actor->body->agility);
 			actor->wornWeapon->rangedAttacker->attack(actor, enemy, toHitBonus, toDamageBonus);
 		} else {
