@@ -3,6 +3,7 @@
 #include "ai.hpp"
 #include "attacker.hpp"
 #include "body.hpp"
+#include "comestible.hpp"
 #include "constants.hpp"
 #include "container.hpp"
 #include "damage.hpp"
@@ -42,6 +43,7 @@ float Actor::update(GameplayState* state) {
 						[](auto& e){ return !e->isAlive(); }), statusEffects.end());
 
 			if(isPlayer()) world->computeFov(x, y, fovRadius);
+			if(isPlayer()) body->nutrition -= turnCost;
 			return turnCost;
 		} else {
 			if(ai->isPlayer()) {

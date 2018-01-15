@@ -35,7 +35,7 @@ public:
 	BodyType bodyType = BodyType::BIOLOGICAL;
 	//Skills, perks, traits, whatever
 	//Radiation load
-	//Hunger
+	int nutrition = 10000;
 
 private:
 	friend class boost::serialization::access;

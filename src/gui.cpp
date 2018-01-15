@@ -118,6 +118,12 @@ void Gui::renderStats(World* world, sf::RenderWindow* window) {
 	atkBonusText.setFillColor(colors::lightBlue);
 	atkBonusText.setPosition((constants::SCREEN_WIDTH-40)*constants::CELL_WIDTH, (4+constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT)*constants::CELL_HEIGHT);
 	window->draw(atkBonusText);
+
+	std::string hungerString = "nutrition:" + std::to_string(player->body->nutrition);
+	sf::Text hungerText(hungerString, font::mainFont, 16);
+	hungerText.setFillColor(colors::lightBlue);
+	hungerText.setPosition((constants::SCREEN_WIDTH-40)*constants::CELL_WIDTH, (5+constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT)*constants::CELL_HEIGHT);
+	window->draw(hungerText);
 }
 
 void Gui::renderNav(World* world, sf::RenderWindow* window) {
