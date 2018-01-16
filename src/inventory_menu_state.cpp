@@ -69,6 +69,8 @@ void InventoryMenuState::handleEvents() {
 					}
 					break;
 				case k::E:
+						actor->addAction(std::make_unique<EatAction>(actor, piles.at(selectedItem).at(0)));
+						engine->addEngineCommand(ContinueCommand(engine));
 					break;
 				case k::Escape:
 					engine->addEngineCommand(ContinueCommand(engine));

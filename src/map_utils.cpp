@@ -3,6 +3,7 @@
 #include "attacker.hpp"
 #include "body.hpp"
 #include "colors.hpp"
+#include "comestible.hpp"
 #include "container.hpp"
 #include "dice.hpp"
 #include "destructible.hpp"
@@ -181,7 +182,13 @@ std::unique_ptr<Actor> npc::makeMonster(World* world, Map* map, int x, int y, in
 
 std::unique_ptr<Actor> item::makeItem(World* world, Map* map, int x, int y) {
 	int r = d100();
-	if(r < 30) {
+	if(r < 10) {
+		std::unique_ptr<Actor> jerky = std::make_unique<Actor>(x, y, '%', "jerky", sf::Color(128, 0, 0));
+		jerky->blocks = false;
+		jerky->pickable = std::make_unique<Pickable>();
+		jerky->comestible = std::make_unique<Comestible>();
+		return jerky;
+	} else if(r < 30) {
 		std::unique_ptr<Actor> stimpak = std::make_unique<Actor>(x, y, '!', "stimpak", sf::Color(128, 0, 128));
 		stimpak->blocks = false;
 		stimpak->pickable = std::make_unique<Pickable>(TargetSelector(TargetSelector::SelectorType::WEARER, 0), std::make_unique<HealthEffect>(4));
