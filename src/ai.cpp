@@ -2,6 +2,7 @@
 #include "action.hpp"
 #include "actor.hpp"
 #include "attacker.hpp"
+#include "body.hpp"
 #include "colors.hpp"
 #include "constants.hpp"
 #include "container.hpp"
@@ -112,9 +113,10 @@ std::unique_ptr<Action> PlayerAi::getNextAction(Actor* actor) {
 std::unique_ptr<Action> MonsterAi::getNextAction(Actor* actor) {
 	World* world = actor->world;
 	Direction direction = Direction::NONE;
+	Actor* player = world->getPlayer();
 	if (actor->destructible && actor->destructible->isDead()) return std::make_unique<WaitAction>(WaitAction(actor));
 
-	if(actor->destructible->hp <= actor->destructible->maxHp * 0.3) {
+	if(actor->destructible->hp <= actor->destructible->maxHp * 0.3 + (0.1 * player->body->getModifier(player->body->charisma))) {
 		aiState = AiState::FRIGHTENED; //TODO implement in terms of morale
 	}
 
@@ -128,7 +130,6 @@ std::unique_ptr<Action> MonsterAi::getNextAction(Actor* actor) {
 		} else { --moveCount; }
 
 		if (moveCount > 0) {
-			Actor* player = world->getPlayer();
 			int targetX = player->x;
 			int targetY = player->y;
 			int dx = targetX - actor->x;

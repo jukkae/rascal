@@ -22,6 +22,7 @@ class Destructible;
 class Pickable;
 class StatusEffect;
 class Transporter;
+class Comestible;
 
 #include "animation.hpp"
 #include "attribute.hpp"
@@ -46,6 +47,7 @@ public:
 	std::unique_ptr<Pickable> pickable;
 	std::unique_ptr<Container> container;
 	std::unique_ptr<Transporter> transporter;
+	std::unique_ptr<Comestible> comestible;
 	Actor* wornWeapon = nullptr;
 	Actor* wornArmor = nullptr;
 	std::experimental::optional<Animation> animation;

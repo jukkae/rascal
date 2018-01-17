@@ -3,6 +3,7 @@
 #include "attacker.hpp"
 #include "body.hpp"
 #include "colors.hpp"
+#include "comestible.hpp"
 #include "container.hpp"
 #include "destructible.hpp"
 #include "effect.hpp"
@@ -184,6 +185,21 @@ bool WieldItemAction::execute() {
 	else return false;
 }
 
+bool EatAction::execute() {
+	if(item->comestible) {
+		actor->body->nutrition += item->comestible->nutrition;
+		ActionSuccessEvent e(item, "You eat the thing!");
+		actor->world->notify(e);
+		actor->container->remove(item);
+		return true;
+	}
+	else {
+		ActionFailureEvent e(item, "You can't eat that!");
+		actor->world->notify(e);
+		return false;
+	}
+}
+
 bool UnWieldItemAction::execute() {
 	if(actor->wornWeapon) {
 		actor->wornWeapon = nullptr;
@@ -257,7 +273,7 @@ bool ShootAction::execute() {
 	} else {
 		// TODO check for LOS
 		if(actor->body) {
-			int toHitBonus = actor->body->getModifier(actor->body->agility);
+			int toHitBonus = actor->body->getModifier(actor->body->intelligence);
 			int toDamageBonus = actor->body->getModifier(actor->body->agility);
 			actor->wornWeapon->rangedAttacker->attack(actor, enemy, toHitBonus, toDamageBonus);
 		} else {

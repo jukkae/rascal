@@ -3,6 +3,7 @@
 #include "ai.hpp"
 #include "attacker.hpp"
 #include "body.hpp"
+#include "comestible.hpp"
 #include "constants.hpp"
 #include "container.hpp"
 #include "damage.hpp"
@@ -34,14 +35,16 @@ float Actor::update(GameplayState* state) {
 		actionsQueue.pop_front();
 		if(success) {
 			float turnCost = 100.0f * actionCost / ai->speed;
-			if(body) turnCost = turnCost * 10.0f / body->agility;
+			if(body) turnCost = turnCost * 10.0f / getAttributeWithModifiers(Attribute::SPEED);
 			for(auto& e : statusEffects) {
 				e->update(this, state, turnCost);
-				if(!e->isAlive()) {
-					statusEffects.erase(std::remove(statusEffects.begin(), statusEffects.end(), e), statusEffects.end());
-				}
 			}
+			statusEffects.erase(std::remove_if(statusEffects.begin(), statusEffects.end(),
+						[](auto& e){ return !e->isAlive(); }), statusEffects.end());
+
 			if(isPlayer()) world->computeFov(x, y, fovRadius);
+			if(isPlayer()) body->nutrition -= turnCost;
+			if(body->nutrition <= 0) destructible->die(this);
 			return turnCost;
 		} else {
 			if(ai->isPlayer()) {
@@ -85,6 +88,9 @@ void Actor::modifyAttribute(Attribute attribute, int delta) {
 			case Attribute::LUCK:
 				body->luck += delta;
 				break;
+			case Attribute::SPEED:
+				body->speed += delta;
+				break;
 			default: break;
 		}
 	}
@@ -108,6 +114,8 @@ int Actor::getAttributeWithModifiers(Attribute attribute) {
 				value = body->agility;
 			case Attribute::LUCK:
 				value = body->luck;
+			case Attribute::SPEED:
+				value = body->speed;
 			default: break;
 		}
 	}

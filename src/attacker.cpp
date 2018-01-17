@@ -1,6 +1,7 @@
 #include <cstdio>
 #include "attacker.hpp"
 #include "actor.hpp"
+#include "body.hpp"
 #include "dice.hpp"
 #include "destructible.hpp"
 #include "effect.hpp"
@@ -19,6 +20,15 @@ bool Attacker::attack(Actor* owner, Actor* target, int toHitBonus, int toDamageB
 			owner->world->notify(e);
 
 			target->destructible->takeDamage(target, dmg);
+
+			if(attackRoll + owner->body->getModifier(owner->body->luck) >= 20) {
+				UiEvent ue("It's a critical hit!");
+				owner->world->notify(ue);
+				MeleeHitEvent e(owner, target, owner->wornWeapon, damage/2, true);
+				owner->world->notify(e);
+
+				target->destructible->takeDamage(target, dmg/2);
+			}
 			return true;
 		} else {
 			MeleeHitEvent e(owner, target, nullptr, 0, false);
