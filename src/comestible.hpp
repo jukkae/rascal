@@ -4,6 +4,6 @@ class Actor;
 
 class Comestible {
 public:
-int nutrition = 10000;
+int nutrition = 20000;
 };
 #endif /* COMESTIBLE_HPP */
