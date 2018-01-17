@@ -44,6 +44,7 @@ float Actor::update(GameplayState* state) {
 
 			if(isPlayer()) world->computeFov(x, y, fovRadius);
 			if(isPlayer()) body->nutrition -= turnCost;
+			if(body->nutrition <= 0) destructible->die(this);
 			return turnCost;
 		} else {
 			if(ai->isPlayer()) {
