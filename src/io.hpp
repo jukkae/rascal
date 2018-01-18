@@ -12,6 +12,7 @@ namespace io {
 extern sf::RenderWindow window;
 // TODO idea: instead of mousePosition, change to target that could be moved by, say, shift+arrows or tab
 extern Point mousePosition; // note: already in WORLD coordinates!
+extern Engine* engine;
 
 bool waitForMouseClick(GameplayState* state);
 bool fileExists(std::string name);

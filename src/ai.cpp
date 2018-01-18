@@ -52,7 +52,7 @@ void PlayerAi::increaseXp(Actor* owner, int xp) {
 std::unique_ptr<Action> PlayerAi::getNextAction(Actor* actor) {
 	Direction dir = Direction::NONE;
 
-	Engine* engine = actor->s->getEngine();
+	Engine* engine = io::engine;
 	sf::Event event;
 	while(engine->pollEvent(event)) {
 		if(event.type == sf::Event::KeyPressed) {
