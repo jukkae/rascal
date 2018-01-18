@@ -23,11 +23,11 @@ class Pickable;
 class StatusEffect;
 class Transporter;
 class Comestible;
+class GameplayState;
 
 #include "animation.hpp"
 #include "attribute.hpp"
 #include "direction.hpp"
-#include "gameplay_state.hpp"
 
 class World;
 class Actor {
@@ -52,7 +52,6 @@ public:
 	Actor* wornArmor = nullptr;
 	std::experimental::optional<Animation> animation;
 
-	GameplayState* s; // temporary for messaging TODO remove
 	World* world = nullptr;
 
 	Actor(int x = 0, int y = 0, int ch = 'x', std::string name = "", sf::Color col = sf::Color::White, boost::optional<float> energy = boost::none);
@@ -62,7 +61,6 @@ public:
 	bool isPlayer();
 	bool isStairs() { return transporter.get(); }
 	void addAction(std::unique_ptr<Action> action) { actionsQueue.push_back(std::move(action)); }
-	void setState(GameplayState* state) { s = state; } // temporary for getting access to state's actors TODO
 	void modifyAttribute(Attribute attribute, int delta); // TODO move to body
 	int getAttributeWithModifiers(Attribute attribute);
 	void addStatusEffect(std::unique_ptr<StatusEffect> statusEffect) { statusEffects.push_back(std::move(statusEffect)); }

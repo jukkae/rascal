@@ -33,7 +33,6 @@ State(engine, window) {
 	newGame(engine);
 
 	// not really the correct place for following, but w/e
-	for (auto& a : world->actors) a->setState(this);
 	for (auto& a : world->actors) a->world = world;
 	world->sortActors();
 }
@@ -41,7 +40,6 @@ State(engine, window) {
 void GameplayState::initLoaded(Engine* engine) {
 	gui.setState(this);
 	renderer.setState(this);
-	for (auto& a : world->actors) a->setState(this);
 }
 
 void GameplayState::newGame(Engine* engine) {
@@ -176,7 +174,6 @@ void GameplayState::nextLevel() {
 
 	world->addActor(std::move(player));
 
-	for (auto& a : world->actors) a->setState(this);
 	for (auto& a : world->actors) a->world = world;
 	world->sortActors();
 }

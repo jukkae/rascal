@@ -86,8 +86,8 @@ bool MoveAction::execute() {
 }
 
 bool TraverseStairsAction::execute() {
-	GameplayState* state = actor->s;
 	World* world = actor->world;
+	GameplayState* state = world->state;
 	std::vector<Actor*> v = world->getActorsAt(actor->x, actor->y);
 	if(v.empty()) {
 		ActionFailureEvent e(actor, "There are no stairs here!");
