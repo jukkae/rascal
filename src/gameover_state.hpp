@@ -7,10 +7,11 @@
 
 class Engine;
 class Actor;
+class Player;
 
 class GameOverState : public State {
 public:
-	GameOverState(Engine* engine, Actor* actor);
+	GameOverState(Engine* engine, Actor* actor, Player* player, bool victory = false);
 
 	void handleEvents() override;
 	void update() override;

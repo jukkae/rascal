@@ -80,7 +80,7 @@ void GameplayState::render() {
 void GameplayState::notify(Event& event) {
 	//TODO proper filtering
 	if(auto e = dynamic_cast<PlayerDeathEvent*>(&event)) {
-		std::unique_ptr<State> gameOverState = std::make_unique<GameOverState>(engine, e->actor);
+		std::unique_ptr<State> gameOverState = std::make_unique<GameOverState>(engine, e->actor, player.get());
 		engine->pushState(std::move(gameOverState));
 	} 
 	if(auto e = dynamic_cast<PlayerStatChangeEvent*>(&event)) {
