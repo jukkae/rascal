@@ -15,18 +15,19 @@
 class Action;
 class Ai;
 class Attacker;
+class Body;
 class Container;
 class RangedAttacker;
 class Destructible;
 class Pickable;
 class StatusEffect;
 class Transporter;
+class Comestible;
+class GameplayState;
 
 #include "animation.hpp"
+#include "attribute.hpp"
 #include "direction.hpp"
-#include "gameplay_state.hpp"
-
-enum class Statistic { CONSTITUTION, STRENGTH, AGILITY, SPEED };
 
 class World;
 class Actor {
@@ -38,6 +39,7 @@ public:
 	boost::optional<float> energy; // Shouldn't be public // TODO should be std::optional
 	bool blocks; // does it block movement?
 	bool fovOnly; // visible only when in fov?
+	std::unique_ptr<Body> body;
 	std::unique_ptr<Attacker> attacker;
 	std::unique_ptr<RangedAttacker> rangedAttacker;
 	std::unique_ptr<Destructible> destructible;
@@ -45,10 +47,11 @@ public:
 	std::unique_ptr<Pickable> pickable;
 	std::unique_ptr<Container> container;
 	std::unique_ptr<Transporter> transporter;
+	std::unique_ptr<Comestible> comestible;
 	Actor* wornWeapon = nullptr;
+	Actor* wornArmor = nullptr;
 	std::experimental::optional<Animation> animation;
 
-	GameplayState* s; // temporary for messaging TODO remove
 	World* world = nullptr;
 
 	Actor(int x = 0, int y = 0, int ch = 'x', std::string name = "", sf::Color col = sf::Color::White, boost::optional<float> energy = boost::none);
@@ -58,11 +61,13 @@ public:
 	bool isPlayer();
 	bool isStairs() { return transporter.get(); }
 	void addAction(std::unique_ptr<Action> action) { actionsQueue.push_back(std::move(action)); }
-	void setState(GameplayState* state) { s = state; } // temporary for getting access to state's actors TODO
-	void modifyStatistic(Statistic stat, float delta);
+	void modifyAttribute(Attribute attribute, int delta); // TODO move to body
+	int getAttributeWithModifiers(Attribute attribute);
 	void addStatusEffect(std::unique_ptr<StatusEffect> statusEffect) { statusEffects.push_back(std::move(statusEffect)); }
+	void removeStatusEffect() { if(statusEffects.size() > 0) statusEffects.erase(statusEffects.begin()); } // TODO crap, remove by type
 	std::vector<std::unique_ptr<StatusEffect>>& getStatusEffects() { return statusEffects; }
 	bool tryToMove(Direction direction, float distance);
+	int getAC();
 
 private:
 	std::deque<std::unique_ptr<Action>> actionsQueue;
@@ -79,6 +84,7 @@ private:
 		ar & energy;
 		ar & blocks;
 		ar & fovOnly;
+		ar & body;
 		ar & attacker;
 		ar & rangedAttacker;
 		ar & destructible;

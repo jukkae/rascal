@@ -33,7 +33,7 @@ void TargetSelector::selectTargets(Actor* wearer, std::vector<Actor*>& list) {
 			int x, y;
 			UiEvent e("Left-click to select an enemy,\nor right-click to cancel.");
 			world->notify(e);
-			if(io::waitForMouseClick(wearer->s)) {
+			if(io::waitForMouseClick(world->state)) {
 				x = io::mousePosition.x;
 				y = io::mousePosition.y;
 				Actor* actor = world->getLiveActor(x, y);
@@ -59,7 +59,7 @@ void TargetSelector::selectTargets(Actor* wearer, std::vector<Actor*>& list) {
 			int x, y;
 			UiEvent e("Left-click to select a tile,\nor right-click to cancel.");
 			world->notify(e);
-			if(io::waitForMouseClick(wearer->s)) {
+			if(io::waitForMouseClick(world->state)) {
 				x = io::mousePosition.x;
 				y = io::mousePosition.y;
 				for(auto& actor : world->getActors()) { // TODO highlight tiles in range

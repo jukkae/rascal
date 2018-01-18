@@ -1,6 +1,7 @@
 #include <cstdio>
 #include "attacker.hpp"
 #include "actor.hpp"
+#include "body.hpp"
 #include "dice.hpp"
 #include "destructible.hpp"
 #include "effect.hpp"
@@ -9,16 +10,25 @@
 #include "colors.hpp"
 #include "world.hpp"
 
-bool Attacker::attack(Actor* owner, Actor* target) {
+bool Attacker::attack(Actor* owner, Actor* target, int toHitBonus, int toDamageBonus) {
 	if(target->destructible && !target->destructible->isDead()) {
-		int attackRoll = d20();
-		if(attackRoll > target->destructible->armorClass) {
-			int dmg = getAttackBaseDamage();
+		int attackRoll = d20() + toHitBonus;
+		if(attackRoll > target->getAC()) {
+			int dmg = getAttackBaseDamage() + toDamageBonus;
 			int damage = dmg - target->destructible->defense;
 			MeleeHitEvent e(owner, target, owner->wornWeapon, damage, true);
 			owner->world->notify(e);
 
 			target->destructible->takeDamage(target, dmg);
+
+			if(attackRoll + owner->body->getModifier(owner->body->luck) >= 20) {
+				UiEvent ue("It's a critical hit!");
+				owner->world->notify(ue);
+				MeleeHitEvent e(owner, target, owner->wornWeapon, damage/2, true);
+				owner->world->notify(e);
+
+				target->destructible->takeDamage(target, dmg/2);
+			}
 			return true;
 		} else {
 			MeleeHitEvent e(owner, target, nullptr, 0, false);
@@ -56,14 +66,14 @@ int Attacker::getAttackBaseDamage() {
 	return dmg;
 }
 
-void RangedAttacker::attack(Actor* owner, Actor* target) {
+void RangedAttacker::attack(Actor* owner, Actor* target, int toHitBonus, int toDamageBonus) {
 	RangedHitEvent e(owner, target);
 	--rounds;
 	if(target->destructible && !target->destructible->isDead()) {
-		int attackRoll = d20();
-		if(attackRoll > target->destructible->armorClass) {
+		int attackRoll = d20() + toHitBonus;
+		if(attackRoll > target->getAC()) {
 			e.hit = true;
-			int dmg = getAttackBaseDamage();
+			int dmg = getAttackBaseDamage() + toDamageBonus;
 			if ( dmg - target->destructible->defense > 0 ) {
 				if(owner->wornWeapon) {
 					e.damage = dmg - target->destructible->defense;

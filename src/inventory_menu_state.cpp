@@ -5,6 +5,7 @@
 #include "engine_command.hpp"
 #include "action.hpp"
 #include "actor.hpp"
+#include "body.hpp"
 #include "colors.hpp"
 #include "constants.hpp"
 #include "container.hpp"
@@ -58,15 +59,18 @@ void InventoryMenuState::handleEvents() {
 					break;
 				case k::W:
 					if(inventoryContents.size() > 0) {
-						actor->addAction(std::make_unique<WieldItemAction>(WieldItemAction(actor, piles.at(selectedItem).at(0))));
-						engine->addEngineCommand(ContinueCommand(engine));
+						if(piles.at(selectedItem).at(0) == actor->wornWeapon || piles.at(selectedItem).at(0) == actor->wornArmor) {
+							actor->addAction(std::make_unique<UnWieldItemAction>(UnWieldItemAction(actor)));
+							engine->addEngineCommand(ContinueCommand(engine));
+						} else {
+							actor->addAction(std::make_unique<WieldItemAction>(WieldItemAction(actor, piles.at(selectedItem).at(0))));
+							engine->addEngineCommand(ContinueCommand(engine));
+						}
 					}
 					break;
 				case k::E:
-					if(inventoryContents.size() > 0) {
-						actor->addAction(std::make_unique<UnWieldItemAction>(UnWieldItemAction(actor)));
+						actor->addAction(std::make_unique<EatAction>(actor, piles.at(selectedItem).at(0)));
 						engine->addEngineCommand(ContinueCommand(engine));
-					}
 					break;
 				case k::Escape:
 					engine->addEngineCommand(ContinueCommand(engine));
@@ -118,13 +122,85 @@ void InventoryMenuState::render() {
 	weightText.setFillColor(colors::brightBlue);
 	window->draw(weightText);
 
-	std::string commandsString = "(u)se - (d)rop - (w)ield - unwi(e)ld - esc to close";
+	std::string commandsString = "(u)se - (d)rop - (w)ield/un(w)ield - esc to close";
 	sf::Text commandsText(commandsString, font::mainFont, 16);
 	commandsText.setPosition(2*constants::CELL_WIDTH, (y+4)*constants::CELL_HEIGHT);
 	commandsText.setFillColor(colors::brightBlue);
 	window->draw(commandsText);
 
+	renderStats();
+
 	window->display();
+}
+
+void InventoryMenuState::renderStats() {
+
+	sf::Text heading("S T A T S", font::mainFont, 16);
+	heading.setPosition(70*constants::CELL_WIDTH, constants::CELL_HEIGHT);
+	heading.setFillColor(colors::brightBlue);
+	window->draw(heading);
+
+	int x = 64;
+	int y = 3;
+
+	if(actor->body) {
+		Body* b = actor->body.get();
+
+		std::string strength = "    Strength: " + std::to_string(b->strength);
+		sf::Text strengthText(strength, font::mainFont, 16);
+		strengthText.setPosition(x*constants::CELL_WIDTH, (y+1)*constants::CELL_HEIGHT);
+		strengthText.setFillColor(colors::brightBlue);
+		window->draw(strengthText);
+
+		std::string perception = "  Perception: " + std::to_string(b->perception);
+		sf::Text perceptionText(perception, font::mainFont, 16);
+		perceptionText.setPosition(x*constants::CELL_WIDTH, (y+2)*constants::CELL_HEIGHT);
+		perceptionText.setFillColor(colors::brightBlue);
+		window->draw(perceptionText);
+
+		std::string endurance = "   Endurance: " + std::to_string(b->endurance);
+		sf::Text enduranceText(endurance, font::mainFont, 16);
+		enduranceText.setPosition(x*constants::CELL_WIDTH, (y+3)*constants::CELL_HEIGHT);
+		enduranceText.setFillColor(colors::brightBlue);
+		window->draw(enduranceText);
+
+		std::string charisma = "    Charisma: " + std::to_string(b->charisma);
+		sf::Text charismaText(charisma, font::mainFont, 16);
+		charismaText.setPosition(x*constants::CELL_WIDTH, (y+4)*constants::CELL_HEIGHT);
+		charismaText.setFillColor(colors::brightBlue);
+		window->draw(charismaText);
+
+		std::string intelligence = "Intelligence: " + std::to_string(b->intelligence);
+		sf::Text intelligenceText(intelligence, font::mainFont, 16);
+		intelligenceText.setPosition(x*constants::CELL_WIDTH, (y+5)*constants::CELL_HEIGHT);
+		intelligenceText.setFillColor(colors::brightBlue);
+		window->draw(intelligenceText);
+
+		std::string agility = "     Agility: " + std::to_string(b->agility);
+		sf::Text agilityText(agility, font::mainFont, 16);
+		agilityText.setPosition(x*constants::CELL_WIDTH, (y+6)*constants::CELL_HEIGHT);
+		agilityText.setFillColor(colors::brightBlue);
+		window->draw(agilityText);
+
+		std::string luck = "        Luck: " + std::to_string(b->luck);
+		sf::Text luckText(luck, font::mainFont, 16);
+		luckText.setPosition(x*constants::CELL_WIDTH, (y+7)*constants::CELL_HEIGHT);
+		luckText.setFillColor(colors::brightBlue);
+		window->draw(luckText);
+
+		std::string speed = "       Speed: " + std::to_string(b->speed);
+		sf::Text speedText(speed, font::mainFont, 16);
+		speedText.setPosition(x*constants::CELL_WIDTH, (y+8)*constants::CELL_HEIGHT);
+		speedText.setFillColor(colors::brightBlue);
+		window->draw(speedText);
+
+	} else {
+		std::string no = "You have no body. How about that?";
+		sf::Text noText(no, font::mainFont, 16);
+		noText.setPosition(x*constants::CELL_WIDTH, (y+1)*constants::CELL_HEIGHT);
+		noText.setFillColor(colors::brightBlue);
+		window->draw(noText);
+	}
 }
 
 void InventoryMenuState::renderPiles() {

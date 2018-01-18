@@ -23,4 +23,13 @@ bool PoisonedStatusEffect::isAlive() {
 	return time > 0;
 }
 
+void AttributeModifierStatusEffect::update(Actor* owner, GameplayState* state, float deltaTime) {
+	time -= deltaTime;
+}
+
+bool AttributeModifierStatusEffect::isAlive() {
+	return time > 0;
+}
+
 BOOST_CLASS_EXPORT_IMPLEMENT(PoisonedStatusEffect)
+BOOST_CLASS_EXPORT_IMPLEMENT(AttributeModifierStatusEffect)

@@ -1,12 +1,16 @@
 #include "level_up_menu_state.hpp"
 
 #include <iostream>
+#include "body.hpp"
+#include "destructible.hpp"
 #include "engine.hpp"
 #include "engine_command.hpp"
 #include "actor.hpp"
 #include "ai.hpp"
+#include "attribute.hpp"
 #include "colors.hpp"
 #include "constants.hpp"
+#include "dice.hpp"
 #include "effect.hpp"
 #include "font.hpp"
 #include "status_effect.hpp"
@@ -16,10 +20,14 @@
 LevelUpMenuState::LevelUpMenuState(Engine* engine, Actor* actor) : 
 State(engine, engine->getWindow()),
 actor(actor) {
-	menuContents.push_back({MenuItemType::CONSTITUTION, "constitution"});
-	menuContents.push_back({MenuItemType::STRENGTH, "strength"});
-	menuContents.push_back({MenuItemType::AGILITY, "agility"});
-	menuContents.push_back({MenuItemType::SPEED, "speed"});
+	menuContents.push_back({Attribute::STRENGTH, "strength"});
+	menuContents.push_back({Attribute::PERCEPTION, "perception"});
+	menuContents.push_back({Attribute::ENDURANCE, "endurance"});
+	menuContents.push_back({Attribute::CHARISMA, "charisma"});
+	menuContents.push_back({Attribute::INTELLIGENCE, "intelligence"});
+	menuContents.push_back({Attribute::AGILITY, "agility"});
+	menuContents.push_back({Attribute::LUCK, "luck"});
+	menuContents.push_back({Attribute::SPEED, "speed"});
 	selectedItem = 0;
 }
 
@@ -73,19 +81,13 @@ void LevelUpMenuState::render() {
 }
 
 void LevelUpMenuState::handleItem(MenuItem item) {
-	switch(item.type) {
-		case MenuItemType::CONSTITUTION:
-			actor->modifyStatistic(Statistic::CONSTITUTION, 20.0f);
-			break;
-		case MenuItemType::STRENGTH:
-			actor->modifyStatistic(Statistic::STRENGTH, 1.0f);
-			break;
-		case MenuItemType::AGILITY:
-			actor->modifyStatistic(Statistic::AGILITY, 1.0f);
-			break;
-		case MenuItemType::SPEED:
-			actor->modifyStatistic(Statistic::SPEED, 10.0f);
-			break;
-		default: break;
+	actor->modifyAttribute(item.attribute, 1);
+	if(auto a = dynamic_cast<PlayerAi*>(actor->ai.get())) {
+		int newLevel = a->xpLevel;
+		int prevHp = actor->destructible->maxHp;
+		int dice = 3 + newLevel + actor->body->getModifier(actor->body->endurance);
+		int newHp = 0;
+		for(int i = 0; i < dice; ++i) newHp += d4();
+		if(newHp > prevHp) actor->destructible->maxHp = newHp;
 	}
 }

@@ -2,6 +2,8 @@
 #include "actor.hpp"
 #include "ai.hpp"
 #include "attacker.hpp"
+#include "body.hpp"
+#include "comestible.hpp"
 #include "constants.hpp"
 #include "container.hpp"
 #include "damage.hpp"
@@ -25,24 +27,28 @@ Actor::~Actor() {
 
 float Actor::update(GameplayState* state) {
 	if(ai) {
-		if(isPlayer()) world->computeFov(x, y);
+		float fovRadius = constants::DEFAULT_FOV_RADIUS * (body ? body->perception / 10.0 : 1.0);
+		if(isPlayer()) world->computeFov(x, y, fovRadius);
 		if(actionsQueue.empty()) actionsQueue.push_back(ai->getNextAction(this));
 		float actionCost = actionsQueue.front()->getLength();
 		bool success = actionsQueue.front()->execute();
 		actionsQueue.pop_front();
 		if(success) {
 			float turnCost = 100.0f * actionCost / ai->speed;
+			if(body) turnCost = turnCost * 10.0f / getAttributeWithModifiers(Attribute::SPEED);
 			for(auto& e : statusEffects) {
 				e->update(this, state, turnCost);
-				if(!e->isAlive()) {
-					statusEffects.erase(std::remove(statusEffects.begin(), statusEffects.end(), e), statusEffects.end());
-				}
 			}
-			if(isPlayer()) world->computeFov(x, y);
+			statusEffects.erase(std::remove_if(statusEffects.begin(), statusEffects.end(),
+						[](auto& e){ return !e->isAlive(); }), statusEffects.end());
+
+			if(isPlayer()) world->computeFov(x, y, fovRadius);
+			if(isPlayer()) body->nutrition -= turnCost;
+			if(body->nutrition <= 0) destructible->die(this);
 			return turnCost;
 		} else {
 			if(ai->isPlayer()) {
-				if(isPlayer()) world->computeFov(x, y);
+				if(isPlayer()) world->computeFov(x, y, fovRadius);
 				return 0;
 			} else {
 				return constants::DEFAULT_TURN_LENGTH;
@@ -58,23 +64,71 @@ float Actor::getDistance(int cx, int cy) const {
 	return sqrtf(dx*dx + dy*dy);
 }
 
-void Actor::modifyStatistic(Statistic stat, float delta) {
-	switch(stat) {
-		case Statistic::CONSTITUTION:
-			destructible->maxHp += delta;
-			destructible->hp += delta;
-			break;
-		case Statistic::STRENGTH:
-			attacker->increase(delta);
-			break;
-		case Statistic::AGILITY:
-			destructible->defense += delta;
-			break;
-		case Statistic::SPEED:
-			ai->speed += delta;
-			break;
-		default: break;
+void Actor::modifyAttribute(Attribute attribute, int delta) {
+	if(body) {
+		switch(attribute) {
+			case Attribute::STRENGTH:
+				body->strength += delta;
+				break;
+			case Attribute::PERCEPTION:
+				body->perception += delta;
+				break;
+			case Attribute::ENDURANCE:
+				body->endurance += delta;
+				break;
+			case Attribute::CHARISMA:
+				body->charisma += delta;
+				break;
+			case Attribute::INTELLIGENCE:
+				body->intelligence += delta;
+				break;
+			case Attribute::AGILITY:
+				body->agility += delta;
+				break;
+			case Attribute::LUCK:
+				body->luck += delta;
+				break;
+			case Attribute::SPEED:
+				body->speed += delta;
+				break;
+			default: break;
+		}
 	}
+}
+
+int Actor::getAttributeWithModifiers(Attribute attribute) {
+	int value = 0;
+	if(body) {
+		switch(attribute) {
+			case Attribute::STRENGTH:
+				value = body->strength;
+			case Attribute::PERCEPTION:
+				value = body->perception;
+			case Attribute::ENDURANCE:
+				value = body->endurance;
+			case Attribute::CHARISMA:
+				value = body->charisma;
+			case Attribute::INTELLIGENCE:
+				value = body->intelligence;
+			case Attribute::AGILITY:
+				value = body->agility;
+			case Attribute::LUCK:
+				value = body->luck;
+			case Attribute::SPEED:
+				value = body->speed;
+			default: break;
+		}
+	}
+	for(auto& ef : statusEffects) {
+		if(auto e = dynamic_cast<AttributeModifierStatusEffect*>(ef.get())) {
+			if(e->isAlive()) {
+				if(attribute == e->attribute) {
+					value += e->modifier;
+				}
+			}
+		}
+	}
+	return value;
 }
 
 bool Actor::tryToMove(Direction direction, float distance) {
@@ -118,3 +172,10 @@ bool Actor::tryToMove(Direction direction, float distance) {
 }
 
 bool Actor::isPlayer() { return ai ? this->ai->isPlayer() : false; }
+
+int Actor::getAC() {
+	int ac = 0;
+	if(body) ac = 10 + body->getModifier(body->agility);
+	if(wornArmor) ++ac; //FIXME
+	return ac;
+}

@@ -1,5 +1,6 @@
 #include "ai.hpp"
 #include "attacker.hpp"
+#include "body.hpp"
 #include "colors.hpp"
 #include "constants.hpp"
 #include "container.hpp"
@@ -70,7 +71,7 @@ void Gui::renderXpBar(World* world, sf::RenderWindow* window) {
 void Gui::renderStats(World* world, sf::RenderWindow* window) {
 	Actor* player = world->getPlayer(); // TODO instead pass player - rather, the actor - as a parameter to both Gui and Renderer
 
-	int ac = player->destructible->armorClass;
+	int ac = player->getAC();
 	std::string acString = "AC: " + std::to_string(ac);
 	sf::Text acText(acString, font::mainFont, 16);
 	acText.setFillColor(colors::lightBlue);
@@ -109,6 +110,20 @@ void Gui::renderStats(World* world, sf::RenderWindow* window) {
 	atkText.setFillColor(colors::lightBlue);
 	atkText.setPosition((constants::SCREEN_WIDTH-40)*constants::CELL_WIDTH, (3+constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT)*constants::CELL_HEIGHT);
 	window->draw(atkText);
+
+	std::string atkBonusString = "s:" + std::to_string(player->body->getModifier(player->body->strength))
+		+ " a:" + std::to_string(player->body->getModifier(player->body->agility))
+		+ " i:" + std::to_string(player->body->getModifier(player->body->intelligence));
+	sf::Text atkBonusText(atkBonusString, font::mainFont, 16);
+	atkBonusText.setFillColor(colors::lightBlue);
+	atkBonusText.setPosition((constants::SCREEN_WIDTH-40)*constants::CELL_WIDTH, (4+constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT)*constants::CELL_HEIGHT);
+	window->draw(atkBonusText);
+
+	std::string hungerString = "nutrition:" + std::to_string(player->body->nutrition);
+	sf::Text hungerText(hungerString, font::mainFont, 16);
+	hungerText.setFillColor(colors::lightBlue);
+	hungerText.setPosition((constants::SCREEN_WIDTH-40)*constants::CELL_WIDTH, (5+constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT)*constants::CELL_HEIGHT);
+	window->draw(hungerText);
 }
 
 void Gui::renderNav(World* world, sf::RenderWindow* window) {

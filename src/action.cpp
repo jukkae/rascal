@@ -1,7 +1,9 @@
 #include "action.hpp"
 #include "actor.hpp"
 #include "attacker.hpp"
+#include "body.hpp"
 #include "colors.hpp"
+#include "comestible.hpp"
 #include "container.hpp"
 #include "destructible.hpp"
 #include "effect.hpp"
@@ -40,7 +42,14 @@ bool MoveAction::execute() {
 				return false;
 			}
 			if(actor->wornWeapon && actor->wornWeapon->attacker) { 
-				bool atkResult = actor->wornWeapon->attacker->attack(actor, a.get());
+				bool atkResult;
+				if(actor->body) {
+					int toHitBonus = actor->body->getModifier(actor->body->agility);
+					int toDamageBonus = actor->body->getModifier(actor->body->strength);
+					atkResult = actor->wornWeapon->attacker->attack(actor, a.get(), toHitBonus, toDamageBonus);
+				} else {
+					atkResult = actor->wornWeapon->attacker->attack(actor, a.get());
+				}
 				if(atkResult && actor->wornWeapon->attacker->effectGenerator) {
 					//TODO handle all different effects
 					std::unique_ptr<Effect> ef = actor->wornWeapon->attacker->effectGenerator->generateEffect();
@@ -51,7 +60,15 @@ bool MoveAction::execute() {
 					ef->applyTo(a.get());
 				}
 			}
-			else actor->attacker->attack(actor, a.get());
+			else {
+				if(actor->body) {
+					int toHitBonus = actor->body->getModifier(actor->body->agility);
+					int toDamageBonus = actor->body->getModifier(actor->body->strength);
+					actor->attacker->attack(actor, a.get(), toHitBonus, toDamageBonus);
+				} else {
+					actor->attacker->attack(actor, a.get());
+				}
+			}
 			return true;
 		}
 	}
@@ -69,8 +86,8 @@ bool MoveAction::execute() {
 }
 
 bool TraverseStairsAction::execute() {
-	GameplayState* state = actor->s;
 	World* world = actor->world;
+	GameplayState* state = world->state;
 	std::vector<Actor*> v = world->getActorsAt(actor->x, actor->y);
 	if(v.empty()) {
 		ActionFailureEvent e(actor, "There are no stairs here!");
@@ -147,6 +164,9 @@ bool DropItemAction::execute() {
 	if(actor->wornWeapon == item) { // TODO order of actions is wrong
 		actor->addAction(std::make_unique<UnWieldItemAction>(UnWieldItemAction(actor)));
 	}
+	if(actor->wornArmor == item) {
+		actor->addAction(std::make_unique<UnWieldItemAction>(UnWieldItemAction(actor)));
+	}
 	ActionSuccessEvent e(item, "You drop what you were holding!"); // TODO player-specific
 	actor->world->notify(e);
 	item->pickable->drop(item, actor);
@@ -157,14 +177,39 @@ bool WieldItemAction::execute() {
 	if(item->attacker || item->rangedAttacker) {
 		actor->wornWeapon = item;
 		return true;
-	} else return false;
+	}
+	if(item->name == "combat armor" || item->name == "leather armor") { // TODO yeah i know
+		actor->wornArmor = item;
+		return true;
+	}
+	else return false;
+}
+
+bool EatAction::execute() {
+	if(item->comestible) {
+		actor->body->nutrition += item->comestible->nutrition;
+		ActionSuccessEvent e(item, "You eat the thing!");
+		actor->world->notify(e);
+		actor->container->remove(item);
+		return true;
+	}
+	else {
+		ActionFailureEvent e(item, "You can't eat that!");
+		actor->world->notify(e);
+		return false;
+	}
 }
 
 bool UnWieldItemAction::execute() {
 	if(actor->wornWeapon) {
 		actor->wornWeapon = nullptr;
 		return true;
-	} else return false;
+	}
+	if(actor->wornArmor) {
+		actor->wornArmor = nullptr;
+		return true;
+	}
+	else return false;
 }
 
 LookAction::LookAction(Actor* actor):
@@ -227,7 +272,13 @@ bool ShootAction::execute() {
 		return false;
 	} else {
 		// TODO check for LOS
-		actor->wornWeapon->rangedAttacker->attack(actor, enemy);
+		if(actor->body) {
+			int toHitBonus = actor->body->getModifier(actor->body->intelligence);
+			int toDamageBonus = actor->body->getModifier(actor->body->agility);
+			actor->wornWeapon->rangedAttacker->attack(actor, enemy, toHitBonus, toDamageBonus);
+		} else {
+			actor->wornWeapon->rangedAttacker->attack(actor, enemy);
+		}
 	}
 	return true;
 }

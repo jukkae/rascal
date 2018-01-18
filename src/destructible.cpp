@@ -1,6 +1,7 @@
 #include <cstdio>
 #include "actor.hpp"
 #include "ai.hpp"
+#include "body.hpp"
 #include "container.hpp"
 #include "destructible.hpp"
 #include "effect.hpp"
@@ -13,12 +14,16 @@
 #include "world.hpp"
 #include <SFML/Graphics/Color.hpp>
 
-Destructible::Destructible(float maxHp, float defense, int xp, std::string corpseName, int armorClass) :
-	maxHp(maxHp), hp(maxHp), defense(defense), xp(xp), corpseName(corpseName), armorClass(armorClass) {;}
+Destructible::Destructible(float maxHp, float defense, int xp, std::string corpseName) :
+	maxHp(maxHp), hp(maxHp), defense(defense), xp(xp), corpseName(corpseName) {;}
 
 float Destructible::takeDamage(Actor* owner, float damage, DamageType type) {
 	if(type == DamageType::NORMAL) damage -= defense;
 	if(damage > 0) {
+		if(owner->body) {
+			int mod = owner->body->getModifier(owner->body->agility);
+			damage -= mod;
+		}
 		hp -= damage;
 		if(hp <= 0) die(owner);
 	} else damage = 0;
@@ -47,8 +52,8 @@ void Destructible::die(Actor* owner) {
 	owner->world->getPlayer()->container->credits += 15; // TODO drop credits instead
 }
 
-MonsterDestructible::MonsterDestructible(float maxHp, float defense, int xp, std::string corpseName, int armorClass) :
-	Destructible(maxHp, defense, xp, corpseName, armorClass) {;}
+MonsterDestructible::MonsterDestructible(float maxHp, float defense, int xp, std::string corpseName) :
+	Destructible(maxHp, defense, xp, corpseName) {;}
 
 void MonsterDestructible::die(Actor* owner) {
 	DeathEvent e(owner, "", xp);
@@ -59,8 +64,8 @@ void MonsterDestructible::die(Actor* owner) {
 	Destructible::die(owner);
 }
 
-PlayerDestructible::PlayerDestructible(float maxHp, float defense, int xp, std::string corpseName, int armorClass) :
-	Destructible(maxHp, defense, xp, corpseName, armorClass) {;}
+PlayerDestructible::PlayerDestructible(float maxHp, float defense, int xp, std::string corpseName) :
+	Destructible(maxHp, defense, xp, corpseName) {;}
 
 void PlayerDestructible::die(Actor* owner) {
 	PlayerDeathEvent e(owner);

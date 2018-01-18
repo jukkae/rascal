@@ -26,7 +26,7 @@ public:
 	std::vector<Actor*> getActorsAt(int x, int y);
 
 
-	void computeFov(int x, int y) { map.computeFov(x, y); }
+	void computeFov(int x, int y, float r) { map.computeFov(x, y, r); }
 	bool isWall(int x, int y) { return map.isWall(x, y); }
 	bool canWalk(int x, int y);
 	bool isInFov(int x, int y) { return map.isInFov(x, y); }

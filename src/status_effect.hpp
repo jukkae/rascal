@@ -10,6 +10,8 @@
 class Actor;
 class GameplayState;
 
+#include "attribute.hpp"
+
 class StatusEffect {
 public:
 	StatusEffect(std::string name = "") : name(name) {;}
@@ -27,7 +29,7 @@ private:
 
 class PoisonedStatusEffect : public StatusEffect {
 public:
-	PoisonedStatusEffect(int time = 10000, int interval = 1000, int damage = 5):
+	PoisonedStatusEffect(int time = 10000, int interval = 1000, int damage = 2):
 	StatusEffect("poisoned"), time(time), interval(interval), damage(damage) {;}
 
 	void update(Actor* owner, GameplayState* state, float deltaTime) override;
@@ -48,6 +50,30 @@ private:
 	}
 };
 
+class AttributeModifierStatusEffect : public StatusEffect {
+public:
+	AttributeModifierStatusEffect(int time = 10000, Attribute attribute = Attribute::NONE, int modifier = 0):
+	StatusEffect("attribute modified"), time(time), attribute(attribute), modifier(modifier)
+	{;} //FIXME name
+
+	void update(Actor* owner, GameplayState* state, float deltaTime) override;
+	bool isAlive() override;
+	int time;
+	Attribute attribute;
+	int modifier;
+	int oldValue;
+private:
+	friend class boost::serialization::access;
+	template<class Archive>
+	void serialize(Archive & ar, const unsigned int version) {
+		ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(StatusEffect);
+		ar & time;
+		ar & attribute;
+		ar & modifier;
+	}
+};
+
 BOOST_CLASS_EXPORT_KEY(PoisonedStatusEffect)
+BOOST_CLASS_EXPORT_KEY(AttributeModifierStatusEffect)
 // remember to register new types in engine.cpp
 #endif /* STATUS_EFFECT_HPP */
