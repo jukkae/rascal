@@ -1,9 +1,12 @@
 #ifndef PLAYER_HPP
 #define PLAYER_HPP
 
+struct Event;
 class Player {
 public:
 int score = 0;
+
+void notify(Event& event);
 
 private:
 	friend class boost::serialization::access;

@@ -87,6 +87,7 @@ void GameplayState::notify(Event& event) {
 		engine->pushState(std::move(levelUpMenuState));
 	}
 	gui.notify(event);
+	player->notify(event);
 	//renderer.notify(event);
 	//audioSystem.notify(event);
 }
