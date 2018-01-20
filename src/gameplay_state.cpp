@@ -13,7 +13,6 @@
 #include "map_utils.hpp"
 #include "pickable.hpp"
 #include "transporter.hpp"
-#include "victory_state.hpp"
 #include "world.hpp"
 #include <chrono>
 #include <SFML/Window/Mouse.hpp>
@@ -80,7 +79,7 @@ void GameplayState::render() {
 void GameplayState::notify(Event& event) {
 	//TODO proper filtering
 	if(auto e = dynamic_cast<PlayerDeathEvent*>(&event)) {
-		std::unique_ptr<State> gameOverState = std::make_unique<GameOverState>(engine, e->actor);
+		std::unique_ptr<State> gameOverState = std::make_unique<GameOverState>(engine, e->actor, player.get());
 		engine->pushState(std::move(gameOverState));
 	} 
 	if(auto e = dynamic_cast<PlayerStatChangeEvent*>(&event)) {
@@ -88,6 +87,7 @@ void GameplayState::notify(Event& event) {
 		engine->pushState(std::move(levelUpMenuState));
 	}
 	gui.notify(event);
+	player->notify(event);
 	//renderer.notify(event);
 	//audioSystem.notify(event);
 }
@@ -136,7 +136,7 @@ void GameplayState::nextLevel() {
 	w->level = world->level + 1;
 	w->time = world->time;
 	if(w->level > 5) {
-		std::unique_ptr<State> victoryState = std::make_unique<VictoryState>(engine, world->getPlayer());
+		std::unique_ptr<State> victoryState = std::make_unique<GameOverState>(engine, world->getPlayer(), player.get(), true);
 		engine->pushState(std::move(victoryState));
 	}
 	gui.message(sf::Color::Magenta, "You take a moment to rest, and recover your strength.");

@@ -3,10 +3,12 @@
 #include "ai.hpp"
 #include "colors.hpp"
 #include "constants.hpp"
+#include "container.hpp"
 #include "effect.hpp"
 #include "font.hpp"
 #include "io.hpp"
 #include "main_menu_state.hpp"
+#include "player.hpp"
 #include "status_effect.hpp"
 #include <iostream>
 #include <SFML/System.hpp>
@@ -14,12 +16,30 @@
 #include <SFML/Window.hpp>
 #include <SFML/Graphics/Text.hpp>
 
-GameOverState::GameOverState(Engine* engine, Actor* actor) :
+GameOverState::GameOverState(Engine* engine, Actor* actor, Player* player, bool victory) :
 State(engine, engine->getWindow())
 {
-	description = "you died at level ";
-	description.append(std::to_string(((PlayerAi*)actor->ai.get())->xpLevel));
-	if(io::fileExists(constants::SAVE_FILE_NAME)) {
+	if(!victory) {
+		description = "you died at level ";
+		description.append(std::to_string(((PlayerAi*)actor->ai.get())->xpLevel));
+		description.append("\n");
+		description.append("score: ");
+		description.append(std::to_string(player->score));
+	} else {
+		description = "you won at level ";
+		description.append(std::to_string(((PlayerAi*)actor->ai.get())->xpLevel));
+		description.append("\n");
+		description.append("you had ");
+		int numberOfMacGuffins = 0;
+		for(auto& i : actor->container->inventory) { if (i->name == "phlebotinum link") numberOfMacGuffins++; }
+		description.append(std::to_string(numberOfMacGuffins));
+		description.append(" phlebotinum links");
+		description.append("\n");
+		description.append("score: ");
+		description.append(std::to_string(player->score));
+	}
+
+	if(io::fileExists(constants::SAVE_FILE_NAME)) { // If file exists
 		io::removeFile(constants::SAVE_FILE_NAME);
 	}
 }
