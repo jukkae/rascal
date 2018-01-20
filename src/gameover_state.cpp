@@ -19,6 +19,7 @@
 GameOverState::GameOverState(Engine* engine, Actor* actor, Player* player, bool victory) :
 State(engine, engine->getWindow())
 {
+	engine->gameOver = true;
 	if(!victory) {
 		description = "you died at level ";
 		description.append(std::to_string(((PlayerAi*)actor->ai.get())->xpLevel));
@@ -39,7 +40,7 @@ State(engine, engine->getWindow())
 		description.append(std::to_string(player->score));
 	}
 
-	if(io::fileExists(constants::SAVE_FILE_NAME)) { // If file exists
+	if(io::fileExists(constants::SAVE_FILE_NAME)) {
 		io::removeFile(constants::SAVE_FILE_NAME);
 	}
 }

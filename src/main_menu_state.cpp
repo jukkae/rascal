@@ -25,8 +25,8 @@ State(engine, engine->getWindow())
 	menuItems.push_back(newGame);
 
 	if(io::fileExists(constants::SAVE_FILE_NAME) || forceShowContinue) {
-		menuItems.push_back(cont);
-	}
+		if(!engine->gameOver) menuItems.push_back(cont);
+		}
 	menuItems.push_back(exit);
 
 	selectedItem = 0;
