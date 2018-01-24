@@ -162,10 +162,10 @@ bool UseItemAction::execute() {
 
 bool DropItemAction::execute() {
 	if(actor->wornWeapon == item) { // TODO order of actions is wrong
-		actor->addAction(std::make_unique<UnWieldItemAction>(UnWieldItemAction(actor)));
+		actor->addAction(std::make_unique<UnWieldItemAction>(UnWieldItemAction(actor, item)));
 	}
 	if(actor->wornArmor == item) {
-		actor->addAction(std::make_unique<UnWieldItemAction>(UnWieldItemAction(actor)));
+		actor->addAction(std::make_unique<UnWieldItemAction>(UnWieldItemAction(actor, item)));
 	}
 	ActionSuccessEvent e(item, "You drop what you were holding!"); // TODO player-specific
 	actor->world->notify(e);
@@ -190,6 +190,9 @@ bool WieldItemAction::execute() {
 			if(std::find(v.begin(), v.end(), BodyPart::HAND_L) != v.end() &&
 			   std::find(v.begin(), v.end(), BodyPart::HAND_R) != v.end()) {
 				if(item->attacker || item->rangedAttacker) {
+					for(auto& b : actor->body->bodyParts) {
+						if(b.first == BodyPart::HAND_L || b.first == BodyPart::HAND_R) b.second = false;
+					}
 					actor->wornWeapon = item;
 					return true;
 				}
@@ -208,6 +211,23 @@ bool WieldItemAction::execute() {
 	return false;
 }
 
+bool UnWieldItemAction::execute() {
+	if(item->wieldable->wieldableType == WieldableType::TWO_HANDS) {
+		for(auto& b : actor->body->bodyParts) {
+			if(b.first == BodyPart::HAND_L || b.first == BodyPart::HAND_R) b.second = true;
+		}
+	}
+	if(actor->wornWeapon) {
+		actor->wornWeapon = nullptr;
+		return true;
+	}
+	if(actor->wornArmor) {
+		actor->wornArmor = nullptr;
+		return true;
+	}
+	else return false;
+}
+
 bool EatAction::execute() {
 	if(item->comestible) {
 		actor->body->nutrition += item->comestible->nutrition;
@@ -221,18 +241,6 @@ bool EatAction::execute() {
 		actor->world->notify(e);
 		return false;
 	}
-}
-
-bool UnWieldItemAction::execute() {
-	if(actor->wornWeapon) {
-		actor->wornWeapon = nullptr;
-		return true;
-	}
-	if(actor->wornArmor) {
-		actor->wornArmor = nullptr;
-		return true;
-	}
-	else return false;
 }
 
 LookAction::LookAction(Actor* actor):

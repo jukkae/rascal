@@ -60,7 +60,7 @@ void InventoryMenuState::handleEvents() {
 				case k::W:
 					if(inventoryContents.size() > 0) {
 						if(piles.at(selectedItem).at(0) == actor->wornWeapon || piles.at(selectedItem).at(0) == actor->wornArmor) {
-							actor->addAction(std::make_unique<UnWieldItemAction>(UnWieldItemAction(actor)));
+							actor->addAction(std::make_unique<UnWieldItemAction>(UnWieldItemAction(actor, piles.at(selectedItem).at(0))));
 							engine->addEngineCommand(ContinueCommand(engine));
 						} else {
 							actor->addAction(std::make_unique<WieldItemAction>(WieldItemAction(actor, piles.at(selectedItem).at(0))));
