@@ -174,15 +174,27 @@ bool DropItemAction::execute() {
 }
 
 bool WieldItemAction::execute() {
-	if(item->attacker || item->rangedAttacker) {
-		actor->wornWeapon = item;
-		return true;
+	if(item->wieldable) {
+		if(item->wieldable->wieldableType == WieldableType::ONE_HAND) {
+			if(item->attacker || item->rangedAttacker) {
+				actor->wornWeapon = item;
+				return true;
+			}
+		}
+		if(item->wieldable->wieldableType == WieldableType::TWO_HANDS) {
+			if(item->attacker || item->rangedAttacker) {
+				actor->wornWeapon = item;
+				return true;
+			}
+		}
+		if(item->wieldable->wieldableType == WieldableType::TORSO) {
+			if(item->name == "combat armor" || item->name == "leather armor") { // TODO yeah i know
+				actor->wornArmor = item;
+				return true;
+			}
+		}
 	}
-	if(item->name == "combat armor" || item->name == "leather armor") { // TODO yeah i know
-		actor->wornArmor = item;
-		return true;
-	}
-	else return false;
+	return false;
 }
 
 bool EatAction::execute() {

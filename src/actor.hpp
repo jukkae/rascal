@@ -29,6 +29,7 @@ class GameplayState;
 #include "animation.hpp"
 #include "attribute.hpp"
 #include "direction.hpp"
+#include "wieldable.hpp" //FIXME for serialization for now
 
 class World;
 class Actor {
@@ -87,6 +88,7 @@ private:
 		ar & blocks;
 		ar & fovOnly;
 		ar & body;
+		ar & wieldable;
 		ar & attacker;
 		ar & rangedAttacker;
 		ar & destructible;

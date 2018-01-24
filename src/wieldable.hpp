@@ -14,8 +14,14 @@ enum class WieldableType {
 
 class Wieldable {
 public:
-	WieldableType wieldableType = WieldableType::ANY;
+	Wieldable(WieldableType wieldableType = WieldableType::ANY) : wieldableType(wieldableType) {;}
+	WieldableType wieldableType;
 private:
+	friend class boost::serialization::access;
+	template<class Archive>
+	void serialize(Archive & ar, const unsigned int version) {
+		ar & wieldableType;
+    }
 };
 
 #endif /* WIELDABLE_HPP */
