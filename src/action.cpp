@@ -176,7 +176,7 @@ bool DropItemAction::execute() {
 bool WieldItemAction::execute() {
 	if(item->wieldable) {
 		if(item->wieldable->wieldableType == WieldableType::ONE_HAND) {
-			auto& v = actor->body->bodyParts;
+			auto v = actor->body->getFreeBodyParts();
 			if(std::find(v.begin(), v.end(), BodyPart::HAND_L) != v.end() ||
 			   std::find(v.begin(), v.end(), BodyPart::HAND_R) != v.end()) {
 				if(item->attacker || item->rangedAttacker) {
@@ -186,7 +186,7 @@ bool WieldItemAction::execute() {
 			}
 		}
 		if(item->wieldable->wieldableType == WieldableType::TWO_HANDS) {
-			auto& v = actor->body->bodyParts;
+			auto v = actor->body->getFreeBodyParts();
 			if(std::find(v.begin(), v.end(), BodyPart::HAND_L) != v.end() &&
 			   std::find(v.begin(), v.end(), BodyPart::HAND_R) != v.end()) {
 				if(item->attacker || item->rangedAttacker) {
@@ -196,7 +196,7 @@ bool WieldItemAction::execute() {
 			}
 		}
 		if(item->wieldable->wieldableType == WieldableType::TORSO) {
-			auto& v = actor->body->bodyParts;
+			auto v = actor->body->getFreeBodyParts();
 			if(std::find(v.begin(), v.end(), BodyPart::TORSO) != v.end()) {
 				if(item->name == "combat armor" || item->name == "leather armor") { // TODO yeah i know
 					actor->wornArmor = item;

@@ -16,6 +16,8 @@ public:
 	static Body createRandomBody();
 	int getModifier(int attribute);
 
+	std::vector<BodyPart> getFreeBodyParts();
+
 	int strength;
 	int perception;
 	int endurance;
@@ -24,7 +26,7 @@ public:
 	int agility;
 	int luck;
 	int speed;
-	std::vector<BodyPart> bodyParts;
+	std::vector<std::pair<BodyPart, bool>> bodyParts; //true = available FIXME unclear
 	BodyType bodyType = BodyType::BIOLOGICAL;
 	//Skills, perks, traits, whatever
 	//Radiation load
