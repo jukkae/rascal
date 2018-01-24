@@ -23,6 +23,7 @@ class Pickable;
 class StatusEffect;
 class Transporter;
 class Comestible;
+class Wieldable;
 class GameplayState;
 
 #include "animation.hpp"
@@ -48,6 +49,7 @@ public:
 	std::unique_ptr<Container> container;
 	std::unique_ptr<Transporter> transporter;
 	std::unique_ptr<Comestible> comestible;
+	std::unique_ptr<Wieldable> wieldable;
 	Actor* wornWeapon = nullptr;
 	Actor* wornArmor = nullptr;
 	std::experimental::optional<Animation> animation;

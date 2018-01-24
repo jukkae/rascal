@@ -1,14 +1,7 @@
 #ifndef BODY_HPP
 #define BODY_HPP
 
-enum class BodyPart {
-	HAND_L,
-	HAND_R,
-	FOOT_L,
-	FOOT_R,
-	TORSO,
-	HEAD
-};
+#include "body_part.hpp"
 
 enum class BodyType {
 	BIOLOGICAL,

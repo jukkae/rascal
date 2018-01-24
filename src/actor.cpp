@@ -14,6 +14,7 @@
 #include "pickable.hpp"
 #include "status_effect.hpp"
 #include "transporter.hpp"
+#include "wieldable.hpp"
 #include "world.hpp"
 
 
