@@ -216,7 +216,7 @@ bool UnWieldItemAction::execute() {
 		for(auto& b : actor->body->bodyParts) {
 			if(b.first == BodyPart::HAND_L || b.first == BodyPart::HAND_R) b.second = true;
 		}
-	}
+	} //TODO continue from here
 	if(actor->wornWeapon) {
 		actor->wornWeapon = nullptr;
 		return true;
