@@ -218,9 +218,9 @@ void InventoryMenuState::renderBodyParts() {
 	if(actor->body) {
 		Body* b = actor->body.get();
 
-		auto freeBodyParts = b->getFreeBodyParts();
+		auto freeBodyParts = b->bodyParts;
 
-		std::string bps = "free body parts: " + std::to_string(freeBodyParts.size());
+		std::string bps = "body parts:";
 		sf::Text bpsText(bps, font::mainFont, 16);
 		bpsText.setPosition(x*constants::CELL_WIDTH, (y+1)*constants::CELL_HEIGHT);
 		bpsText.setFillColor(colors::brightBlue);
@@ -229,7 +229,7 @@ void InventoryMenuState::renderBodyParts() {
 		for(auto& bp : freeBodyParts) {
 			++y;
 			std::string bpt = "";
-			switch(bp) {
+			switch(bp.first) {
 				case BodyPart::HAND_L: bpt.append("left hand");  break;
 				case BodyPart::HAND_R: bpt.append("right hand"); break;
 				case BodyPart::FOOT_L: bpt.append("left foot");  break;
@@ -238,7 +238,10 @@ void InventoryMenuState::renderBodyParts() {
 				case BodyPart::HEAD  : bpt.append("head");       break;
 				default: break;
 			};
-			io::text(bpt, x, y+1, colors::brightBlue);
+			sf::Color col;
+			if(bp.second) col = colors::brightBlue;
+			else col = colors::blue;
+			io::text(bpt, x, y+1, col);
 		}
 	}
 }
