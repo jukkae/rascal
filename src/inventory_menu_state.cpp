@@ -6,6 +6,7 @@
 #include "action.hpp"
 #include "actor.hpp"
 #include "body.hpp"
+#include "body_part.hpp"
 #include "colors.hpp"
 #include "constants.hpp"
 #include "container.hpp"
@@ -129,6 +130,7 @@ void InventoryMenuState::render() {
 	window->draw(commandsText);
 
 	renderStats();
+	renderBodyParts();
 
 	window->display();
 }
@@ -200,6 +202,28 @@ void InventoryMenuState::renderStats() {
 		noText.setPosition(x*constants::CELL_WIDTH, (y+1)*constants::CELL_HEIGHT);
 		noText.setFillColor(colors::brightBlue);
 		window->draw(noText);
+	}
+}
+
+void InventoryMenuState::renderBodyParts() {
+	sf::Text heading("B O D Y", font::mainFont, 16);
+	heading.setPosition(90*constants::CELL_WIDTH, constants::CELL_HEIGHT);
+	heading.setFillColor(colors::brightBlue);
+	window->draw(heading);
+
+	int x = 90;
+	int y = 3;
+
+	if(actor->body) {
+		Body* b = actor->body.get();
+
+		auto freeBodyParts = b->getFreeBodyParts();
+
+		std::string bp = "Body parts: " + std::to_string(freeBodyParts.size());
+		sf::Text bpText(bp, font::mainFont, 16);
+		bpText.setPosition(x*constants::CELL_WIDTH, (y+1)*constants::CELL_HEIGHT);
+		bpText.setFillColor(colors::brightBlue);
+		window->draw(bpText);
 	}
 }
 
