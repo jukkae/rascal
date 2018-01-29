@@ -12,6 +12,7 @@
 #include "container.hpp"
 #include "effect.hpp"
 #include "font.hpp"
+#include "io.hpp"
 #include "status_effect.hpp"
 
 InventoryMenuState::InventoryMenuState(Engine* engine, Actor* actor) :
@@ -237,10 +238,7 @@ void InventoryMenuState::renderBodyParts() {
 				case BodyPart::HEAD  : bpt.append("head");       break;
 				default: break;
 			};
-			sf::Text bpText(bpt, font::mainFont, 16);
-			bpText.setPosition(x*constants::CELL_WIDTH, (y+1)*constants::CELL_HEIGHT);
-			bpText.setFillColor(colors::brightBlue);
-			window->draw(bpText);
+			io::text(bpt, x, y+1, colors::brightBlue);
 		}
 	}
 }
