@@ -219,11 +219,29 @@ void InventoryMenuState::renderBodyParts() {
 
 		auto freeBodyParts = b->getFreeBodyParts();
 
-		std::string bp = "Body parts: " + std::to_string(freeBodyParts.size());
-		sf::Text bpText(bp, font::mainFont, 16);
-		bpText.setPosition(x*constants::CELL_WIDTH, (y+1)*constants::CELL_HEIGHT);
-		bpText.setFillColor(colors::brightBlue);
-		window->draw(bpText);
+		std::string bps = "free body parts: " + std::to_string(freeBodyParts.size());
+		sf::Text bpsText(bps, font::mainFont, 16);
+		bpsText.setPosition(x*constants::CELL_WIDTH, (y+1)*constants::CELL_HEIGHT);
+		bpsText.setFillColor(colors::brightBlue);
+		window->draw(bpsText);
+
+		for(auto& bp : freeBodyParts) {
+			++y;
+			std::string bpt = "";
+			switch(bp) {
+				case BodyPart::HAND_L: bpt.append("left hand");  break;
+				case BodyPart::HAND_R: bpt.append("right hand"); break;
+				case BodyPart::FOOT_L: bpt.append("left foot");  break;
+				case BodyPart::FOOT_R: bpt.append("right foot"); break;
+				case BodyPart::TORSO : bpt.append("torso");      break;
+				case BodyPart::HEAD  : bpt.append("head");       break;
+				default: break;
+			};
+			sf::Text bpText(bpt, font::mainFont, 16);
+			bpText.setPosition(x*constants::CELL_WIDTH, (y+1)*constants::CELL_HEIGHT);
+			bpText.setFillColor(colors::brightBlue);
+			window->draw(bpText);
+		}
 	}
 }
 
