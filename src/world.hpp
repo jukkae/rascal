@@ -25,9 +25,10 @@ public:
 	Actor* getLiveActor(int x, int y) const;
 	std::vector<std::unique_ptr<Actor>>& getActors() { return actors; }
 	std::vector<Actor*> getActorsAt(int x, int y);
+	std::vector<Actor*> getActorsAsPtrs() { std::vector<Actor*> as; for(auto& a : actors) as.push_back(a.get()); return as; }
 
 
-	void computeFov(int x, int y, float r) { fov::computeFov(&map, x, y, r); }
+	void computeFov(int x, int y, float r) { fov::computeFov(&map, x, y, r, FovType::CIRCLE, getActorsAsPtrs()); }
 	bool isWall(int x, int y) { return map.isWall(x, y); }
 	bool canWalk(int x, int y);
 	bool isInFov(int x, int y) { return map.isInFov(x, y); }

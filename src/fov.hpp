@@ -3,6 +3,7 @@
 
 #include "constants.hpp"
 
+class Actor;
 class Map;
 template<class T>
 struct Vec;
@@ -31,8 +32,8 @@ public:
 };
 
 namespace fov {
-	void computeFov(Map* map, /*std::vector<Actor*> actors,*/ int x, int y, int radius = constants::DEFAULT_FOV_RADIUS, FovType fovType = FovType::CIRCLE);
-	void computeFovForOctant(Map* map, int x, int y, int octant, int radius = constants::DEFAULT_FOV_RADIUS, FovType fovType = FovType::CIRCLE);
+	void computeFov(Map* map, int x, int y, int radius = constants::DEFAULT_FOV_RADIUS, FovType fovType = FovType::CIRCLE, std::vector<Actor*> actors = {});
+	void computeFovForOctant(Map* map, int x, int y, int octant, int radius = constants::DEFAULT_FOV_RADIUS, FovType fovType = FovType::CIRCLE, std::vector<Actor*> actors = {});
 	Vec<int> transformOctant(int row, int col, int octant);
 }; // namespace fov
 #endif /* FOV_HPP */

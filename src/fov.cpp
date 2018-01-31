@@ -1,8 +1,11 @@
 #include "fov.hpp"
+
+#include "actor.hpp"
+#include "status_effect.hpp" //FIXME wtf do i need this for
 #include "map.hpp"
 #include "vec.hpp"
 
-void fov::computeFov(Map* map, int x, int y, int radius, FovType fovType) {
+void fov::computeFov(Map* map, int x, int y, int radius, FovType fovType, std::vector<Actor*> actors) {
 	//Low-hanging fruit optimization:
 	//Only loop through possible values
 	for(int i = 0; i < map->width; ++i) {
@@ -11,11 +14,11 @@ void fov::computeFov(Map* map, int x, int y, int radius, FovType fovType) {
 		}
 	}
 	for(int octant = 0; octant < 8; octant++) {
-		computeFovForOctant(map, x, y, octant, radius, fovType);
+		computeFovForOctant(map, x, y, octant, radius, fovType, actors);
 	}
 }
 
-void fov::computeFovForOctant(Map* map, int x, int y, int octant, int radius, FovType fovType) {
+void fov::computeFovForOctant(Map* map, int x, int y, int octant, int radius, FovType fovType, std::vector<Actor*> actors) {
 	ShadowLine shadowLine;
 	bool fullShadow = false;
 	for(int row = 0; row < radius; row++) {
@@ -40,6 +43,14 @@ void fov::computeFovForOctant(Map* map, int x, int y, int octant, int radius, Fo
 				if(visible && map->isWall(xPos, yPos) /*TODO check for doors*/) {
 					shadowLine.addShadow(projection);
 					fullShadow = shadowLine.isFullShadow();
+				}
+				if(visible && actors.size() > 0) {
+					for(auto& a : actors) {
+						if(a->blocksLight && a->x == xPos && a->y == yPos) {
+							shadowLine.addShadow(projection);
+							fullShadow = shadowLine.isFullShadow();
+						}
+					}
 				}
 			}
 		}
