@@ -1,5 +1,6 @@
 #include "actor.hpp"
 #include "ai.hpp"
+#include "armor.hpp"
 #include "attacker.hpp"
 #include "body.hpp"
 #include "colors.hpp"
@@ -266,18 +267,21 @@ std::unique_ptr<Actor> item::makeItem(World* world, Map* map, int x, int y) {
 		armor->blocks = false;
 		armor->pickable = std::make_unique<Pickable>();
 		armor->wieldable = std::make_unique<Wieldable>(WieldableType::TORSO);
+		armor->armor = std::make_unique<Armor>(1);
 		return armor;
 	} else if(r < 98){
 		std::unique_ptr<Actor> armor = std::make_unique<Actor>(x, y, '[', "combat armor", sf::Color(128, 255, 255));
 		armor->blocks = false;
 		armor->pickable = std::make_unique<Pickable>();
 		armor->wieldable = std::make_unique<Wieldable>(WieldableType::TORSO);
+		armor->armor = std::make_unique<Armor>(2);
 		return armor;
 	} else if(r < 99){
 		std::unique_ptr<Actor> armor = std::make_unique<Actor>(x, y, '[', "combat helmet", sf::Color(255, 0, 128));
 		armor->blocks = false;
 		armor->pickable = std::make_unique<Pickable>();
 		armor->wieldable = std::make_unique<Wieldable>(WieldableType::HEAD);
+		armor->armor = std::make_unique<Armor>(1);
 		return armor;
 	} else {
 		std::unique_ptr<Actor> navcomp = std::make_unique<Actor>(x, y, 'q', "navigation computer", sf::Color::Blue, 0);

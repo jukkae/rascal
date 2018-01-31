@@ -14,6 +14,7 @@
 #include <SFML/Graphics/Color.hpp>
 class Action;
 class Ai;
+class Armor;
 class Attacker;
 class Body;
 class Container;
@@ -30,6 +31,7 @@ class GameplayState;
 #include "attribute.hpp"
 #include "direction.hpp"
 #include "wieldable.hpp" //FIXME for serialization for now
+#include "armor.hpp" //FIXME for serialization for now
 
 class World;
 class Actor {
@@ -44,6 +46,7 @@ public:
 	std::unique_ptr<Body> body;
 	std::unique_ptr<Attacker> attacker;
 	std::unique_ptr<RangedAttacker> rangedAttacker;
+	std::unique_ptr<Armor> armor;
 	std::unique_ptr<Destructible> destructible;
 	std::unique_ptr<Ai> ai;
 	std::unique_ptr<Pickable> pickable;
@@ -91,6 +94,7 @@ private:
 		ar & wieldable;
 		ar & attacker;
 		ar & rangedAttacker;
+		ar & armor;
 		ar & destructible;
 		ar & ai;
 		ar & pickable;

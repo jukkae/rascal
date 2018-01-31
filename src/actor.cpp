@@ -177,7 +177,7 @@ int Actor::getAC() {
 	int ac = 0;
 	if(body) ac = 10 + body->getModifier(body->agility);
 	for(auto& a : wornArmors) {
-		++ac; //TODO
+		if(a->armor) ac += a->armor->acBonus;
 	}
 	return ac;
 }
