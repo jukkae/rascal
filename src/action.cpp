@@ -32,6 +32,7 @@ bool MoveAction::execute() {
 	}
 
 	if (world->isWall(targetX, targetY)) return false;
+	for (auto a : world->getActorsAt(targetX, targetY)) if (a->openable && a->blocks) return false;
 
 	// look for living actors to attack
 	for (auto& a : world->getActors()) {
@@ -370,4 +371,35 @@ bool ShootAction::execute() {
 		}
 	}
 	return true;
+}
+
+bool OpenAction::execute() {
+	World* w = actor->world;
+	for(int x = actor->x - 1; x <= actor->x + 1; ++x) {
+		for(int y = actor->y - 1; y <= actor->y + 1; ++y) {
+			if(x == actor->x && y == actor->y) continue;
+			std::vector<Actor*> as = w->getActorsAt(x, y);
+			for(auto& a : as) if(a->openable && !a->openable->open) {
+				a->openable->open = true;
+				a->blocks = false;
+				a->blocksLight = false;
+				a->col = sf::Color(255, 255, 255);
+				return true;
+			}
+		}
+	}
+	for(int x = actor->x - 1; x <= actor->x + 1; ++x) {
+		for(int y = actor->y - 1; y <= actor->y + 1; ++y) {
+			if(x == actor->x && y == actor->y) continue;
+			std::vector<Actor*> as = w->getActorsAt(x, y);
+			for(auto& a : as) if(a->openable && a->openable->open) {
+				a->openable->open = false;
+				a->blocks = true;
+				a->blocksLight = true;
+				a->col = sf::Color(0, 0, 0);
+				return true;
+			}
+		}
+	}
+	return false;
 }

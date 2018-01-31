@@ -32,6 +32,7 @@ class GameplayState;
 #include "direction.hpp"
 #include "wieldable.hpp" //FIXME for serialization for now
 #include "armor.hpp" //FIXME for serialization for now
+#include "openable.hpp" //FIXME for serialization for now
 
 class World;
 class Actor {
@@ -42,6 +43,7 @@ public:
 	std::string name;
 	boost::optional<float> energy; // Shouldn't be public // TODO should be std::optional
 	bool blocks; // does it block movement?
+	bool blocksLight = false;
 	bool fovOnly; // visible only when in fov?
 	std::unique_ptr<Body> body;
 	std::unique_ptr<Attacker> attacker;
@@ -54,6 +56,7 @@ public:
 	std::unique_ptr<Transporter> transporter;
 	std::unique_ptr<Comestible> comestible;
 	std::unique_ptr<Wieldable> wieldable;
+	std::unique_ptr<Openable> openable;
 	Actor* wornWeapon = nullptr;
 	std::vector<Actor*> wornArmors;
 	std::experimental::optional<Animation> animation;
@@ -89,9 +92,11 @@ private:
 		ar & name;
 		ar & energy;
 		ar & blocks;
+		ar & blocksLight;
 		ar & fovOnly;
 		ar & body;
 		ar & wieldable;
+		ar & openable;
 		ar & attacker;
 		ar & rangedAttacker;
 		ar & armor;
