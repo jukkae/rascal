@@ -175,6 +175,15 @@ std::unique_ptr<Actor> npc::makeMonster(World* world, Map* map, int x, int y, in
 
 		punk->container->add(std::move(stimpak));
 
+		std::unique_ptr<Actor> cookie = std::make_unique<Actor>(x, y, '%', "cookie", sf::Color(128, 128, 0));
+		cookie->blocks = false;
+		cookie->pickable = std::make_unique<Pickable>();
+		cookie->comestible = std::make_unique<Comestible>();
+		cookie->comestible->nutrition = 10000;
+		cookie->world = world;
+
+		punk->container->add(std::move(cookie));
+
 		return punk;
 	} else if (r < 80) {
 		std::unique_ptr<Actor> fighter = std::make_unique<Actor>(x, y, 'H', "fighter", colors::darkGreen, 1);
