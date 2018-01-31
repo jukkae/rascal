@@ -2,7 +2,7 @@
 #define OPENABLE_HPP
 class Openable {
 public:
-	bool open;
+	bool open = false;
 private:
 	friend class boost::serialization::access;
 	template<class Archive>

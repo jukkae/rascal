@@ -379,10 +379,24 @@ bool OpenAction::execute() {
 		for(int y = actor->y - 1; y <= actor->y + 1; ++y) {
 			if(x == actor->x && y == actor->y) continue;
 			std::vector<Actor*> as = w->getActorsAt(x, y);
-			for(auto& a : as) if(a->blocks && a->blocksLight) { //FIXME check for Openable component
+			for(auto& a : as) if(a->openable && !a->openable->open) {
+				a->openable->open = true;
 				a->blocks = false;
 				a->blocksLight = false;
 				a->col = sf::Color(255, 255, 255);
+				return true;
+			}
+		}
+	}
+	for(int x = actor->x - 1; x <= actor->x + 1; ++x) {
+		for(int y = actor->y - 1; y <= actor->y + 1; ++y) {
+			if(x == actor->x && y == actor->y) continue;
+			std::vector<Actor*> as = w->getActorsAt(x, y);
+			for(auto& a : as) if(a->openable && a->openable->open) {
+				a->openable->open = false;
+				a->blocks = true;
+				a->blocksLight = true;
+				a->col = sf::Color(0, 0, 0);
 				return true;
 			}
 		}
