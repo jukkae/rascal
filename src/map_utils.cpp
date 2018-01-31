@@ -22,12 +22,8 @@ void map_utils::addItems(World* world, Map* map) {
 	for(int x = 0; x < map->width; ++x) {
 		for(int y = 0; y < map->height; ++y) {
 			int r = d100();
-			//if (!map->isWall(x, y) && r == 1) { // can't use canWalk yet
-			if (!map->isWall(x, y)) {
-				if ((map->isWall(x-1, y) && map->isWall(x+1, y)) ||
-					(map->isWall(x, y-1) && map->isWall(x, y+1))) {
+			if (!map->isWall(x, y) && r == 1) { // can't use canWalk yet
 					world->addActor(item::makeItem(world, map, x, y));
-				}
 			}
 		}
 	}
@@ -37,8 +33,11 @@ void map_utils::addDoors(World* world, Map* map) {
 	for(int x = 1; x < map->width-1; ++x) {
 		for(int y = 1; y < map->height-1; ++y) {
 			int r = d100();
-			if (!map->isWall(x, y) && r == 1) {
+			if (!map->isWall(x, y)) {
+			if ((map->isWall(x-1, y) && map->isWall(x+1, y)) ||
+				(map->isWall(x, y-1) && map->isWall(x, y+1))) {
 				world->addActor(item::makeItem(world, map, x, y));
+			}
 			}
 		}
 	}
