@@ -1,6 +1,7 @@
 #include "actor.hpp"
 #include "constants.hpp"
 #include "effect.hpp"
+#include "font.hpp"
 #include "gameplay_state.hpp"
 #include "io.hpp"
 #include "point.hpp"
@@ -36,4 +37,11 @@ bool io::removeFile(std::string name) {
 	int result = remove(name.c_str());
 	if(result == 0) return true;
 	else return false;
+}
+
+void io::text(std::string text, int x, int y, sf::Color color) {
+	sf::Text sfText(text, font::mainFont, 16);
+	sfText.setPosition(x*constants::CELL_WIDTH, y*constants::CELL_HEIGHT);
+	sfText.setFillColor(color);
+	window.draw(sfText);
 }

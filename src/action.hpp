@@ -141,13 +141,15 @@ private:
 
 class UnWieldItemAction : public Action {
 public:
-	UnWieldItemAction(Actor* actor) : Action(actor, 50.0f) {;}
+	Actor* item;
+	UnWieldItemAction(Actor* actor, Actor* item) : Action(actor, 50.0f), item(item) {;}
 	bool execute();
 private:
 	friend class boost::serialization::access;
 	template<class Archive>
 	void serialize(Archive & ar, const unsigned int version) {
 		ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(Action);
+		ar & item;
 	}
 };
 

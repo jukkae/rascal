@@ -23,11 +23,13 @@ class Pickable;
 class StatusEffect;
 class Transporter;
 class Comestible;
+class Wieldable;
 class GameplayState;
 
 #include "animation.hpp"
 #include "attribute.hpp"
 #include "direction.hpp"
+#include "wieldable.hpp" //FIXME for serialization for now
 
 class World;
 class Actor {
@@ -48,6 +50,7 @@ public:
 	std::unique_ptr<Container> container;
 	std::unique_ptr<Transporter> transporter;
 	std::unique_ptr<Comestible> comestible;
+	std::unique_ptr<Wieldable> wieldable;
 	Actor* wornWeapon = nullptr;
 	Actor* wornArmor = nullptr;
 	std::experimental::optional<Animation> animation;
@@ -85,6 +88,7 @@ private:
 		ar & blocks;
 		ar & fovOnly;
 		ar & body;
+		ar & wieldable;
 		ar & attacker;
 		ar & rangedAttacker;
 		ar & destructible;
