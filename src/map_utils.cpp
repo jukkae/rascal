@@ -248,40 +248,47 @@ std::unique_ptr<Actor> item::makeItem(World* world, Map* map, int x, int y) {
 		rock->attacker = std::make_unique<Attacker>(1, 4, 0);
 		rock->wieldable = std::make_unique<Wieldable>(WieldableType::ONE_HAND);
 		return rock;
-	} else if(r < 93) {
+	} else if(r < 92) {
 		std::unique_ptr<Actor> pistol = std::make_unique<Actor>(x, y, '\\', "pistol", sf::Color(255, 128, 255));
 		pistol->blocks = false;
 		pistol->pickable = std::make_unique<Pickable>();
 		pistol->rangedAttacker = std::make_unique<RangedAttacker>(1, 4, 0, 10.0);
 		pistol->wieldable = std::make_unique<Wieldable>(WieldableType::ONE_HAND);
 		return pistol;
-	} else if(r < 95){
+	} else if(r < 94){
 		std::unique_ptr<Actor> rifle = std::make_unique<Actor>(x, y, '\\', "rifle", sf::Color(128, 255, 255));
 		rifle->blocks = false;
 		rifle->pickable = std::make_unique<Pickable>();
 		rifle->rangedAttacker = std::make_unique<RangedAttacker>(2, 6, 0, 10.0);
 		rifle->wieldable = std::make_unique<Wieldable>(WieldableType::TWO_HANDS);
 		return rifle;
-	} else if(r < 96){
+	} else if(r < 95){
 		std::unique_ptr<Actor> armor = std::make_unique<Actor>(x, y, '[', "leather armor", sf::Color(0, 128, 255));
 		armor->blocks = false;
 		armor->pickable = std::make_unique<Pickable>();
 		armor->wieldable = std::make_unique<Wieldable>(WieldableType::TORSO);
 		armor->armor = std::make_unique<Armor>(1);
 		return armor;
-	} else if(r < 97){
+	} else if(r < 96){
 		std::unique_ptr<Actor> armor = std::make_unique<Actor>(x, y, '[', "combat armor", sf::Color(128, 255, 255));
 		armor->blocks = false;
 		armor->pickable = std::make_unique<Pickable>();
 		armor->wieldable = std::make_unique<Wieldable>(WieldableType::TORSO);
 		armor->armor = std::make_unique<Armor>(2);
 		return armor;
+	} else if(r < 97){
+		std::unique_ptr<Actor> armor = std::make_unique<Actor>(x, y, '[', "flat cap", sf::Color(0, 128, 128));
+		armor->blocks = false;
+		armor->pickable = std::make_unique<Pickable>();
+		armor->wieldable = std::make_unique<Wieldable>(WieldableType::HEAD);
+		armor->armor = std::make_unique<Armor>(1);
+		return armor;
 	} else if(r < 98){
 		std::unique_ptr<Actor> armor = std::make_unique<Actor>(x, y, '[', "combat helmet", sf::Color(255, 0, 128));
 		armor->blocks = false;
 		armor->pickable = std::make_unique<Pickable>();
 		armor->wieldable = std::make_unique<Wieldable>(WieldableType::HEAD);
-		armor->armor = std::make_unique<Armor>(1);
+		armor->armor = std::make_unique<Armor>(2);
 		return armor;
 	} else if(r < 99){
 		std::unique_ptr<Actor> armor = std::make_unique<Actor>(x, y, '[', "combat boots", sf::Color(128, 0, 128));
