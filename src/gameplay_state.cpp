@@ -44,6 +44,7 @@ void GameplayState::initLoaded(Engine* engine) {
 void GameplayState::newGame(Engine* engine) {
 	map_utils::addPlayer(world, &world->map);
 	map_utils::addStairs(world, &world->map);
+	map_utils::addDoors(world, &world->map);
 	map_utils::addMcGuffin(world, &world->map, world->level);
 	map_utils::addItems(world, &world->map);
 	map_utils::addMonsters(world, &world->map);
@@ -163,6 +164,7 @@ void GameplayState::nextLevel() {
 	if(world->level == 3) world->map.generateMap(MapType::PILLARS);
 	else world->map.generateMap(MapType::BUILDING);
 
+	map_utils::addDoors(world, &world->map);
 	map_utils::addItems(world, &world->map);
 	map_utils::addMonsters(world, &world->map, world->level);
 	if(downstairs) {
