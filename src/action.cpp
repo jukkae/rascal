@@ -208,6 +208,9 @@ bool WieldItemAction::execute() {
 			auto v = actor->body->getFreeBodyParts();
 			if(std::find(v.begin(), v.end(), BodyPart::TORSO) != v.end()) {
 				if(item->name == "combat armor" || item->name == "leather armor") { // TODO yeah i know
+					for(auto& b : actor->body->bodyParts) {
+						if(b.first == BodyPart::TORSO) b.second = false;
+					}
 					actor->wornArmor = item;
 					return true;
 				}
@@ -230,7 +233,12 @@ bool UnWieldItemAction::execute() {
 				break;
 			}
 		}
-	} //TODO continue from here
+	}
+	if(item->wieldable->wieldableType == WieldableType::TORSO) {
+		for(auto& b : actor->body->bodyParts) {
+			if(b.first == BodyPart::TORSO) b.second = true;
+		}
+	}
 	if(actor->wornWeapon) {
 		actor->wornWeapon = nullptr;
 		return true;
