@@ -230,6 +230,18 @@ bool WieldItemAction::execute() {
 				}
 			}
 		}
+		if(item->wieldable->wieldableType == WieldableType::FEET) {
+			auto v = actor->body->getFreeBodyParts();
+			if(std::find(v.begin(), v.end(), BodyPart::FEET) != v.end()) {
+				if(item->armor) {
+					for(auto& b : actor->body->bodyParts) {
+						if(b.first == BodyPart::FEET) b.second = false;
+					}
+					actor->wornArmors.push_back(item);
+					return true;
+				}
+			}
+		}
 	}
 	return false;
 }
@@ -256,6 +268,11 @@ bool UnWieldItemAction::execute() {
 	if(item->wieldable->wieldableType == WieldableType::HEAD) {
 		for(auto& b : actor->body->bodyParts) {
 			if(b.first == BodyPart::HEAD) b.second = true;
+		}
+	}
+	if(item->wieldable->wieldableType == WieldableType::FEET) {
+		for(auto& b : actor->body->bodyParts) {
+			if(b.first == BodyPart::FEET) b.second = true;
 		}
 	}
 	if(actor->wornWeapon) {

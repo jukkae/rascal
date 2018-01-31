@@ -237,8 +237,7 @@ void InventoryMenuState::renderBodyParts() {
 			switch(bp.first) {
 				case BodyPart::HAND_L: bpt.append("left hand");  break;
 				case BodyPart::HAND_R: bpt.append("right hand"); break;
-				case BodyPart::FOOT_L: bpt.append("left foot");  break;
-				case BodyPart::FOOT_R: bpt.append("right foot"); break;
+				case BodyPart::FEET  : bpt.append("feet");       break;
 				case BodyPart::TORSO : bpt.append("torso");      break;
 				case BodyPart::HEAD  : bpt.append("head");       break;
 				default: break;

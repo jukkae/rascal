@@ -3,8 +3,7 @@
 enum class BodyPart {
 	HAND_L,
 	HAND_R,
-	FOOT_L,
-	FOOT_R,
+	FEET,
 	TORSO,
 	HEAD
 };
