@@ -36,7 +36,9 @@ void map_utils::addDoors(World* world, Map* map) {
 			if (!map->isWall(x, y)) {
 			if ((map->isWall(x-1, y) && map->isWall(x+1, y)) ||
 				(map->isWall(x, y-1) && map->isWall(x, y+1))) {
-				world->addActor(item::makeItem(world, map, x, y));
+				std::unique_ptr<Actor> door = std::make_unique<Actor>(x, y, '+', "door", sf::Color::Black, 0);
+				door->blocks = true;
+				world->addActor(std::move(door));
 			}
 			}
 		}
