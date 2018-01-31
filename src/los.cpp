@@ -24,18 +24,11 @@ Point los::lerp_point(Point a, Point b, float t) {
 }
 
 std::vector<Point> los::get_line(Point a, Point b) {
-	std::cout << "point a: " << a.x << ", " << a.y << "\n";
-	std::cout << "point b: " << b.x << ", " << b.y << "\n";
-
 	std::vector<Point> line;
 	int n = los::diagonal_distance(a, b) + 1;
 	for(int i = 0; i < n; ++i) {
 		float t = (n == 0 ? 0.0 : (float)i / (float)n);
         line.push_back(round_point(lerp_point(a, b, t)));
 	}
-	//line.push_back(b); //FIXME sometimes needed, but not always
-
-	std::cout << "\n\n" << "LINE:" << "\n";
-	for(auto& p: line) std::cout << p.x << ", " << p.y << "\n";
 	return line;
 }
