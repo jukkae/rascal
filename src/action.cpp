@@ -180,6 +180,12 @@ bool WieldItemAction::execute() {
 			if(std::find(v.begin(), v.end(), BodyPart::HAND_L) != v.end() ||
 			   std::find(v.begin(), v.end(), BodyPart::HAND_R) != v.end()) {
 				if(item->attacker || item->rangedAttacker) {
+					for(auto& b : actor->body->bodyParts) {
+						if(b.first == BodyPart::HAND_R || b.first == BodyPart::HAND_R) {
+							b.second = false;
+							break;
+						}
+					}
 					actor->wornWeapon = item;
 					return true;
 				}
@@ -215,6 +221,14 @@ bool UnWieldItemAction::execute() {
 	if(item->wieldable->wieldableType == WieldableType::TWO_HANDS) {
 		for(auto& b : actor->body->bodyParts) {
 			if(b.first == BodyPart::HAND_L || b.first == BodyPart::HAND_R) b.second = true;
+		}
+	}
+	if(item->wieldable->wieldableType == WieldableType::ONE_HAND) {
+		for(auto& b : actor->body->bodyParts) {
+			if((b.first == BodyPart::HAND_L || b.first == BodyPart::HAND_R) && b.second == false) {
+				b.second = true;
+				break;
+			}
 		}
 	} //TODO continue from here
 	if(actor->wornWeapon) {
