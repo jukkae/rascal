@@ -182,6 +182,17 @@ std::unique_ptr<Actor> npc::makeMonster(World* world, Map* map, int x, int y, in
 		fighter->attacker = std::make_unique<Attacker>(2, 3, 0);
 		fighter->ai = std::make_unique<MonsterAi>();
 		fighter->body = std::make_unique<Body>();
+
+		fighter->container = std::make_unique<Container>(10);
+
+		std::unique_ptr<Actor> jerky = std::make_unique<Actor>(x, y, '%', "jerky", sf::Color(128, 0, 0));
+		jerky->blocks = false;
+		jerky->pickable = std::make_unique<Pickable>();
+		jerky->comestible = std::make_unique<Comestible>();
+		jerky->world = world;
+
+		fighter->container->add(std::move(jerky));
+
 		return fighter;
 	} else if (r < 90) {
 		std::unique_ptr<Actor> guard = std::make_unique<Actor>(x, y, 'h', "guard", colors::darkGreen, 1);
