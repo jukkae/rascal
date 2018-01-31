@@ -22,8 +22,7 @@ speed(spd)
 {
 	bodyParts.push_back(std::pair<BodyPart, bool>(BodyPart::HAND_L, true));
 	bodyParts.push_back(std::pair<BodyPart, bool>(BodyPart::HAND_R, true));
-	bodyParts.push_back(std::pair<BodyPart, bool>(BodyPart::FOOT_L, true));
-	bodyParts.push_back(std::pair<BodyPart, bool>(BodyPart::FOOT_R, true));
+	bodyParts.push_back(std::pair<BodyPart, bool>(BodyPart::FEET,   true));
 	bodyParts.push_back(std::pair<BodyPart, bool>(BodyPart::TORSO,  true));
 	bodyParts.push_back(std::pair<BodyPart, bool>(BodyPart::HEAD,   true));
 };

@@ -61,7 +61,12 @@ void InventoryMenuState::handleEvents() {
 					break;
 				case k::W:
 					if(inventoryContents.size() > 0) {
-						if(piles.at(selectedItem).at(0) == actor->wornWeapon || piles.at(selectedItem).at(0) == actor->wornArmor) {
+						if(piles.at(selectedItem).at(0) == actor->wornWeapon) {
+							actor->addAction(std::make_unique<UnWieldItemAction>(UnWieldItemAction(actor, piles.at(selectedItem).at(0))));
+							engine->addEngineCommand(ContinueCommand(engine));
+						}
+						//else if(piles.at(selectedItem).at(0) == actor->wornArmor) {
+						else if(actor->wornArmors.end() != std::find_if(actor->wornArmors.begin(), actor->wornArmors.end(), [&](auto& a){ return piles.at(selectedItem).at(0) == a; })) {
 							actor->addAction(std::make_unique<UnWieldItemAction>(UnWieldItemAction(actor, piles.at(selectedItem).at(0))));
 							engine->addEngineCommand(ContinueCommand(engine));
 						} else {
@@ -232,8 +237,7 @@ void InventoryMenuState::renderBodyParts() {
 			switch(bp.first) {
 				case BodyPart::HAND_L: bpt.append("left hand");  break;
 				case BodyPart::HAND_R: bpt.append("right hand"); break;
-				case BodyPart::FOOT_L: bpt.append("left foot");  break;
-				case BodyPart::FOOT_R: bpt.append("right foot"); break;
+				case BodyPart::FEET  : bpt.append("feet");       break;
 				case BodyPart::TORSO : bpt.append("torso");      break;
 				case BodyPart::HEAD  : bpt.append("head");       break;
 				default: break;

@@ -164,8 +164,10 @@ bool DropItemAction::execute() {
 	if(actor->wornWeapon == item) { // TODO order of actions is wrong
 		actor->addAction(std::make_unique<UnWieldItemAction>(UnWieldItemAction(actor, item)));
 	}
-	if(actor->wornArmor == item) {
-		actor->addAction(std::make_unique<UnWieldItemAction>(UnWieldItemAction(actor, item)));
+	for(auto& a : actor->wornArmors) {
+		if(a == item) {
+			actor->addAction(std::make_unique<UnWieldItemAction>(UnWieldItemAction(actor, item)));
+		}
 	}
 	ActionSuccessEvent e(item, "You drop what you were holding!"); // TODO player-specific
 	actor->world->notify(e);
@@ -207,11 +209,35 @@ bool WieldItemAction::execute() {
 		if(item->wieldable->wieldableType == WieldableType::TORSO) {
 			auto v = actor->body->getFreeBodyParts();
 			if(std::find(v.begin(), v.end(), BodyPart::TORSO) != v.end()) {
-				if(item->name == "combat armor" || item->name == "leather armor") { // TODO yeah i know
+				if(item->armor) {
 					for(auto& b : actor->body->bodyParts) {
 						if(b.first == BodyPart::TORSO) b.second = false;
 					}
-					actor->wornArmor = item;
+					actor->wornArmors.push_back(item);
+					return true;
+				}
+			}
+		}
+		if(item->wieldable->wieldableType == WieldableType::HEAD) {
+			auto v = actor->body->getFreeBodyParts();
+			if(std::find(v.begin(), v.end(), BodyPart::HEAD) != v.end()) {
+				if(item->armor) {
+					for(auto& b : actor->body->bodyParts) {
+						if(b.first == BodyPart::HEAD) b.second = false;
+					}
+					actor->wornArmors.push_back(item);
+					return true;
+				}
+			}
+		}
+		if(item->wieldable->wieldableType == WieldableType::FEET) {
+			auto v = actor->body->getFreeBodyParts();
+			if(std::find(v.begin(), v.end(), BodyPart::FEET) != v.end()) {
+				if(item->armor) {
+					for(auto& b : actor->body->bodyParts) {
+						if(b.first == BodyPart::FEET) b.second = false;
+					}
+					actor->wornArmors.push_back(item);
 					return true;
 				}
 			}
@@ -239,15 +265,25 @@ bool UnWieldItemAction::execute() {
 			if(b.first == BodyPart::TORSO) b.second = true;
 		}
 	}
+	if(item->wieldable->wieldableType == WieldableType::HEAD) {
+		for(auto& b : actor->body->bodyParts) {
+			if(b.first == BodyPart::HEAD) b.second = true;
+		}
+	}
+	if(item->wieldable->wieldableType == WieldableType::FEET) {
+		for(auto& b : actor->body->bodyParts) {
+			if(b.first == BodyPart::FEET) b.second = true;
+		}
+	}
 	if(actor->wornWeapon) {
 		actor->wornWeapon = nullptr;
 		return true;
 	}
-	if(actor->wornArmor) {
-		actor->wornArmor = nullptr;
-		return true;
+	if(actor->wornArmors.size() > 0) {
+		auto& v = actor->wornArmors;
+		if(v.end() == v.erase(std::remove_if(v.begin(), v.end(), [&](auto& a){ return a == item; }), v.end())) return true;
 	}
-	else return false;
+	return false;
 }
 
 bool EatAction::execute() {
