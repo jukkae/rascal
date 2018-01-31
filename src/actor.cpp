@@ -14,6 +14,7 @@
 #include "pickable.hpp"
 #include "status_effect.hpp"
 #include "transporter.hpp"
+#include "utils.hpp"
 #include "wieldable.hpp"
 #include "world.hpp"
 
@@ -40,9 +41,7 @@ float Actor::update(GameplayState* state) {
 			for(auto& e : statusEffects) {
 				e->update(this, state, turnCost);
 			}
-			statusEffects.erase(std::remove_if(statusEffects.begin(), statusEffects.end(),
-						[](auto& e){ return !e->isAlive(); }), statusEffects.end());
-
+			utils::erase_where(statusEffects, [](auto& e){ return !e->isAlive(); });
 			if(isPlayer()) world->computeFov(x, y, fovRadius);
 			if(isPlayer()) body->nutrition -= turnCost;
 			if(body->nutrition <= 0) destructible->die(this);
