@@ -15,9 +15,11 @@
 #include "gui.hpp"
 #include "io.hpp"
 #include "inventory_menu_state.hpp"
+#include "los.hpp"
 #include "map.hpp"
 #include "pickable.hpp"
 #include "persistent.hpp"
+#include "point.hpp"
 #include "state.hpp"
 #include "level_up_menu_state.hpp"
 #include "main_menu_state.hpp"
@@ -128,7 +130,8 @@ std::unique_ptr<Action> MonsterAi::getNextAction(Actor* actor) {
 	}
 
 	if(aiState == AiState::NORMAL) {
-		if (actor->world->isInFov(actor->x, actor->y)) {
+		//if (actor->world->isInFov(actor->x, actor->y)) {
+		if (los::is_visible(Point(actor->x, actor->y), Point(player->x, player->y))) {
 			moveCount = TRACKING_TURNS; //TODO also track if was in FOV, and fire event when first seeing player
 		} else { --moveCount; }
 
