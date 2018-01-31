@@ -119,6 +119,10 @@ std::unique_ptr<Action> MonsterAi::getNextAction(Actor* actor) {
 	World* world = actor->world;
 	Direction direction = Direction::NONE;
 	Actor* player = world->getPlayer();
+	/*if (los::is_visible(Point(actor->x, actor->y), Point(player->x, player->y), &world->map, world->getActorsAsPtrs(), constants::DEFAULT_ENEMY_FOV_RADIUS)) {
+		actor->col = colors::red;
+	} else  { actor->col = colors::black; }*/
+
 	if (actor->destructible && actor->destructible->isDead()) return std::make_unique<WaitAction>(WaitAction(actor));
 
 	if(actor->destructible->hp <= actor->destructible->maxHp * 0.3 + (0.1 * player->body->getModifier(player->body->charisma))) {
@@ -131,7 +135,7 @@ std::unique_ptr<Action> MonsterAi::getNextAction(Actor* actor) {
 
 	if(aiState == AiState::NORMAL) {
 		//if (actor->world->isInFov(actor->x, actor->y)) {
-		if (los::is_visible(Point(actor->x, actor->y), Point(player->x, player->y), &world->map, world->getActorsAsPtrs())) {
+		if (los::is_visible(Point(actor->x, actor->y), Point(player->x, player->y), &world->map, world->getActorsAsPtrs(), constants::DEFAULT_ENEMY_FOV_RADIUS)) {
 			moveCount = TRACKING_TURNS; //TODO also track if was in FOV, and fire event when first seeing player
 		} else { --moveCount; }
 
