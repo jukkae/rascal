@@ -32,6 +32,7 @@ class GameplayState;
 #include "direction.hpp"
 #include "wieldable.hpp" //FIXME for serialization for now
 #include "armor.hpp" //FIXME for serialization for now
+#include "openable.hpp" //FIXME for serialization for now
 
 class World;
 class Actor {
@@ -55,6 +56,7 @@ public:
 	std::unique_ptr<Transporter> transporter;
 	std::unique_ptr<Comestible> comestible;
 	std::unique_ptr<Wieldable> wieldable;
+	std::unique_ptr<Openable> openable;
 	Actor* wornWeapon = nullptr;
 	std::vector<Actor*> wornArmors;
 	std::experimental::optional<Animation> animation;
@@ -94,6 +96,7 @@ private:
 		ar & fovOnly;
 		ar & body;
 		ar & wieldable;
+		ar & openable;
 		ar & attacker;
 		ar & rangedAttacker;
 		ar & armor;
