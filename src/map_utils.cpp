@@ -189,6 +189,18 @@ std::unique_ptr<Actor> npc::makeMonster(World* world, Map* map, int x, int y, in
 		guard->attacker = std::make_unique<Attacker>(1, 3, 0);
 		guard->ai = std::make_unique<MonsterAi>(200);
 		guard->body = std::make_unique<Body>();
+
+		guard->container = std::make_unique<Container>(10);
+
+		std::unique_ptr<Actor> ration = std::make_unique<Actor>(x, y, '%', "ration", sf::Color(0, 128, 0));
+		ration->blocks = false;
+		ration->pickable = std::make_unique<Pickable>();
+		ration->comestible = std::make_unique<Comestible>();
+		ration->comestible->nutrition = 30000;
+		ration->world = world; //FIXME that I need to do this is bad and error-prone. Figure out better ways of actor creation.
+
+		guard->container->add(std::move(ration));
+
 		return guard;
 	}
 	else {
