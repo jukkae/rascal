@@ -34,15 +34,15 @@ void map_utils::addDoors(World* world, Map* map) {
 		for(int y = 1; y < map->height-1; ++y) {
 			int r = d100();
 			if (!map->isWall(x, y)) {
-			if ((map->isWall(x-1, y) && map->isWall(x+1, y)) ||
-				(map->isWall(x, y-1) && map->isWall(x, y+1))) {
-				std::unique_ptr<Actor> door = std::make_unique<Actor>(x, y, '+', "door", sf::Color::Black, 0);
-				door->openable = std::make_unique<Openable>();
-				door->blocks = true;
-				door->blocksLight = true;
-				door->fovOnly = false;
-				world->addActor(std::move(door));
-			}
+				if ((map->isWall(x-1, y) && map->isWall(x+1, y)) ||
+					(map->isWall(x, y-1) && map->isWall(x, y+1))) {
+					std::unique_ptr<Actor> door = std::make_unique<Actor>(x, y, '+', "door", sf::Color::Black, 0);
+					door->openable = std::make_unique<Openable>();
+					door->blocks = true;
+					door->blocksLight = true;
+					door->fovOnly = false;
+					world->addActor(std::move(door));
+				}
 			}
 		}
 	}
