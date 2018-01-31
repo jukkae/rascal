@@ -75,6 +75,9 @@ std::unique_ptr<Action> PlayerAi::getNextAction(Actor* actor) {
 					engine->pushState(std::move(inventoryMenuState));
 					break;
 				}
+				case k::O: {
+					return std::make_unique<OpenAction>(OpenAction(actor));
+				}
 				case k::Comma: {
 					return std::make_unique<PickupAction>(PickupAction(actor));
 				}

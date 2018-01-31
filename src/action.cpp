@@ -372,3 +372,20 @@ bool ShootAction::execute() {
 	}
 	return true;
 }
+
+bool OpenAction::execute() {
+	World* w = actor->world;
+	for(int x = actor->x - 1; x <= actor->x + 1; ++x) {
+		for(int y = actor->y - 1; y <= actor->y + 1; ++y) {
+			if(x == actor->x && y == actor->y) continue;
+			std::vector<Actor*> as = w->getActorsAt(x, y);
+			for(auto& a : as) if(a->blocks && a->blocksLight) { //FIXME check for Openable component
+				a->blocks = false;
+				a->blocksLight = false;
+				a->col = sf::Color(255, 255, 255);
+				return true;
+			}
+		}
+	}
+	return false;
+}

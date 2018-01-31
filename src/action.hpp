@@ -196,6 +196,18 @@ private:
 	}
 };
 
+class OpenAction : public Action {
+public:
+	OpenAction(Actor* actor) : Action(actor, 100.0f) {;}
+	bool execute();
+private:
+	friend class boost::serialization::access;
+	template<class Archive>
+	void serialize(Archive & ar, const unsigned int version) {
+		ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(Action);
+	}
+};
+
 struct ActionResult {
 	bool succeeded;
 	boost::optional<Action> alternativeAction;
