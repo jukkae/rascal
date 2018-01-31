@@ -177,6 +177,8 @@ bool Actor::isPlayer() { return ai ? this->ai->isPlayer() : false; }
 int Actor::getAC() {
 	int ac = 0;
 	if(body) ac = 10 + body->getModifier(body->agility);
-	if(wornArmor) ++ac; //FIXME
+	for(auto& a : wornArmors) {
+		++ac; //TODO
+	}
 	return ac;
 }

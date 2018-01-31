@@ -52,7 +52,7 @@ public:
 	std::unique_ptr<Comestible> comestible;
 	std::unique_ptr<Wieldable> wieldable;
 	Actor* wornWeapon = nullptr;
-	Actor* wornArmor = nullptr;
+	std::vector<Actor*> wornArmors;
 	std::experimental::optional<Animation> animation;
 
 	World* world = nullptr;

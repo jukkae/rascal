@@ -164,8 +164,10 @@ bool DropItemAction::execute() {
 	if(actor->wornWeapon == item) { // TODO order of actions is wrong
 		actor->addAction(std::make_unique<UnWieldItemAction>(UnWieldItemAction(actor, item)));
 	}
-	if(actor->wornArmor == item) {
-		actor->addAction(std::make_unique<UnWieldItemAction>(UnWieldItemAction(actor, item)));
+	for(auto& a : actor->wornArmors) {
+		if(a == item) {
+			actor->addAction(std::make_unique<UnWieldItemAction>(UnWieldItemAction(actor, item)));
+		}
 	}
 	ActionSuccessEvent e(item, "You drop what you were holding!"); // TODO player-specific
 	actor->world->notify(e);
@@ -211,7 +213,7 @@ bool WieldItemAction::execute() {
 					for(auto& b : actor->body->bodyParts) {
 						if(b.first == BodyPart::TORSO) b.second = false;
 					}
-					actor->wornArmor = item;
+					actor->wornArmors.push_back(item);
 					return true;
 				}
 			}
@@ -223,7 +225,7 @@ bool WieldItemAction::execute() {
 					for(auto& b : actor->body->bodyParts) {
 						if(b.first == BodyPart::HEAD) b.second = false;
 					}
-					actor->wornArmor = item; //TODO this won't do
+					actor->wornArmors.push_back(item);
 					return true;
 				}
 			}
@@ -260,11 +262,11 @@ bool UnWieldItemAction::execute() {
 		actor->wornWeapon = nullptr;
 		return true;
 	}
-	if(actor->wornArmor) {
-		actor->wornArmor = nullptr;
-		return true;
+	if(actor->wornArmors.size() > 0) {
+		auto& v = actor->wornArmors;
+		if(v.end() == v.erase(std::remove_if(v.begin(), v.end(), [&](auto& a){ return a == item; }), v.end())) return true;
 	}
-	else return false;
+	return false;
 }
 
 bool EatAction::execute() {
