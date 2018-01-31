@@ -40,6 +40,7 @@ void map_utils::addDoors(World* world, Map* map) {
 				door->openable = std::make_unique<Openable>();
 				door->blocks = true;
 				door->blocksLight = true;
+				door->fovOnly = false;
 				world->addActor(std::move(door));
 			}
 			}
