@@ -1,7 +1,17 @@
 #include "los.hpp"
 
-bool los::is_visible(Point a, Point b) {
-	los::get_line(a, b);
+#include "map.hpp"
+#include "actor.hpp"
+#include "status_effect.hpp" //gorram
+
+bool los::is_visible(Point a, Point b, Map* map, std::vector<Actor*> actors) {
+	auto line = los::get_line(a, b);
+	for(auto a : line) {
+		if (map->isWall(a.x, a.y)) return false;
+		for(auto b : actors) if (a.x == b->x && a.y == b->y) {
+			if (b->blocksLight) return false;
+		}
+	}
 	return true;
 }
 
@@ -30,5 +40,6 @@ std::vector<Point> los::get_line(Point a, Point b) {
 		float t = (n == 0 ? 0.0 : (float)i / (float)n);
         line.push_back(round_point(lerp_point(a, b, t)));
 	}
+	if(line.back().x != b.x && line.back().y != b.y) line.push_back(b);
 	return line;
 }
