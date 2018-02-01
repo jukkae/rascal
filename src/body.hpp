@@ -46,6 +46,7 @@ private:
 		ar & speed;
 		ar & bodyParts;
 		ar & bodyType;
+		ar & nutrition;
     }
 };
 #endif /* BODY_HPP */
