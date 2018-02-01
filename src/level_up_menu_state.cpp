@@ -13,6 +13,7 @@
 #include "dice.hpp"
 #include "effect.hpp"
 #include "font.hpp"
+#include "io.hpp"
 #include "status_effect.hpp"
 #include <SFML/System.hpp>
 #include <SFML/Window.hpp>
@@ -62,17 +63,20 @@ void LevelUpMenuState::update() {
 void LevelUpMenuState::render() {
 	window->clear(sf::Color::Black);
 
-	int y = 1;
+	int width = constants::SCREEN_WIDTH;
+	int height = constants::SCREEN_HEIGHT;
+
+	std::string heading = "Y O U   H A V E   G A I N E D   A   L E V E L";
+	int headingX = (width - heading.length()) / 2;
+	io::text(heading, headingX, 1, colors::brightBlue);
+
+	int y = 3;
 	int itemIndex = 0;
 	for (auto item : menuContents) {
-		sf::Text text;
-		text.setCharacterSize(16);
-		text.setFont(font::mainFont);
-		text.setString(item.label);
-		text.setPosition(2*constants::CELL_WIDTH, y*constants::CELL_HEIGHT);
-		if(itemIndex == selectedItem) text.setFillColor(colors::brightBlue);
-		else text.setFillColor(colors::darkBlue);
-		window->draw(text);
+		int x = (width - item.label.length()) / 2;
+		sf::Color color = colors::darkBlue;
+		if(itemIndex == selectedItem) color = colors::brightBlue;
+		io::text(item.label, x, y, color);
 		++y;
 		++itemIndex;
 	}
