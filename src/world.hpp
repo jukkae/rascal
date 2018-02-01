@@ -18,6 +18,7 @@ public:
 	void updateNextActor();
 	void updateTime();
 	void sortActors();
+	void applyRadiation(float dt);
 
 
 	Actor* getPlayer() const;
@@ -41,6 +42,7 @@ public:
 	int height;
 	int time = 0;
 	int level = 1;
+	int radiation = 1;
 	std::vector<std::unique_ptr<Actor>> actors;
 	Map map;
 	GameplayState* state = nullptr;
@@ -53,6 +55,7 @@ private:
 		ar & actors;
 		ar & map;
 		ar & state;
+		ar & radiation;
 	}
 };
 #endif /* WORLD_HPP */

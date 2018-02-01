@@ -13,5 +13,6 @@ int d10();
 int d12();
 int d20();
 int d100();
+int d1000();
 
 #endif /* DICE_HPP */
