@@ -74,7 +74,7 @@ void MainMenuState::render() {
 }
 
 void MainMenuState::renderAsciiTitle() {
-	int x = 1;
+	int x = (constants::SCREEN_WIDTH - 41) / 2; // title is 41 cells wide
 	int y = 1;
 	sf::Text text(asciiTitle, font::mainFont, 16);
 	text.setPosition(x * constants::CELL_WIDTH, y * constants::CELL_HEIGHT);
@@ -88,6 +88,7 @@ void MainMenuState::showMenu() {
 
 	int itemIndex = 0;
 	for(MenuItem item : menuItems) {
+		menuX = (constants::SCREEN_WIDTH - item.label.length()) / 2;
 		sf::Text itemText(item.label, font::mainFont, 16);
 		if (selectedItem == itemIndex) {
 			itemText.setFillColor(colors::brightBlue);
