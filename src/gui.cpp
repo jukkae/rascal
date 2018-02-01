@@ -138,6 +138,11 @@ void Gui::renderNav(World* world, sf::RenderWindow* window) {
 		locText.setFillColor(colors::lightBlue);
 		locText.setPosition((constants::SCREEN_WIDTH-20)*constants::CELL_WIDTH, (3+constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT)*constants::CELL_HEIGHT);
 		window->draw(locText);
+		std::string rad = "rad: " + std::to_string(world->radiation);
+		sf::Text radText(rad, font::mainFont, 16);
+		radText.setFillColor(colors::lightBlue);
+		radText.setPosition((constants::SCREEN_WIDTH-20)*constants::CELL_WIDTH, (4+constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT)*constants::CELL_HEIGHT);
+		window->draw(radText);
 	}
 
 }
