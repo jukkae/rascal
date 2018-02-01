@@ -107,6 +107,7 @@ private:
 		ar & actionsQueue;
 		ar & transporter;
 		ar & wornWeapon;
+		ar & wornArmors;
 		ar & statusEffects;
 		ar & world;
 		ar & animation;
