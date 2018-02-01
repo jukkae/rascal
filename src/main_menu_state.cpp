@@ -31,10 +31,19 @@ State(engine, engine->getWindow())
 
 	selectedItem = 0;
 
+	{
 	std::ifstream fin("assets/asciiTitle.txt");
 	std::stringstream buffer;
 	buffer << fin.rdbuf();
 	asciiTitle = buffer.str();
+	}
+
+	{
+	std::ifstream fin("assets/bgArt.txt");
+	std::stringstream buffer;
+	buffer << fin.rdbuf();
+	bgArt = buffer.str();
+	}
 }
 
 void MainMenuState::handleEvents() {
@@ -69,6 +78,7 @@ void MainMenuState::update() {
 }
 
 void MainMenuState::render() {
+	renderBgArt();
 	renderAsciiTitle();
 	showMenu();
 }
@@ -79,6 +89,15 @@ void MainMenuState::renderAsciiTitle() {
 	sf::Text text(asciiTitle, font::mainFont, 16);
 	text.setPosition(x * constants::CELL_WIDTH, y * constants::CELL_HEIGHT);
 	text.setFillColor(colors::brightBlue);
+	window->draw(text);
+}
+
+void MainMenuState::renderBgArt() {
+	int x = 0; // bg is hardcoded
+	int y = 0;
+	sf::Text text(bgArt, font::mainFont, 16);
+	text.setPosition(x * constants::CELL_WIDTH, y * constants::CELL_HEIGHT);
+	text.setFillColor(colors::lightGreen);
 	window->draw(text);
 }
 
