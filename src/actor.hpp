@@ -33,6 +33,7 @@ class GameplayState;
 #include "wieldable.hpp" //FIXME for serialization for now
 #include "armor.hpp" //FIXME for serialization for now
 #include "openable.hpp" //FIXME for serialization for now
+#include "comestible.hpp" //FIXME for serialization for now
 
 class World;
 class Actor {
@@ -111,6 +112,7 @@ private:
 		ar & statusEffects;
 		ar & world;
 		ar & animation;
+		ar & comestible;
     }   
 };
 #endif /* ACTOR_HPP */
