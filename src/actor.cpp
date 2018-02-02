@@ -31,7 +31,7 @@ float Actor::update(GameplayState* state) {
 	if(ai) {
 		float fovRadius = constants::DEFAULT_FOV_RADIUS * (body ? body->perception / 10.0 : 1.0);
 		if(isPlayer()) world->computeFov(x, y, fovRadius);
-		if(actionsQueue.empty()) actionsQueue.push_back(ai->getNextAction(this)); //TODO segfaults for confused ai
+		if(actionsQueue.empty()) actionsQueue.push_back(ai->getNextAction(this));
 		float actionCost = actionsQueue.front()->getLength();
 		bool success = actionsQueue.front()->execute();
 		actionsQueue.pop_front();
