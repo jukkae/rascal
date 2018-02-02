@@ -83,7 +83,6 @@ void Renderer::renderMap(const World* const world, sf::RenderWindow* window) {
 								//blue = 255;
 								//color.b = blue;
 							}
-							//TODO cell automaton doesn't work because it's only run in FOV
 							for(int i = -1; i <= 1; ++i) {
 								for(int j = -1; j <= 1; ++j) {
 									if(i == 0 && j == 0) continue;
