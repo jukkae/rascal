@@ -15,5 +15,6 @@ macosx/
 *.dylib
 *.app
 *.pch
+*.pch-*
 *.zip
 tags
