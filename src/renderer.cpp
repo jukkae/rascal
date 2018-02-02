@@ -83,6 +83,7 @@ void Renderer::renderMap(const World* const world, sf::RenderWindow* window) {
 								//blue = 255;
 								//color.b = blue;
 							}
+							int nextColor = 64;
 							for(int i = -1; i <= 1; ++i) {
 								for(int j = -1; j <= 1; ++j) {
 									if(i == 0 && j == 0) continue;
@@ -91,20 +92,20 @@ void Renderer::renderMap(const World* const world, sf::RenderWindow* window) {
 									else {
 										int neighbor = previous[(worldX+i) + mapWidth*(worldY+j)];
 										if(neighbor > color.b) {
-											color.b = neighbor - 4;
+											nextColor = neighbor - 4;
 										} else {
 											//--color.b;
 										}
-										if(color.b > 64) --color.b;
-										if(color.b > 64) --color.b;
-										if(color.b > 64) --color.b;
-										if(color.b > 64) --color.b;
+										if(nextColor > 64) --color.b;
+										if(nextColor > 64) --color.b;
+										if(nextColor > 64) --color.b;
+										if(nextColor > 64) --color.b;
 									}
 								}
 							}
 							sf::Color col;
 							if(map->tiles[worldX + mapWidth*worldY].inFov) {
-								col = color;
+								col = sf::Color(0, 0, nextColor);
 							} else if(map->isExplored(worldX, worldY)) {
 								col = colors::darkestBlue;
 							} else col = colors::black;
