@@ -218,7 +218,7 @@ void TemporaryAi::decreaseTurns(Actor* owner) {
 void TemporaryAi::applyTo(Actor* actor) {
 	oldAi = std::move(actor->ai);
 	this->faction = oldAi->faction;
-	actor->ai = std::unique_ptr<Ai>(this);
+	actor->ai.reset(this);
 }
 
 std::unique_ptr<Action> ConfusedMonsterAi::getNextAction(Actor* owner) {
