@@ -5,6 +5,7 @@
 #include "colors.hpp"
 #include "destructible.hpp"
 #include "effect.hpp"
+#include "event.hpp"
 #include "font.hpp"
 #include "gameplay_state.hpp"
 #include "io.hpp"
@@ -108,6 +109,13 @@ void Renderer::renderMap(const World* const world, sf::RenderWindow* window) {
 		}
 	}
 }
+
+void Renderer::notify(Event& event) {
+	if(auto e = dynamic_cast<GenericActorEvent*>(&event)) {
+		std::cout << "event\n";
+	}
+}
+
 
 void Renderer::renderHighlight(const World* const world, sf::RenderWindow* window, const Point& point) {
 	goingUp ? elapsedTime += 10 : elapsedTime -= 10;
