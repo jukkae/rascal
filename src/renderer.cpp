@@ -138,7 +138,9 @@ void Renderer::notify(Event& event, World* world) {
 		int x = e->x;
 		int y = e->y;
 		int mapWidth = 120; // TODO ughh
-		world->map.tiles[x + mapWidth*y].animation->colors.at(0).b = 255;
+		if(world->map.tiles[x + mapWidth*y].animation) {
+			world->map.tiles[x + mapWidth*y].animation->colors.at(0).b = 255;
+		}
 	}
 }
 

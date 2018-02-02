@@ -28,7 +28,7 @@ State(engine, window) {
 	gui.setState(this);
 	renderer.setState(this);
 	world->map.setWorld(world);
-	world->map.generateMap(MapType::WATER /*TODO default*/);
+	world->map.generateMap();
 	newGame(engine);
 
 	// not really the correct place for following, but w/e
