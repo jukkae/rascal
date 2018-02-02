@@ -46,6 +46,7 @@ void Renderer::renderMap(const World* const world, sf::RenderWindow* window) {
 		for(int y = 0; y < mapHeight; ++y) {
 			if(map->tiles[x + mapWidth*y].terrain == Terrain::WATER && map->tiles[x + mapWidth*y].walkable) {
 				previous.at(x + mapWidth*y) = map->tiles[x + mapWidth*y].animation->colors[0].b;
+				if(previous.at(x + mapWidth*y) > 0) previous.at(x + mapWidth*y) = previous.at(x + mapWidth*y) - 1;
 			}
 		}
 	}
@@ -81,6 +82,7 @@ void Renderer::renderMap(const World* const world, sf::RenderWindow* window) {
 								//blue = 255;
 								//color.b = blue;
 							}
+							//TODO cell automaton doesn't work because it's only run in FOV
 							for(int i = -1; i <= 1; ++i) {
 								for(int j = -1; j <= 1; ++j) {
 									if(i == 0 && j == 0) continue;
@@ -89,9 +91,9 @@ void Renderer::renderMap(const World* const world, sf::RenderWindow* window) {
 									else {
 										int neighbor = previous[(worldX+i) + mapWidth*(worldY+j)];
 										if(neighbor > color.b) {
-											color.b = neighbor - 1;
+											color.b = neighbor - 2;
 										} else {
-											//--color.b;
+											--color.b;
 										}
 										--color.b;
 										--color.b;
