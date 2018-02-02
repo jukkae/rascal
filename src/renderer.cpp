@@ -44,6 +44,7 @@ void Renderer::renderMap(const World* const world, sf::RenderWindow* window) {
 	std::vector<int> previous(mapWidth*mapHeight);
 	for(int x = 0; x < mapWidth; ++x) {
 		for(int y = 0; y < mapHeight; ++y) {
+			previous.at(x + mapWidth*y) = 0;
 			if(map->tiles[x + mapWidth*y].terrain == Terrain::WATER && map->tiles[x + mapWidth*y].walkable) {
 				previous.at(x + mapWidth*y) = map->tiles[x + mapWidth*y].animation->colors[0].b;
 				if(previous.at(x + mapWidth*y) > 0) previous.at(x + mapWidth*y) = previous.at(x + mapWidth*y) - 1;
@@ -66,7 +67,7 @@ void Renderer::renderMap(const World* const world, sf::RenderWindow* window) {
 				if(worldX < 0 || worldX >= mapWidth || worldY < 0 || worldY >= mapHeight) {
 					rectangle.setFillColor(colors::black);
 				} // TODO this code is getting bad
-				else if(map->tiles[worldX + mapWidth*worldY].inFov) {
+				else if(map->tiles[worldX + mapWidth*worldY].inFov || map->tiles[worldX + mapWidth*worldY].terrain == Terrain::WATER) {
 					if(map->tiles[worldX + mapWidth*worldY].terrain == Terrain::WATER && map->tiles[worldX + mapWidth*worldY].walkable) {
 						if(map->tiles[worldX + mapWidth*worldY].animation) {
 							//Animation& animation = const_cast<Animation&>(*map->tiles[worldX + mapWidth*worldY].animation); // TODO i know i know
@@ -91,16 +92,18 @@ void Renderer::renderMap(const World* const world, sf::RenderWindow* window) {
 									else {
 										int neighbor = previous[(worldX+i) + mapWidth*(worldY+j)];
 										if(neighbor > color.b) {
-											color.b = neighbor - 2;
+											color.b = neighbor - 1;
 										} else {
-											--color.b;
+											//--color.b;
 										}
-										--color.b;
-										--color.b;
+										if(color.b > 0) --color.b;
 									}
 								}
 							}
-							sf::Color col = color;
+							sf::Color col;
+							//if(map->tiles[worldX + mapWidth*worldY].inFov) {
+								col = color;
+							//} else col = colors::black;
 							rectangle.setFillColor(col);
 						}
 						//rectangle.setFillColor(colors::lightBlue);
