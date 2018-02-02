@@ -13,7 +13,6 @@
 #include "map_utils.hpp"
 #include "pickable.hpp"
 #include "transporter.hpp"
-#include "victory_state.hpp"
 #include "world.hpp"
 #include <chrono>
 #include <SFML/Window/Mouse.hpp>
@@ -45,6 +44,7 @@ void GameplayState::initLoaded(Engine* engine) {
 void GameplayState::newGame(Engine* engine) {
 	map_utils::addPlayer(world, &world->map);
 	map_utils::addStairs(world, &world->map);
+	map_utils::addDoors(world, &world->map);
 	map_utils::addMcGuffin(world, &world->map, world->level);
 	map_utils::addItems(world, &world->map);
 	map_utils::addMonsters(world, &world->map);
@@ -80,7 +80,7 @@ void GameplayState::render() {
 void GameplayState::notify(Event& event) {
 	//TODO proper filtering
 	if(auto e = dynamic_cast<PlayerDeathEvent*>(&event)) {
-		std::unique_ptr<State> gameOverState = std::make_unique<GameOverState>(engine, e->actor);
+		std::unique_ptr<State> gameOverState = std::make_unique<GameOverState>(engine, e->actor, player.get());
 		engine->pushState(std::move(gameOverState));
 	} 
 	if(auto e = dynamic_cast<PlayerStatChangeEvent*>(&event)) {
@@ -88,7 +88,8 @@ void GameplayState::notify(Event& event) {
 		engine->pushState(std::move(levelUpMenuState));
 	}
 	gui.notify(event);
-	//renderer.notify(event);
+	player->notify(event);
+	renderer.notify(event, world); // TODO nasty
 	//audioSystem.notify(event);
 }
 
@@ -134,9 +135,10 @@ void GameplayState::nextLevel() {
 
 	std::unique_ptr<World> w = std::make_unique<World>(120, 72);
 	w->level = world->level + 1;
+	w->radiation = world->level + 1;
 	w->time = world->time;
 	if(w->level > 5) {
-		std::unique_ptr<State> victoryState = std::make_unique<VictoryState>(engine, world->getPlayer());
+		std::unique_ptr<State> victoryState = std::make_unique<GameOverState>(engine, world->getPlayer(), player.get(), true);
 		engine->pushState(std::move(victoryState));
 	}
 	gui.message(sf::Color::Magenta, "You take a moment to rest, and recover your strength.");
@@ -163,6 +165,7 @@ void GameplayState::nextLevel() {
 	if(world->level == 3) world->map.generateMap(MapType::PILLARS);
 	else world->map.generateMap(MapType::BUILDING);
 
+	map_utils::addDoors(world, &world->map);
 	map_utils::addItems(world, &world->map);
 	map_utils::addMonsters(world, &world->map, world->level);
 	if(downstairs) {

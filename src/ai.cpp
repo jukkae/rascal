@@ -15,9 +15,11 @@
 #include "gui.hpp"
 #include "io.hpp"
 #include "inventory_menu_state.hpp"
+#include "los.hpp"
 #include "map.hpp"
 #include "pickable.hpp"
 #include "persistent.hpp"
+#include "point.hpp"
 #include "state.hpp"
 #include "level_up_menu_state.hpp"
 #include "main_menu_state.hpp"
@@ -75,6 +77,9 @@ std::unique_ptr<Action> PlayerAi::getNextAction(Actor* actor) {
 					engine->pushState(std::move(inventoryMenuState));
 					break;
 				}
+				case k::O: {
+					return std::make_unique<OpenAction>(OpenAction(actor));
+				}
 				case k::Comma: {
 					return std::make_unique<PickupAction>(PickupAction(actor));
 				}
@@ -114,6 +119,10 @@ std::unique_ptr<Action> MonsterAi::getNextAction(Actor* actor) {
 	World* world = actor->world;
 	Direction direction = Direction::NONE;
 	Actor* player = world->getPlayer();
+	/*if (los::is_visible(Point(actor->x, actor->y), Point(player->x, player->y), &world->map, world->getActorsAsPtrs(), constants::DEFAULT_ENEMY_FOV_RADIUS)) {
+		actor->col = colors::red;
+	} else  { actor->col = colors::black; }*/
+
 	if (actor->destructible && actor->destructible->isDead()) return std::make_unique<WaitAction>(WaitAction(actor));
 
 	if(actor->destructible->hp <= actor->destructible->maxHp * 0.3 + (0.1 * player->body->getModifier(player->body->charisma))) {
@@ -125,7 +134,8 @@ std::unique_ptr<Action> MonsterAi::getNextAction(Actor* actor) {
 	}
 
 	if(aiState == AiState::NORMAL) {
-		if (actor->world->isInFov(actor->x, actor->y)) {
+		//if (actor->world->isInFov(actor->x, actor->y)) {
+		if (los::is_visible(Point(actor->x, actor->y), Point(player->x, player->y), &world->map, world->getActorsAsPtrs(), constants::DEFAULT_ENEMY_FOV_RADIUS)) {
 			moveCount = TRACKING_TURNS; //TODO also track if was in FOV, and fire event when first seeing player
 		} else { --moveCount; }
 
@@ -208,7 +218,7 @@ void TemporaryAi::decreaseTurns(Actor* owner) {
 void TemporaryAi::applyTo(Actor* actor) {
 	oldAi = std::move(actor->ai);
 	this->faction = oldAi->faction;
-	actor->ai = std::unique_ptr<Ai>(this);
+	actor->ai.reset(this);
 }
 
 std::unique_ptr<Action> ConfusedMonsterAi::getNextAction(Actor* owner) {

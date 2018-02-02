@@ -44,6 +44,7 @@ Engine::~Engine() {
 }
 
 void Engine::newGame() {
+	gameOver = false;
 	if(io::fileExists(constants::SAVE_FILE_NAME)) {
 		io::removeFile(constants::SAVE_FILE_NAME);
 	}
@@ -87,11 +88,12 @@ void Engine::executeEngineCommand() {
 }
 
 void Engine::exit() {
-	save();
+	if(!gameOver) save();
 	::exit(0);
 }
 
 void Engine::load() {
+	gameOver = false;
 	std::ifstream ifs(constants::SAVE_FILE_NAME);
 	boost::archive::text_iarchive ia(ifs);
 

@@ -21,7 +21,9 @@ float Destructible::takeDamage(Actor* owner, float damage, DamageType type) {
 	if(type == DamageType::NORMAL) damage -= defense;
 	if(damage > 0) {
 		if(owner->body) {
-			int mod = owner->body->getModifier(owner->body->agility);
+			int mod = 0;
+			if(type != DamageType::RADIATION) mod = owner->body->getModifier(owner->body->agility);
+			else mod = owner->body->getModifier(owner->body->endurance);
 			damage -= mod;
 		}
 		hp -= damage;

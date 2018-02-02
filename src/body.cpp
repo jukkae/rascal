@@ -20,12 +20,11 @@ agility(a),
 luck(l),
 speed(spd)
 {
-	bodyParts.push_back(BodyPart::HAND_L);
-	bodyParts.push_back(BodyPart::HAND_R);
-	bodyParts.push_back(BodyPart::FOOT_L);
-	bodyParts.push_back(BodyPart::FOOT_R);
-	bodyParts.push_back(BodyPart::TORSO);
-	bodyParts.push_back(BodyPart::HEAD);
+	bodyParts.push_back(std::pair<BodyPart, bool>(BodyPart::HAND_L, true));
+	bodyParts.push_back(std::pair<BodyPart, bool>(BodyPart::HAND_R, true));
+	bodyParts.push_back(std::pair<BodyPart, bool>(BodyPart::FEET,   true));
+	bodyParts.push_back(std::pair<BodyPart, bool>(BodyPart::TORSO,  true));
+	bodyParts.push_back(std::pair<BodyPart, bool>(BodyPart::HEAD,   true));
 };
 
 int Body::getModifier(int attribute) {
@@ -47,4 +46,10 @@ Body Body::createRandomBody() {
 	int l = d6() + d6() + d6();
 	int spd = 10; //default to normal speed
 	return Body(s, p, e, c, i, a, l, spd);
+}
+
+std::vector<BodyPart> Body::getFreeBodyParts() {
+	std::vector<BodyPart> freeParts;
+	for(auto b : bodyParts) if(b.second) freeParts.push_back(b.first);
+	return freeParts;
 }

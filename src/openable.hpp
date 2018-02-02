@@ -1,15 +1,13 @@
-#ifndef COMESTIBLE_HPP
-#define COMESTIBLE_HPP
-class Actor;
-
-class Comestible {
+#ifndef OPENABLE_HPP
+#define OPENABLE_HPP
+class Openable {
 public:
-	int nutrition = 20000;
+	bool open = false;
 private:
 	friend class boost::serialization::access;
 	template<class Archive>
 	void serialize(Archive & ar, const unsigned int version) {
-		ar & nutrition;
+		ar & open;
 	}
 };
-#endif /* COMESTIBLE_HPP */
+#endif /* OPENABLE_HPP */

@@ -28,7 +28,12 @@ bool HealthEffect::applyTo(Actor* actor) {
 AiChangeEffect::AiChangeEffect(std::unique_ptr<TemporaryAi> newAi) : newAi(std::move(newAi)) {;}
 
 bool AiChangeEffect::applyTo(Actor* actor) {
-	newAi->applyTo(actor);
+	newAi = std::make_unique<ConfusedMonsterAi>(10);
+	//newAi->applyTo(actor); FIXME This is bad, okay
+	newAi->oldAi = std::move(actor->ai);
+	newAi->faction = newAi->oldAi->faction;
+	actor->ai = std::move(newAi);
+
 	AiChangeEvent e(actor);
 	actor->world->notify(e);
 	return true;

@@ -26,9 +26,11 @@ private:
 	std::vector<MenuItem> menuItems;
 	int selectedItem;
 	std::string asciiTitle;
+	std::string bgArt;
 
 	void handleSelectedMenuItem();
 	void renderAsciiTitle();
+	void renderBgArt();
 	void showMenu();
 };
 #endif /* MAIN_MENU_STATE_HPP */

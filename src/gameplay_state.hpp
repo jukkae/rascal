@@ -5,6 +5,7 @@
 #include <boost/archive/text_iarchive.hpp>
 #include "engine.hpp"
 #include "gui.hpp"
+#include "player.hpp"
 #include "point.hpp"
 #include "renderer.hpp"
 #include <SFML/Graphics.hpp>
@@ -34,6 +35,7 @@ public:
 	void setWindow(sf::RenderWindow* w) { window = w; }
 
 	World* world = nullptr; // TODO should be private
+	std::unique_ptr<Player> player = std::make_unique<Player>();
 private:
 	Gui gui;
 	Renderer renderer;
@@ -56,6 +58,7 @@ namespace serialization {
 		ar & s->gui;
 		ar & s->world;
 		ar & s->levels;
+		ar & s->player;
 	}
 
 	template<class Archive>
@@ -68,6 +71,7 @@ namespace serialization {
 		ar & s->gui;
 		ar & s->world;
 		ar & s->levels;
+		ar & s->player;
 	}
 } // namespace boost
 } // namespace serialization

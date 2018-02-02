@@ -32,6 +32,7 @@ bool MoveAction::execute() {
 	}
 
 	if (world->isWall(targetX, targetY)) return false;
+	for (auto a : world->getActorsAt(targetX, targetY)) if (a->openable && a->blocks) return false;
 
 	// look for living actors to attack
 	for (auto& a : world->getActors()) {
@@ -82,6 +83,8 @@ bool MoveAction::execute() {
 	}
 	actor->x = targetX;
 	actor->y = targetY;
+	MoveEvent e(targetX, targetY);
+	world->notify(e);
 	return true;
 }
 
@@ -162,10 +165,12 @@ bool UseItemAction::execute() {
 
 bool DropItemAction::execute() {
 	if(actor->wornWeapon == item) { // TODO order of actions is wrong
-		actor->addAction(std::make_unique<UnWieldItemAction>(UnWieldItemAction(actor)));
+		actor->addAction(std::make_unique<UnWieldItemAction>(UnWieldItemAction(actor, item)));
 	}
-	if(actor->wornArmor == item) {
-		actor->addAction(std::make_unique<UnWieldItemAction>(UnWieldItemAction(actor)));
+	for(auto& a : actor->wornArmors) {
+		if(a == item) {
+			actor->addAction(std::make_unique<UnWieldItemAction>(UnWieldItemAction(actor, item)));
+		}
 	}
 	ActionSuccessEvent e(item, "You drop what you were holding!"); // TODO player-specific
 	actor->world->notify(e);
@@ -174,15 +179,114 @@ bool DropItemAction::execute() {
 }
 
 bool WieldItemAction::execute() {
-	if(item->attacker || item->rangedAttacker) {
-		actor->wornWeapon = item;
+	if(item->wieldable) {
+		if(item->wieldable->wieldableType == WieldableType::ONE_HAND) {
+			auto v = actor->body->getFreeBodyParts();
+			if(std::find(v.begin(), v.end(), BodyPart::HAND_L) != v.end() ||
+			   std::find(v.begin(), v.end(), BodyPart::HAND_R) != v.end()) {
+				if(item->attacker || item->rangedAttacker) {
+					for(auto& b : actor->body->bodyParts) {
+						if(b.first == BodyPart::HAND_R || b.first == BodyPart::HAND_R) {
+							b.second = false;
+							break;
+						}
+					}
+					actor->wornWeapon = item;
+					return true;
+				}
+			}
+		}
+		if(item->wieldable->wieldableType == WieldableType::TWO_HANDS) {
+			auto v = actor->body->getFreeBodyParts();
+			if(std::find(v.begin(), v.end(), BodyPart::HAND_L) != v.end() &&
+			   std::find(v.begin(), v.end(), BodyPart::HAND_R) != v.end()) {
+				if(item->attacker || item->rangedAttacker) {
+					for(auto& b : actor->body->bodyParts) {
+						if(b.first == BodyPart::HAND_L || b.first == BodyPart::HAND_R) b.second = false;
+					}
+					actor->wornWeapon = item;
+					return true;
+				}
+			}
+		}
+		if(item->wieldable->wieldableType == WieldableType::TORSO) {
+			auto v = actor->body->getFreeBodyParts();
+			if(std::find(v.begin(), v.end(), BodyPart::TORSO) != v.end()) {
+				if(item->armor) {
+					for(auto& b : actor->body->bodyParts) {
+						if(b.first == BodyPart::TORSO) b.second = false;
+					}
+					actor->wornArmors.push_back(item);
+					return true;
+				}
+			}
+		}
+		if(item->wieldable->wieldableType == WieldableType::HEAD) {
+			auto v = actor->body->getFreeBodyParts();
+			if(std::find(v.begin(), v.end(), BodyPart::HEAD) != v.end()) {
+				if(item->armor) {
+					for(auto& b : actor->body->bodyParts) {
+						if(b.first == BodyPart::HEAD) b.second = false;
+					}
+					actor->wornArmors.push_back(item);
+					return true;
+				}
+			}
+		}
+		if(item->wieldable->wieldableType == WieldableType::FEET) {
+			auto v = actor->body->getFreeBodyParts();
+			if(std::find(v.begin(), v.end(), BodyPart::FEET) != v.end()) {
+				if(item->armor) {
+					for(auto& b : actor->body->bodyParts) {
+						if(b.first == BodyPart::FEET) b.second = false;
+					}
+					actor->wornArmors.push_back(item);
+					return true;
+				}
+			}
+		}
+	}
+	return false;
+}
+
+bool UnWieldItemAction::execute() {
+	if(item->wieldable->wieldableType == WieldableType::TWO_HANDS) {
+		for(auto& b : actor->body->bodyParts) {
+			if(b.first == BodyPart::HAND_L || b.first == BodyPart::HAND_R) b.second = true;
+		}
+	}
+	if(item->wieldable->wieldableType == WieldableType::ONE_HAND) {
+		for(auto& b : actor->body->bodyParts) {
+			if((b.first == BodyPart::HAND_L || b.first == BodyPart::HAND_R) && b.second == false) {
+				b.second = true;
+				break;
+			}
+		}
+	}
+	if(item->wieldable->wieldableType == WieldableType::TORSO) {
+		for(auto& b : actor->body->bodyParts) {
+			if(b.first == BodyPart::TORSO) b.second = true;
+		}
+	}
+	if(item->wieldable->wieldableType == WieldableType::HEAD) {
+		for(auto& b : actor->body->bodyParts) {
+			if(b.first == BodyPart::HEAD) b.second = true;
+		}
+	}
+	if(item->wieldable->wieldableType == WieldableType::FEET) {
+		for(auto& b : actor->body->bodyParts) {
+			if(b.first == BodyPart::FEET) b.second = true;
+		}
+	}
+	if(actor->wornWeapon) {
+		actor->wornWeapon = nullptr;
 		return true;
 	}
-	if(item->name == "combat armor" || item->name == "leather armor") { // TODO yeah i know
-		actor->wornArmor = item;
-		return true;
+	if(actor->wornArmors.size() > 0) {
+		auto& v = actor->wornArmors;
+		if(v.end() == v.erase(std::remove_if(v.begin(), v.end(), [&](auto& a){ return a == item; }), v.end())) return true;
 	}
-	else return false;
+	return false;
 }
 
 bool EatAction::execute() {
@@ -198,18 +302,6 @@ bool EatAction::execute() {
 		actor->world->notify(e);
 		return false;
 	}
-}
-
-bool UnWieldItemAction::execute() {
-	if(actor->wornWeapon) {
-		actor->wornWeapon = nullptr;
-		return true;
-	}
-	if(actor->wornArmor) {
-		actor->wornArmor = nullptr;
-		return true;
-	}
-	else return false;
 }
 
 LookAction::LookAction(Actor* actor):
@@ -281,4 +373,35 @@ bool ShootAction::execute() {
 		}
 	}
 	return true;
+}
+
+bool OpenAction::execute() {
+	World* w = actor->world;
+	for(int x = actor->x - 1; x <= actor->x + 1; ++x) {
+		for(int y = actor->y - 1; y <= actor->y + 1; ++y) {
+			if(x == actor->x && y == actor->y) continue;
+			std::vector<Actor*> as = w->getActorsAt(x, y);
+			for(auto& a : as) if(a->openable && !a->openable->open) {
+				a->openable->open = true;
+				a->blocks = false;
+				a->blocksLight = false;
+				a->col = sf::Color(255, 255, 255);
+				return true;
+			}
+		}
+	}
+	for(int x = actor->x - 1; x <= actor->x + 1; ++x) {
+		for(int y = actor->y - 1; y <= actor->y + 1; ++y) {
+			if(x == actor->x && y == actor->y) continue;
+			std::vector<Actor*> as = w->getActorsAt(x, y);
+			for(auto& a : as) if(a->openable && a->openable->open) {
+				a->openable->open = false;
+				a->blocks = true;
+				a->blocksLight = true;
+				a->col = sf::Color(0, 0, 0);
+				return true;
+			}
+		}
+	}
+	return false;
 }

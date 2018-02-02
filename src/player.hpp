@@ -1,15 +1,19 @@
-#ifndef COMESTIBLE_HPP
-#define COMESTIBLE_HPP
-class Actor;
+#ifndef PLAYER_HPP
+#define PLAYER_HPP
 
-class Comestible {
+struct Event;
+class Player {
 public:
-	int nutrition = 20000;
+int score = 0;
+
+void notify(Event& event);
+
 private:
 	friend class boost::serialization::access;
 	template<class Archive>
 	void serialize(Archive & ar, const unsigned int version) {
-		ar & nutrition;
+		ar & score;
 	}
 };
-#endif /* COMESTIBLE_HPP */
+
+#endif /* PLAYER_HPP */

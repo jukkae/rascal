@@ -3,6 +3,7 @@
 
 #include <vector>
 #include "map.hpp"
+#include "fov.hpp" //FIXME move implementation to cpp
 
 class Actor;
 struct Event;
@@ -17,6 +18,7 @@ public:
 	void updateNextActor();
 	void updateTime();
 	void sortActors();
+	void applyRadiation(float dt);
 
 
 	Actor* getPlayer() const;
@@ -24,9 +26,10 @@ public:
 	Actor* getLiveActor(int x, int y) const;
 	std::vector<std::unique_ptr<Actor>>& getActors() { return actors; }
 	std::vector<Actor*> getActorsAt(int x, int y);
+	std::vector<Actor*> getActorsAsPtrs() { std::vector<Actor*> as; for(auto& a : actors) as.push_back(a.get()); return as; } //FIXME horrible
 
 
-	void computeFov(int x, int y, float r) { map.computeFov(x, y, r); }
+	void computeFov(int x, int y, float r) { fov::computeFov(&map, x, y, r, FovType::CIRCLE, getActorsAsPtrs()); }
 	bool isWall(int x, int y) { return map.isWall(x, y); }
 	bool canWalk(int x, int y);
 	bool isInFov(int x, int y) { return map.isInFov(x, y); }
@@ -39,6 +42,7 @@ public:
 	int height;
 	int time = 0;
 	int level = 1;
+	int radiation = 1;
 	std::vector<std::unique_ptr<Actor>> actors;
 	Map map;
 	GameplayState* state = nullptr;
@@ -51,6 +55,7 @@ private:
 		ar & actors;
 		ar & map;
 		ar & state;
+		ar & radiation;
 	}
 };
 #endif /* WORLD_HPP */

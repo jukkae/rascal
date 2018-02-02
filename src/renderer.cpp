@@ -1,12 +1,14 @@
+#include "renderer.hpp"
+
 #include "actor.hpp"
 #include "animation.hpp"
 #include "colors.hpp"
 #include "destructible.hpp"
 #include "effect.hpp"
+#include "event.hpp"
 #include "font.hpp"
 #include "gameplay_state.hpp"
 #include "io.hpp"
-#include "renderer.hpp"
 #include "status_effect.hpp"
 #include "map.hpp"
 #include "point.hpp"
@@ -38,6 +40,18 @@ void Renderer::renderMap(const World* const world, sf::RenderWindow* window) {
 	int mouseXcells = mouseXpx / constants::SQUARE_CELL_WIDTH;
 	int mouseYcells = mouseYpx / constants::SQUARE_CELL_HEIGHT;
 
+	// build buffer for cellular automaton
+	std::vector<int> previous(mapWidth*mapHeight);
+	for(int x = 0; x < mapWidth; ++x) {
+		for(int y = 0; y < mapHeight; ++y) {
+			previous.at(x + mapWidth*y) = 64;
+			if(map->tiles[x + mapWidth*y].terrain == Terrain::WATER && map->tiles[x + mapWidth*y].walkable) {
+				previous.at(x + mapWidth*y) = map->tiles[x + mapWidth*y].animation->colors[0].b;
+				if(previous.at(x + mapWidth*y) > 0) previous.at(x + mapWidth*y) = previous.at(x + mapWidth*y) - 1;
+			}
+		}
+	}
+
 	for(int x = 0; x < screenWidth; ++x) {
 		for(int y = 0; y < screenHeight; ++y) {
 			if(x == mouseXcells && y == mouseYcells) {
@@ -53,15 +67,49 @@ void Renderer::renderMap(const World* const world, sf::RenderWindow* window) {
 				if(worldX < 0 || worldX >= mapWidth || worldY < 0 || worldY >= mapHeight) {
 					rectangle.setFillColor(colors::black);
 				} // TODO this code is getting bad
-				else if(map->tiles[worldX + mapWidth*worldY].inFov) {
+				else if(map->tiles[worldX + mapWidth*worldY].inFov || map->tiles[worldX + mapWidth*worldY].terrain == Terrain::WATER) {
 					if(map->tiles[worldX + mapWidth*worldY].terrain == Terrain::WATER && map->tiles[worldX + mapWidth*worldY].walkable) {
 						if(map->tiles[worldX + mapWidth*worldY].animation) {
-							Animation& animation = const_cast<Animation&>(*map->tiles[worldX + mapWidth*worldY].animation); // TODO i know i know
-							int index = animation.phase / animation.colFreq;
-							animation.phase++;
-							if(animation.phase >= animation.colors.size() * animation.colFreq) animation.phase = 0;
-							sf::Color color = animation.colors.at(index);
-							rectangle.setFillColor(color);
+							//Animation& animation = const_cast<Animation&>(*map->tiles[worldX + mapWidth*worldY].animation); // TODO i know i know
+							//int index = animation.phase / animation.colFreq;
+							//animation.phase++;
+							//if(animation.phase >= animation.colors.size() * animation.colFreq) animation.phase = 0;
+							//sf::Color color = animation.colors.at(index);
+							Animation& animation = const_cast<Animation&>(*map->tiles[worldX + mapWidth*worldY].animation);
+							//animation.colors[0] = sf::Color(0, 0, 0);
+							sf::Color& color = animation.colors[0];
+							int blue = 0;
+							if(worldX == world->getPlayer()->x && worldY == world->getPlayer()->y) {
+								//blue = 255;
+								//color.b = blue;
+							}
+							for(int i = -1; i <= 1; ++i) {
+								for(int j = -1; j <= 1; ++j) {
+									if(i == 0 && j == 0) continue;
+									if(i + worldX < 0 || i + worldX >= mapWidth || j + worldY < 0 || j + worldY >= mapHeight) continue;
+									if(!(map->tiles[worldX+i + mapWidth*(worldY+j)].terrain == Terrain::WATER) || !map->tiles[worldX+i + mapWidth*(worldY+j)].walkable) continue;
+									else {
+										int neighbor = previous[(worldX+i) + mapWidth*(worldY+j)];
+										if(neighbor > color.b) {
+											color.b = neighbor - 4;
+										} else {
+											//--color.b;
+										}
+										if(color.b > 64) --color.b;
+										if(color.b > 64) --color.b;
+										if(color.b > 64) --color.b;
+										if(color.b > 64) --color.b;
+									}
+								}
+							}
+							sf::Color col;
+							if(map->tiles[worldX + mapWidth*worldY].inFov) {
+								col = color;
+							} else if(map->isExplored(worldX, worldY)) {
+								col = colors::darkestBlue;
+							} else col = colors::black;
+
+							rectangle.setFillColor(col);
 						}
 						//rectangle.setFillColor(colors::lightBlue);
 					} else {
@@ -84,6 +132,18 @@ void Renderer::renderMap(const World* const world, sf::RenderWindow* window) {
 		}
 	}
 }
+
+void Renderer::notify(Event& event, World* world) {
+	if(auto e = dynamic_cast<MoveEvent*>(&event)) {
+		int x = e->x;
+		int y = e->y;
+		int mapWidth = 120; // TODO ughh
+		if(world->map.tiles[x + mapWidth*y].animation) {
+			world->map.tiles[x + mapWidth*y].animation->colors.at(0).b = 255;
+		}
+	}
+}
+
 
 void Renderer::renderHighlight(const World* const world, sf::RenderWindow* window, const Point& point) {
 	goingUp ? elapsedTime += 10 : elapsedTime -= 10;

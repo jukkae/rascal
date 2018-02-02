@@ -25,16 +25,25 @@ State(engine, engine->getWindow())
 	menuItems.push_back(newGame);
 
 	if(io::fileExists(constants::SAVE_FILE_NAME) || forceShowContinue) {
-		menuItems.push_back(cont);
+		if(!engine->gameOver) menuItems.push_back(cont);
 	}
 	menuItems.push_back(exit);
 
 	selectedItem = 0;
 
+	{
 	std::ifstream fin("assets/asciiTitle.txt");
 	std::stringstream buffer;
 	buffer << fin.rdbuf();
 	asciiTitle = buffer.str();
+	}
+
+	{
+	std::ifstream fin("assets/bgArt.txt");
+	std::stringstream buffer;
+	buffer << fin.rdbuf();
+	bgArt = buffer.str();
+	}
 }
 
 void MainMenuState::handleEvents() {
@@ -69,16 +78,26 @@ void MainMenuState::update() {
 }
 
 void MainMenuState::render() {
+	renderBgArt();
 	renderAsciiTitle();
 	showMenu();
 }
 
 void MainMenuState::renderAsciiTitle() {
-	int x = 1;
+	int x = (constants::SCREEN_WIDTH - 41) / 2; // title is 41 cells wide
 	int y = 1;
 	sf::Text text(asciiTitle, font::mainFont, 16);
 	text.setPosition(x * constants::CELL_WIDTH, y * constants::CELL_HEIGHT);
 	text.setFillColor(colors::brightBlue);
+	window->draw(text);
+}
+
+void MainMenuState::renderBgArt() {
+	int x = 0; // bg is hardcoded
+	int y = 0;
+	sf::Text text(bgArt, font::mainFont, 16);
+	text.setPosition(x * constants::CELL_WIDTH, y * constants::CELL_HEIGHT);
+	text.setFillColor(colors::lightGreen);
 	window->draw(text);
 }
 
@@ -88,6 +107,7 @@ void MainMenuState::showMenu() {
 
 	int itemIndex = 0;
 	for(MenuItem item : menuItems) {
+		menuX = (constants::SCREEN_WIDTH - item.label.length()) / 2;
 		sf::Text itemText(item.label, font::mainFont, 16);
 		if (selectedItem == itemIndex) {
 			itemText.setFillColor(colors::brightBlue);

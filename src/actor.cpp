@@ -14,6 +14,8 @@
 #include "pickable.hpp"
 #include "status_effect.hpp"
 #include "transporter.hpp"
+#include "utils.hpp"
+#include "wieldable.hpp"
 #include "world.hpp"
 
 
@@ -39,9 +41,7 @@ float Actor::update(GameplayState* state) {
 			for(auto& e : statusEffects) {
 				e->update(this, state, turnCost);
 			}
-			statusEffects.erase(std::remove_if(statusEffects.begin(), statusEffects.end(),
-						[](auto& e){ return !e->isAlive(); }), statusEffects.end());
-
+			utils::erase_where(statusEffects, [](auto& e){ return !e->isAlive(); });
 			if(isPlayer()) world->computeFov(x, y, fovRadius);
 			if(isPlayer()) body->nutrition -= turnCost;
 			if(body->nutrition <= 0) destructible->die(this);
@@ -128,6 +128,7 @@ int Actor::getAttributeWithModifiers(Attribute attribute) {
 			}
 		}
 	}
+	if(value <= 0) value = 1; // 0 or 1?
 	return value;
 }
 
@@ -176,6 +177,8 @@ bool Actor::isPlayer() { return ai ? this->ai->isPlayer() : false; }
 int Actor::getAC() {
 	int ac = 0;
 	if(body) ac = 10 + body->getModifier(body->agility);
-	if(wornArmor) ++ac; //FIXME
+	for(auto& a : wornArmors) {
+		if(a->armor) ac += a->armor->acBonus;
+	}
 	return ac;
 }

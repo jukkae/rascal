@@ -6,11 +6,13 @@
 #include "action.hpp"
 #include "actor.hpp"
 #include "body.hpp"
+#include "body_part.hpp"
 #include "colors.hpp"
 #include "constants.hpp"
 #include "container.hpp"
 #include "effect.hpp"
 #include "font.hpp"
+#include "io.hpp"
 #include "status_effect.hpp"
 
 InventoryMenuState::InventoryMenuState(Engine* engine, Actor* actor) :
@@ -59,8 +61,13 @@ void InventoryMenuState::handleEvents() {
 					break;
 				case k::W:
 					if(inventoryContents.size() > 0) {
-						if(piles.at(selectedItem).at(0) == actor->wornWeapon || piles.at(selectedItem).at(0) == actor->wornArmor) {
-							actor->addAction(std::make_unique<UnWieldItemAction>(UnWieldItemAction(actor)));
+						if(piles.at(selectedItem).at(0) == actor->wornWeapon) {
+							actor->addAction(std::make_unique<UnWieldItemAction>(UnWieldItemAction(actor, piles.at(selectedItem).at(0))));
+							engine->addEngineCommand(ContinueCommand(engine));
+						}
+						//else if(piles.at(selectedItem).at(0) == actor->wornArmor) {
+						else if(actor->wornArmors.end() != std::find_if(actor->wornArmors.begin(), actor->wornArmors.end(), [&](auto& a){ return piles.at(selectedItem).at(0) == a; })) {
+							actor->addAction(std::make_unique<UnWieldItemAction>(UnWieldItemAction(actor, piles.at(selectedItem).at(0))));
 							engine->addEngineCommand(ContinueCommand(engine));
 						} else {
 							actor->addAction(std::make_unique<WieldItemAction>(WieldItemAction(actor, piles.at(selectedItem).at(0))));
@@ -129,6 +136,7 @@ void InventoryMenuState::render() {
 	window->draw(commandsText);
 
 	renderStats();
+	renderBodyParts();
 
 	window->display();
 }
@@ -200,6 +208,45 @@ void InventoryMenuState::renderStats() {
 		noText.setPosition(x*constants::CELL_WIDTH, (y+1)*constants::CELL_HEIGHT);
 		noText.setFillColor(colors::brightBlue);
 		window->draw(noText);
+	}
+}
+
+void InventoryMenuState::renderBodyParts() {
+	sf::Text heading("B O D Y", font::mainFont, 16);
+	heading.setPosition(90*constants::CELL_WIDTH, constants::CELL_HEIGHT);
+	heading.setFillColor(colors::brightBlue);
+	window->draw(heading);
+
+	int x = 90;
+	int y = 3;
+
+	if(actor->body) {
+		Body* b = actor->body.get();
+
+		auto freeBodyParts = b->bodyParts;
+
+		std::string bps = "body parts:";
+		sf::Text bpsText(bps, font::mainFont, 16);
+		bpsText.setPosition(x*constants::CELL_WIDTH, (y+1)*constants::CELL_HEIGHT);
+		bpsText.setFillColor(colors::brightBlue);
+		window->draw(bpsText);
+
+		for(auto& bp : freeBodyParts) {
+			++y;
+			std::string bpt = "";
+			switch(bp.first) {
+				case BodyPart::HAND_L: bpt.append("left hand");  break;
+				case BodyPart::HAND_R: bpt.append("right hand"); break;
+				case BodyPart::FEET  : bpt.append("feet");       break;
+				case BodyPart::TORSO : bpt.append("torso");      break;
+				case BodyPart::HEAD  : bpt.append("head");       break;
+				default: break;
+			};
+			sf::Color col;
+			if(bp.second) col = colors::brightBlue;
+			else col = colors::blue;
+			io::text(bpt, x, y+1, col);
+		}
 	}
 }
 

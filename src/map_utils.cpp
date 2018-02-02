@@ -1,5 +1,6 @@
 #include "actor.hpp"
 #include "ai.hpp"
+#include "armor.hpp"
 #include "attacker.hpp"
 #include "body.hpp"
 #include "colors.hpp"
@@ -13,6 +14,7 @@
 #include "pickable.hpp"
 #include "status_effect.hpp"
 #include "transporter.hpp"
+#include "wieldable.hpp"
 #include "world.hpp"
 #include <SFML/Graphics.hpp>
 
@@ -21,7 +23,26 @@ void map_utils::addItems(World* world, Map* map) {
 		for(int y = 0; y < map->height; ++y) {
 			int r = d100();
 			if (!map->isWall(x, y) && r == 1) { // can't use canWalk yet
-				world->addActor(item::makeItem(world, map, x, y));
+					world->addActor(item::makeItem(world, map, x, y));
+			}
+		}
+	}
+}
+
+void map_utils::addDoors(World* world, Map* map) {
+	for(int x = 1; x < map->width-1; ++x) {
+		for(int y = 1; y < map->height-1; ++y) {
+			int r = d100();
+			if (!map->isWall(x, y)) {
+				if ((map->isWall(x-1, y) && map->isWall(x+1, y)) ||
+					(map->isWall(x, y-1) && map->isWall(x, y+1))) {
+					std::unique_ptr<Actor> door = std::make_unique<Actor>(x, y, '+', "door", sf::Color::Black, 0);
+					door->openable = std::make_unique<Openable>();
+					door->blocks = true;
+					door->blocksLight = true;
+					door->fovOnly = false;
+					world->addActor(std::move(door));
+				}
 			}
 		}
 	}
@@ -154,6 +175,15 @@ std::unique_ptr<Actor> npc::makeMonster(World* world, Map* map, int x, int y, in
 
 		punk->container->add(std::move(stimpak));
 
+		std::unique_ptr<Actor> cookie = std::make_unique<Actor>(x, y, '%', "cookie", sf::Color(128, 128, 0));
+		cookie->blocks = false;
+		cookie->pickable = std::make_unique<Pickable>();
+		cookie->comestible = std::make_unique<Comestible>();
+		cookie->comestible->nutrition = 10000;
+		cookie->world = world;
+
+		punk->container->add(std::move(cookie));
+
 		return punk;
 	} else if (r < 80) {
 		std::unique_ptr<Actor> fighter = std::make_unique<Actor>(x, y, 'H', "fighter", colors::darkGreen, 1);
@@ -161,6 +191,17 @@ std::unique_ptr<Actor> npc::makeMonster(World* world, Map* map, int x, int y, in
 		fighter->attacker = std::make_unique<Attacker>(2, 3, 0);
 		fighter->ai = std::make_unique<MonsterAi>();
 		fighter->body = std::make_unique<Body>();
+
+		fighter->container = std::make_unique<Container>(10);
+
+		std::unique_ptr<Actor> jerky = std::make_unique<Actor>(x, y, '%', "jerky", sf::Color(128, 0, 0));
+		jerky->blocks = false;
+		jerky->pickable = std::make_unique<Pickable>();
+		jerky->comestible = std::make_unique<Comestible>();
+		jerky->world = world;
+
+		fighter->container->add(std::move(jerky));
+
 		return fighter;
 	} else if (r < 90) {
 		std::unique_ptr<Actor> guard = std::make_unique<Actor>(x, y, 'h', "guard", colors::darkGreen, 1);
@@ -168,6 +209,18 @@ std::unique_ptr<Actor> npc::makeMonster(World* world, Map* map, int x, int y, in
 		guard->attacker = std::make_unique<Attacker>(1, 3, 0);
 		guard->ai = std::make_unique<MonsterAi>(200);
 		guard->body = std::make_unique<Body>();
+
+		guard->container = std::make_unique<Container>(10);
+
+		std::unique_ptr<Actor> ration = std::make_unique<Actor>(x, y, '%', "ration", sf::Color(0, 128, 0));
+		ration->blocks = false;
+		ration->pickable = std::make_unique<Pickable>();
+		ration->comestible = std::make_unique<Comestible>();
+		ration->comestible->nutrition = 30000;
+		ration->world = world; //FIXME that I need to do this is bad and error-prone. Figure out better ways of actor creation.
+
+		guard->container->add(std::move(ration));
+
 		return guard;
 	}
 	else {
@@ -229,6 +282,7 @@ std::unique_ptr<Actor> item::makeItem(World* world, Map* map, int x, int y) {
 		baton->pickable = std::make_unique<Pickable>();
 		baton->attacker = std::make_unique<Attacker>(1, 3, 1);
 		baton->attacker->effectGenerator = std::make_unique<EffectGeneratorFor<StatusEffectEffect>>(Attribute::SPEED, -4);
+		baton->wieldable = std::make_unique<Wieldable>(WieldableType::ONE_HAND);
 		return baton;
 	} else if(r < 85) {
 		std::unique_ptr<Actor> knuckleduster = std::make_unique<Actor>(x, y, '|', "knuckle duster", sf::Color(128, 255, 128));
@@ -236,34 +290,63 @@ std::unique_ptr<Actor> item::makeItem(World* world, Map* map, int x, int y) {
 		knuckleduster->pickable = std::make_unique<Pickable>();
 		knuckleduster->attacker = std::make_unique<Attacker>(2, 6, 2);
 		knuckleduster->attacker->effectGenerator = std::make_unique<EffectGeneratorFor<MoveEffect>>();
+		knuckleduster->wieldable = std::make_unique<Wieldable>(WieldableType::ONE_HAND);
 		return knuckleduster;
 	} else if(r < 90) {
 		std::unique_ptr<Actor> rock = std::make_unique<Actor>(x, y, '|', "rock", sf::Color(255, 128, 128));
 		rock->blocks = false;
 		rock->pickable = std::make_unique<Pickable>();
 		rock->attacker = std::make_unique<Attacker>(1, 4, 0);
+		rock->wieldable = std::make_unique<Wieldable>(WieldableType::ONE_HAND);
 		return rock;
-	} else if(r < 95) {
+	} else if(r < 92) {
 		std::unique_ptr<Actor> pistol = std::make_unique<Actor>(x, y, '\\', "pistol", sf::Color(255, 128, 255));
 		pistol->blocks = false;
 		pistol->pickable = std::make_unique<Pickable>();
 		pistol->rangedAttacker = std::make_unique<RangedAttacker>(1, 4, 0, 10.0);
+		pistol->wieldable = std::make_unique<Wieldable>(WieldableType::ONE_HAND);
 		return pistol;
-	} else if(r < 97){
+	} else if(r < 94){
 		std::unique_ptr<Actor> rifle = std::make_unique<Actor>(x, y, '\\', "rifle", sf::Color(128, 255, 255));
 		rifle->blocks = false;
 		rifle->pickable = std::make_unique<Pickable>();
 		rifle->rangedAttacker = std::make_unique<RangedAttacker>(2, 6, 0, 10.0);
+		rifle->wieldable = std::make_unique<Wieldable>(WieldableType::TWO_HANDS);
 		return rifle;
-	} else if(r < 98){
+	} else if(r < 95){
 		std::unique_ptr<Actor> armor = std::make_unique<Actor>(x, y, '[', "leather armor", sf::Color(0, 128, 255));
 		armor->blocks = false;
 		armor->pickable = std::make_unique<Pickable>();
+		armor->wieldable = std::make_unique<Wieldable>(WieldableType::TORSO);
+		armor->armor = std::make_unique<Armor>(1);
 		return armor;
-	} else if(r < 99){
+	} else if(r < 96){
 		std::unique_ptr<Actor> armor = std::make_unique<Actor>(x, y, '[', "combat armor", sf::Color(128, 255, 255));
 		armor->blocks = false;
 		armor->pickable = std::make_unique<Pickable>();
+		armor->wieldable = std::make_unique<Wieldable>(WieldableType::TORSO);
+		armor->armor = std::make_unique<Armor>(2);
+		return armor;
+	} else if(r < 97){
+		std::unique_ptr<Actor> armor = std::make_unique<Actor>(x, y, '[', "flat cap", sf::Color(0, 128, 128));
+		armor->blocks = false;
+		armor->pickable = std::make_unique<Pickable>();
+		armor->wieldable = std::make_unique<Wieldable>(WieldableType::HEAD);
+		armor->armor = std::make_unique<Armor>(1);
+		return armor;
+	} else if(r < 98){
+		std::unique_ptr<Actor> armor = std::make_unique<Actor>(x, y, '[', "combat helmet", sf::Color(255, 0, 128));
+		armor->blocks = false;
+		armor->pickable = std::make_unique<Pickable>();
+		armor->wieldable = std::make_unique<Wieldable>(WieldableType::HEAD);
+		armor->armor = std::make_unique<Armor>(2);
+		return armor;
+	} else if(r < 99){
+		std::unique_ptr<Actor> armor = std::make_unique<Actor>(x, y, '[', "combat boots", sf::Color(128, 0, 128));
+		armor->blocks = false;
+		armor->pickable = std::make_unique<Pickable>();
+		armor->wieldable = std::make_unique<Wieldable>(WieldableType::FEET);
+		armor->armor = std::make_unique<Armor>(1);
 		return armor;
 	} else {
 		std::unique_ptr<Actor> navcomp = std::make_unique<Actor>(x, y, 'q', "navigation computer", sf::Color::Blue, 0);

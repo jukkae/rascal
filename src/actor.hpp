@@ -14,6 +14,7 @@
 #include <SFML/Graphics/Color.hpp>
 class Action;
 class Ai;
+class Armor;
 class Attacker;
 class Body;
 class Container;
@@ -23,11 +24,16 @@ class Pickable;
 class StatusEffect;
 class Transporter;
 class Comestible;
+class Wieldable;
 class GameplayState;
 
 #include "animation.hpp"
 #include "attribute.hpp"
 #include "direction.hpp"
+#include "wieldable.hpp" //FIXME for serialization for now
+#include "armor.hpp" //FIXME for serialization for now
+#include "openable.hpp" //FIXME for serialization for now
+#include "comestible.hpp" //FIXME for serialization for now
 
 class World;
 class Actor {
@@ -38,18 +44,22 @@ public:
 	std::string name;
 	boost::optional<float> energy; // Shouldn't be public // TODO should be std::optional
 	bool blocks; // does it block movement?
+	bool blocksLight = false;
 	bool fovOnly; // visible only when in fov?
 	std::unique_ptr<Body> body;
 	std::unique_ptr<Attacker> attacker;
 	std::unique_ptr<RangedAttacker> rangedAttacker;
+	std::unique_ptr<Armor> armor;
 	std::unique_ptr<Destructible> destructible;
 	std::unique_ptr<Ai> ai;
 	std::unique_ptr<Pickable> pickable;
 	std::unique_ptr<Container> container;
 	std::unique_ptr<Transporter> transporter;
 	std::unique_ptr<Comestible> comestible;
+	std::unique_ptr<Wieldable> wieldable;
+	std::unique_ptr<Openable> openable;
 	Actor* wornWeapon = nullptr;
-	Actor* wornArmor = nullptr;
+	std::vector<Actor*> wornArmors;
 	std::experimental::optional<Animation> animation;
 
 	World* world = nullptr;
@@ -83,10 +93,14 @@ private:
 		ar & name;
 		ar & energy;
 		ar & blocks;
+		ar & blocksLight;
 		ar & fovOnly;
 		ar & body;
+		ar & wieldable;
+		ar & openable;
 		ar & attacker;
 		ar & rangedAttacker;
+		ar & armor;
 		ar & destructible;
 		ar & ai;
 		ar & pickable;
@@ -94,9 +108,11 @@ private:
 		ar & actionsQueue;
 		ar & transporter;
 		ar & wornWeapon;
+		ar & wornArmors;
 		ar & statusEffects;
 		ar & world;
 		ar & animation;
+		ar & comestible;
     }   
 };
 #endif /* ACTOR_HPP */

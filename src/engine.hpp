@@ -32,6 +32,7 @@ public:
 	void load();
 
 	sf::RenderWindow* getWindow() { return window; }
+	bool gameOver = false; //TODO this is bad and i feel bad
 private:
 	sf::RenderWindow* window;
 	State* gameplayState;

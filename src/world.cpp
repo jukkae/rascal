@@ -1,5 +1,7 @@
 #include "world.hpp"
+#include "damage.hpp"
 #include "destructible.hpp"
+#include "dice.hpp"
 #include "effect.hpp"
 #include "event.hpp"
 #include "gameplay_state.hpp"
@@ -38,6 +40,7 @@ void World::updateNextActor() {
 
 	float actionTime = activeActor->update(state);
 	*activeActor->energy -= actionTime;
+	applyRadiation(actionTime);
 
     /*actors.erase(actors.begin());
     auto it = std::lower_bound(actors.begin(), actors.end(), activeActor, [](const auto& lhs, const auto& rhs) { return lhs->energy > rhs->energy; });
@@ -45,6 +48,23 @@ void World::updateNextActor() {
 
 	sortActors();
 	updateTime();
+}
+
+void World::applyRadiation(float dt) {
+	if (dt > 0) {
+		int r = d1000();
+		int rx = r * dt;
+		if(rx <= radiation * 100){
+			int dmg = 0;
+			if(d3() == 1) {
+				dmg = d2();
+			}
+			Actor* player = getPlayer();
+			player->destructible->takeDamage(player, dmg, DamageType::RADIATION);
+			GenericActorEvent e(player, "You feel a bit sick from the radiation...");
+			notify(e);
+		}
+	}
 }
 
 void World::updateTime() {

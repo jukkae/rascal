@@ -18,5 +18,6 @@ namespace constants {
 	static int const DEFAULT_MAP_WIDTH = 120;
 	static int const DEFAULT_MAP_HEIGHT = 72;
 	static int const DEFAULT_FOV_RADIUS = 25;
+	static int const DEFAULT_ENEMY_FOV_RADIUS = 10;
 }
 #endif /* CONSTANTS_HPP */
