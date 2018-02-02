@@ -57,12 +57,35 @@ void Renderer::renderMap(const World* const world, sf::RenderWindow* window) {
 				else if(map->tiles[worldX + mapWidth*worldY].inFov) {
 					if(map->tiles[worldX + mapWidth*worldY].terrain == Terrain::WATER && map->tiles[worldX + mapWidth*worldY].walkable) {
 						if(map->tiles[worldX + mapWidth*worldY].animation) {
-							Animation& animation = const_cast<Animation&>(*map->tiles[worldX + mapWidth*worldY].animation); // TODO i know i know
-							int index = animation.phase / animation.colFreq;
-							animation.phase++;
-							if(animation.phase >= animation.colors.size() * animation.colFreq) animation.phase = 0;
-							sf::Color color = animation.colors.at(index);
-							rectangle.setFillColor(color);
+							//Animation& animation = const_cast<Animation&>(*map->tiles[worldX + mapWidth*worldY].animation); // TODO i know i know
+							//int index = animation.phase / animation.colFreq;
+							//animation.phase++;
+							//if(animation.phase >= animation.colors.size() * animation.colFreq) animation.phase = 0;
+							//sf::Color color = animation.colors.at(index);
+							Animation& animation = const_cast<Animation&>(*map->tiles[worldX + mapWidth*worldY].animation);
+							//animation.colors[0] = sf::Color(0, 0, 0);
+							sf::Color& color = animation.colors[0];
+							int blue = 0;
+							if(worldX == world->getPlayer()->x && worldY == world->getPlayer()->y) {
+								blue = 255;
+								color.b = blue;
+							}
+							for(int i = -1; i <= 1; ++i) {
+								for(int j = -1; j <= 1; ++j) {
+									if(i == 0 && j == 0) continue;
+									if(i + worldX < 0 || i + worldX >= mapWidth || j + worldY < 0 || j + worldY >= mapHeight) continue;
+									else {
+										Tile neighbor = map->tiles[(worldX+i) + mapWidth*(worldY+j)];
+										if(neighbor.animation->colors.at(0).b > color.b) {
+											++color.b;
+										} else {
+											--color.b;
+										}
+									}
+								}
+							}
+							sf::Color col = color;
+							rectangle.setFillColor(col);
 						}
 						//rectangle.setFillColor(colors::lightBlue);
 					} else {
