@@ -128,6 +128,7 @@ int Actor::getAttributeWithModifiers(Attribute attribute) {
 			}
 		}
 	}
+	if(value <= 0) value = 1; // 0 or 1?
 	return value;
 }
 
