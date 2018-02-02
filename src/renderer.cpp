@@ -40,6 +40,16 @@ void Renderer::renderMap(const World* const world, sf::RenderWindow* window) {
 	int mouseXcells = mouseXpx / constants::SQUARE_CELL_WIDTH;
 	int mouseYcells = mouseYpx / constants::SQUARE_CELL_HEIGHT;
 
+	// build buffer for cellular automaton
+	std::vector<int> previous(mapWidth*mapHeight);
+	for(int x = 0; x < mapWidth; ++x) {
+		for(int y = 0; y < mapHeight; ++y) {
+			if(map->tiles[x + mapWidth*y].terrain == Terrain::WATER && map->tiles[x + mapWidth*y].walkable) {
+				previous.at(x + mapWidth*y) = map->tiles[x + mapWidth*y].animation->colors[0].b;
+			}
+		}
+	}
+
 	for(int x = 0; x < screenWidth; ++x) {
 		for(int y = 0; y < screenHeight; ++y) {
 			if(x == mouseXcells && y == mouseYcells) {
@@ -77,13 +87,13 @@ void Renderer::renderMap(const World* const world, sf::RenderWindow* window) {
 									if(i + worldX < 0 || i + worldX >= mapWidth || j + worldY < 0 || j + worldY >= mapHeight) continue;
 									if(!(map->tiles[worldX+i + mapWidth*(worldY+j)].terrain == Terrain::WATER) || !map->tiles[worldX+i + mapWidth*(worldY+j)].walkable) continue;
 									else {
-										Tile neighbor = map->tiles[(worldX+i) + mapWidth*(worldY+j)];
-										if(neighbor.animation->colors.at(0).b > color.b) {
-											++color.b;
-											color.b = neighbor.animation->colors.at(0).b - 1;
+										int neighbor = previous[(worldX+i) + mapWidth*(worldY+j)];
+										if(neighbor > color.b) {
+											color.b = neighbor - 1;
 										} else {
 											//--color.b;
 										}
+										--color.b;
 										--color.b;
 									}
 								}
