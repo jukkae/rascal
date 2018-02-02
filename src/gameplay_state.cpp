@@ -89,7 +89,7 @@ void GameplayState::notify(Event& event) {
 	}
 	gui.notify(event);
 	player->notify(event);
-	renderer.notify(event);
+	renderer.notify(event, world); // TODO nasty
 	//audioSystem.notify(event);
 }
 

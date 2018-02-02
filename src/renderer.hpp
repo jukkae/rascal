@@ -16,7 +16,7 @@ public:
 	void render(const World* const world, sf::RenderWindow* window);
 	Point getWorldCoordsFromScreenCoords(const Point& point) const;
 	void setState(GameplayState* s) { state = s; }
-	void notify(Event& event);
+	void notify(Event& event, World* world);
 
 private:
 	int elapsedTime = 0; // TODO crap just for testing

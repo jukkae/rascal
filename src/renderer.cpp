@@ -68,20 +68,23 @@ void Renderer::renderMap(const World* const world, sf::RenderWindow* window) {
 							sf::Color& color = animation.colors[0];
 							int blue = 0;
 							if(worldX == world->getPlayer()->x && worldY == world->getPlayer()->y) {
-								blue = 255;
-								color.b = blue;
+								//blue = 255;
+								//color.b = blue;
 							}
 							for(int i = -1; i <= 1; ++i) {
 								for(int j = -1; j <= 1; ++j) {
 									if(i == 0 && j == 0) continue;
 									if(i + worldX < 0 || i + worldX >= mapWidth || j + worldY < 0 || j + worldY >= mapHeight) continue;
+									if(!(map->tiles[worldX+i + mapWidth*(worldY+j)].terrain == Terrain::WATER) || !map->tiles[worldX+i + mapWidth*(worldY+j)].walkable) continue;
 									else {
 										Tile neighbor = map->tiles[(worldX+i) + mapWidth*(worldY+j)];
 										if(neighbor.animation->colors.at(0).b > color.b) {
 											++color.b;
+											color.b = neighbor.animation->colors.at(0).b - 1;
 										} else {
-											--color.b;
+											//--color.b;
 										}
+										--color.b;
 									}
 								}
 							}
@@ -110,9 +113,12 @@ void Renderer::renderMap(const World* const world, sf::RenderWindow* window) {
 	}
 }
 
-void Renderer::notify(Event& event) {
-	if(auto e = dynamic_cast<GenericActorEvent*>(&event)) {
-		std::cout << "event\n";
+void Renderer::notify(Event& event, World* world) {
+	if(auto e = dynamic_cast<MoveEvent*>(&event)) {
+		int x = e->x;
+		int y = e->y;
+		int mapWidth = 120; // TODO ughh
+		world->map.tiles[x + mapWidth*y].animation->colors.at(0).b = 255;
 	}
 }
 
