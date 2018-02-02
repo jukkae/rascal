@@ -44,7 +44,7 @@ void Renderer::renderMap(const World* const world, sf::RenderWindow* window) {
 	std::vector<int> previous(mapWidth*mapHeight);
 	for(int x = 0; x < mapWidth; ++x) {
 		for(int y = 0; y < mapHeight; ++y) {
-			previous.at(x + mapWidth*y) = 0;
+			previous.at(x + mapWidth*y) = 64;
 			if(map->tiles[x + mapWidth*y].terrain == Terrain::WATER && map->tiles[x + mapWidth*y].walkable) {
 				previous.at(x + mapWidth*y) = map->tiles[x + mapWidth*y].animation->colors[0].b;
 				if(previous.at(x + mapWidth*y) > 0) previous.at(x + mapWidth*y) = previous.at(x + mapWidth*y) - 1;
@@ -92,18 +92,24 @@ void Renderer::renderMap(const World* const world, sf::RenderWindow* window) {
 									else {
 										int neighbor = previous[(worldX+i) + mapWidth*(worldY+j)];
 										if(neighbor > color.b) {
-											color.b = neighbor - 1;
+											color.b = neighbor - 4;
 										} else {
 											//--color.b;
 										}
-										if(color.b > 0) --color.b;
+										if(color.b > 64) --color.b;
+										if(color.b > 64) --color.b;
+										if(color.b > 64) --color.b;
+										if(color.b > 64) --color.b;
 									}
 								}
 							}
 							sf::Color col;
-							//if(map->tiles[worldX + mapWidth*worldY].inFov) {
+							if(map->tiles[worldX + mapWidth*worldY].inFov) {
 								col = color;
-							//} else col = colors::black;
+							} else if(map->isExplored(worldX, worldY)) {
+								col = colors::darkestBlue;
+							} else col = colors::black;
+
 							rectangle.setFillColor(col);
 						}
 						//rectangle.setFillColor(colors::lightBlue);
