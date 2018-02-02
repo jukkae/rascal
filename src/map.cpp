@@ -91,8 +91,7 @@ void Map::generateWaterMap() {
 			Animation anim;
 			anim.chars = std::vector<char>(); // empty on purpose
 			anim.colors = std::vector<sf::Color>();
-			anim.colors.push_back(colors::lightBlue);
-			anim.colors.push_back(colors::lighterBlue); // TODO
+			anim.colors.push_back(colors::darkestBlue);
 			anim.charFreq = 1;
 			anim.colFreq = 10;
 			anim.phase = 0.0f;
@@ -101,13 +100,17 @@ void Map::generateWaterMap() {
 	}
 	for(int x = 0; x < width; ++x) {
 		for(int y = 0; y < height; ++y) {
-			if(x % 3 == 0 && y % 3 == 0) tiles.at(x + y*width).walkable = false;
+			if(x % 3 == 0 && y % 3 == 0) {
+				tiles.at(x + y*width).walkable = false;
+				tiles.at(x + y*width).terrain = Terrain::NORMAL;
+			}
 		}
 	}
 	for(int x = 0; x < width; ++x) {
 		for(int y = 0; y < height; ++y) {
 			if(x == 0 || x == width - 1 || y == 0 || y == height - 1) {
 				tiles.at(x + y*width).walkable = false;
+				tiles.at(x + y*width).terrain = Terrain::NORMAL;
 			}
 		}
 	}

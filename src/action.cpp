@@ -83,6 +83,8 @@ bool MoveAction::execute() {
 	}
 	actor->x = targetX;
 	actor->y = targetY;
+	MoveEvent e(targetX, targetY);
+	world->notify(e);
 	return true;
 }
 

@@ -8,6 +8,7 @@ class Actor;
 class GameplayState;
 class World;
 struct Point;
+struct Event;
 class Renderer {
 public:
 	Renderer() : Renderer(constants::SQUARE_SCREEN_WIDTH, constants::SCREEN_HEIGHT) {;}
@@ -15,6 +16,7 @@ public:
 	void render(const World* const world, sf::RenderWindow* window);
 	Point getWorldCoordsFromScreenCoords(const Point& point) const;
 	void setState(GameplayState* s) { state = s; }
+	void notify(Event& event, World* world);
 
 private:
 	int elapsedTime = 0; // TODO crap just for testing

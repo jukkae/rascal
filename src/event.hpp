@@ -131,4 +131,11 @@ struct GenericActorEvent : public Event { // temp
 	Actor* actor;
 	std::string formatString;
 };
+
+struct MoveEvent : public Event {
+	MoveEvent(int x, int y): x(x), y(y) {;}
+
+	int x;
+	int y;
+};
 #endif /* EVENT_HPP */
