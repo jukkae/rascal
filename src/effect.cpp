@@ -29,7 +29,7 @@ AiChangeEffect::AiChangeEffect(std::unique_ptr<TemporaryAi> newAi) : newAi(std::
 
 bool AiChangeEffect::applyTo(Actor* actor) {
 	newAi = std::make_unique<ConfusedMonsterAi>(10);
-	//newAi->applyTo(actor);
+	//newAi->applyTo(actor); FIXME This is bad, okay
 	newAi->oldAi = std::move(actor->ai);
 	newAi->faction = newAi->oldAi->faction;
 	actor->ai = std::move(newAi);

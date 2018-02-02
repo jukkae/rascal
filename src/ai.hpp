@@ -77,7 +77,7 @@ public:
 	void applyTo(Actor* actor);
 
 	virtual std::unique_ptr<Action> getNextAction(Actor* actor) override = 0;
-	std::unique_ptr<Ai> oldAi;
+	std::unique_ptr<Ai> oldAi; //TODO this should be private, but it's not for now
 protected:
 	int turns;
 
