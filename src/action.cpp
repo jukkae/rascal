@@ -58,7 +58,8 @@ bool MoveAction::execute() {
 						e->direction = direction;
 						e->distance = 5.0f;
 					}
-					ef->applyTo(a.get());
+					if(Actor* aPtr = a.get()) // TODO it seems that a might be invalidated at times, this is not the way to fix
+						ef->applyTo(aPtr);
 				}
 			}
 			else {
