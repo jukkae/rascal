@@ -164,10 +164,10 @@ std::unique_ptr<Actor> npc::makeMonster(World* world, Map* map, int x, int y, in
 	switch(difficulty) {
 		case 1: {
 			if(r < 50) {
-				npc = makePunk(world, map, x, y);
+				npc = makeDog(world, map, x, y);
 				return npc;
 			} else {
-				npc = makePunk(world, map, x, y);
+				npc = makeMutant(world, map, x, y);
 				return npc;
 			}
 			break;
@@ -220,11 +220,20 @@ std::unique_ptr<Actor> npc::makeMonster(World* world, Map* map, int x, int y, in
 	}
 }
 
+std::unique_ptr<Actor> npc::makeDog(World* world, Map* map, int x, int y) {
+		std::unique_ptr<Actor> a = std::make_unique<Actor>(x, y, 'd', "dog", colors::desaturatedGreen, 1);
+		a->destructible = std::make_unique<MonsterDestructible>(2, 0, 25, "dead dog");
+		a->attacker = std::make_unique<Attacker>(1, 2, 1);
+		a->ai = std::make_unique<MonsterAi>(200);
+		a->body = std::make_unique<Body>();
+		return a;
+}
+
 std::unique_ptr<Actor> npc::makePunk(World* world, Map* map, int x, int y) {
 		std::unique_ptr<Actor> punk = std::make_unique<Actor>(x, y, 'h', "punk", colors::desaturatedGreen, 1);
 		punk->destructible = std::make_unique<MonsterDestructible>(3, 0, 50, "dead punk");
 		punk->attacker = std::make_unique<Attacker>(1, 3, 0);
-		punk->ai = std::make_unique<MonsterAi>();
+		punk->ai = std::make_unique<MonsterAi>(100);
 		punk->body = std::make_unique<Body>();
 		punk->container = std::make_unique<Container>(10);
 
@@ -293,6 +302,15 @@ std::unique_ptr<Actor> npc::makeBoxer(World* world, Map* map, int x, int y) {
 		boxer->destructible = std::make_unique<MonsterDestructible>(4, 0, 70, "boxer carcass");
 		boxer->attacker = std::make_unique<Attacker>(1, 4, 2);
 		boxer->ai = std::make_unique<MonsterAi>();
+		boxer->body = std::make_unique<Body>();
+		return boxer;
+}
+
+std::unique_ptr<Actor> npc::makeMutant(World* world, Map* map, int x, int y) {
+		std::unique_ptr<Actor> boxer = std::make_unique<Actor>(x, y, 'm', "mutant", colors::darkerGreen, 1);
+		boxer->destructible = std::make_unique<MonsterDestructible>(8, 0, 200, "mutant carcass");
+		boxer->attacker = std::make_unique<Attacker>(2, 4, 0);
+		boxer->ai = std::make_unique<MonsterAi>(90);
 		boxer->body = std::make_unique<Body>();
 		return boxer;
 }
