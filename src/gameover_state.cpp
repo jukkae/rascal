@@ -14,7 +14,6 @@
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
-#include <SFML/Graphics/Text.hpp>
 
 GameOverState::GameOverState(Engine* engine, Actor* actor, Player* player, bool victory) :
 State(engine, engine->getWindow())
@@ -74,8 +73,5 @@ void GameOverState::update() {
 void GameOverState::render() {
 	int x = 2;
 	int y = 2;
-	sf::Text text(description, font::mainFont, 16);
-	text.setPosition(x * constants::CELL_WIDTH, y * constants::CELL_HEIGHT);
-	text.setFillColor(colors::brightBlue);
-	window->draw(text);
+	io::text(description, x, y, colors::brightBlue);
 }
