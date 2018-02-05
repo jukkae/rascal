@@ -140,7 +140,7 @@ void Renderer::notify(Event& event, World* world) {
 	if(auto e = dynamic_cast<MoveEvent*>(&event)) {
 		int x = e->x;
 		int y = e->y;
-		int mapWidth = 120; // TODO ughh
+		int mapWidth = world->width;
 		if(world->map.tiles[x + mapWidth*y].animation) {
 			world->map.tiles[x + mapWidth*y].animation->colors.at(0).b = 255;
 		}
