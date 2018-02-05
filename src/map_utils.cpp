@@ -159,8 +159,68 @@ void map_utils::addMcGuffin(World* world, Map* map, int level) {
 }
 
 std::unique_ptr<Actor> npc::makeMonster(World* world, Map* map, int x, int y, int difficulty) {
-	int r = d100() - 10 + (10 * difficulty);
-	if(r < 70) {
+	int r = d100();
+	std::unique_ptr<Actor> npc;
+	switch(difficulty) {
+		case 1: {
+			if(r < 50) {
+				npc = makePunk(world, map, x, y);
+				return npc;
+			} else {
+				npc = makePunk(world, map, x, y);
+				return npc;
+			}
+			break;
+		}
+		case 2: {
+			if(r < 50) {
+				npc = makePunk(world, map, x, y);
+				return npc;
+			} else {
+				npc = makePunk(world, map, x, y);
+				return npc;
+			}
+			break;
+		}
+		case 3: {
+			if(r < 50) {
+				npc = makePunk(world, map, x, y);
+				return npc;
+			} else {
+				npc = makePunk(world, map, x, y);
+				return npc;
+			}
+			break;
+		}
+		case 4: {
+			if(r < 50) {
+				npc = makePunk(world, map, x, y);
+				return npc;
+			} else {
+				npc = makePunk(world, map, x, y);
+				return npc;
+			}
+			break;
+		}
+		case 5: {
+			if(r < 50) {
+				npc = makePunk(world, map, x, y);
+				return npc;
+			} else {
+				npc = makePunk(world, map, x, y);
+				return npc;
+			}
+			break;
+		}
+		default: {
+				npc = makePunk(world, map, x, y);
+				return npc;
+			break;
+		}
+	}
+}
+
+std::unique_ptr<Actor> npc::makePunk(World* world, Map* map, int x, int y) {
 		std::unique_ptr<Actor> punk = std::make_unique<Actor>(x, y, 'h', "punk", colors::desaturatedGreen, 1);
 		punk->destructible = std::make_unique<MonsterDestructible>(3, 0, 50, "dead punk");
 		punk->attacker = std::make_unique<Attacker>(1, 3, 0);
@@ -185,7 +245,9 @@ std::unique_ptr<Actor> npc::makeMonster(World* world, Map* map, int x, int y, in
 		punk->container->add(std::move(cookie));
 
 		return punk;
-	} else if (r < 80) {
+}
+
+std::unique_ptr<Actor> npc::makeFighter(World* world, Map* map, int x, int y) {
 		std::unique_ptr<Actor> fighter = std::make_unique<Actor>(x, y, 'H', "fighter", colors::darkGreen, 1);
 		fighter->destructible = std::make_unique<MonsterDestructible>(5, 1, 100, "fighter carcass");
 		fighter->attacker = std::make_unique<Attacker>(2, 3, 0);
@@ -203,7 +265,9 @@ std::unique_ptr<Actor> npc::makeMonster(World* world, Map* map, int x, int y, in
 		fighter->container->add(std::move(jerky));
 
 		return fighter;
-	} else if (r < 90) {
+}
+
+std::unique_ptr<Actor> npc::makeGuard(World* world, Map* map, int x, int y) {
 		std::unique_ptr<Actor> guard = std::make_unique<Actor>(x, y, 'h', "guard", colors::darkGreen, 1);
 		guard->destructible = std::make_unique<MonsterDestructible>(6, 1, 100, "guard body");
 		guard->attacker = std::make_unique<Attacker>(1, 3, 0);
@@ -222,15 +286,15 @@ std::unique_ptr<Actor> npc::makeMonster(World* world, Map* map, int x, int y, in
 		guard->container->add(std::move(ration));
 
 		return guard;
-	}
-	else {
+}
+
+std::unique_ptr<Actor> npc::makeBoxer(World* world, Map* map, int x, int y) {
 		std::unique_ptr<Actor> boxer = std::make_unique<Actor>(x, y, 'H', "boxer", colors::darkerGreen, 1);
 		boxer->destructible = std::make_unique<MonsterDestructible>(4, 0, 70, "boxer carcass");
 		boxer->attacker = std::make_unique<Attacker>(1, 4, 2);
 		boxer->ai = std::make_unique<MonsterAi>();
 		boxer->body = std::make_unique<Body>();
 		return boxer;
-	}
 }
 
 std::unique_ptr<Actor> item::makeItem(World* world, Map* map, int x, int y) {
