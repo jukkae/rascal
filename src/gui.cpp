@@ -113,15 +113,9 @@ void Gui::renderNav(World* world, sf::RenderWindow* window) {
 		[&] (const std::unique_ptr<Actor>& a) { return a->name == "navigation computer"; }
 	)) {
 		std::string location = std::to_string(player->x) + ", " + std::to_string(player->y);
-		sf::Text locText(location, font::mainFont, 16);
-		locText.setFillColor(colors::lightBlue);
-		locText.setPosition((constants::SCREEN_WIDTH-20)*constants::CELL_WIDTH, (3+constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT)*constants::CELL_HEIGHT);
-		window->draw(locText);
+		io::text(location, constants::SCREEN_WIDTH-20, 3+constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT, colors::lightBlue);
 		std::string rad = "rad: " + std::to_string(world->radiation);
-		sf::Text radText(rad, font::mainFont, 16);
-		radText.setFillColor(colors::lightBlue);
-		radText.setPosition((constants::SCREEN_WIDTH-20)*constants::CELL_WIDTH, (4+constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT)*constants::CELL_HEIGHT);
-		window->draw(radText);
+		io::text(rad, constants::SCREEN_WIDTH-20, 4+constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT, colors::lightBlue);
 	}
 
 }
@@ -130,17 +124,11 @@ void Gui::renderStatusEffects(World* world, sf::RenderWindow* window) {
 	Actor* player = world->getPlayer();
 
 	if(player->getStatusEffects().size() > 0) {
-		sf::Text effectsHeading("status effects:", font::mainFont, 16);
-		effectsHeading.setFillColor(colors::lightBlue);
-		effectsHeading.setPosition((constants::SCREEN_WIDTH-60)*constants::CELL_WIDTH, (1 + constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT)*constants::CELL_HEIGHT);
-		window->draw(effectsHeading);
+		io::text("status effects:", constants::SCREEN_WIDTH-60, 1+constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT, colors::lightBlue);
 		int i = 1;
 		for (auto& e : player->getStatusEffects()) {
 			std::string effectStr = e->name;
-			sf::Text effectText(effectStr, font::mainFont, 16);
-			effectText.setFillColor(colors::lightBlue);
-			effectText.setPosition((constants::SCREEN_WIDTH-60)*constants::CELL_WIDTH, (1 + i + constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT)*constants::CELL_HEIGHT);
-			window->draw(effectText);
+			io::text(effectStr, constants::SCREEN_WIDTH-60, 1+i+constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT, colors::lightBlue);
 			++i;
 		}
 	}
@@ -150,10 +138,7 @@ void Gui::renderMessageLog(sf::RenderWindow* window) {
 	int y = 1;
 	float colCoef = 0.4f;
 	for(Message msg : log) {
-		sf::Text text(msg.text, font::mainFont, 16);
-		text.setFillColor(colors::multiply(msg.col, colCoef));
-		text.setPosition(MSG_X * constants::CELL_WIDTH, (y + constants::SCREEN_HEIGHT - constants::GUI_PANEL_HEIGHT) * constants::CELL_HEIGHT); // correct position
-		window->draw(text);
+		io::text(msg.text, MSG_X, y+constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT, colors::multiply(msg.col, colCoef));
 		++y;
 		if(colCoef < 1.0f) {
 			colCoef += 0.3f;
@@ -176,14 +161,8 @@ void Gui::renderBar(int x, int y, int width, std::string name, float value, floa
 		rect.setPosition(x * constants::CELL_WIDTH, (y + constants::SCREEN_HEIGHT - constants::GUI_PANEL_HEIGHT) * constants::CELL_HEIGHT);
 		window->draw(rect);
 	}
-	sf::Text text;
-	text.setFont(font::mainFont);
 	std::string string = name + " : " + std::to_string((int)value) + "/" + std::to_string((int)maxValue);
-	text.setString(string);
-	text.setCharacterSize(16);
-	text.setFillColor(sf::Color::White);
-	text.setPosition(x*constants::CELL_WIDTH, (y + constants::SCREEN_HEIGHT - constants::GUI_PANEL_HEIGHT) * constants::CELL_HEIGHT);
-	window->draw(text);
+	io::text(string, x, y+constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT, colors::white);
 }
 
 void Gui::renderMouseLook(World* world, sf::RenderWindow* window) {
@@ -217,14 +196,8 @@ void Gui::renderMouseLook(World* world, sf::RenderWindow* window) {
 			}
 		}
 	}
-	sf::Text text;
-	text.setFont(font::mainFont);
 	std::string string = buf;
-	text.setString(string);
-	text.setCharacterSize(16);
-	text.setFillColor(lightGrey);
-	text.setPosition(1 * constants::CELL_WIDTH, (0 + constants::SCREEN_HEIGHT - constants::GUI_PANEL_HEIGHT) * constants::CELL_HEIGHT);
-	window->draw(text);
+	io::text(string, 1, 0+constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT, colors::lightGrey);
 }
 
 void Gui::message(sf::Color col, std::string text, va_list args) {
