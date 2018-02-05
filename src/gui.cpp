@@ -42,16 +42,10 @@ void Gui::render(World* world, sf::RenderWindow* window) {
 	renderBar(1, 1, BAR_WIDTH, "HP", world->getPlayer()->destructible->hp, world->getPlayer()->destructible->maxHp, lightRed, darkerRed, window);
 
 	std::string dungeonLvlString = "Floor " + std::to_string(world->level);
-	sf::Text dlvl(dungeonLvlString, font::mainFont, 16);
-	dlvl.setPosition(3*constants::CELL_WIDTH, (3+constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT)*constants::CELL_HEIGHT);
-	dlvl.setFillColor(sf::Color::White);
-	window->draw(dlvl);
+	io::text(dungeonLvlString, 3, 3+constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT, colors::white);
 
 	std::string timeString = "Time: " + std::to_string(world->time);
-	sf::Text time(timeString, font::mainFont, 16);
-	time.setPosition(3*constants::CELL_WIDTH, (4+constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT)*constants::CELL_HEIGHT);
-	time.setFillColor(sf::Color::White);
-	window->draw(time);
+	io::text(timeString, 3, 4+constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT, colors::white);
 
 	renderXpBar(world, window);
 	renderMouseLook(world, window);
@@ -73,10 +67,7 @@ void Gui::renderStats(World* world, sf::RenderWindow* window) {
 
 	int ac = player->getAC();
 	std::string acString = "AC: " + std::to_string(ac);
-	sf::Text acText(acString, font::mainFont, 16);
-	acText.setFillColor(colors::lightBlue);
-	acText.setPosition((constants::SCREEN_WIDTH-40)*constants::CELL_WIDTH, (1+constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT)*constants::CELL_HEIGHT);
-	window->draw(acText);
+	io::text(acString, constants::SCREEN_WIDTH-40, 1+constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT, colors::lightBlue);
 
 	std::string weaponString;
 	if(!player->wornWeapon) weaponString = "Wielding: nothing";
@@ -84,10 +75,7 @@ void Gui::renderStats(World* world, sf::RenderWindow* window) {
 		weaponString = "Wielding: " + player->wornWeapon->name;
 		if(player->wornWeapon->rangedAttacker) weaponString.append(" (").append(std::to_string(player->wornWeapon->rangedAttacker->rounds)).append("/").append(std::to_string(player->wornWeapon->rangedAttacker->capacity)).append(")");
 	}
-	sf::Text weaponText(weaponString, font::mainFont, 16);
-	weaponText.setFillColor(colors::lightBlue);
-	weaponText.setPosition((constants::SCREEN_WIDTH-40)*constants::CELL_WIDTH, (2+constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT)*constants::CELL_HEIGHT);
-	window->draw(weaponText);
+	io::text(weaponString, constants::SCREEN_WIDTH-40, 2+constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT, colors::lightBlue);
 
 	int n, d, b;
 	if(!player->wornWeapon) {
@@ -106,24 +94,15 @@ void Gui::renderStats(World* world, sf::RenderWindow* window) {
 		b = player->wornWeapon->rangedAttacker->bonus;
 	}
 	std::string atkString = "dm: " + std::to_string(n) + "d" + std::to_string(d) + "+" + std::to_string(b);
-	sf::Text atkText(atkString, font::mainFont, 16);
-	atkText.setFillColor(colors::lightBlue);
-	atkText.setPosition((constants::SCREEN_WIDTH-40)*constants::CELL_WIDTH, (3+constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT)*constants::CELL_HEIGHT);
-	window->draw(atkText);
+	io::text(atkString, constants::SCREEN_WIDTH-40, 3+constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT, colors::lightBlue);
 
 	std::string atkBonusString = "s:" + std::to_string(player->body->getModifier(player->body->strength))
 		+ " a:" + std::to_string(player->body->getModifier(player->body->agility))
 		+ " i:" + std::to_string(player->body->getModifier(player->body->intelligence));
-	sf::Text atkBonusText(atkBonusString, font::mainFont, 16);
-	atkBonusText.setFillColor(colors::lightBlue);
-	atkBonusText.setPosition((constants::SCREEN_WIDTH-40)*constants::CELL_WIDTH, (4+constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT)*constants::CELL_HEIGHT);
-	window->draw(atkBonusText);
+	io::text(atkBonusString, constants::SCREEN_WIDTH-40, 4+constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT, colors::lightBlue);
 
 	std::string hungerString = "nutrition:" + std::to_string(player->body->nutrition);
-	sf::Text hungerText(hungerString, font::mainFont, 16);
-	hungerText.setFillColor(colors::lightBlue);
-	hungerText.setPosition((constants::SCREEN_WIDTH-40)*constants::CELL_WIDTH, (5+constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT)*constants::CELL_HEIGHT);
-	window->draw(hungerText);
+	io::text(hungerString, constants::SCREEN_WIDTH-40, 5+constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT, colors::lightBlue);
 }
 
 void Gui::renderNav(World* world, sf::RenderWindow* window) {
