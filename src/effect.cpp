@@ -2,25 +2,41 @@
 
 #include "actor.hpp"
 #include "ai.hpp"
+#include "body.hpp"
+#include "damage.hpp"
 #include "destructible.hpp"
 #include "event.hpp"
 #include "world.hpp"
 
-HealthEffect::HealthEffect(float amount) : amount(amount) {;}
+HealthEffect::HealthEffect(float amount, HealthEffectType type) : amount(amount), type(type) {;}
 
 bool HealthEffect::applyTo(Actor* actor) {
 	if(!actor->destructible) return false;
-	if(amount > 0) {
-		float pointsHealed = actor->destructible->heal(amount);
-		if(pointsHealed > 0) {
-			PickableHealthEffectEvent e(actor, pointsHealed);
+	if(type == HealthEffectType::HEALTH) {
+		if(amount > 0) {
+			float pointsHealed = actor->destructible->heal(amount);
+			if(pointsHealed > 0) {
+				PickableHealthEffectEvent e(actor, pointsHealed);
+				actor->world->notify(e);
+				return true;
+			}
+		} else {
+			PickableHealthEffectEvent e(actor, amount-actor->destructible->defense);
 			actor->world->notify(e);
-			return true;
+			if(actor->destructible->takeDamage(actor, -amount) > 0) return true;
 		}
-	} else {
-		PickableHealthEffectEvent e(actor, amount-actor->destructible->defense);
+		return false;
+	} else if (type == HealthEffectType::IODINE) { //FIXME add iodine OD
+		actor->body->iodine += amount;
+		if(actor->body->iodine > 10) {
+			actor->destructible->takeDamage(actor, 2*(actor->body->iodine - 10), DamageType::RADIATION);
+			GenericActorEvent e(actor, "That's probably enough iodine for now!");
+			actor->world->notify(e);
+			actor->body->iodine = 10;
+		}
+		GenericActorEvent e(actor, "You can feel the iodine flow through you!");
 		actor->world->notify(e);
-		if(actor->destructible->takeDamage(actor, -amount) > 0) return true;
+		return true;
 	}
 	return false;
 }
