@@ -25,7 +25,7 @@ bool HealthEffect::applyTo(Actor* actor) {
 			if(actor->destructible->takeDamage(actor, -amount) > 0) return true;
 		}
 		return false;
-	} else if (type == HealthEffectType::IODINE) {
+	} else if (type == HealthEffectType::IODINE) { //FIXME add iodine OD
 		actor->body->iodine += amount;
 		return true;
 		GenericActorEvent e(actor, "You can feel the iodine flow through you!");
