@@ -466,27 +466,27 @@ std::unique_ptr<Actor> item::makeItem(World* world, Map* map, int x, int y) {
 		jerky->pickable = std::make_unique<Pickable>();
 		jerky->comestible = std::make_unique<Comestible>();
 		return jerky;
-	} else if(r < 20) {
+	} else if(r < 15) {
 		std::unique_ptr<Actor> a = std::make_unique<Actor>(x, y, '!', "iodine syringe", sf::Color(128, 128, 0));
 		a->blocks = false;
 		a->pickable = std::make_unique<Pickable>(TargetSelector(TargetSelector::SelectorType::WEARER, 0), std::make_unique<HealthEffect>(d3()+2, HealthEffectType::IODINE));
 		return a;
-	} else if(r < 30) {
+	} else if(r < 35) {
 		std::unique_ptr<Actor> stimpak = std::make_unique<Actor>(x, y, '!', "stimpak", sf::Color(128, 0, 128));
 		stimpak->blocks = false;
 		stimpak->pickable = std::make_unique<Pickable>(TargetSelector(TargetSelector::SelectorType::WEARER, 0), std::make_unique<HealthEffect>(4));
 		return stimpak;
-	} else if(r < 35) {
-		std::unique_ptr<Actor> fakeStimpak = std::make_unique<Actor>(x, y, '!', "stimpak", sf::Color(128, 128, 128));
+	} else if(r < 40) {
+		std::unique_ptr<Actor> fakeStimpak = std::make_unique<Actor>(x, y, '!', "stimpak", sf::Color(128, 0, 128));
 		fakeStimpak->blocks = false;
 		fakeStimpak->pickable = std::make_unique<Pickable>(TargetSelector(TargetSelector::SelectorType::WEARER, 0), std::make_unique<StatusEffectEffect>(std::make_unique<PoisonedStatusEffect>(PoisonedStatusEffect())));
 		return fakeStimpak;
-	} else if(r < 40) {
+	} else if(r < 45) {
 		std::unique_ptr<Actor> antidote = std::make_unique<Actor>(x, y, '!', "antidote", sf::Color(0, 128, 128));
 		antidote->blocks = false;
 		antidote->pickable = std::make_unique<Pickable>(TargetSelector(TargetSelector::SelectorType::WEARER, 0), std::make_unique<StatusEffectRemovalEffect>(std::make_unique<PoisonedStatusEffect>(PoisonedStatusEffect())));
 		return antidote;
-	} else if(r < 50) {
+	} else if(r < 55) {
 		std::unique_ptr<Actor> blasterBoltDevice = std::make_unique<Actor>(x, y, '?', "blaster bolt device", sf::Color(128, 128, 0));
 		blasterBoltDevice->blocks = false;
 		blasterBoltDevice->pickable = std::make_unique<Pickable>(TargetSelector(TargetSelector::SelectorType::CLOSEST_MONSTER, 5), std::make_unique<HealthEffect>(-20));
