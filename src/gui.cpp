@@ -103,6 +103,9 @@ void Gui::renderStats(World* world, sf::RenderWindow* window) {
 
 	std::string hungerString = "nutrition:" + std::to_string(player->body->nutrition);
 	io::text(hungerString, constants::SCREEN_WIDTH-40, 5+constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT, colors::lightBlue);
+
+	std::string iodineString = "iodine:" + std::to_string(player->body->iodine);
+	io::text(iodineString, constants::SCREEN_WIDTH-40, 6+constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT, colors::lightBlue);
 }
 
 void Gui::renderNav(World* world, sf::RenderWindow* window) {

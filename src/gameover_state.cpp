@@ -29,12 +29,7 @@ State(engine, engine->getWindow())
 		description = "you won at level ";
 		description.append(std::to_string(((PlayerAi*)actor->ai.get())->xpLevel));
 		description.append("\n");
-		description.append("you had ");
-		int numberOfMacGuffins = 0;
-		for(auto& i : actor->container->inventory) { if (i->name == "phlebotinum link") numberOfMacGuffins++; }
-		description.append(std::to_string(numberOfMacGuffins));
-		description.append(" phlebotinum links");
-		description.append("\n");
+		for(auto& i : actor->container->inventory) { if (i->name == "phlebotinum link") player->score += 100; }
 		description.append("score: ");
 		description.append(std::to_string(player->score));
 	}

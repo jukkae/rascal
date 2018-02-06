@@ -159,21 +159,166 @@ void map_utils::addMcGuffin(World* world, Map* map, int level) {
 }
 
 std::unique_ptr<Actor> npc::makeMonster(World* world, Map* map, int x, int y, int difficulty) {
-	int r = d100() - 10 + (10 * difficulty);
-	if(r < 70) {
-		std::unique_ptr<Actor> punk = std::make_unique<Actor>(x, y, 'h', "punk", colors::desaturatedGreen, 1);
-		punk->destructible = std::make_unique<MonsterDestructible>(3, 0, 50, "dead punk");
-		punk->attacker = std::make_unique<Attacker>(1, 3, 0);
-		punk->ai = std::make_unique<MonsterAi>();
-		punk->body = std::make_unique<Body>();
-		punk->container = std::make_unique<Container>(10);
+	int r = d100();
+	std::unique_ptr<Actor> npc;
+	switch(difficulty) {
+		case 1: {
+			if(r < 50) {
+				npc = makeDog(world, map, x, y);
+				return npc;
+			} else if (r < 60) {
+				npc = makeSnake(world, map, x, y);
+				return npc;
+			} else if (r < 90) {
+				npc = makeChild(world, map, x, y);
+				return npc;
+			} else {
+				npc = makePunk(world, map, x, y);
+				return npc;
+			}
+		}
+		case 2: {
+			if(r < 40) {
+				npc = makeSnake(world, map, x, y);
+				return npc;
+			} else if (r < 60) {
+				npc = makeChild(world, map, x, y);
+				return npc;
+			} else if (r < 70) {
+				npc = makeGuard(world, map, x, y);
+				return npc;
+			} else if (r < 75) {
+				npc = makeBoxer(world, map, x, y);
+				return npc;
+			} else {
+				npc = makePunk(world, map, x, y);
+				return npc;
+			}
+		}
+		case 3: {
+			if(r < 30) {
+				npc = makeGuard(world, map, x, y);
+				return npc;
+			} else if (r < 50) {
+				npc = makeBoxer(world, map, x, y);
+				return npc;
+			} else if (r < 75) {
+				npc = makeMutant(world, map, x, y);
+				return npc;
+			} else {
+				npc = makePunk(world, map, x, y);
+				return npc;
+			}
+		}
+		case 4: {
+			if(r < 20) {
+				npc = makeGuard(world, map, x, y);
+				return npc;
+			} else if (r < 40) {
+				npc = makeBoxer(world, map, x, y);
+				return npc;
+			} else if (r < 65) {
+				npc = makeMutant(world, map, x, y);
+				return npc;
+			} else if (r < 75) {
+				npc = makeCyborg(world, map, x, y);
+				return npc;
+			} else {
+				npc = makePunk(world, map, x, y);
+				return npc;
+			}
+		}
+		case 5: {
+			if(r < 20) {
+				npc = makeGuard(world, map, x, y);
+				return npc;
+			} else if (r < 40) {
+				npc = makeBoxer(world, map, x, y);
+				return npc;
+			} else if (r < 65) {
+				npc = makeMutant(world, map, x, y);
+				return npc;
+			} else if (r < 75) {
+				npc = makeCyborg(world, map, x, y);
+				return npc;
+			} else if (r < 80) {
+				npc = makeAndroid(world, map, x, y);
+				return npc;
+			} else {
+				npc = makePunk(world, map, x, y);
+				return npc;
+			}
+		}
+		default: {
+				npc = makePunk(world, map, x, y);
+				return npc;
+			break;
+		}
+	}
+}
 
-		std::unique_ptr<Actor> stimpak = std::make_unique<Actor>(x, y, '!', "super stimpak", sf::Color(128, 128, 128));
-		stimpak->blocks = false;
-		stimpak->pickable = std::make_unique<Pickable>(TargetSelector(TargetSelector::SelectorType::WEARER, 0), std::make_unique<HealthEffect>(8));
-		stimpak->world = world; //FIXME that I need to do this is bad and error-prone. Figure out better ways of actor creation.
+std::unique_ptr<Actor> npc::makeDog(World* world, Map* map, int x, int y) {
+		std::unique_ptr<Actor> a = std::make_unique<Actor>(x, y, 'd', "dog", colors::desaturatedGreen, 1);
+		a->destructible = std::make_unique<MonsterDestructible>(2, 0, 25, "dead dog");
+		a->attacker = std::make_unique<Attacker>(1, 2, 1);
+		a->ai = std::make_unique<MonsterAi>(200);
+		a->body = std::make_unique<Body>();
+		return a;
+}
 
-		punk->container->add(std::move(stimpak));
+std::unique_ptr<Actor> npc::makeSnake(World* world, Map* map, int x, int y) {
+		std::unique_ptr<Actor> a = std::make_unique<Actor>(x, y, 's', "snake", colors::desaturatedGreen, 1);
+		a->destructible = std::make_unique<MonsterDestructible>(2, 0, 50, "dead snake");
+		a->attacker = std::make_unique<Attacker>(2, 2, 0);
+		a->ai = std::make_unique<MonsterAi>(100);
+		a->body = std::make_unique<Body>();
+		a->container = std::make_unique<Container>(1);
+		if(d6() >= 3) {
+			std::unique_ptr<Actor> food = std::make_unique<Actor>(x, y, '%', "snakemeat", sf::Color(128, 128, 0));
+			food->blocks = false;
+			food->pickable = std::make_unique<Pickable>();
+			food->comestible = std::make_unique<Comestible>();
+			food->comestible->nutrition = 5000;
+			food->world = world;
+			a->container->add(std::move(food));
+		}
+		return a;
+}
+
+std::unique_ptr<Actor> npc::makeChild(World* world, Map* map, int x, int y) {
+		std::unique_ptr<Actor> a = std::make_unique<Actor>(x, y, 'c', "child", colors::desaturatedGreen, 1);
+		a->destructible = std::make_unique<MonsterDestructible>(2, 0, 25, "dead child");
+		a->attacker = std::make_unique<Attacker>(1, 2, 0);
+		a->ai = std::make_unique<MonsterAi>(75);
+		a->body = std::make_unique<Body>();
+		a->container = std::make_unique<Container>(10);
+		if(d6() >= 3) {
+			std::unique_ptr<Actor> stimpak = std::make_unique<Actor>(x, y, '!', "super stimpak", sf::Color(128, 128, 128));
+			stimpak->blocks = false;
+			stimpak->pickable = std::make_unique<Pickable>(TargetSelector(TargetSelector::SelectorType::WEARER, 0), std::make_unique<HealthEffect>(8));
+			stimpak->world = world; //FIXME that I need to do this is bad and error-prone. Figure out better ways of actor creation.
+
+			a->container->add(std::move(stimpak));
+		}
+		if(d6() >= 3) {
+			std::unique_ptr<Actor> food = std::make_unique<Actor>(x, y, '%', "snakemeat", sf::Color(128, 128, 0));
+			food->blocks = false;
+			food->pickable = std::make_unique<Pickable>();
+			food->comestible = std::make_unique<Comestible>();
+			food->comestible->nutrition = 5000;
+			food->world = world;
+			a->container->add(std::move(food));
+		}
+		return a;
+}
+
+std::unique_ptr<Actor> npc::makePunk(World* world, Map* map, int x, int y) {
+		std::unique_ptr<Actor> a = std::make_unique<Actor>(x, y, 'h', "punk", colors::desaturatedGreen, 1);
+		a->destructible = std::make_unique<MonsterDestructible>(3, 0, 50, "dead punk");
+		a->attacker = std::make_unique<Attacker>(1, 3, 0);
+		a->ai = std::make_unique<MonsterAi>(100);
+		a->body = std::make_unique<Body>();
+		a->container = std::make_unique<Container>(10);
 
 		std::unique_ptr<Actor> cookie = std::make_unique<Actor>(x, y, '%', "cookie", sf::Color(128, 128, 0));
 		cookie->blocks = false;
@@ -182,17 +327,19 @@ std::unique_ptr<Actor> npc::makeMonster(World* world, Map* map, int x, int y, in
 		cookie->comestible->nutrition = 10000;
 		cookie->world = world;
 
-		punk->container->add(std::move(cookie));
+		a->container->add(std::move(cookie));
 
-		return punk;
-	} else if (r < 80) {
-		std::unique_ptr<Actor> fighter = std::make_unique<Actor>(x, y, 'H', "fighter", colors::darkGreen, 1);
-		fighter->destructible = std::make_unique<MonsterDestructible>(5, 1, 100, "fighter carcass");
-		fighter->attacker = std::make_unique<Attacker>(2, 3, 0);
-		fighter->ai = std::make_unique<MonsterAi>();
-		fighter->body = std::make_unique<Body>();
+		return a;
+}
 
-		fighter->container = std::make_unique<Container>(10);
+std::unique_ptr<Actor> npc::makeFighter(World* world, Map* map, int x, int y) {
+		std::unique_ptr<Actor> a = std::make_unique<Actor>(x, y, 'H', "fighter", colors::darkGreen, 1);
+		a->destructible = std::make_unique<MonsterDestructible>(5, 1, 100, "fighter carcass");
+		a->attacker = std::make_unique<Attacker>(2, 3, 0);
+		a->ai = std::make_unique<MonsterAi>();
+		a->body = std::make_unique<Body>();
+
+		a->container = std::make_unique<Container>(10);
 
 		std::unique_ptr<Actor> jerky = std::make_unique<Actor>(x, y, '%', "jerky", sf::Color(128, 0, 0));
 		jerky->blocks = false;
@@ -200,17 +347,19 @@ std::unique_ptr<Actor> npc::makeMonster(World* world, Map* map, int x, int y, in
 		jerky->comestible = std::make_unique<Comestible>();
 		jerky->world = world;
 
-		fighter->container->add(std::move(jerky));
+		a->container->add(std::move(jerky));
 
-		return fighter;
-	} else if (r < 90) {
-		std::unique_ptr<Actor> guard = std::make_unique<Actor>(x, y, 'h', "guard", colors::darkGreen, 1);
-		guard->destructible = std::make_unique<MonsterDestructible>(6, 1, 100, "guard body");
-		guard->attacker = std::make_unique<Attacker>(1, 3, 0);
-		guard->ai = std::make_unique<MonsterAi>(200);
-		guard->body = std::make_unique<Body>();
+		return a;
+}
 
-		guard->container = std::make_unique<Container>(10);
+std::unique_ptr<Actor> npc::makeGuard(World* world, Map* map, int x, int y) {
+		std::unique_ptr<Actor> a = std::make_unique<Actor>(x, y, 'h', "guard", colors::darkGreen, 1);
+		a->destructible = std::make_unique<MonsterDestructible>(6, 1, 100, "guard body");
+		a->attacker = std::make_unique<Attacker>(1, 3, 0);
+		a->ai = std::make_unique<MonsterAi>(200);
+		a->body = std::make_unique<Body>();
+
+		a->container = std::make_unique<Container>(10);
 
 		std::unique_ptr<Actor> ration = std::make_unique<Actor>(x, y, '%', "ration", sf::Color(0, 128, 0));
 		ration->blocks = false;
@@ -219,18 +368,94 @@ std::unique_ptr<Actor> npc::makeMonster(World* world, Map* map, int x, int y, in
 		ration->comestible->nutrition = 30000;
 		ration->world = world; //FIXME that I need to do this is bad and error-prone. Figure out better ways of actor creation.
 
-		guard->container->add(std::move(ration));
+		a->container->add(std::move(ration));
 
-		return guard;
-	}
-	else {
-		std::unique_ptr<Actor> boxer = std::make_unique<Actor>(x, y, 'H', "boxer", colors::darkerGreen, 1);
-		boxer->destructible = std::make_unique<MonsterDestructible>(4, 0, 70, "boxer carcass");
-		boxer->attacker = std::make_unique<Attacker>(1, 4, 2);
-		boxer->ai = std::make_unique<MonsterAi>();
-		boxer->body = std::make_unique<Body>();
-		return boxer;
-	}
+		if(d6() >= 3) {
+			std::unique_ptr<Actor> stimpak = std::make_unique<Actor>(x, y, '!', "stimpak", sf::Color(128, 128, 128));
+			stimpak->blocks = false;
+			stimpak->pickable = std::make_unique<Pickable>(TargetSelector(TargetSelector::SelectorType::WEARER, 0), std::make_unique<HealthEffect>(4));
+			stimpak->world = world; //FIXME that I need to do this is bad and error-prone. Figure out better ways of actor creation.
+
+			a->container->add(std::move(stimpak));
+		}
+
+		return a;
+}
+
+std::unique_ptr<Actor> npc::makeBoxer(World* world, Map* map, int x, int y) {
+		std::unique_ptr<Actor> a = std::make_unique<Actor>(x, y, 'H', "boxer", colors::darkerGreen, 1);
+		a->destructible = std::make_unique<MonsterDestructible>(4, 0, 70, "boxer carcass");
+		a->attacker = std::make_unique<Attacker>(1, 4, 2);
+		a->ai = std::make_unique<MonsterAi>();
+		a->body = std::make_unique<Body>();
+		a->container = std::make_unique<Container>(10);
+		if(d6() == 6) {
+			std::unique_ptr<Actor> knuckleduster = std::make_unique<Actor>(x, y, '|', "knuckle duster", sf::Color(128, 255, 128));
+			knuckleduster->blocks = false;
+			knuckleduster->pickable = std::make_unique<Pickable>();
+			knuckleduster->attacker = std::make_unique<Attacker>(2, 6, 2);
+			knuckleduster->attacker->effectGenerator = std::make_unique<EffectGeneratorFor<MoveEffect>>();
+			knuckleduster->wieldable = std::make_unique<Wieldable>(WieldableType::ONE_HAND);
+			knuckleduster->world = world;
+			a->container->add(std::move(knuckleduster));
+		}
+
+		if(d6() >= 3) {
+			std::unique_ptr<Actor> stimpak = std::make_unique<Actor>(x, y, '!', "stimpak", sf::Color(128, 128, 128));
+			stimpak->blocks = false;
+			stimpak->pickable = std::make_unique<Pickable>(TargetSelector(TargetSelector::SelectorType::WEARER, 0), std::make_unique<HealthEffect>(4));
+			stimpak->world = world; //FIXME that I need to do this is bad and error-prone. Figure out better ways of actor creation.
+
+			a->container->add(std::move(stimpak));
+		}
+		return a;
+}
+
+std::unique_ptr<Actor> npc::makeMutant(World* world, Map* map, int x, int y) {
+		std::unique_ptr<Actor> a = std::make_unique<Actor>(x, y, 'm', "mutant", colors::darkerGreen, 1);
+		a->destructible = std::make_unique<MonsterDestructible>(8, 0, 200, "mutant carcass");
+		a->attacker = std::make_unique<Attacker>(2, 4, 0);
+		a->ai = std::make_unique<MonsterAi>(90);
+		a->body = std::make_unique<Body>();
+		a->container = std::make_unique<Container>(10);
+
+		std::unique_ptr<Actor> ration = std::make_unique<Actor>(x, y, '%', "ration", sf::Color(0, 128, 0));
+		ration->blocks = false;
+		ration->pickable = std::make_unique<Pickable>();
+		ration->comestible = std::make_unique<Comestible>();
+		ration->comestible->nutrition = 30000;
+		ration->world = world; //FIXME that I need to do this is bad and error-prone. Figure out better ways of actor creation.
+
+		a->container->add(std::move(ration));
+		return a;
+}
+
+std::unique_ptr<Actor> npc::makeCyborg(World* world, Map* map, int x, int y) {
+		std::unique_ptr<Actor> a = std::make_unique<Actor>(x, y, 'r', "cyborg", colors::darkerGreen, 1);
+		a->destructible = std::make_unique<MonsterDestructible>(8, 0, 250, "cyborg carcass");
+		a->attacker = std::make_unique<Attacker>(1, 8, 0);
+		a->ai = std::make_unique<MonsterAi>(120);
+		a->body = std::make_unique<Body>();
+		a->container = std::make_unique<Container>(10);
+
+		std::unique_ptr<Actor> ration = std::make_unique<Actor>(x, y, '%', "ration", sf::Color(0, 128, 0));
+		ration->blocks = false;
+		ration->pickable = std::make_unique<Pickable>();
+		ration->comestible = std::make_unique<Comestible>();
+		ration->comestible->nutrition = 30000;
+		ration->world = world; //FIXME that I need to do this is bad and error-prone. Figure out better ways of actor creation.
+
+		a->container->add(std::move(ration));
+		return a;
+}
+
+std::unique_ptr<Actor> npc::makeAndroid(World* world, Map* map, int x, int y) {
+		std::unique_ptr<Actor> a = std::make_unique<Actor>(x, y, 'h', "punk", colors::darkerGreen, 1);
+		a->destructible = std::make_unique<MonsterDestructible>(8, 1, 300, "broken android");
+		a->attacker = std::make_unique<Attacker>(2, 6, 2);
+		a->ai = std::make_unique<MonsterAi>(150);
+		a->body = std::make_unique<Body>();
+		return a;
 }
 
 std::unique_ptr<Actor> item::makeItem(World* world, Map* map, int x, int y) {
@@ -241,22 +466,27 @@ std::unique_ptr<Actor> item::makeItem(World* world, Map* map, int x, int y) {
 		jerky->pickable = std::make_unique<Pickable>();
 		jerky->comestible = std::make_unique<Comestible>();
 		return jerky;
-	} else if(r < 30) {
+	} else if(r < 15) {
+		std::unique_ptr<Actor> a = std::make_unique<Actor>(x, y, '!', "iodine syringe", sf::Color(128, 128, 0));
+		a->blocks = false;
+		a->pickable = std::make_unique<Pickable>(TargetSelector(TargetSelector::SelectorType::WEARER, 0), std::make_unique<HealthEffect>(d3()+2, HealthEffectType::IODINE));
+		return a;
+	} else if(r < 35) {
 		std::unique_ptr<Actor> stimpak = std::make_unique<Actor>(x, y, '!', "stimpak", sf::Color(128, 0, 128));
 		stimpak->blocks = false;
 		stimpak->pickable = std::make_unique<Pickable>(TargetSelector(TargetSelector::SelectorType::WEARER, 0), std::make_unique<HealthEffect>(4));
 		return stimpak;
-	} else if(r < 35) {
-		std::unique_ptr<Actor> fakeStimpak = std::make_unique<Actor>(x, y, '!', "stimpak", sf::Color(128, 128, 128));
+	} else if(r < 40) {
+		std::unique_ptr<Actor> fakeStimpak = std::make_unique<Actor>(x, y, '!', "stimpak", sf::Color(128, 0, 128));
 		fakeStimpak->blocks = false;
 		fakeStimpak->pickable = std::make_unique<Pickable>(TargetSelector(TargetSelector::SelectorType::WEARER, 0), std::make_unique<StatusEffectEffect>(std::make_unique<PoisonedStatusEffect>(PoisonedStatusEffect())));
 		return fakeStimpak;
-	} else if(r < 40) {
+	} else if(r < 45) {
 		std::unique_ptr<Actor> antidote = std::make_unique<Actor>(x, y, '!', "antidote", sf::Color(0, 128, 128));
 		antidote->blocks = false;
 		antidote->pickable = std::make_unique<Pickable>(TargetSelector(TargetSelector::SelectorType::WEARER, 0), std::make_unique<StatusEffectRemovalEffect>(std::make_unique<PoisonedStatusEffect>(PoisonedStatusEffect())));
 		return antidote;
-	} else if(r < 50) {
+	} else if(r < 55) {
 		std::unique_ptr<Actor> blasterBoltDevice = std::make_unique<Actor>(x, y, '?', "blaster bolt device", sf::Color(128, 128, 0));
 		blasterBoltDevice->blocks = false;
 		blasterBoltDevice->pickable = std::make_unique<Pickable>(TargetSelector(TargetSelector::SelectorType::CLOSEST_MONSTER, 5), std::make_unique<HealthEffect>(-20));
