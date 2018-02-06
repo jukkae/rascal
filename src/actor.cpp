@@ -47,8 +47,10 @@ float Actor::update(GameplayState* state) {
 			if(isPlayer()) body->nutrition -= turnCost;
 			if(body->nutrition <= 0) {
 				body->nutrition = 0;
-				GenericActorEvent e(this, "%s are feeling pretty hungry");
-				world->notify(e);
+				if(d6() == 1) {
+					GenericActorEvent e(this, "%s are feeling pretty hungry");
+					world->notify(e);
+				}
 				if(d12() == 1) {
 					destructible->takeDamage(this, d3()+1);
 					GenericActorEvent e(this, "%s are REALLY feeling pretty hungry");

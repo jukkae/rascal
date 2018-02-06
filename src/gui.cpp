@@ -101,11 +101,6 @@ void Gui::renderStats(World* world, sf::RenderWindow* window) {
 		+ " i:" + std::to_string(player->body->getModifier(player->body->intelligence));
 	io::text(atkBonusString, constants::SCREEN_WIDTH-40, 4+constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT, colors::lightBlue);
 
-	std::string hungerString = "nutrition:" + std::to_string(player->body->nutrition);
-	io::text(hungerString, constants::SCREEN_WIDTH-40, 5+constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT, colors::lightBlue);
-
-	std::string iodineString = "iodine:" + std::to_string(player->body->iodine);
-	io::text(iodineString, constants::SCREEN_WIDTH-40, 6+constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT, colors::lightBlue);
 }
 
 void Gui::renderNav(World* world, sf::RenderWindow* window) {
@@ -119,6 +114,13 @@ void Gui::renderNav(World* world, sf::RenderWindow* window) {
 		io::text(location, constants::SCREEN_WIDTH-20, 3+constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT, colors::lightBlue);
 		std::string rad = "rad: " + std::to_string(world->radiation);
 		io::text(rad, constants::SCREEN_WIDTH-20, 4+constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT, colors::lightBlue);
+
+		// TODO doesn't belong here, temporary until info management is figured out
+		std::string hungerString = "nutrition:" + std::to_string(player->body->nutrition);
+		io::text(hungerString, constants::SCREEN_WIDTH-40, 5+constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT, colors::lightBlue);
+
+		std::string iodineString = "iodine:" + std::to_string(player->body->iodine);
+		io::text(iodineString, constants::SCREEN_WIDTH-40, 6+constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT, colors::lightBlue);
 	}
 
 }
