@@ -370,6 +370,15 @@ std::unique_ptr<Actor> npc::makeGuard(World* world, Map* map, int x, int y) {
 
 		a->container->add(std::move(ration));
 
+		if(d6() >= 3) {
+			std::unique_ptr<Actor> stimpak = std::make_unique<Actor>(x, y, '!', "stimpak", sf::Color(128, 128, 128));
+			stimpak->blocks = false;
+			stimpak->pickable = std::make_unique<Pickable>(TargetSelector(TargetSelector::SelectorType::WEARER, 0), std::make_unique<HealthEffect>(4));
+			stimpak->world = world; //FIXME that I need to do this is bad and error-prone. Figure out better ways of actor creation.
+
+			a->container->add(std::move(stimpak));
+		}
+
 		return a;
 }
 
@@ -389,6 +398,15 @@ std::unique_ptr<Actor> npc::makeBoxer(World* world, Map* map, int x, int y) {
 			knuckleduster->wieldable = std::make_unique<Wieldable>(WieldableType::ONE_HAND);
 			knuckleduster->world = world;
 			a->container->add(std::move(knuckleduster));
+		}
+
+		if(d6() >= 3) {
+			std::unique_ptr<Actor> stimpak = std::make_unique<Actor>(x, y, '!', "stimpak", sf::Color(128, 128, 128));
+			stimpak->blocks = false;
+			stimpak->pickable = std::make_unique<Pickable>(TargetSelector(TargetSelector::SelectorType::WEARER, 0), std::make_unique<HealthEffect>(4));
+			stimpak->world = world; //FIXME that I need to do this is bad and error-prone. Figure out better ways of actor creation.
+
+			a->container->add(std::move(stimpak));
 		}
 		return a;
 }
