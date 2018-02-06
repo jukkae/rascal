@@ -1,4 +1,6 @@
 #include "world.hpp"
+
+#include "body.hpp"
 #include "damage.hpp"
 #include "destructible.hpp"
 #include "dice.hpp"
@@ -60,7 +62,10 @@ void World::applyRadiation(float dt) {
 				dmg = d2();
 			}
 			Actor* player = getPlayer();
-			player->destructible->takeDamage(player, dmg, DamageType::RADIATION);
+			int iodine = player->body->iodine;
+			if(d10() >= iodine) {
+				player->destructible->takeDamage(player, dmg, DamageType::RADIATION);
+			}
 			GenericActorEvent e(player, "You feel a bit sick from the radiation...");
 			notify(e);
 		}

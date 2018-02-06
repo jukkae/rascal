@@ -469,7 +469,7 @@ std::unique_ptr<Actor> item::makeItem(World* world, Map* map, int x, int y) {
 	} else if(r < 20) {
 		std::unique_ptr<Actor> a = std::make_unique<Actor>(x, y, '!', "iodine syringe", sf::Color(128, 128, 0));
 		a->blocks = false;
-		a->pickable = std::make_unique<Pickable>(TargetSelector(TargetSelector::SelectorType::WEARER, 0), std::make_unique<HealthEffect>(4, HealthEffectType::IODINE));
+		a->pickable = std::make_unique<Pickable>(TargetSelector(TargetSelector::SelectorType::WEARER, 0), std::make_unique<HealthEffect>(d3()+2, HealthEffectType::IODINE));
 		return a;
 	} else if(r < 30) {
 		std::unique_ptr<Actor> stimpak = std::make_unique<Actor>(x, y, '!', "stimpak", sf::Color(128, 0, 128));

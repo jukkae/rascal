@@ -3,6 +3,7 @@
 #include "actor.hpp"
 #include "ai.hpp"
 #include "body.hpp"
+#include "damage.hpp"
 #include "destructible.hpp"
 #include "event.hpp"
 #include "world.hpp"
@@ -27,9 +28,15 @@ bool HealthEffect::applyTo(Actor* actor) {
 		return false;
 	} else if (type == HealthEffectType::IODINE) { //FIXME add iodine OD
 		actor->body->iodine += amount;
-		return true;
+		if(actor->body->iodine > 10) {
+			actor->destructible->takeDamage(actor, 2*(actor->body->iodine - 10), DamageType::RADIATION);
+			GenericActorEvent e(actor, "That's probably enough iodine for now!");
+			actor->world->notify(e);
+			actor->body->iodine = 10;
+		}
 		GenericActorEvent e(actor, "You can feel the iodine flow through you!");
 		actor->world->notify(e);
+		return true;
 	}
 	return false;
 }
