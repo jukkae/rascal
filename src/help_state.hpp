@@ -10,6 +10,8 @@ public:
 	void update() override;
 	void render() override;
 private:
+	std::string helpText;
+
 };
 
 #endif /* HELP_STATE_HPP */

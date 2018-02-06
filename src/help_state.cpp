@@ -9,7 +9,12 @@
 HelpState::HelpState(Engine* engine) :
 State(engine, engine->getWindow())
 {
-
+	{
+	std::ifstream fin("assets/help.txt");
+	std::stringstream buffer;
+	buffer << fin.rdbuf();
+	helpText = buffer.str();
+	}
 }
 
 void HelpState::handleEvents() {
@@ -47,5 +52,12 @@ void HelpState::render() {
 	std::string version = "Version " + version::VERSION;
 	x = (constants::SCREEN_WIDTH - version.length()) / 2;
 	io::text(version, x, 2, colors::brightBlue);
+
+	x = (constants::SCREEN_WIDTH - 24) / 2; //FIXME known width
+	io::text(helpText, x, 6, colors::lightGreen);
+
+	std::string copyright = "(c) 2017- jukkae";
+	x = (constants::SCREEN_WIDTH - copyright.length()) / 2;
+	io::text(copyright, x, constants::SCREEN_HEIGHT - 3, colors::brightBlue);
 }
 
