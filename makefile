@@ -42,7 +42,7 @@ zip-bundle:
 	zip -vr rascal.zip Rascal.app/ -x "*.DS_Store"
 
 clean:
-	rm -rf *.o rascal save.txt rascal.dSYM obj/*.o *.pch
+	rm -rf *.o rascal save.txt rascal.dSYM obj/*.o *.pch *.pch-* rascal.zip Rascal.app
 
 run:
 	./rascal
