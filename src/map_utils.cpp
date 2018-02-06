@@ -18,12 +18,12 @@
 #include "world.hpp"
 #include <SFML/Graphics.hpp>
 
-void map_utils::addItems(World* world, Map* map) {
+void map_utils::addItems(World* world, Map* map, int difficulty) {
 	for(int x = 0; x < map->width; ++x) {
 		for(int y = 0; y < map->height; ++y) {
 			int r = d100();
 			if (!map->isWall(x, y) && r == 1) { // can't use canWalk yet
-					world->addActor(item::makeItem(world, map, x, y));
+					world->addActor(item::makeItem(world, map, x, y, difficulty));
 			}
 		}
 	}
@@ -458,40 +458,41 @@ std::unique_ptr<Actor> npc::makeAndroid(World* world, Map* map, int x, int y) {
 		return a;
 }
 
-std::unique_ptr<Actor> item::makeItem(World* world, Map* map, int x, int y) {
+std::unique_ptr<Actor> item::makeItem(World* world, Map* map, int x, int y, int difficulty) {
 	int r = d100();
-	if(r < 10) {
+	if(r < 15) {
 		std::unique_ptr<Actor> jerky = std::make_unique<Actor>(x, y, '%', "jerky", sf::Color(128, 0, 0));
 		jerky->blocks = false;
 		jerky->pickable = std::make_unique<Pickable>();
 		jerky->comestible = std::make_unique<Comestible>();
 		return jerky;
-	} else if(r < 15) {
+	} else if(r < 25) {
 		std::unique_ptr<Actor> a = std::make_unique<Actor>(x, y, '!', "iodine syringe", sf::Color(128, 128, 0));
 		a->blocks = false;
 		a->pickable = std::make_unique<Pickable>(TargetSelector(TargetSelector::SelectorType::WEARER, 0), std::make_unique<HealthEffect>(d3()+2, HealthEffectType::IODINE));
 		return a;
-	} else if(r < 35) {
+	} else if(r < 45) {
 		std::unique_ptr<Actor> stimpak = std::make_unique<Actor>(x, y, '!', "stimpak", sf::Color(128, 0, 128));
+		int amount = difficulty + d4();
 		stimpak->blocks = false;
-		stimpak->pickable = std::make_unique<Pickable>(TargetSelector(TargetSelector::SelectorType::WEARER, 0), std::make_unique<HealthEffect>(4));
+		stimpak->pickable = std::make_unique<Pickable>(TargetSelector(TargetSelector::SelectorType::WEARER, 0), std::make_unique<HealthEffect>(amount));
 		return stimpak;
-	} else if(r < 40) {
+	} else if(r < 50) {
 		std::unique_ptr<Actor> fakeStimpak = std::make_unique<Actor>(x, y, '!', "stimpak", sf::Color(128, 0, 128));
 		fakeStimpak->blocks = false;
 		fakeStimpak->pickable = std::make_unique<Pickable>(TargetSelector(TargetSelector::SelectorType::WEARER, 0), std::make_unique<StatusEffectEffect>(std::make_unique<PoisonedStatusEffect>(PoisonedStatusEffect())));
 		return fakeStimpak;
-	} else if(r < 45) {
+	} else if(r < 55) {
 		std::unique_ptr<Actor> antidote = std::make_unique<Actor>(x, y, '!', "antidote", sf::Color(0, 128, 128));
 		antidote->blocks = false;
 		antidote->pickable = std::make_unique<Pickable>(TargetSelector(TargetSelector::SelectorType::WEARER, 0), std::make_unique<StatusEffectRemovalEffect>(std::make_unique<PoisonedStatusEffect>(PoisonedStatusEffect())));
 		return antidote;
-	} else if(r < 55) {
+	} else if(r < 60) {
 		std::unique_ptr<Actor> blasterBoltDevice = std::make_unique<Actor>(x, y, '?', "blaster bolt device", sf::Color(128, 128, 0));
 		blasterBoltDevice->blocks = false;
 		blasterBoltDevice->pickable = std::make_unique<Pickable>(TargetSelector(TargetSelector::SelectorType::CLOSEST_MONSTER, 5), std::make_unique<HealthEffect>(-20));
 		return blasterBoltDevice;
-	} else if(r < 60) {
+	} else if(r < 65) {
 		std::unique_ptr<Actor> fragGrenade = std::make_unique<Actor>(x, y, '?', "fragmentation grenade", sf::Color(128, 255, 128));
 		fragGrenade->blocks = false;
 		fragGrenade->pickable = std::make_unique<Pickable>(TargetSelector(TargetSelector::SelectorType::SELECTED_RANGE, 3), std::make_unique<HealthEffect>(-12));
@@ -507,6 +508,13 @@ std::unique_ptr<Actor> item::makeItem(World* world, Map* map, int x, int y) {
 		teslaCoil->pickable = std::make_unique<Pickable>(TargetSelector(TargetSelector::SelectorType::WEARER_RANGE, 5), std::make_unique<HealthEffect>(-6));
 		return teslaCoil;
 	} else if(r < 80) {
+		std::unique_ptr<Actor> rock = std::make_unique<Actor>(x, y, '|', "rock", sf::Color(255, 128, 128));
+		rock->blocks = false;
+		rock->pickable = std::make_unique<Pickable>();
+		rock->attacker = std::make_unique<Attacker>(1, 4, 0);
+		rock->wieldable = std::make_unique<Wieldable>(WieldableType::ONE_HAND);
+		return rock;
+	} else if(r < 85 && difficulty >= 2) {
 		std::unique_ptr<Actor> baton = std::make_unique<Actor>(x, y, '|', "stun baton", sf::Color(128, 128, 255));
 		baton->blocks = false;
 		baton->pickable = std::make_unique<Pickable>();
@@ -514,7 +522,7 @@ std::unique_ptr<Actor> item::makeItem(World* world, Map* map, int x, int y) {
 		baton->attacker->effectGenerator = std::make_unique<EffectGeneratorFor<StatusEffectEffect>>(Attribute::SPEED, -4);
 		baton->wieldable = std::make_unique<Wieldable>(WieldableType::ONE_HAND);
 		return baton;
-	} else if(r < 85) {
+	} else if(r < 90 && difficulty >= 3) {
 		std::unique_ptr<Actor> knuckleduster = std::make_unique<Actor>(x, y, '|', "knuckle duster", sf::Color(128, 255, 128));
 		knuckleduster->blocks = false;
 		knuckleduster->pickable = std::make_unique<Pickable>();
@@ -522,13 +530,6 @@ std::unique_ptr<Actor> item::makeItem(World* world, Map* map, int x, int y) {
 		knuckleduster->attacker->effectGenerator = std::make_unique<EffectGeneratorFor<MoveEffect>>();
 		knuckleduster->wieldable = std::make_unique<Wieldable>(WieldableType::ONE_HAND);
 		return knuckleduster;
-	} else if(r < 90) {
-		std::unique_ptr<Actor> rock = std::make_unique<Actor>(x, y, '|', "rock", sf::Color(255, 128, 128));
-		rock->blocks = false;
-		rock->pickable = std::make_unique<Pickable>();
-		rock->attacker = std::make_unique<Attacker>(1, 4, 0);
-		rock->wieldable = std::make_unique<Wieldable>(WieldableType::ONE_HAND);
-		return rock;
 	} else if(r < 92) {
 		std::unique_ptr<Actor> pistol = std::make_unique<Actor>(x, y, '\\', "pistol", sf::Color(255, 128, 255));
 		pistol->blocks = false;
@@ -536,7 +537,7 @@ std::unique_ptr<Actor> item::makeItem(World* world, Map* map, int x, int y) {
 		pistol->rangedAttacker = std::make_unique<RangedAttacker>(1, 4, 0, 10.0);
 		pistol->wieldable = std::make_unique<Wieldable>(WieldableType::ONE_HAND);
 		return pistol;
-	} else if(r < 94){
+	} else if(r < 94 && difficulty >= 3){
 		std::unique_ptr<Actor> rifle = std::make_unique<Actor>(x, y, '\\', "rifle", sf::Color(128, 255, 255));
 		rifle->blocks = false;
 		rifle->pickable = std::make_unique<Pickable>();
@@ -550,7 +551,7 @@ std::unique_ptr<Actor> item::makeItem(World* world, Map* map, int x, int y) {
 		armor->wieldable = std::make_unique<Wieldable>(WieldableType::TORSO);
 		armor->armor = std::make_unique<Armor>(1);
 		return armor;
-	} else if(r < 96){
+	} else if(r < 96 && difficulty >= 4){
 		std::unique_ptr<Actor> armor = std::make_unique<Actor>(x, y, '[', "combat armor", sf::Color(128, 255, 255));
 		armor->blocks = false;
 		armor->pickable = std::make_unique<Pickable>();
@@ -564,7 +565,7 @@ std::unique_ptr<Actor> item::makeItem(World* world, Map* map, int x, int y) {
 		armor->wieldable = std::make_unique<Wieldable>(WieldableType::HEAD);
 		armor->armor = std::make_unique<Armor>(1);
 		return armor;
-	} else if(r < 98){
+	} else if(r < 98 && difficulty >= 2){
 		std::unique_ptr<Actor> armor = std::make_unique<Actor>(x, y, '[', "combat helmet", sf::Color(255, 0, 128));
 		armor->blocks = false;
 		armor->pickable = std::make_unique<Pickable>();

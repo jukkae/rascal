@@ -166,7 +166,7 @@ void GameplayState::nextLevel() {
 	else world->map.generateMap(MapType::BUILDING);
 
 	map_utils::addDoors(world, &world->map);
-	map_utils::addItems(world, &world->map);
+	map_utils::addItems(world, &world->map, world->level);
 	map_utils::addMonsters(world, &world->map, world->level);
 	if(downstairs) {
 		map_utils::addStairs(world, &world->map, downstairsX, downstairsY);
