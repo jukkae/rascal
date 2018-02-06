@@ -10,6 +10,11 @@
 sf::Font font::mainFont;
 sf::Font font::squareFont;
 
+namespace {
+std::string squareFontFileName = "square.ttf";
+std::string mainFontFileName   = "FSEX300.ttf";
+} // namespace
+
 extern void font::load() {
 #ifdef __APPLE__
 # ifdef BUNDLE_BUILD
@@ -20,36 +25,32 @@ extern void font::load() {
     {
     }
     CFRelease(resourcesURL);
-
     chdir(path);
-    std::cout << "Current Path: " << path << std::endl;
+    //std::cout << "Current Path: " << path << std::endl;
 
-
-	if(!font::mainFont.loadFromFile("../Resources/Assets/FSEX300.ttf")) {
-		std::cout << "error loading main font: Not in bundle or bundle malformed\n";
-		if(!font::mainFont.loadFromFile("assets/FSEX300.ttf")) {
-			std::cout << "retry failed\n";
+	if(!font::mainFont.loadFromFile("../Resources/Assets/" + mainFontFileName)) {
+		if(!font::mainFont.loadFromFile("assets/" + mainFontFileName)) {
+			std::cout << "font loading failed\n";
 		}
 	}
-	if(!font::squareFont.loadFromFile("../Resources/Assets/square.ttf")) {
-		std::cout << "error loading square font: Not in bundle or bundle malformed\n";
-		if(!font::squareFont.loadFromFile("assets/square.ttf")) {
-			std::cout << "retry failed\n";
+	if(!font::squareFont.loadFromFile("../Resources/Assets/" + squareFontFileName)) {
+		if(!font::squareFont.loadFromFile("assets/" + squareFontFileName)) {
+			std::cout << "font loading failed\n";
 		}
 	}
-# else
-	if(!font::mainFont.loadFromFile("assets/FSEX300.ttf")) {
+# else /* BUNDLE_BUILD */
+	if(!font::mainFont.loadFromFile("assets/" + mainFontFileName)) {
 		std::cout << "error loading main font\n";
 	}
-	if(!font::squareFont.loadFromFile("assets/square.ttf")) {
+	if(!font::squareFont.loadFromFile("assets/" + squareFontFileName)) {
 		std::cout << "error loading square font\n";
 	}
-# endif /* BUNDLE_BUILD */
+# endif /* __APPLE__ */
 #elif __linux__
-	if(!font::mainFont.loadFromFile("assets/FSEX300.ttf")) {
+	if(!font::mainFont.loadFromFile("assets/" + mainFontFileName)) {
 		std::cout << "error loading main font\n";
 	}
-	if(!font::squareFont.loadFromFile("assets/square.ttf")) {
+	if(!font::squareFont.loadFromFile("assets/" + squareFontFileName)) {
 		std::cout << "error loading square font\n";
 	}
 #else
