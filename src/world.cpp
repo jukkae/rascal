@@ -56,7 +56,7 @@ void World::applyRadiation(float dt) {
 	if (dt > 0) {
 		int r = d1000();
 		int rx = r * dt;
-		if(rx <= radiation * 100){
+		if(rx <= radiation * 50){
 			int dmg = 0;
 			if(d3() == 1) {
 				dmg = d2();
