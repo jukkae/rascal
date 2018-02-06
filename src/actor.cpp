@@ -45,7 +45,17 @@ float Actor::update(GameplayState* state) {
 			utils::erase_where(statusEffects, [](auto& e){ return !e->isAlive(); });
 			if(isPlayer()) world->computeFov(x, y, fovRadius);
 			if(isPlayer()) body->nutrition -= turnCost;
-			if(body->nutrition <= 0) destructible->die(this);
+			if(body->nutrition <= 0) {
+				body->nutrition = 0;
+				GenericActorEvent e(this, "%s are feeling pretty hungry");
+				world->notify(e);
+				if(d20() == 1) {
+					destructible->takeDamage(this, d3()+1);
+					GenericActorEvent e(this, "%s are REALLY feeling pretty hungry");
+					world->notify(e);
+				}
+				//destructible->die(this);
+			}
 			if(body->iodine > 0) {
 				if(d20() == 1) {
 					body->iodine--; //FIXME doesn't take turn cost into account
@@ -134,6 +144,7 @@ int Actor::getAttributeWithModifiers(Attribute attribute) {
 			}
 		}
 	}
+	if(isPlayer()) if(body->nutrition == 0) value /= 3;
 	if(value <= 0) value = 1; // 0 or 1?
 	return value;
 }
