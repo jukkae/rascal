@@ -116,7 +116,7 @@ void InventoryMenuState::render() {
 	std::string weightString = "weight: " + std::to_string(contentsWeight) + " / " + std::to_string(capacity);
 	io::text(weightString, 2, y+2, colors::brightBlue);
 
-	std::string commandsString = "(u)se - (d)rop - (w)ield/un(w)ield - esc to close";
+	std::string commandsString = "(u)se - (d)rop - (w)ield/un(w)ield - (e)at - esc to close";
 	io::text(commandsString, 2, y+4, colors::brightBlue);
 
 	renderStats();

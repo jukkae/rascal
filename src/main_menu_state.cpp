@@ -4,6 +4,7 @@
 #include "engine.hpp"
 #include "engine_command.hpp"
 #include "font.hpp"
+#include "help_state.hpp"
 #include "io.hpp"
 
 #include <fstream>
@@ -19,6 +20,7 @@ State(engine, engine->getWindow())
 {
 	MenuItem newGame = { MenuItemCode::NEW_GAME, "New game!" };
 	MenuItem cont = { MenuItemCode::CONTINUE, "Continue!" };
+	MenuItem help = { MenuItemCode::HELP, "Help & about" };
 	MenuItem exit = { MenuItemCode::EXIT, "Exit!" };
 
 	menuItems.push_back(newGame);
@@ -26,6 +28,7 @@ State(engine, engine->getWindow())
 	if(io::fileExists(constants::SAVE_FILE_NAME) || forceShowContinue) {
 		if(!engine->gameOver) menuItems.push_back(cont);
 	}
+	menuItems.push_back(help);
 	menuItems.push_back(exit);
 
 	selectedItem = 0;
@@ -117,6 +120,12 @@ void MainMenuState::handleSelectedMenuItem() {
 			break;
 		case MenuItemCode::EXIT:
 			engine->addEngineCommand(ExitCommand(engine));
+			break;
+		case MenuItemCode::HELP:
+			{
+				std::unique_ptr<State> helpState = std::make_unique<HelpState>(engine);
+				engine->pushState(std::move(helpState));
+			}
 			break;
 		case MenuItemCode::NONE:
 			break;
