@@ -365,12 +365,20 @@ bool ShootAction::execute() {
 		return false;
 	} else {
 		// TODO check for LOS
+		bool hit = false;
 		if(actor->body) {
 			int toHitBonus = actor->body->getModifier(actor->body->intelligence);
 			int toDamageBonus = actor->body->getModifier(actor->body->agility);
-			actor->wornWeapon->rangedAttacker->attack(actor, enemy, toHitBonus, toDamageBonus);
+			hit = actor->wornWeapon->rangedAttacker->attack(actor, enemy, toHitBonus, toDamageBonus);
 		} else {
-			actor->wornWeapon->rangedAttacker->attack(actor, enemy);
+			hit = actor->wornWeapon->rangedAttacker->attack(actor, enemy);
+		}
+		if(hit) {
+			//ActionSuccessEvent e(actor, "It's a hit!"); // Printed from ShootAction
+			//world->notify(e);
+		} else {
+			ActionFailureEvent e(actor, "The shot ricochets harmlessly!");
+			world->notify(e);
 		}
 	}
 	return true;
