@@ -121,7 +121,9 @@ void InventoryMenuState::render() {
 	int itemIndex = 0;
 	for (auto pile : piles) {
 		sf::Color color = itemIndex == selectedItem ? colors::brightBlue : colors::darkBlue;
-		io::text(pile.at(0)->name + " (" + std::to_string(pile.size()) + ")", x, y, color);
+		int pileSize = pile.size();
+		if(pileSize != 1) { io::text(pile.at(0)->name + " (" + std::to_string(pileSize) + ")", x, y, color); }
+		else { io::text(pile.at(0)->name,  x, y, color); }
 		++y;
 		++itemIndex;
 	}
