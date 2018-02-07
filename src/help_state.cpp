@@ -53,8 +53,15 @@ void HelpState::render() {
 	x = (constants::SCREEN_WIDTH - version.length()) / 2;
 	io::text(version, x, 2, colors::brightBlue);
 
+	int lines;
+	lines = std::count(helpText.begin(), helpText.end(), '\n');
 	x = (constants::SCREEN_WIDTH - 24) / 2; //FIXME known width
 	io::text(helpText, x, 6, colors::lightGreen);
+
+	std::string story = "To escape, fight your way to the top...";
+	x = (constants::SCREEN_WIDTH - story.length()) / 2;
+	io::text(story, x, 6 + lines + 3, colors::brightBlue);
+
 
 	std::string copyright = "(c) 2017- jukkae";
 	x = (constants::SCREEN_WIDTH - copyright.length()) / 2;
