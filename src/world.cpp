@@ -60,7 +60,15 @@ void World::applyRadiation(float dt) {
 			Actor* player = getPlayer();
 			int dmg = 0;
 			if(d3() == 1) {
-				dmg = d2();
+				switch(radiation){
+					case 0:  dmg = 0;    break;
+					case 1:  dmg = 1;    break;
+					case 2:  dmg = d2(); break;
+					case 3:  dmg = d3(); break;
+					case 4:  dmg = d4(); break;
+					case 5:  dmg = d5(); break;
+					default: dmg = d6(); break;
+				}
 			}
 			if(dmg != 0) {
 				GenericActorEvent e(player, "You feel a bit sick from the radiation...");
