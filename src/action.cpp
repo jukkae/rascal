@@ -292,9 +292,14 @@ bool UnWieldItemAction::execute() {
 
 bool EatAction::execute() {
 	if(item->comestible) {
+		int originalNutrition = actor->body->nutrition;
 		actor->body->nutrition += item->comestible->nutrition;
 		ActionSuccessEvent e(item, "You eat the thing!");
 		actor->world->notify(e);
+		if(originalNutrition <= 0) {
+			ActionSuccessEvent f(item, "You don't feel hungry anymore!");
+			actor->world->notify(f);
+		}
 		actor->container->remove(item);
 		return true;
 	}
