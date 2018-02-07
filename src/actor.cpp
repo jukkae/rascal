@@ -59,7 +59,7 @@ float Actor::update(GameplayState* state) {
 				//destructible->die(this);
 			}
 			if(body->iodine > 0) {
-				if(d20() == 1) {
+				if(d100() <= 2) {
 					body->iodine--; //FIXME doesn't take turn cost into account
 				}
 			}
