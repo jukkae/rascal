@@ -1,6 +1,7 @@
 #ifndef ENGINE_HPP
 #define ENGINE_HPP
 class State;
+#include "preferences.hpp"
 #include <queue>
 #include <string>
 
@@ -33,6 +34,7 @@ public:
 
 	sf::RenderWindow* getWindow() { return window; }
 	bool gameOver = false; //TODO this is bad and i feel bad
+	Preferences preferences;
 private:
 	sf::RenderWindow* window;
 	State* gameplayState;
@@ -41,5 +43,6 @@ private:
 	std::queue<sf::Event> events;
 
 	void executeEngineCommand();
+	void parsePreferences();
 };
 #endif /* ENGINE_HPP */

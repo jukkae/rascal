@@ -21,6 +21,7 @@
 
 Engine::Engine(sf::RenderWindow* window) : window(window) {
 	font::load();
+	parsePreferences();
 	std::unique_ptr<State> gps = std::make_unique<GameplayState>(this, window);
 
 	bool showContinueInMenu = false;
@@ -131,4 +132,17 @@ void Engine::save() {
 	oa.template register_type<EffectGeneratorFor<StatusEffectEffect>>();
 
 	oa << gameplayState;
+}
+
+void Engine::parsePreferences() {
+	std::ifstream fin("assets/preferences.txt");
+	std::string line;
+	while(std::getline(fin, line)) {
+		std::istringstream iss(line);
+		std::string a, b;
+		if (!(iss >> a >> b)) { break; } // error
+		std::cout << a;
+		std::cout << b;
+		std::cout << "\n";
+	}
 }
