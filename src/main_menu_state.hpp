@@ -8,7 +8,7 @@
 class Engine;
 class MainMenuState : public State {
 public:
-	enum class MenuItemCode { NONE, NEW_GAME, CONTINUE, HELP, EXIT };
+	enum class MenuItemCode { NONE, NEW_GAME, CONTINUE, HELP, PREFERENCES, EXIT };
 
 	MainMenuState(Engine* engine, bool forceShowContinue = false);
 
