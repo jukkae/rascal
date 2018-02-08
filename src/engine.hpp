@@ -43,6 +43,7 @@ private:
 	std::queue<sf::Event> events;
 
 	void executeEngineCommand();
-	void parsePreferences();
+	void loadPreferences();
+	void savePreferences();
 };
 #endif /* ENGINE_HPP */
