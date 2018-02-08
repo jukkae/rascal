@@ -4,17 +4,17 @@
 #include "constants.hpp"
 #include "engine_command.hpp"
 #include "io.hpp"
+#include "preferences.hpp"
 #include "version.hpp"
 
 PreferencesState::PreferencesState(Engine* engine) :
-State(engine, engine->getWindow())
+State(engine, engine->getWindow()),
+preferences(engine->preferences)
 {
-	{
-	std::ifstream fin("assets/preferences.txt");
-	std::stringstream buffer;
-	buffer << fin.rdbuf();
-	preferences = buffer.str();
-	}
+	PreferenceItem music = { preferences.music.first, preferences.music.second };
+	PreferenceItem dummy = { preferences.dummy.first, preferences.dummy.second };
+	items.push_back(music);
+	items.push_back(dummy);
 }
 
 void PreferencesState::handleEvents() {
@@ -23,11 +23,23 @@ void PreferencesState::handleEvents() {
 		if(event.type == sf::Event::KeyPressed) {
 			using k = sf::Keyboard::Key;
 			switch(event.key.code) {
+				case k::Up:
+					if(selectedItem > 0) --selectedItem;
+					break;
+				case k::Down:
+					if(selectedItem < items.size() - 1) ++selectedItem;
+					break;
+				case k::Left:
+					items.at(selectedItem).value ^= true;
+					break;
+				case k::Right:
+					items.at(selectedItem).value ^= true;
+					break;
 				case k::Escape:
 					engine->addEngineCommand(ContinueCommand(engine));
 					break;
 				case k::Return:
-					engine->addEngineCommand(ContinueCommand(engine));
+					handleSelectedItem();
 					break;
 				default:
 					break;
@@ -50,8 +62,16 @@ void PreferencesState::render() {
 	int x = (constants::SCREEN_WIDTH - header.length()) / 2;
 	io::text(header, x, 1, colors::brightBlue);
 
-	int lines;
-	lines = std::count(preferences.begin(), preferences.end(), '\n');
-	x = (constants::SCREEN_WIDTH - preferences.length()) / 2; //FIXME known width
-	io::text(preferences, x, 6, colors::brightBlue);
+	int menuY = 4;
+	int itemIndex = 0;
+	for(PreferenceItem item : items) {
+		x = (constants::SCREEN_WIDTH / 2) - item.key.length(); // center colons
+		sf::Color color = selectedItem == itemIndex ? colors::brightBlue : colors::darkBlue;
+		io::text(item.key + " : " + (item.value ? "on" : "off"), x, menuY+itemIndex, color);
+		++itemIndex;
+	}
+}
+
+void PreferencesState::handleSelectedItem() {
+
 }
