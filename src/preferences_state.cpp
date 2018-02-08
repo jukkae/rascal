@@ -13,8 +13,10 @@ preferences(engine->preferences)
 {
 	PreferenceItem music = { preferences.music.first, preferences.music.second };
 	PreferenceItem dummy = { preferences.dummy.first, preferences.dummy.second };
+	PreferenceItem longer = { preferences.longer_dummy_preference.first, preferences.longer_dummy_preference.second };
 	items.push_back(music);
 	items.push_back(dummy);
+	items.push_back(longer);
 }
 
 void PreferencesState::handleEvents() {
