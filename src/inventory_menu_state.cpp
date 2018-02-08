@@ -35,6 +35,22 @@ actor(actor) {
 	capacity = actor->container->capacity;
 }
 
+void InventoryMenuState::sortIntoPiles() {
+	if(inventoryContents.size() > 0) {
+		int i = 0;
+		while(i < inventoryContents.size()) {
+			std::string name = inventoryContents.at(i)->name;
+			std::vector<Actor*> pile;
+			while(i < inventoryContents.size() && name == inventoryContents.at(i)->name) {
+				pile.push_back(inventoryContents.at(i));
+				++i;
+				if(pile.back()->rangedAttacker) break;
+			}
+			piles.push_back(pile);
+		}
+	}
+}
+
 void InventoryMenuState::handleEvents() {
 	sf::Event event;
 	while(engine->pollEvent(event)) {
@@ -105,7 +121,9 @@ void InventoryMenuState::render() {
 	int itemIndex = 0;
 	for (auto pile : piles) {
 		sf::Color color = itemIndex == selectedItem ? colors::brightBlue : colors::darkBlue;
-		io::text(pile.at(0)->name + " (" + std::to_string(pile.size()) + ")", x, y, color);
+		int pileSize = pile.size();
+		if(pileSize != 1) { io::text(pile.at(0)->name + " (" + std::to_string(pileSize) + ")", x, y, color); }
+		else { io::text(pile.at(0)->name,  x, y, color); }
 		++y;
 		++itemIndex;
 	}
@@ -199,19 +217,4 @@ void InventoryMenuState::renderBodyParts() {
 }
 
 void InventoryMenuState::renderPiles() {
-}
-
-void InventoryMenuState::sortIntoPiles() {
-	if(inventoryContents.size() > 0) {
-		int i = 0;
-		while(i < inventoryContents.size()) {
-			std::string name = inventoryContents.at(i)->name;
-			std::vector<Actor*> pile;
-			while(i < inventoryContents.size() && name == inventoryContents.at(i)->name) {
-				pile.push_back(inventoryContents.at(i));
-				++i;
-			}
-			piles.push_back(pile);
-		}
-	}
 }

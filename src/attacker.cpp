@@ -66,7 +66,7 @@ int Attacker::getAttackBaseDamage() {
 	return dmg;
 }
 
-void RangedAttacker::attack(Actor* owner, Actor* target, int toHitBonus, int toDamageBonus) {
+bool RangedAttacker::attack(Actor* owner, Actor* target, int toHitBonus, int toDamageBonus) {
 	RangedHitEvent e(owner, target);
 	--rounds;
 	if(target->destructible && !target->destructible->isDead()) {
@@ -79,17 +79,20 @@ void RangedAttacker::attack(Actor* owner, Actor* target, int toHitBonus, int toD
 					e.damage = dmg - target->destructible->defense;
 					e.weapon = owner->wornWeapon;
 				}
-			} else {
+			} else { // TODO what happens here
 				e.damage = dmg - target->destructible->defense;
 				e.weapon = owner->wornWeapon;
 			}
 			owner->world->notify(e);
 			target->destructible->takeDamage(target, dmg);
+			return true;
 		}
+		return false;
 	}
 	else {
 		owner->world->notify(e);
 		//TODO shooting at dead bodies
+		return true;
 	}
 }
 

@@ -41,7 +41,7 @@ public:
 	RangedAttacker(int numberOfDice = 1, int dice = 0, int bonus = 0, float range = 0.0f, int capacity = 10, int rounds = 10):
 		numberOfDice(numberOfDice), dice(dice), bonus(bonus), range(range), capacity(capacity), rounds(rounds) {;} // FIXME capacity and rounds default to something else
 
-	void attack(Actor* owner, Actor* target, int toHitBonus = 0, int toDamageBonus = 0);
+	bool attack(Actor* owner, Actor* target, int toHitBonus = 0, int toDamageBonus = 0);
 	int getAttackBaseDamage();
 
 	int numberOfDice;

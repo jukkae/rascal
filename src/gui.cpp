@@ -96,10 +96,10 @@ void Gui::renderStats(World* world, sf::RenderWindow* window) {
 	std::string atkString = "dm: " + std::to_string(n) + "d" + std::to_string(d) + "+" + std::to_string(b);
 	io::text(atkString, constants::SCREEN_WIDTH-40, 3+constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT, colors::lightBlue);
 
-	std::string atkBonusString = "s:" + std::to_string(player->body->getModifier(player->body->strength))
-		+ " a:" + std::to_string(player->body->getModifier(player->body->agility))
-		+ " i:" + std::to_string(player->body->getModifier(player->body->intelligence));
-	io::text(atkBonusString, constants::SCREEN_WIDTH-40, 4+constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT, colors::lightBlue);
+//	std::string atkBonusString = "s:" + std::to_string(player->body->getModifier(player->body->strength))
+//		+ " a:" + std::to_string(player->body->getModifier(player->body->agility))
+//		+ " i:" + std::to_string(player->body->getModifier(player->body->intelligence));
+//	io::text(atkBonusString, constants::SCREEN_WIDTH-40, 4+constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT, colors::lightBlue);
 
 }
 
