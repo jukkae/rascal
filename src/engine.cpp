@@ -21,6 +21,7 @@
 
 Engine::Engine(sf::RenderWindow* window) : window(window) {
 	font::load();
+	loadPreferences();
 	std::unique_ptr<State> gps = std::make_unique<GameplayState>(this, window);
 
 	bool showContinueInMenu = false;
@@ -88,6 +89,7 @@ void Engine::executeEngineCommand() {
 }
 
 void Engine::exit() {
+	savePreferences();
 	if(!gameOver) save();
 	::exit(0);
 }
@@ -131,4 +133,14 @@ void Engine::save() {
 	oa.template register_type<EffectGeneratorFor<StatusEffectEffect>>();
 
 	oa << gameplayState;
+}
+
+void Engine::loadPreferences() {
+	std::ifstream fin("assets/preferences.txt");
+	fin >> preferences;
+}
+
+void Engine::savePreferences() {
+	std::ofstream fout("assets/preferences.txt");
+	fout << preferences;
 }

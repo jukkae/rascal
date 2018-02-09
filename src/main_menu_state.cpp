@@ -6,6 +6,7 @@
 #include "font.hpp"
 #include "help_state.hpp"
 #include "io.hpp"
+#include "preferences_state.hpp"
 
 #include <fstream>
 #include <string>
@@ -21,6 +22,7 @@ State(engine, engine->getWindow())
 	MenuItem newGame = { MenuItemCode::NEW_GAME, "New game!" };
 	MenuItem cont = { MenuItemCode::CONTINUE, "Continue!" };
 	MenuItem help = { MenuItemCode::HELP, "Help & about" };
+	MenuItem preferences = { MenuItemCode::PREFERENCES, "Preferences" };
 	MenuItem exit = { MenuItemCode::EXIT, "Exit!" };
 
 	menuItems.push_back(newGame);
@@ -29,6 +31,7 @@ State(engine, engine->getWindow())
 		if(!engine->gameOver) menuItems.push_back(cont);
 	}
 	menuItems.push_back(help);
+	menuItems.push_back(preferences);
 	menuItems.push_back(exit);
 
 	selectedItem = 0;
@@ -125,6 +128,12 @@ void MainMenuState::handleSelectedMenuItem() {
 			{
 				std::unique_ptr<State> helpState = std::make_unique<HelpState>(engine);
 				engine->pushState(std::move(helpState));
+			}
+			break;
+		case MenuItemCode::PREFERENCES:
+			{
+				std::unique_ptr<State> preferencesState = std::make_unique<PreferencesState>(engine);
+				engine->pushState(std::move(preferencesState));
 			}
 			break;
 		case MenuItemCode::NONE:
