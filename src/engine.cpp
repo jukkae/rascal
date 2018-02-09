@@ -137,18 +137,10 @@ void Engine::save() {
 
 void Engine::loadPreferences() {
 	std::ifstream fin("assets/preferences.txt");
-	std::string line;
-	while(std::getline(fin, line)) {
-		std::istringstream iss(line);
-		std::string a, b;
-		if (!(iss >> a >> b)) { break; } // error
-		std::cout << a;
-		std::cout << b;
-		std::cout << "\n";
-	}
+	fin >> preferences;
 }
 
 void Engine::savePreferences() {
-	std::cout << "prefs:\n";
-	std::cout << preferences;
+	std::ofstream fout("assets/preferences.txt");
+	fout << preferences;
 }
