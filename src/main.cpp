@@ -9,6 +9,8 @@
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
+#include <SFML/Audio.hpp>
+
 
 int width = constants::CELL_WIDTH * constants::SCREEN_WIDTH;
 int height = constants::CELL_HEIGHT * constants::SCREEN_HEIGHT;
@@ -18,6 +20,10 @@ Engine engine(&io::window);
 namespace io { Engine* engine = &::engine; }
 
 int main() {
+	sf::Music music; // Can't be declared "in global scope" [sic], ie., in header? Crashed upon exit!
+	if(!music.openFromFile("assets/main_theme.ogg")) { ;/* error */ }
+	music.play();
+
 	io::window.setMouseCursorVisible(false);
 	while(io::window.isOpen()) {
 		sf::Event event;

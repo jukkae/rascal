@@ -8,7 +8,6 @@ class State;
 #include <SFML/Window/Event.hpp>
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
-#include <SFML/Audio.hpp>
 
 class EngineCommand;
 class Engine {
@@ -42,7 +41,6 @@ private:
 	std::vector<std::unique_ptr<State>> states;
 	std::queue<std::unique_ptr<EngineCommand>> engineCommands;
 	std::queue<sf::Event> events;
-	sf::Music music;
 
 	void executeEngineCommand();
 	void loadPreferences();

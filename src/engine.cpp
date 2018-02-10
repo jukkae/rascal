@@ -18,15 +18,9 @@
 #include "status_effect.hpp"
 #include "world.hpp"
 
-#include <SFML/Audio.hpp>
-#include <SFML/Audio/Music.hpp>
-
-
 Engine::Engine(sf::RenderWindow* window) : window(window) {
 	font::load();
 	loadPreferences();
-	if(!music.openFromFile("assets/main_theme.ogg")) { ;/* error */ }
-	music.play();
 
 	std::unique_ptr<State> gps = std::make_unique<GameplayState>(this, window);
 
@@ -96,7 +90,6 @@ void Engine::executeEngineCommand() {
 
 void Engine::exit() {
 	savePreferences();
-	music.stop();
 	if(!gameOver) save();
 	::exit(0);
 }
