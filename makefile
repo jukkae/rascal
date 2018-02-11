@@ -2,7 +2,7 @@
 
 CXX=clang
 CPPFLAGS=-Wall -std=c++1z
-LDFLAGS=-lc++ -lboost_serialization -framework SFML -framework sfml-window -framework sfml-graphics -framework sfml-system -framework CoreFoundation -rpath @executable_path/../Resources/Frameworks
+LDFLAGS=-lc++ -lboost_serialization -framework SFML -framework sfml-window -framework sfml-graphics -framework sfml-system -framework sfml-audio -framework CoreFoundation -rpath @executable_path/../Resources/Frameworks
 BUNDLE_BUILD=-DBUNDLE_BUILD
 
 # precompile headers
@@ -100,3 +100,4 @@ bundle-deps:
 	install_name_tool -change @executable_path/../Frameworks/sfml-window.framework/Versions/2.4.2/sfml-window @executable_path/../Resources/Frameworks/sfml-window.framework/Versions/2.4.2/sfml-window ./Rascal.app/Contents/MacOS/Rascal
 	install_name_tool -change @executable_path/../Frameworks/sfml-graphics.framework/Versions/2.4.2/sfml-graphics @executable_path/../Resources/Frameworks/sfml-graphics.framework/Versions/2.4.2/sfml-graphics ./Rascal.app/Contents/MacOS/Rascal
 	install_name_tool -change @executable_path/../Frameworks/sfml-system.framework/Versions/2.4.2/sfml-system @executable_path/../Resources/Frameworks/sfml-system.framework/Versions/2.4.2/sfml-system ./Rascal.app/Contents/MacOS/Rascal
+	install_name_tool -change @executable_path/../Frameworks/sfml-audio.framework/Versions/2.4.2/sfml-audio @executable_path/../Resources/Frameworks/sfml-audio.framework/Versions/2.4.2/sfml-audio ./Rascal.app/Contents/MacOS/Rascal

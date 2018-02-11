@@ -18,10 +18,12 @@
 #include "status_effect.hpp"
 #include "world.hpp"
 
-
 Engine::Engine(sf::RenderWindow* window) : window(window) {
 	font::load();
 	loadPreferences();
+	if(preferences.music.second) audioPlayer.music.play();
+	else audioPlayer.music.stop();
+
 	std::unique_ptr<State> gps = std::make_unique<GameplayState>(this, window);
 
 	bool showContinueInMenu = false;
@@ -91,7 +93,8 @@ void Engine::executeEngineCommand() {
 void Engine::exit() {
 	savePreferences();
 	if(!gameOver) save();
-	::exit(0);
+	//::exit(0);
+	io::window.close();
 }
 
 void Engine::load() {
