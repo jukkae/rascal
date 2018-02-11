@@ -58,7 +58,8 @@ bool MoveAction::execute() {
 						e->direction = direction;
 						e->distance = 5.0f;
 					}
-					ef->applyTo(a.get());
+					if(Actor* aPtr = a.get()) // TODO it seems that a might be invalidated at times, this is not the way to fix
+						ef->applyTo(aPtr);
 				}
 			}
 			else {
@@ -291,9 +292,14 @@ bool UnWieldItemAction::execute() {
 
 bool EatAction::execute() {
 	if(item->comestible) {
+		int originalNutrition = actor->body->nutrition;
 		actor->body->nutrition += item->comestible->nutrition;
 		ActionSuccessEvent e(item, "You eat the thing!");
 		actor->world->notify(e);
+		if(originalNutrition <= 0) {
+			ActionSuccessEvent f(item, "You don't feel hungry anymore!");
+			actor->world->notify(f);
+		}
 		actor->container->remove(item);
 		return true;
 	}
@@ -364,12 +370,20 @@ bool ShootAction::execute() {
 		return false;
 	} else {
 		// TODO check for LOS
+		bool hit = false;
 		if(actor->body) {
 			int toHitBonus = actor->body->getModifier(actor->body->intelligence);
 			int toDamageBonus = actor->body->getModifier(actor->body->agility);
-			actor->wornWeapon->rangedAttacker->attack(actor, enemy, toHitBonus, toDamageBonus);
+			hit = actor->wornWeapon->rangedAttacker->attack(actor, enemy, toHitBonus, toDamageBonus);
 		} else {
-			actor->wornWeapon->rangedAttacker->attack(actor, enemy);
+			hit = actor->wornWeapon->rangedAttacker->attack(actor, enemy);
+		}
+		if(hit) {
+			//ActionSuccessEvent e(actor, "It's a hit!"); // Printed from ShootAction
+			//world->notify(e);
+		} else {
+			ActionFailureEvent e(actor, "The shot ricochets harmlessly!");
+			world->notify(e);
 		}
 	}
 	return true;

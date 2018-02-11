@@ -4,6 +4,7 @@
 #include "engine.hpp"
 #include "engine_command.hpp"
 #include "font.hpp"
+#include "help_state.hpp"
 #include "io.hpp"
 
 #include <fstream>
@@ -13,13 +14,13 @@
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
-#include <SFML/Graphics/Text.hpp>
 
 MainMenuState::MainMenuState(Engine* engine, bool forceShowContinue) :
 State(engine, engine->getWindow())
 {
 	MenuItem newGame = { MenuItemCode::NEW_GAME, "New game!" };
 	MenuItem cont = { MenuItemCode::CONTINUE, "Continue!" };
+	MenuItem help = { MenuItemCode::HELP, "Help & about" };
 	MenuItem exit = { MenuItemCode::EXIT, "Exit!" };
 
 	menuItems.push_back(newGame);
@@ -27,6 +28,7 @@ State(engine, engine->getWindow())
 	if(io::fileExists(constants::SAVE_FILE_NAME) || forceShowContinue) {
 		if(!engine->gameOver) menuItems.push_back(cont);
 	}
+	menuItems.push_back(help);
 	menuItems.push_back(exit);
 
 	selectedItem = 0;
@@ -86,19 +88,13 @@ void MainMenuState::render() {
 void MainMenuState::renderAsciiTitle() {
 	int x = (constants::SCREEN_WIDTH - 41) / 2; // title is 41 cells wide
 	int y = 1;
-	sf::Text text(asciiTitle, font::mainFont, 16);
-	text.setPosition(x * constants::CELL_WIDTH, y * constants::CELL_HEIGHT);
-	text.setFillColor(colors::brightBlue);
-	window->draw(text);
+	io::text(asciiTitle, x, y, colors::brightBlue);
 }
 
 void MainMenuState::renderBgArt() {
 	int x = 0; // bg is hardcoded
 	int y = 0;
-	sf::Text text(bgArt, font::mainFont, 16);
-	text.setPosition(x * constants::CELL_WIDTH, y * constants::CELL_HEIGHT);
-	text.setFillColor(colors::lightGreen);
-	window->draw(text);
+	io::text(bgArt, x, y, colors::lightGreen);
 }
 
 void MainMenuState::showMenu() {
@@ -108,15 +104,8 @@ void MainMenuState::showMenu() {
 	int itemIndex = 0;
 	for(MenuItem item : menuItems) {
 		menuX = (constants::SCREEN_WIDTH - item.label.length()) / 2;
-		sf::Text itemText(item.label, font::mainFont, 16);
-		if (selectedItem == itemIndex) {
-			itemText.setFillColor(colors::brightBlue);
-		} else {
-			itemText.setFillColor(colors::darkBlue);
-		}
-
-		itemText.setPosition(menuX * constants::CELL_WIDTH, (menuY + itemIndex * 3) * constants::CELL_HEIGHT);
-		window->draw(itemText);
+		sf::Color color = selectedItem == itemIndex ? colors::brightBlue : colors::darkBlue;
+		io::text(item.label, menuX, menuY+itemIndex*3, color);
 		++itemIndex;
 	}
 }
@@ -131,6 +120,12 @@ void MainMenuState::handleSelectedMenuItem() {
 			break;
 		case MenuItemCode::EXIT:
 			engine->addEngineCommand(ExitCommand(engine));
+			break;
+		case MenuItemCode::HELP:
+			{
+				std::unique_ptr<State> helpState = std::make_unique<HelpState>(engine);
+				engine->pushState(std::move(helpState));
+			}
 			break;
 		case MenuItemCode::NONE:
 			break;

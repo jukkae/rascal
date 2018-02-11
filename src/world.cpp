@@ -1,4 +1,6 @@
 #include "world.hpp"
+
+#include "body.hpp"
 #include "damage.hpp"
 #include "destructible.hpp"
 #include "dice.hpp"
@@ -54,15 +56,28 @@ void World::applyRadiation(float dt) {
 	if (dt > 0) {
 		int r = d1000();
 		int rx = r * dt;
-		if(rx <= radiation * 100){
+		if(rx <= radiation * 50){
+			Actor* player = getPlayer();
 			int dmg = 0;
 			if(d3() == 1) {
-				dmg = d2();
+				switch(radiation){
+					case 0:  dmg = 0;    break;
+					case 1:  dmg = 1;    break;
+					case 2:  dmg = d2(); break;
+					case 3:  dmg = d3(); break;
+					case 4:  dmg = d4(); break;
+					case 5:  dmg = d5(); break;
+					default: dmg = d6(); break;
+				}
 			}
-			Actor* player = getPlayer();
-			player->destructible->takeDamage(player, dmg, DamageType::RADIATION);
-			GenericActorEvent e(player, "You feel a bit sick from the radiation...");
-			notify(e);
+			if(dmg != 0) {
+				GenericActorEvent e(player, "You feel a bit sick from the radiation...");
+				notify(e);
+			}
+			int iodine = player->body->iodine;
+			if(d10() >= iodine) {
+				player->destructible->takeDamage(player, dmg, DamageType::RADIATION);
+			}
 		}
 	}
 }

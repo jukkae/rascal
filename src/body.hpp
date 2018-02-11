@@ -31,6 +31,7 @@ public:
 	//Skills, perks, traits, whatever
 	//Radiation load
 	int nutrition = 20000;
+	int iodine = 0;
 
 private:
 	friend class boost::serialization::access;
@@ -47,6 +48,7 @@ private:
 		ar & bodyParts;
 		ar & bodyType;
 		ar & nutrition;
+		ar & iodine;
     }
 };
 #endif /* BODY_HPP */

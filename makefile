@@ -18,7 +18,7 @@ OBJ := obj
 
 SOURCES := $(wildcard src/*.cpp)
 OBJECTS := $(patsubst $(SRC)/%.cpp, $(OBJ)/%.o, $(SOURCES))
-.PHONY: clean run bundle-deps header-check
+.PHONY: clean run bundle-deps header-check zip-bundle
 
 rascal: $(OBJECTS)
 	$(CXX) $^ -o $@ $(CPPFLAGS) $(LDFLAGS)
@@ -38,8 +38,11 @@ compile-debug: clean $(OBJS)
 build-for-bundle: clean $(OBJS)
 	$(CXX) $(SOURCES) -o rascal $(CPPFLAGS) -I$(SRC) -include $(PCH_SRC) -Iinclude $(LDFLAGS) -I/usr/local/include $(BUNDLE_BUILD)
 
+zip-bundle:
+	zip -vr rascal.zip Rascal.app/ -x "*.DS_Store"
+
 clean:
-	rm -rf *.o rascal save.txt rascal.dSYM obj/*.o *.pch
+	rm -rf *.o rascal save.txt rascal.dSYM obj/*.o *.pch *.pch-* rascal.zip Rascal.app
 
 run:
 	./rascal
@@ -47,7 +50,7 @@ run:
 header-check:
 	cppclean src || true
 
-bundle: build-for-bundle appbundle bundle-deps
+bundle: build-for-bundle appbundle bundle-deps zip-bundle
 
 APPNAME=Rascal
 APPBUNDLE=$(APPNAME).app

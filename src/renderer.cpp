@@ -113,17 +113,20 @@ void Renderer::renderMap(const World* const world, sf::RenderWindow* window) {
 						}
 						//rectangle.setFillColor(colors::lightBlue);
 					} else {
-						rectangle.setFillColor(map->isWall(worldX, worldY) ? colors::lightWall : colors::lightGround);
+						if(map->isExplored(worldX, worldY) && map->tiles[worldX + mapWidth*worldY].terrain == Terrain::WATER) { // water, not walkable
+							rectangle.setFillColor(colors::darkerBlue);
+						} else {
+							rectangle.setFillColor(map->isWall(worldX, worldY) ? colors::lightWall : colors::lightGround);
+						}
 					}
 				}
 				else if(map->isExplored(worldX, worldY)) {
-					if(map->tiles[worldX + mapWidth*worldY].terrain == Terrain::WATER && map->tiles[worldX + mapWidth*worldY].walkable) {
-						rectangle.setFillColor(colors::darkBlue);
-					} else {
-						rectangle.setFillColor(map->isWall(worldX, worldY) ? colors::darkWall : colors::darkGround);
-					}
+					rectangle.setFillColor(map->isWall(worldX, worldY) ? colors::darkWall : colors::darkGround);
 				}
 				else {
+					rectangle.setFillColor(colors::black);
+				}
+				if(!map->isExplored(worldX, worldY)) {
 					rectangle.setFillColor(colors::black);
 				}
 
@@ -137,7 +140,7 @@ void Renderer::notify(Event& event, World* world) {
 	if(auto e = dynamic_cast<MoveEvent*>(&event)) {
 		int x = e->x;
 		int y = e->y;
-		int mapWidth = 120; // TODO ughh
+		int mapWidth = world->width;
 		if(world->map.tiles[x + mapWidth*y].animation) {
 			world->map.tiles[x + mapWidth*y].animation->colors.at(0).b = 255;
 		}

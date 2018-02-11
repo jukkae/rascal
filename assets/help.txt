@@ -1,0 +1,11 @@
+Move            - arrows
+Target and look - mouse
+Shoot           - (s)
+Open / close    - (o)
+Pick up         - (,)
+Wait            - (.)
+Look around     - (:)
+Inventory       - (i)
+Go up           - (<)
+Go down         - (>)
+Show menu       - (ESC)

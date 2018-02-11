@@ -127,6 +127,7 @@ void GameplayState::nextLevel() {
 			else ++it;
 		}
 		world = levels.at(world->level).get();
+		for (auto& a : player->container->inventory) a->world = world;
 		world->addActor(std::move(player));
 		for (auto& a : world->actors) a->world = world;
 		world->sortActors();
@@ -166,7 +167,7 @@ void GameplayState::nextLevel() {
 	else world->map.generateMap(MapType::BUILDING);
 
 	map_utils::addDoors(world, &world->map);
-	map_utils::addItems(world, &world->map);
+	map_utils::addItems(world, &world->map, world->level);
 	map_utils::addMonsters(world, &world->map, world->level);
 	if(downstairs) {
 		map_utils::addStairs(world, &world->map, downstairsX, downstairsY);
@@ -175,6 +176,7 @@ void GameplayState::nextLevel() {
 	}
 	map_utils::addMcGuffin(world, &world->map, world->level);
 
+	for (auto& a : player->container->inventory) a->world = world;
 	world->addActor(std::move(player));
 
 	for (auto& a : world->actors) a->world = world;
@@ -195,6 +197,7 @@ void GameplayState::previousLevel() {
 	}
 
 	world = levels.at(world->level-2).get();
+	for (auto& a : player->container->inventory) a->world = world;
 	world->addActor(std::move(player));
 	for (auto& a : world->actors) a->world = world;
 	world->sortActors();

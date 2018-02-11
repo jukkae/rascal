@@ -14,7 +14,6 @@
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
-#include <SFML/Graphics/Text.hpp>
 
 GameOverState::GameOverState(Engine* engine, Actor* actor, Player* player, bool victory) :
 State(engine, engine->getWindow())
@@ -30,12 +29,7 @@ State(engine, engine->getWindow())
 		description = "you won at level ";
 		description.append(std::to_string(((PlayerAi*)actor->ai.get())->xpLevel));
 		description.append("\n");
-		description.append("you had ");
-		int numberOfMacGuffins = 0;
-		for(auto& i : actor->container->inventory) { if (i->name == "phlebotinum link") numberOfMacGuffins++; }
-		description.append(std::to_string(numberOfMacGuffins));
-		description.append(" phlebotinum links");
-		description.append("\n");
+		for(auto& i : actor->container->inventory) { if (i->name == "phlebotinum link") player->score += 100; }
 		description.append("score: ");
 		description.append(std::to_string(player->score));
 	}
@@ -74,8 +68,5 @@ void GameOverState::update() {
 void GameOverState::render() {
 	int x = 2;
 	int y = 2;
-	sf::Text text(description, font::mainFont, 16);
-	text.setPosition(x * constants::CELL_WIDTH, y * constants::CELL_HEIGHT);
-	text.setFillColor(colors::brightBlue);
-	window->draw(text);
+	io::text(description, x, y, colors::brightBlue);
 }

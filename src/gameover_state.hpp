@@ -11,7 +11,6 @@ class Player;
 
 class GameOverState : public State {
 public:
-	//TODO move victory state's functions over here
 	GameOverState(Engine* engine, Actor* actor, Player* player, bool victory = false);
 
 	void handleEvents() override;

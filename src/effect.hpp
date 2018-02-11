@@ -19,11 +19,14 @@ private:
 };
 //BOOST_SERIALIZATION_ASSUME_ABSTRACT(Effect)
 
+enum class HealthEffectType { HEALTH, IODINE };
+//FIXME name change required to reflect actual behavior
 class HealthEffect : public Effect {
 public:
 	float amount;
+	HealthEffectType type;
 
-	HealthEffect(float amount = 0);
+	HealthEffect(float amount = 0, HealthEffectType type = HealthEffectType::HEALTH);
 	bool applyTo(Actor* actor) override;
 private:
 	friend class boost::serialization::access;
