@@ -36,8 +36,8 @@ public:
 	sf::RenderWindow* getWindow() { return window; }
 	bool gameOver = false; //TODO this is bad and i feel bad
 	Preferences preferences;
+	AudioPlayer audioPlayer; //FIXME let's have this public for now
 private:
-	AudioPlayer audioPlayer;
 	sf::RenderWindow* window;
 	State* gameplayState;
 	std::vector<std::unique_ptr<State>> states;

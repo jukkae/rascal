@@ -33,9 +33,43 @@ void PreferencesState::handleEvents() {
 					break;
 				case k::Left:
 					items.at(selectedItem).value ^= true;
+					if(items.at(selectedItem).key == "music") {
+						switch(engine->audioPlayer.music.getStatus()) {
+							case sf::SoundSource::Status::Stopped: {
+								engine->audioPlayer.music.play();
+								break;
+							}
+							case sf::SoundSource::Status::Paused: {
+								engine->audioPlayer.music.play();
+								break;
+							}
+							case sf::SoundSource::Status::Playing: {
+								engine->audioPlayer.music.stop(); // Stop or pause?
+								break;
+							}
+							default: break;
+						}
+					}
 					break;
 				case k::Right:
 					items.at(selectedItem).value ^= true;
+					if(items.at(selectedItem).key == "music") {
+						switch(engine->audioPlayer.music.getStatus()) {
+							case sf::SoundSource::Status::Stopped: {
+								engine->audioPlayer.music.play();
+								break;
+							}
+							case sf::SoundSource::Status::Paused: {
+								engine->audioPlayer.music.play();
+								break;
+							}
+							case sf::SoundSource::Status::Playing: {
+								engine->audioPlayer.music.stop(); // Stop or pause?
+								break;
+							}
+							default: break;
+						}
+					}
 					break;
 				case k::Escape:
 					engine->addEngineCommand(ContinueCommand(engine));

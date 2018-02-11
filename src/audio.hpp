@@ -6,8 +6,8 @@
 class AudioPlayer {
 public:
 	AudioPlayer();
+	sf::Music music; //FIXME let's have this public for now
 private:
-	sf::Music music;
 };
 
 #endif /* AUDIO_HPP */

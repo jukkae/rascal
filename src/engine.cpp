@@ -21,6 +21,8 @@
 Engine::Engine(sf::RenderWindow* window) : window(window) {
 	font::load();
 	loadPreferences();
+	if(preferences.music.second) audioPlayer.music.play();
+	else audioPlayer.music.stop(); // shouldn't need this
 
 	std::unique_ptr<State> gps = std::make_unique<GameplayState>(this, window);
 
