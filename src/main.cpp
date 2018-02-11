@@ -9,30 +9,28 @@
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
-#include <SFML/Audio.hpp>
 
 
 int width = constants::CELL_WIDTH * constants::SCREEN_WIDTH;
 int height = constants::CELL_HEIGHT * constants::SCREEN_HEIGHT;
 namespace io { sf::RenderWindow window(sf::VideoMode(width, height), "Rascal"); }
 namespace io { Point mousePosition(0,0); }
-Engine engine(&io::window);
-namespace io { Engine* engine = &::engine; }
+namespace io { Engine* engine; }
 
 int main() {
-	sf::Music music; // Can't be declared "in global scope" [sic], ie., in header? Crashed upon exit!
-	if(!music.openFromFile("assets/main_theme.ogg")) { ;/* error */ }
-	music.play();
-
-	io::window.setMouseCursorVisible(false);
-	while(io::window.isOpen()) {
-		sf::Event event;
-        while (io::window.pollEvent(event)) {
-            if (event.type == sf::Event::Closed)
-                io::window.close();
-			else engine.addEvent(event);
-        }
-		engine.update();
+	{ // Need to have engine go out of scope before exit
+		Engine engine(&io::window);
+		io::engine = &engine;
+		io::window.setMouseCursorVisible(false);
+		while(io::window.isOpen()) {
+			sf::Event event;
+			while (io::window.pollEvent(event)) {
+				if (event.type == sf::Event::Closed)
+					io::window.close();
+				else engine.addEvent(event);
+			}
+			engine.update();
+		}
 	}
 
 	return 0;

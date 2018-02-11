@@ -9,6 +9,7 @@ class State;
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
 
+#include "audio.hpp"
 class EngineCommand;
 class Engine {
 public:
@@ -36,6 +37,7 @@ public:
 	bool gameOver = false; //TODO this is bad and i feel bad
 	Preferences preferences;
 private:
+	AudioPlayer audioPlayer;
 	sf::RenderWindow* window;
 	State* gameplayState;
 	std::vector<std::unique_ptr<State>> states;

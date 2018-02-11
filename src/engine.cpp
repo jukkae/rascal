@@ -91,7 +91,8 @@ void Engine::executeEngineCommand() {
 void Engine::exit() {
 	savePreferences();
 	if(!gameOver) save();
-	::exit(0);
+	//::exit(0);
+	io::window.close();
 }
 
 void Engine::load() {
