@@ -8,6 +8,7 @@ public:
 	void draw();
 	void setBackground(Point position, sf::Color color);
 	void drawGlyph(Point position, std::string glyph, sf::Color color);
+	void highlight(Point position, sf::Color color /* = some default */);
 private:
 	//internal 2d buffer of bg/fg colors & glyphs to be drawn
 	//-> custom 2d array type?
