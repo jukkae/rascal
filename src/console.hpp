@@ -11,6 +11,12 @@ struct Cell {
 	char glyph; // is char good?
 };
 
+template<class T>
+class Mat2d {
+public:
+	std::vector<T> contents; //sb private
+};
+
 class Console {
 public:
 	Console() : consoleType(ConsoleType::SQUARE) {;}
@@ -21,7 +27,7 @@ public:
 private:
 	//internal 2d buffer of bg/fg colors & glyphs to be drawn
 	//-> custom 2d array type?
-	std::vector<Cell> cells;
+	Mat2d<Cell> cells;
 	ConsoleType consoleType;
 };
 
