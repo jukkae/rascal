@@ -23,6 +23,7 @@ public:
 	void draw();
 	void setBackground(Point position, sf::Color color);
 	void drawGlyph(Point position, char glyph, sf::Color color);
+	void drawText(Point position, std::string text, sf::Color color);
 	void highlight(Point position, sf::Color color /* = some default */);
 private:
 	//internal 2d buffer of bg/fg colors & glyphs to be drawn
