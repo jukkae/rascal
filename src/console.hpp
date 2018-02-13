@@ -19,7 +19,7 @@ public:
 
 class Console {
 public:
-	Console() : consoleType(ConsoleType::SQUARE) {;}
+	Console(ConsoleType consoleType = ConsoleType::NARROW) : consoleType(consoleType) {;}
 	void draw();
 	void setBackground(Point position, sf::Color color);
 	void drawGlyph(Point position, char glyph, sf::Color color);

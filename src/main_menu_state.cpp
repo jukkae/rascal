@@ -19,6 +19,7 @@
 MainMenuState::MainMenuState(Engine* engine, bool forceShowContinue) :
 State(engine, engine->getWindow())
 {
+	console = Console(ConsoleType::NARROW);
 	MenuItem newGame = { MenuItemCode::NEW_GAME, "New game!" };
 	MenuItem cont = { MenuItemCode::CONTINUE, "Continue!" };
 	MenuItem help = { MenuItemCode::HELP, "Help & about" };
