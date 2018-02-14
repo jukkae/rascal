@@ -146,7 +146,7 @@ void Gui::renderStatusEffects(World* world, sf::RenderWindow* window) {
 }
 
 void Gui::renderMessageLog(sf::RenderWindow* window) {
-	int y = 1;
+	int y = 0;
 	float colCoef = 0.4f;
 	for(Message msg : log) {
 		console.drawText(Point(MSG_X, y), msg.text, colors::multiply(msg.col, colCoef));
