@@ -7,7 +7,13 @@
 
 Console::Console(ConsoleType consoleType):
 consoleType(consoleType) {
-	cells.contents = std::vector<Cell>(constants::SCREEN_WIDTH * constants::SCREEN_HEIGHT);
+	int width;
+	int height = constants::SCREEN_HEIGHT;
+	if(consoleType == ConsoleType::NARROW) width = constants::SCREEN_WIDTH;
+	else width = constants::SQUARE_SCREEN_WIDTH;
+	cells.w = width;
+	cells.h = height;
+	cells.contents = std::vector<Cell>(width * height);
 }
 
 void Console::draw() {
@@ -43,7 +49,7 @@ void Console::drawGraphicsBlock(Point position, std::string text, sf::Color colo
 			cell.fg = color;
 			cell.glyph = c;
 			if(x < constants::SCREEN_WIDTH) { // if outside, just discard
-				cells.contents.at(x + y*constants::SCREEN_WIDTH) = cell;
+				cells.at(x, y) = cell;
 			}
 			++x;
 		}

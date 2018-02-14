@@ -15,7 +15,27 @@ struct Cell {
 template<class T>
 class Mat2d {
 public:
-	//TODO size should a) depend on type and b) be dynamic
+	using data_type       = std::vector<T>;
+	using value_type      = typename std::vector<T>::value_type;
+	using size_type       = typename std::vector<T>::size_type;
+	using reference       = typename std::vector<T>::reference;
+	using const_reference = typename std::vector<T>::const_reference;
+
+	reference operator() (size_type const x, size_type const y) {
+		return contents[x + y*w];
+	}
+	const_reference operator() (size_type const x, size_type const y) const {
+		return contents[x + y*x];
+	}
+	reference at(size_type const x, size_type const y) {
+		return contents.at(x + y*w);
+	}
+	const_reference at(size_type const x, size_type const y) const {
+		return contents.at(x + y*w);
+	}
+
+	int w;
+	int h;
 	std::vector<T> contents; //sb private
 };
 
