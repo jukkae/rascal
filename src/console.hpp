@@ -24,7 +24,7 @@ public:
 		return contents[x + y*w];
 	}
 	const_reference operator() (size_type const x, size_type const y) const {
-		return contents[x + y*x];
+		return contents[x + y*w];
 	}
 	reference at(size_type const x, size_type const y) {
 		return contents.at(x + y*w);
