@@ -149,7 +149,8 @@ void Gui::renderMessageLog(sf::RenderWindow* window) {
 	int y = 1;
 	float colCoef = 0.4f;
 	for(Message msg : log) {
-		io::text(msg.text, MSG_X, y+constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT, colors::multiply(msg.col, colCoef));
+		console.drawText(Point(MSG_X, y), msg.text, colors::multiply(msg.col, colCoef));
+		//io::text(msg.text, MSG_X, y+constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT, colors::multiply(msg.col, colCoef));
 		++y;
 		if(colCoef < 1.0f) {
 			colCoef += 0.3f;

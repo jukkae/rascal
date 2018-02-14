@@ -17,6 +17,7 @@ consoleType(consoleType), clearMode(clearMode) {
 }
 
 void Console::clear() {
+	for(auto& c : cells) c = Cell();
 	int cw = consoleType == ConsoleType::NARROW ? constants::CELL_WIDTH : constants::SQUARE_CELL_WIDTH;
 	int ch = consoleType == ConsoleType::NARROW ? constants::CELL_HEIGHT : constants::SQUARE_CELL_HEIGHT;
 
@@ -57,7 +58,23 @@ void Console::drawGlyph(Point position, char glyph, sf::Color color) {
 }
 
 void Console::drawText(Point position, std::string text, sf::Color color) {
-
+	// TODO this should break lines automatically etc
+	int y = position.y;
+	std::istringstream s(text);
+	std::string line;
+	while(std::getline(s, line)) {
+		int x = position.x;
+		for(char& c : line) {
+			Cell cell;
+			cell.fg = color;
+			cell.glyph = c;
+			if(x < constants::SCREEN_WIDTH) { // if outside, just discard
+				cells.at(x, y) = cell;
+			}
+			++x;
+		}
+		++y;
+	}
 }
 
 void Console::drawGraphicsBlock(Point position, std::string text, sf::Color color) {
