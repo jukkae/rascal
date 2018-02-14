@@ -110,7 +110,7 @@ void MainMenuState::showMenu() {
 	for(MenuItem item : menuItems) {
 		menuX = (constants::SCREEN_WIDTH - item.label.length()) / 2;
 		sf::Color color = selectedItem == itemIndex ? colors::brightBlue : colors::darkBlue;
-		io::text(item.label, menuX, menuY+itemIndex*3, color);
+		console.drawGraphicsBlock(Point(menuX, menuY+itemIndex*3), item.label, color);
 		++itemIndex;
 	}
 }
