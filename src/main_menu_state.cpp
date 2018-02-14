@@ -76,6 +76,7 @@ void MainMenuState::handleEvents() {
 
 void MainMenuState::update() {
 	window->clear(sf::Color::Black);
+	console.clear();
 
 	handleEvents();
 	render();

@@ -5,15 +5,29 @@
 
 #include <sstream>
 
-Console::Console(ConsoleType consoleType):
-consoleType(consoleType) {
-	int width;
-	int height = constants::SCREEN_HEIGHT;
+Console::Console(ConsoleType consoleType, ClearMode clearMode):
+consoleType(consoleType), clearMode(clearMode) {
+	height = constants::SCREEN_HEIGHT;
 	if(consoleType == ConsoleType::NARROW) width = constants::SCREEN_WIDTH;
 	else width = constants::SQUARE_SCREEN_WIDTH;
 	cells.w = width;
 	cells.h = height;
 	cells.contents = std::vector<Cell>(width * height);
+}
+
+void Console::clear() {
+	int cw = consoleType == ConsoleType::NARROW ? constants::CELL_WIDTH : constants::SQUARE_CELL_WIDTH;
+	int ch = consoleType == ConsoleType::NARROW ? constants::CELL_HEIGHT : constants::SQUARE_CELL_HEIGHT;
+
+	sf::RectangleShape bg(sf::Vector2f(cw * width, ch * height));
+	bg.setPosition(x * cw, y * ch);
+	if(clearMode == ClearMode::BLACK) {
+		bg.setFillColor(colors::black);
+	}
+	else {
+
+	}
+	io::window.draw(bg);
 }
 
 void Console::draw() {
