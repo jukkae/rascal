@@ -29,7 +29,11 @@ static const sf::Color lightViolet(185, 115, 255);
 static const sf::Color darkerViolet(64, 0, 128);
 static const sf::Color lightGrey(159, 159, 159);
 
-Gui::Gui() {
+Gui::Gui(): console() {
+	console.x = 0;
+	console.y = constants::SCREEN_HEIGHT - constants::GUI_PANEL_HEIGHT;
+	console.width = constants::SCREEN_WIDTH;
+	console.height = constants::GUI_PANEL_HEIGHT;
 }
 
 void Gui::clear() {
@@ -37,6 +41,7 @@ void Gui::clear() {
 }
 
 void Gui::render(World* world, sf::RenderWindow* window) {
+	console.clear();
 
 	renderMessageLog(window);
 	renderBar(1, 1, BAR_WIDTH, "HP", world->getPlayer()->destructible->hp, world->getPlayer()->destructible->maxHp, lightRed, darkerRed, window);
@@ -53,6 +58,7 @@ void Gui::render(World* world, sf::RenderWindow* window) {
 	renderStatusEffects(world, window);
 	renderStats(world, window);
 	renderNav(world, window);
+	//console.draw();
 }
 
 void Gui::renderXpBar(World* world, sf::RenderWindow* window) {

@@ -40,8 +40,9 @@ bool io::removeFile(std::string name) {
 }
 
 void io::text(std::string text, int x, int y, sf::Color color) {
+	int verticalOffset = 3;
 	sf::Text sfText(text, font::mainFont, 16);
-	sfText.setPosition(x*constants::CELL_WIDTH, y*constants::CELL_HEIGHT);
+	sfText.setPosition(x*constants::CELL_WIDTH, y*constants::CELL_HEIGHT - verticalOffset);
 	sfText.setFillColor(color);
 	window.draw(sfText);
 }

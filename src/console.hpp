@@ -19,6 +19,13 @@ public:
 	using size_type       = typename std::vector<T>::size_type;
 	using reference       = typename std::vector<T>::reference;
 	using const_reference = typename std::vector<T>::const_reference;
+	using iterator        = typename std::vector<T>::iterator;
+	using const_iterator  = typename std::vector<T>::const_iterator;
+
+	iterator begin() { return contents.begin(); }
+	iterator end() { return contents.end(); }
+	const_iterator begin() const { return contents.begin(); }
+	const_iterator end() const { return contents.end(); }
 
 	reference operator() (size_type const x, size_type const y) {
 		return contents[x + y*w];
