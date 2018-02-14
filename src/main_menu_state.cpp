@@ -93,13 +93,13 @@ void MainMenuState::render() {
 void MainMenuState::renderAsciiTitle() {
 	int x = (constants::SCREEN_WIDTH - 41) / 2; // title is 41 cells wide
 	int y = 1;
-	console.drawText(Point(x, y), asciiTitle, colors::brightBlue);
+	console.drawGraphicsBlock(Point(x, y), asciiTitle, colors::brightBlue);
 }
 
 void MainMenuState::renderBgArt() {
 	int x = 0; // bg is hardcoded
 	int y = 0;
-	io::text(bgArt, x, y, colors::lightGreen);
+	console.drawGraphicsBlock(Point(x, y), bgArt, colors::lightGreen);
 }
 
 void MainMenuState::showMenu() {

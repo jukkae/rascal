@@ -3,6 +3,8 @@
 #include "engine.hpp" // TODO need to include this before io.hpp
 #include "io.hpp"
 
+#include <sstream>
+
 Console::Console(ConsoleType consoleType):
 consoleType(consoleType) {
 	cells.contents = std::vector<Cell>(constants::SCREEN_WIDTH * constants::SCREEN_HEIGHT);
@@ -27,20 +29,26 @@ void Console::drawGlyph(Point position, char glyph, sf::Color color) {
 }
 
 void Console::drawText(Point position, std::string text, sf::Color color) {
-	int index = position.x + position.y * constants::SCREEN_WIDTH;
-	for(char& c : text) {
-		if(c == '\n') {
-			index += constants::SCREEN_WIDTH - index % constants::SCREEN_WIDTH;
-			index += position.x;
-			continue;
+
+}
+
+void Console::drawGraphicsBlock(Point position, std::string text, sf::Color color) {
+	int y = position.y;
+	std::istringstream s(text);
+	std::string line;
+	while(std::getline(s, line)) {
+		int x = position.x;
+		for(char& c : line) {
+			Cell cell;
+			cell.fg = color;
+			cell.glyph = c;
+			if(x < constants::SCREEN_WIDTH) { // if outside, just discard
+				cells.contents.at(x + y*constants::SCREEN_WIDTH) = cell;
+			}
+			++x;
 		}
-		Cell cell;
-		cell.fg = color;
-		cell.glyph = c;
-		cells.contents.at(index) = cell;
-		++index;
+		++y;
 	}
-	//io::text(text, position.x, position.y, color);
 }
 
 void Console::highlight(Point position, sf::Color color) {
