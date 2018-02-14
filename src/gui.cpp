@@ -47,10 +47,11 @@ void Gui::render(World* world, sf::RenderWindow* window) {
 	renderBar(1, 1, BAR_WIDTH, "HP", world->getPlayer()->destructible->hp, world->getPlayer()->destructible->maxHp, lightRed, darkerRed, window);
 
 	std::string dungeonLvlString = "Floor " + std::to_string(world->level);
-	io::text(dungeonLvlString, 3, 3+constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT, colors::white);
+	console.drawText(Point(3, 3), dungeonLvlString, colors::white);
+
 
 	std::string timeString = "Time: " + std::to_string(world->time);
-	io::text(timeString, 3, 4+constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT, colors::white);
+	console.drawText(Point(3, 4), timeString, colors::white);
 
 	renderXpBar(world, window);
 	renderMouseLook(world, window);
@@ -73,7 +74,7 @@ void Gui::renderStats(World* world, sf::RenderWindow* window) {
 
 	int ac = player->getAC();
 	std::string acString = "AC: " + std::to_string(ac);
-	io::text(acString, constants::SCREEN_WIDTH-40, 1+constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT, colors::lightBlue);
+	console.drawText(Point(120, 1), acString, colors::lightBlue);
 
 	std::string weaponString;
 	if(!player->wornWeapon) weaponString = "Wielding: nothing";
@@ -81,7 +82,7 @@ void Gui::renderStats(World* world, sf::RenderWindow* window) {
 		weaponString = "Wielding: " + player->wornWeapon->name;
 		if(player->wornWeapon->rangedAttacker) weaponString.append(" (").append(std::to_string(player->wornWeapon->rangedAttacker->rounds)).append("/").append(std::to_string(player->wornWeapon->rangedAttacker->capacity)).append(")");
 	}
-	io::text(weaponString, constants::SCREEN_WIDTH-40, 2+constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT, colors::lightBlue);
+	console.drawText(Point(120, 2), weaponString, colors::lightBlue);
 
 	int n, d, b;
 	if(!player->wornWeapon) {
@@ -100,13 +101,7 @@ void Gui::renderStats(World* world, sf::RenderWindow* window) {
 		b = player->wornWeapon->rangedAttacker->bonus;
 	}
 	std::string atkString = "dm: " + std::to_string(n) + "d" + std::to_string(d) + "+" + std::to_string(b);
-	io::text(atkString, constants::SCREEN_WIDTH-40, 3+constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT, colors::lightBlue);
-
-//	std::string atkBonusString = "s:" + std::to_string(player->body->getModifier(player->body->strength))
-//		+ " a:" + std::to_string(player->body->getModifier(player->body->agility))
-//		+ " i:" + std::to_string(player->body->getModifier(player->body->intelligence));
-//	io::text(atkBonusString, constants::SCREEN_WIDTH-40, 4+constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT, colors::lightBlue);
-
+	console.drawText(Point(120, 3), atkString, colors::lightBlue);
 }
 
 void Gui::renderNav(World* world, sf::RenderWindow* window) {
@@ -117,16 +112,16 @@ void Gui::renderNav(World* world, sf::RenderWindow* window) {
 		[&] (const std::unique_ptr<Actor>& a) { return a->name == "navigation computer"; }
 	)) {
 		std::string location = std::to_string(player->x) + ", " + std::to_string(player->y);
-		io::text(location, constants::SCREEN_WIDTH-20, 3+constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT, colors::lightBlue);
+		console.drawText(Point(100, 3), location, colors::lightBlue);
 		std::string rad = "rad: " + std::to_string(world->radiation);
-		io::text(rad, constants::SCREEN_WIDTH-20, 4+constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT, colors::lightBlue);
+		console.drawText(Point(100, 4), rad, colors::lightBlue);
 
 		// TODO doesn't belong here, temporary until info management is figured out
 		std::string hungerString = "nutrition:" + std::to_string(player->body->nutrition);
-		io::text(hungerString, constants::SCREEN_WIDTH-40, 5+constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT, colors::lightBlue);
+		console.drawText(Point(120, 5), hungerString, colors::lightBlue);
 
 		std::string iodineString = "iodine:" + std::to_string(player->body->iodine);
-		io::text(iodineString, constants::SCREEN_WIDTH-40, 6+constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT, colors::lightBlue);
+		console.drawText(Point(120, 6), iodineString, colors::lightBlue);
 	}
 
 }
@@ -136,10 +131,11 @@ void Gui::renderStatusEffects(World* world, sf::RenderWindow* window) {
 
 	if(player->getStatusEffects().size() > 0) {
 		io::text("status effects:", constants::SCREEN_WIDTH-60, 1+constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT, colors::lightBlue);
+		console.drawText(Point(100, 1), "status effects:", colors::lightBlue);
 		int i = 1;
 		for (auto& e : player->getStatusEffects()) {
 			std::string effectStr = e->name;
-			io::text(effectStr, constants::SCREEN_WIDTH-60, 1+i+constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT, colors::lightBlue);
+			console.drawText(Point(100, 1 + i), effectStr, colors::lightBlue);
 			++i;
 		}
 	}
@@ -150,7 +146,6 @@ void Gui::renderMessageLog(sf::RenderWindow* window) {
 	float colCoef = 0.4f;
 	for(Message msg : log) {
 		console.drawText(Point(MSG_X, y), msg.text, colors::multiply(msg.col, colCoef));
-		//io::text(msg.text, MSG_X, y+constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT, colors::multiply(msg.col, colCoef));
 		++y;
 		if(colCoef < 1.0f) {
 			colCoef += 0.3f;
@@ -174,7 +169,7 @@ void Gui::renderBar(int x, int y, int width, std::string name, float value, floa
 		window->draw(rect);
 	}
 	std::string string = name + " : " + std::to_string((int)value) + "/" + std::to_string((int)maxValue);
-	io::text(string, x, y+constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT, colors::white);
+	console.drawText(Point(x, y), string, colors::white);
 }
 
 void Gui::renderMouseLook(World* world, sf::RenderWindow* window) {
@@ -209,7 +204,7 @@ void Gui::renderMouseLook(World* world, sf::RenderWindow* window) {
 		}
 	}
 	std::string string = buf;
-	io::text(string, 1, 0+constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT, colors::lightGrey);
+	console.drawText(Point(1, 0), string, colors::lightGrey);
 }
 
 void Gui::message(sf::Color col, std::string text, va_list args) {
