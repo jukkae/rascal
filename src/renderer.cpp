@@ -67,22 +67,13 @@ void Renderer::renderMap(const World* const world, sf::RenderWindow* window) {
 				int worldX = x + cameraX;
 				int worldY = y + cameraY;
 
-				sf::RectangleShape rectangle(sf::Vector2f(constants::SQUARE_CELL_WIDTH, constants::SQUARE_CELL_HEIGHT));
-				rectangle.setPosition(x * constants::SQUARE_CELL_WIDTH, y * constants::SQUARE_CELL_HEIGHT);
-
 				if(worldX < 0 || worldX >= mapWidth || worldY < 0 || worldY >= mapHeight) {
-					rectangle.setFillColor(colors::black);
+					console.setBackground(Point(x, y), colors::black);
 				} // TODO this code is getting bad
 				else if(map->tiles[worldX + mapWidth*worldY].inFov || map->tiles[worldX + mapWidth*worldY].terrain == Terrain::WATER) {
 					if(map->tiles[worldX + mapWidth*worldY].terrain == Terrain::WATER && map->tiles[worldX + mapWidth*worldY].walkable) {
 						if(map->tiles[worldX + mapWidth*worldY].animation) {
-							//Animation& animation = const_cast<Animation&>(*map->tiles[worldX + mapWidth*worldY].animation); // TODO i know i know
-							//int index = animation.phase / animation.colFreq;
-							//animation.phase++;
-							//if(animation.phase >= animation.colors.size() * animation.colFreq) animation.phase = 0;
-							//sf::Color color = animation.colors.at(index);
 							Animation& animation = const_cast<Animation&>(*map->tiles[worldX + mapWidth*worldY].animation);
-							//animation.colors[0] = sf::Color(0, 0, 0);
 							sf::Color& color = animation.colors[0];
 							int blue = 0;
 							if(worldX == world->getPlayer()->x && worldY == world->getPlayer()->y) {
@@ -115,28 +106,27 @@ void Renderer::renderMap(const World* const world, sf::RenderWindow* window) {
 								col = colors::darkestBlue;
 							} else col = colors::black;
 
-							rectangle.setFillColor(col);
+
+							console.setBackground(Point(x, y), col);
 						}
 						//rectangle.setFillColor(colors::lightBlue);
 					} else {
 						if(map->isExplored(worldX, worldY) && map->tiles[worldX + mapWidth*worldY].terrain == Terrain::WATER) { // water, not walkable
-							rectangle.setFillColor(colors::darkerBlue);
+							console.setBackground(Point(x, y), colors::darkerBlue);
 						} else {
-							rectangle.setFillColor(map->isWall(worldX, worldY) ? colors::lightWall : colors::lightGround);
+							console.setBackground(Point(x, y), map->isWall(worldX, worldY) ? colors::lightWall : colors::lightGround);
 						}
 					}
 				}
 				else if(map->isExplored(worldX, worldY)) {
-					rectangle.setFillColor(map->isWall(worldX, worldY) ? colors::darkWall : colors::darkGround);
+					console.setBackground(Point(x, y), map->isWall(worldX, worldY) ? colors::darkWall : colors::darkGround);
 				}
 				else {
-					rectangle.setFillColor(colors::black);
+					console.setBackground(Point(x, y), colors::black);
 				}
 				if(!map->isExplored(worldX, worldY)) {
-					rectangle.setFillColor(colors::black);
+					console.setBackground(Point(x, y), colors::black);
 				}
-
-				window->draw(rectangle);
 			}
 		}
 	}
