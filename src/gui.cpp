@@ -154,19 +154,15 @@ void Gui::renderMessageLog(sf::RenderWindow* window) {
 }
 
 void Gui::renderBar(int x, int y, int width, std::string name, float value, float maxValue, const sf::Color barColor, const sf::Color backColor, sf::RenderWindow* window) {
-	sf::RectangleShape bg(sf::Vector2f(constants::CELL_WIDTH * width, constants::CELL_HEIGHT));
-	bg.setFillColor(backColor);
-	bg.setPosition(x * constants::CELL_WIDTH, (y + constants::SCREEN_HEIGHT - constants::GUI_PANEL_HEIGHT) * constants::CELL_HEIGHT);
-	window->draw(bg);
-
-	sf::RectangleShape rect(sf::Vector2f(constants::CELL_WIDTH * width, constants::CELL_HEIGHT));
+	for(int i = 0; i < width; ++i) {
+		console.setBackground(Point(x + i, y), backColor);
+	}
 
 	int barWidth = (int) (value / maxValue * width);
 	if ( barWidth > 0 ) {
-		rect.setFillColor(barColor);
-		rect.setSize(sf::Vector2f(constants::CELL_WIDTH * barWidth, constants::CELL_HEIGHT));
-		rect.setPosition(x * constants::CELL_WIDTH, (y + constants::SCREEN_HEIGHT - constants::GUI_PANEL_HEIGHT) * constants::CELL_HEIGHT);
-		window->draw(rect);
+		for(int i = 0; i < barWidth; ++i) {
+			console.setBackground(Point(x + i, y), barColor);
+		}
 	}
 	std::string string = name + " : " + std::to_string((int)value) + "/" + std::to_string((int)maxValue);
 	console.drawText(Point(x, y), string, colors::white);

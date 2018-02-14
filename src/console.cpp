@@ -50,7 +50,9 @@ void Console::draw() {
 }
 
 void Console::setBackground(Point position, sf::Color color) {
-
+	int x = position.x;
+	int y = position.y;
+	cells.at(x, y).bg = color;
 }
 
 void Console::drawGlyph(Point position, char glyph, sf::Color color) {
@@ -65,11 +67,9 @@ void Console::drawText(Point position, std::string text, sf::Color color) {
 	while(std::getline(s, line)) {
 		int x = position.x;
 		for(char& c : line) {
-			Cell cell;
-			cell.fg = color;
-			cell.glyph = c;
 			if(x < constants::SCREEN_WIDTH) { // if outside, just discard
-				cells.at(x, y) = cell;
+				cells.at(x, y).fg = color;
+				cells.at(x, y).glyph = c;
 			}
 			++x;
 		}
@@ -84,11 +84,9 @@ void Console::drawGraphicsBlock(Point position, std::string text, sf::Color colo
 	while(std::getline(s, line)) {
 		int x = position.x;
 		for(char& c : line) {
-			Cell cell;
-			cell.fg = color;
-			cell.glyph = c;
 			if(x < constants::SCREEN_WIDTH) { // if outside, just discard
-				cells.at(x, y) = cell;
+				cells.at(x, y).fg = color;
+				cells.at(x, y).glyph = c;
 			}
 			++x;
 		}
