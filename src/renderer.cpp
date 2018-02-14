@@ -14,17 +14,23 @@
 #include "point.hpp"
 #include "world.hpp"
 
-Renderer::Renderer(int screenWidth, int screenHeight): screenWidth(screenWidth), screenHeight(screenHeight) {
+Renderer::Renderer(int screenWidth, int screenHeight): screenWidth(screenWidth), screenHeight(screenHeight), console(ConsoleType::SQUARE) {
+	console.x = 0;
+	console.y = 0;
+	console.width = constants::SCREEN_WIDTH;
+	console.height = constants::SCREEN_HEIGHT;
 }
 
 void Renderer::render(const World* const world, sf::RenderWindow* window) {
 	//window.clear(sf::Color::Black);
+	console.clear();
 
 	const Map* const map = &world->map;
 	const std::vector<std::unique_ptr<Actor>>& actors = world->actors;
 	renderMap(world, window);
 	renderActors(world, window);
 
+	console.draw();
 	//window.display();
 }
 
@@ -239,12 +245,7 @@ void Renderer::renderActor(const Actor* const actor, sf::RenderWindow* window) {
 	Point screenPosition = getScreenCoordsFromWorldCoords(worldPosition);
 	int x = screenPosition.x;
 	int y = screenPosition.y;
-
-	sf::Text t((char)actor->ch, font::squareFont, 16);
-	t.setPosition(x*constants::SQUARE_CELL_WIDTH, y*constants::SQUARE_CELL_HEIGHT);
-	t.setFillColor(actor->col);
-	window->draw(t);
-
+	console.drawGlyph(screenPosition, (char)actor->ch, actor->col);
 }
 
 Point Renderer::getWorldCoordsFromScreenCoords(const Point& point) const {

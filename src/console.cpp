@@ -34,7 +34,7 @@ void Console::clear() {
 
 void Console::draw() {
 	int index = 0;
-	int cw = consoleType == ConsoleType::NARROW ? constants::CELL_WIDTH : constants::SQUARE_CELL_WIDTH;
+	int cw = ((consoleType == ConsoleType::NARROW) ? constants::CELL_WIDTH : constants::SQUARE_CELL_WIDTH);
 	int ch = consoleType == ConsoleType::NARROW ? constants::CELL_HEIGHT : constants::SQUARE_CELL_HEIGHT;
 	for(auto& c : cells.contents) {
 		int xc = index % cells.w;
@@ -43,7 +43,8 @@ void Console::draw() {
 		bg.setPosition((x+xc) * cw, (y+yc) * ch);
 		bg.setFillColor(c.bg);
 		io::window.draw(bg);
-		io::text(std::string(1, c.glyph), x+xc, y+yc, c.fg);
+		if(consoleType == ConsoleType::NARROW) io::text(std::string(1, c.glyph), x+xc, y+yc, c.fg);
+		else io::squareText(std::string(1, c.glyph), x+xc*2, y+yc, c.fg);
 		++index;
 	}
 	//io::window.display();

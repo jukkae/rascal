@@ -1,6 +1,7 @@
 #ifndef RENDERER_HPP
 #define RENDERER_HPP
 #include <vector>
+#include "console.hpp"
 #include "constants.hpp"
 #include <SFML/Graphics.hpp>
 
@@ -24,6 +25,7 @@ private:
 	int screenWidth;
 	int screenHeight;
 	GameplayState* state;
+	Console console;
 
 	void renderMap(const World* const world, sf::RenderWindow* window);
 	void renderActors(const World* const world, sf::RenderWindow* window);

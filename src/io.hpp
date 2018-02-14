@@ -19,6 +19,7 @@ bool fileExists(std::string name);
 bool removeFile(std::string name);
 
 void text(std::string text, int x, int y, sf::Color color = sf::Color::White);
+void squareText(std::string text, int x, int y, sf::Color color = sf::Color::White);
 
 } // namespace io
 #endif /* IO_HPP */
