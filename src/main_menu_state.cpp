@@ -75,14 +75,14 @@ void MainMenuState::handleEvents() {
 }
 
 void MainMenuState::update() {
-	window->clear(sf::Color::Black);
+	//window->clear(sf::Color::Black);
 	console.clear();
 
 	handleEvents();
 	render();
 
 	console.draw();
-	window->display();
+	//window->display();
 }
 
 void MainMenuState::render() {
