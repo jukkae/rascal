@@ -92,7 +92,7 @@ void MainMenuState::render() {
 void MainMenuState::renderAsciiTitle() {
 	int x = (constants::SCREEN_WIDTH - 41) / 2; // title is 41 cells wide
 	int y = 1;
-	io::text(asciiTitle, x, y, colors::brightBlue);
+	console.drawText(Point(x, y), asciiTitle, colors::brightBlue);
 }
 
 void MainMenuState::renderBgArt() {
