@@ -82,7 +82,7 @@ void MainMenuState::update() {
 	render();
 
 	console.draw();
-	//window->display();
+	window->display();
 }
 
 void MainMenuState::render() {

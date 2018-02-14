@@ -58,7 +58,7 @@ void Gui::render(World* world, sf::RenderWindow* window) {
 	renderStatusEffects(world, window);
 	renderStats(world, window);
 	renderNav(world, window);
-	//console.draw();
+	console.draw();
 }
 
 void Gui::renderXpBar(World* world, sf::RenderWindow* window) {

@@ -45,7 +45,7 @@ void Console::draw() {
 		io::text(std::string(1, c.glyph), x+xc, y+yc, c.fg);
 		++index;
 	}
-	io::window.display();
+	//io::window.display();
 }
 
 void Console::setBackground(Point position, sf::Color color) {
