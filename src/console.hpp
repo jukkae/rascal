@@ -1,25 +1,27 @@
 #ifndef CONSOLE_HPP
 #define CONSOLE_HPP
 
+#include "constants.hpp"
 #include "colors.hpp"
 #include "point.hpp"
 enum class ConsoleType { SQUARE, NARROW };
 
 struct Cell {
-	sf::Color bg;
-	sf::Color fg;
-	char glyph; // is char good?
+	sf::Color bg = colors::black;
+	sf::Color fg = colors::white;
+	char glyph = ' '; // is char good?
 };
 
 template<class T>
 class Mat2d {
 public:
+	//TODO size should a) depend on type and b) be dynamic
 	std::vector<T> contents; //sb private
 };
 
 class Console {
 public:
-	Console(ConsoleType consoleType = ConsoleType::NARROW) : consoleType(consoleType) {;}
+	Console(ConsoleType consoleType = ConsoleType::NARROW);
 	void draw();
 	void setBackground(Point position, sf::Color color);
 	void drawGlyph(Point position, char glyph, sf::Color color);

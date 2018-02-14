@@ -80,6 +80,7 @@ void MainMenuState::update() {
 	handleEvents();
 	render();
 
+	console.draw();
 	window->display();
 }
 
