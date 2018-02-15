@@ -53,7 +53,8 @@ namespace colors {
 	static sf::Color lightWall    (100, 100, 200);
 	static sf::Color lightGround  (200, 210, 200);
 
-	static const inline Color multiply(Color c, float f) { return Color(c.r * f, c.g * f, c.b * f); }
+	static const inline Color multiply(Color c, float f) { return Color(c.r * f  , c.g * f  , c.b * f  ); }
+	static const inline Color      add(Color c, Color d) { return Color(c.r + d.r, c.g + d.g, c.b + d.b); }
 };
 
 #endif /* COLORS_HPP */

@@ -56,7 +56,7 @@ public:
 	void drawGlyph(Point position, char glyph, sf::Color color);
 	void drawText(Point position, std::string text, sf::Color color);
 	void drawGraphicsBlock(Point position, std::string text, sf::Color color);
-	void highlight(Point position, sf::Color color /* = some default */);
+	void highlight(Point position, sf::Color color = colors::darkestGrey);
 	int x = 0; //private, ctor
 	int y = 0;
 	int width;

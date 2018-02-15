@@ -60,72 +60,70 @@ void Renderer::renderMap(const World* const world, sf::RenderWindow* window) {
 
 	for(int x = 0; x < screenWidth; ++x) {
 		for(int y = 0; y < screenHeight; ++y) {
-			if(x == mouseXcells && y == mouseYcells) {
-				renderHighlight(world, window, Point(x, y));
-			}
-			else {
-				int worldX = x + cameraX;
-				int worldY = y + cameraY;
+			int worldX = x + cameraX;
+			int worldY = y + cameraY;
 
-				if(worldX < 0 || worldX >= mapWidth || worldY < 0 || worldY >= mapHeight) {
-					console.setBackground(Point(x, y), colors::black);
-				} // TODO this code is getting bad
-				else if(map->tiles[worldX + mapWidth*worldY].inFov || map->tiles[worldX + mapWidth*worldY].terrain == Terrain::WATER) {
-					if(map->tiles[worldX + mapWidth*worldY].terrain == Terrain::WATER && map->tiles[worldX + mapWidth*worldY].walkable) {
-						if(map->tiles[worldX + mapWidth*worldY].animation) {
-							Animation& animation = const_cast<Animation&>(*map->tiles[worldX + mapWidth*worldY].animation);
-							sf::Color& color = animation.colors[0];
-							int blue = 0;
-							if(worldX == world->getPlayer()->x && worldY == world->getPlayer()->y) {
-								//blue = 255;
-								//color.b = blue;
-							}
-							for(int i = -1; i <= 1; ++i) {
-								for(int j = -1; j <= 1; ++j) {
-									if(i == 0 && j == 0) continue;
-									if(i + worldX < 0 || i + worldX >= mapWidth || j + worldY < 0 || j + worldY >= mapHeight) continue;
-									if(!(map->tiles[worldX+i + mapWidth*(worldY+j)].terrain == Terrain::WATER) || !map->tiles[worldX+i + mapWidth*(worldY+j)].walkable) continue;
-									else {
-										int neighbor = previous[(worldX+i) + mapWidth*(worldY+j)];
-										if(neighbor > color.b) {
-											color.b = neighbor - 4;
-										} else {
-											//--color.b;
-										}
-										if(color.b > 64) --color.b;
-										if(color.b > 64) --color.b;
-										if(color.b > 64) --color.b;
-										if(color.b > 64) --color.b;
+			if(worldX < 0 || worldX >= mapWidth || worldY < 0 || worldY >= mapHeight) {
+				console.setBackground(Point(x, y), colors::black);
+			} // TODO this code is getting bad
+			else if(map->tiles[worldX + mapWidth*worldY].inFov || map->tiles[worldX + mapWidth*worldY].terrain == Terrain::WATER) {
+				if(map->tiles[worldX + mapWidth*worldY].terrain == Terrain::WATER && map->tiles[worldX + mapWidth*worldY].walkable) {
+					if(map->tiles[worldX + mapWidth*worldY].animation) {
+						Animation& animation = const_cast<Animation&>(*map->tiles[worldX + mapWidth*worldY].animation);
+						sf::Color& color = animation.colors[0];
+						int blue = 0;
+						if(worldX == world->getPlayer()->x && worldY == world->getPlayer()->y) {
+							//blue = 255;
+							//color.b = blue;
+						}
+						for(int i = -1; i <= 1; ++i) {
+							for(int j = -1; j <= 1; ++j) {
+								if(i == 0 && j == 0) continue;
+								if(i + worldX < 0 || i + worldX >= mapWidth || j + worldY < 0 || j + worldY >= mapHeight) continue;
+								if(!(map->tiles[worldX+i + mapWidth*(worldY+j)].terrain == Terrain::WATER) || !map->tiles[worldX+i + mapWidth*(worldY+j)].walkable) continue;
+								else {
+									int neighbor = previous[(worldX+i) + mapWidth*(worldY+j)];
+									if(neighbor > color.b) {
+										color.b = neighbor - 4;
+									} else {
+										//--color.b;
 									}
+									if(color.b > 64) --color.b;
+									if(color.b > 64) --color.b;
+									if(color.b > 64) --color.b;
+									if(color.b > 64) --color.b;
 								}
 							}
-							sf::Color col;
-							if(map->tiles[worldX + mapWidth*worldY].inFov) {
-								col = color;
-							} else if(map->isExplored(worldX, worldY)) {
-								col = colors::darkestBlue;
-							} else col = colors::black;
+						}
+						sf::Color col;
+						if(map->tiles[worldX + mapWidth*worldY].inFov) {
+							col = color;
+						} else if(map->isExplored(worldX, worldY)) {
+							col = colors::darkestBlue;
+						} else col = colors::black;
 
-							console.setBackground(Point(x, y), col);
-						}
-						//rectangle.setFillColor(colors::lightBlue);
+						console.setBackground(Point(x, y), col);
+					}
+					//rectangle.setFillColor(colors::lightBlue);
+				} else {
+					if(map->isExplored(worldX, worldY) && map->tiles[worldX + mapWidth*worldY].terrain == Terrain::WATER) { // water, not walkable
+						console.setBackground(Point(x, y), colors::darkerBlue);
 					} else {
-						if(map->isExplored(worldX, worldY) && map->tiles[worldX + mapWidth*worldY].terrain == Terrain::WATER) { // water, not walkable
-							console.setBackground(Point(x, y), colors::darkerBlue);
-						} else {
-							console.setBackground(Point(x, y), map->isWall(worldX, worldY) ? colors::lightWall : colors::lightGround);
-						}
+						console.setBackground(Point(x, y), map->isWall(worldX, worldY) ? colors::lightWall : colors::lightGround);
 					}
 				}
-				else if(map->isExplored(worldX, worldY)) {
-					console.setBackground(Point(x, y), map->isWall(worldX, worldY) ? colors::darkWall : colors::darkGround);
-				}
-				else {
-					console.setBackground(Point(x, y), colors::black);
-				}
-				if(!map->isExplored(worldX, worldY)) {
-					console.setBackground(Point(x, y), colors::black);
-				}
+			}
+			else if(map->isExplored(worldX, worldY)) {
+				console.setBackground(Point(x, y), map->isWall(worldX, worldY) ? colors::darkWall : colors::darkGround);
+			}
+			else {
+				console.setBackground(Point(x, y), colors::black);
+			}
+			if(!map->isExplored(worldX, worldY)) {
+				console.setBackground(Point(x, y), colors::black);
+			}
+			if(mouseXcells >= 0 && mouseXcells < console.width && mouseYcells >= 0 && mouseYcells < console.height) {
+				console.highlight(Point(mouseXcells, mouseYcells));
 			}
 		}
 	}
@@ -140,40 +138,6 @@ void Renderer::notify(Event& event, World* world) {
 			world->map.tiles[x + mapWidth*y].animation->colors.at(0).b = 255;
 		}
 	}
-}
-
-
-void Renderer::renderHighlight(const World* const world, sf::RenderWindow* window, const Point& point) {
-	goingUp ? elapsedTime += 10 : elapsedTime -= 10;
-	if(elapsedTime >= 255 || elapsedTime <= 0) goingUp = !goingUp;
-
-	const Map* const map = &world->map;
-	int x = point.x;
-	int y = point.y;
-	int cameraX = world->getPlayer()->x - (screenWidth/2);
-	int cameraY = world->getPlayer()->y - (screenHeight/2);
-	int mapWidth = map->width;
-	int mapHeight = map->height;
-
-	int worldX = x + cameraX;
-	int worldY = y + cameraY;
-
-	float coef = 1.2 * (elapsedTime / 255.0);
-	sf::Color color;
-	if(worldX < 0 || worldX >= mapWidth || worldY < 0 || worldY >= mapHeight) {
-		color = colors::darkestGrey;
-	}
-	else if(map->tiles[worldX + mapWidth*worldY].inFov) {
-		color = (map->isWall(worldX, worldY) ? colors::multiply(colors::lightWall, coef) : colors::multiply(colors::lightGround, coef));
-	}
-	else if(map->isExplored(worldX, worldY)) {
-		color = (map->isWall(worldX, worldY) ? colors::multiply(colors::darkWall, coef) : colors::multiply(colors::darkGround, coef));
-	}
-	else {
-		color = colors::darkestGrey;
-	}
-
-	console.highlight(point, color);
 }
 
 void Renderer::renderActors(const World* const world, sf::RenderWindow* window) {

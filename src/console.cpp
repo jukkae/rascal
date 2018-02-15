@@ -101,5 +101,6 @@ void Console::drawGraphicsBlock(Point position, std::string text, sf::Color colo
 }
 
 void Console::highlight(Point position, sf::Color color) {
-	setBackground(position, color);
+	sf::Color newBg = colors::add(cells.at(position.x, position.y).bg, color);
+	setBackground(position, newBg);
 }
