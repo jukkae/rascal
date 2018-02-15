@@ -19,6 +19,7 @@
 MainMenuState::MainMenuState(Engine* engine, bool forceShowContinue) :
 State(engine, engine->getWindow())
 {
+	console = Console(ConsoleType::NARROW);
 	MenuItem newGame = { MenuItemCode::NEW_GAME, "New game!" };
 	MenuItem cont = { MenuItemCode::CONTINUE, "Continue!" };
 	MenuItem help = { MenuItemCode::HELP, "Help & about" };
@@ -74,12 +75,20 @@ void MainMenuState::handleEvents() {
 }
 
 void MainMenuState::update() {
-	window->clear(sf::Color::Black);
+	//window->clear(sf::Color::Black);
+	console.clear();
 
 	handleEvents();
 	render();
 
+	console.draw();
 	window->display();
+	// TODO where would the call to SFML window display() belong?
+	// It's intimately tied to each scene's own update loop, so it can't be moved to, for example, Engine
+	// - at least, not straightforward
+	// ConsoleStack for each scene, and Stack would then call that?
+	// Seems needlessly convoluted
+	// Have State call that (like now?) – seems dirty
 }
 
 void MainMenuState::render() {
@@ -91,13 +100,13 @@ void MainMenuState::render() {
 void MainMenuState::renderAsciiTitle() {
 	int x = (constants::SCREEN_WIDTH - 41) / 2; // title is 41 cells wide
 	int y = 1;
-	io::text(asciiTitle, x, y, colors::brightBlue);
+	console.drawGraphicsBlock(Point(x, y), asciiTitle, colors::brightBlue);
 }
 
 void MainMenuState::renderBgArt() {
 	int x = 0; // bg is hardcoded
 	int y = 0;
-	io::text(bgArt, x, y, colors::lightGreen);
+	console.drawGraphicsBlock(Point(x, y), bgArt, colors::lightGreen);
 }
 
 void MainMenuState::showMenu() {
@@ -108,7 +117,7 @@ void MainMenuState::showMenu() {
 	for(MenuItem item : menuItems) {
 		menuX = (constants::SCREEN_WIDTH - item.label.length()) / 2;
 		sf::Color color = selectedItem == itemIndex ? colors::brightBlue : colors::darkBlue;
-		io::text(item.label, menuX, menuY+itemIndex*3, color);
+		console.drawGraphicsBlock(Point(menuX, menuY+itemIndex*3), item.label, color);
 		++itemIndex;
 	}
 }

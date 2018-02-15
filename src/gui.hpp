@@ -1,6 +1,7 @@
 #ifndef GUI_HPP
 #define GUI_HPP
 
+#include "console.hpp"
 #include "messaging.hpp"
 #include <SFML/Graphics.hpp>
 class GameplayState;
@@ -36,6 +37,7 @@ protected:
 private:
 	bool isInteresting(Event& event);
 	GameplayState* state;
+	Console console;
 	friend class boost::serialization::access;
 	template<class Archive>
 	void serialize(Archive & ar, const unsigned int version) {

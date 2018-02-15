@@ -18,6 +18,7 @@
 GameOverState::GameOverState(Engine* engine, Actor* actor, Player* player, bool victory) :
 State(engine, engine->getWindow())
 {
+	console = Console(ConsoleType::NARROW);
 	engine->gameOver = true;
 	if(!victory) {
 		description = "you died at level ";
@@ -57,16 +58,18 @@ void GameOverState::handleEvents() {
 }
 
 void GameOverState::update() {
-	window->clear(sf::Color::Black);
+	//window->clear(sf::Color::Black);
+	console.clear();
 
 	handleEvents();
 	render();
 
+	console.draw();
 	window->display();
 }
 
 void GameOverState::render() {
 	int x = 2;
 	int y = 2;
-	io::text(description, x, y, colors::brightBlue);
+	console.drawGraphicsBlock(Point(x, y), description, colors::brightBlue);
 }

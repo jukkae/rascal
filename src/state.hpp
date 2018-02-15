@@ -4,9 +4,10 @@
 #include <boost/serialization/assume_abstract.hpp>
 #include "engine.hpp"
 #include <SFML/Window.hpp>
+#include "console.hpp"
 class State {
 public:
-	State(Engine* engine, sf::RenderWindow* window): engine(engine), window(window) {;}
+	State(Engine* engine, sf::RenderWindow* window): engine(engine), window(window), console() {;}
 	virtual ~State() {}
 
 	virtual void handleEvents() = 0;
@@ -18,6 +19,7 @@ public:
 protected:
 	Engine* engine;
 	sf::RenderWindow* window;
+	Console console;
 
 private:
 	friend class boost::serialization::access;

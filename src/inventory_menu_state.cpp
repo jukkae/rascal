@@ -18,6 +18,7 @@
 InventoryMenuState::InventoryMenuState(Engine* engine, Actor* actor) :
 State(engine, engine->getWindow()),
 actor(actor) {
+	console = Console(ConsoleType::NARROW);
 	inventoryContents.clear();
 	for(auto& item : actor->container->inventory) inventoryContents.push_back(item.get());
 
@@ -111,9 +112,9 @@ void InventoryMenuState::update() {
 }
 
 void InventoryMenuState::render() {
-	window->clear(sf::Color::Black);
-
-	io::text("I N V E N T O R Y", 2, 1, colors::brightBlue);
+	//window->clear(sf::Color::Black);
+	console.clear();
+	console.drawGraphicsBlock(Point(2, 1), "I N V E N T O R Y", colors::brightBlue);
 
 	int x = 2;
 	int y = 3;
@@ -122,69 +123,78 @@ void InventoryMenuState::render() {
 	for (auto pile : piles) {
 		sf::Color color = itemIndex == selectedItem ? colors::brightBlue : colors::darkBlue;
 		int pileSize = pile.size();
-		if(pileSize != 1) { io::text(pile.at(0)->name + " (" + std::to_string(pileSize) + ")", x, y, color); }
-		else { io::text(pile.at(0)->name,  x, y, color); }
+		if(pileSize != 1) {
+			console.drawGraphicsBlock(Point(x, y), pile.at(0)->name + " (" + std::to_string(pileSize) + ")", color);
+		}
+		else {
+			console.drawGraphicsBlock(Point(x, y), pile.at(0)->name, color);
+		}
 		++y;
 		++itemIndex;
 	}
 
 	std::string creditsString = "credits: " + std::to_string(credits);
-	io::text(creditsString, 2, y+1, colors::brightBlue);
+	console.drawGraphicsBlock(Point(2, y+1), creditsString, colors::brightBlue);
 
 	std::string weightString = "weight: " + std::to_string(contentsWeight) + " / " + std::to_string(capacity);
-	io::text(weightString, 2, y+2, colors::brightBlue);
+	console.drawGraphicsBlock(Point(2, y+2), weightString, colors::brightBlue);
 
 	std::string commandsString = "(u)se - (d)rop - (w)ield/un(w)ield - (e)at - esc to close";
-	io::text(commandsString, 2, y+4, colors::brightBlue);
+	console.drawGraphicsBlock(Point(2, y+4), commandsString, colors::brightBlue);
 
 	renderStats();
 	renderBodyParts();
 
+	console.draw();
 	window->display();
+
 }
 
 void InventoryMenuState::renderStats() {
 
-	io::text("S T A T S", 70, 1, colors::brightBlue);
+	console.drawGraphicsBlock(Point(70, 1), "S T A T S", colors::brightBlue);
 
 	int x = 64;
 	int y = 3;
 
 	if(actor->body) {
+		std::string statsBlock = "";
 		Body* b = actor->body.get();
 
-		std::string strength = "    Strength: " + std::to_string(b->strength);
-		io::text(strength, x, y+1, colors::brightBlue);
+		std::string strength = "    Strength: " + std::to_string(b->strength) + "\n";
+		statsBlock.append(strength);
 
-		std::string perception = "  Perception: " + std::to_string(b->perception);
-		io::text(perception, x, y+2, colors::brightBlue);
+		std::string perception = "  Perception: " + std::to_string(b->perception) + "\n";
+		statsBlock.append(perception);
 
-		std::string endurance = "   Endurance: " + std::to_string(b->endurance);
-		io::text(endurance, x, y+3, colors::brightBlue);
+		std::string endurance = "   Endurance: " + std::to_string(b->endurance) + "\n";
+		statsBlock.append(endurance);
 
-		std::string charisma = "    Charisma: " + std::to_string(b->charisma);
-		io::text(charisma, x, y+4, colors::brightBlue);
+		std::string charisma = "    Charisma: " + std::to_string(b->charisma) + "\n";
+		statsBlock.append(charisma);
 
-		std::string intelligence = "Intelligence: " + std::to_string(b->intelligence);
-		io::text(intelligence, x, y+5, colors::brightBlue);
+		std::string intelligence = "Intelligence: " + std::to_string(b->intelligence) + "\n";
+		statsBlock.append(intelligence);
 
-		std::string agility = "     Agility: " + std::to_string(b->agility);
-		io::text(agility, x, y+6, colors::brightBlue);
+		std::string agility = "     Agility: " + std::to_string(b->agility) + "\n";
+		statsBlock.append(agility);
 
-		std::string luck = "        Luck: " + std::to_string(b->luck);
-		io::text(luck, x, y+7, colors::brightBlue);
+		std::string luck = "        Luck: " + std::to_string(b->luck) + "\n";
+		statsBlock.append(luck);
 
-		std::string speed = "       Speed: " + std::to_string(b->speed);
-		io::text(speed, x, y+8, colors::brightBlue);
+		std::string speed = "       Speed: " + std::to_string(b->speed) + "\n";
+		statsBlock.append(speed);
+
+		console.drawGraphicsBlock(Point(x, y), statsBlock, colors::brightBlue);
 
 	} else {
 		std::string no = "You have no body. How about that?";
-		io::text(no, x, y+1, colors::brightBlue);
+		console.drawGraphicsBlock(Point(x, y+1), no, colors::brightBlue);
 	}
 }
 
 void InventoryMenuState::renderBodyParts() {
-	io::text("B O D Y", 90, 1, colors::brightBlue);
+	console.drawGraphicsBlock(Point(90, 1), "B O D Y", colors::brightBlue);
 
 	int x = 90;
 	int y = 3;
@@ -195,7 +205,7 @@ void InventoryMenuState::renderBodyParts() {
 		auto freeBodyParts = b->bodyParts;
 
 		std::string bps = "body parts:";
-		io::text(bps, x, y+1, colors::brightBlue);
+		console.drawGraphicsBlock(Point(x, y+1), bps, colors::brightBlue);
 
 		for(auto& bp : freeBodyParts) {
 			++y;
@@ -211,7 +221,7 @@ void InventoryMenuState::renderBodyParts() {
 			sf::Color col;
 			if(bp.second) col = colors::brightBlue;
 			else col = colors::blue;
-			io::text(bpt, x, y+1, col);
+			console.drawGraphicsBlock(Point(x, y+1), bpt, col);
 		}
 	}
 }

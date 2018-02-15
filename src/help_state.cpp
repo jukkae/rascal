@@ -9,6 +9,7 @@
 HelpState::HelpState(Engine* engine) :
 State(engine, engine->getWindow())
 {
+	console = Console(ConsoleType::NARROW);
 	{
 	std::ifstream fin("assets/help.txt");
 	std::stringstream buffer;
@@ -37,34 +38,36 @@ void HelpState::handleEvents() {
 }
 
 void HelpState::update() {
-	window->clear(sf::Color::Black);
+	console.clear();
 
 	handleEvents();
 	render();
 
+	console.draw();
 	window->display();
 }
 
 void HelpState::render() {
 	std::string header = "R A S C A L";
 	int x = (constants::SCREEN_WIDTH - header.length()) / 2;
-	io::text(header, x, 1, colors::brightBlue);
+	console.drawGraphicsBlock(Point(x, 1), header, colors::brightBlue);
+
 	std::string version = "Version " + version::VERSION;
 	x = (constants::SCREEN_WIDTH - version.length()) / 2;
-	io::text(version, x, 2, colors::brightBlue);
+	console.drawGraphicsBlock(Point(x, 2), version, colors::brightBlue);
 
 	int lines;
 	lines = std::count(helpText.begin(), helpText.end(), '\n');
 	x = (constants::SCREEN_WIDTH - 24) / 2; //FIXME known width
-	io::text(helpText, x, 6, colors::lightGreen);
+	console.drawGraphicsBlock(Point(x, 6), helpText, colors::lightGreen);
 
 	std::string story = "To escape, fight your way to the top...";
 	x = (constants::SCREEN_WIDTH - story.length()) / 2;
-	io::text(story, x, 6 + lines + 3, colors::brightBlue);
+	console.drawGraphicsBlock(Point(x, 6 + lines + 3), story, colors::brightBlue);
 
 
 	std::string copyright = "(c) 2017- jukkae";
 	x = (constants::SCREEN_WIDTH - copyright.length()) / 2;
-	io::text(copyright, x, constants::SCREEN_HEIGHT - 3, colors::brightBlue);
+	console.drawGraphicsBlock(Point(x, constants::SCREEN_HEIGHT - 3), copyright, colors::brightBlue);
 }
 

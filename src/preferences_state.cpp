@@ -11,6 +11,7 @@ PreferencesState::PreferencesState(Engine* engine) :
 State(engine, engine->getWindow()),
 preferences(engine->preferences)
 {
+	console = Console(ConsoleType::NARROW);
 	PreferenceItem music = { preferences.music.first, preferences.music.second };
 	//PreferenceItem dummy = { preferences.dummy.first, preferences.dummy.second };
 	//PreferenceItem longer = { preferences.longer_dummy_preference.first, preferences.longer_dummy_preference.second };
@@ -85,25 +86,27 @@ void PreferencesState::handleEvents() {
 }
 
 void PreferencesState::update() {
-	window->clear(sf::Color::Black);
+	console.clear();
 
 	handleEvents();
 	render();
 
+	console.draw();
 	window->display();
 }
 
 void PreferencesState::render() {
 	std::string header = "P R E F E R E N C E S";
 	int x = (constants::SCREEN_WIDTH - header.length()) / 2;
-	io::text(header, x, 1, colors::brightBlue);
+	console.drawGraphicsBlock(Point(x, 1), header, colors::brightBlue);
+
 
 	int menuY = 4;
 	int itemIndex = 0;
 	for(PreferenceItem item : items) {
 		x = (constants::SCREEN_WIDTH / 2) - item.key.length(); // center colons
 		sf::Color color = selectedItem == itemIndex ? colors::brightBlue : colors::darkBlue;
-		io::text(item.key + " : " + (item.value ? "on" : "off"), x, menuY+itemIndex, color);
+		console.drawGraphicsBlock(Point(x, menuY+itemIndex), item.key + " : " + (item.value ? "on" : "off"), color);
 		++itemIndex;
 	}
 }

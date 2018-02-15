@@ -21,6 +21,8 @@
 LevelUpMenuState::LevelUpMenuState(Engine* engine, Actor* actor) : 
 State(engine, engine->getWindow()),
 actor(actor) {
+	console = Console(ConsoleType::NARROW);
+
 	menuContents.push_back({Attribute::STRENGTH, "strength"});
 	menuContents.push_back({Attribute::PERCEPTION, "perception"});
 	menuContents.push_back({Attribute::ENDURANCE, "endurance"});
@@ -61,14 +63,14 @@ void LevelUpMenuState::update() {
 }
 
 void LevelUpMenuState::render() {
-	window->clear(sf::Color::Black);
+	console.clear();
 
 	int width = constants::SCREEN_WIDTH;
 	int height = constants::SCREEN_HEIGHT;
 
 	std::string heading = "Y O U   H A V E   G A I N E D   A   L E V E L";
 	int headingX = (width - heading.length()) / 2;
-	io::text(heading, headingX, 1, colors::brightBlue);
+	console.drawGraphicsBlock(Point(headingX, 1), heading, colors::brightBlue);
 
 	int y = 3;
 	int itemIndex = 0;
@@ -76,11 +78,12 @@ void LevelUpMenuState::render() {
 		int x = (width - item.label.length()) / 2;
 		sf::Color color = colors::darkBlue;
 		if(itemIndex == selectedItem) color = colors::brightBlue;
-		io::text(item.label, x, y, color);
+		console.drawGraphicsBlock(Point(x, y), item.label, color);
 		++y;
 		++itemIndex;
 	}
 
+	console.draw();
 	window->display();
 }
 
