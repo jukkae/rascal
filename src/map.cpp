@@ -22,8 +22,11 @@
 Map::Map() : Map(constants::DEFAULT_MAP_WIDTH, constants::DEFAULT_MAP_HEIGHT) {}
 
 Map::Map(int width, int height) : width(width), height(height) {
-	for(int i = 0; i < width*height; ++i) {
-		tiles.push_back(Tile());
+	tiles = Mat2d<Tile>(width, height);
+	for(int i = 0; i < width; ++i) {
+		for(int j = 0; j < height; ++j) {
+			tiles(i, j) = Tile();
+		}
 	}
 }
 
@@ -51,10 +54,10 @@ void Map::generateBuildingMap() {
 		for(int x = a.x0(); x < a.x1(); ++x) {
 			for(int y = a.y0(); y < a.y1(); ++y) {
 				if(x == a.x0() || x == a.x1() || y == a.y0() || y == a.y1()) {
-					tiles.at(x + y*width).walkable = false;
+					tiles(x, y).walkable = false;
 				}
 				if(x == a.x0() + 1 || x == a.x1() - 1 || y == a.y0() + 1 || y == a.y1() - 1) {
-					tiles.at(x + y*width).walkable = true;
+					tiles(x, y).walkable = true;
 				}
 			}
 		}
@@ -63,7 +66,7 @@ void Map::generateBuildingMap() {
 	for(int x = 0; x < width; ++x) {
 		for(int y = 0; y < height; ++y) {
 			if(x == 0 || x == width - 1 || y == 0 || y == height - 1) {
-				tiles.at(x + y*width).walkable = false;
+				tiles(x, y).walkable = false;
 			}
 		}
 	}
@@ -72,13 +75,13 @@ void Map::generateBuildingMap() {
 void Map::generatePillarsMap() {
 	for(int x = 0; x < width; ++x) {
 		for(int y = 0; y < height; ++y) {
-			if(x % 3 == 0 && y % 3 == 0) tiles.at(x + y*width).walkable = false;
+			if(x % 3 == 0 && y % 3 == 0) tiles(x, y).walkable = false;
 		}
 	}
 	for(int x = 0; x < width; ++x) {
 		for(int y = 0; y < height; ++y) {
 			if(x == 0 || x == width - 1 || y == 0 || y == height - 1) {
-				tiles.at(x + y*width).walkable = false;
+				tiles(x, y).walkable = false;
 			}
 		}
 	}
@@ -87,7 +90,7 @@ void Map::generatePillarsMap() {
 void Map::generateWaterMap() {
 	for(int x = 0; x < width; ++x) {
 		for(int y = 0; y < height; ++y) {
-			tiles.at(x + y*width).terrain = Terrain::WATER;
+			tiles(x, y).terrain = Terrain::WATER;
 			Animation anim;
 			anim.chars = std::vector<char>(); // empty on purpose
 			anim.colors = std::vector<sf::Color>();
@@ -95,20 +98,20 @@ void Map::generateWaterMap() {
 			anim.charFreq = 1;
 			anim.colFreq = 10;
 			anim.phase = 0.0f;
-			tiles.at(x + y*width).animation = anim;
+			tiles(x, y).animation = anim;
 		}
 	}
 	for(int x = 0; x < width; ++x) {
 		for(int y = 0; y < height; ++y) {
 			if(x % 3 == 0 && y % 3 == 0) {
-				tiles.at(x + y*width).walkable = false;
+				tiles(x, y).walkable = false;
 			}
 		}
 	}
 	for(int x = 0; x < width; ++x) {
 		for(int y = 0; y < height; ++y) {
 			if(x == 0 || x == width - 1 || y == 0 || y == height - 1) {
-				tiles.at(x + y*width).walkable = false;
+				tiles(x, y).walkable = false;
 			}
 		}
 	}
@@ -151,7 +154,7 @@ std::vector<Rect> Map::breakRooms(Rect area, BreakDirection direction) {
 }
 
 bool Map::isWall(int x, int y) const {
-	return !tiles.at(x + y*width).walkable;
+	return !tiles(x, y).walkable;
 	//return !map->isWalkable(x, y); // can't use this while creating monsters
 }
 
@@ -163,12 +166,12 @@ bool Map::canWalk(int x, int y) const {
 
 bool Map::isExplored(int x, int y) const {
 	if(x < 0 || x >= width || y < 0 || y >= height) return false; // I mean, if it's not on map, it can't be explored, right?
-	return tiles[x + y*width].explored;
+	return tiles(x, y).explored;
 }
 
 bool Map::isInFov(int x, int y) const {
 	if(x < 0 || x >= width || y < 0 || y >= height) return false;
-	if(tiles[x+y*width].inFov) {
+	if(tiles(x, y).inFov) {
 		return true;
 	}
 	return false;

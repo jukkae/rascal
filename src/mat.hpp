@@ -12,6 +12,9 @@ public:
 	using iterator        = typename std::vector<T>::iterator;
 	using const_iterator  = typename std::vector<T>::const_iterator;
 
+	Mat2d() = default;
+	Mat2d(size_type width, size_type height): w(width), h(height), contents(width * height) {;}
+
 	iterator begin() { return contents.begin(); }
 	iterator end() { return contents.end(); }
 	const_iterator begin() const { return contents.begin(); }
@@ -33,6 +36,16 @@ public:
 	int w;
 	int h;
 	std::vector<T> contents; //sb private
+
+private:
+	friend class boost::serialization::access;
+	template<typename Archive>
+	void serialize(Archive & ar, const unsigned int version) {
+		ar & w;
+		ar & h;
+		ar & contents;
+	}
+
 };
 
 #endif /* MAT_HPP */
