@@ -83,6 +83,12 @@ void MainMenuState::update() {
 
 	console.draw();
 	window->display();
+	// TODO where would the call to SFML window display() belong?
+	// It's intimately tied to each scene's own update loop, so it can't be moved to, for example, Engine
+	// - at least, not straightforward
+	// ConsoleStack for each scene, and Stack would then call that?
+	// Seems needlessly convoluted
+	// Have State call that (like now?) – seems dirty
 }
 
 void MainMenuState::render() {
