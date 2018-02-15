@@ -130,7 +130,6 @@ void Gui::renderStatusEffects(World* world, sf::RenderWindow* window) {
 	Actor* player = world->getPlayer();
 
 	if(player->getStatusEffects().size() > 0) {
-		io::text("status effects:", constants::SCREEN_WIDTH-60, 1+constants::SCREEN_HEIGHT-constants::GUI_PANEL_HEIGHT, colors::lightBlue);
 		console.drawText(Point(100, 1), "status effects:", colors::lightBlue);
 		int i = 1;
 		for (auto& e : player->getStatusEffects()) {
