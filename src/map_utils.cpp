@@ -133,7 +133,7 @@ void map_utils::addStairs(World* world, Map* map, int dsX, int dsY) {
 	stairs->transporter->direction = VerticalDirection::UP;
 	world->addActor(std::move(stairs));
 
-	if (map->isWall(dsX, dsY)) map->tiles[dsX + map->width * dsY].walkable = true; // FIXME
+	if (map->isWall(dsX, dsY)) map->tiles(dsX, dsY).walkable = true; // FIXME
 	std::unique_ptr<Actor> downstairs = std::make_unique<Actor>(dsX, dsY, '>', "stairs (down)", sf::Color::White, boost::none);
     downstairs->blocks = false;
     downstairs->fovOnly = false;

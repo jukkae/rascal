@@ -10,7 +10,7 @@ void fov::computeFov(Map* map, int x, int y, int radius, FovType fovType, std::v
 	//Only loop through possible values
 	for(int i = 0; i < map->width; ++i) {
 		for(int j = 0; j < map->height; ++j) {
-			map->tiles[i + map->width*j].inFov = false;
+			map->tiles(i, j).inFov = false;
 		}
 	}
 	for(int octant = 0; octant < 8; octant++) {
@@ -32,13 +32,13 @@ void fov::computeFovForOctant(Map* map, int x, int y, int octant, int radius, Fo
 			if(xPos < 0 || xPos >= map->width || yPos < 0 || yPos >= map->height) break;
 
 			if(fullShadow) {
-				map->tiles[xPos + map->width*yPos].inFov = false;
+				map->tiles(xPos, yPos).inFov = false;
 			}
 			else {
 				Shadow projection = Shadow::projectTile(row, col);
 				bool visible = !shadowLine.isInShadow(projection);
-				map->tiles[xPos + map->width*yPos].inFov = visible;
-				if(visible) map->tiles[xPos + map->width*yPos].explored = true; // *maybe* extract function
+				map->tiles(xPos, yPos).inFov = visible;
+				if(visible) map->tiles(xPos, yPos).explored = true; // *maybe* extract function
 
 				if(visible && map->isWall(xPos, yPos) /*TODO check for doors*/) {
 					shadowLine.addShadow(projection);

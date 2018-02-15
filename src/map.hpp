@@ -10,6 +10,7 @@
 #include <boost/serialization/export.hpp>
 #include "animation.hpp"
 #include "constants.hpp"
+#include "mat.hpp"
 class World;
 struct Rect;
 template<class T>
@@ -44,7 +45,9 @@ enum class MapType { BUILDING, WATER, PILLARS };
 class Map {
 public:
 	int width, height;
-	std::vector<Tile> tiles;
+	//std::vector<Tile> tiles;
+	Mat2d<Tile> tiles;
+
 
 	Map();
 	Map(int width, int height);

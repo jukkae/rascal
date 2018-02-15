@@ -51,8 +51,8 @@ void Renderer::renderMap(const World* const world, sf::RenderWindow* window) {
 	for(int x = 0; x < mapWidth; ++x) {
 		for(int y = 0; y < mapHeight; ++y) {
 			previous.at(x + mapWidth*y) = 64;
-			if(map->tiles[x + mapWidth*y].terrain == Terrain::WATER && map->tiles[x + mapWidth*y].walkable) {
-				previous.at(x + mapWidth*y) = map->tiles[x + mapWidth*y].animation->colors[0].b;
+			if(map->tiles(x, y).terrain == Terrain::WATER && map->tiles(x, y).walkable) {
+				previous.at(x + mapWidth*y) = map->tiles(x, y).animation->colors[0].b;
 				if(previous.at(x + mapWidth*y) > 0) previous.at(x + mapWidth*y) = previous.at(x + mapWidth*y) - 1;
 			}
 		}
@@ -66,10 +66,10 @@ void Renderer::renderMap(const World* const world, sf::RenderWindow* window) {
 			if(worldX < 0 || worldX >= mapWidth || worldY < 0 || worldY >= mapHeight) {
 				console.setBackground(Point(x, y), colors::black);
 			} // TODO this code is getting bad
-			else if(map->tiles[worldX + mapWidth*worldY].inFov || map->tiles[worldX + mapWidth*worldY].terrain == Terrain::WATER) {
-				if(map->tiles[worldX + mapWidth*worldY].terrain == Terrain::WATER && map->tiles[worldX + mapWidth*worldY].walkable) {
-					if(map->tiles[worldX + mapWidth*worldY].animation) {
-						Animation& animation = const_cast<Animation&>(*map->tiles[worldX + mapWidth*worldY].animation);
+			else if(map->tiles(worldX, worldY).inFov || map->tiles(worldX, worldY).terrain == Terrain::WATER) {
+				if(map->tiles(worldX, worldY).terrain == Terrain::WATER && map->tiles(worldX, worldY).walkable) {
+					if(map->tiles(worldX, worldY).animation) {
+						Animation& animation = const_cast<Animation&>(*map->tiles(worldX, worldY).animation);
 						sf::Color& color = animation.colors[0];
 						int blue = 0;
 						if(worldX == world->getPlayer()->x && worldY == world->getPlayer()->y) {
@@ -80,7 +80,7 @@ void Renderer::renderMap(const World* const world, sf::RenderWindow* window) {
 							for(int j = -1; j <= 1; ++j) {
 								if(i == 0 && j == 0) continue;
 								if(i + worldX < 0 || i + worldX >= mapWidth || j + worldY < 0 || j + worldY >= mapHeight) continue;
-								if(!(map->tiles[worldX+i + mapWidth*(worldY+j)].terrain == Terrain::WATER) || !map->tiles[worldX+i + mapWidth*(worldY+j)].walkable) continue;
+								if(!(map->tiles(worldX+i, worldY+j).terrain == Terrain::WATER) || !map->tiles(worldX+i, (worldY+j)).walkable) continue;
 								else {
 									int neighbor = previous[(worldX+i) + mapWidth*(worldY+j)];
 									if(neighbor > color.b) {
@@ -96,7 +96,7 @@ void Renderer::renderMap(const World* const world, sf::RenderWindow* window) {
 							}
 						}
 						sf::Color col;
-						if(map->tiles[worldX + mapWidth*worldY].inFov) {
+						if(map->tiles(worldX, worldY).inFov) {
 							col = color;
 						} else if(map->isExplored(worldX, worldY)) {
 							col = colors::darkestBlue;
@@ -106,7 +106,7 @@ void Renderer::renderMap(const World* const world, sf::RenderWindow* window) {
 					}
 					//rectangle.setFillColor(colors::lightBlue);
 				} else {
-					if(map->isExplored(worldX, worldY) && map->tiles[worldX + mapWidth*worldY].terrain == Terrain::WATER) { // water, not walkable
+					if(map->isExplored(worldX, worldY) && map->tiles(worldX, worldY).terrain == Terrain::WATER) { // water, not walkable
 						console.setBackground(Point(x, y), colors::darkerBlue);
 					} else {
 						console.setBackground(Point(x, y), map->isWall(worldX, worldY) ? colors::lightWall : colors::lightGround);
@@ -134,8 +134,8 @@ void Renderer::notify(Event& event, World* world) {
 		int x = e->x;
 		int y = e->y;
 		int mapWidth = world->width;
-		if(world->map.tiles[x + mapWidth*y].animation) {
-			world->map.tiles[x + mapWidth*y].animation->colors.at(0).b = 255;
+		if(world->map.tiles(x, y).animation) {
+			world->map.tiles(x, y).animation->colors.at(0).b = 255;
 		}
 	}
 }
