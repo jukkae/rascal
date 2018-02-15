@@ -126,7 +126,6 @@ void Renderer::renderMap(const World* const world, sf::RenderWindow* window) {
 				if(!map->isExplored(worldX, worldY)) {
 					console.setBackground(Point(x, y), colors::black);
 				}
-				std::cout << "\n"; // TODO wtf why does this crash without this
 			}
 		}
 	}
