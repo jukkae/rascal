@@ -152,41 +152,44 @@ void InventoryMenuState::render() {
 
 void InventoryMenuState::renderStats() {
 
-	io::text("S T A T S", 70, 1, colors::brightBlue);
+	console.drawGraphicsBlock(Point(70, 1), "S T A T S", colors::brightBlue);
 
 	int x = 64;
 	int y = 3;
 
 	if(actor->body) {
+		std::string statsBlock = "";
 		Body* b = actor->body.get();
 
-		std::string strength = "    Strength: " + std::to_string(b->strength);
-		io::text(strength, x, y+1, colors::brightBlue);
+		std::string strength = "    Strength: " + std::to_string(b->strength) + "\n";
+		statsBlock.append(strength);
 
-		std::string perception = "  Perception: " + std::to_string(b->perception);
-		io::text(perception, x, y+2, colors::brightBlue);
+		std::string perception = "  Perception: " + std::to_string(b->perception) + "\n";
+		statsBlock.append(perception);
 
-		std::string endurance = "   Endurance: " + std::to_string(b->endurance);
-		io::text(endurance, x, y+3, colors::brightBlue);
+		std::string endurance = "   Endurance: " + std::to_string(b->endurance) + "\n";
+		statsBlock.append(endurance);
 
-		std::string charisma = "    Charisma: " + std::to_string(b->charisma);
-		io::text(charisma, x, y+4, colors::brightBlue);
+		std::string charisma = "    Charisma: " + std::to_string(b->charisma) + "\n";
+		statsBlock.append(charisma);
 
-		std::string intelligence = "Intelligence: " + std::to_string(b->intelligence);
-		io::text(intelligence, x, y+5, colors::brightBlue);
+		std::string intelligence = "Intelligence: " + std::to_string(b->intelligence) + "\n";
+		statsBlock.append(intelligence);
 
-		std::string agility = "     Agility: " + std::to_string(b->agility);
-		io::text(agility, x, y+6, colors::brightBlue);
+		std::string agility = "     Agility: " + std::to_string(b->agility) + "\n";
+		statsBlock.append(agility);
 
-		std::string luck = "        Luck: " + std::to_string(b->luck);
-		io::text(luck, x, y+7, colors::brightBlue);
+		std::string luck = "        Luck: " + std::to_string(b->luck) + "\n";
+		statsBlock.append(luck);
 
-		std::string speed = "       Speed: " + std::to_string(b->speed);
-		io::text(speed, x, y+8, colors::brightBlue);
+		std::string speed = "       Speed: " + std::to_string(b->speed) + "\n";
+		statsBlock.append(speed);
+
+		console.drawGraphicsBlock(Point(x, y), statsBlock, colors::brightBlue);
 
 	} else {
 		std::string no = "You have no body. How about that?";
-		io::text(no, x, y+1, colors::brightBlue);
+		console.drawGraphicsBlock(Point(x, y+1), no, colors::brightBlue);
 	}
 }
 
