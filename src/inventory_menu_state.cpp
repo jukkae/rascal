@@ -194,7 +194,7 @@ void InventoryMenuState::renderStats() {
 }
 
 void InventoryMenuState::renderBodyParts() {
-	io::text("B O D Y", 90, 1, colors::brightBlue);
+	console.drawGraphicsBlock(Point(90, 1), "B O D Y", colors::brightBlue);
 
 	int x = 90;
 	int y = 3;
@@ -205,7 +205,7 @@ void InventoryMenuState::renderBodyParts() {
 		auto freeBodyParts = b->bodyParts;
 
 		std::string bps = "body parts:";
-		io::text(bps, x, y+1, colors::brightBlue);
+		console.drawGraphicsBlock(Point(x, y+1), bps, colors::brightBlue);
 
 		for(auto& bp : freeBodyParts) {
 			++y;
@@ -221,7 +221,7 @@ void InventoryMenuState::renderBodyParts() {
 			sf::Color col;
 			if(bp.second) col = colors::brightBlue;
 			else col = colors::blue;
-			io::text(bpt, x, y+1, col);
+			console.drawGraphicsBlock(Point(x, y+1), bpt, col);
 		}
 	}
 }
