@@ -159,24 +159,21 @@ void Renderer::renderHighlight(const World* const world, sf::RenderWindow* windo
 	int worldY = y + cameraY;
 
 	float coef = 1.2 * (elapsedTime / 255.0);
-
-	sf::RectangleShape rectangle(sf::Vector2f(constants::SQUARE_CELL_WIDTH, constants::SQUARE_CELL_HEIGHT));
-	rectangle.setPosition(x * constants::SQUARE_CELL_WIDTH, y * constants::SQUARE_CELL_HEIGHT);
-
+	sf::Color color;
 	if(worldX < 0 || worldX >= mapWidth || worldY < 0 || worldY >= mapHeight) {
-		rectangle.setFillColor(colors::darkestGrey);
+		color = colors::darkestGrey;
 	}
 	else if(map->tiles[worldX + mapWidth*worldY].inFov) {
-		rectangle.setFillColor(map->isWall(worldX, worldY) ? colors::multiply(colors::lightWall, coef) : colors::multiply(colors::lightGround, coef));
+		color = (map->isWall(worldX, worldY) ? colors::multiply(colors::lightWall, coef) : colors::multiply(colors::lightGround, coef));
 	}
 	else if(map->isExplored(worldX, worldY)) {
-		rectangle.setFillColor(map->isWall(worldX, worldY) ? colors::multiply(colors::darkWall, coef) : colors::multiply(colors::darkGround, coef));
+		color = (map->isWall(worldX, worldY) ? colors::multiply(colors::darkWall, coef) : colors::multiply(colors::darkGround, coef));
 	}
 	else {
-		rectangle.setFillColor(colors::darkestGrey);
+		color = colors::darkestGrey;
 	}
 
-	window->draw(rectangle);
+	console.highlight(point, color);
 }
 
 void Renderer::renderActors(const World* const world, sf::RenderWindow* window) {
