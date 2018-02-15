@@ -18,6 +18,7 @@
 InventoryMenuState::InventoryMenuState(Engine* engine, Actor* actor) :
 State(engine, engine->getWindow()),
 actor(actor) {
+	console = Console(ConsoleType::NARROW);
 	inventoryContents.clear();
 	for(auto& item : actor->container->inventory) inventoryContents.push_back(item.get());
 
@@ -111,9 +112,9 @@ void InventoryMenuState::update() {
 }
 
 void InventoryMenuState::render() {
-	window->clear(sf::Color::Black);
-
-	io::text("I N V E N T O R Y", 2, 1, colors::brightBlue);
+	//window->clear(sf::Color::Black);
+	console.clear();
+	console.drawGraphicsBlock(Point(2, 1), "I N V E N T O R Y", colors::brightBlue);
 
 	int x = 2;
 	int y = 3;
@@ -122,25 +123,31 @@ void InventoryMenuState::render() {
 	for (auto pile : piles) {
 		sf::Color color = itemIndex == selectedItem ? colors::brightBlue : colors::darkBlue;
 		int pileSize = pile.size();
-		if(pileSize != 1) { io::text(pile.at(0)->name + " (" + std::to_string(pileSize) + ")", x, y, color); }
-		else { io::text(pile.at(0)->name,  x, y, color); }
+		if(pileSize != 1) {
+			console.drawGraphicsBlock(Point(x, y), pile.at(0)->name + " (" + std::to_string(pileSize) + ")", color);
+		}
+		else {
+			console.drawGraphicsBlock(Point(x, y), pile.at(0)->name, color);
+		}
 		++y;
 		++itemIndex;
 	}
 
 	std::string creditsString = "credits: " + std::to_string(credits);
-	io::text(creditsString, 2, y+1, colors::brightBlue);
+	console.drawGraphicsBlock(Point(2, y+1), creditsString, colors::brightBlue);
 
 	std::string weightString = "weight: " + std::to_string(contentsWeight) + " / " + std::to_string(capacity);
-	io::text(weightString, 2, y+2, colors::brightBlue);
+	console.drawGraphicsBlock(Point(2, y+2), weightString, colors::brightBlue);
 
 	std::string commandsString = "(u)se - (d)rop - (w)ield/un(w)ield - (e)at - esc to close";
-	io::text(commandsString, 2, y+4, colors::brightBlue);
+	console.drawGraphicsBlock(Point(2, y+4), commandsString, colors::brightBlue);
 
 	renderStats();
 	renderBodyParts();
 
+	console.draw();
 	window->display();
+
 }
 
 void InventoryMenuState::renderStats() {
