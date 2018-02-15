@@ -53,6 +53,7 @@ void Console::draw() {
 void Console::setBackground(Point position, sf::Color color) {
 	int x = position.x;
 	int y = position.y;
+	if(x < 0 || x >= width || y < 0 || y >= height) return;
 	cells.at(x, y).bg = color;
 }
 
