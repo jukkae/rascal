@@ -122,10 +122,10 @@ void Renderer::renderMap(const World* const world, sf::RenderWindow* window) {
 			if(!map->isExplored(worldX, worldY)) {
 				console.setBackground(Point(x, y), colors::black);
 			}
-			if(mouseXcells >= 0 && mouseXcells < console.width && mouseYcells >= 0 && mouseYcells < console.height) {
-				console.highlight(Point(mouseXcells, mouseYcells));
-			}
 		}
+	}
+	if(mouseXcells >= 0 && mouseXcells < console.width && mouseYcells >= 0 && mouseYcells < console.height) {
+		console.highlight(Point(mouseXcells, mouseYcells));
 	}
 }
 
