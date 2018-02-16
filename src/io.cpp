@@ -48,7 +48,7 @@ void io::text(std::string text, int x, int y, sf::Color color) {
 }
 
 void io::squareText(std::string text, int x, int y, sf::Color color) {
-	int verticalOffset = 3;
+	int verticalOffset = 1;
 	sf::Text sfText(text, font::squareFont, 16);
 	sfText.setPosition(x*constants::CELL_WIDTH, y*constants::CELL_HEIGHT - verticalOffset);
 	sfText.setFillColor(color);
