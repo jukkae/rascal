@@ -68,11 +68,10 @@ void Renderer::renderMap(const World* const world, sf::RenderWindow* window) {
 			}
 		}
 	}
+	renderAnimations(world, window);
 	if(mouseXcells >= 0 && mouseXcells < console.width && mouseYcells >= 0 && mouseYcells < console.height) {
 		console.highlight(Point(mouseXcells, mouseYcells));
 	}
-
-	renderAnimations(world, window);
 }
 
 void Renderer::renderAnimations(const World* const world, sf::RenderWindow* window) {
