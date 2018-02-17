@@ -46,6 +46,47 @@ void Renderer::renderMap(const World* const world, sf::RenderWindow* window) {
 	int mouseXcells = mouseXpx / constants::SQUARE_CELL_WIDTH;
 	int mouseYcells = mouseYpx / constants::SQUARE_CELL_HEIGHT;
 
+	for(int x = 0; x < screenWidth; ++x) {
+		for(int y = 0; y < screenHeight; ++y) {
+			int worldX = x + cameraX;
+			int worldY = y + cameraY;
+
+			if(worldX < 0 || worldX >= mapWidth || worldY < 0 || worldY >= mapHeight) {
+				console.setBackground(Point(x, y), colors::black);
+			}
+			else if(!map->isExplored(worldX, worldY)) {
+				console.setBackground(Point(x, y), colors::black);
+			}
+			else if(map->isInFov(worldX, worldY)) {
+				console.setBackground(Point(x, y), map->isWall(worldX, worldY) ? colors::lightWall : colors::lightGround);
+			}
+			else if(map->isExplored(worldX, worldY)) {
+				console.setBackground(Point(x, y), map->isWall(worldX, worldY) ? colors::darkWall : colors::darkGround);
+			}
+			else {
+				console.setBackground(Point(x, y), colors::black);
+			}
+		}
+	}
+	if(mouseXcells >= 0 && mouseXcells < console.width && mouseYcells >= 0 && mouseYcells < console.height) {
+		console.highlight(Point(mouseXcells, mouseYcells));
+	}
+
+	renderAnimations(world, window);
+}
+
+void Renderer::renderAnimations(const World* const world, sf::RenderWindow* window) {
+	const Map* const map = &world->map;
+	int cameraX = world->getPlayer()->x - (screenWidth/2);
+	int cameraY = world->getPlayer()->y - (screenHeight/2);
+	int mapWidth = map->width;
+	int mapHeight = map->height;
+
+	int mouseXpx = sf::Mouse::getPosition(*window).x;
+	int mouseYpx = sf::Mouse::getPosition(*window).y;
+	int mouseXcells = mouseXpx / constants::SQUARE_CELL_WIDTH;
+	int mouseYcells = mouseYpx / constants::SQUARE_CELL_HEIGHT;
+
 	// build buffer for cellular automaton
 	std::vector<int> previous(mapWidth*mapHeight);
 	for(int x = 0; x < mapWidth; ++x) {
@@ -62,20 +103,12 @@ void Renderer::renderMap(const World* const world, sf::RenderWindow* window) {
 		for(int y = 0; y < screenHeight; ++y) {
 			int worldX = x + cameraX;
 			int worldY = y + cameraY;
-
-			if(worldX < 0 || worldX >= mapWidth || worldY < 0 || worldY >= mapHeight) {
-				console.setBackground(Point(x, y), colors::black);
-			} // TODO this code is getting bad
-			else if(map->tiles(worldX, worldY).inFov || map->tiles(worldX, worldY).terrain == Terrain::WATER) {
-				if(map->tiles(worldX, worldY).terrain == Terrain::WATER && map->tiles(worldX, worldY).walkable) {
+			if(map->tiles(worldX, worldY).terrain == Terrain::WATER) {
+				if(map->tiles(worldX, worldY).walkable) {
 					if(map->tiles(worldX, worldY).animation) {
 						Animation& animation = const_cast<Animation&>(*map->tiles(worldX, worldY).animation);
 						sf::Color& color = animation.colors[0];
 						int blue = 0;
-						if(worldX == world->getPlayer()->x && worldY == world->getPlayer()->y) {
-							//blue = 255;
-							//color.b = blue;
-						}
 						for(int i = -1; i <= 1; ++i) {
 							for(int j = -1; j <= 1; ++j) {
 								if(i == 0 && j == 0) continue;
@@ -108,24 +141,10 @@ void Renderer::renderMap(const World* const world, sf::RenderWindow* window) {
 				} else {
 					if(map->isExplored(worldX, worldY) && map->tiles(worldX, worldY).terrain == Terrain::WATER) { // water, not walkable
 						console.setBackground(Point(x, y), colors::darkerBlue);
-					} else {
-						console.setBackground(Point(x, y), map->isWall(worldX, worldY) ? colors::lightWall : colors::lightGround);
 					}
 				}
 			}
-			else if(map->isExplored(worldX, worldY)) {
-				console.setBackground(Point(x, y), map->isWall(worldX, worldY) ? colors::darkWall : colors::darkGround);
-			}
-			else {
-				console.setBackground(Point(x, y), colors::black);
-			}
-			if(!map->isExplored(worldX, worldY)) {
-				console.setBackground(Point(x, y), colors::black);
-			}
 		}
-	}
-	if(mouseXcells >= 0 && mouseXcells < console.width && mouseYcells >= 0 && mouseYcells < console.height) {
-		console.highlight(Point(mouseXcells, mouseYcells));
 	}
 }
 
