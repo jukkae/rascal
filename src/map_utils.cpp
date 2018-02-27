@@ -32,7 +32,6 @@ void map_utils::addItems(World* world, Map* map, int difficulty) {
 void map_utils::addDoors(World* world, Map* map) {
 	for(int x = 1; x < map->width-1; ++x) {
 		for(int y = 1; y < map->height-1; ++y) {
-			int r = d100();
 			if (!map->isWall(x, y)) {
 				if ((map->isWall(x-1, y) && map->isWall(x+1, y)) ||
 					(map->isWall(x, y-1) && map->isWall(x, y+1))) {

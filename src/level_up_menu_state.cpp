@@ -66,7 +66,6 @@ void LevelUpMenuState::render() {
 	console.clear();
 
 	int width = constants::SCREEN_WIDTH;
-	int height = constants::SCREEN_HEIGHT;
 
 	std::string heading = "Y O U   H A V E   G A I N E D   A   L E V E L";
 	int headingX = (width - heading.length()) / 2;
