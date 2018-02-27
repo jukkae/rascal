@@ -3,6 +3,7 @@
 #include <vector>
 #include "console.hpp"
 #include "constants.hpp"
+#include "mat.hpp"
 #include <SFML/Graphics.hpp>
 
 class Actor;

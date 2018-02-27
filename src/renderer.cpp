@@ -25,8 +25,6 @@ void Renderer::render(const World* const world, sf::RenderWindow* window) {
 	//window.clear(sf::Color::Black);
 	console.clear();
 
-	const Map* const map = &world->map;
-	const std::vector<std::unique_ptr<Actor>>& actors = world->actors;
 	renderMap(world, window);
 	renderActors(world, window);
 
@@ -81,11 +79,6 @@ void Renderer::renderAnimations(const World* const world, sf::RenderWindow* wind
 	int mapWidth = map->width;
 	int mapHeight = map->height;
 
-	int mouseXpx = sf::Mouse::getPosition(*window).x;
-	int mouseYpx = sf::Mouse::getPosition(*window).y;
-	int mouseXcells = mouseXpx / constants::SQUARE_CELL_WIDTH;
-	int mouseYcells = mouseYpx / constants::SQUARE_CELL_HEIGHT;
-
 	// build buffer for cellular automaton
 	std::vector<int> previous(mapWidth*mapHeight);
 	for(int x = 0; x < mapWidth; ++x) {
@@ -107,7 +100,6 @@ void Renderer::renderAnimations(const World* const world, sf::RenderWindow* wind
 					if(map->tiles(worldX, worldY).animation) {
 						Animation& animation = const_cast<Animation&>(*map->tiles(worldX, worldY).animation);
 						sf::Color& color = animation.colors[0];
-						int blue = 0;
 						for(int i = -1; i <= 1; ++i) {
 							for(int j = -1; j <= 1; ++j) {
 								if(i == 0 && j == 0) continue;
@@ -151,7 +143,6 @@ void Renderer::notify(Event& event, World* world) {
 	if(auto e = dynamic_cast<MoveEvent*>(&event)) {
 		int x = e->x;
 		int y = e->y;
-		int mapWidth = world->width;
 		if(world->map.tiles(x, y).animation) {
 			world->map.tiles(x, y).animation->colors.at(0).b = 255;
 		}
@@ -211,8 +202,6 @@ void Renderer::renderActors(const World* const world, sf::RenderWindow* window) 
 void Renderer::renderActor(const Actor* const actor, sf::RenderWindow* window) {
 	Point worldPosition(actor->x, actor->y);
 	Point screenPosition = getScreenCoordsFromWorldCoords(worldPosition);
-	int x = screenPosition.x;
-	int y = screenPosition.y;
 	console.drawGlyph(screenPosition, (char)actor->ch, actor->col);
 }
 
