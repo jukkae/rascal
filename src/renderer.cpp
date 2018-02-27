@@ -87,9 +87,8 @@ void Renderer::renderAnimations(const World* const world, sf::RenderWindow* wind
 	for(int x = 0; x < mapWidth; ++x) {
 		for(int y = 0; y < mapHeight; ++y) {
 			previous.at(x + mapWidth*y) = 64;
-			if(map->tiles(x, y).terrain == Terrain::WATER && map->tiles(x, y).walkable) {
+			if(map->tiles(x, y).animation) {
 				previous.at(x + mapWidth*y) = map->tiles(x, y).animation->colors[0].b;
-				if(previous.at(x + mapWidth*y) > 0) previous.at(x + mapWidth*y) = previous.at(x + mapWidth*y) - 1;
 			}
 		}
 	}
