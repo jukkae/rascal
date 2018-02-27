@@ -88,6 +88,7 @@ void Map::generatePillarsMap() {
 }
 
 void Map::generateWaterMap() {
+	hasAnimations = true;
 	for(int x = 0; x < width; ++x) {
 		for(int y = 0; y < height; ++y) {
 			tiles(x, y) = Tile();

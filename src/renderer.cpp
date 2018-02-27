@@ -77,6 +77,7 @@ void Renderer::renderMap(const World* const world, sf::RenderWindow* window) {
 
 void Renderer::renderAnimations(const World* const world, sf::RenderWindow* window) {
 	const Map* const map = &world->map;
+	if(!map->hasAnimations) return;
 	int cameraX = world->getPlayer()->x - (screenWidth/2);
 	int cameraY = world->getPlayer()->y - (screenHeight/2);
 	int mapWidth = map->width;

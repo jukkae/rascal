@@ -47,7 +47,7 @@ public:
 	int width, height;
 	//std::vector<Tile> tiles;
 	Mat2d<Tile> tiles;
-
+	bool hasAnimations = false;
 
 	Map();
 	Map(int width, int height);
@@ -73,6 +73,7 @@ private:
 		ar & width;
 		ar & height;
 		ar & tiles;
+		ar & hasAnimations;
 		ar & world;
 	}
 };
