@@ -60,6 +60,9 @@ void Renderer::renderMap(const World* const world, sf::RenderWindow* window) {
 			}
 			else if(map->isExplored(worldX, worldY)) {
 				console.setBackground(Point(x, y), map->isWall(worldX, worldY) ? colors::darkWall : colors::darkGround);
+				if((map->tiles(worldX, worldY).terrain == Terrain::WATER)) { // blechh
+					console.setBackground(Point(x, y), map->isWall(worldX, worldY) ? colors::darkerBlue : sf::Color(0, 0, 32));
+				}
 			}
 			else {
 				console.setBackground(Point(x, y), colors::black);
@@ -109,28 +112,15 @@ void Renderer::renderAnimations(const World* const world, sf::RenderWindow* wind
 								int neighbor = previous[(worldX+i) + mapWidth*(worldY+j)];
 								if(neighbor > color.b) {
 									color.b = neighbor - 4;
-								} else {
-									//--color.b;
 								}
-								if(color.b > 64) --color.b;
-								if(color.b > 64) --color.b;
-								if(color.b > 64) --color.b;
-								if(color.b > 64) --color.b;
+								for(int c = 0; c < 4; ++c) if(color.b > 64) --color.b;
 							}
 						}
 					}
 					sf::Color col;
 					if(map->tiles(worldX, worldY).inFov) {
 						col = color;
-					} else if(map->isExplored(worldX, worldY)) {
-						col = colors::darkestBlue;
-					} else col = colors::black;
-
-					console.setBackground(Point(x, y), col);
-					//rectangle.setFillColor(colors::lightBlue);
-				} else {
-					if(map->isExplored(worldX, worldY) && map->tiles(worldX, worldY).terrain == Terrain::WATER) { // water, not walkable
-						console.setBackground(Point(x, y), colors::darkerBlue);
+						console.setBackground(Point(x, y), col);
 					}
 				}
 			}

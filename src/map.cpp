@@ -90,6 +90,7 @@ void Map::generatePillarsMap() {
 void Map::generateWaterMap() {
 	for(int x = 0; x < width; ++x) {
 		for(int y = 0; y < height; ++y) {
+			tiles(x, y) = Tile();
 			tiles(x, y).terrain = Terrain::WATER;
 			Animation anim;
 			anim.chars = std::vector<char>(); // empty on purpose
@@ -105,6 +106,7 @@ void Map::generateWaterMap() {
 		for(int y = 0; y < height; ++y) {
 			if(x % 3 == 0 && y % 3 == 0) {
 				tiles(x, y).walkable = false;
+				tiles(x, y).animation = std::experimental::nullopt;
 			}
 		}
 	}
@@ -112,6 +114,7 @@ void Map::generateWaterMap() {
 		for(int y = 0; y < height; ++y) {
 			if(x == 0 || x == width - 1 || y == 0 || y == height - 1) {
 				tiles(x, y).walkable = false;
+				tiles(x, y).animation = std::experimental::nullopt;
 			}
 		}
 	}
