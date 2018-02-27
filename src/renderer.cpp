@@ -95,39 +95,38 @@ void Renderer::renderAnimations(const World* const world, sf::RenderWindow* wind
 		for(int y = 0; y < screenHeight; ++y) {
 			int worldX = x + cameraX;
 			int worldY = y + cameraY;
-			if(map->tiles(worldX, worldY).terrain == Terrain::WATER) {
+			if(worldX < 0 || worldX >= mapWidth || worldY < 0 || worldY >= mapHeight) continue;
+			if(map->tiles(worldX, worldY).animation) {
 				if(map->tiles(worldX, worldY).walkable) {
-					if(map->tiles(worldX, worldY).animation) {
-						Animation& animation = const_cast<Animation&>(*map->tiles(worldX, worldY).animation);
-						sf::Color& color = animation.colors[0];
-						for(int i = -1; i <= 1; ++i) {
-							for(int j = -1; j <= 1; ++j) {
-								if(i == 0 && j == 0) continue;
-								if(i + worldX < 0 || i + worldX >= mapWidth || j + worldY < 0 || j + worldY >= mapHeight) continue;
-								if(!(map->tiles(worldX+i, worldY+j).terrain == Terrain::WATER) || !map->tiles(worldX+i, (worldY+j)).walkable) continue;
-								else {
-									int neighbor = previous[(worldX+i) + mapWidth*(worldY+j)];
-									if(neighbor > color.b) {
-										color.b = neighbor - 4;
-									} else {
-										//--color.b;
-									}
-									if(color.b > 64) --color.b;
-									if(color.b > 64) --color.b;
-									if(color.b > 64) --color.b;
-									if(color.b > 64) --color.b;
+					Animation& animation = const_cast<Animation&>(*map->tiles(worldX, worldY).animation);
+					sf::Color& color = animation.colors[0];
+					for(int i = -1; i <= 1; ++i) {
+						for(int j = -1; j <= 1; ++j) {
+							if(i == 0 && j == 0) continue;
+							if(i + worldX < 0 || i + worldX >= mapWidth || j + worldY < 0 || j + worldY >= mapHeight) continue;
+							if(!(map->tiles(worldX+i, worldY+j).terrain == Terrain::WATER) || !map->tiles(worldX+i, (worldY+j)).walkable) continue;
+							else {
+								int neighbor = previous[(worldX+i) + mapWidth*(worldY+j)];
+								if(neighbor > color.b) {
+									color.b = neighbor - 4;
+								} else {
+									//--color.b;
 								}
+								if(color.b > 64) --color.b;
+								if(color.b > 64) --color.b;
+								if(color.b > 64) --color.b;
+								if(color.b > 64) --color.b;
 							}
 						}
-						sf::Color col;
-						if(map->tiles(worldX, worldY).inFov) {
-							col = color;
-						} else if(map->isExplored(worldX, worldY)) {
-							col = colors::darkestBlue;
-						} else col = colors::black;
-
-						console.setBackground(Point(x, y), col);
 					}
+					sf::Color col;
+					if(map->tiles(worldX, worldY).inFov) {
+						col = color;
+					} else if(map->isExplored(worldX, worldY)) {
+						col = colors::darkestBlue;
+					} else col = colors::black;
+
+					console.setBackground(Point(x, y), col);
 					//rectangle.setFillColor(colors::lightBlue);
 				} else {
 					if(map->isExplored(worldX, worldY) && map->tiles(worldX, worldY).terrain == Terrain::WATER) { // water, not walkable
