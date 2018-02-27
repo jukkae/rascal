@@ -69,7 +69,7 @@ void Renderer::renderMap(const World* const world, sf::RenderWindow* window) {
 			}
 		}
 	}
-	renderAnimations(world, window);
+	if(map->hasAnimations) renderAnimations(world, window);
 	if(mouseXcells >= 0 && mouseXcells < console.width && mouseYcells >= 0 && mouseYcells < console.height) {
 		console.highlight(Point(mouseXcells, mouseYcells));
 	}
@@ -77,7 +77,6 @@ void Renderer::renderMap(const World* const world, sf::RenderWindow* window) {
 
 void Renderer::renderAnimations(const World* const world, sf::RenderWindow* window) {
 	const Map* const map = &world->map;
-	if(!map->hasAnimations) return;
 	int cameraX = world->getPlayer()->x - (screenWidth/2);
 	int cameraY = world->getPlayer()->y - (screenHeight/2);
 	int mapWidth = map->width;
