@@ -75,6 +75,7 @@ void Renderer::renderMap(const World* const world, sf::RenderWindow* window) {
 	}
 }
 
+// FIXME shouldn't be called render animations, rather run automata or something
 void Renderer::renderAnimations(const World* const world, sf::RenderWindow* window) {
 	const Map* const map = &world->map;
 	int cameraX = world->getPlayer()->x - (screenWidth/2);
