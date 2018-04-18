@@ -179,6 +179,11 @@ bool DropItemAction::execute() {
 	return true;
 }
 
+bool ThrowItemAction::execute() {
+	item->pickable->hurl(item, actor);
+	return true;
+}
+
 bool WieldItemAction::execute() {
 	if(item->wieldable) {
 		if(item->wieldable->wieldableType == WieldableType::ONE_HAND) {

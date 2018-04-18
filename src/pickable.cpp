@@ -1,5 +1,7 @@
 #include "pickable.hpp"
+#include "action.hpp"
 #include "actor.hpp"
+#include "body.hpp"
 #include "container.hpp"
 #include "destructible.hpp"
 #include "effect.hpp"
@@ -116,6 +118,59 @@ bool Pickable::use(Actor* owner, Actor* wearer) {
 		}
 	}
 	return success;
+}
+
+bool Pickable::hurl(Actor* owner, Actor* wearer) {
+	if(wearer->wornWeapon == owner) {
+		wearer->addAction(std::make_unique<UnWieldItemAction>(wearer, owner));
+	}
+	for(auto& a : wearer->wornArmors) {
+		if(a == owner) {
+			wearer->addAction(std::make_unique<UnWieldItemAction>(wearer, owner));
+		}
+	}
+
+	World* world = wearer->world;
+	int x, y;
+	UiEvent e("Left-click to select a tile,\nor right-click to cancel.");
+	world->notify(e);
+	if(io::waitForMouseClick(world->state)) {
+		x = io::mousePosition.x;
+		y = io::mousePosition.y;
+		if(wearer->getDistance(x, y) <= wearer->body->strength / 2) {
+			if(wearer->container) {
+				std::string ownerName = owner->name;
+
+				const auto it = std::find_if(
+						wearer->container->inventory.begin(),
+						wearer->container->inventory.end(),
+						[&] (const std::unique_ptr<Actor>& a) { return owner == a.get(); });
+				std::unique_ptr<Actor> item = std::move(*it); // after moving *it == nullptr -> no need to use remove_if
+				wearer->container->inventory.erase(it);
+
+				item->x = x;
+				item->y = y;
+				wearer->world->addActor(std::move(item));
+			}
+
+			bool success = false;
+			//for(Actor* actor : list) {
+				//if(effect->applyTo(actor)) success = true;
+			//}
+			//if(success) {
+				//if(wearer->container) {
+					//wearer->container->remove(owner);
+				//}
+			//}
+			return success;
+
+			//ActionSuccessEvent e(owner, "You throw what you were holding!"); // TODO player-specific
+			//wearer->world->notify(e);
+			//owner->pickable->drop(owner, wearer);
+		}
+		else return false;
+	}
+	return false;
 }
 
 void Pickable::drop(Actor* owner, Actor* wearer) {

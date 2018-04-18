@@ -125,6 +125,20 @@ private:
 	}
 };
 
+class ThrowItemAction : public Action {
+public:
+	ThrowItemAction(Actor* actor, Actor* item) : Action(actor, 50.0f), item(item) {;}
+	bool execute();
+private:
+	Actor* item;
+	friend class boost::serialization::access;
+	template<class Archive>
+	void serialize(Archive & ar, const unsigned int version) {
+		ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(Action);
+		ar & item;
+	}
+};
+
 class WieldItemAction : public Action {
 public:
 	WieldItemAction(Actor* actor, Actor* item) : Action(actor, 50.0f), item(item) {;}

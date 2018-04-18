@@ -70,6 +70,12 @@ void InventoryMenuState::handleEvents() {
 						engine->addEngineCommand(ContinueCommand(engine));
 					}
 					break;
+				case k::T:
+					if(inventoryContents.size() > 0) {
+						actor->addAction(std::make_unique<ThrowItemAction>(actor, piles.at(selectedItem).at(0)));
+						engine->addEngineCommand(ContinueCommand(engine));
+					}
+					break;
 				case k::U:
 					if(inventoryContents.size() > 0) {
 						actor->addAction(std::make_unique<UseItemAction>(UseItemAction(actor, piles.at(selectedItem).at(0))));
@@ -139,8 +145,11 @@ void InventoryMenuState::render() {
 	std::string weightString = "weight: " + std::to_string(contentsWeight) + " / " + std::to_string(capacity);
 	console.drawGraphicsBlock(Point(2, y+2), weightString, colors::brightBlue);
 
-	std::string commandsString = "(u)se - (d)rop - (w)ield/un(w)ield - (e)at - esc to close";
+	std::string commandsString = "(u)se - (d)rop - (w)ield/un(w)ield - (e)at - (t)hrow";
 	console.drawGraphicsBlock(Point(2, y+4), commandsString, colors::brightBlue);
+
+	std::string closeString = "esc to close";
+	console.drawGraphicsBlock(Point(2, y+5), closeString, colors::brightBlue);
 
 	renderStats();
 	renderBodyParts();
