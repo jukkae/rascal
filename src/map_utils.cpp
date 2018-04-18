@@ -500,6 +500,7 @@ std::unique_ptr<Actor> item::makeItem(World* world, Map* map, int x, int y, int 
 		fragGrenade->blocks = false;
 		fragGrenade->pickable = std::make_unique<Pickable>(TargetSelector(TargetSelector::SelectorType::SELECTED_RANGE, 3), std::make_unique<HealthEffect>(-12));
 		fragGrenade->pickable->fragile = true;
+		fragGrenade->pickable->explosive = true;
 		return fragGrenade;
 	} else if(r < 70) {
 		std::unique_ptr<Actor> confusor = std::make_unique<Actor>(x, y, '?', "confusor", sf::Color(128, 0, 128));

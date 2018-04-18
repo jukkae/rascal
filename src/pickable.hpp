@@ -35,6 +35,7 @@ public:
 	void drop(Actor* owner, Actor* wearer);
 	int weight;
 	bool fragile = false;
+	bool explosive = false;
 protected:
 	TargetSelector selector;
 	std::unique_ptr<Effect> effect;

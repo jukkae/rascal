@@ -155,7 +155,7 @@ bool Pickable::hurl(Actor* owner, Actor* wearer) {
 
 			bool success = false;
 			if(this->fragile) {
-				if(selector.type == TargetSelector::SelectorType::SELECTED_RANGE) {
+				if(this->explosive && selector.type == TargetSelector::SelectorType::SELECTED_RANGE) {
 					std::vector<Actor*> list;
 					for(auto& actor : world->getActors()) {
 						if(actor->destructible && !actor->destructible->isDead() && actor->getDistance(x, y) <= selector.range ) {
