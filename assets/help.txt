@@ -7,7 +7,7 @@ Z  X  C
 
 Wait            - (s)
 Target and look - mouse
-Shoot           - (t)
+Shoot           - left click
 Open / close    - (o)
 Pick up         - (,)
 Look around     - (:)

@@ -108,9 +108,6 @@ std::unique_ptr<Action> PlayerAi::getNextAction(Actor* actor) {
 					}
 					case k::Period:
 						return std::make_unique<LookAction>(actor);
-					case k::T: {
-						return std::make_unique<ShootAction>(actor, io::mousePosition);
-					}
 					case 56: { // < key
 						return std::make_unique<TraverseStairsAction>(actor, false);
 					}
@@ -121,6 +118,13 @@ std::unique_ptr<Action> PlayerAi::getNextAction(Actor* actor) {
 					}
 					default: return std::make_unique<EmptyAction>(actor);
 				}
+			}
+		} else if(event.type == sf::Event::MouseButtonPressed) {
+			if(event.mouseButton.button == sf::Mouse::Left) {
+				return std::make_unique<ShootAction>(actor, io::mousePosition);
+			}
+			if(event.mouseButton.button == sf::Mouse::Right) {
+
 			}
 		}
 	}
