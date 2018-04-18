@@ -1,9 +1,15 @@
-Move            - arrows
+Movement:
+Q  W  E
+ \ | /
+A-   -D
+ / | \
+Z  X  C
+
+Wait            - (s)
 Target and look - mouse
-Shoot           - (s)
+Shoot           - (t)
 Open / close    - (o)
 Pick up         - (,)
-Wait            - (.)
 Look around     - (:)
 Inventory       - (i)
 Go up           - (<)
