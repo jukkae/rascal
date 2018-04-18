@@ -154,6 +154,13 @@ bool Pickable::hurl(Actor* owner, Actor* wearer) {
 			}
 
 			bool success = false;
+			if(this->fragile) {
+				ActionSuccessEvent e(owner, "You throw what you were holding!\nIt breaks!"); // TODO player-specific
+				wearer->world->notify(e);
+			} else {
+				ActionSuccessEvent e(owner, "You throw what you were holding!");
+				wearer->world->notify(e);
+			}
 			//for(Actor* actor : list) {
 				//if(effect->applyTo(actor)) success = true;
 			//}
@@ -163,12 +170,12 @@ bool Pickable::hurl(Actor* owner, Actor* wearer) {
 				//}
 			//}
 			return success;
-
-			//ActionSuccessEvent e(owner, "You throw what you were holding!"); // TODO player-specific
-			//wearer->world->notify(e);
-			//owner->pickable->drop(owner, wearer);
 		}
-		else return false;
+		else {
+			ActionFailureEvent e(owner, "You can't throw that far!"); // TODO player-specific
+			wearer->world->notify(e);
+			return false;
+		}
 	}
 	return false;
 }

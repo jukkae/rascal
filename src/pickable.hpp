@@ -35,6 +35,7 @@ public:
 	bool hurl(Actor* owner, Actor* wearer); // Can't call this throw
 	void drop(Actor* owner, Actor* wearer);
 	int weight;
+	bool fragile = false;
 protected:
 	TargetSelector selector;
 	std::unique_ptr<Effect> effect;
