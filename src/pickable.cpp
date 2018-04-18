@@ -155,20 +155,28 @@ bool Pickable::hurl(Actor* owner, Actor* wearer) {
 
 			bool success = false;
 			if(this->fragile) {
-				ActionSuccessEvent e(owner, "You throw what you were holding!\nIt breaks!"); // TODO player-specific
-				wearer->world->notify(e);
+				if(selector.type == TargetSelector::SelectorType::SELECTED_RANGE) {
+					std::vector<Actor*> list;
+					for(auto& actor : world->getActors()) {
+						if(actor->destructible && !actor->destructible->isDead() && actor->getDistance(x, y) <= selector.range ) {
+							list.push_back(actor.get());
+						}
+					}
+
+					bool success = false;
+					for(Actor* actor : list) {
+						if(effect->applyTo(actor)) success = true;
+					}
+					ActionSuccessEvent e(owner, "You throw what you were holding!\nIt explodes!"); // TODO player-specific
+					wearer->world->notify(e);
+				} else {
+					ActionSuccessEvent e(owner, "You throw what you were holding!\nIt breaks!");
+					wearer->world->notify(e);
+				}
 			} else {
 				ActionSuccessEvent e(owner, "You throw what you were holding!");
 				wearer->world->notify(e);
 			}
-			//for(Actor* actor : list) {
-				//if(effect->applyTo(actor)) success = true;
-			//}
-			//if(success) {
-				//if(wearer->container) {
-					//wearer->container->remove(owner);
-				//}
-			//}
 			return success;
 		}
 		else {

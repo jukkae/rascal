@@ -15,7 +15,6 @@ public:
 	TargetSelector(SelectorType type = SelectorType::NONE, float range = 0);
 	void selectTargets(Actor* wearer, std::vector<Actor*>& list);
 	SelectorType type;
-protected:
 	float range;
 private:
 	friend class boost::serialization::access;
