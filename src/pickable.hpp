@@ -33,6 +33,7 @@ public:
 	bool use (Actor* owner, Actor* wearer);
 	bool hurl(Actor* owner, Actor* wearer); // Can't call this throw
 	void drop(Actor* owner, Actor* wearer);
+	void destroy(Actor* owner);
 	int weight;
 	bool fragile = false;
 	bool explosive = false;

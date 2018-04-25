@@ -172,6 +172,7 @@ bool Pickable::hurl(Actor* owner, Actor* wearer) {
 				} else {
 					ActionSuccessEvent e(owner, "You throw what you were holding!\nIt breaks!");
 					wearer->world->notify(e);
+					this->destroy(owner);
 				}
 			} else {
 				ActionSuccessEvent e(owner, "You throw what you were holding!");
@@ -203,4 +204,11 @@ void Pickable::drop(Actor* owner, Actor* wearer) {
 		item->y = wearer->y;
 		wearer->world->addActor(std::move(item));
 	}
+}
+
+void Pickable::destroy(Actor* owner) {
+	owner->blocks = false;
+	owner->col = sf::Color(128, 128, 128);
+	owner->name = "broken remnants";
+	owner->pickable = nullptr; // FIXME does this leak memory?
 }
