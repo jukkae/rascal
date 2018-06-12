@@ -57,7 +57,13 @@ private:
 
 class MoveAction : public Action {
 public:
-	MoveAction(Actor* actor, Direction direction) : Action(actor, 100.0f), direction(direction) {;}
+	MoveAction(Actor* actor, Direction direction) : Action(actor, 100.0f), direction(direction)
+	{
+		if(direction == Direction::NE || direction == Direction::SE ||
+		   direction == Direction::SW || direction == Direction::NW) {
+			this->length = 141; // sqrt(2) * 100
+		}
+	}
 	bool execute();
 private:
 	Direction direction;
