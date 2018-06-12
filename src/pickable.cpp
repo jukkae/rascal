@@ -154,17 +154,16 @@ bool Pickable::hurl(Actor* owner, Actor* wearer) {
 			}
 
 			bool success = false;
+			std::vector<Actor*> actors;
+			for(auto& actor : world->getActors()) {
+				if(actor->destructible && !actor->destructible->isDead() && actor->getDistance(x, y) <= selector.range ) {
+					actors.push_back(actor.get());
+				}
+			}
 			if(this->fragile) {
 				if(this->explosive && selector.type == TargetSelector::SelectorType::SELECTED_RANGE) {
-					std::vector<Actor*> list;
-					for(auto& actor : world->getActors()) {
-						if(actor->destructible && !actor->destructible->isDead() && actor->getDistance(x, y) <= selector.range ) {
-							list.push_back(actor.get());
-						}
-					}
-
 					bool success = false;
-					for(Actor* actor : list) {
+					for(Actor* actor : actors) {
 						if(effect->applyTo(actor)) success = true;
 					}
 					ActionSuccessEvent e(owner, "You throw what you were holding!\nIt explodes!"); // TODO player-specific
@@ -177,6 +176,12 @@ bool Pickable::hurl(Actor* owner, Actor* wearer) {
 			} else {
 				ActionSuccessEvent e(owner, "You throw what you were holding!");
 				wearer->world->notify(e);
+			}
+			if(!actors.empty()) {
+				Actor* target = actors.front(); // FIXME pick random actor
+				if(target->destructible) { // TODO better damage calculation
+					target->destructible->takeDamage(target, this->weight);
+				}
 			}
 			return success;
 		}

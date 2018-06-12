@@ -516,6 +516,7 @@ std::unique_ptr<Actor> item::makeItem(World* world, Map* map, int x, int y, int 
 		std::unique_ptr<Actor> rock = std::make_unique<Actor>(x, y, '|', "rock", sf::Color(255, 0, 128));
 		rock->blocks = false;
 		rock->pickable = std::make_unique<Pickable>();
+		rock->pickable->weight = 5;
 		rock->attacker = std::make_unique<Attacker>(1, 4, 0);
 		rock->wieldable = std::make_unique<Wieldable>(WieldableType::ONE_HAND);
 		return rock;
