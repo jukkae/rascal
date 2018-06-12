@@ -210,5 +210,5 @@ void Pickable::destroy(Actor* owner) {
 	owner->blocks = false;
 	owner->col = sf::Color(128, 128, 128);
 	owner->name = "broken remnants";
-	owner->pickable = nullptr; // FIXME does this leak memory?
+	owner->pickable.reset();
 }
