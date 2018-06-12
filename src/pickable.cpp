@@ -3,6 +3,7 @@
 #include "actor.hpp"
 #include "body.hpp"
 #include "container.hpp"
+#include "damage.hpp"
 #include "destructible.hpp"
 #include "effect.hpp"
 #include "event.hpp"
@@ -179,8 +180,13 @@ bool Pickable::hurl(Actor* owner, Actor* wearer) {
 			}
 			if(!actors.empty()) {
 				Actor* target = actors.front(); // FIXME pick random actor
-				if(target->destructible) { // TODO better damage calculation
-					target->destructible->takeDamage(target, this->weight);
+				if(target->destructible) {
+					int strengthModifier = wearer->body->getModifier(wearer->body->strength);
+					float damage = 0;
+					if(strengthModifier > 0) damage = 1 + ((strengthModifier * this->weight) / 3);
+					int damageTaken =target->destructible->takeDamage(target, damage, DamageType::CRUSHING);
+					RangedHitEvent e(wearer, target, owner, damageTaken, true); // TODO another hit type needed
+					wearer->world->notify(e);
 				}
 			}
 			return success;
