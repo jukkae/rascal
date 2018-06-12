@@ -58,61 +58,77 @@ std::unique_ptr<Action> PlayerAi::getNextAction(Actor* actor) {
 	sf::Event event;
 	while(engine->pollEvent(event)) {
 		if(event.type == sf::Event::KeyPressed) {
-			using k = sf::Keyboard::Key;
-			switch(event.key.code) {
-				case k::Up:
-					dir = Direction::N;
-					break;
-				case k::Down:
-					dir = Direction::S;
-					break;
-				case k::Left:
-					dir = Direction::W;
-					break;
-				case k::Right:
-					dir = Direction::E;
-					break;
-				case k::I: {
-					std::unique_ptr<State> inventoryMenuState = std::make_unique<InventoryMenuState>(engine, actor);
-					engine->pushState(std::move(inventoryMenuState));
-					break;
-				}
-				case k::O: {
-					return std::make_unique<OpenAction>(OpenAction(actor));
-				}
-				case k::Comma: {
-					return std::make_unique<PickupAction>(PickupAction(actor));
-				}
-				case k::Period: {
-					if(event.key.shift) {
-						return std::make_unique<LookAction>(LookAction(actor));
+			if(event.key.shift) {
+				using k = sf::Keyboard::Key;
+				switch(event.key.code) {
+					case 56: { // < key
+						return std::make_unique<TraverseStairsAction>(actor, true);
 					}
-					else {
-						return std::make_unique<WaitAction>(WaitAction(actor));
+					default: return std::make_unique<EmptyAction>(actor);
+				}
+			} else {
+				using k = sf::Keyboard::Key;
+				switch(event.key.code) {
+					case k::Q:
+						dir = Direction::NW;
+						return std::make_unique<MoveAction>(actor, dir);
+					case k::W:
+						dir = Direction::N;
+						return std::make_unique<MoveAction>(actor, dir);
+					case k::E:
+						dir = Direction::NE;
+						return std::make_unique<MoveAction>(actor, dir);
+					case k::A:
+						dir = Direction::W;
+						return std::make_unique<MoveAction>(actor, dir);
+					case k::S:
+						return std::make_unique<WaitAction>(actor);
+					case k::D:
+						dir = Direction::E;
+						return std::make_unique<MoveAction>(actor, dir);
+					case k::Z:
+						dir = Direction::SW;
+						return std::make_unique<MoveAction>(actor, dir);
+					case k::X:
+						dir = Direction::S;
+						return std::make_unique<MoveAction>(actor, dir);
+					case k::C:
+						dir = Direction::SE;
+						return std::make_unique<MoveAction>(actor, dir);
+					case k::I: {
+						std::unique_ptr<State> inventoryMenuState = std::make_unique<InventoryMenuState>(engine, actor);
+						engine->pushState(std::move(inventoryMenuState));
+						break;
 					}
-				}
-				case k::S: {
-					return std::make_unique<ShootAction>(ShootAction(actor, io::mousePosition));
-				}
-				case 56: { // < key
-					if(event.key.shift) {
-						return std::make_unique<TraverseStairsAction>(TraverseStairsAction(actor, true));
+					case k::O: {
+						return std::make_unique<OpenAction>(actor);
 					}
-					else {
-						return std::make_unique<TraverseStairsAction>(TraverseStairsAction(actor, false));
+					case k::Comma: {
+						return std::make_unique<PickupAction>(actor);
 					}
+					case k::Period:
+						return std::make_unique<LookAction>(actor);
+					case 56: { // < key
+						return std::make_unique<TraverseStairsAction>(actor, false);
+					}
+					case k::Escape: {
+						engine->save();
+						std::unique_ptr<State> mainMenuState = std::make_unique<MainMenuState>(engine);
+						engine->pushState(std::move(mainMenuState));
+					}
+					default: return std::make_unique<EmptyAction>(actor);
 				}
-				case k::Escape: {
-					engine->save();
-					std::unique_ptr<State> mainMenuState = std::make_unique<MainMenuState>(engine);
-					engine->pushState(std::move(mainMenuState));
-				}
-				default: dir = Direction::NONE; break;
+			}
+		} else if(event.type == sf::Event::MouseButtonPressed) {
+			if(event.mouseButton.button == sf::Mouse::Left) {
+				return std::make_unique<ShootAction>(actor, io::mousePosition);
+			}
+			if(event.mouseButton.button == sf::Mouse::Right) {
+
 			}
 		}
 	}
-
-	return std::make_unique<MoveAction>(MoveAction(actor, dir));
+	return std::make_unique<EmptyAction>(actor);
 }
 
 std::unique_ptr<Action> MonsterAi::getNextAction(Actor* actor) {

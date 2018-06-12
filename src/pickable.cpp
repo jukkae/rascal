@@ -1,6 +1,9 @@
 #include "pickable.hpp"
+#include "action.hpp"
 #include "actor.hpp"
+#include "body.hpp"
 #include "container.hpp"
+#include "damage.hpp"
 #include "destructible.hpp"
 #include "effect.hpp"
 #include "event.hpp"
@@ -118,6 +121,85 @@ bool Pickable::use(Actor* owner, Actor* wearer) {
 	return success;
 }
 
+bool Pickable::hurl(Actor* owner, Actor* wearer) {
+	if(wearer->wornWeapon == owner) {
+		wearer->addAction(std::make_unique<UnWieldItemAction>(wearer, owner));
+	}
+	for(auto& a : wearer->wornArmors) {
+		if(a == owner) {
+			wearer->addAction(std::make_unique<UnWieldItemAction>(wearer, owner));
+		}
+	}
+
+	World* world = wearer->world;
+	int x, y;
+	UiEvent e("Left-click to select a tile,\nor right-click to cancel.");
+	world->notify(e);
+	if(io::waitForMouseClick(world->state)) {
+		x = io::mousePosition.x;
+		y = io::mousePosition.y;
+		if(wearer->getDistance(x, y) <= wearer->body->strength / 2) {
+			if(wearer->container) {
+				std::string ownerName = owner->name;
+
+				const auto it = std::find_if(
+						wearer->container->inventory.begin(),
+						wearer->container->inventory.end(),
+						[&] (const std::unique_ptr<Actor>& a) { return owner == a.get(); });
+				std::unique_ptr<Actor> item = std::move(*it); // after moving *it == nullptr -> no need to use remove_if
+				wearer->container->inventory.erase(it);
+
+				item->x = x;
+				item->y = y;
+				wearer->world->addActor(std::move(item));
+			}
+
+			bool success = false;
+			std::vector<Actor*> actors;
+			for(auto& actor : world->getActors()) {
+				if(actor->destructible && !actor->destructible->isDead() && actor->getDistance(x, y) <= selector.range ) {
+					actors.push_back(actor.get());
+				}
+			}
+			if(this->fragile) {
+				if(this->explosive && selector.type == TargetSelector::SelectorType::SELECTED_RANGE) {
+					bool success = false;
+					for(Actor* actor : actors) {
+						if(effect->applyTo(actor)) success = true;
+					}
+					ActionSuccessEvent e(owner, "You throw what you were holding!\nIt explodes!"); // TODO player-specific
+					wearer->world->notify(e);
+				} else {
+					ActionSuccessEvent e(owner, "You throw what you were holding!\nIt breaks!");
+					wearer->world->notify(e);
+					this->destroy(owner);
+				}
+			} else {
+				ActionSuccessEvent e(owner, "You throw what you were holding!");
+				wearer->world->notify(e);
+			}
+			if(!actors.empty()) {
+				Actor* target = actors.front(); // FIXME pick random actor
+				if(target->destructible) {
+					int strengthModifier = wearer->body->getModifier(wearer->body->strength);
+					float damage = 0;
+					if(strengthModifier > 0) damage = 1 + ((strengthModifier * this->weight) / 3);
+					int damageTaken =target->destructible->takeDamage(target, damage, DamageType::CRUSHING);
+					RangedHitEvent e(wearer, target, owner, damageTaken, true); // TODO another hit type needed
+					wearer->world->notify(e);
+				}
+			}
+			return success;
+		}
+		else {
+			ActionFailureEvent e(owner, "You can't throw that far!"); // TODO player-specific
+			wearer->world->notify(e);
+			return false;
+		}
+	}
+	return false;
+}
+
 void Pickable::drop(Actor* owner, Actor* wearer) {
 	if(wearer->container) {
 		std::string ownerName = owner->name;
@@ -133,4 +215,11 @@ void Pickable::drop(Actor* owner, Actor* wearer) {
 		item->y = wearer->y;
 		wearer->world->addActor(std::move(item));
 	}
+}
+
+void Pickable::destroy(Actor* owner) {
+	owner->blocks = false;
+	owner->col = sf::Color(128, 128, 128);
+	owner->name = "broken remnants";
+	owner->pickable.reset();
 }

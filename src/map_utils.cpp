@@ -469,22 +469,26 @@ std::unique_ptr<Actor> item::makeItem(World* world, Map* map, int x, int y, int 
 		std::unique_ptr<Actor> a = std::make_unique<Actor>(x, y, '!', "iodine syringe", sf::Color(128, 128, 0));
 		a->blocks = false;
 		a->pickable = std::make_unique<Pickable>(TargetSelector(TargetSelector::SelectorType::WEARER, 0), std::make_unique<HealthEffect>(d3()+2, HealthEffectType::IODINE));
+		a->pickable->fragile = true;
 		return a;
 	} else if(r < 45) {
 		std::unique_ptr<Actor> stimpak = std::make_unique<Actor>(x, y, '!', "stimpak", sf::Color(128, 0, 128));
 		int amount = difficulty + d4();
 		stimpak->blocks = false;
 		stimpak->pickable = std::make_unique<Pickable>(TargetSelector(TargetSelector::SelectorType::WEARER, 0), std::make_unique<HealthEffect>(amount));
+		stimpak->pickable->fragile = true;
 		return stimpak;
 	} else if(r < 50) {
 		std::unique_ptr<Actor> fakeStimpak = std::make_unique<Actor>(x, y, '!', "stimpak", sf::Color(128, 0, 128));
 		fakeStimpak->blocks = false;
 		fakeStimpak->pickable = std::make_unique<Pickable>(TargetSelector(TargetSelector::SelectorType::WEARER, 0), std::make_unique<StatusEffectEffect>(std::make_unique<PoisonedStatusEffect>(PoisonedStatusEffect())));
+		fakeStimpak->pickable->fragile = true;
 		return fakeStimpak;
 	} else if(r < 55) {
 		std::unique_ptr<Actor> antidote = std::make_unique<Actor>(x, y, '!', "antidote", sf::Color(0, 128, 128));
 		antidote->blocks = false;
 		antidote->pickable = std::make_unique<Pickable>(TargetSelector(TargetSelector::SelectorType::WEARER, 0), std::make_unique<StatusEffectRemovalEffect>(std::make_unique<PoisonedStatusEffect>(PoisonedStatusEffect())));
+		antidote->pickable->fragile = true;
 		return antidote;
 	} else if(r < 60) {
 		std::unique_ptr<Actor> blasterBoltDevice = std::make_unique<Actor>(x, y, '?', "blaster bolt device", sf::Color(128, 128, 0));
@@ -495,6 +499,8 @@ std::unique_ptr<Actor> item::makeItem(World* world, Map* map, int x, int y, int 
 		std::unique_ptr<Actor> fragGrenade = std::make_unique<Actor>(x, y, '?', "fragmentation grenade", sf::Color(0, 128, 128));
 		fragGrenade->blocks = false;
 		fragGrenade->pickable = std::make_unique<Pickable>(TargetSelector(TargetSelector::SelectorType::SELECTED_RANGE, 3), std::make_unique<HealthEffect>(-12));
+		fragGrenade->pickable->fragile = true;
+		fragGrenade->pickable->explosive = true;
 		return fragGrenade;
 	} else if(r < 70) {
 		std::unique_ptr<Actor> confusor = std::make_unique<Actor>(x, y, '?', "confusor", sf::Color(128, 0, 128));
@@ -510,6 +516,7 @@ std::unique_ptr<Actor> item::makeItem(World* world, Map* map, int x, int y, int 
 		std::unique_ptr<Actor> rock = std::make_unique<Actor>(x, y, '|', "rock", sf::Color(255, 0, 128));
 		rock->blocks = false;
 		rock->pickable = std::make_unique<Pickable>();
+		rock->pickable->weight = 5;
 		rock->attacker = std::make_unique<Attacker>(1, 4, 0);
 		rock->wieldable = std::make_unique<Wieldable>(WieldableType::ONE_HAND);
 		return rock;

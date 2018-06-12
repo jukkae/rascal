@@ -142,7 +142,7 @@ Message messaging::createMessageFromEvent(Event& event) {
 	if(auto e = dynamic_cast<AiChangeEvent*>(&event)) {
 		fmt = "%d: The eyes of the %s look vacant!";
 		messageText = formatString(fmt, e->time, e->actor->name.c_str());
-		color = colors::blue;
+		color = colors::cyan;
 	}
 
 	if(auto e = dynamic_cast<StatusEffectChangeEvent*>(&event)) {
@@ -151,16 +151,16 @@ Message messaging::createMessageFromEvent(Event& event) {
 				ignore(fx);
 				fmt = "%d: The %s feels bad";
 				messageText = formatString(fmt, e->time, e->actor->name.c_str());
-				color = colors::blue;
+				color = colors::cyan;
 			} else {
 				fmt = "%d: The %s feels a bit different";
 				messageText = formatString(fmt, e->time, e->actor->name.c_str());
-				color = colors::blue;
+				color = colors::cyan;
 			}
 		} else {
 			fmt = "%d: The %s feels a bit more normal";
 			messageText = formatString(fmt, e->time, e->actor->name.c_str());
-			color = colors::blue;
+			color = colors::cyan;
 		}
 	}
 
@@ -168,7 +168,7 @@ Message messaging::createMessageFromEvent(Event& event) {
 		std::string text = formatString(e->formatString, e->actor->name.c_str());
 		fmt = "%d: %s";
 		messageText = formatString(fmt, e->time, text.c_str());
-		color = colors::blue;
+		color = colors::cyan;
 	}
 
 	return Message(messageText, color);

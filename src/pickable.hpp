@@ -15,7 +15,6 @@ public:
 	TargetSelector(SelectorType type = SelectorType::NONE, float range = 0);
 	void selectTargets(Actor* wearer, std::vector<Actor*>& list);
 	SelectorType type;
-protected:
 	float range;
 private:
 	friend class boost::serialization::access;
@@ -32,8 +31,12 @@ public:
 	virtual ~Pickable() {};
 	bool pick(std::unique_ptr<Actor> owner, Actor* wearer);
 	bool use (Actor* owner, Actor* wearer);
+	bool hurl(Actor* owner, Actor* wearer); // Can't call this throw
 	void drop(Actor* owner, Actor* wearer);
+	void destroy(Actor* owner);
 	int weight;
+	bool fragile = false;
+	bool explosive = false;
 protected:
 	TargetSelector selector;
 	std::unique_ptr<Effect> effect;
