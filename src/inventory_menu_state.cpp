@@ -133,8 +133,8 @@ void InventoryMenuState::render() {
 			console.drawGraphicsBlock(Point(x, y), pile.at(0)->name + " (" + std::to_string(pileSize) + ")", color);
 		}
 		else {
-			if(pile.at(0) == actor->wornWeapon) {
-				console.drawGraphicsBlock(Point(x, y), pile.at(0)->name + " (wielded)", color);
+			if(pile.at(0) == actor->wornWeapon || (std::find(actor->wornArmors.begin(), actor->wornArmors.end(), pile.at(0)) != actor->wornArmors.end())) {
+				console.drawGraphicsBlock(Point(x, y), pile.at(0)->name + " (worn)", color);
 			} else {
 				console.drawGraphicsBlock(Point(x, y), pile.at(0)->name, color);
 			}
