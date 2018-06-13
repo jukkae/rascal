@@ -13,12 +13,12 @@
 bool io::waitForMouseClick(GameplayState* state) {
 	while(true) {
 		sf::Event event;
-		while(window.pollEvent(event)) { // Dummy polling to keep macOS happy
+		while(window.pollEvent(event)) {
 			state->render();
-			if(sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+			if(event.type == sf::Event::MouseButtonPressed) {
 				return true;
 			}
-			if(sf::Mouse::isButtonPressed(sf::Mouse::Right)) {
+			if(event.type == sf::Event::MouseButtonReleased) {
 				return false;
 			}
 		}
