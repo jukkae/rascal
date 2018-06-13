@@ -95,6 +95,7 @@ void InventoryMenuState::handleEvents() {
 							actor->addAction(std::make_unique<UnWieldItemAction>(UnWieldItemAction(actor, piles.at(selectedItem).at(0))));
 							engine->addEngineCommand(ContinueCommand(engine));
 						} else {
+							if(!piles.at(selectedItem).at(0)->attacker && !piles.at(selectedItem).at(0)->rangedAttacker && !piles.at(selectedItem).at(0)->armor) break;
 							actor->addAction(std::make_unique<WieldItemAction>(WieldItemAction(actor, piles.at(selectedItem).at(0))));
 							engine->addEngineCommand(ContinueCommand(engine));
 						}
