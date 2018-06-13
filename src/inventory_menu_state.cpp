@@ -46,6 +46,8 @@ void InventoryMenuState::sortIntoPiles() {
 				pile.push_back(inventoryContents.at(i));
 				++i;
 				if(pile.back()->rangedAttacker) break;
+				if(pile.back()->attacker) break;
+				if(pile.back()->armor) break; // FIXME proper sorting for all sorts of wieldables: make them stack again
 			}
 			piles.push_back(pile);
 		}
