@@ -1,8 +1,8 @@
 # Compile for macOs
 
 CXX=clang
-CPPFLAGS=-Wall -std=c++1z
-LDFLAGS=-lc++ -lboost_serialization -framework SFML -framework sfml-window -framework sfml-graphics -framework sfml-system -framework sfml-audio -framework CoreFoundation -rpath @executable_path/../Resources/Frameworks
+CPPFLAGS=-Wall -std=c++1z -I/usr/local/sys/usr/include
+LDFLAGS=-L/usr/local/lib -lc++ -lboost_serialization -lsfml-window -lsfml-graphics -lsfml-system -lsfml-audio -framework CoreFoundation -rpath @executable_path/../Resources/Frameworks
 BUNDLE_BUILD=-DBUNDLE_BUILD
 
 # precompile headers
