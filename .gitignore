@@ -18,3 +18,5 @@ macosx/
 *.pch-*
 *.zip
 tags
+
+*.swp
