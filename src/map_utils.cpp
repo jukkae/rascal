@@ -166,7 +166,7 @@ std::unique_ptr<Actor> npc::makeMonster(World* world, Map* map, int x, int y, in
 			if(r < 50) {
 				npc = makeBeingFromToml(world, map, x, y, "dog");
 				return npc;
-			} else if (r < 100) { // TODO should be r < 60
+			} else if (r < 60) {
 				npc = makeBeingFromToml(world, map, x, y, "snake");
 				return npc;
 			} else if (r < 90) {
