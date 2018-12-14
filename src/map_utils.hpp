@@ -24,7 +24,6 @@ namespace npc {
 std::unique_ptr<Actor> makeMonster(World* world, Map* map, int x, int y, int difficulty = 1);
 std::unique_ptr<Actor> makeBeingFromToml(World* world, Map* map, int x, int y, std::string type);
 std::unique_ptr<Actor> makeFighter(World* world, Map* map, int x, int y); //TODO move defs to data
-std::unique_ptr<Actor> makeGuard(World* world, Map* map, int x, int y); //TODO move defs to data
 std::unique_ptr<Actor> makeBoxer(World* world, Map* map, int x, int y); //TODO move defs to data
 std::unique_ptr<Actor> makeMutant(World* world, Map* map, int x, int y); //TODO move defs to data
 std::unique_ptr<Actor> makeCyborg(World* world, Map* map, int x, int y); //TODO move defs to data

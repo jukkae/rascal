@@ -18,7 +18,27 @@ blocks = false
 [cookie.comestible]
 nutrition = 10000
 
+[ration]
+name = "ration"
+ch = "%"
+color = "darkerGreen"
+blocks = false
+[ration.pickable]
+[ration.comestible]
+nutrition = 30000
+
 # Syringes
+
+[stimpak]
+name = "stimpak"
+ch = "!"
+color = "grey"
+blocks = false
+[stimpak.pickable]
+targetSelector.type = "Wearer"
+targetSelector.range = 0
+effect.type = "HealthEffect"
+effect.value = 4
 
 [super_stimpak]
 name = "super stimpak"

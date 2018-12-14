@@ -79,3 +79,25 @@ speed = 100
 capacity = 10
 contents = [ { content = "cookie" } ]
 [punk.body]
+
+[guard]
+name = "guard"
+ch = "h"
+color = "darkGreen"
+[guard.destructible]
+maxHp = 6
+defense = 1
+xp = 100
+corpseName = "guard body"
+[guard.attacker]
+numberOfDice = 1
+dice = 3
+bonus = 0
+[guard.ai]
+type = "MonsterAi"
+speed = 200
+[guard.container]
+capacity = 10
+contents = [ { content = "ration" },
+             { with_probability = 66, content = "stimpak" } ]
+[guard.body]
