@@ -8,3 +8,16 @@ blocks = false
 [snakemeat.pickable]
 [snakemeat.comestible]
 nutrition = 5000 # this belongs to snakemeat.comestible
+
+# Syringes
+
+[super_stimpak]
+name = "super stimpak"
+ch = "!"
+color = "grey"
+blocks = false
+[super_stimpak.pickable]
+targetSelector.type = "Wearer"
+targetSelector.range = 0
+effect.type = "HealthEffect"
+effect.value = 8

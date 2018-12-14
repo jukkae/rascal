@@ -170,7 +170,7 @@ std::unique_ptr<Actor> npc::makeMonster(World* world, Map* map, int x, int y, in
 				npc = makeBeingFromToml(world, map, x, y, "snake");
 				return npc;
 			} else if (r < 90) {
-				npc = makeChild(world, map, x, y);
+				npc = makeBeingFromToml(world, map, x, y, "child");
 				return npc;
 			} else {
 				npc = makePunk(world, map, x, y);
@@ -340,9 +340,34 @@ std::unique_ptr<Actor> item::makeItemFromToml(World* world, Map* map, int x, int
 	if(item.count("pickable") != 0) {
 		auto pickable = toml::get<toml::table>(item.at("pickable"));
 		a->pickable = std::make_unique<Pickable>();
+
+		TargetSelector t; // TODO ughh
+		if(pickable.count("targetSelector") != 0) {
+			auto targetSelector = toml::get<toml::table>(pickable.at("targetSelector"));
+			std::string targetSelectorType = toml::get<std::string>(targetSelector.at("type"));
+			int targetSelectorRange = toml::get<int>(targetSelector.at("range"));
+			if(targetSelectorType == "Wearer") {
+				t = TargetSelector(TargetSelector::SelectorType::WEARER, targetSelectorRange);
+			}
+			else throw std::logic_error("Not implemented");
+		}
+
+		std::unique_ptr<Effect> e = nullptr;
+		if(pickable.count("effect") != 0) {
+			auto effect = toml::get<toml::table>(pickable.at("effect"));
+			std::string effectType = toml::get<std::string>(effect.at("type"));
+			int effectValue = toml::get<int>(effect.at("value"));
+			if(effectType == "HealthEffect") {
+				e = std::make_unique<HealthEffect>(effectValue);
+			}
+			else throw std::logic_error("Not implemented");
+		}
+		if(pickable.count("targetSelector") != 0 &&
+	     pickable.count("effect") != 0) { // TODO bad check, i know
+			a->pickable = std::make_unique<Pickable>(t, std::move(e));
+		}
 	}
 
-	// Note: toml::table is alias to std::unordered_map
 	if(item.count("comestible") != 0) {
 		auto comestible = toml::get<toml::table>(item.at("comestible"));
 		a->comestible = std::make_unique<Comestible>();

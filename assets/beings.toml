@@ -33,6 +33,28 @@ bonus = 0
 type = "MonsterAi"
 speed = 100
 [snake.container]
-capacity = 2
-contents = [ { with_probability = 66, content = "snakemeat"} ] # with_probability is optional
+capacity = 1
+contents = [ { with_probability = 66, content = "snakemeat" } ] # with_probability is optional
 [snake.body] # empty table = default body
+
+[child]
+name = "child"
+ch = "c"
+color = "desaturatedGreen"
+[child.destructible]
+maxHp = 2
+defense = 0
+xp = 25
+corpseName = "dead child"
+[child.attacker]
+numberOfDice = 1
+dice = 2
+bonus = 0
+[child.ai]
+type = "MonsterAi"
+speed = 75
+[child.container]
+capacity = 10
+contents = [ { with_probability = 100, content = "super_stimpak" }, # TODO probability should be 66
+             { with_probability = 66, content = "snakemeat" } ]
+[child.body]
