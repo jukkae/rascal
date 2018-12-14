@@ -102,6 +102,27 @@ contents = [ { content = "ration" },
              { with_probability = 66, content = "stimpak" } ]
 [guard.body]
 
+[fighter]
+name = "fighter"
+ch = "H"
+color = "darkGreen"
+[fighter.destructible]
+maxHp = 5
+defense = 1
+xp = 100
+corpseName = "fighter carcass"
+[fighter.attacker]
+numberOfDice = 2
+dice = 3
+bonus = 0
+[fighter.ai]
+type = "MonsterAi"
+speed = 100
+[fighter.container]
+capacity = 10
+contents = [ { content = "jerky" } ]
+[fighter.body]
+
 [boxer]
 name = "boxer"
 ch = "H"
@@ -144,3 +165,42 @@ speed = 90
 capacity = 10
 contents = [ { content = "ration" } ]
 [mutant.body]
+
+[cyborg]
+name = "cyborg"
+ch = "r"
+color = "darkerGreen"
+[cyborg.destructible]
+maxHp = 8
+defense = 0
+xp = 250
+corpseName = "cyborg carcass"
+[cyborg.attacker]
+numberOfDice = 1
+dice = 8
+bonus = 0
+[cyborg.ai]
+type = "MonsterAi"
+speed = 120
+[cyborg.container]
+capacity = 10
+contents = [ { content = "ration" } ]
+[cyborg.body]
+
+[android]
+name = "punk"
+ch = "h"
+color = "darkerGreen"
+[android.destructible]
+maxHp = 8
+defense = 1
+xp = 300
+corpseName = "broken android"
+[android.attacker]
+numberOfDice = 2
+dice = 6
+bonus = 2
+[android.ai]
+type = "MonsterAi"
+speed = 150
+[android.body]

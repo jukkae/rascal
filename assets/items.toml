@@ -18,6 +18,15 @@ blocks = false
 [cookie.comestible]
 nutrition = 10000
 
+[jerky]
+name = "jerky"
+ch = "%"
+color = "darkerRed"
+blocks = false
+[jerky.pickable]
+[jerky.comestible]
+nutrition = 20000
+
 [ration]
 name = "ration"
 ch = "%"
