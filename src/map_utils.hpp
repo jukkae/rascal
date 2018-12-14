@@ -22,10 +22,7 @@ std::unique_ptr<Actor> makeItemFromToml(World* world, Map* map, int x, int y, st
 
 namespace npc {
 std::unique_ptr<Actor> makeMonster(World* world, Map* map, int x, int y, int difficulty = 1);
-std::unique_ptr<Actor> makeDog(World* world, Map* map, int x, int y); //TODO move defs to data
 std::unique_ptr<Actor> makeBeingFromToml(World* world, Map* map, int x, int y, std::string type);
-std::unique_ptr<Actor> makeSnake(World* world, Map* map, int x, int y); //TODO move defs to data
-std::unique_ptr<Actor> makeChild(World* world, Map* map, int x, int y); //TODO move defs to data
 std::unique_ptr<Actor> makePunk(World* world, Map* map, int x, int y); //TODO move defs to data
 std::unique_ptr<Actor> makeFighter(World* world, Map* map, int x, int y); //TODO move defs to data
 std::unique_ptr<Actor> makeGuard(World* world, Map* map, int x, int y); //TODO move defs to data

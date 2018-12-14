@@ -182,7 +182,7 @@ std::unique_ptr<Actor> npc::makeMonster(World* world, Map* map, int x, int y, in
 				npc = makeBeingFromToml(world, map, x, y, "snake");
 				return npc;
 			} else if (r < 60) {
-				npc = makeChild(world, map, x, y);
+				npc = makeBeingFromToml(world, map, x, y, "child");
 				return npc;
 			} else if (r < 70) {
 				npc = makeGuard(world, map, x, y);
@@ -378,33 +378,6 @@ std::unique_ptr<Actor> item::makeItemFromToml(World* world, Map* map, int x, int
 	}
 
 	return a;
-}
-
-std::unique_ptr<Actor> npc::makeChild(World* world, Map* map, int x, int y) {
-		std::unique_ptr<Actor> a = std::make_unique<Actor>(x, y, 'c', "child", colors::get("desaturatedGreen"), 1);
-		a->destructible = std::make_unique<MonsterDestructible>(2, 0, 25, "dead child");
-		a->attacker = std::make_unique<Attacker>(1, 2, 0);
-		a->ai = std::make_unique<MonsterAi>(75);
-		a->body = std::make_unique<Body>();
-		a->container = std::make_unique<Container>(10);
-		if(d6() >= 3) {
-			std::unique_ptr<Actor> stimpak = std::make_unique<Actor>(x, y, '!', "super stimpak", sf::Color(128, 128, 128));
-			stimpak->blocks = false;
-			stimpak->pickable = std::make_unique<Pickable>(TargetSelector(TargetSelector::SelectorType::WEARER, 0), std::make_unique<HealthEffect>(8));
-			stimpak->world = world; //FIXME that I need to do this is bad and error-prone. Figure out better ways of actor creation.
-
-			a->container->add(std::move(stimpak));
-		}
-		if(d6() >= 3) {
-			std::unique_ptr<Actor> food = std::make_unique<Actor>(x, y, '%', "snakemeat", sf::Color(128, 128, 0));
-			food->blocks = false;
-			food->pickable = std::make_unique<Pickable>();
-			food->comestible = std::make_unique<Comestible>();
-			food->comestible->nutrition = 5000;
-			food->world = world;
-			a->container->add(std::move(food));
-		}
-		return a;
 }
 
 std::unique_ptr<Actor> npc::makePunk(World* world, Map* map, int x, int y) {

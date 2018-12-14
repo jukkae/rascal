@@ -55,6 +55,6 @@ type = "MonsterAi"
 speed = 75
 [child.container]
 capacity = 10
-contents = [ { with_probability = 100, content = "super_stimpak" }, # TODO probability should be 66
+contents = [ { with_probability = 66, content = "super_stimpak" },
              { with_probability = 66, content = "snakemeat" } ]
 [child.body]
