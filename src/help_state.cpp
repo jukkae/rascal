@@ -50,24 +50,23 @@ void HelpState::update() {
 void HelpState::render() {
 	std::string header = "R A S C A L";
 	int x = (constants::SCREEN_WIDTH - header.length()) / 2;
-	console.drawGraphicsBlock(Point(x, 1), header, colors::brightBlue);
+	console.drawGraphicsBlock(Point(x, 1), header, colors::get("brightBlue"));
 
 	std::string version = "Version " + version::VERSION;
 	x = (constants::SCREEN_WIDTH - version.length()) / 2;
-	console.drawGraphicsBlock(Point(x, 2), version, colors::brightBlue);
+	console.drawGraphicsBlock(Point(x, 2), version, colors::get("brightBlue"));
 
 	int lines;
 	lines = std::count(helpText.begin(), helpText.end(), '\n');
 	x = (constants::SCREEN_WIDTH - 24) / 2; //FIXME known width
-	console.drawGraphicsBlock(Point(x, 6), helpText, colors::lightGreen);
+	console.drawGraphicsBlock(Point(x, 6), helpText, colors::get("lightGreen"));
 
 	std::string story = "To escape, fight your way to the top...";
 	x = (constants::SCREEN_WIDTH - story.length()) / 2;
-	console.drawGraphicsBlock(Point(x, 6 + lines + 3), story, colors::brightBlue);
+	console.drawGraphicsBlock(Point(x, 6 + lines + 3), story, colors::get("brightBlue"));
 
 
 	std::string copyright = "(c) 2017- jukkae";
 	x = (constants::SCREEN_WIDTH - copyright.length()) / 2;
-	console.drawGraphicsBlock(Point(x, constants::SCREEN_HEIGHT - 3), copyright, colors::brightBlue);
+	console.drawGraphicsBlock(Point(x, constants::SCREEN_HEIGHT - 3), copyright, colors::get("brightBlue"));
 }
-

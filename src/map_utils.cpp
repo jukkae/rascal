@@ -266,9 +266,7 @@ std::unique_ptr<Actor> npc::makeBeingFromToml(World* world, Map* map, int x, int
 	// TODO should check if keys and values are valid
 	a->ch = toml::get<std::string>(being.at("ch"))[0]; // TODO assert(string.size() == 1);
 	a->name = toml::get<std::string>(being.at("name"));
-	if(toml::get<std::string>(being.at("color")) == "desaturatedGreen") {
-		a->col = colors::desaturatedGreen;
-	} else { a->col = colors::red; }
+	a->col = colors::get(toml::get<std::string>(being.at("color")));
 
 	try {
 		auto ai = toml::get<toml::table>(being.at("ai"));
@@ -341,9 +339,8 @@ std::unique_ptr<Actor> item::makeItemFromToml(World* world, Map* map, int x, int
 	// TODO should check if keys and values are valid
 	a->ch = toml::get<std::string>(item.at("ch"))[0]; // TODO assert(string.size() == 1);
 	a->name = toml::get<std::string>(item.at("name"));
-	if(toml::get<std::string>(item.at("color")) == "desaturatedGreen") {
-		a->col = colors::desaturatedGreen;
-	} else { a->col = colors::red; }
+	a->col = colors::get(toml::get<std::string>(item.at("color")));
+
 	a->blocks = toml::get<bool>(item.at("blocks"));
 
 	//try {
@@ -365,7 +362,7 @@ std::unique_ptr<Actor> item::makeItemFromToml(World* world, Map* map, int x, int
 }
 
 std::unique_ptr<Actor> npc::makeChild(World* world, Map* map, int x, int y) {
-		std::unique_ptr<Actor> a = std::make_unique<Actor>(x, y, 'c', "child", colors::desaturatedGreen, 1);
+		std::unique_ptr<Actor> a = std::make_unique<Actor>(x, y, 'c', "child", colors::get("desaturatedGreen"), 1);
 		a->destructible = std::make_unique<MonsterDestructible>(2, 0, 25, "dead child");
 		a->attacker = std::make_unique<Attacker>(1, 2, 0);
 		a->ai = std::make_unique<MonsterAi>(75);
@@ -392,7 +389,7 @@ std::unique_ptr<Actor> npc::makeChild(World* world, Map* map, int x, int y) {
 }
 
 std::unique_ptr<Actor> npc::makePunk(World* world, Map* map, int x, int y) {
-		std::unique_ptr<Actor> a = std::make_unique<Actor>(x, y, 'h', "punk", colors::desaturatedGreen, 1);
+		std::unique_ptr<Actor> a = std::make_unique<Actor>(x, y, 'h', "punk", colors::get("desaturatedGreen"), 1);
 		a->destructible = std::make_unique<MonsterDestructible>(3, 0, 50, "dead punk");
 		a->attacker = std::make_unique<Attacker>(1, 3, 0);
 		a->ai = std::make_unique<MonsterAi>(100);
@@ -412,7 +409,7 @@ std::unique_ptr<Actor> npc::makePunk(World* world, Map* map, int x, int y) {
 }
 
 std::unique_ptr<Actor> npc::makeFighter(World* world, Map* map, int x, int y) {
-		std::unique_ptr<Actor> a = std::make_unique<Actor>(x, y, 'H', "fighter", colors::darkGreen, 1);
+		std::unique_ptr<Actor> a = std::make_unique<Actor>(x, y, 'H', "fighter", colors::get("darkGreen"), 1);
 		a->destructible = std::make_unique<MonsterDestructible>(5, 1, 100, "fighter carcass");
 		a->attacker = std::make_unique<Attacker>(2, 3, 0);
 		a->ai = std::make_unique<MonsterAi>();
@@ -432,7 +429,7 @@ std::unique_ptr<Actor> npc::makeFighter(World* world, Map* map, int x, int y) {
 }
 
 std::unique_ptr<Actor> npc::makeGuard(World* world, Map* map, int x, int y) {
-		std::unique_ptr<Actor> a = std::make_unique<Actor>(x, y, 'h', "guard", colors::darkGreen, 1);
+		std::unique_ptr<Actor> a = std::make_unique<Actor>(x, y, 'h', "guard", colors::get("darkGreen"), 1);
 		a->destructible = std::make_unique<MonsterDestructible>(6, 1, 100, "guard body");
 		a->attacker = std::make_unique<Attacker>(1, 3, 0);
 		a->ai = std::make_unique<MonsterAi>(200);
@@ -462,7 +459,7 @@ std::unique_ptr<Actor> npc::makeGuard(World* world, Map* map, int x, int y) {
 }
 
 std::unique_ptr<Actor> npc::makeBoxer(World* world, Map* map, int x, int y) {
-		std::unique_ptr<Actor> a = std::make_unique<Actor>(x, y, 'H', "boxer", colors::darkerGreen, 1);
+		std::unique_ptr<Actor> a = std::make_unique<Actor>(x, y, 'H', "boxer", colors::get("darkerGreen"), 1);
 		a->destructible = std::make_unique<MonsterDestructible>(4, 0, 70, "boxer carcass");
 		a->attacker = std::make_unique<Attacker>(1, 4, 2);
 		a->ai = std::make_unique<MonsterAi>();
@@ -491,7 +488,7 @@ std::unique_ptr<Actor> npc::makeBoxer(World* world, Map* map, int x, int y) {
 }
 
 std::unique_ptr<Actor> npc::makeMutant(World* world, Map* map, int x, int y) {
-		std::unique_ptr<Actor> a = std::make_unique<Actor>(x, y, 'm', "mutant", colors::darkerGreen, 1);
+		std::unique_ptr<Actor> a = std::make_unique<Actor>(x, y, 'm', "mutant", colors::get("darkerGreen"), 1);
 		a->destructible = std::make_unique<MonsterDestructible>(8, 0, 200, "mutant carcass");
 		a->attacker = std::make_unique<Attacker>(2, 4, 0);
 		a->ai = std::make_unique<MonsterAi>(90);
@@ -510,7 +507,7 @@ std::unique_ptr<Actor> npc::makeMutant(World* world, Map* map, int x, int y) {
 }
 
 std::unique_ptr<Actor> npc::makeCyborg(World* world, Map* map, int x, int y) {
-		std::unique_ptr<Actor> a = std::make_unique<Actor>(x, y, 'r', "cyborg", colors::darkerGreen, 1);
+		std::unique_ptr<Actor> a = std::make_unique<Actor>(x, y, 'r', "cyborg", colors::get("darkerGreen"), 1);
 		a->destructible = std::make_unique<MonsterDestructible>(8, 0, 250, "cyborg carcass");
 		a->attacker = std::make_unique<Attacker>(1, 8, 0);
 		a->ai = std::make_unique<MonsterAi>(120);
@@ -529,7 +526,7 @@ std::unique_ptr<Actor> npc::makeCyborg(World* world, Map* map, int x, int y) {
 }
 
 std::unique_ptr<Actor> npc::makeAndroid(World* world, Map* map, int x, int y) {
-		std::unique_ptr<Actor> a = std::make_unique<Actor>(x, y, 'h', "punk", colors::darkerGreen, 1);
+		std::unique_ptr<Actor> a = std::make_unique<Actor>(x, y, 'h', "punk", colors::get("darkerGreen"), 1);
 		a->destructible = std::make_unique<MonsterDestructible>(8, 1, 300, "broken android");
 		a->attacker = std::make_unique<Attacker>(2, 6, 2);
 		a->ai = std::make_unique<MonsterAi>(150);

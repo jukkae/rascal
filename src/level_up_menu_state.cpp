@@ -18,7 +18,7 @@
 #include <SFML/System.hpp>
 #include <SFML/Window.hpp>
 
-LevelUpMenuState::LevelUpMenuState(Engine* engine, Actor* actor) : 
+LevelUpMenuState::LevelUpMenuState(Engine* engine, Actor* actor) :
 State(engine, engine->getWindow()),
 actor(actor) {
 	console = Console(ConsoleType::NARROW);
@@ -69,14 +69,14 @@ void LevelUpMenuState::render() {
 
 	std::string heading = "Y O U   H A V E   G A I N E D   A   L E V E L";
 	int headingX = (width - heading.length()) / 2;
-	console.drawGraphicsBlock(Point(headingX, 1), heading, colors::brightBlue);
+	console.drawGraphicsBlock(Point(headingX, 1), heading, colors::get("brightBlue"));
 
 	int y = 3;
 	int itemIndex = 0;
 	for (auto item : menuContents) {
 		int x = (width - item.label.length()) / 2;
-		sf::Color color = colors::darkBlue;
-		if(itemIndex == selectedItem) color = colors::brightBlue;
+		sf::Color color = colors::get("darkBlue");
+		if(itemIndex == selectedItem) color = colors::get("brightBlue");
 		console.drawGraphicsBlock(Point(x, y), item.label, color);
 		++y;
 		++itemIndex;

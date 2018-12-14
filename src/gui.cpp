@@ -47,11 +47,11 @@ void Gui::render(World* world, sf::RenderWindow* window) {
 	renderBar(1, 1, BAR_WIDTH, "HP", world->getPlayer()->destructible->hp, world->getPlayer()->destructible->maxHp, lightRed, darkerRed, window);
 
 	std::string dungeonLvlString = "Floor " + std::to_string(world->level);
-	console.drawText(Point(3, 3), dungeonLvlString, colors::white);
+	console.drawText(Point(3, 3), dungeonLvlString, colors::get("white"));
 
 
 	std::string timeString = "Time: " + std::to_string(world->time);
-	console.drawText(Point(3, 4), timeString, colors::white);
+	console.drawText(Point(3, 4), timeString, colors::get("white"));
 
 	renderXpBar(world, window);
 	renderMouseLook(world, window);
@@ -74,7 +74,7 @@ void Gui::renderStats(World* world, sf::RenderWindow* window) {
 
 	int ac = player->getAC();
 	std::string acString = "AC: " + std::to_string(ac);
-	console.drawText(Point(120, 1), acString, colors::lightBlue);
+	console.drawText(Point(120, 1), acString, colors::get("lightBlue"));
 
 	std::string weaponString;
 	if(!player->wornWeapon) weaponString = "Wielding: nothing";
@@ -82,7 +82,7 @@ void Gui::renderStats(World* world, sf::RenderWindow* window) {
 		weaponString = "Wielding: " + player->wornWeapon->name;
 		if(player->wornWeapon->rangedAttacker) weaponString.append(" (").append(std::to_string(player->wornWeapon->rangedAttacker->rounds)).append("/").append(std::to_string(player->wornWeapon->rangedAttacker->capacity)).append(")");
 	}
-	console.drawText(Point(120, 2), weaponString, colors::lightBlue);
+	console.drawText(Point(120, 2), weaponString, colors::get("lightBlue"));
 
 	int n, d, b;
 	if(!player->wornWeapon) {
@@ -101,7 +101,7 @@ void Gui::renderStats(World* world, sf::RenderWindow* window) {
 		b = player->wornWeapon->rangedAttacker->bonus;
 	}
 	std::string atkString = "dm: " + std::to_string(n) + "d" + std::to_string(d) + "+" + std::to_string(b);
-	console.drawText(Point(120, 3), atkString, colors::lightBlue);
+	console.drawText(Point(120, 3), atkString, colors::get("lightBlue"));
 }
 
 void Gui::renderNav(World* world, sf::RenderWindow* window) {
@@ -112,16 +112,16 @@ void Gui::renderNav(World* world, sf::RenderWindow* window) {
 		[&] (const std::unique_ptr<Actor>& a) { return a->name == "navigation computer"; }
 	)) {
 		std::string location = std::to_string(player->x) + ", " + std::to_string(player->y);
-		console.drawText(Point(100, 3), location, colors::lightBlue);
+		console.drawText(Point(100, 3), location, colors::get("lightBlue"));
 		std::string rad = "rad: " + std::to_string(world->radiation);
-		console.drawText(Point(100, 4), rad, colors::lightBlue);
+		console.drawText(Point(100, 4), rad, colors::get("lightBlue"));
 
 		// TODO doesn't belong here, temporary until info management is figured out
 		std::string hungerString = "nutrition:" + std::to_string(player->body->nutrition);
-		console.drawText(Point(120, 5), hungerString, colors::lightBlue);
+		console.drawText(Point(120, 5), hungerString, colors::get("lightBlue"));
 
 		std::string iodineString = "iodine:" + std::to_string(player->body->iodine);
-		console.drawText(Point(120, 6), iodineString, colors::lightBlue);
+		console.drawText(Point(120, 6), iodineString, colors::get("lightBlue"));
 	}
 
 }
@@ -130,11 +130,11 @@ void Gui::renderStatusEffects(World* world, sf::RenderWindow* window) {
 	Actor* player = world->getPlayer();
 
 	if(player->getStatusEffects().size() > 0) {
-		console.drawText(Point(100, 1), "status effects:", colors::lightBlue);
+		console.drawText(Point(100, 1), "status effects:", colors::get("lightBlue"));
 		int i = 1;
 		for (auto& e : player->getStatusEffects()) {
 			std::string effectStr = e->name;
-			console.drawText(Point(100, 1 + i), effectStr, colors::lightBlue);
+			console.drawText(Point(100, 1 + i), effectStr, colors::get("lightBlue"));
 			++i;
 		}
 	}
@@ -164,7 +164,7 @@ void Gui::renderBar(int x, int y, int width, std::string name, float value, floa
 		}
 	}
 	std::string string = name + " : " + std::to_string((int)value) + "/" + std::to_string((int)maxValue);
-	console.drawText(Point(x, y), string, colors::white);
+	console.drawText(Point(x, y), string, colors::get("white"));
 }
 
 void Gui::renderMouseLook(World* world, sf::RenderWindow* window) {
@@ -199,7 +199,7 @@ void Gui::renderMouseLook(World* world, sf::RenderWindow* window) {
 		}
 	}
 	std::string string = buf;
-	console.drawText(Point(1, 0), string, colors::lightGrey);
+	console.drawText(Point(1, 0), string, colors::get("lightGrey"));
 }
 
 void Gui::message(sf::Color col, std::string text, va_list args) {

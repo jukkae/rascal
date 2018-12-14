@@ -24,7 +24,7 @@ void Console::clear() {
 	sf::RectangleShape bg(sf::Vector2f(cw * width, ch * height));
 	bg.setPosition(x * cw, y * ch);
 	if(clearMode == ClearMode::BLACK) {
-		bg.setFillColor(colors::black);
+		bg.setFillColor(colors::get("black"));
 	}
 	else {
 
