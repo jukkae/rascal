@@ -17,6 +17,7 @@
 #include "wieldable.hpp"
 #include "world.hpp"
 #include <SFML/Graphics.hpp>
+#include "../include/toml/toml.h"
 
 void map_utils::addItems(World* world, Map* map, int difficulty) {
 	for(int x = 0; x < map->width; ++x) {

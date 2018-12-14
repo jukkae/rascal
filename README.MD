@@ -18,12 +18,15 @@ Currently macOS only.
 When running `make bundle`, it's possible that macdylibbundler complains `/!\ WARNING : can't get path for '@rpath/libsfml-system.2.4.dylib'`. If this happens, the quickest workaround is to just paste a zillion times `/usr/local/lib`. Should fix this at some point. It's entirely possible that there's something wrong with the whole `rpath` thing here.
 
 ## Dependencies
-- SFML 2.4.2
-- Boost 1.65.1
+- SFML 2.4.2 or higher
+- Boost 1.65.1 or higher
 
 ## Acknowledgments
-Includes freetype library licensed under GPL 2.
-Current macOS builds include SFML and boost libraries.
+Includes tinytoml library licensed under BSD 2-Clause "Simplified" License.
+Includes freetype library licensed under FTL.
+Includes SFML licensed under Zlib.
+Current macOS builds include boost libraries.
+All copyrights of external libraries belong to their authors.
 
 Current builds include Square typeface by Wouter van Oortmerssen licensed under CC BY 3.0. Typeface available at <http://strlen.com/square/>.
 Current builds include Fixedsys Excelsior typeface by Darien Valentine released into public domain.
