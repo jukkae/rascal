@@ -71,5 +71,5 @@ void GameOverState::update() {
 void GameOverState::render() {
 	int x = 2;
 	int y = 2;
-	console.drawGraphicsBlock(Point(x, y), description, colors::brightBlue);
+	console.drawGraphicsBlock(Point(x, y), description, colors::get("brightBlue"));
 }

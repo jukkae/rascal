@@ -30,31 +30,31 @@ std::string messaging::formatString(std::string text, ...) {
 Message messaging::createMessageFromEvent(Event& event) {
 	std::string fmt;
 	std::string messageText = "UNKNOWN EVENT";
-	sf::Color color = colors::white;
+	sf::Color color = colors::get("white");
 
 	if(auto e = dynamic_cast<ItemFoundEvent*>(&event)) {
 		fmt = "%d: There's a %s here!";
 		messageText = formatString(fmt, e->time, e->item->name.c_str());
-			color = colors::green;
+			color = colors::get("green");
 	}
 
 	if(auto e = dynamic_cast<MeleeHitEvent*>(&event)) {
 		if(!e->hit) {
 			fmt = "%d: %s misses %s.";
 			messageText = formatString(fmt, e->time, e->hitter->name.c_str(), e->hittee->name.c_str());
-			color = colors::grey;
+			color = colors::get("grey");
 		} else if(e->damage <= 0) {
 			fmt = "%d: %s hits %s, but it seems to have no effect.";
 			messageText = formatString(fmt, e->time, e->hitter->name.c_str(), e->hittee->name.c_str());
-			color = colors::red;
+			color = colors::get("red");
 		} else if(e->weapon) {
 			fmt = "%d: %s attacks %s for %d hit points with a %s.";
 			messageText = formatString(fmt, e->time, e->hitter->name.c_str(), e->hittee->name.c_str(), e->damage, e->weapon->name.c_str());
-			color = colors::red;
+			color = colors::get("red");
 		} else {
 			fmt = "%d: %s attacks %s for %d hit points.";
 			messageText = formatString(fmt, e->time, e->hitter->name.c_str(), e->hittee->name.c_str(), e->damage);
-			color = colors::red;
+			color = colors::get("red");
 		}
 	}
 
@@ -62,56 +62,56 @@ Message messaging::createMessageFromEvent(Event& event) {
 		if(!e->hit) {
 			fmt = "%d: %s misses %s. Bullet ricochets harmlessly!";
 			messageText = formatString(fmt, e->time, e->hitter->name.c_str(), e->hittee->name.c_str());
-			color = colors::grey;
+			color = colors::get("grey");
 		} else if(e->damage <= 0) {
 			fmt = "%d: %s hits %s, but it seems to have no effect.";
 			messageText = formatString(fmt, e->time, e->hitter->name.c_str(), e->hittee->name.c_str());
-			color = colors::red;
+			color = colors::get("red");
 		} else if(e->weapon) {
 			fmt = "%d: %s shoots %s for %d hit points with a %s.";
 			messageText = formatString(fmt, e->time, e->hitter->name.c_str(), e->hittee->name.c_str(), e->damage, e->weapon->name.c_str());
-			color = colors::red;
+			color = colors::get("red");
 		}
 	}
 
 	if(auto e = dynamic_cast<ActionFailureEvent*>(&event)) {
 		fmt = "%d: %s";
 		messageText = formatString(fmt, e->time, e->failureMessage.c_str());
-		color = colors::lightRed;
+		color = colors::get("lightRed");
 	}
 
 	if(auto e = dynamic_cast<ActionSuccessEvent*>(&event)) {
 		fmt = "%d: %s";
 		messageText = formatString(fmt, e->time, e->successMessage.c_str());
-		color = colors::green;
+		color = colors::get("green");
 	}
 
 	if(auto e = dynamic_cast<RequestDescriptionEvent*>(&event)) {
 		ignore(e);
 		messageText = "You take a look around. It's bleak."; // TODO obvs more stuff; time!
-		color = colors::grey;
+		color = colors::get("grey");
 	}
 
 	if(auto e = dynamic_cast<UiEvent*>(&event)) {
 		messageText = e->text;
-		color = colors::cyan;
+		color = colors::get("cyan");
 	}
 
 	if(auto e = dynamic_cast<StatusEffectEvent*>(&event)) {
 		fmt = "%d: %s";
 		messageText = formatString(fmt, e->time, e->text.c_str());
-		color = colors::red; //TODO now red for poison dmg
+		color = colors::get("red"); //TODO now red for poison dmg
 	}
 
 	if(auto e = dynamic_cast<DeathEvent*>(&event)) {
 		if(e->xp == 0) {
 			fmt = "%d: %s is dead!";
 			messageText = formatString(fmt, e->time, e->actor->name.c_str());
-			color = colors::lightGrey;
+			color = colors::get("lightGrey");
 		} else {
 			fmt = "%d: %s is dead! You gain %d xp!";
 			messageText = formatString(fmt, e->time, e->actor->name.c_str(), e->xp);
-			color = colors::lightGrey;
+			color = colors::get("lightGrey");
 		}
 	}
 
@@ -119,30 +119,30 @@ Message messaging::createMessageFromEvent(Event& event) {
 		if(e->amount >= 0) {
 			fmt = "%d: %s gains %d hp!";
 			messageText = formatString(fmt, e->time, e->actor->name.c_str(), e->amount);
-			color = colors::green;
+			color = colors::get("green");
 		} else {
 			fmt = "%d: %s is harmed for %d hp!";
 			messageText = formatString(fmt, e->time, e->actor->name.c_str(), -e->amount);
-			color = colors::red;
+			color = colors::get("red");
 		}
 	}
 
 	if(auto e = dynamic_cast<PlayerDeathEvent*>(&event)) {
 		fmt = "%d: You are dead!";
 		messageText = formatString(fmt, e->time);
-		color = colors::red;
+		color = colors::get("red");
 	}
 
 	if(auto e = dynamic_cast<PlayerStatChangeEvent*>(&event)) {
 		fmt = "%d: You've reached level %d!";
 		messageText = formatString(fmt, e->time, e->xpLevel);
-		color = colors::yellow;
+		color = colors::get("yellow");
 	}
 
 	if(auto e = dynamic_cast<AiChangeEvent*>(&event)) {
 		fmt = "%d: The eyes of the %s look vacant!";
 		messageText = formatString(fmt, e->time, e->actor->name.c_str());
-		color = colors::cyan;
+		color = colors::get("cyan");
 	}
 
 	if(auto e = dynamic_cast<StatusEffectChangeEvent*>(&event)) {
@@ -151,16 +151,16 @@ Message messaging::createMessageFromEvent(Event& event) {
 				ignore(fx);
 				fmt = "%d: The %s feels bad";
 				messageText = formatString(fmt, e->time, e->actor->name.c_str());
-				color = colors::cyan;
+				color = colors::get("cyan");
 			} else {
 				fmt = "%d: The %s feels a bit different";
 				messageText = formatString(fmt, e->time, e->actor->name.c_str());
-				color = colors::cyan;
+				color = colors::get("cyan");
 			}
 		} else {
 			fmt = "%d: The %s feels a bit more normal";
 			messageText = formatString(fmt, e->time, e->actor->name.c_str());
-			color = colors::cyan;
+			color = colors::get("cyan");
 		}
 	}
 
@@ -168,7 +168,7 @@ Message messaging::createMessageFromEvent(Event& event) {
 		std::string text = formatString(e->formatString, e->actor->name.c_str());
 		fmt = "%d: %s";
 		messageText = formatString(fmt, e->time, text.c_str());
-		color = colors::cyan;
+		color = colors::get("cyan");
 	}
 
 	return Message(messageText, color);

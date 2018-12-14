@@ -98,14 +98,14 @@ void PreferencesState::update() {
 void PreferencesState::render() {
 	std::string header = "P R E F E R E N C E S";
 	int x = (constants::SCREEN_WIDTH - header.length()) / 2;
-	console.drawGraphicsBlock(Point(x, 1), header, colors::brightBlue);
+	console.drawGraphicsBlock(Point(x, 1), header, colors::get("brightBlue"));
 
 
 	int menuY = 4;
 	int itemIndex = 0;
 	for(PreferenceItem item : items) {
 		x = (constants::SCREEN_WIDTH / 2) - item.key.length(); // center colons
-		sf::Color color = selectedItem == itemIndex ? colors::brightBlue : colors::darkBlue;
+		sf::Color color = selectedItem == itemIndex ? colors::get("brightBlue") : colors::get("darkBlue");
 		console.drawGraphicsBlock(Point(x, menuY+itemIndex), item.key + " : " + (item.value ? "on" : "off"), color);
 		++itemIndex;
 	}

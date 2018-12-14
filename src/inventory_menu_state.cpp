@@ -123,14 +123,14 @@ void InventoryMenuState::update() {
 void InventoryMenuState::render() {
 	//window->clear(sf::Color::Black);
 	console.clear();
-	console.drawGraphicsBlock(Point(2, 1), "I N V E N T O R Y", colors::brightBlue);
+	console.drawGraphicsBlock(Point(2, 1), "I N V E N T O R Y", colors::get("brightBlue"));
 
 	int x = 2;
 	int y = 3;
 
 	int itemIndex = 0;
 	for (auto pile : piles) {
-		sf::Color color = itemIndex == selectedItem ? colors::brightBlue : colors::darkBlue;
+		sf::Color color = itemIndex == selectedItem ? colors::get("brightBlue") : colors::get("darkBlue");
 		int pileSize = pile.size();
 		if(pileSize != 1) {
 			console.drawGraphicsBlock(Point(x, y), pile.at(0)->name + " (" + std::to_string(pileSize) + ")", color);
@@ -147,16 +147,16 @@ void InventoryMenuState::render() {
 	}
 
 	std::string creditsString = "credits: " + std::to_string(credits);
-	console.drawGraphicsBlock(Point(2, y+1), creditsString, colors::brightBlue);
+	console.drawGraphicsBlock(Point(2, y+1), creditsString, colors::get("brightBlue"));
 
 	std::string weightString = "weight: " + std::to_string(contentsWeight) + " / " + std::to_string(capacity);
-	console.drawGraphicsBlock(Point(2, y+2), weightString, colors::brightBlue);
+	console.drawGraphicsBlock(Point(2, y+2), weightString, colors::get("brightBlue"));
 
 	std::string commandsString = "(u)se - (d)rop - (w)ield/un(w)ield - (e)at - (t)hrow";
-	console.drawGraphicsBlock(Point(2, y+4), commandsString, colors::brightBlue);
+	console.drawGraphicsBlock(Point(2, y+4), commandsString, colors::get("brightBlue"));
 
 	std::string closeString = "esc to close";
-	console.drawGraphicsBlock(Point(2, y+5), closeString, colors::brightBlue);
+	console.drawGraphicsBlock(Point(2, y+5), closeString, colors::get("brightBlue"));
 
 	renderStats();
 	renderBodyParts();
@@ -168,7 +168,7 @@ void InventoryMenuState::render() {
 
 void InventoryMenuState::renderStats() {
 
-	console.drawGraphicsBlock(Point(70, 1), "S T A T S", colors::brightBlue);
+	console.drawGraphicsBlock(Point(70, 1), "S T A T S", colors::get("brightBlue"));
 
 	int x = 64;
 	int y = 3;
@@ -201,16 +201,16 @@ void InventoryMenuState::renderStats() {
 		std::string speed = "       Speed: " + std::to_string(b->speed) + "\n";
 		statsBlock.append(speed);
 
-		console.drawGraphicsBlock(Point(x, y), statsBlock, colors::brightBlue);
+		console.drawGraphicsBlock(Point(x, y), statsBlock, colors::get("brightBlue"));
 
 	} else {
 		std::string no = "You have no body. How about that?";
-		console.drawGraphicsBlock(Point(x, y+1), no, colors::brightBlue);
+		console.drawGraphicsBlock(Point(x, y+1), no, colors::get("brightBlue"));
 	}
 }
 
 void InventoryMenuState::renderBodyParts() {
-	console.drawGraphicsBlock(Point(90, 1), "B O D Y", colors::brightBlue);
+	console.drawGraphicsBlock(Point(90, 1), "B O D Y", colors::get("brightBlue"));
 
 	int x = 90;
 	int y = 3;
@@ -221,7 +221,7 @@ void InventoryMenuState::renderBodyParts() {
 		auto freeBodyParts = b->bodyParts;
 
 		std::string bps = "body parts:";
-		console.drawGraphicsBlock(Point(x, y+1), bps, colors::brightBlue);
+		console.drawGraphicsBlock(Point(x, y+1), bps, colors::get("brightBlue"));
 
 		for(auto& bp : freeBodyParts) {
 			++y;
@@ -235,8 +235,8 @@ void InventoryMenuState::renderBodyParts() {
 				default: break;
 			};
 			sf::Color col;
-			if(bp.second) col = colors::brightBlue;
-			else col = colors::blue;
+			if(bp.second) col = colors::get("brightBlue");
+			else col = colors::get("blue");
 			console.drawGraphicsBlock(Point(x, y+1), bpt, col);
 		}
 	}

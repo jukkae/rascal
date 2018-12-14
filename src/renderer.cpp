@@ -50,22 +50,22 @@ void Renderer::renderMap(const World* const world, sf::RenderWindow* window) {
 			int worldY = y + cameraY;
 
 			if(worldX < 0 || worldX >= mapWidth || worldY < 0 || worldY >= mapHeight) {
-				console.setBackground(Point(x, y), colors::black);
+				console.setBackground(Point(x, y), colors::get("black"));
 			}
 			else if(!map->isExplored(worldX, worldY)) {
-				console.setBackground(Point(x, y), colors::black);
+				console.setBackground(Point(x, y), colors::get("black"));
 			}
 			else if(map->isInFov(worldX, worldY)) {
-				console.setBackground(Point(x, y), map->isWall(worldX, worldY) ? colors::lightWall : colors::lightGround);
+				console.setBackground(Point(x, y), map->isWall(worldX, worldY) ? colors::get("lightWall") : colors::get("lightGround"));
 			}
 			else if(map->isExplored(worldX, worldY)) {
-				console.setBackground(Point(x, y), map->isWall(worldX, worldY) ? colors::darkWall : colors::darkGround);
+				console.setBackground(Point(x, y), map->isWall(worldX, worldY) ? colors::get("darkWall") : colors::get("darkGround"));
 				if((map->tiles(worldX, worldY).terrain == Terrain::WATER)) { // blechh
-					console.setBackground(Point(x, y), map->isWall(worldX, worldY) ? colors::darkerBlue : sf::Color(0, 0, 32));
+					console.setBackground(Point(x, y), map->isWall(worldX, worldY) ? colors::get("darkerBlue") : sf::Color(0, 0, 32));
 				}
 			}
 			else {
-				console.setBackground(Point(x, y), colors::black);
+				console.setBackground(Point(x, y), colors::get("black"));
 			}
 		}
 	}

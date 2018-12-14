@@ -96,7 +96,7 @@ void Map::generateWaterMap() {
 			Animation anim;
 			anim.chars = std::vector<char>(); // empty on purpose
 			anim.colors = std::vector<sf::Color>();
-			anim.colors.push_back(colors::darkestBlue);
+			anim.colors.push_back(colors::get("darkestBlue"));
 			anim.charFreq = 1;
 			anim.colFreq = 10;
 			anim.phase = 0.0f;
@@ -124,7 +124,7 @@ void Map::generateWaterMap() {
 std::vector<Rect> Map::breakRooms(Rect area, BreakDirection direction) {
 	int minDim = 30;
 	std::vector<Rect> areas;
-	
+
 	if(area.width() < minDim || area.height() < minDim) {
 		areas.push_back(area);
 		return areas;
@@ -180,4 +180,3 @@ bool Map::isInFov(int x, int y) const {
 	}
 	return false;
 }
-
