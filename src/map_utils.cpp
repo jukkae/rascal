@@ -268,41 +268,35 @@ std::unique_ptr<Actor> npc::makeBeingFromToml(World* world, Map* map, int x, int
 	a->name = toml::get<std::string>(being.at("name"));
 	a->col = colors::get(toml::get<std::string>(being.at("color")));
 
-	try {
+	if(being.count("ai") != 0) {
 		auto ai = toml::get<toml::table>(being.at("ai"));
 		if(toml::get<std::string>(ai.at("type")) == "MonsterAi") {
 			int speed = toml::get<int>(ai.at("speed"));
 			a->ai = std::make_unique<MonsterAi>(speed); // TODO default
 		} else { /* DO WHAT */ }
-	} catch (toml::type_error e) { // TODO probably not the most robust
-		std::cout << "AI table doesn't exist in config.\n";
 	}
 
-	try {
+	if(being.count("destructible") != 0) {
 		auto destructible = toml::get<toml::table>(being.at("destructible"));
 		int maxHp = toml::get<int>(destructible.at("maxHp"));
 		int defense = toml::get<int>(destructible.at("defense"));
 		int xp = toml::get<int>(destructible.at("xp"));
 		std::string corpseName = toml::get<std::string>(destructible.at("corpseName"));
 		a->destructible = std::make_unique<MonsterDestructible>(maxHp, defense, xp, corpseName);
-	} catch (toml::type_error e) { // TODO probably not the most robust
-		std::cout << "Destructible table doesn't exist in config.\n";
 	}
 
-	try {
+	if(being.count("attacker") != 0) {
 		auto attacker = toml::get<toml::table>(being.at("attacker"));
 		int numberOfDice = toml::get<int>(attacker.at("numberOfDice"));
 		int dice = toml::get<int>(attacker.at("dice"));
 		int bonus = toml::get<int>(attacker.at("bonus"));
 		a->attacker = std::make_unique<Attacker>(numberOfDice, dice, bonus);
-	} catch (toml::type_error e) { // TODO probably not the most robust
-		std::cout << "Attacker table doesn't exist in config.\n";
 	}
 
-	//try {
+	if(being.count("body") != 0) {
 		auto body = toml::get<toml::table>(being.at("body"));
 		a->body = std::make_unique<Body>();
-	//} // TODO figure out a robust way of dealing with this
+	}
 
 	if(being.count("container") != 0) {
 		auto container = toml::get<toml::table>(being.at("container"));
@@ -343,10 +337,10 @@ std::unique_ptr<Actor> item::makeItemFromToml(World* world, Map* map, int x, int
 
 	a->blocks = toml::get<bool>(item.at("blocks"));
 
-	//try {
+	if(item.count("pickable") != 0) {
 		auto pickable = toml::get<toml::table>(item.at("pickable"));
 		a->pickable = std::make_unique<Pickable>();
-	//} // TODO figure out a robust way of dealing with this
+	}
 
 	// Note: toml::table is alias to std::unordered_map
 	if(item.count("comestible") != 0) {
