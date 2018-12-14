@@ -166,7 +166,7 @@ std::unique_ptr<Actor> npc::makeMonster(World* world, Map* map, int x, int y, in
 			if(r < 50) {
 				npc = makeBeingFromToml(world, map, x, y, "dog");
 				return npc;
-			} else if (r < 60) {
+			} else if (r < 100) { // TODO should be r < 60
 				npc = makeBeingFromToml(world, map, x, y, "snake");
 				return npc;
 			} else if (r < 90) {
@@ -260,7 +260,7 @@ std::unique_ptr<Actor> npc::makeMonster(World* world, Map* map, int x, int y, in
 std::unique_ptr<Actor> npc::makeBeingFromToml(World* world, Map* map, int x, int y, std::string type) {
 	auto beings = toml::parse("assets/beings.toml");
 
-	auto being = toml::get<toml::Table>(beings.at(type));
+	auto being = toml::get<toml::table>(beings.at(type));
 	auto a = std::make_unique<Actor>(x, y);
 	a->energy = 1;
 	// TODO should check if keys and values are valid
@@ -271,7 +271,7 @@ std::unique_ptr<Actor> npc::makeBeingFromToml(World* world, Map* map, int x, int
 	} else { a->col = colors::red; }
 
 	try {
-		auto ai = toml::get<toml::Table>(being.at("ai"));
+		auto ai = toml::get<toml::table>(being.at("ai"));
 		if(toml::get<std::string>(ai.at("type")) == "MonsterAi") {
 			int speed = toml::get<int>(ai.at("speed"));
 			a->ai = std::make_unique<MonsterAi>(speed); // TODO default
@@ -281,7 +281,7 @@ std::unique_ptr<Actor> npc::makeBeingFromToml(World* world, Map* map, int x, int
 	}
 
 	try {
-		auto destructible = toml::get<toml::Table>(being.at("destructible"));
+		auto destructible = toml::get<toml::table>(being.at("destructible"));
 		int maxHp = toml::get<int>(destructible.at("maxHp"));
 		int defense = toml::get<int>(destructible.at("defense"));
 		int xp = toml::get<int>(destructible.at("xp"));
@@ -292,7 +292,7 @@ std::unique_ptr<Actor> npc::makeBeingFromToml(World* world, Map* map, int x, int
 	}
 
 	try {
-		auto attacker = toml::get<toml::Table>(being.at("attacker"));
+		auto attacker = toml::get<toml::table>(being.at("attacker"));
 		int numberOfDice = toml::get<int>(attacker.at("numberOfDice"));
 		int dice = toml::get<int>(attacker.at("dice"));
 		int bonus = toml::get<int>(attacker.at("bonus"));
@@ -302,20 +302,62 @@ std::unique_ptr<Actor> npc::makeBeingFromToml(World* world, Map* map, int x, int
 	}
 
 	//try {
-		auto body = toml::get<toml::Table>(being.at("body"));
+		auto body = toml::get<toml::table>(being.at("body"));
 		a->body = std::make_unique<Body>();
 	//} // TODO figure out a robust way of dealing with this
 
-	if(type == "snake") { // TODO read from items.toml
-		a->container = std::make_unique<Container>(1);
-		if(d6() >= 3) {
-			std::unique_ptr<Actor> food = std::make_unique<Actor>(x, y, '%', "snakemeat", sf::Color(128, 128, 0));
-			food->blocks = false;
-			food->pickable = std::make_unique<Pickable>();
-			food->comestible = std::make_unique<Comestible>();
-			food->comestible->nutrition = 5000;
-			food->world = world;
-			a->container->add(std::move(food));
+	if(being.count("container") != 0) {
+		auto container = toml::get<toml::table>(being.at("container"));
+		int capacity = toml::get<int>(container.at("capacity"));
+		a->container = std::make_unique<Container>(capacity);
+		auto contents = toml::get<std::vector<toml::table>>(container.at("contents"));
+		for(auto& table: contents) {
+			std::string type = toml::get<std::string>(table.at("content"));
+
+			if(table.count("with_probability") != 0) {
+				int probability = toml::get<int>(table.at("with_probability"));
+
+				if(d100() <= probability) {
+					auto item = item::makeItemFromToml(world, map, x, y, type);
+					a->container->add(std::move(item));
+				}
+			} else {
+				auto item = item::makeItemFromToml(world, map, x, y, type);
+				a->container->add(std::move(item));
+			}
+		}
+	}
+
+	return a;
+}
+
+std::unique_ptr<Actor> item::makeItemFromToml(World* world, Map* map, int x, int y, std::string type) {
+	auto items = toml::parse("assets/items.toml");
+	auto item = toml::get<toml::table>(items.at(type));
+
+	auto a = std::make_unique<Actor>(x, y);
+	a->world = world;
+
+	// TODO should check if keys and values are valid
+	a->ch = toml::get<std::string>(item.at("ch"))[0]; // TODO assert(string.size() == 1);
+	a->name = toml::get<std::string>(item.at("name"));
+	if(toml::get<std::string>(item.at("color")) == "desaturatedGreen") {
+		a->col = colors::desaturatedGreen;
+	} else { a->col = colors::red; }
+	a->blocks = toml::get<bool>(item.at("blocks"));
+
+	//try {
+		auto pickable = toml::get<toml::table>(item.at("pickable"));
+		a->pickable = std::make_unique<Pickable>();
+	//} // TODO figure out a robust way of dealing with this
+
+	// Note: toml::table is alias to std::unordered_map
+	if(item.count("comestible") != 0) {
+		auto comestible = toml::get<toml::table>(item.at("comestible"));
+		a->comestible = std::make_unique<Comestible>();
+		if(comestible.count("nutrition") != 0) {
+			int nutrition = toml::get<int>(comestible.at("nutrition"));
+			a->comestible->nutrition = nutrition;
 		}
 	}
 

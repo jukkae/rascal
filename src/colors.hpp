@@ -47,6 +47,7 @@ namespace colors {
 	static Color brightBlue       (100, 100, 255);
 	static Color cyan             (  0, 255, 255);
 	static Color yellow           (255, 255,   0);
+	static Color darkerYellow     (128, 128,   0);
 
 	static sf::Color darkWall     (0,   0,   100);
 	static sf::Color darkGround   (100, 110, 100);

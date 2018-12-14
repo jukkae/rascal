@@ -17,6 +17,7 @@ void addMcGuffin(World* world, Map* map, int level);
 
 namespace item { //TODO move to separate files
 std::unique_ptr<Actor> makeItem(World* world, Map* map, int x, int y, int difficulty = 1);
+std::unique_ptr<Actor> makeItemFromToml(World* world, Map* map, int x, int y, std::string type);
 } // namespace item
 
 namespace npc {

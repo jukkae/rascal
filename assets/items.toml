@@ -1,0 +1,10 @@
+# Comestibles
+
+[snakemeat]
+name = "snakemeat"
+ch = "%"
+color = "darkerYellow"
+blocks = false
+[snakemeat.pickable]
+[snakemeat.comestible]
+nutrition = 5000 # this belongs to snakemeat.comestible
