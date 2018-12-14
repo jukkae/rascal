@@ -389,11 +389,7 @@ std::unique_ptr<Actor> item::makeItemFromToml(World* world, Map* map, int x, int
 std::unique_ptr<Actor> item::makeItem(World* world, Map* map, int x, int y, int difficulty) {
 	int r = d100();
 	if(r < 15) {
-		std::unique_ptr<Actor> jerky = std::make_unique<Actor>(x, y, '%', "jerky", sf::Color(128, 0, 0));
-		jerky->blocks = false;
-		jerky->pickable = std::make_unique<Pickable>();
-		jerky->comestible = std::make_unique<Comestible>();
-		return jerky;
+		return makeItemFromToml(world, map, x, y, "jerky");
 	} else if(r < 25) {
 		std::unique_ptr<Actor> a = std::make_unique<Actor>(x, y, '!', "iodine syringe", sf::Color(128, 128, 0));
 		a->blocks = false;
@@ -458,13 +454,7 @@ std::unique_ptr<Actor> item::makeItem(World* world, Map* map, int x, int y, int 
 		baton->wieldable = std::make_unique<Wieldable>(WieldableType::ONE_HAND);
 		return baton;
 	} else if(r < 90 && difficulty >= 3) {
-		std::unique_ptr<Actor> knuckleduster = std::make_unique<Actor>(x, y, '|', "knuckle duster", sf::Color(128, 255, 0));
-		knuckleduster->blocks = false;
-		knuckleduster->pickable = std::make_unique<Pickable>();
-		knuckleduster->attacker = std::make_unique<Attacker>(2, 6, 2);
-		knuckleduster->attacker->effectGenerator = std::make_unique<EffectGeneratorFor<MoveEffect>>();
-		knuckleduster->wieldable = std::make_unique<Wieldable>(WieldableType::ONE_HAND);
-		return knuckleduster;
+		return makeItemFromToml(world, map, x, y, "knuckleduster");
 	} else if(r < 92) {
 		std::unique_ptr<Actor> pistol = std::make_unique<Actor>(x, y, '\\', "pistol", sf::Color(0, 128, 255));
 		pistol->blocks = false;
