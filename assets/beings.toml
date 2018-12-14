@@ -11,4 +11,19 @@ attacker.dice = 2
 attacker.bonus = 1
 ai.type = "MonsterAi"
 ai.speed = 200
-[dog.body]
+[dog.body] # empty table = default body
+
+[snake]
+name = "snake"
+ch = "s"
+color = "desaturatedGreen"
+destructible.maxHp = 2
+destructible.defense = 0
+destructible.xp = 50
+destructible.corpseName = "dead snake"
+attacker.numberOfDice = 2
+attacker.dice = 2
+attacker.bonus = 0
+ai.type = "MonsterAi"
+ai.speed = 100
+[snake.body] # empty table = default body

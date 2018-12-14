@@ -163,12 +163,11 @@ std::unique_ptr<Actor> npc::makeMonster(World* world, Map* map, int x, int y, in
 	std::unique_ptr<Actor> npc;
 	switch(difficulty) {
 		case 1: {
-			r = 10; // TODO remove when done
 			if(r < 50) {
-				npc = makeDogFromToml(world, map, x, y);
+				npc = makeBeingFromToml(world, map, x, y, "dog");
 				return npc;
 			} else if (r < 60) {
-				npc = makeSnake(world, map, x, y);
+				npc = makeBeingFromToml(world, map, x, y, "snake");
 				return npc;
 			} else if (r < 90) {
 				npc = makeChild(world, map, x, y);
@@ -180,7 +179,7 @@ std::unique_ptr<Actor> npc::makeMonster(World* world, Map* map, int x, int y, in
 		}
 		case 2: {
 			if(r < 40) {
-				npc = makeSnake(world, map, x, y);
+				npc = makeBeingFromToml(world, map, x, y, "snake");
 				return npc;
 			} else if (r < 60) {
 				npc = makeChild(world, map, x, y);
@@ -258,29 +257,21 @@ std::unique_ptr<Actor> npc::makeMonster(World* world, Map* map, int x, int y, in
 	}
 }
 
-std::unique_ptr<Actor> npc::makeDog(World* world, Map* map, int x, int y) {
-		std::unique_ptr<Actor> a = std::make_unique<Actor>(x, y, 'd', "dog", colors::desaturatedGreen, 1);
-		a->destructible = std::make_unique<MonsterDestructible>(2, 0, 25, "dead dog");
-		a->attacker = std::make_unique<Attacker>(1, 2, 1);
-		a->ai = std::make_unique<MonsterAi>(200);
-		a->body = std::make_unique<Body>();
-		return a;
-}
-
-std::unique_ptr<Actor> npc::makeDogFromToml(World* world, Map* map, int x, int y) {
+std::unique_ptr<Actor> npc::makeBeingFromToml(World* world, Map* map, int x, int y, std::string type) {
 	auto beings = toml::parse("assets/beings.toml");
-	auto dog = toml::get<toml::Table>(beings.at("dog"));
+
+	auto being = toml::get<toml::Table>(beings.at(type));
 	auto a = std::make_unique<Actor>(x, y);
 	a->energy = 1;
 	// TODO should check if keys and values are valid
-	a->ch = toml::get<std::string>(dog.at("ch"))[0]; // TODO assert(string.size() == 1);
-	a->name = toml::get<std::string>(dog.at("name"));
-	if(toml::get<std::string>(dog.at("color")) == "desaturatedGreen") {
+	a->ch = toml::get<std::string>(being.at("ch"))[0]; // TODO assert(string.size() == 1);
+	a->name = toml::get<std::string>(being.at("name"));
+	if(toml::get<std::string>(being.at("color")) == "desaturatedGreen") {
 		a->col = colors::desaturatedGreen;
 	} else { a->col = colors::red; }
 
 	try {
-		auto ai = toml::get<toml::Table>(dog.at("ai"));
+		auto ai = toml::get<toml::Table>(being.at("ai"));
 		if(toml::get<std::string>(ai.at("type")) == "MonsterAi") {
 			int speed = toml::get<int>(ai.at("speed"));
 			a->ai = std::make_unique<MonsterAi>(speed); // TODO default
@@ -289,9 +280,8 @@ std::unique_ptr<Actor> npc::makeDogFromToml(World* world, Map* map, int x, int y
 		std::cout << "AI table doesn't exist in config.\n";
 	}
 
-
 	try {
-		auto destructible = toml::get<toml::Table>(dog.at("destructible"));
+		auto destructible = toml::get<toml::Table>(being.at("destructible"));
 		int maxHp = toml::get<int>(destructible.at("maxHp"));
 		int defense = toml::get<int>(destructible.at("defense"));
 		int xp = toml::get<int>(destructible.at("xp"));
@@ -302,7 +292,7 @@ std::unique_ptr<Actor> npc::makeDogFromToml(World* world, Map* map, int x, int y
 	}
 
 	try {
-		auto attacker = toml::get<toml::Table>(dog.at("attacker"));
+		auto attacker = toml::get<toml::Table>(being.at("attacker"));
 		int numberOfDice = toml::get<int>(attacker.at("numberOfDice"));
 		int dice = toml::get<int>(attacker.at("dice"));
 		int bonus = toml::get<int>(attacker.at("bonus"));
@@ -312,19 +302,11 @@ std::unique_ptr<Actor> npc::makeDogFromToml(World* world, Map* map, int x, int y
 	}
 
 	//try {
-		auto body = toml::get<toml::Table>(dog.at("body"));
+		auto body = toml::get<toml::Table>(being.at("body"));
 		a->body = std::make_unique<Body>();
 	//} // TODO figure out a robust way of dealing with this
 
-	return a;
-}
-
-std::unique_ptr<Actor> npc::makeSnake(World* world, Map* map, int x, int y) {
-		std::unique_ptr<Actor> a = std::make_unique<Actor>(x, y, 's', "snake", colors::desaturatedGreen, 1);
-		a->destructible = std::make_unique<MonsterDestructible>(2, 0, 50, "dead snake");
-		a->attacker = std::make_unique<Attacker>(2, 2, 0);
-		a->ai = std::make_unique<MonsterAi>(100);
-		a->body = std::make_unique<Body>();
+	if(type == "snake") { // TODO read from items.toml
 		a->container = std::make_unique<Container>(1);
 		if(d6() >= 3) {
 			std::unique_ptr<Actor> food = std::make_unique<Actor>(x, y, '%', "snakemeat", sf::Color(128, 128, 0));
@@ -335,7 +317,9 @@ std::unique_ptr<Actor> npc::makeSnake(World* world, Map* map, int x, int y) {
 			food->world = world;
 			a->container->add(std::move(food));
 		}
-		return a;
+	}
+
+	return a;
 }
 
 std::unique_ptr<Actor> npc::makeChild(World* world, Map* map, int x, int y) {
