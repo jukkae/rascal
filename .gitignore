@@ -4,7 +4,6 @@ rascal
 rascal.dSYM
 save.txt
 dev_assets/
-include/
 lib/
 obj/
 *.a

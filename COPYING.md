@@ -3,7 +3,7 @@ Files under `src/` and `assets/` © 2017– Jukka Eerikäinen <jukkae@iki.fi>, l
 Files under `include/` and `frameworks/` © their respective copyright owners.
 
 
-[tinytoml library](https://github.com/mayah/tinytoml) © MAYAH, licensed under BSD-2-Clause.
+[cpptoml library](https://github.com/skystrife/cpptoml) © Chase Geigle, licensed under MIT.
 
 [FreeType library](https://www.freetype.org/) © its authors, licensed under FTL.
 
