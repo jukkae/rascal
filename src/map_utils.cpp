@@ -165,89 +165,70 @@ std::unique_ptr<Actor> npc::makeMonster(World* world, Map* map, int x, int y, in
 		case 1: {
 			if(r < 50) {
 				npc = makeBeingFromToml(world, map, x, y, "dog");
-				return npc;
 			} else if (r < 60) {
 				npc = makeBeingFromToml(world, map, x, y, "snake");
-				return npc;
 			} else if (r < 90) {
 				npc = makeBeingFromToml(world, map, x, y, "child");
-				return npc;
 			} else {
 				npc = makeBeingFromToml(world, map, x, y, "punk");
-				return npc;
 			}
+			return npc;
 		}
 		case 2: {
 			if(r < 40) {
 				npc = makeBeingFromToml(world, map, x, y, "snake");
-				return npc;
 			} else if (r < 60) {
 				npc = makeBeingFromToml(world, map, x, y, "child");
-				return npc;
 			} else if (r < 70) {
 				npc = makeBeingFromToml(world, map, x, y, "guard");
-				return npc;
 			} else if (r < 75) {
 				npc = makeBeingFromToml(world, map, x, y, "boxer");
-				return npc;
 			} else {
 				npc = makeBeingFromToml(world, map, x, y, "punk");
-				return npc;
 			}
+			return npc;
 		}
 		case 3: {
 			if(r < 30) {
 				npc = makeBeingFromToml(world, map, x, y, "guard");
-				return npc;
 			} else if (r < 50) {
 				npc = makeBeingFromToml(world, map, x, y, "boxer");
-				return npc;
 			} else if (r < 75) {
 				npc = makeBeingFromToml(world, map, x, y, "mutant");
-				return npc;
 			} else {
 				npc = makeBeingFromToml(world, map, x, y, "punk");
-				return npc;
 			}
+			return npc;
 		}
 		case 4: {
 			if(r < 20) {
 				npc = makeBeingFromToml(world, map, x, y, "guard");
-				return npc;
 			} else if (r < 40) {
 				npc = makeBeingFromToml(world, map, x, y, "boxer");
-				return npc;
 			} else if (r < 65) {
 				npc = makeBeingFromToml(world, map, x, y, "mutant");
-				return npc;
 			} else if (r < 75) {
 				npc = makeBeingFromToml(world, map, x, y, "cyborg");
-				return npc;
 			} else {
 				npc = makeBeingFromToml(world, map, x, y, "punk");
-				return npc;
 			}
+			return npc;
 		}
 		case 5: {
 			if(r < 20) {
 				npc = makeBeingFromToml(world, map, x, y, "guard");
-				return npc;
 			} else if (r < 40) {
 				npc = makeBeingFromToml(world, map, x, y, "boxer");
-				return npc;
 			} else if (r < 65) {
 				npc = makeBeingFromToml(world, map, x, y, "mutant");
-				return npc;
 			} else if (r < 75) {
 				npc = makeBeingFromToml(world, map, x, y, "cyborg");
-				return npc;
 			} else if (r < 80) {
 				npc = makeBeingFromToml(world, map, x, y, "android");
-				return npc;
 			} else {
 				npc = makeBeingFromToml(world, map, x, y, "punk");
-				return npc;
 			}
+			return npc;
 		}
 		default: {
 				npc = makeBeingFromToml(world, map, x, y, "punk");
