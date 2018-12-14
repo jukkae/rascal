@@ -7,7 +7,6 @@ dev_assets/
 include/
 lib/
 obj/
-frameworks/
 *.a
 *.la
 *.lai
