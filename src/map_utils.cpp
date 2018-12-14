@@ -166,7 +166,7 @@ std::unique_ptr<Actor> npc::makeMonster(World* world, Map* map, int x, int y, in
 			//
 			r = 0;
 			if(r == 0) {
-				npc = makeBeingFromToml(world, map, x, y, "boxer");
+				npc = makeBeingFromToml(world, map, x, y, "mutant");
 				return npc;
 			}
 			//
@@ -210,7 +210,7 @@ std::unique_ptr<Actor> npc::makeMonster(World* world, Map* map, int x, int y, in
 				npc = makeBeingFromToml(world, map, x, y, "boxer");
 				return npc;
 			} else if (r < 75) {
-				npc = makeMutant(world, map, x, y);
+				npc = makeBeingFromToml(world, map, x, y, "mutant");
 				return npc;
 			} else {
 				npc = makeBeingFromToml(world, map, x, y, "punk");
@@ -225,7 +225,7 @@ std::unique_ptr<Actor> npc::makeMonster(World* world, Map* map, int x, int y, in
 				npc = makeBeingFromToml(world, map, x, y, "boxer");
 				return npc;
 			} else if (r < 65) {
-				npc = makeMutant(world, map, x, y);
+				npc = makeBeingFromToml(world, map, x, y, "mutant");
 				return npc;
 			} else if (r < 75) {
 				npc = makeCyborg(world, map, x, y);
@@ -243,7 +243,7 @@ std::unique_ptr<Actor> npc::makeMonster(World* world, Map* map, int x, int y, in
 				npc = makeBeingFromToml(world, map, x, y, "boxer");
 				return npc;
 			} else if (r < 65) {
-				npc = makeMutant(world, map, x, y);
+				npc = makeBeingFromToml(world, map, x, y, "mutant");
 				return npc;
 			} else if (r < 75) {
 				npc = makeCyborg(world, map, x, y);
@@ -429,25 +429,6 @@ std::unique_ptr<Actor> npc::makeFighter(World* world, Map* map, int x, int y) {
 
 		a->container->add(std::move(jerky));
 
-		return a;
-}
-
-std::unique_ptr<Actor> npc::makeMutant(World* world, Map* map, int x, int y) {
-		std::unique_ptr<Actor> a = std::make_unique<Actor>(x, y, 'm', "mutant", colors::get("darkerGreen"), 1);
-		a->destructible = std::make_unique<MonsterDestructible>(8, 0, 200, "mutant carcass");
-		a->attacker = std::make_unique<Attacker>(2, 4, 0);
-		a->ai = std::make_unique<MonsterAi>(90);
-		a->body = std::make_unique<Body>();
-		a->container = std::make_unique<Container>(10);
-
-		std::unique_ptr<Actor> ration = std::make_unique<Actor>(x, y, '%', "ration", sf::Color(0, 128, 0));
-		ration->blocks = false;
-		ration->pickable = std::make_unique<Pickable>();
-		ration->comestible = std::make_unique<Comestible>();
-		ration->comestible->nutrition = 30000;
-		ration->world = world; //FIXME that I need to do this is bad and error-prone. Figure out better ways of actor creation.
-
-		a->container->add(std::move(ration));
 		return a;
 }
 

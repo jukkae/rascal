@@ -123,3 +123,24 @@ capacity = 10
 contents = [ { with_probability = 17, content = "knuckleduster" },
              { with_probability = 66, content = "stimpak" } ]
 [boxer.body]
+
+[mutant]
+name = "mutant"
+ch = "m"
+color = "darkerGreen"
+[mutant.destructible]
+maxHp = 8
+defense = 0
+xp = 200
+corpseName = "mutant carcass"
+[mutant.attacker]
+numberOfDice = 2
+dice = 4
+bonus = 0
+[mutant.ai]
+type = "MonsterAi"
+speed = 90
+[mutant.container]
+capacity = 10
+contents = [ { content = "ration" } ]
+[mutant.body]
