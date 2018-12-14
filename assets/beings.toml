@@ -101,3 +101,25 @@ capacity = 10
 contents = [ { content = "ration" },
              { with_probability = 66, content = "stimpak" } ]
 [guard.body]
+
+[boxer]
+name = "boxer"
+ch = "H"
+color = "darkerGreen"
+[boxer.destructible]
+maxHp = 4
+defense = 0
+xp = 70
+corpseName = "boxer carcass"
+[boxer.attacker]
+numberOfDice = 1
+dice = 4
+bonus = 2
+[boxer.ai]
+type = "MonsterAi"
+speed = 100 # what about default?
+[boxer.container]
+capacity = 10
+contents = [ { with_probability = 17, content = "knuckleduster" },
+             { with_probability = 66, content = "stimpak" } ]
+[boxer.body]

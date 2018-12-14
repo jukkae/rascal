@@ -166,7 +166,7 @@ std::unique_ptr<Actor> npc::makeMonster(World* world, Map* map, int x, int y, in
 			//
 			r = 0;
 			if(r == 0) {
-				npc = makeBeingFromToml(world, map, x, y, "guard");
+				npc = makeBeingFromToml(world, map, x, y, "boxer");
 				return npc;
 			}
 			//
@@ -195,7 +195,7 @@ std::unique_ptr<Actor> npc::makeMonster(World* world, Map* map, int x, int y, in
 				npc = makeBeingFromToml(world, map, x, y, "guard");
 				return npc;
 			} else if (r < 75) {
-				npc = makeBoxer(world, map, x, y);
+				npc = makeBeingFromToml(world, map, x, y, "boxer");
 				return npc;
 			} else {
 				npc = makeBeingFromToml(world, map, x, y, "punk");
@@ -207,7 +207,7 @@ std::unique_ptr<Actor> npc::makeMonster(World* world, Map* map, int x, int y, in
 				npc = makeBeingFromToml(world, map, x, y, "guard");
 				return npc;
 			} else if (r < 50) {
-				npc = makeBoxer(world, map, x, y);
+				npc = makeBeingFromToml(world, map, x, y, "boxer");
 				return npc;
 			} else if (r < 75) {
 				npc = makeMutant(world, map, x, y);
@@ -222,7 +222,7 @@ std::unique_ptr<Actor> npc::makeMonster(World* world, Map* map, int x, int y, in
 				npc = makeBeingFromToml(world, map, x, y, "guard");
 				return npc;
 			} else if (r < 40) {
-				npc = makeBoxer(world, map, x, y);
+				npc = makeBeingFromToml(world, map, x, y, "boxer");
 				return npc;
 			} else if (r < 65) {
 				npc = makeMutant(world, map, x, y);
@@ -240,7 +240,7 @@ std::unique_ptr<Actor> npc::makeMonster(World* world, Map* map, int x, int y, in
 				npc = makeBeingFromToml(world, map, x, y, "guard");
 				return npc;
 			} else if (r < 40) {
-				npc = makeBoxer(world, map, x, y);
+				npc = makeBeingFromToml(world, map, x, y, "boxer");
 				return npc;
 			} else if (r < 65) {
 				npc = makeMutant(world, map, x, y);
@@ -384,6 +384,31 @@ std::unique_ptr<Actor> item::makeItemFromToml(World* world, Map* map, int x, int
 		}
 	}
 
+	if(item.count("attacker") != 0) {
+		auto attacker = toml::get<toml::table>(item.at("attacker"));
+		int numberOfDice = toml::get<int>(attacker.at("numberOfDice"));
+		int dice = toml::get<int>(attacker.at("dice"));
+		int bonus = toml::get<int>(attacker.at("bonus"));
+		a->attacker = std::make_unique<Attacker>(numberOfDice, dice, bonus);
+
+		if(attacker.count("effect") != 0) {
+			std::string effectType = toml::get<std::string>(attacker.at("effect"));
+			if(effectType == "MoveEffect") {
+				a->attacker->effectGenerator = std::make_unique<EffectGeneratorFor<MoveEffect>>();
+			}
+			else throw std::logic_error("Not implemented");
+		}
+	}
+
+	if(item.count("wieldable") != 0) {
+		auto wieldable = toml::get<toml::table>(item.at("wieldable"));
+		std::string wieldableType = toml::get<std::string>(wieldable.at("type"));
+		if(wieldableType == "OneHand") {
+			a->wieldable = std::make_unique<Wieldable>(WieldableType::ONE_HAND);
+		}
+		else throw std::logic_error("Not implemented");
+	}
+
 	return a;
 }
 
@@ -404,35 +429,6 @@ std::unique_ptr<Actor> npc::makeFighter(World* world, Map* map, int x, int y) {
 
 		a->container->add(std::move(jerky));
 
-		return a;
-}
-
-std::unique_ptr<Actor> npc::makeBoxer(World* world, Map* map, int x, int y) {
-		std::unique_ptr<Actor> a = std::make_unique<Actor>(x, y, 'H', "boxer", colors::get("darkerGreen"), 1);
-		a->destructible = std::make_unique<MonsterDestructible>(4, 0, 70, "boxer carcass");
-		a->attacker = std::make_unique<Attacker>(1, 4, 2);
-		a->ai = std::make_unique<MonsterAi>();
-		a->body = std::make_unique<Body>();
-		a->container = std::make_unique<Container>(10);
-		if(d6() == 6) {
-			std::unique_ptr<Actor> knuckleduster = std::make_unique<Actor>(x, y, '|', "knuckle duster", sf::Color(128, 255, 128));
-			knuckleduster->blocks = false;
-			knuckleduster->pickable = std::make_unique<Pickable>();
-			knuckleduster->attacker = std::make_unique<Attacker>(2, 6, 2);
-			knuckleduster->attacker->effectGenerator = std::make_unique<EffectGeneratorFor<MoveEffect>>();
-			knuckleduster->wieldable = std::make_unique<Wieldable>(WieldableType::ONE_HAND);
-			knuckleduster->world = world;
-			a->container->add(std::move(knuckleduster));
-		}
-
-		if(d6() >= 3) {
-			std::unique_ptr<Actor> stimpak = std::make_unique<Actor>(x, y, '!', "stimpak", sf::Color(128, 128, 128));
-			stimpak->blocks = false;
-			stimpak->pickable = std::make_unique<Pickable>(TargetSelector(TargetSelector::SelectorType::WEARER, 0), std::make_unique<HealthEffect>(4));
-			stimpak->world = world; //FIXME that I need to do this is bad and error-prone. Figure out better ways of actor creation.
-
-			a->container->add(std::move(stimpak));
-		}
 		return a;
 }
 

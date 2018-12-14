@@ -50,3 +50,19 @@ targetSelector.type = "Wearer"
 targetSelector.range = 0
 effect.type = "HealthEffect"
 effect.value = 8
+
+# Weapons
+
+[knuckleduster]
+name = "knuckle duster"
+ch = "|"
+color = "lightGreen"
+blocks = false
+[knuckleduster.pickable]
+[knuckleduster.attacker]
+numberOfDice = 2
+dice = 6
+bonus = 2
+effect = "MoveEffect"
+[knuckleduster.wieldable]
+type = "OneHand"
