@@ -7,7 +7,16 @@ color = "darkerYellow"
 blocks = false
 [snakemeat.pickable]
 [snakemeat.comestible]
-nutrition = 5000 # this belongs to snakemeat.comestible
+nutrition = 5000
+
+[cookie]
+name = "cookie"
+ch = "%"
+color = "darkerYellow"
+blocks = false
+[cookie.pickable]
+[cookie.comestible]
+nutrition = 10000
 
 # Syringes
 

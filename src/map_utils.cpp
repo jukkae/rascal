@@ -163,6 +163,7 @@ std::unique_ptr<Actor> npc::makeMonster(World* world, Map* map, int x, int y, in
 	std::unique_ptr<Actor> npc;
 	switch(difficulty) {
 		case 1: {
+			r = 95;
 			if(r < 50) {
 				npc = makeBeingFromToml(world, map, x, y, "dog");
 				return npc;
@@ -173,7 +174,7 @@ std::unique_ptr<Actor> npc::makeMonster(World* world, Map* map, int x, int y, in
 				npc = makeBeingFromToml(world, map, x, y, "child");
 				return npc;
 			} else {
-				npc = makePunk(world, map, x, y);
+				npc = makeBeingFromToml(world, map, x, y, "punk");
 				return npc;
 			}
 		}
@@ -191,7 +192,7 @@ std::unique_ptr<Actor> npc::makeMonster(World* world, Map* map, int x, int y, in
 				npc = makeBoxer(world, map, x, y);
 				return npc;
 			} else {
-				npc = makePunk(world, map, x, y);
+				npc = makeBeingFromToml(world, map, x, y, "punk");
 				return npc;
 			}
 		}
@@ -206,7 +207,7 @@ std::unique_ptr<Actor> npc::makeMonster(World* world, Map* map, int x, int y, in
 				npc = makeMutant(world, map, x, y);
 				return npc;
 			} else {
-				npc = makePunk(world, map, x, y);
+				npc = makeBeingFromToml(world, map, x, y, "punk");
 				return npc;
 			}
 		}
@@ -224,7 +225,7 @@ std::unique_ptr<Actor> npc::makeMonster(World* world, Map* map, int x, int y, in
 				npc = makeCyborg(world, map, x, y);
 				return npc;
 			} else {
-				npc = makePunk(world, map, x, y);
+				npc = makeBeingFromToml(world, map, x, y, "punk");
 				return npc;
 			}
 		}
@@ -245,12 +246,12 @@ std::unique_ptr<Actor> npc::makeMonster(World* world, Map* map, int x, int y, in
 				npc = makeAndroid(world, map, x, y);
 				return npc;
 			} else {
-				npc = makePunk(world, map, x, y);
+				npc = makeBeingFromToml(world, map, x, y, "punk");
 				return npc;
 			}
 		}
 		default: {
-				npc = makePunk(world, map, x, y);
+				npc = makeBeingFromToml(world, map, x, y, "punk");
 				return npc;
 			break;
 		}
@@ -378,26 +379,6 @@ std::unique_ptr<Actor> item::makeItemFromToml(World* world, Map* map, int x, int
 	}
 
 	return a;
-}
-
-std::unique_ptr<Actor> npc::makePunk(World* world, Map* map, int x, int y) {
-		std::unique_ptr<Actor> a = std::make_unique<Actor>(x, y, 'h', "punk", colors::get("desaturatedGreen"), 1);
-		a->destructible = std::make_unique<MonsterDestructible>(3, 0, 50, "dead punk");
-		a->attacker = std::make_unique<Attacker>(1, 3, 0);
-		a->ai = std::make_unique<MonsterAi>(100);
-		a->body = std::make_unique<Body>();
-		a->container = std::make_unique<Container>(10);
-
-		std::unique_ptr<Actor> cookie = std::make_unique<Actor>(x, y, '%', "cookie", sf::Color(128, 128, 0));
-		cookie->blocks = false;
-		cookie->pickable = std::make_unique<Pickable>();
-		cookie->comestible = std::make_unique<Comestible>();
-		cookie->comestible->nutrition = 10000;
-		cookie->world = world;
-
-		a->container->add(std::move(cookie));
-
-		return a;
 }
 
 std::unique_ptr<Actor> npc::makeFighter(World* world, Map* map, int x, int y) {

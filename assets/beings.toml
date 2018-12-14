@@ -58,3 +58,24 @@ capacity = 10
 contents = [ { with_probability = 66, content = "super_stimpak" },
              { with_probability = 66, content = "snakemeat" } ]
 [child.body]
+
+[punk]
+name = "punk"
+ch = "h"
+color = "desaturatedGreen"
+[punk.destructible]
+maxHp = 3
+defense = 0
+xp = 50
+corpseName = "dead punk"
+[punk.attacker]
+numberOfDice = 1
+dice = 3
+bonus = 0
+[punk.ai]
+type = "MonsterAi"
+speed = 100
+[punk.container]
+capacity = 10
+contents = [ { content = "cookie" } ]
+[punk.body]
