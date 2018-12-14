@@ -17,7 +17,7 @@
 #include "wieldable.hpp"
 #include "world.hpp"
 #include <SFML/Graphics.hpp>
-#include "../include/cpptoml.h"
+#include "../include/toml.hpp"
 
 void map_utils::addItems(World* world, Map* map, int difficulty) {
 	for(int x = 0; x < map->width; ++x) {
@@ -163,8 +163,9 @@ std::unique_ptr<Actor> npc::makeMonster(World* world, Map* map, int x, int y, in
 	std::unique_ptr<Actor> npc;
 	switch(difficulty) {
 		case 1: {
+			r = 10; // TODO remove when done
 			if(r < 50) {
-				npc = makeDog(world, map, x, y);
+				npc = makeDogFromToml(world, map, x, y);
 				return npc;
 			} else if (r < 60) {
 				npc = makeSnake(world, map, x, y);
@@ -264,6 +265,58 @@ std::unique_ptr<Actor> npc::makeDog(World* world, Map* map, int x, int y) {
 		a->ai = std::make_unique<MonsterAi>(200);
 		a->body = std::make_unique<Body>();
 		return a;
+}
+
+std::unique_ptr<Actor> npc::makeDogFromToml(World* world, Map* map, int x, int y) {
+	auto beings = toml::parse("assets/beings.toml");
+	auto dog = toml::get<toml::Table>(beings.at("dog"));
+	auto a = std::make_unique<Actor>(x, y);
+	a->energy = 1;
+	// TODO should check if keys and values are valid
+	a->ch = toml::get<std::string>(dog.at("ch"))[0]; // TODO assert(string.size() == 1);
+	a->name = toml::get<std::string>(dog.at("name"));
+	if(toml::get<std::string>(dog.at("color")) == "desaturatedGreen") {
+		a->col = colors::desaturatedGreen;
+	} else { a->col = colors::red; }
+
+	try {
+		auto ai = toml::get<toml::Table>(dog.at("ai"));
+		if(toml::get<std::string>(ai.at("type")) == "MonsterAi") {
+			int speed = toml::get<int>(ai.at("speed"));
+			a->ai = std::make_unique<MonsterAi>(speed); // TODO default
+		} else { /* DO WHAT */ }
+	} catch (toml::type_error e) { // TODO probably not the most robust
+		std::cout << "AI table doesn't exist in config.\n";
+	}
+
+
+	try {
+		auto destructible = toml::get<toml::Table>(dog.at("destructible"));
+		int maxHp = toml::get<int>(destructible.at("maxHp"));
+		int defense = toml::get<int>(destructible.at("defense"));
+		int xp = toml::get<int>(destructible.at("xp"));
+		std::string corpseName = toml::get<std::string>(destructible.at("corpseName"));
+		a->destructible = std::make_unique<MonsterDestructible>(maxHp, defense, xp, corpseName);
+	} catch (toml::type_error e) { // TODO probably not the most robust
+		std::cout << "Destructible table doesn't exist in config.\n";
+	}
+
+	try {
+		auto attacker = toml::get<toml::Table>(dog.at("attacker"));
+		int numberOfDice = toml::get<int>(attacker.at("numberOfDice"));
+		int dice = toml::get<int>(attacker.at("dice"));
+		int bonus = toml::get<int>(attacker.at("bonus"));
+		a->attacker = std::make_unique<Attacker>(numberOfDice, dice, bonus);
+	} catch (toml::type_error e) { // TODO probably not the most robust
+		std::cout << "Attacker table doesn't exist in config.\n";
+	}
+
+	//try {
+		auto body = toml::get<toml::Table>(dog.at("body"));
+		a->body = std::make_unique<Body>();
+	//} // TODO figure out a robust way of dealing with this
+
+	return a;
 }
 
 std::unique_ptr<Actor> npc::makeSnake(World* world, Map* map, int x, int y) {

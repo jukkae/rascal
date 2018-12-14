@@ -1,0 +1,14 @@
+[dog]
+name = "dog"
+ch = "d"
+color = "desaturatedGreen"
+destructible.maxHp = 2
+destructible.defense = 0
+destructible.xp = 25
+destructible.corpseName = "dead dog"
+attacker.numberOfDice = 1
+attacker.dice = 2
+attacker.bonus = 1
+ai.type = "MonsterAi"
+ai.speed = 200
+[dog.body]

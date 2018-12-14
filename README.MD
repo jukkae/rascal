@@ -22,9 +22,9 @@ When running `make bundle`, it's possible that macdylibbundler complains `/!\ WA
 - Boost 1.65.1 or higher
 
 ## Acknowledgments
-Includes tinytoml library licensed under BSD 2-Clause "Simplified" License.
+Includes toml11 library licensed under MIT License.
 Includes freetype library licensed under FTL.
-Includes SFML licensed under Zlib.
+Includes SFML licensed under Zlib License.
 Current macOS builds include boost libraries.
 All copyrights of external libraries belong to their authors.
 

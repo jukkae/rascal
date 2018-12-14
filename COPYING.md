@@ -3,7 +3,7 @@ Files under `src/` and `assets/` © 2017– Jukka Eerikäinen <jukkae@iki.fi>, l
 Files under `include/` and `frameworks/` © their respective copyright owners.
 
 
-[cpptoml library](https://github.com/skystrife/cpptoml) © Chase Geigle, licensed under MIT.
+[toml11 library](https://github.com/ToruNiina/toml11) © Toru Niina, licensed under MIT.
 
 [FreeType library](https://www.freetype.org/) © its authors, licensed under FTL.
 
