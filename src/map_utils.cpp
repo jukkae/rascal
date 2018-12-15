@@ -340,12 +340,17 @@ std::unique_ptr<Actor> item::makeItemFromToml(World* world, Map* map, int x, int
 			int effectValue = toml::get<int>(effect.at("value"));
 			if(effectType == "HealthEffect") {
 				e = std::make_unique<HealthEffect>(effectValue);
-			}
-			else throw std::logic_error("Not implemented");
+			} else if (effectType == "IodineEffect") {
+				e = std::make_unique<HealthEffect>(effectValue, HealthEffectType::IODINE);
+			} else throw std::logic_error("Not implemented");
 		}
 		if(pickable.count("targetSelector") != 0 &&
 	     pickable.count("effect") != 0) { // TODO bad check, i know
 			a->pickable = std::make_unique<Pickable>(t, std::move(e));
+		}
+		if(pickable.count("fragile") != 0) {
+			bool fragile = toml::get<bool>(pickable.at("fragile"));
+			a->pickable->fragile = fragile;
 		}
 	}
 
@@ -388,14 +393,11 @@ std::unique_ptr<Actor> item::makeItemFromToml(World* world, Map* map, int x, int
 
 std::unique_ptr<Actor> item::makeItem(World* world, Map* map, int x, int y, int difficulty) {
 	int r = d100();
+	r = 20;
 	if(r < 15) {
 		return makeItemFromToml(world, map, x, y, "jerky");
 	} else if(r < 25) {
-		std::unique_ptr<Actor> a = std::make_unique<Actor>(x, y, '!', "iodine syringe", sf::Color(128, 128, 0));
-		a->blocks = false;
-		a->pickable = std::make_unique<Pickable>(TargetSelector(TargetSelector::SelectorType::WEARER, 0), std::make_unique<HealthEffect>(d3()+2, HealthEffectType::IODINE));
-		a->pickable->fragile = true;
-		return a;
+		return makeItemFromToml(world, map, x, y, "iodine_syringe");
 	} else if(r < 45) {
 		std::unique_ptr<Actor> stimpak = std::make_unique<Actor>(x, y, '!', "stimpak", sf::Color(128, 0, 128));
 		int amount = difficulty + d4();

@@ -60,6 +60,18 @@ targetSelector.range = 0
 effect.type = "HealthEffect"
 effect.value = 8
 
+[iodine_syringe]
+name = "iodine syringe"
+ch = "!"
+color = "darkerYellow"
+blocks = false
+[iodine_syringe.pickable]
+targetSelector.type = "Wearer"
+targetSelector.range = 0
+effect.type = "IodineEffect"
+effect.value = 4
+fragile = true
+
 # Weapons
 
 [knuckleduster]
