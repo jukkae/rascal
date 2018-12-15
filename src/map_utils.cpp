@@ -401,6 +401,9 @@ std::unique_ptr<Actor> item::makeItemFromToml(World* world, Map* map, int x, int
 			std::string effectType = toml::get<std::string>(attacker.at("effect"));
 			if(effectType == "MoveEffect") {
 				a->attacker->effectGenerator = std::make_unique<EffectGeneratorFor<MoveEffect>>();
+			} else if(effectType == "SpeedEffect") {
+				int effectValue = toml::get<int>(attacker.at("effectValue"));
+				a->attacker->effectGenerator = std::make_unique<EffectGeneratorFor<StatusEffectEffect>>(Attribute::SPEED, effectValue);
 			}
 			else throw std::logic_error("Not implemented");
 		}
@@ -432,7 +435,7 @@ std::unique_ptr<Actor> item::makeItemFromToml(World* world, Map* map, int x, int
 
 std::unique_ptr<Actor> item::makeItem(World* world, Map* map, int x, int y, int difficulty) {
 	int r = d100();
-	r = 100;
+	r = 84;
 	if(r < 15) {
 		return makeItemFromToml(world, map, x, y, "jerky");
 	} else if(r < 25) {
@@ -454,13 +457,7 @@ std::unique_ptr<Actor> item::makeItem(World* world, Map* map, int x, int y, int 
 	} else if(r < 80) {
 		return makeItemFromToml(world, map, x, y, "rock");
 	} else if(r < 85/* && difficulty >= 2*/) {
-		std::unique_ptr<Actor> baton = std::make_unique<Actor>(x, y, '|', "stun baton", sf::Color(0, 128, 255));
-		baton->blocks = false;
-		baton->pickable = std::make_unique<Pickable>();
-		baton->attacker = std::make_unique<Attacker>(1, 3, 1);
-		baton->attacker->effectGenerator = std::make_unique<EffectGeneratorFor<StatusEffectEffect>>(Attribute::SPEED, -4);
-		baton->wieldable = std::make_unique<Wieldable>(WieldableType::ONE_HAND);
-		return baton;
+		return makeItemFromToml(world, map, x, y, "baton");
 	} else if(r < 90/* && difficulty >= 3*/) {
 		return makeItemFromToml(world, map, x, y, "knuckleduster");
 	} else if(r < 92) {

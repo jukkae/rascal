@@ -36,6 +36,7 @@ blocks = false
 [ration.comestible]
 nutrition = 30000
 
+
 # Syringes
 
 [stimpak]
@@ -96,6 +97,7 @@ targetSelector.range = 0
 effect.type = "RemovePoisonEffect"
 fragile = true
 
+
 # Weapons
 
 [rock]
@@ -124,6 +126,21 @@ dice = 6
 bonus = 2
 effect = "MoveEffect"
 [knuckleduster.wieldable]
+type = "OneHand"
+
+[baton]
+name = "stun baton"
+ch = "|"
+color = "yellow"
+blocks = false
+[baton.pickable]
+[baton.attacker]
+numberOfDice = 1
+dice = 3
+bonus = 1
+effect = "SpeedEffect"
+effectValue = -4
+[baton.wieldable]
 type = "OneHand"
 
 # Clothing and armor
