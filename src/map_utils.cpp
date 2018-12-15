@@ -159,91 +159,28 @@ void map_utils::addMcGuffin(World* world, Map* map, int level) {
 }
 
 std::unique_ptr<Actor> npc::makeMonster(World* world, Map* map, int x, int y, int difficulty) {
-	int r = d100();
 	std::unique_ptr<Actor> npc;
-	switch(difficulty) {
-		case 1: {
-			auto& levels = map_utils::LevelsTable::getInstance().levelsTable;
+	if(difficulty <= 5) { // TODO actually check against levels.toml
+		auto& levels = map_utils::LevelsTable::getInstance().levelsTable;
 
-			auto level = toml::get<toml::table>(levels.at("1"));
-			auto beings = toml::get<std::vector<toml::table>>(level.at("beings"));
-			std::vector<int> weights;
-			std::vector<std::string> types;
-			for(auto& beingTable : beings) {
-				int weight = toml::get<int>(beingTable.at("with_weight"));
-				std::string beingType = toml::get<std::string>(beingTable.at("being"));
-				weights.push_back(weight);
-				types.push_back(beingType);
-			}
-			std::random_device rd; // TODO should use one for the whole program
-			std::mt19937 gen(rd());
-			std::discrete_distribution<> d(weights.begin(), weights.end());
-			npc = makeBeingFromToml(world, map, x, y, types.at(d(gen)));
-
-			return npc;
+		auto level = toml::get<toml::table>(levels.at(std::to_string(difficulty)));
+		auto beings = toml::get<std::vector<toml::table>>(level.at("beings"));
+		std::vector<int> weights;
+		std::vector<std::string> types;
+		for(auto& beingTable : beings) {
+			int weight = toml::get<int>(beingTable.at("with_weight"));
+			std::string beingType = toml::get<std::string>(beingTable.at("being"));
+			weights.push_back(weight);
+			types.push_back(beingType);
 		}
-		case 2: {
-			if(r < 40) {
-				npc = makeBeingFromToml(world, map, x, y, "snake");
-			} else if (r < 60) {
-				npc = makeBeingFromToml(world, map, x, y, "child");
-			} else if (r < 70) {
-				npc = makeBeingFromToml(world, map, x, y, "guard");
-			} else if (r < 75) {
-				npc = makeBeingFromToml(world, map, x, y, "boxer");
-			} else {
-				npc = makeBeingFromToml(world, map, x, y, "punk");
-			}
-			return npc;
-		}
-		case 3: {
-			if(r < 30) {
-				npc = makeBeingFromToml(world, map, x, y, "guard");
-			} else if (r < 50) {
-				npc = makeBeingFromToml(world, map, x, y, "boxer");
-			} else if (r < 75) {
-				npc = makeBeingFromToml(world, map, x, y, "mutant");
-			} else {
-				npc = makeBeingFromToml(world, map, x, y, "punk");
-			}
-			return npc;
-		}
-		case 4: {
-			if(r < 20) {
-				npc = makeBeingFromToml(world, map, x, y, "guard");
-			} else if (r < 40) {
-				npc = makeBeingFromToml(world, map, x, y, "boxer");
-			} else if (r < 65) {
-				npc = makeBeingFromToml(world, map, x, y, "mutant");
-			} else if (r < 75) {
-				npc = makeBeingFromToml(world, map, x, y, "cyborg");
-			} else {
-				npc = makeBeingFromToml(world, map, x, y, "punk");
-			}
-			return npc;
-		}
-		case 5: {
-			if(r < 20) {
-				npc = makeBeingFromToml(world, map, x, y, "guard");
-			} else if (r < 40) {
-				npc = makeBeingFromToml(world, map, x, y, "boxer");
-			} else if (r < 65) {
-				npc = makeBeingFromToml(world, map, x, y, "mutant");
-			} else if (r < 75) {
-				npc = makeBeingFromToml(world, map, x, y, "cyborg");
-			} else if (r < 80) {
-				npc = makeBeingFromToml(world, map, x, y, "android");
-			} else {
-				npc = makeBeingFromToml(world, map, x, y, "punk");
-			}
-			return npc;
-		}
-		default: {
-				npc = makeBeingFromToml(world, map, x, y, "punk");
-				return npc;
-			break;
-		}
+		std::random_device rd; // TODO should use one for the whole program
+		std::mt19937 gen(rd());
+		std::discrete_distribution<> d(weights.begin(), weights.end());
+		npc = makeBeingFromToml(world, map, x, y, types.at(d(gen)));
+	} else {
+		npc = makeBeingFromToml(world, map, x, y, "punk");
 	}
+	return npc;
 }
 
 std::unique_ptr<Actor> npc::makeBeingFromToml(World* world, Map* map, int x, int y, std::string type) {

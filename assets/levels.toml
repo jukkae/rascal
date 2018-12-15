@@ -7,3 +7,57 @@ beings = [ { with_weight = 5, being = "dog" },
 items = [ { amount = 1, item = "phlebotinum_link"},
           { with_weight = 3, item = "jerky" },
           { with_weight = 2, item = "iodine_syringe"} ]
+
+[2]
+mapType = "Water" # TODO implement
+beings = [ { with_weight = 4, being = "snake" },
+           { with_weight = 2, being = "child" },
+           { with_weight = 1, being = "guard" },
+           { with_weight = 1, being = "boxer" },
+           { with_weight = 2, being = "punk" } ]
+items = [ { amount = 1, item = "phlebotinum_link"},
+          { with_weight = 3, item = "jerky" },
+          { with_weight = 2, item = "iodine_syringe"} ]
+
+[3]
+mapType = "Building"
+beings = [ { with_weight = 3, being = "guard" },
+           { with_weight = 2, being = "boxer" },
+           { with_weight = 3, being = "mutant" },
+           { with_weight = 2, being = "punk" } ]
+items = [ { amount = 1, item = "phlebotinum_link"},
+          { with_weight = 3, item = "jerky" },
+          { with_weight = 2, item = "iodine_syringe"} ]
+
+[4]
+mapType = "Pillars" # TODO implement
+beings = [ { with_weight = 2, being = "guard" },
+           { with_weight = 2, being = "boxer" },
+           { with_weight = 2, being = "mutant" },
+           { with_weight = 1, being = "cyborg" },
+           { with_weight = 2, being = "punk" } ]
+items = [ { amount = 1, item = "phlebotinum_link"},
+          { with_weight = 3, item = "jerky" },
+          { with_weight = 2, item = "iodine_syringe"} ]
+
+[5]
+mapType = "Building"
+beings = [ { with_weight = 2, being = "guard" },
+           { with_weight = 2, being = "boxer" },
+           { with_weight = 1, being = "mutant" },
+           { with_weight = 1, being = "cyborg" },
+           { with_weight = 1, being = "android" },
+           { with_weight = 2, being = "punk" } ]
+items = [ { amount = 1, item = "phlebotinum_link"},
+          { with_weight = 3, item = "jerky" },
+          { with_weight = 2, item = "iodine_syringe"} ]
+
+[default]
+mapType = "Building"
+beings = [ { with_weight = 5, being = "dog" },
+           { with_weight = 1, being = "snake" },
+           { with_weight = 3, being = "child" },
+           { with_weight = 1, being = "punk" } ]
+items = [ { amount = 1, item = "phlebotinum_link"},
+          { with_weight = 3, item = "jerky" },
+          { with_weight = 2, item = "iodine_syringe"} ]
