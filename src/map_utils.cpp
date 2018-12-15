@@ -393,8 +393,16 @@ std::unique_ptr<Actor> item::makeItemFromToml(World* world, Map* map, int x, int
 		std::string wieldableType = toml::get<std::string>(wieldable.at("type"));
 		if(wieldableType == "OneHand") {
 			a->wieldable = std::make_unique<Wieldable>(WieldableType::ONE_HAND);
+		} else if (wieldableType == "Torso") {
+			a->wieldable = std::make_unique<Wieldable>(WieldableType::TORSO);
 		}
 		else throw std::logic_error("Not implemented");
+	}
+
+	if(item.count("armor") != 0) {
+		auto armorTable = toml::get<toml::table>(item.at("armor"));
+		int armorValue = toml::get<int>(armorTable.at("value"));
+		a->armor = std::make_unique<Armor>(armorValue);
 	}
 
 	return a;
@@ -402,7 +410,7 @@ std::unique_ptr<Actor> item::makeItemFromToml(World* world, Map* map, int x, int
 
 std::unique_ptr<Actor> item::makeItem(World* world, Map* map, int x, int y, int difficulty) {
 	int r = d100();
-	r = 79;
+	r = 94;
 	if(r < 15) {
 		return makeItemFromToml(world, map, x, y, "jerky");
 	} else if(r < 25) {
@@ -462,12 +470,7 @@ std::unique_ptr<Actor> item::makeItem(World* world, Map* map, int x, int y, int 
 		rifle->wieldable = std::make_unique<Wieldable>(WieldableType::TWO_HANDS);
 		return rifle;
 	} else if(r < 95){
-		std::unique_ptr<Actor> armor = std::make_unique<Actor>(x, y, '[', "leather armor", sf::Color(0, 128, 255));
-		armor->blocks = false;
-		armor->pickable = std::make_unique<Pickable>();
-		armor->wieldable = std::make_unique<Wieldable>(WieldableType::TORSO);
-		armor->armor = std::make_unique<Armor>(1);
-		return armor;
+		return makeItemFromToml(world, map, x, y, "leather_armor");
 	} else if(r < 96 && difficulty >= 4){
 		std::unique_ptr<Actor> armor = std::make_unique<Actor>(x, y, '[', "combat armor", sf::Color(128, 255, 0));
 		armor->blocks = false;

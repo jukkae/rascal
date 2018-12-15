@@ -125,3 +125,16 @@ bonus = 2
 effect = "MoveEffect"
 [knuckleduster.wieldable]
 type = "OneHand"
+
+# Armor
+
+[leather_armor]
+name = "leather armor"
+ch = "["
+color = "lightBlue"
+blocks = false
+[leather_armor.pickable]
+[leather_armor.wieldable]
+type = "Torso"
+[leather_armor.armor]
+value = 1
