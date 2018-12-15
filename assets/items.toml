@@ -182,3 +182,17 @@ blocks = false
 type = "Feet"
 [combat_boots.armor]
 value = 1
+
+
+# Special items
+
+[blaster_bolt_device]
+name = "blaster bolt device"
+ch = "?"
+color = "darkerYellow"
+blocks = false
+[blaster_bolt_device.pickable]
+targetSelector.type = "ClosestMonster"
+targetSelector.range = 5
+effect.type = "HealthEffect"
+effect.value = -20

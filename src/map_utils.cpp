@@ -329,6 +329,8 @@ std::unique_ptr<Actor> item::makeItemFromToml(World* world, Map* map, int x, int
 			int targetSelectorRange = toml::get<int>(targetSelector.at("range"));
 			if(targetSelectorType == "Wearer") {
 				t = TargetSelector(TargetSelector::SelectorType::WEARER, targetSelectorRange);
+			} else if (targetSelectorType == "ClosestMonster") {
+				t = TargetSelector(TargetSelector::SelectorType::CLOSEST_MONSTER, targetSelectorRange);
 			}
 			else throw std::logic_error("Not implemented");
 		}
@@ -414,7 +416,7 @@ std::unique_ptr<Actor> item::makeItemFromToml(World* world, Map* map, int x, int
 
 std::unique_ptr<Actor> item::makeItem(World* world, Map* map, int x, int y, int difficulty) {
 	int r = d100();
-	r = 98;
+	r = 59;
 	if(r < 15) {
 		return makeItemFromToml(world, map, x, y, "jerky");
 	} else if(r < 25) {
@@ -426,10 +428,7 @@ std::unique_ptr<Actor> item::makeItem(World* world, Map* map, int x, int y, int 
 	} else if(r < 55) {
 		return makeItemFromToml(world, map, x, y, "antidote");
 	} else if(r < 60) {
-		std::unique_ptr<Actor> blasterBoltDevice = std::make_unique<Actor>(x, y, '?', "blaster bolt device", sf::Color(128, 128, 0));
-		blasterBoltDevice->blocks = false;
-		blasterBoltDevice->pickable = std::make_unique<Pickable>(TargetSelector(TargetSelector::SelectorType::CLOSEST_MONSTER, 5), std::make_unique<HealthEffect>(-20));
-		return blasterBoltDevice;
+		return makeItemFromToml(world, map, x, y, "blaster_bolt_device");
 	} else if(r < 65) {
 		std::unique_ptr<Actor> fragGrenade = std::make_unique<Actor>(x, y, '?', "fragmentation grenade", sf::Color(0, 128, 128));
 		fragGrenade->blocks = false;
