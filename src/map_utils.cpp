@@ -395,6 +395,10 @@ std::unique_ptr<Actor> item::makeItemFromToml(World* world, Map* map, int x, int
 			a->wieldable = std::make_unique<Wieldable>(WieldableType::ONE_HAND);
 		} else if (wieldableType == "Torso") {
 			a->wieldable = std::make_unique<Wieldable>(WieldableType::TORSO);
+		} else if (wieldableType == "Head") {
+			a->wieldable = std::make_unique<Wieldable>(WieldableType::HEAD);
+		} else if (wieldableType == "Feet") {
+			a->wieldable = std::make_unique<Wieldable>(WieldableType::FEET);
 		}
 		else throw std::logic_error("Not implemented");
 	}
@@ -410,7 +414,7 @@ std::unique_ptr<Actor> item::makeItemFromToml(World* world, Map* map, int x, int
 
 std::unique_ptr<Actor> item::makeItem(World* world, Map* map, int x, int y, int difficulty) {
 	int r = d100();
-	r = 94;
+	r = 98;
 	if(r < 15) {
 		return makeItemFromToml(world, map, x, y, "jerky");
 	} else if(r < 25) {
@@ -445,7 +449,7 @@ std::unique_ptr<Actor> item::makeItem(World* world, Map* map, int x, int y, int 
 		return teslaCoil;
 	} else if(r < 80) {
 		return makeItemFromToml(world, map, x, y, "rock");
-	} else if(r < 85 && difficulty >= 2) {
+	} else if(r < 85/* && difficulty >= 2*/) {
 		std::unique_ptr<Actor> baton = std::make_unique<Actor>(x, y, '|', "stun baton", sf::Color(0, 128, 255));
 		baton->blocks = false;
 		baton->pickable = std::make_unique<Pickable>();
@@ -453,7 +457,7 @@ std::unique_ptr<Actor> item::makeItem(World* world, Map* map, int x, int y, int 
 		baton->attacker->effectGenerator = std::make_unique<EffectGeneratorFor<StatusEffectEffect>>(Attribute::SPEED, -4);
 		baton->wieldable = std::make_unique<Wieldable>(WieldableType::ONE_HAND);
 		return baton;
-	} else if(r < 90 && difficulty >= 3) {
+	} else if(r < 90/* && difficulty >= 3*/) {
 		return makeItemFromToml(world, map, x, y, "knuckleduster");
 	} else if(r < 92) {
 		std::unique_ptr<Actor> pistol = std::make_unique<Actor>(x, y, '\\', "pistol", sf::Color(0, 128, 255));
@@ -462,7 +466,7 @@ std::unique_ptr<Actor> item::makeItem(World* world, Map* map, int x, int y, int 
 		pistol->rangedAttacker = std::make_unique<RangedAttacker>(1, 4, 0, 10.0);
 		pistol->wieldable = std::make_unique<Wieldable>(WieldableType::ONE_HAND);
 		return pistol;
-	} else if(r < 94 && difficulty >= 3){
+	} else if(r < 94/* && difficulty >= 3*/){
 		std::unique_ptr<Actor> rifle = std::make_unique<Actor>(x, y, '\\', "rifle", sf::Color(128, 0, 255));
 		rifle->blocks = false;
 		rifle->pickable = std::make_unique<Pickable>();
@@ -471,34 +475,14 @@ std::unique_ptr<Actor> item::makeItem(World* world, Map* map, int x, int y, int 
 		return rifle;
 	} else if(r < 95){
 		return makeItemFromToml(world, map, x, y, "leather_armor");
-	} else if(r < 96 && difficulty >= 4){
-		std::unique_ptr<Actor> armor = std::make_unique<Actor>(x, y, '[', "combat armor", sf::Color(128, 255, 0));
-		armor->blocks = false;
-		armor->pickable = std::make_unique<Pickable>();
-		armor->wieldable = std::make_unique<Wieldable>(WieldableType::TORSO);
-		armor->armor = std::make_unique<Armor>(2);
-		return armor;
+	} else if(r < 96/* && difficulty >= 4*/){
+		return makeItemFromToml(world, map, x, y, "combat_armor");
 	} else if(r < 97){
-		std::unique_ptr<Actor> armor = std::make_unique<Actor>(x, y, '[', "flat cap", sf::Color(0, 128, 128));
-		armor->blocks = false;
-		armor->pickable = std::make_unique<Pickable>();
-		armor->wieldable = std::make_unique<Wieldable>(WieldableType::HEAD);
-		armor->armor = std::make_unique<Armor>(1);
-		return armor;
-	} else if(r < 98 && difficulty >= 2){
-		std::unique_ptr<Actor> armor = std::make_unique<Actor>(x, y, '[', "combat helmet", sf::Color(255, 0, 128));
-		armor->blocks = false;
-		armor->pickable = std::make_unique<Pickable>();
-		armor->wieldable = std::make_unique<Wieldable>(WieldableType::HEAD);
-		armor->armor = std::make_unique<Armor>(2);
-		return armor;
+		return makeItemFromToml(world, map, x, y, "flat_cap");
+	} else if(r < 98/* && difficulty >= 2*/){
+		return makeItemFromToml(world, map, x, y, "combat_helmet");
 	} else if(r < 99){
-		std::unique_ptr<Actor> armor = std::make_unique<Actor>(x, y, '[', "combat boots", sf::Color(128, 0, 128));
-		armor->blocks = false;
-		armor->pickable = std::make_unique<Pickable>();
-		armor->wieldable = std::make_unique<Wieldable>(WieldableType::FEET);
-		armor->armor = std::make_unique<Armor>(1);
-		return armor;
+		return makeItemFromToml(world, map, x, y, "combat_boots");
 	} else {
 		std::unique_ptr<Actor> navcomp = std::make_unique<Actor>(x, y, 'q', "navigation computer", sf::Color::Blue, 0);
 		navcomp->blocks = false;

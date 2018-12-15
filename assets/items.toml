@@ -126,7 +126,7 @@ effect = "MoveEffect"
 [knuckleduster.wieldable]
 type = "OneHand"
 
-# Armor
+# Clothing and armor
 
 [leather_armor]
 name = "leather armor"
@@ -137,4 +137,48 @@ blocks = false
 [leather_armor.wieldable]
 type = "Torso"
 [leather_armor.armor]
+value = 1
+
+[combat_armor]
+name = "combat armor"
+ch = "["
+color = "lightGreen"
+blocks = false
+[combat_armor.pickable]
+[combat_armor.wieldable]
+type = "Torso"
+[combat_armor.armor]
+value = 2
+
+[flat_cap]
+name = "flat cap"
+ch = "["
+color = "darkerCyan"
+blocks = false
+[flat_cap.pickable]
+[flat_cap.wieldable]
+type = "Head"
+[flat_cap.armor]
+value = 1
+
+[combat_helmet]
+name = "combat helmet"
+ch = "["
+color = "lightRed"
+blocks = false
+[combat_helmet.pickable]
+[combat_helmet.wieldable]
+type = "Head"
+[combat_helmet.armor]
+value = 2
+
+[combat_boots]
+name = "combat boots"
+ch = "["
+color = "lightBlue"
+blocks = false
+[combat_boots.pickable]
+[combat_boots.wieldable]
+type = "Feet"
+[combat_boots.armor]
 value = 1
