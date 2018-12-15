@@ -6,9 +6,27 @@ beings = [ { with_weight = 5, being = "dog" },
            { with_weight = 1, being = "snake" },
            { with_weight = 3, being = "child" },
            { with_weight = 1, being = "punk" } ]
-items = [ { amount = 1, item = "phlebotinum_link" },
-          { with_weight = 3, item = "jerky" },
-          { with_weight = 2, item = "iodine_syringe" } ]
+items = [ { amount = 1, item = "phlebotinum_link" }, # TODO implement
+          { with_weight = 1, item = "jerky" },
+          { with_weight = 1, item = "iodine_syringe" },
+          { with_weight = 1, item = "stimpak" },
+          { with_weight = 1, item = "fake_stimpak" },
+          { with_weight = 1, item = "antidote" },
+          { with_weight = 1, item = "blaster_bolt_device" },
+          { with_weight = 1, item = "frag_grenade" },
+          { with_weight = 1, item = "confusor" },
+          { with_weight = 1, item = "tesla_coil" },
+          { with_weight = 1, item = "rock" },
+          { with_weight = 1, item = "baton" },
+          { with_weight = 1, item = "knuckleduster" },
+          { with_weight = 1, item = "pistol" },
+          { with_weight = 1, item = "rifle" },
+          { with_weight = 1, item = "leather_armor" },
+          { with_weight = 1, item = "combat_armor" },
+          { with_weight = 1, item = "flat_cap" },
+          { with_weight = 1, item = "combat_helmet" },
+          { with_weight = 1, item = "combat_boots" },
+          { with_weight = 1, item = "navcomp" } ]
 
 [2]
 mapType = "Water" # TODO implement
@@ -20,8 +38,26 @@ beings = [ { with_weight = 4, being = "snake" },
            { with_weight = 1, being = "boxer" },
            { with_weight = 2, being = "punk" } ]
 items = [ { amount = 1, item = "phlebotinum_link" },
-          { with_weight = 3, item = "jerky" },
-          { with_weight = 2, item = "iodine_syringe" } ]
+          { with_weight = 1, item = "jerky" },
+          { with_weight = 1, item = "iodine_syringe" },
+          { with_weight = 1, item = "stimpak" },
+          { with_weight = 1, item = "fake_stimpak" },
+          { with_weight = 1, item = "antidote" },
+          { with_weight = 1, item = "blaster_bolt_device" },
+          { with_weight = 1, item = "frag_grenade" },
+          { with_weight = 1, item = "confusor" },
+          { with_weight = 1, item = "tesla_coil" },
+          { with_weight = 1, item = "rock" },
+          { with_weight = 1, item = "baton" },
+          { with_weight = 1, item = "knuckleduster" },
+          { with_weight = 1, item = "pistol" },
+          { with_weight = 1, item = "rifle" },
+          { with_weight = 1, item = "leather_armor" },
+          { with_weight = 1, item = "combat_armor" },
+          { with_weight = 1, item = "flat_cap" },
+          { with_weight = 1, item = "combat_helmet" },
+          { with_weight = 1, item = "combat_boots" },
+          { with_weight = 1, item = "navcomp" } ]
 
 [3]
 mapType = "Building"
@@ -32,8 +68,26 @@ beings = [ { with_weight = 3, being = "guard" },
            { with_weight = 3, being = "mutant" },
            { with_weight = 2, being = "punk" } ]
 items = [ { amount = 1, item = "phlebotinum_link" },
-          { with_weight = 3, item = "jerky" },
-          { with_weight = 2, item = "iodine_syringe" } ]
+          { with_weight = 1, item = "jerky" },
+          { with_weight = 1, item = "iodine_syringe" },
+          { with_weight = 1, item = "stimpak" },
+          { with_weight = 1, item = "fake_stimpak" },
+          { with_weight = 1, item = "antidote" },
+          { with_weight = 1, item = "blaster_bolt_device" },
+          { with_weight = 1, item = "frag_grenade" },
+          { with_weight = 1, item = "confusor" },
+          { with_weight = 1, item = "tesla_coil" },
+          { with_weight = 1, item = "rock" },
+          { with_weight = 1, item = "baton" },
+          { with_weight = 1, item = "knuckleduster" },
+          { with_weight = 1, item = "pistol" },
+          { with_weight = 1, item = "rifle" },
+          { with_weight = 1, item = "leather_armor" },
+          { with_weight = 1, item = "combat_armor" },
+          { with_weight = 1, item = "flat_cap" },
+          { with_weight = 1, item = "combat_helmet" },
+          { with_weight = 1, item = "combat_boots" },
+          { with_weight = 1, item = "navcomp" } ]
 
 [4]
 mapType = "Pillars" # TODO implement
@@ -45,8 +99,26 @@ beings = [ { with_weight = 2, being = "guard" },
            { with_weight = 1, being = "cyborg" },
            { with_weight = 2, being = "punk" } ]
 items = [ { amount = 1, item = "phlebotinum_link" },
-          { with_weight = 3, item = "jerky" },
-          { with_weight = 2, item = "iodine_syringe" } ]
+          { with_weight = 1, item = "jerky" },
+          { with_weight = 1, item = "iodine_syringe" },
+          { with_weight = 1, item = "stimpak" },
+          { with_weight = 1, item = "fake_stimpak" },
+          { with_weight = 1, item = "antidote" },
+          { with_weight = 1, item = "blaster_bolt_device" },
+          { with_weight = 1, item = "frag_grenade" },
+          { with_weight = 1, item = "confusor" },
+          { with_weight = 1, item = "tesla_coil" },
+          { with_weight = 1, item = "rock" },
+          { with_weight = 1, item = "baton" },
+          { with_weight = 1, item = "knuckleduster" },
+          { with_weight = 1, item = "pistol" },
+          { with_weight = 1, item = "rifle" },
+          { with_weight = 1, item = "leather_armor" },
+          { with_weight = 1, item = "combat_armor" },
+          { with_weight = 1, item = "flat_cap" },
+          { with_weight = 1, item = "combat_helmet" },
+          { with_weight = 1, item = "combat_boots" },
+          { with_weight = 1, item = "navcomp" } ]
 
 [5]
 mapType = "Building"
@@ -59,8 +131,26 @@ beings = [ { with_weight = 2, being = "guard" },
            { with_weight = 1, being = "android" },
            { with_weight = 2, being = "punk" } ]
 items = [ { amount = 1, item = "phlebotinum_link" },
-          { with_weight = 3, item = "jerky" },
-          { with_weight = 2, item = "iodine_syringe" } ]
+          { with_weight = 1, item = "jerky" },
+          { with_weight = 1, item = "iodine_syringe" },
+          { with_weight = 1, item = "stimpak" },
+          { with_weight = 1, item = "fake_stimpak" },
+          { with_weight = 1, item = "antidote" },
+          { with_weight = 1, item = "blaster_bolt_device" },
+          { with_weight = 1, item = "frag_grenade" },
+          { with_weight = 1, item = "confusor" },
+          { with_weight = 1, item = "tesla_coil" },
+          { with_weight = 1, item = "rock" },
+          { with_weight = 1, item = "baton" },
+          { with_weight = 1, item = "knuckleduster" },
+          { with_weight = 1, item = "pistol" },
+          { with_weight = 1, item = "rifle" },
+          { with_weight = 1, item = "leather_armor" },
+          { with_weight = 1, item = "combat_armor" },
+          { with_weight = 1, item = "flat_cap" },
+          { with_weight = 1, item = "combat_helmet" },
+          { with_weight = 1, item = "combat_boots" },
+          { with_weight = 1, item = "navcomp" } ]
 
 [default]
 mapType = "Building"
@@ -71,5 +161,23 @@ beings = [ { with_weight = 5, being = "dog" },
            { with_weight = 3, being = "child" },
            { with_weight = 1, being = "punk" } ]
 items = [ { amount = 1, item = "phlebotinum_link" },
-          { with_weight = 3, item = "jerky" },
-          { with_weight = 2, item = "iodine_syringe" } ]
+          { with_weight = 1, item = "jerky" },
+          { with_weight = 1, item = "iodine_syringe" },
+          { with_weight = 1, item = "stimpak" },
+          { with_weight = 1, item = "fake_stimpak" },
+          { with_weight = 1, item = "antidote" },
+          { with_weight = 1, item = "blaster_bolt_device" },
+          { with_weight = 1, item = "frag_grenade" },
+          { with_weight = 1, item = "confusor" },
+          { with_weight = 1, item = "tesla_coil" },
+          { with_weight = 1, item = "rock" },
+          { with_weight = 1, item = "baton" },
+          { with_weight = 1, item = "knuckleduster" },
+          { with_weight = 1, item = "pistol" },
+          { with_weight = 1, item = "rifle" },
+          { with_weight = 1, item = "leather_armor" },
+          { with_weight = 1, item = "combat_armor" },
+          { with_weight = 1, item = "flat_cap" },
+          { with_weight = 1, item = "combat_helmet" },
+          { with_weight = 1, item = "combat_boots" },
+          { with_weight = 1, item = "navcomp" } ]

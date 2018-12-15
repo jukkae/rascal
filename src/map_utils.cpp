@@ -390,46 +390,25 @@ std::unique_ptr<Actor> item::makeItemFromToml(World* world, Map* map, int x, int
 }
 
 std::unique_ptr<Actor> item::makeItem(World* world, Map* map, int x, int y, int difficulty) {
-	int r = d100();
-	if(r < 15) {
-		return makeItemFromToml(world, map, x, y, "jerky");
-	} else if(r < 25) {
-		return makeItemFromToml(world, map, x, y, "iodine_syringe");
-	} else if(r < 45) {
-		return makeItemFromToml(world, map, x, y, "stimpak");
-	} else if(r < 50) {
-		return makeItemFromToml(world, map, x, y, "fake_stimpak");
-	} else if(r < 55) {
-		return makeItemFromToml(world, map, x, y, "antidote");
-	} else if(r < 60) {
-		return makeItemFromToml(world, map, x, y, "blaster_bolt_device");
-	} else if(r < 65) {
-		return makeItemFromToml(world, map, x, y, "frag_grenade");
-	} else if(r < 70) {
-		return makeItemFromToml(world, map, x, y, "confusor");
-	} else if(r < 75) {
-		return makeItemFromToml(world, map, x, y, "tesla_coil");
-	} else if(r < 80) {
-		return makeItemFromToml(world, map, x, y, "rock");
-	} else if(r < 85/* && difficulty >= 2*/) {
-		return makeItemFromToml(world, map, x, y, "baton");
-	} else if(r < 90/* && difficulty >= 3*/) {
-		return makeItemFromToml(world, map, x, y, "knuckleduster");
-	} else if(r < 92) {
-		return makeItemFromToml(world, map, x, y, "pistol");
-	} else if(r < 94/* && difficulty >= 3*/){
-		return makeItemFromToml(world, map, x, y, "rifle");
-	} else if(r < 95){
-		return makeItemFromToml(world, map, x, y, "leather_armor");
-	} else if(r < 96/* && difficulty >= 4*/){
-		return makeItemFromToml(world, map, x, y, "combat_armor");
-	} else if(r < 97){
-		return makeItemFromToml(world, map, x, y, "flat_cap");
-	} else if(r < 98/* && difficulty >= 2*/){
-		return makeItemFromToml(world, map, x, y, "combat_helmet");
-	} else if(r < 99){
-		return makeItemFromToml(world, map, x, y, "combat_boots");
+	if(difficulty <= 5) { // TODO actual check
+		auto& levels = map_utils::LevelsTable::getInstance().levelsTable;
+
+		auto level = toml::get<toml::table>(levels.at(std::to_string(difficulty)));
+		auto items = toml::get<std::vector<toml::table>>(level.at("items"));
+		std::vector<int> weights;
+		std::vector<std::string> types;
+		for(auto& itemTable : items) {
+			if(itemTable.count("with_weight") == 0) continue;
+			int weight = toml::get<int>(itemTable.at("with_weight"));
+			std::string itemType = toml::get<std::string>(itemTable.at("item"));
+			weights.push_back(weight);
+			types.push_back(itemType);
+		}
+		std::random_device rd; // TODO should use one for the whole program
+		std::mt19937 gen(rd());
+		std::discrete_distribution<> d(weights.begin(), weights.end());
+		return makeItemFromToml(world, map, x, y, types.at(d(gen)));
 	} else {
-		return makeItemFromToml(world, map, x, y, "navcomp");
+		return makeItemFromToml(world, map, x, y, "rock");
 	}
 }
