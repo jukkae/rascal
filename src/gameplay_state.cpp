@@ -82,7 +82,7 @@ void GameplayState::notify(Event& event) {
 	if(auto e = dynamic_cast<PlayerDeathEvent*>(&event)) {
 		std::unique_ptr<State> gameOverState = std::make_unique<GameOverState>(engine, e->actor, player.get());
 		engine->pushState(std::move(gameOverState));
-	} 
+	}
 	if(auto e = dynamic_cast<PlayerStatChangeEvent*>(&event)) {
 		std::unique_ptr<State> levelUpMenuState = std::make_unique<LevelUpMenuState>(engine, e->actor);
 		engine->pushState(std::move(levelUpMenuState));
@@ -105,7 +105,7 @@ void GameplayState::message(sf::Color col, std::string text, ...) {
 void GameplayState::nextLevel() {
 	Actor* downstairs = nullptr;
 	for(auto& a : world->actors) {
-		if(a->name == "stairs (up)") { 
+		if(a->name == "stairs (up)") {
 			downstairs = a.get();
 		}
 	}

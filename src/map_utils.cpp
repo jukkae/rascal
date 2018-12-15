@@ -239,7 +239,7 @@ std::unique_ptr<Actor> npc::makeMonster(World* world, Map* map, int x, int y, in
 }
 
 std::unique_ptr<Actor> npc::makeBeingFromToml(World* world, Map* map, int x, int y, std::string type) {
-	auto beings = toml::parse("assets/beings.toml");
+	auto& beings = map_utils::BeingsTable::getInstance().beingsTable;
 
 	auto being = toml::get<toml::table>(beings.at(type));
 	auto a = std::make_unique<Actor>(x, y);
@@ -305,7 +305,7 @@ std::unique_ptr<Actor> npc::makeBeingFromToml(World* world, Map* map, int x, int
 }
 
 std::unique_ptr<Actor> item::makeItemFromToml(World* world, Map* map, int x, int y, std::string type) {
-	auto items = toml::parse("assets/items.toml");
+	auto& items = map_utils::ItemsTable::getInstance().itemsTable;
 	auto item = toml::get<toml::table>(items.at(type));
 
 	auto a = std::make_unique<Actor>(x, y);
