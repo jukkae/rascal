@@ -33,6 +33,19 @@ private:
   void operator=(BeingsTable const&) = delete;
 };
 
+class LevelsTable {
+public:
+  static LevelsTable& getInstance() {
+    static LevelsTable instance;
+    return instance;
+  }
+  toml::table levelsTable;
+private:
+  LevelsTable() { levelsTable = toml::parse("assets/levels.toml"); }
+  LevelsTable(LevelsTable const&) = delete;
+  void operator=(LevelsTable const&) = delete;
+};
+
 void addItems(World* world, Map* map, int difficulty = 1);
 void addDoors(World* world, Map* map);
 void addMonsters(World* world, Map* map, int difficulty = 1);

@@ -1,0 +1,6 @@
+[1]
+mapType = "Building"
+beings = [ { with_weight = 5, being = "dog" },
+           { with_weight = 1, being = "snake" },
+           { with_weight = 3, being = "child" },
+           { with_weight = 1, being = "punk" } ]

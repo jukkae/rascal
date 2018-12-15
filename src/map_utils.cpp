@@ -163,6 +163,11 @@ std::unique_ptr<Actor> npc::makeMonster(World* world, Map* map, int x, int y, in
 	std::unique_ptr<Actor> npc;
 	switch(difficulty) {
 		case 1: {
+			auto& levels = map_utils::LevelsTable::getInstance().levelsTable;
+
+			auto level = toml::get<toml::table>(levels.at("1"));
+			std::cout << "TODO continue from map_utils.cpp:169\n";
+
 			if(r < 50) {
 				npc = makeBeingFromToml(world, map, x, y, "dog");
 			} else if (r < 60) {
