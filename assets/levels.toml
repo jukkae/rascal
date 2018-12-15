@@ -4,3 +4,6 @@ beings = [ { with_weight = 5, being = "dog" },
            { with_weight = 1, being = "snake" },
            { with_weight = 3, being = "child" },
            { with_weight = 1, being = "punk" } ]
+items = [ { amount = 1, item = "phlebotinum_link"},
+          { with_weight = 3, item = "jerky" },
+          { with_weight = 2, item = "iodine_syringe"} ]

@@ -286,3 +286,10 @@ ch = "q"
 color = "blue"
 blocks = false
 [navcomp.pickable]
+
+[phlebotinum_link]
+name = "phlebotinum link"
+ch = "1"
+color = "white"
+blocks = false
+[phlebotinum_link.pickable]

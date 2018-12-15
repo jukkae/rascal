@@ -166,17 +166,20 @@ std::unique_ptr<Actor> npc::makeMonster(World* world, Map* map, int x, int y, in
 			auto& levels = map_utils::LevelsTable::getInstance().levelsTable;
 
 			auto level = toml::get<toml::table>(levels.at("1"));
-			std::cout << "TODO continue from map_utils.cpp:169\n";
-
-			if(r < 50) {
-				npc = makeBeingFromToml(world, map, x, y, "dog");
-			} else if (r < 60) {
-				npc = makeBeingFromToml(world, map, x, y, "snake");
-			} else if (r < 90) {
-				npc = makeBeingFromToml(world, map, x, y, "child");
-			} else {
-				npc = makeBeingFromToml(world, map, x, y, "punk");
+			auto beings = toml::get<std::vector<toml::table>>(level.at("beings"));
+			std::vector<int> weights;
+			std::vector<std::string> types;
+			for(auto& beingTable : beings) {
+				int weight = toml::get<int>(beingTable.at("with_weight"));
+				std::string beingType = toml::get<std::string>(beingTable.at("being"));
+				weights.push_back(weight);
+				types.push_back(beingType);
 			}
+			std::random_device rd; // TODO should use one for the whole program
+			std::mt19937 gen(rd());
+			std::discrete_distribution<> d(weights.begin(), weights.end());
+			npc = makeBeingFromToml(world, map, x, y, types.at(d(gen)));
+
 			return npc;
 		}
 		case 2: {
