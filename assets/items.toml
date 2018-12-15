@@ -143,6 +143,37 @@ effectValue = -4
 [baton.wieldable]
 type = "OneHand"
 
+[pistol]
+name = "pistol"
+ch = "\\"
+color = "lightRed"
+blocks = false
+[pistol.pickable]
+weight = 5
+[pistol.rangedAttacker]
+numberOfDice = 1
+dice = 4
+bonus = 0
+range = 10.0
+[pistol.wieldable]
+type = "OneHand"
+
+[rifle]
+name = "rifle"
+ch = "\\"
+color = "lightBlue"
+blocks = false
+[rifle.pickable]
+weight = 5
+[rifle.rangedAttacker]
+numberOfDice = 2
+dice = 6
+bonus = 0
+range = 10.0
+[rifle.wieldable]
+type = "TwoHands"
+
+
 # Clothing and armor
 
 [leather_armor]
