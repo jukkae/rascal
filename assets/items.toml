@@ -49,6 +49,16 @@ targetSelector.range = 0
 effect.type = "HealthEffect"
 effect.value = 4
 
+[fake_stimpak]
+name = "stimpak"
+ch = "!"
+color = "grey"
+blocks = false
+[fake_stimpak.pickable]
+targetSelector.type = "Wearer"
+targetSelector.range = 0
+effect.type = "PoisonEffect"
+
 [super_stimpak]
 name = "super stimpak"
 ch = "!"

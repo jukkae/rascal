@@ -337,11 +337,14 @@ std::unique_ptr<Actor> item::makeItemFromToml(World* world, Map* map, int x, int
 		if(pickable.count("effect") != 0) {
 			auto effect = toml::get<toml::table>(pickable.at("effect"));
 			std::string effectType = toml::get<std::string>(effect.at("type"));
-			int effectValue = toml::get<int>(effect.at("value"));
 			if(effectType == "HealthEffect") {
+				int effectValue = toml::get<int>(effect.at("value"));
 				e = std::make_unique<HealthEffect>(effectValue);
 			} else if (effectType == "IodineEffect") {
+				int effectValue = toml::get<int>(effect.at("value"));
 				e = std::make_unique<HealthEffect>(effectValue, HealthEffectType::IODINE);
+			} else if (effectType == "PoisonEffect") {
+				e = std::make_unique<StatusEffectEffect>(std::make_unique<PoisonedStatusEffect>(PoisonedStatusEffect()));
 			} else throw std::logic_error("Not implemented");
 		}
 		if(pickable.count("targetSelector") != 0 &&
@@ -393,24 +396,15 @@ std::unique_ptr<Actor> item::makeItemFromToml(World* world, Map* map, int x, int
 
 std::unique_ptr<Actor> item::makeItem(World* world, Map* map, int x, int y, int difficulty) {
 	int r = d100();
-	r = 20;
+	r = 52;
 	if(r < 15) {
 		return makeItemFromToml(world, map, x, y, "jerky");
 	} else if(r < 25) {
 		return makeItemFromToml(world, map, x, y, "iodine_syringe");
 	} else if(r < 45) {
-		std::unique_ptr<Actor> stimpak = std::make_unique<Actor>(x, y, '!', "stimpak", sf::Color(128, 0, 128));
-		int amount = difficulty + d4();
-		stimpak->blocks = false;
-		stimpak->pickable = std::make_unique<Pickable>(TargetSelector(TargetSelector::SelectorType::WEARER, 0), std::make_unique<HealthEffect>(amount));
-		stimpak->pickable->fragile = true;
-		return stimpak;
+		return makeItemFromToml(world, map, x, y, "stimpak");
 	} else if(r < 50) {
-		std::unique_ptr<Actor> fakeStimpak = std::make_unique<Actor>(x, y, '!', "stimpak", sf::Color(128, 0, 128));
-		fakeStimpak->blocks = false;
-		fakeStimpak->pickable = std::make_unique<Pickable>(TargetSelector(TargetSelector::SelectorType::WEARER, 0), std::make_unique<StatusEffectEffect>(std::make_unique<PoisonedStatusEffect>(PoisonedStatusEffect())));
-		fakeStimpak->pickable->fragile = true;
-		return fakeStimpak;
+		return makeItemFromToml(world, map, x, y, "fake_stimpak");
 	} else if(r < 55) {
 		std::unique_ptr<Actor> antidote = std::make_unique<Actor>(x, y, '!', "antidote", sf::Color(0, 128, 128));
 		antidote->blocks = false;
