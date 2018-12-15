@@ -196,3 +196,45 @@ targetSelector.type = "ClosestMonster"
 targetSelector.range = 5
 effect.type = "HealthEffect"
 effect.value = -20
+
+[frag_grenade]
+name = "frag grenade"
+ch = "?"
+color = "darkerCyan"
+blocks = false
+[frag_grenade.pickable]
+targetSelector.type = "SelectedRange"
+targetSelector.range = 3
+effect.type = "HealthEffect"
+effect.value = -12
+fragile = true
+explosive = true
+
+[confusor]
+name = "confusor"
+ch = "?"
+color = "darkerMagenta"
+blocks = false
+[confusor.pickable]
+targetSelector.type = "SelectedMonster"
+targetSelector.range = 5
+effect.type = "ConfusedAiEffect"
+effect.value = 10
+
+[tesla_coil]
+name = "tesla coil"
+ch = "#"
+color = "grey"
+blocks = false
+[tesla_coil.pickable]
+targetSelector.type = "WearerRange"
+targetSelector.range = 5
+effect.type = "HealthEffect"
+effect.value = -6
+
+[navcomp]
+name = "navigation computer"
+ch = "q"
+color = "blue"
+blocks = false
+[navcomp.pickable]

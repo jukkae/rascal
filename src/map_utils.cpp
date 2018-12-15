@@ -331,6 +331,12 @@ std::unique_ptr<Actor> item::makeItemFromToml(World* world, Map* map, int x, int
 				t = TargetSelector(TargetSelector::SelectorType::WEARER, targetSelectorRange);
 			} else if (targetSelectorType == "ClosestMonster") {
 				t = TargetSelector(TargetSelector::SelectorType::CLOSEST_MONSTER, targetSelectorRange);
+			} else if (targetSelectorType == "SelectedRange") {
+				t = TargetSelector(TargetSelector::SelectorType::SELECTED_RANGE, targetSelectorRange);
+			} else if (targetSelectorType == "SelectedMonster") {
+				t = TargetSelector(TargetSelector::SelectorType::SELECTED_MONSTER, targetSelectorRange);
+			} else if (targetSelectorType == "WearerRange") {
+				t = TargetSelector(TargetSelector::SelectorType::WEARER_RANGE, targetSelectorRange);
 			}
 			else throw std::logic_error("Not implemented");
 		}
@@ -349,8 +355,14 @@ std::unique_ptr<Actor> item::makeItemFromToml(World* world, Map* map, int x, int
 				e = std::make_unique<StatusEffectEffect>(std::make_unique<PoisonedStatusEffect>(PoisonedStatusEffect()));
 			} else if (effectType == "RemovePoisonEffect") {
 				e = std::make_unique<StatusEffectRemovalEffect>(std::make_unique<PoisonedStatusEffect>(PoisonedStatusEffect()));
-			} else throw std::logic_error("Not implemented");
+			} else if (effectType == "ConfusedAiEffect") {
+				int effectValue = toml::get<int>(effect.at("value"));
+				e = std::make_unique<AiChangeEffect>(std::make_unique<ConfusedMonsterAi>(effectValue));
+			}
+
+			else throw std::logic_error("Not implemented");
 		}
+
 		if(pickable.count("targetSelector") != 0 &&
 	     pickable.count("effect") != 0) { // TODO bad check, i know
 			a->pickable = std::make_unique<Pickable>(t, std::move(e));
@@ -358,6 +370,10 @@ std::unique_ptr<Actor> item::makeItemFromToml(World* world, Map* map, int x, int
 		if(pickable.count("fragile") != 0) {
 			bool fragile = toml::get<bool>(pickable.at("fragile"));
 			a->pickable->fragile = fragile;
+		}
+		if(pickable.count("explosive") != 0) {
+			bool explosive = toml::get<bool>(pickable.at("explosive"));
+			a->pickable->explosive = explosive;
 		}
 		if(pickable.count("weight") != 0) {
 			int weight = toml::get<int>(pickable.at("weight"));
@@ -416,7 +432,7 @@ std::unique_ptr<Actor> item::makeItemFromToml(World* world, Map* map, int x, int
 
 std::unique_ptr<Actor> item::makeItem(World* world, Map* map, int x, int y, int difficulty) {
 	int r = d100();
-	r = 59;
+	r = 100;
 	if(r < 15) {
 		return makeItemFromToml(world, map, x, y, "jerky");
 	} else if(r < 25) {
@@ -430,22 +446,11 @@ std::unique_ptr<Actor> item::makeItem(World* world, Map* map, int x, int y, int 
 	} else if(r < 60) {
 		return makeItemFromToml(world, map, x, y, "blaster_bolt_device");
 	} else if(r < 65) {
-		std::unique_ptr<Actor> fragGrenade = std::make_unique<Actor>(x, y, '?', "fragmentation grenade", sf::Color(0, 128, 128));
-		fragGrenade->blocks = false;
-		fragGrenade->pickable = std::make_unique<Pickable>(TargetSelector(TargetSelector::SelectorType::SELECTED_RANGE, 3), std::make_unique<HealthEffect>(-12));
-		fragGrenade->pickable->fragile = true;
-		fragGrenade->pickable->explosive = true;
-		return fragGrenade;
+		return makeItemFromToml(world, map, x, y, "frag_grenade");
 	} else if(r < 70) {
-		std::unique_ptr<Actor> confusor = std::make_unique<Actor>(x, y, '?', "confusor", sf::Color(128, 0, 128));
-		confusor->blocks = false;
-		confusor->pickable = std::make_unique<Pickable>(TargetSelector(TargetSelector::SelectorType::SELECTED_MONSTER, 5), std::make_unique<AiChangeEffect>(std::make_unique<ConfusedMonsterAi>(10)));
-		return confusor;
+		return makeItemFromToml(world, map, x, y, "confusor");
 	} else if(r < 75) {
-		std::unique_ptr<Actor> teslaCoil = std::make_unique<Actor>(x, y, '#', "tesla coil", sf::Color(128, 128, 128));
-		teslaCoil->blocks = false;
-		teslaCoil->pickable = std::make_unique<Pickable>(TargetSelector(TargetSelector::SelectorType::WEARER_RANGE, 5), std::make_unique<HealthEffect>(-6));
-		return teslaCoil;
+		return makeItemFromToml(world, map, x, y, "tesla_coil");
 	} else if(r < 80) {
 		return makeItemFromToml(world, map, x, y, "rock");
 	} else if(r < 85/* && difficulty >= 2*/) {
@@ -483,9 +488,6 @@ std::unique_ptr<Actor> item::makeItem(World* world, Map* map, int x, int y, int 
 	} else if(r < 99){
 		return makeItemFromToml(world, map, x, y, "combat_boots");
 	} else {
-		std::unique_ptr<Actor> navcomp = std::make_unique<Actor>(x, y, 'q', "navigation computer", sf::Color::Blue, 0);
-		navcomp->blocks = false;
-		navcomp->pickable = std::make_unique<Pickable>(TargetSelector(TargetSelector::SelectorType::NONE));
-		return navcomp;
+		return makeItemFromToml(world, map, x, y, "navcomp");
 	}
 }
