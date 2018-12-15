@@ -345,6 +345,8 @@ std::unique_ptr<Actor> item::makeItemFromToml(World* world, Map* map, int x, int
 				e = std::make_unique<HealthEffect>(effectValue, HealthEffectType::IODINE);
 			} else if (effectType == "PoisonEffect") {
 				e = std::make_unique<StatusEffectEffect>(std::make_unique<PoisonedStatusEffect>(PoisonedStatusEffect()));
+			} else if (effectType == "RemovePoisonEffect") {
+				e = std::make_unique<StatusEffectRemovalEffect>(std::make_unique<PoisonedStatusEffect>(PoisonedStatusEffect()));
 			} else throw std::logic_error("Not implemented");
 		}
 		if(pickable.count("targetSelector") != 0 &&
@@ -406,11 +408,7 @@ std::unique_ptr<Actor> item::makeItem(World* world, Map* map, int x, int y, int 
 	} else if(r < 50) {
 		return makeItemFromToml(world, map, x, y, "fake_stimpak");
 	} else if(r < 55) {
-		std::unique_ptr<Actor> antidote = std::make_unique<Actor>(x, y, '!', "antidote", sf::Color(0, 128, 128));
-		antidote->blocks = false;
-		antidote->pickable = std::make_unique<Pickable>(TargetSelector(TargetSelector::SelectorType::WEARER, 0), std::make_unique<StatusEffectRemovalEffect>(std::make_unique<PoisonedStatusEffect>(PoisonedStatusEffect())));
-		antidote->pickable->fragile = true;
-		return antidote;
+		return makeItemFromToml(world, map, x, y, "antidote");
 	} else if(r < 60) {
 		std::unique_ptr<Actor> blasterBoltDevice = std::make_unique<Actor>(x, y, '?', "blaster bolt device", sf::Color(128, 128, 0));
 		blasterBoltDevice->blocks = false;

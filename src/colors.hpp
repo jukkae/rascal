@@ -47,6 +47,7 @@ namespace colors {
 		{ "brightBlue",       Color(100, 100, 255) },
 
 		{ "cyan",             Color(  0, 255, 255) },
+		{ "darkerCyan",       Color(  0, 128, 128) },
 		{ "yellow",           Color(255, 255,   0) },
 		{ "darkerYellow",     Color(128, 128,   0) },
 

@@ -48,6 +48,7 @@ targetSelector.type = "Wearer"
 targetSelector.range = 0
 effect.type = "HealthEffect"
 effect.value = 4
+fragile = true
 
 [fake_stimpak]
 name = "stimpak"
@@ -58,6 +59,7 @@ blocks = false
 targetSelector.type = "Wearer"
 targetSelector.range = 0
 effect.type = "PoisonEffect"
+fragile = true
 
 [super_stimpak]
 name = "super stimpak"
@@ -69,6 +71,7 @@ targetSelector.type = "Wearer"
 targetSelector.range = 0
 effect.type = "HealthEffect"
 effect.value = 8
+fragile = true
 
 [iodine_syringe]
 name = "iodine syringe"
@@ -80,6 +83,17 @@ targetSelector.type = "Wearer"
 targetSelector.range = 0
 effect.type = "IodineEffect"
 effect.value = 4
+fragile = true
+
+[antidote]
+name = "antidote"
+ch = "!"
+color = "darkerCyan"
+blocks = false
+[antidote.pickable]
+targetSelector.type = "Wearer"
+targetSelector.range = 0
+effect.type = "RemovePoisonEffect"
 fragile = true
 
 # Weapons
