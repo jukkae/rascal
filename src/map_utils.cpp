@@ -357,6 +357,10 @@ std::unique_ptr<Actor> item::makeItemFromToml(World* world, Map* map, int x, int
 			bool fragile = toml::get<bool>(pickable.at("fragile"));
 			a->pickable->fragile = fragile;
 		}
+		if(pickable.count("weight") != 0) {
+			int weight = toml::get<int>(pickable.at("weight"));
+			a->pickable->weight = weight;
+		}
 	}
 
 	if(item.count("comestible") != 0) {
@@ -398,7 +402,7 @@ std::unique_ptr<Actor> item::makeItemFromToml(World* world, Map* map, int x, int
 
 std::unique_ptr<Actor> item::makeItem(World* world, Map* map, int x, int y, int difficulty) {
 	int r = d100();
-	r = 52;
+	r = 79;
 	if(r < 15) {
 		return makeItemFromToml(world, map, x, y, "jerky");
 	} else if(r < 25) {
@@ -432,13 +436,7 @@ std::unique_ptr<Actor> item::makeItem(World* world, Map* map, int x, int y, int 
 		teslaCoil->pickable = std::make_unique<Pickable>(TargetSelector(TargetSelector::SelectorType::WEARER_RANGE, 5), std::make_unique<HealthEffect>(-6));
 		return teslaCoil;
 	} else if(r < 80) {
-		std::unique_ptr<Actor> rock = std::make_unique<Actor>(x, y, '|', "rock", sf::Color(255, 0, 128));
-		rock->blocks = false;
-		rock->pickable = std::make_unique<Pickable>();
-		rock->pickable->weight = 5;
-		rock->attacker = std::make_unique<Attacker>(1, 4, 0);
-		rock->wieldable = std::make_unique<Wieldable>(WieldableType::ONE_HAND);
-		return rock;
+		return makeItemFromToml(world, map, x, y, "rock");
 	} else if(r < 85 && difficulty >= 2) {
 		std::unique_ptr<Actor> baton = std::make_unique<Actor>(x, y, '|', "stun baton", sf::Color(0, 128, 255));
 		baton->blocks = false;

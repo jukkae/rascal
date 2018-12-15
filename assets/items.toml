@@ -98,6 +98,20 @@ fragile = true
 
 # Weapons
 
+[rock]
+name = "rock"
+ch = "|"
+color = "lightRed"
+blocks = false
+[rock.pickable]
+weight = 5
+[rock.attacker]
+numberOfDice = 1
+dice = 4
+bonus = 0
+[rock.wieldable]
+type = "OneHand"
+
 [knuckleduster]
 name = "knuckle duster"
 ch = "|"
