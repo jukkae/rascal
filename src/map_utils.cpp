@@ -26,6 +26,7 @@ void map_utils::addItems(World* world, Map* map, int difficulty) {
 
 	auto level = toml::get<toml::table>(levels.at(std::to_string(difficulty)));
 	auto items = toml::get<std::vector<toml::table>>(level.at("items"));
+	auto item_probability = toml::get<float>(level.at("item_probability"));
 
 	// std::map<int, std::string> would be better for both of these
 	std::vector<int> weights;
@@ -49,10 +50,12 @@ void map_utils::addItems(World* world, Map* map, int difficulty) {
 	auto& gen = dice::gen;
 	std::discrete_distribution<> d(weights.begin(), weights.end());
 
+	std::uniform_real_distribution<> probability_distribution(0, 1);
+
 	for(int x = 0; x < map->width; ++x) {
 		for(int y = 0; y < map->height; ++y) {
-			int r = d100();
-			if (!map->isWall(x, y) && r == 1) { // can't use canWalk yet
+			float r = probability_distribution(gen);
+			if (!map->isWall(x, y) && r <= item_probability) { // can't use canWalk yet
 				auto item = item::makeItemFromToml(world, map, x, y, weightedTypes.at(d(gen)));
 				world->addActor(std::move(item));
 			}
@@ -102,6 +105,8 @@ void map_utils::addMonsters(World* world, Map* map, int difficulty) {
 	auto level = toml::get<toml::table>(levels.at(std::to_string(difficulty)));
 	auto beings = toml::get<std::vector<toml::table>>(level.at("beings"));
 
+	auto being_probability = toml::get<float>(level.at("being_probability"));
+
 	std::vector<int> weights;
 	std::vector<std::string> types;
 	std::vector<int> amounts;
@@ -124,11 +129,12 @@ void map_utils::addMonsters(World* world, Map* map, int difficulty) {
 	auto& gen = dice::gen;
 	std::discrete_distribution<> d(weights.begin(), weights.end());
 
+	std::uniform_real_distribution<> probability_distribution(0, 1);
+
 	for(int x = 0; x < map->width; ++x) {
 		for(int y = 0; y < map->height; ++y) {
-			int r = d100();
-			int s = d3();
-			if (!map->isWall(x, y) && r == 1 && s == 1) { // can't use canWalk yet
+			float r = probability_distribution(gen);
+			if (!map->isWall(x, y) && r <= being_probability) { // can't use canWalk yet
 				auto npc = npc::makeBeingFromToml(world, map, x, y, types.at(d(gen)));
 				world->addActor(std::move(npc));
 			}
