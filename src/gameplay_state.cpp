@@ -120,20 +120,11 @@ void GameplayState::nextLevel() {
 void GameplayState::previousLevel() {
 	if(world->level <= 1) return;
 
-	std::unique_ptr<Actor> player;
-	auto it = world->actors.begin();
-	while (it != world->actors.end()) {
-		if ((*it)->isPlayer()) {
-			player = std::move(*it); // i want to move(*it) move(*it)
-			it = world->actors.erase(it);
-		}
-		else ++it;
-	}
+	World* oldWorld = world;
+	World* newWorld = levels.at(world->level-2).get();
+	newWorld->movePlayerFrom(oldWorld);
 
 	world = levels.at(world->level-2).get();
-	for (auto& a : player->container->inventory) a->world = world;
-	world->addActor(std::move(player));
-	world->sortActors();
 }
 
 BOOST_CLASS_EXPORT(GameplayState)
