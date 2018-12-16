@@ -101,14 +101,26 @@ void map_utils::addMonsters(World* world, Map* map, int difficulty) {
 	auto& levels = map_utils::LevelsTable::getInstance().levelsTable;
 	auto level = toml::get<toml::table>(levels.at(std::to_string(difficulty)));
 	auto beings = toml::get<std::vector<toml::table>>(level.at("beings"));
+
 	std::vector<int> weights;
 	std::vector<std::string> types;
+	std::vector<int> amounts;
+	std::vector<std::string> numberedTypes;
+
 	for(auto& beingTable : beings) {
-		int weight = toml::get<int>(beingTable.at("with_weight"));
-		std::string beingType = toml::get<std::string>(beingTable.at("being"));
-		weights.push_back(weight);
-		types.push_back(beingType);
+		if(beingTable.count("amount") != 0) {
+			int amount = toml::get<int>(beingTable.at("amount"));
+			std::string beingType = toml::get<std::string>(beingTable.at("being"));
+			amounts.push_back(amount);
+			numberedTypes.push_back(beingType);
+		} else if(beingTable.count("with_weight") != 0) {
+			int weight = toml::get<int>(beingTable.at("with_weight"));
+			std::string beingType = toml::get<std::string>(beingTable.at("being"));
+			weights.push_back(weight);
+			types.push_back(beingType);
+		} else throw std::logic_error("Malformed beings in levels.toml");
 	}
+
 	std::random_device rd; // TODO should use one for the whole program
 	std::mt19937 gen(rd());
 	std::discrete_distribution<> d(weights.begin(), weights.end());
@@ -121,6 +133,23 @@ void map_utils::addMonsters(World* world, Map* map, int difficulty) {
 				auto npc = npc::makeBeingFromToml(world, map, x, y, types.at(d(gen)));
 				world->addActor(std::move(npc));
 			}
+		}
+	}
+
+	std::uniform_int_distribution<int> x_dist(0, map->width-1);
+	std::uniform_int_distribution<int> y_dist(0, map->height-1);
+	for(int i = 0; i < amounts.size(); ++i) {
+		int amount = amounts.at(i);
+		std::string beingType = numberedTypes.at(i);
+		for(int n = 0; n < amount; ++n) {
+			int x = x_dist(gen);
+			int y = y_dist(gen);
+			while(map->isWall(x, y)) {
+				x = x_dist(gen);
+				y = y_dist(gen);
+			} // TODO in extreme corner cases this might be endless
+			auto being = npc::makeBeingFromToml(world, map, x, y, beingType);
+			world->addActor(std::move(being));
 		}
 	}
 }

@@ -2,7 +2,8 @@
 mapType = "Building"
 being_probability = 0.003 # per tile TODO implement
 item_probability = 0.01 # per tile TODO implement
-beings = [ { with_weight = 5, being = "dog" },
+beings = [ { amount = 1, being = "fighter" },
+           { with_weight = 5, being = "dog" },
            { with_weight = 1, being = "snake" },
            { with_weight = 3, being = "child" },
            { with_weight = 1, being = "punk" } ]
