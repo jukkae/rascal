@@ -26,14 +26,24 @@ void map_utils::addItems(World* world, Map* map, int difficulty) {
 
 	auto level = toml::get<toml::table>(levels.at(std::to_string(difficulty)));
 	auto items = toml::get<std::vector<toml::table>>(level.at("items"));
+
+	// std::map<int, std::string> would be better for both of these
 	std::vector<int> weights;
-	std::vector<std::string> types;
+	std::vector<std::string> weightedTypes;
+	std::vector<int> amounts;
+	std::vector<std::string> numberedTypes;
 	for(auto& itemTable : items) {
-		if(itemTable.count("with_weight") == 0) continue;
-		int weight = toml::get<int>(itemTable.at("with_weight"));
-		std::string itemType = toml::get<std::string>(itemTable.at("item"));
-		weights.push_back(weight);
-		types.push_back(itemType);
+		if(itemTable.count("amount") != 0) {
+			int amount = toml::get<int>(itemTable.at("amount"));
+			std::string itemType = toml::get<std::string>(itemTable.at("item"));
+			amounts.push_back(amount);
+			numberedTypes.push_back(itemType);
+		} else if(itemTable.count("with_weight") != 0) {
+			int weight = toml::get<int>(itemTable.at("with_weight"));
+			std::string itemType = toml::get<std::string>(itemTable.at("item"));
+			weights.push_back(weight);
+			weightedTypes.push_back(itemType);
+		} else throw std::logic_error("Malformed items in levels.toml");
 	}
 	std::random_device rd; // TODO should use one for the whole program
 	std::mt19937 gen(rd());
@@ -43,9 +53,26 @@ void map_utils::addItems(World* world, Map* map, int difficulty) {
 		for(int y = 0; y < map->height; ++y) {
 			int r = d100();
 			if (!map->isWall(x, y) && r == 1) { // can't use canWalk yet
-				auto item = item::makeItemFromToml(world, map, x, y, types.at(d(gen)));
+				auto item = item::makeItemFromToml(world, map, x, y, weightedTypes.at(d(gen)));
 				world->addActor(std::move(item));
 			}
+		}
+	}
+
+	std::uniform_int_distribution<int> x_dist(0, map->width-1);
+	std::uniform_int_distribution<int> y_dist(0, map->height-1);
+	for(int i = 0; i < amounts.size(); ++i) {
+		int amount = amounts.at(i);
+		std::string itemType = numberedTypes.at(i);
+		for(int n = 0; n < amount; ++n) {
+			int x = x_dist(gen);
+			int y = y_dist(gen);
+			while(map->isWall(x, y)) {
+				x = x_dist(gen);
+				y = y_dist(gen);
+			} // TODO in extreme corner cases this might be endless
+			auto item = item::makeItemFromToml(world, map, x, y, itemType);
+			world->addActor(std::move(item));
 		}
 	}
 }
@@ -178,22 +205,6 @@ void map_utils::addStairs(World* world, Map* map, int dsX, int dsY) {
 	downstairs->transporter = std::make_unique<Transporter>();
 	downstairs->transporter->direction = VerticalDirection::DOWN;
 	world->addActor(std::move(downstairs));
-}
-
-void map_utils::addMcGuffin(World* world, Map* map, int level) {
-	int x = 0;
-	int y = 0;
-	do {
-		int r = d100();
-		int s = d100();
-		x = (map->width-1) * r / 100;
-		y = (map->height-1) * s / 100;
-	} while (map->isWall(x, y)); // should check for canWalk, but can't do that yet
-
-	std::unique_ptr<Actor> mcGuffin = std::make_unique<Actor>(x, y, 'q', "phlebotinum link", sf::Color::White, 0);
-    mcGuffin->blocks = false;
-	mcGuffin->pickable = std::make_unique<Pickable>(TargetSelector(TargetSelector::SelectorType::NONE));
-	world->addActor(std::move(mcGuffin));
 }
 
 std::unique_ptr<Actor> npc::makeBeingFromToml(World* world, Map* map, int x, int y, std::string type) {

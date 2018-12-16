@@ -289,7 +289,7 @@ blocks = false
 
 [phlebotinum_link]
 name = "phlebotinum link"
-ch = "1"
+ch = "q"
 color = "white"
 blocks = false
 [phlebotinum_link.pickable]

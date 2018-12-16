@@ -45,7 +45,6 @@ void GameplayState::newGame(Engine* engine) {
 	map_utils::addPlayer(world, &world->map);
 	map_utils::addStairs(world, &world->map);
 	map_utils::addDoors(world, &world->map);
-	map_utils::addMcGuffin(world, &world->map, world->level);
 	map_utils::addItems(world, &world->map);
 	map_utils::addMonsters(world, &world->map);
 	gui.message(sf::Color::Green, "Welcome to year 20XXAD, you strange rascal!\nPrepare to fight or die!");
@@ -174,7 +173,6 @@ void GameplayState::nextLevel() {
 	} else {
 		map_utils::addStairs(world, &world->map);
 	}
-	map_utils::addMcGuffin(world, &world->map, world->level);
 
 	for (auto& a : player->container->inventory) a->world = world;
 	world->addActor(std::move(player));

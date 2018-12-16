@@ -6,7 +6,7 @@ beings = [ { with_weight = 5, being = "dog" },
            { with_weight = 1, being = "snake" },
            { with_weight = 3, being = "child" },
            { with_weight = 1, being = "punk" } ]
-items = [ { amount = 1, item = "phlebotinum_link" }, # TODO implement
+items = [ { amount = 1, item = "phlebotinum_link" },
           { with_weight = 1, item = "jerky" },
           { with_weight = 1, item = "iodine_syringe" },
           { with_weight = 1, item = "stimpak" },
@@ -30,8 +30,8 @@ items = [ { amount = 1, item = "phlebotinum_link" }, # TODO implement
 
 [2]
 mapType = "Water" # TODO implement
-being_probability = 0.003 # per tile TODO implement
-item_probability = 0.01 # per tile TODO implement
+being_probability = 0.003
+item_probability = 0.01
 beings = [ { with_weight = 4, being = "snake" },
            { with_weight = 2, being = "child" },
            { with_weight = 1, being = "guard" },
@@ -61,8 +61,8 @@ items = [ { amount = 1, item = "phlebotinum_link" },
 
 [3]
 mapType = "Building"
-being_probability = 0.003 # per tile TODO implement
-item_probability = 0.01 # per tile TODO implement
+being_probability = 0.003
+item_probability = 0.01
 beings = [ { with_weight = 3, being = "guard" },
            { with_weight = 2, being = "boxer" },
            { with_weight = 3, being = "mutant" },
@@ -91,8 +91,8 @@ items = [ { amount = 1, item = "phlebotinum_link" },
 
 [4]
 mapType = "Pillars" # TODO implement
-being_probability = 0.003 # per tile TODO implement
-item_probability = 0.01 # per tile TODO implement
+being_probability = 0.003
+item_probability = 0.01
 beings = [ { with_weight = 2, being = "guard" },
            { with_weight = 2, being = "boxer" },
            { with_weight = 2, being = "mutant" },
@@ -122,8 +122,8 @@ items = [ { amount = 1, item = "phlebotinum_link" },
 
 [5]
 mapType = "Building"
-being_probability = 0.003 # per tile TODO implement
-item_probability = 0.01 # per tile TODO implement
+being_probability = 0.003
+item_probability = 0.01
 beings = [ { with_weight = 2, being = "guard" },
            { with_weight = 2, being = "boxer" },
            { with_weight = 1, being = "mutant" },
@@ -154,8 +154,8 @@ items = [ { amount = 1, item = "phlebotinum_link" },
 
 [default]
 mapType = "Building"
-being_probability = 0.003 # per tile TODO implement
-item_probability = 0.01 # per tile TODO implement
+being_probability = 0.003
+item_probability = 0.01
 beings = [ { with_weight = 5, being = "dog" },
            { with_weight = 1, being = "snake" },
            { with_weight = 3, being = "child" },
