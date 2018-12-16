@@ -1,6 +1,7 @@
 #include "world.hpp"
 
 #include "body.hpp"
+#include "container.hpp"
 #include "damage.hpp"
 #include "destructible.hpp"
 #include "dice.hpp"
@@ -23,11 +24,22 @@ width(width), height(height), level(level), state(state) {
 	map_utils::addDoors(this, &map);
 	map_utils::addItems(this, &map, level);
 	map_utils::addMonsters(this, &map, level);
-
 }
 
 void World::movePlayerFrom(World* other) {
-	throw std::logic_error("Moving player from world to world not implemented!");
+	std::unique_ptr<Actor> player;
+
+	auto it = other->actors.begin();
+	while (it != other->actors.end()) {
+		if ((*it)->isPlayer()) {
+			player = std::move(*it); // i want to move(*it) move(*it)
+			it = other->actors.erase(it);
+		}
+		else ++it;
+	}
+	for (auto& a : player->container->inventory) a->world = this;
+	this->addActor(std::move(player));
+	this->sortActors();
 }
 
 Actor* World::getPlayer() const {

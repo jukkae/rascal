@@ -40,8 +40,6 @@ void GameplayState::newGame(Engine* engine) {
 
 	world->sortActors();
 
-	world->movePlayerFrom(world); // TODO
-
 	gui.message(sf::Color::Green, "Welcome to year 20XXAD, you strange rascal!\nPrepare to fight or die!");
 }
 
@@ -110,23 +108,6 @@ void GameplayState::nextLevel() {
 		downstairsY = downstairs->y;
 	}
 
-	if(levels.size() > world->level) {
-		std::unique_ptr<Actor> player;
-		auto it = world->actors.begin();
-		while (it != world->actors.end()) {
-			if ((*it)->isPlayer()) {
-				player = std::move(*it); // i want to move(*it) move(*it)
-				it = world->actors.erase(it);
-			}
-			else ++it;
-		}
-		world = levels.at(world->level).get();
-		for (auto& a : player->container->inventory) a->world = world;
-		world->addActor(std::move(player));
-		world->sortActors();
-		return;
-	}
-
 	int newLevel = world->level + 1;
 
 	if(newLevel > 5) {
@@ -140,18 +121,9 @@ void GameplayState::nextLevel() {
 	w->movePlayerFrom(world);
 
 	gui.message(sf::Color::Magenta, "You take a moment to rest, and recover your strength.");
-	world->getPlayer()->destructible->heal(world->getPlayer()->destructible->maxHp/2);
+	Actor* player = w->getPlayer();
+	player->destructible->heal(player->destructible->maxHp/2);
 	gui.message(sf::Color::Red, "After a rare moment of peace, you climb\nhigher. You will escape this hellhole.");
-
-	std::unique_ptr<Actor> player;
-	auto it = world->actors.begin();
-	while (it != world->actors.end()) {
-		if ((*it)->isPlayer()) {
-			player = std::move(*it); // i want to move(*it) move(*it)
-			it = world->actors.erase(it);
-		}
-		else ++it;
-	}
 
 	levels.push_back(std::move(w));
 	world = levels.back().get();
@@ -161,11 +133,6 @@ void GameplayState::nextLevel() {
 	} else {
 		map_utils::addStairs(world, &world->map);
 	}
-
-	for (auto& a : player->container->inventory) a->world = world;
-	world->addActor(std::move(player));
-
-	world->sortActors();
 }
 
 void GameplayState::previousLevel() {
