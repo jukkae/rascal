@@ -181,67 +181,70 @@ void map_utils::addPlayer(World* world, Map* map) {
 	world->addActor(std::move(player));
 }
 
-// TODO now just randomly sprinkle one upstairs, one downstairs
-void map_utils::addStairs(World* world, Map* map) {
-	int x = 0;
-	int y = 0;
-	do {
-		int r = d100();
-		int s = d100();
-		x = (map->width-1) * r / 100;
-		y = (map->height-1) * s / 100;
-	} while (map->isWall(x, y)); // should check for canWalk, but can't do that yet
+void map_utils::addStairs(World* world, Map* map, World* lower, World* upper) {
+	if(lower != nullptr) {
+		Actor* lower_downstairs = nullptr;
+		for(auto& a : lower->actors) {
+			if(a->name == "stairs (up)") {
+				lower_downstairs = a.get();
+			}
+		}
+		int x = 0;
+		int y = 0;
+		if(lower_downstairs) {
+			x = lower_downstairs->x;
+			y = lower_downstairs->y;
+		} else throw std::logic_error("no upstairs found on lower floor!");
 
-	x = world->getPlayer()->x + 1;
-	y = world->getPlayer()->y + 1;
+		if (map->isWall(x, y)){
+			 map->tiles(x, y).walkable = true; // Crude, TODO check if works
+		}
 
-	std::unique_ptr<Actor> stairs = std::make_unique<Actor>(world, x, y, '<', "stairs (up)", sf::Color::White, boost::none);
-    stairs->blocks = false;
-    stairs->fovOnly = false;
-	stairs->transporter = std::make_unique<Transporter>();
-	stairs->transporter->direction = VerticalDirection::UP;
-	world->addActor(std::move(stairs));
+		std::unique_ptr<Actor> downstairs = std::make_unique<Actor>(world, x, y, '>', "stairs (down)", sf::Color::White, boost::none);
+	  downstairs->blocks = false;
+	  downstairs->fovOnly = false;
+		downstairs->transporter = std::make_unique<Transporter>();
+		downstairs->transporter->direction = VerticalDirection::DOWN;
+		world->addActor(std::move(downstairs));
+	} else {
+		int x = 0;
+		int y = 0;
+		do {
+			int r = d100();
+			int s = d100();
+			x = (map->width-1) * r / 100;
+			y = (map->height-1) * s / 100;
+		} while (map->isWall(x, y)); // should check for canWalk, but can't do that yet
 
-	do {
-		int r = d100();
-		int s = d100();
-		x = (map->width-1) * r / 100;
-		y = (map->height-1) * s / 100;
-	} while (map->isWall(x, y)); // should check for canWalk, but can't do that yet
+		std::unique_ptr<Actor> downstairs = std::make_unique<Actor>(world, x, y, '>', "stairs (down)", sf::Color::White, boost::none);
+	  downstairs->blocks = false;
+	  downstairs->fovOnly = false;
+		downstairs->transporter = std::make_unique<Transporter>();
+		downstairs->transporter->direction = VerticalDirection::DOWN;
+		world->addActor(std::move(downstairs));
+	}
+	if(upper != nullptr) {
+		throw std::logic_error("generating a lower floor is not implemented");
+	} else {
+		int x = 0;
+		int y = 0;
+		do {
+			int r = d100();
+			int s = d100();
+			x = (map->width-1) * r / 100;
+			y = (map->height-1) * s / 100;
+		} while (map->isWall(x, y)); // should check for canWalk, but can't do that yet
 
-	std::unique_ptr<Actor> downstairs = std::make_unique<Actor>(world, x, y, '>', "stairs (down)", sf::Color::White, boost::none);
-    downstairs->blocks = false;
-    downstairs->fovOnly = false;
-	downstairs->transporter = std::make_unique<Transporter>();
-	downstairs->transporter->direction = VerticalDirection::DOWN;
-	world->addActor(std::move(downstairs));
-}
+		x = world->getPlayer()->x + 1;
+		y = world->getPlayer()->y + 1;
 
-// TODO temp
-void map_utils::addStairs(World* world, Map* map, int dsX, int dsY) {
-	int x = 0;
-	int y = 0;
-	do {
-		int r = d100();
-		int s = d100();
-		x = (map->width-1) * r / 100;
-		y = (map->height-1) * s / 100;
-	} while (map->isWall(x, y)); // should check for canWalk, but can't do that yet
-
-	std::unique_ptr<Actor> stairs = std::make_unique<Actor>(world, x, y, '<', "stairs (up)", sf::Color::White, boost::none);
-    stairs->blocks = false;
-    stairs->fovOnly = false;
-	stairs->transporter = std::make_unique<Transporter>();
-	stairs->transporter->direction = VerticalDirection::UP;
-	world->addActor(std::move(stairs));
-
-	if (map->isWall(dsX, dsY)) map->tiles(dsX, dsY).walkable = true; // FIXME
-	std::unique_ptr<Actor> downstairs = std::make_unique<Actor>(world, dsX, dsY, '>', "stairs (down)", sf::Color::White, boost::none);
-    downstairs->blocks = false;
-    downstairs->fovOnly = false;
-	downstairs->transporter = std::make_unique<Transporter>();
-	downstairs->transporter->direction = VerticalDirection::DOWN;
-	world->addActor(std::move(downstairs));
+		std::unique_ptr<Actor> upstairs = std::make_unique<Actor>(world, x, y, '<', "stairs (up)", sf::Color::White, boost::none);
+	  upstairs->blocks = false;
+	  upstairs->fovOnly = false;
+		upstairs->transporter = std::make_unique<Transporter>();
+		upstairs->transporter->direction = VerticalDirection::UP;
+		world->addActor(std::move(upstairs));
+	}
 }
 
 std::unique_ptr<Actor> npc::makeBeingFromToml(World* world, Map* map, int x, int y, std::string type) {

@@ -50,8 +50,9 @@ void addItems(World* world, Map* map, int difficulty = 1);
 void addDoors(World* world, Map* map);
 void addMonsters(World* world, Map* map, int difficulty = 1);
 void addPlayer(World* world, Map* map);
-void addStairs(World* world, Map* map);
-void addStairs(World* world, Map* map, int dsX, int dsY); // TODO temp
+void addStairs(World* world, Map* map,
+               World* lower = nullptr,
+               World* upper = nullptr);
 } // namespace map_utils
 
 namespace item {

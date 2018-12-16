@@ -92,22 +92,7 @@ void GameplayState::message(sf::Color col, std::string text, ...) {
 	va_end(args);
 }
 
-// Bulk: map helper?
-// FIXME ugly and brittle
 void GameplayState::nextLevel() {
-	Actor* downstairs = nullptr;
-	for(auto& a : world->actors) {
-		if(a->name == "stairs (up)") {
-			downstairs = a.get();
-		}
-	}
-	int downstairsX = 0;
-	int downstairsY = 0;
-	if(downstairs) {
-		downstairsX = downstairs->x;
-		downstairsY = downstairs->y;
-	}
-
 	int newLevel = world->level + 1;
 
 	if(newLevel > 5) {
@@ -126,13 +111,10 @@ void GameplayState::nextLevel() {
 	gui.message(sf::Color::Red, "After a rare moment of peace, you climb\nhigher. You will escape this hellhole.");
 
 	levels.push_back(std::move(w));
+	World* oldWorld = world;
 	world = levels.back().get();
 
-	if(downstairs) {
-		map_utils::addStairs(world, &world->map, downstairsX, downstairsY);
-	} else {
-		map_utils::addStairs(world, &world->map);
-	}
+	map_utils::addStairs(world, &world->map, oldWorld);
 }
 
 void GameplayState::previousLevel() {
