@@ -20,6 +20,8 @@ public:
 	void sortActors();
 	void applyRadiation(float dt);
 
+	void movePlayerFrom(World* other);
+
 
 	Actor* getPlayer() const;
 	Actor* getClosestMonster(int x, int y, float range) const;

@@ -26,6 +26,10 @@ width(width), height(height), level(level), state(state) {
 
 }
 
+void World::movePlayerFrom(World* other) {
+	throw std::logic_error("Moving player from world to world not implemented!");
+}
+
 Actor* World::getPlayer() const {
 	for(auto& actor : actors) {
         if(actor->isPlayer()) return actor.get();

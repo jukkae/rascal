@@ -40,6 +40,8 @@ void GameplayState::newGame(Engine* engine) {
 
 	world->sortActors();
 
+	world->movePlayerFrom(world); // TODO
+
 	gui.message(sf::Color::Green, "Welcome to year 20XXAD, you strange rascal!\nPrepare to fight or die!");
 }
 
@@ -134,6 +136,8 @@ void GameplayState::nextLevel() {
 
 	std::unique_ptr<World> w = std::make_unique<World>(120, 72, newLevel, this);
 	w->time = world->time;
+
+	w->movePlayerFrom(world);
 
 	gui.message(sf::Color::Magenta, "You take a moment to rest, and recover your strength.");
 	world->getPlayer()->destructible->heal(world->getPlayer()->destructible->maxHp/2);
