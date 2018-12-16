@@ -37,6 +37,7 @@ void World::movePlayerFrom(World* other) {
 		}
 		else ++it;
 	}
+	player->world = this;
 	for (auto& a : player->container->inventory) a->world = this;
 	this->addActor(std::move(player));
 	this->sortActors();
