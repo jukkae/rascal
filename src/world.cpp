@@ -7,6 +7,7 @@
 #include "effect.hpp"
 #include "event.hpp"
 #include "gameplay_state.hpp"
+#include "map_utils.hpp"
 #include <iostream>
 
 World::World(int width, int height, int level):
@@ -18,6 +19,11 @@ width(width), height(height), level(level) {
 	else mapType = MapType::BUILDING;
 	map = Map(width, height, mapType);
 	map.setWorld(this);
+
+	map_utils::addDoors(this, &map);
+	map_utils::addItems(this, &map, level);
+	map_utils::addMonsters(this, &map, level);
+
 }
 
 Actor* World::getPlayer() const {

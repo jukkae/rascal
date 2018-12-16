@@ -42,9 +42,6 @@ void GameplayState::initLoaded(Engine* engine) {
 void GameplayState::newGame(Engine* engine) {
 	map_utils::addPlayer(world, &world->map);
 	map_utils::addStairs(world, &world->map);
-	map_utils::addDoors(world, &world->map);
-	map_utils::addItems(world, &world->map);
-	map_utils::addMonsters(world, &world->map);
 	gui.message(sf::Color::Green, "Welcome to year 20XXAD, you strange rascal!\nPrepare to fight or die!");
 }
 
@@ -157,9 +154,6 @@ void GameplayState::nextLevel() {
 	world = levels.back().get();
 	world->state = this;
 
-	map_utils::addDoors(world, &world->map);
-	map_utils::addItems(world, &world->map, world->level);
-	map_utils::addMonsters(world, &world->map, world->level);
 	if(downstairs) {
 		map_utils::addStairs(world, &world->map, downstairsX, downstairsY);
 	} else {
