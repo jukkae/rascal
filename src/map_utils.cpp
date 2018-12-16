@@ -20,11 +20,31 @@
 #include "../include/toml.hpp"
 
 void map_utils::addItems(World* world, Map* map, int difficulty) {
+	if(difficulty > 5) throw std::logic_error("Levels above 5 not implemented");
+
+	auto& levels = map_utils::LevelsTable::getInstance().levelsTable;
+
+	auto level = toml::get<toml::table>(levels.at(std::to_string(difficulty)));
+	auto items = toml::get<std::vector<toml::table>>(level.at("items"));
+	std::vector<int> weights;
+	std::vector<std::string> types;
+	for(auto& itemTable : items) {
+		if(itemTable.count("with_weight") == 0) continue;
+		int weight = toml::get<int>(itemTable.at("with_weight"));
+		std::string itemType = toml::get<std::string>(itemTable.at("item"));
+		weights.push_back(weight);
+		types.push_back(itemType);
+	}
+	std::random_device rd; // TODO should use one for the whole program
+	std::mt19937 gen(rd());
+	std::discrete_distribution<> d(weights.begin(), weights.end());
+
 	for(int x = 0; x < map->width; ++x) {
 		for(int y = 0; y < map->height; ++y) {
 			int r = d100();
 			if (!map->isWall(x, y) && r == 1) { // can't use canWalk yet
-					world->addActor(item::makeItem(world, map, x, y, difficulty));
+				auto item = item::makeItemFromToml(world, map, x, y, types.at(d(gen)));
+				world->addActor(std::move(item));
 			}
 		}
 	}
@@ -49,12 +69,30 @@ void map_utils::addDoors(World* world, Map* map) {
 }
 
 void map_utils::addMonsters(World* world, Map* map, int difficulty) {
+	if(difficulty > 5) throw std::logic_error("Levels above 5 not implemented");
+
+	auto& levels = map_utils::LevelsTable::getInstance().levelsTable;
+	auto level = toml::get<toml::table>(levels.at(std::to_string(difficulty)));
+	auto beings = toml::get<std::vector<toml::table>>(level.at("beings"));
+	std::vector<int> weights;
+	std::vector<std::string> types;
+	for(auto& beingTable : beings) {
+		int weight = toml::get<int>(beingTable.at("with_weight"));
+		std::string beingType = toml::get<std::string>(beingTable.at("being"));
+		weights.push_back(weight);
+		types.push_back(beingType);
+	}
+	std::random_device rd; // TODO should use one for the whole program
+	std::mt19937 gen(rd());
+	std::discrete_distribution<> d(weights.begin(), weights.end());
+
 	for(int x = 0; x < map->width; ++x) {
 		for(int y = 0; y < map->height; ++y) {
 			int r = d100();
 			int s = d3();
 			if (!map->isWall(x, y) && r == 1 && s == 1) { // can't use canWalk yet
-				world->addActor(npc::makeMonster(world, map, x, y, difficulty));
+				auto npc = npc::makeBeingFromToml(world, map, x, y, types.at(d(gen)));
+				world->addActor(std::move(npc));
 			}
 		}
 	}
@@ -156,31 +194,6 @@ void map_utils::addMcGuffin(World* world, Map* map, int level) {
     mcGuffin->blocks = false;
 	mcGuffin->pickable = std::make_unique<Pickable>(TargetSelector(TargetSelector::SelectorType::NONE));
 	world->addActor(std::move(mcGuffin));
-}
-
-std::unique_ptr<Actor> npc::makeMonster(World* world, Map* map, int x, int y, int difficulty) {
-	std::unique_ptr<Actor> npc;
-	if(difficulty <= 5) { // TODO actually check against levels.toml
-		auto& levels = map_utils::LevelsTable::getInstance().levelsTable;
-
-		auto level = toml::get<toml::table>(levels.at(std::to_string(difficulty)));
-		auto beings = toml::get<std::vector<toml::table>>(level.at("beings"));
-		std::vector<int> weights;
-		std::vector<std::string> types;
-		for(auto& beingTable : beings) {
-			int weight = toml::get<int>(beingTable.at("with_weight"));
-			std::string beingType = toml::get<std::string>(beingTable.at("being"));
-			weights.push_back(weight);
-			types.push_back(beingType);
-		}
-		std::random_device rd; // TODO should use one for the whole program
-		std::mt19937 gen(rd());
-		std::discrete_distribution<> d(weights.begin(), weights.end());
-		npc = makeBeingFromToml(world, map, x, y, types.at(d(gen)));
-	} else {
-		npc = makeBeingFromToml(world, map, x, y, "punk");
-	}
-	return npc;
 }
 
 std::unique_ptr<Actor> npc::makeBeingFromToml(World* world, Map* map, int x, int y, std::string type) {
@@ -387,28 +400,4 @@ std::unique_ptr<Actor> item::makeItemFromToml(World* world, Map* map, int x, int
 	}
 
 	return a;
-}
-
-std::unique_ptr<Actor> item::makeItem(World* world, Map* map, int x, int y, int difficulty) {
-	if(difficulty <= 5) { // TODO actual check
-		auto& levels = map_utils::LevelsTable::getInstance().levelsTable;
-
-		auto level = toml::get<toml::table>(levels.at(std::to_string(difficulty)));
-		auto items = toml::get<std::vector<toml::table>>(level.at("items"));
-		std::vector<int> weights;
-		std::vector<std::string> types;
-		for(auto& itemTable : items) {
-			if(itemTable.count("with_weight") == 0) continue;
-			int weight = toml::get<int>(itemTable.at("with_weight"));
-			std::string itemType = toml::get<std::string>(itemTable.at("item"));
-			weights.push_back(weight);
-			types.push_back(itemType);
-		}
-		std::random_device rd; // TODO should use one for the whole program
-		std::mt19937 gen(rd());
-		std::discrete_distribution<> d(weights.begin(), weights.end());
-		return makeItemFromToml(world, map, x, y, types.at(d(gen)));
-	} else {
-		return makeItemFromToml(world, map, x, y, "rock");
-	}
 }
