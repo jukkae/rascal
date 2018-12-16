@@ -30,7 +30,7 @@ items = [ { amount = 1, item = "phlebotinum_link" },
           { with_weight = 1, item = "navcomp" } ]
 
 [2]
-mapType = "Water" # TODO implement
+mapType = "Water"
 being_probability = 0.003
 item_probability = 0.01
 beings = [ { with_weight = 4, being = "snake" },
@@ -92,7 +92,7 @@ items = [ { amount = 1, item = "phlebotinum_link" },
           { with_weight = 1, item = "navcomp" } ]
 
 [4]
-mapType = "Pillars" # TODO implement
+mapType = "Pillars"
 being_probability = 0.003
 item_probability = 0.01
 beings = [ { with_weight = 2, being = "guard" },

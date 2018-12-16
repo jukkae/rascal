@@ -10,14 +10,28 @@
 #include "gameplay_state.hpp"
 #include "map_utils.hpp"
 #include <iostream>
+#include "../include/toml.hpp"
 
 World::World(int width, int height, int level, GameplayState* state):
 width(width), height(height), level(level), state(state) {
 	radiation = level;
 	MapType mapType;
-	if(level == 2) mapType = MapType::WATER;
-	else if(level == 3) mapType = MapType::PILLARS;
-	else mapType = MapType::BUILDING;
+
+	auto& levelsTable = map_utils::LevelsTable::getInstance().levelsTable;
+	auto levelTable = toml::get<toml::table>(levelsTable.at(std::to_string(level)));
+	std::string mapTypeFromToml = toml::get<std::string>(levelTable.at("mapType"));
+	if(mapTypeFromToml == "Building") {
+		mapType = MapType::BUILDING;
+	} else if(mapTypeFromToml == "Water") {
+		mapType = MapType::WATER;
+	} else if(mapTypeFromToml == "Pillars") {
+		mapType = MapType::PILLARS;
+	} else if(mapTypeFromToml == "Hardcoded") {
+		throw std::logic_error("Hardcoded maps are not implemented yet");
+	} else {
+		throw std::logic_error("This map type is not implemented yet");
+	}
+
 	map = Map(width, height, mapType);
 	map.setWorld(this);
 
