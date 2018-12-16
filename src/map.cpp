@@ -19,15 +19,20 @@
 
 #include <SFML/Graphics/Color.hpp>
 
-Map::Map() : Map(constants::DEFAULT_MAP_WIDTH, constants::DEFAULT_MAP_HEIGHT) {}
+Map::Map() :
+Map(constants::DEFAULT_MAP_WIDTH,
+	  constants::DEFAULT_MAP_HEIGHT,
+		MapType::BUILDING) { }
 
-Map::Map(int width, int height) : width(width), height(height) {
+Map::Map(int width, int height, MapType mapType) :
+width(width), height(height) {
 	tiles = Mat2d<Tile>(width, height);
 	for(int i = 0; i < width; ++i) {
 		for(int j = 0; j < height; ++j) {
 			tiles(i, j) = Tile();
 		}
 	}
+	generateMap(mapType);
 }
 
 void Map::generateMap(MapType mapType) {

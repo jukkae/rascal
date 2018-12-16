@@ -9,8 +9,15 @@
 #include "gameplay_state.hpp"
 #include <iostream>
 
-World::World(int width, int height): width(width), height(height) {
-	map = Map(width, height);
+World::World(int width, int height, int level):
+width(width), height(height), level(level) {
+	radiation = level;
+	MapType mapType;
+	if(level == 2) mapType = MapType::WATER;
+	else if(level == 3) mapType = MapType::PILLARS;
+	else mapType = MapType::BUILDING;
+	map = Map(width, height, mapType);
+	map.setWorld(this);
 }
 
 Actor* World::getPlayer() const {

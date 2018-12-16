@@ -20,15 +20,13 @@
 
 GameplayState::GameplayState(Engine* engine, sf::RenderWindow* window) :
 State(engine, window) {
-	std::unique_ptr<World> w = std::make_unique<World>(120, 72);
+	std::unique_ptr<World> w = std::make_unique<World>(120, 72, 1);
 	levels.push_back(std::move(w));
 	world = levels.front().get();
 	world->state = this;
 
 	gui.setState(this);
 	renderer.setState(this);
-	world->map.setWorld(world);
-	world->map.generateMap();
 	newGame(engine);
 
 	// not really the correct place for following, but w/e
@@ -133,9 +131,9 @@ void GameplayState::nextLevel() {
 		return;
 	}
 
-	std::unique_ptr<World> w = std::make_unique<World>(120, 72);
-	w->level = world->level + 1;
-	w->radiation = world->level + 1;
+	int newLevel = world->level + 1;
+	std::unique_ptr<World> w = std::make_unique<World>(120, 72, newLevel);
+
 	w->time = world->time;
 	if(w->level > 5) {
 		std::unique_ptr<State> victoryState = std::make_unique<GameOverState>(engine, world->getPlayer(), player.get(), true);
@@ -158,12 +156,6 @@ void GameplayState::nextLevel() {
 	levels.push_back(std::move(w));
 	world = levels.back().get();
 	world->state = this;
-
-	world->map = Map(120, 72);
-	world->map.setWorld(world);
-	if(world->level == 2) world->map.generateMap(MapType::WATER);
-	if(world->level == 3) world->map.generateMap(MapType::PILLARS);
-	else world->map.generateMap(MapType::BUILDING);
 
 	map_utils::addDoors(world, &world->map);
 	map_utils::addItems(world, &world->map, world->level);

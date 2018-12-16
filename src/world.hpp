@@ -10,8 +10,8 @@ struct Event;
 class GameplayState;
 class World {
 public:
-	World(): World(120, 72) {;}
-	World(int width, int height);
+	World(): World(120, 72, 1) {;} // TODO this might break s11n
+	World(int width, int height, int level);
 
 	void update();
 	Actor* getNextActor() const { return actors.front().get(); }
@@ -41,7 +41,7 @@ public:
 	int width;
 	int height;
 	int time = 0;
-	int level = 1;
+	int level;
 	int radiation = 1;
 	std::vector<std::unique_ptr<Actor>> actors;
 	Map map;
