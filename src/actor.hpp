@@ -62,9 +62,9 @@ public:
 	std::vector<Actor*> wornArmors;
 	std::experimental::optional<Animation> animation;
 
-	World* world = nullptr;
+	World* world;
 
-	Actor(int x = 0, int y = 0, int ch = 'x', std::string name = "", sf::Color col = sf::Color::White, boost::optional<float> energy = boost::none);
+	Actor(World* world = nullptr, int x = 0, int y = 0, int ch = 'x', std::string name = "", sf::Color col = sf::Color::White, boost::optional<float> energy = boost::none);
 	~Actor();
 	float update(GameplayState* state);
 	float getDistance(int cx, int cy) const; // TODO doesn't belong here i suppose
@@ -113,6 +113,6 @@ private:
 		ar & world;
 		ar & animation;
 		ar & comestible;
-    }   
+    }
 };
 #endif /* ACTOR_HPP */

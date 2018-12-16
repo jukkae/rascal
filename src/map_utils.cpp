@@ -86,7 +86,7 @@ void map_utils::addDoors(World* world, Map* map) {
 			if (!map->isWall(x, y)) {
 				if ((map->isWall(x-1, y) && map->isWall(x+1, y)) ||
 					(map->isWall(x, y-1) && map->isWall(x, y+1))) {
-					std::unique_ptr<Actor> door = std::make_unique<Actor>(x, y, '+', "door", sf::Color::Black, 0);
+					std::unique_ptr<Actor> door = std::make_unique<Actor>(world, x, y, '+', "door", sf::Color::Black, 0);
 					door->openable = std::make_unique<Openable>();
 					door->blocks = true;
 					door->blocksLight = true;
@@ -169,7 +169,7 @@ void map_utils::addPlayer(World* world, Map* map) {
 		y = (map->height-1) * s / 100;
 	} while (map->isWall(x, y)); // should check for canWalk, but can't do that yet
 
-	std::unique_ptr<Actor> player = std::make_unique<Actor>(x, y, '@', "you", sf::Color::White, 2);
+	std::unique_ptr<Actor> player = std::make_unique<Actor>(world, x, y, '@', "you", sf::Color::White, 2);
 	player->attacker     = std::make_unique<Attacker>(1, 2, 1);
 	player->ai           = std::make_unique<PlayerAi>();
 	player->container    = std::make_unique<Container>(100);
@@ -192,7 +192,7 @@ void map_utils::addStairs(World* world, Map* map) {
 		y = (map->height-1) * s / 100;
 	} while (map->isWall(x, y)); // should check for canWalk, but can't do that yet
 
-	std::unique_ptr<Actor> stairs = std::make_unique<Actor>(x, y, '<', "stairs (up)", sf::Color::White, boost::none);
+	std::unique_ptr<Actor> stairs = std::make_unique<Actor>(world, x, y, '<', "stairs (up)", sf::Color::White, boost::none);
     stairs->blocks = false;
     stairs->fovOnly = false;
 	stairs->transporter = std::make_unique<Transporter>();
@@ -206,7 +206,7 @@ void map_utils::addStairs(World* world, Map* map) {
 		y = (map->height-1) * s / 100;
 	} while (map->isWall(x, y)); // should check for canWalk, but can't do that yet
 
-	std::unique_ptr<Actor> downstairs = std::make_unique<Actor>(x, y, '>', "stairs (down)", sf::Color::White, boost::none);
+	std::unique_ptr<Actor> downstairs = std::make_unique<Actor>(world, x, y, '>', "stairs (down)", sf::Color::White, boost::none);
     downstairs->blocks = false;
     downstairs->fovOnly = false;
 	downstairs->transporter = std::make_unique<Transporter>();
@@ -225,7 +225,7 @@ void map_utils::addStairs(World* world, Map* map, int dsX, int dsY) {
 		y = (map->height-1) * s / 100;
 	} while (map->isWall(x, y)); // should check for canWalk, but can't do that yet
 
-	std::unique_ptr<Actor> stairs = std::make_unique<Actor>(x, y, '<', "stairs (up)", sf::Color::White, boost::none);
+	std::unique_ptr<Actor> stairs = std::make_unique<Actor>(world, x, y, '<', "stairs (up)", sf::Color::White, boost::none);
     stairs->blocks = false;
     stairs->fovOnly = false;
 	stairs->transporter = std::make_unique<Transporter>();
@@ -233,7 +233,7 @@ void map_utils::addStairs(World* world, Map* map, int dsX, int dsY) {
 	world->addActor(std::move(stairs));
 
 	if (map->isWall(dsX, dsY)) map->tiles(dsX, dsY).walkable = true; // FIXME
-	std::unique_ptr<Actor> downstairs = std::make_unique<Actor>(dsX, dsY, '>', "stairs (down)", sf::Color::White, boost::none);
+	std::unique_ptr<Actor> downstairs = std::make_unique<Actor>(world, dsX, dsY, '>', "stairs (down)", sf::Color::White, boost::none);
     downstairs->blocks = false;
     downstairs->fovOnly = false;
 	downstairs->transporter = std::make_unique<Transporter>();
@@ -245,7 +245,7 @@ std::unique_ptr<Actor> npc::makeBeingFromToml(World* world, Map* map, int x, int
 	auto& beings = map_utils::BeingsTable::getInstance().beingsTable;
 
 	auto being = toml::get<toml::table>(beings.at(type));
-	auto a = std::make_unique<Actor>(x, y);
+	auto a = std::make_unique<Actor>(world, x, y);
 	a->energy = 1;
 	// TODO should check if keys and values are valid
 	a->ch = toml::get<std::string>(being.at("ch"))[0]; // TODO assert(string.size() == 1);
@@ -311,7 +311,7 @@ std::unique_ptr<Actor> item::makeItemFromToml(World* world, Map* map, int x, int
 	auto& items = map_utils::ItemsTable::getInstance().itemsTable;
 	auto item = toml::get<toml::table>(items.at(type));
 
-	auto a = std::make_unique<Actor>(x, y);
+	auto a = std::make_unique<Actor>(world, x, y);
 	a->world = world;
 
 	// TODO should check if keys and values are valid

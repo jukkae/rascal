@@ -27,10 +27,6 @@ State(engine, window) {
 	gui.setState(this);
 	renderer.setState(this);
 	newGame(engine);
-
-	// not really the correct place for following, but w/e
-	for (auto& a : world->actors) a->world = world;
-	world->sortActors();
 }
 
 void GameplayState::initLoaded(Engine* engine) {
@@ -41,6 +37,9 @@ void GameplayState::initLoaded(Engine* engine) {
 void GameplayState::newGame(Engine* engine) {
 	map_utils::addPlayer(world, &world->map);
 	map_utils::addStairs(world, &world->map);
+
+	world->sortActors();
+
 	gui.message(sf::Color::Green, "Welcome to year 20XXAD, you strange rascal!\nPrepare to fight or die!");
 }
 
@@ -122,7 +121,6 @@ void GameplayState::nextLevel() {
 		world = levels.at(world->level).get();
 		for (auto& a : player->container->inventory) a->world = world;
 		world->addActor(std::move(player));
-		for (auto& a : world->actors) a->world = world;
 		world->sortActors();
 		return;
 	}
@@ -163,7 +161,6 @@ void GameplayState::nextLevel() {
 	for (auto& a : player->container->inventory) a->world = world;
 	world->addActor(std::move(player));
 
-	for (auto& a : world->actors) a->world = world;
 	world->sortActors();
 }
 
@@ -183,7 +180,6 @@ void GameplayState::previousLevel() {
 	world = levels.at(world->level-2).get();
 	for (auto& a : player->container->inventory) a->world = world;
 	world->addActor(std::move(player));
-	for (auto& a : world->actors) a->world = world;
 	world->sortActors();
 }
 
