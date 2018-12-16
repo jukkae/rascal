@@ -129,13 +129,15 @@ void GameplayState::nextLevel() {
 	}
 
 	int newLevel = world->level + 1;
-	std::unique_ptr<World> w = std::make_unique<World>(120, 72, newLevel);
 
-	w->time = world->time;
-	if(w->level > 5) {
+	if(newLevel > 5) {
 		std::unique_ptr<State> victoryState = std::make_unique<GameOverState>(engine, world->getPlayer(), player.get(), true);
 		engine->pushState(std::move(victoryState));
 	}
+
+	std::unique_ptr<World> w = std::make_unique<World>(120, 72, newLevel);
+	w->time = world->time;
+
 	gui.message(sf::Color::Magenta, "You take a moment to rest, and recover your strength.");
 	world->getPlayer()->destructible->heal(world->getPlayer()->destructible->maxHp/2);
 	gui.message(sf::Color::Red, "After a rare moment of peace, you climb\nhigher. You will escape this hellhole.");
