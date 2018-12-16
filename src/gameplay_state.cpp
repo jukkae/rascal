@@ -20,10 +20,9 @@
 
 GameplayState::GameplayState(Engine* engine, sf::RenderWindow* window) :
 State(engine, window) {
-	std::unique_ptr<World> w = std::make_unique<World>(120, 72, 1);
+	std::unique_ptr<World> w = std::make_unique<World>(120, 72, 1, this);
 	levels.push_back(std::move(w));
 	world = levels.front().get();
-	world->state = this;
 
 	gui.setState(this);
 	renderer.setState(this);
@@ -135,7 +134,7 @@ void GameplayState::nextLevel() {
 		engine->pushState(std::move(victoryState));
 	}
 
-	std::unique_ptr<World> w = std::make_unique<World>(120, 72, newLevel);
+	std::unique_ptr<World> w = std::make_unique<World>(120, 72, newLevel, this);
 	w->time = world->time;
 
 	gui.message(sf::Color::Magenta, "You take a moment to rest, and recover your strength.");
@@ -154,7 +153,6 @@ void GameplayState::nextLevel() {
 
 	levels.push_back(std::move(w));
 	world = levels.back().get();
-	world->state = this;
 
 	if(downstairs) {
 		map_utils::addStairs(world, &world->map, downstairsX, downstairsY);

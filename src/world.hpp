@@ -10,8 +10,8 @@ struct Event;
 class GameplayState;
 class World {
 public:
-	World(): World(120, 72, 1) {;} // TODO this might break s11n
-	World(int width, int height, int level);
+	World(): World(120, 72, 1, nullptr) {;} // TODO this might break s11n
+	World(int width, int height, int level, GameplayState* state);
 
 	void update();
 	Actor* getNextActor() const { return actors.front().get(); }
@@ -45,7 +45,7 @@ public:
 	int radiation = 1;
 	std::vector<std::unique_ptr<Actor>> actors;
 	Map map;
-	GameplayState* state = nullptr;
+	GameplayState* state;
 private:
 	friend class boost::serialization::access;
     template<class Archive>

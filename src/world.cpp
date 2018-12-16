@@ -10,8 +10,8 @@
 #include "map_utils.hpp"
 #include <iostream>
 
-World::World(int width, int height, int level):
-width(width), height(height), level(level) {
+World::World(int width, int height, int level, GameplayState* state):
+width(width), height(height), level(level), state(state) {
 	radiation = level;
 	MapType mapType;
 	if(level == 2) mapType = MapType::WATER;
