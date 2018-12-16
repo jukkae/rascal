@@ -4,11 +4,8 @@ rascal
 rascal.dSYM
 save.txt
 dev_assets/
-include/
 lib/
 obj/
-frameworks/
-macosx/
 *.a
 *.la
 *.lai
@@ -18,3 +15,5 @@ macosx/
 *.pch-*
 *.zip
 tags
+
+*.swp

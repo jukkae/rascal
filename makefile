@@ -1,8 +1,8 @@
 # Compile for macOs
 
 CXX=clang
-CPPFLAGS=-Wall -std=c++1z
-LDFLAGS=-lc++ -lboost_serialization -framework SFML -framework sfml-window -framework sfml-graphics -framework sfml-system -framework sfml-audio -framework CoreFoundation -rpath @executable_path/../Resources/Frameworks
+CPPFLAGS=-Wall -std=c++1z -I/usr/local/sys/usr/include
+LDFLAGS=-L/usr/local/lib -lc++ -lboost_serialization -lsfml-window -lsfml-graphics -lsfml-system -lsfml-audio -framework CoreFoundation -rpath @executable_path/../Resources/Frameworks
 BUNDLE_BUILD=-DBUNDLE_BUILD
 
 # precompile headers
@@ -93,8 +93,7 @@ macosx/$(APPNAME).icns: macosx/$(APPNAME)Icon.png
 bundle-deps:
 	cp -r ./assets/ $(APPBUNDLE)/Contents/Resources/Assets/
 	cp -r ./frameworks/ $(APPBUNDLE)/Contents/Resources/Frameworks/
-	cp -r ./macosx/freetype.framework/ $(APPBUNDLE)/Contents/Resources/Frameworks/freetype.framework/
-	cp -r ./macosx/freetype.framework/ $(APPBUNDLE)/Contents/Frameworks/freetype.framework/
+	cp -r ./frameworks/ $(APPBUNDLE)/Contents/Frameworks/
 	../macdylibbundler/dylibbundler -b -x ./Rascal.app/Contents/MacOS/Rascal -d ./Rascal.app/Contents/Resources/Libs -od -p @executable_path/../Resources/Libs
 	install_name_tool -change @executable_path/../Frameworks/SFML.framework/Versions/2.4.2/SFML @executable_path/../Resources/Frameworks/SFML.framework/Versions/2.4.2/SFML ./Rascal.app/Contents/MacOS/Rascal
 	install_name_tool -change @executable_path/../Frameworks/sfml-window.framework/Versions/2.4.2/sfml-window @executable_path/../Resources/Frameworks/sfml-window.framework/Versions/2.4.2/sfml-window ./Rascal.app/Contents/MacOS/Rascal

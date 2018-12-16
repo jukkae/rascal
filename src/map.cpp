@@ -19,15 +19,20 @@
 
 #include <SFML/Graphics/Color.hpp>
 
-Map::Map() : Map(constants::DEFAULT_MAP_WIDTH, constants::DEFAULT_MAP_HEIGHT) {}
+Map::Map() :
+Map(constants::DEFAULT_MAP_WIDTH,
+	  constants::DEFAULT_MAP_HEIGHT,
+		MapType::BUILDING) { }
 
-Map::Map(int width, int height) : width(width), height(height) {
+Map::Map(int width, int height, MapType mapType) :
+width(width), height(height) {
 	tiles = Mat2d<Tile>(width, height);
 	for(int i = 0; i < width; ++i) {
 		for(int j = 0; j < height; ++j) {
 			tiles(i, j) = Tile();
 		}
 	}
+	generateMap(mapType);
 }
 
 void Map::generateMap(MapType mapType) {
@@ -96,7 +101,7 @@ void Map::generateWaterMap() {
 			Animation anim;
 			anim.chars = std::vector<char>(); // empty on purpose
 			anim.colors = std::vector<sf::Color>();
-			anim.colors.push_back(colors::darkestBlue);
+			anim.colors.push_back(colors::get("darkestBlue"));
 			anim.charFreq = 1;
 			anim.colFreq = 10;
 			anim.phase = 0.0f;
@@ -124,7 +129,7 @@ void Map::generateWaterMap() {
 std::vector<Rect> Map::breakRooms(Rect area, BreakDirection direction) {
 	int minDim = 30;
 	std::vector<Rect> areas;
-	
+
 	if(area.width() < minDim || area.height() < minDim) {
 		areas.push_back(area);
 		return areas;
@@ -180,4 +185,3 @@ bool Map::isInFov(int x, int y) const {
 	}
 	return false;
 }
-

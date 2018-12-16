@@ -7,8 +7,8 @@
 #include "point.hpp"
 
 struct Cell {
-	sf::Color bg = colors::black;
-	sf::Color fg = colors::white;
+	sf::Color bg = colors::get("black");
+	sf::Color fg = colors::get("white");
 	char glyph = ' '; // is char good?
 };
 
@@ -23,7 +23,7 @@ public:
 	void drawGlyph(Point position, char glyph, sf::Color color);
 	void drawText(Point position, std::string text, sf::Color color);
 	void drawGraphicsBlock(Point position, std::string text, sf::Color color);
-	void highlight(Point position, sf::Color color = colors::darkestGrey);
+	void highlight(Point position, sf::Color color = colors::get("darkestGrey"));
 	int x = 0; //private, ctor
 	int y = 0;
 	int width;

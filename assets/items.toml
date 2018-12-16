@@ -1,0 +1,295 @@
+# Comestibles
+
+[snakemeat]
+name = "snakemeat"
+ch = "%"
+color = "darkerYellow"
+blocks = false
+[snakemeat.pickable]
+[snakemeat.comestible]
+nutrition = 5000
+
+[cookie]
+name = "cookie"
+ch = "%"
+color = "darkerYellow"
+blocks = false
+[cookie.pickable]
+[cookie.comestible]
+nutrition = 10000
+
+[jerky]
+name = "jerky"
+ch = "%"
+color = "darkerRed"
+blocks = false
+[jerky.pickable]
+[jerky.comestible]
+nutrition = 20000
+
+[ration]
+name = "ration"
+ch = "%"
+color = "darkerGreen"
+blocks = false
+[ration.pickable]
+[ration.comestible]
+nutrition = 30000
+
+
+# Syringes
+
+[stimpak]
+name = "stimpak"
+ch = "!"
+color = "grey"
+blocks = false
+[stimpak.pickable]
+targetSelector.type = "Wearer"
+targetSelector.range = 0
+effect.type = "HealthEffect"
+effect.value = 4
+fragile = true
+
+[fake_stimpak]
+name = "stimpak"
+ch = "!"
+color = "grey"
+blocks = false
+[fake_stimpak.pickable]
+targetSelector.type = "Wearer"
+targetSelector.range = 0
+effect.type = "PoisonEffect"
+fragile = true
+
+[super_stimpak]
+name = "super stimpak"
+ch = "!"
+color = "grey"
+blocks = false
+[super_stimpak.pickable]
+targetSelector.type = "Wearer"
+targetSelector.range = 0
+effect.type = "HealthEffect"
+effect.value = 8
+fragile = true
+
+[iodine_syringe]
+name = "iodine syringe"
+ch = "!"
+color = "darkerYellow"
+blocks = false
+[iodine_syringe.pickable]
+targetSelector.type = "Wearer"
+targetSelector.range = 0
+effect.type = "IodineEffect"
+effect.value = 4
+fragile = true
+
+[antidote]
+name = "antidote"
+ch = "!"
+color = "darkerCyan"
+blocks = false
+[antidote.pickable]
+targetSelector.type = "Wearer"
+targetSelector.range = 0
+effect.type = "RemovePoisonEffect"
+fragile = true
+
+
+# Weapons
+
+[rock]
+name = "rock"
+ch = "|"
+color = "lightRed"
+blocks = false
+[rock.pickable]
+weight = 5
+[rock.attacker]
+numberOfDice = 1
+dice = 4
+bonus = 0
+[rock.wieldable]
+type = "OneHand"
+
+[knuckleduster]
+name = "knuckle duster"
+ch = "|"
+color = "lightGreen"
+blocks = false
+[knuckleduster.pickable]
+[knuckleduster.attacker]
+numberOfDice = 2
+dice = 6
+bonus = 2
+effect = "MoveEffect"
+[knuckleduster.wieldable]
+type = "OneHand"
+
+[baton]
+name = "stun baton"
+ch = "|"
+color = "yellow"
+blocks = false
+[baton.pickable]
+[baton.attacker]
+numberOfDice = 1
+dice = 3
+bonus = 1
+effect = "SpeedEffect"
+effectValue = -4
+[baton.wieldable]
+type = "OneHand"
+
+[pistol]
+name = "pistol"
+ch = "\\"
+color = "lightRed"
+blocks = false
+[pistol.pickable]
+weight = 5
+[pistol.rangedAttacker]
+numberOfDice = 1
+dice = 4
+bonus = 0
+range = 10.0
+[pistol.wieldable]
+type = "OneHand"
+
+[rifle]
+name = "rifle"
+ch = "\\"
+color = "lightBlue"
+blocks = false
+[rifle.pickable]
+weight = 5
+[rifle.rangedAttacker]
+numberOfDice = 2
+dice = 6
+bonus = 0
+range = 10.0
+[rifle.wieldable]
+type = "TwoHands"
+
+
+# Clothing and armor
+
+[leather_armor]
+name = "leather armor"
+ch = "["
+color = "lightBlue"
+blocks = false
+[leather_armor.pickable]
+[leather_armor.wieldable]
+type = "Torso"
+[leather_armor.armor]
+value = 1
+
+[combat_armor]
+name = "combat armor"
+ch = "["
+color = "lightGreen"
+blocks = false
+[combat_armor.pickable]
+[combat_armor.wieldable]
+type = "Torso"
+[combat_armor.armor]
+value = 2
+
+[flat_cap]
+name = "flat cap"
+ch = "["
+color = "darkerCyan"
+blocks = false
+[flat_cap.pickable]
+[flat_cap.wieldable]
+type = "Head"
+[flat_cap.armor]
+value = 1
+
+[combat_helmet]
+name = "combat helmet"
+ch = "["
+color = "lightRed"
+blocks = false
+[combat_helmet.pickable]
+[combat_helmet.wieldable]
+type = "Head"
+[combat_helmet.armor]
+value = 2
+
+[combat_boots]
+name = "combat boots"
+ch = "["
+color = "lightBlue"
+blocks = false
+[combat_boots.pickable]
+[combat_boots.wieldable]
+type = "Feet"
+[combat_boots.armor]
+value = 1
+
+
+# Special items
+
+[blaster_bolt_device]
+name = "blaster bolt device"
+ch = "?"
+color = "darkerYellow"
+blocks = false
+[blaster_bolt_device.pickable]
+targetSelector.type = "ClosestMonster"
+targetSelector.range = 5
+effect.type = "HealthEffect"
+effect.value = -20
+
+[frag_grenade]
+name = "frag grenade"
+ch = "?"
+color = "darkerCyan"
+blocks = false
+[frag_grenade.pickable]
+targetSelector.type = "SelectedRange"
+targetSelector.range = 3
+effect.type = "HealthEffect"
+effect.value = -12
+fragile = true
+explosive = true
+
+[confusor]
+name = "confusor"
+ch = "?"
+color = "darkerMagenta"
+blocks = false
+[confusor.pickable]
+targetSelector.type = "SelectedMonster"
+targetSelector.range = 5
+effect.type = "ConfusedAiEffect"
+effect.value = 10
+
+[tesla_coil]
+name = "tesla coil"
+ch = "#"
+color = "grey"
+blocks = false
+[tesla_coil.pickable]
+targetSelector.type = "WearerRange"
+targetSelector.range = 5
+effect.type = "HealthEffect"
+effect.value = -6
+
+[navcomp]
+name = "navigation computer"
+ch = "q"
+color = "blue"
+blocks = false
+[navcomp.pickable]
+
+[phlebotinum_link]
+name = "phlebotinum link"
+ch = "q"
+color = "white"
+blocks = false
+[phlebotinum_link.pickable]

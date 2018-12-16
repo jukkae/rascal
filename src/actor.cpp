@@ -20,8 +20,8 @@
 #include "world.hpp"
 
 
-Actor::Actor(int x, int y, int ch, std::string name, sf::Color col, boost::optional<float> energy) :
-	x(x), y(y), ch(ch), col(col), name(name), energy(energy),
+Actor::Actor(World* world, int x, int y, int ch, std::string name, sf::Color col, boost::optional<float> energy) :
+	world(world), x(x), y(y), ch(ch), col(col), name(name), energy(energy),
 	blocks(true), fovOnly(true), attacker(nullptr), destructible(nullptr), ai(nullptr),
 	pickable(nullptr), container(nullptr), transporter(nullptr) {;}
 

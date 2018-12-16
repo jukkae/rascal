@@ -100,13 +100,13 @@ void MainMenuState::render() {
 void MainMenuState::renderAsciiTitle() {
 	int x = (constants::SCREEN_WIDTH - 41) / 2; // title is 41 cells wide
 	int y = 1;
-	console.drawGraphicsBlock(Point(x, y), asciiTitle, colors::brightBlue);
+	console.drawGraphicsBlock(Point(x, y), asciiTitle, colors::get("brightBlue"));
 }
 
 void MainMenuState::renderBgArt() {
 	int x = 0; // bg is hardcoded
 	int y = 0;
-	console.drawGraphicsBlock(Point(x, y), bgArt, colors::lightGreen);
+	console.drawGraphicsBlock(Point(x, y), bgArt, colors::get("lightGreen"));
 }
 
 void MainMenuState::showMenu() {
@@ -116,7 +116,7 @@ void MainMenuState::showMenu() {
 	int itemIndex = 0;
 	for(MenuItem item : menuItems) {
 		menuX = (constants::SCREEN_WIDTH - item.label.length()) / 2;
-		sf::Color color = selectedItem == itemIndex ? colors::brightBlue : colors::darkBlue;
+		sf::Color color = selectedItem == itemIndex ? colors::get("brightBlue") : colors::get("darkBlue");
 		console.drawGraphicsBlock(Point(menuX, menuY+itemIndex*3), item.label, color);
 		++itemIndex;
 	}

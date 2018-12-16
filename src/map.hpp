@@ -50,13 +50,7 @@ public:
 	bool hasAnimations = false;
 
 	Map();
-	Map(int width, int height);
-
-	void generateMap(MapType mapType = MapType::BUILDING);
-	void generateBuildingMap();
-	void generatePillarsMap();
-	void generateWaterMap();
-	std::vector<Rect> breakRooms(Rect area, BreakDirection direction = BreakDirection::HORIZONTAL);
+	Map(int width, int height, MapType mapType);
 
 	void setWall(int x, int y);
 	bool isWall(int x, int y) const;
@@ -67,6 +61,13 @@ public:
 
 private:
 	World* world;
+
+	void generateMap(MapType mapType = MapType::BUILDING);
+	void generateBuildingMap();
+	void generatePillarsMap();
+	void generateWaterMap();
+	std::vector<Rect> breakRooms(Rect area, BreakDirection direction = BreakDirection::HORIZONTAL);
+
 	friend class boost::serialization::access;
 	template<class Archive>
 	void serialize(Archive & ar, const unsigned int version) {

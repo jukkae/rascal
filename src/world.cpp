@@ -1,16 +1,46 @@
 #include "world.hpp"
 
 #include "body.hpp"
+#include "container.hpp"
 #include "damage.hpp"
 #include "destructible.hpp"
 #include "dice.hpp"
 #include "effect.hpp"
 #include "event.hpp"
 #include "gameplay_state.hpp"
+#include "map_utils.hpp"
 #include <iostream>
 
-World::World(int width, int height): width(width), height(height) {
-	map = Map(width, height);
+World::World(int width, int height, int level, GameplayState* state):
+width(width), height(height), level(level), state(state) {
+	radiation = level;
+	MapType mapType;
+	if(level == 2) mapType = MapType::WATER;
+	else if(level == 3) mapType = MapType::PILLARS;
+	else mapType = MapType::BUILDING;
+	map = Map(width, height, mapType);
+	map.setWorld(this);
+
+	map_utils::addDoors(this, &map);
+	map_utils::addItems(this, &map, level);
+	map_utils::addMonsters(this, &map, level);
+}
+
+void World::movePlayerFrom(World* other) {
+	std::unique_ptr<Actor> player;
+
+	auto it = other->actors.begin();
+	while (it != other->actors.end()) {
+		if ((*it)->isPlayer()) {
+			player = std::move(*it); // i want to move(*it) move(*it)
+			it = other->actors.erase(it);
+		}
+		else ++it;
+	}
+	player->world = this;
+	for (auto& a : player->container->inventory) a->world = this;
+	this->addActor(std::move(player));
+	this->sortActors();
 }
 
 Actor* World::getPlayer() const {

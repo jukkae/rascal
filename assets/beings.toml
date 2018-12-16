@@ -1,0 +1,206 @@
+[dog]
+name = "dog"
+ch = "d"
+color = "desaturatedGreen"
+[dog.destructible]
+maxHp = 2
+defense = 0
+xp = 25
+corpseName = "dead dog"
+[dog.attacker]
+numberOfDice = 1
+dice = 2
+bonus = 1
+[dog.ai]
+type = "MonsterAi"
+speed = 200
+[dog.body] # empty table = default body
+
+[snake]
+name = "snake"
+ch = "s"
+color = "desaturatedGreen"
+[snake.destructible]
+maxHp = 2
+defense = 0
+xp = 50
+corpseName = "dead snake"
+[snake.attacker]
+numberOfDice = 2
+dice = 2
+bonus = 0
+[snake.ai]
+type = "MonsterAi"
+speed = 100
+[snake.container]
+capacity = 1
+contents = [ { with_probability = 66, content = "snakemeat" } ] # with_probability is optional
+[snake.body] # empty table = default body
+
+[child]
+name = "child"
+ch = "c"
+color = "desaturatedGreen"
+[child.destructible]
+maxHp = 2
+defense = 0
+xp = 25
+corpseName = "dead child"
+[child.attacker]
+numberOfDice = 1
+dice = 2
+bonus = 0
+[child.ai]
+type = "MonsterAi"
+speed = 75
+[child.container]
+capacity = 10
+contents = [ { with_probability = 66, content = "super_stimpak" },
+             { with_probability = 66, content = "snakemeat" } ]
+[child.body]
+
+[punk]
+name = "punk"
+ch = "h"
+color = "desaturatedGreen"
+[punk.destructible]
+maxHp = 3
+defense = 0
+xp = 50
+corpseName = "dead punk"
+[punk.attacker]
+numberOfDice = 1
+dice = 3
+bonus = 0
+[punk.ai]
+type = "MonsterAi"
+speed = 100
+[punk.container]
+capacity = 10
+contents = [ { content = "cookie" } ]
+[punk.body]
+
+[guard]
+name = "guard"
+ch = "h"
+color = "darkGreen"
+[guard.destructible]
+maxHp = 6
+defense = 1
+xp = 100
+corpseName = "guard body"
+[guard.attacker]
+numberOfDice = 1
+dice = 3
+bonus = 0
+[guard.ai]
+type = "MonsterAi"
+speed = 200
+[guard.container]
+capacity = 10
+contents = [ { content = "ration" },
+             { with_probability = 66, content = "stimpak" } ]
+[guard.body]
+
+[fighter]
+name = "fighter"
+ch = "H"
+color = "darkGreen"
+[fighter.destructible]
+maxHp = 5
+defense = 1
+xp = 100
+corpseName = "fighter carcass"
+[fighter.attacker]
+numberOfDice = 2
+dice = 3
+bonus = 0
+[fighter.ai]
+type = "MonsterAi"
+speed = 100
+[fighter.container]
+capacity = 10
+contents = [ { content = "jerky" } ]
+[fighter.body]
+
+[boxer]
+name = "boxer"
+ch = "H"
+color = "darkerGreen"
+[boxer.destructible]
+maxHp = 4
+defense = 0
+xp = 70
+corpseName = "boxer carcass"
+[boxer.attacker]
+numberOfDice = 1
+dice = 4
+bonus = 2
+[boxer.ai]
+type = "MonsterAi"
+speed = 100 # what about default?
+[boxer.container]
+capacity = 10
+contents = [ { with_probability = 17, content = "knuckleduster" },
+             { with_probability = 66, content = "stimpak" } ]
+[boxer.body]
+
+[mutant]
+name = "mutant"
+ch = "m"
+color = "darkerGreen"
+[mutant.destructible]
+maxHp = 8
+defense = 0
+xp = 200
+corpseName = "mutant carcass"
+[mutant.attacker]
+numberOfDice = 2
+dice = 4
+bonus = 0
+[mutant.ai]
+type = "MonsterAi"
+speed = 90
+[mutant.container]
+capacity = 10
+contents = [ { content = "ration" } ]
+[mutant.body]
+
+[cyborg]
+name = "cyborg"
+ch = "r"
+color = "darkerGreen"
+[cyborg.destructible]
+maxHp = 8
+defense = 0
+xp = 250
+corpseName = "cyborg carcass"
+[cyborg.attacker]
+numberOfDice = 1
+dice = 8
+bonus = 0
+[cyborg.ai]
+type = "MonsterAi"
+speed = 120
+[cyborg.container]
+capacity = 10
+contents = [ { content = "ration" } ]
+[cyborg.body]
+
+[android]
+name = "punk"
+ch = "h"
+color = "darkerGreen"
+[android.destructible]
+maxHp = 8
+defense = 1
+xp = 300
+corpseName = "broken android"
+[android.attacker]
+numberOfDice = 2
+dice = 6
+bonus = 2
+[android.ai]
+type = "MonsterAi"
+speed = 150
+[android.body]

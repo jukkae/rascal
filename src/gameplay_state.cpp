@@ -20,20 +20,13 @@
 
 GameplayState::GameplayState(Engine* engine, sf::RenderWindow* window) :
 State(engine, window) {
-	std::unique_ptr<World> w = std::make_unique<World>(120, 72);
+	std::unique_ptr<World> w = std::make_unique<World>(120, 72, 1, this);
 	levels.push_back(std::move(w));
 	world = levels.front().get();
-	world->state = this;
 
 	gui.setState(this);
 	renderer.setState(this);
-	world->map.setWorld(world);
-	world->map.generateMap();
 	newGame(engine);
-
-	// not really the correct place for following, but w/e
-	for (auto& a : world->actors) a->world = world;
-	world->sortActors();
 }
 
 void GameplayState::initLoaded(Engine* engine) {
@@ -44,10 +37,9 @@ void GameplayState::initLoaded(Engine* engine) {
 void GameplayState::newGame(Engine* engine) {
 	map_utils::addPlayer(world, &world->map);
 	map_utils::addStairs(world, &world->map);
-	map_utils::addDoors(world, &world->map);
-	map_utils::addMcGuffin(world, &world->map, world->level);
-	map_utils::addItems(world, &world->map);
-	map_utils::addMonsters(world, &world->map);
+
+	world->sortActors();
+
 	gui.message(sf::Color::Green, "Welcome to year 20XXAD, you strange rascal!\nPrepare to fight or die!");
 }
 
@@ -82,7 +74,7 @@ void GameplayState::notify(Event& event) {
 	if(auto e = dynamic_cast<PlayerDeathEvent*>(&event)) {
 		std::unique_ptr<State> gameOverState = std::make_unique<GameOverState>(engine, e->actor, player.get());
 		engine->pushState(std::move(gameOverState));
-	} 
+	}
 	if(auto e = dynamic_cast<PlayerStatChangeEvent*>(&event)) {
 		std::unique_ptr<State> levelUpMenuState = std::make_unique<LevelUpMenuState>(engine, e->actor);
 		engine->pushState(std::move(levelUpMenuState));
@@ -100,107 +92,39 @@ void GameplayState::message(sf::Color col, std::string text, ...) {
 	va_end(args);
 }
 
-// Bulk: map helper?
-// FIXME ugly and brittle
 void GameplayState::nextLevel() {
-	Actor* downstairs = nullptr;
-	for(auto& a : world->actors) {
-		if(a->name == "stairs (up)") { 
-			downstairs = a.get();
-		}
-	}
-	int downstairsX = 0;
-	int downstairsY = 0;
-	if(downstairs) {
-		downstairsX = downstairs->x;
-		downstairsY = downstairs->y;
-	}
+	int newLevel = world->level + 1;
 
-	if(levels.size() > world->level) {
-		std::unique_ptr<Actor> player;
-		auto it = world->actors.begin();
-		while (it != world->actors.end()) {
-			if ((*it)->isPlayer()) {
-				player = std::move(*it); // i want to move(*it) move(*it)
-				it = world->actors.erase(it);
-			}
-			else ++it;
-		}
-		world = levels.at(world->level).get();
-		for (auto& a : player->container->inventory) a->world = world;
-		world->addActor(std::move(player));
-		for (auto& a : world->actors) a->world = world;
-		world->sortActors();
-		return;
-	}
-
-	std::unique_ptr<World> w = std::make_unique<World>(120, 72);
-	w->level = world->level + 1;
-	w->radiation = world->level + 1;
-	w->time = world->time;
-	if(w->level > 5) {
+	if(newLevel > 5) {
 		std::unique_ptr<State> victoryState = std::make_unique<GameOverState>(engine, world->getPlayer(), player.get(), true);
 		engine->pushState(std::move(victoryState));
 	}
+
+	std::unique_ptr<World> w = std::make_unique<World>(120, 72, newLevel, this);
+	w->time = world->time;
+
+	w->movePlayerFrom(world);
+
 	gui.message(sf::Color::Magenta, "You take a moment to rest, and recover your strength.");
-	world->getPlayer()->destructible->heal(world->getPlayer()->destructible->maxHp/2);
+	Actor* player = w->getPlayer();
+	player->destructible->heal(player->destructible->maxHp/2);
 	gui.message(sf::Color::Red, "After a rare moment of peace, you climb\nhigher. You will escape this hellhole.");
 
-	std::unique_ptr<Actor> player;
-	auto it = world->actors.begin();
-	while (it != world->actors.end()) {
-		if ((*it)->isPlayer()) {
-			player = std::move(*it); // i want to move(*it) move(*it)
-			it = world->actors.erase(it);
-		}
-		else ++it;
-	}
-
 	levels.push_back(std::move(w));
+	World* oldWorld = world;
 	world = levels.back().get();
-	world->state = this;
 
-	world->map = Map(120, 72);
-	world->map.setWorld(world);
-	if(world->level == 2) world->map.generateMap(MapType::WATER);
-	if(world->level == 3) world->map.generateMap(MapType::PILLARS);
-	else world->map.generateMap(MapType::BUILDING);
-
-	map_utils::addDoors(world, &world->map);
-	map_utils::addItems(world, &world->map, world->level);
-	map_utils::addMonsters(world, &world->map, world->level);
-	if(downstairs) {
-		map_utils::addStairs(world, &world->map, downstairsX, downstairsY);
-	} else {
-		map_utils::addStairs(world, &world->map);
-	}
-	map_utils::addMcGuffin(world, &world->map, world->level);
-
-	for (auto& a : player->container->inventory) a->world = world;
-	world->addActor(std::move(player));
-
-	for (auto& a : world->actors) a->world = world;
-	world->sortActors();
+	map_utils::addStairs(world, &world->map, oldWorld);
 }
 
 void GameplayState::previousLevel() {
 	if(world->level <= 1) return;
 
-	std::unique_ptr<Actor> player;
-	auto it = world->actors.begin();
-	while (it != world->actors.end()) {
-		if ((*it)->isPlayer()) {
-			player = std::move(*it); // i want to move(*it) move(*it)
-			it = world->actors.erase(it);
-		}
-		else ++it;
-	}
+	World* oldWorld = world;
+	World* newWorld = levels.at(world->level-2).get();
+	newWorld->movePlayerFrom(oldWorld);
 
 	world = levels.at(world->level-2).get();
-	for (auto& a : player->container->inventory) a->world = world;
-	world->addActor(std::move(player));
-	for (auto& a : world->actors) a->world = world;
-	world->sortActors();
 }
 
 BOOST_CLASS_EXPORT(GameplayState)
