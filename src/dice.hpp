@@ -3,6 +3,10 @@
 
 #include <random>
 
+namespace dice { // FIXME bad, but better than what it was
+  extern std::default_random_engine& gen;
+}
+
 int d2();
 int d3();
 int d4();

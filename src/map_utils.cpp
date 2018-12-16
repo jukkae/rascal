@@ -45,8 +45,8 @@ void map_utils::addItems(World* world, Map* map, int difficulty) {
 			weightedTypes.push_back(itemType);
 		} else throw std::logic_error("Malformed items in levels.toml");
 	}
-	std::random_device rd; // TODO should use one for the whole program
-	std::mt19937 gen(rd());
+
+	auto& gen = dice::gen;
 	std::discrete_distribution<> d(weights.begin(), weights.end());
 
 	for(int x = 0; x < map->width; ++x) {
@@ -121,8 +121,7 @@ void map_utils::addMonsters(World* world, Map* map, int difficulty) {
 		} else throw std::logic_error("Malformed beings in levels.toml");
 	}
 
-	std::random_device rd; // TODO should use one for the whole program
-	std::mt19937 gen(rd());
+	auto& gen = dice::gen;
 	std::discrete_distribution<> d(weights.begin(), weights.end());
 
 	for(int x = 0; x < map->width; ++x) {

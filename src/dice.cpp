@@ -4,6 +4,9 @@
 // could use std::random_device{}() instead of time, but should check for entropy
 unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
 std::default_random_engine generator(seed);
+
+std::default_random_engine& dice::gen = generator;
+
 std::uniform_int_distribution<int> d2_dist   (1, 2);
 std::uniform_int_distribution<int> d3_dist   (1, 3);
 std::uniform_int_distribution<int> d4_dist   (1, 4);
