@@ -61,7 +61,8 @@ items = [ { amount = 1, item = "phlebotinum_link" },
           { with_weight = 1, item = "navcomp" } ]
 
 [3]
-mapType = "Building"
+mapType = "Hardcoded" # TODO implement
+mapFile = "Doesn't exist yet" # TODO implement
 being_probability = 0.003
 item_probability = 0.01
 beings = [ { with_weight = 3, being = "guard" },
