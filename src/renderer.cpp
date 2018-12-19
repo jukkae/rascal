@@ -39,10 +39,9 @@ void Renderer::renderMap(const World* const world, sf::RenderWindow* window) {
 	int mapWidth = map->width;
 	int mapHeight = map->height;
 
-	int mouseXpx = sf::Mouse::getPosition(*window).x;
-	int mouseYpx = sf::Mouse::getPosition(*window).y;
-	int mouseXcells = mouseXpx / constants::SQUARE_CELL_WIDTH;
-	int mouseYcells = mouseYpx / constants::SQUARE_CELL_HEIGHT;
+
+	int mouseX = io::mousePositionInScreenCoords.x;
+	int mouseY = io::mousePositionInScreenCoords.y;
 
 	for(int x = 0; x < screenWidth; ++x) {
 		for(int y = 0; y < screenHeight; ++y) {
@@ -70,8 +69,8 @@ void Renderer::renderMap(const World* const world, sf::RenderWindow* window) {
 		}
 	}
 	if(map->hasAnimations) renderAnimations(world, window);
-	if(mouseXcells >= 0 && mouseXcells < console.width && mouseYcells >= 0 && mouseYcells < console.height) {
-		console.highlight(Point(mouseXcells, mouseYcells));
+	if(mouseX >= 0 && mouseX < console.width && mouseY >= 0 && mouseY < console.height) {
+		console.highlight(Point(mouseX, mouseY));
 	}
 }
 

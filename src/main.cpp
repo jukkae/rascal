@@ -15,6 +15,7 @@ int width = constants::CELL_WIDTH * constants::SCREEN_WIDTH;
 int height = constants::CELL_HEIGHT * constants::SCREEN_HEIGHT;
 namespace io { sf::RenderWindow window(sf::VideoMode(width, height), "Rascal"); }
 namespace io { Point mousePosition(0,0); }
+namespace io { Point mousePositionInScreenCoords(0,0); }
 namespace io { Engine* engine; }
 
 int main() {

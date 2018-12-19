@@ -170,12 +170,22 @@ void Gui::renderBar(int x, int y, int width, std::string name, float value, floa
 void Gui::renderMouseLook(World* world, sf::RenderWindow* window) {
 	int xPix = sf::Mouse::getPosition(*window).x;
 	int yPix = sf::Mouse::getPosition(*window).y;
+	int windowWidth = window->getSize().x;
+	int windowHeight = window->getSize().y;
+
+	// Clamp within window
+	if(xPix < 0) xPix = 0;
+	if(xPix >= windowWidth) xPix = windowWidth - 1;
+	if(yPix < 0) yPix = 0;
+	if(yPix >= windowHeight) yPix = windowHeight - 1;
+
 	int xCells = xPix / constants::SQUARE_CELL_WIDTH;
 	int yCells = yPix / constants::SQUARE_CELL_HEIGHT;
 	Point screenCells(xCells, yCells);
 
 	Point location = state->getWorldCoordsFromScreenCoords(screenCells);
 	io::mousePosition = location; // TODO this is nasty to do here, but it's still cleaner than it was before
+	io::mousePositionInScreenCoords = screenCells; // TODO this is nasty to do here, but it's still cleaner than it was before
 	int x = location.x;
 	int y = location.y;
 
