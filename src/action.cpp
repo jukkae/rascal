@@ -13,6 +13,9 @@
 #include "transporter.hpp"
 #include "world.hpp"
 
+#include "dialogue_state.hpp"
+#include "io.hpp"
+
 bool MoveAction::execute() {
 	World* world = actor->world;
 	int targetX = actor->x;
@@ -42,7 +45,7 @@ bool MoveAction::execute() {
 				world->notify(e);
 				return false;
 			}
-			if(actor->wornWeapon && actor->wornWeapon->attacker) { 
+			if(actor->wornWeapon && actor->wornWeapon->attacker) {
 				bool atkResult;
 				if(actor->body) {
 					int toHitBonus = actor->body->getModifier(actor->body->agility);
@@ -422,5 +425,23 @@ bool OpenAction::execute() {
 			}
 		}
 	}
+	return false;
+}
+
+bool TalkAction::execute() {
+	World* w = actor->world;
+	for(int x = actor->x - 1; x <= actor->x + 1; ++x) {
+		for(int y = actor->y - 1; y <= actor->y + 1; ++y) {
+			if(x == actor->x && y == actor->y) continue;
+			std::vector<Actor*> as = w->getActorsAt(x, y);
+			for(auto& a : as) if(a->ai) { // also if not dead, if not hostile
+				Engine* engine = io::engine;
+				std::unique_ptr<State> dialogueState = std::make_unique<DialogueState>(engine, actor);
+				engine->pushState(std::move(dialogueState));
+				return true;
+			}
+		}
+	}
+	// TODO "talk to whom?" message in GUI console
 	return false;
 }

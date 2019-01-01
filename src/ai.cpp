@@ -100,8 +100,13 @@ std::unique_ptr<Action> PlayerAi::getNextAction(Actor* actor) {
 						engine->pushState(std::move(inventoryMenuState));
 						break;
 					}
+					// TODO select direction
 					case k::O: {
 						return std::make_unique<OpenAction>(actor);
+					}
+					// TODO select direction
+					case k::T: {
+						return std::make_unique<TalkAction>(actor);
 					}
 					case k::Comma: {
 						return std::make_unique<PickupAction>(actor);
@@ -140,6 +145,10 @@ std::unique_ptr<Action> MonsterAi::getNextAction(Actor* actor) {
 	} else  { actor->col = colors::black; }*/
 
 	if (actor->destructible && actor->destructible->isDead()) return std::make_unique<WaitAction>(WaitAction(actor));
+
+	if (aiState == AiState::FRIENDLY) {
+		return std::make_unique<WaitAction>(WaitAction(actor));
+	}
 
 	if(actor->destructible->hp <= actor->destructible->maxHp * 0.3 + (0.1 * player->body->getModifier(player->body->charisma))) {
 		aiState = AiState::FRIGHTENED; //TODO implement in terms of morale

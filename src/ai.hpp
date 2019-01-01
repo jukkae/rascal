@@ -50,7 +50,7 @@ private:
 	}
 };
 
-enum class AiState { NORMAL, FRIGHTENED };
+enum class AiState { NORMAL, FRIGHTENED, FRIENDLY };
 
 class MonsterAi : public Ai {
 public:
@@ -62,12 +62,13 @@ protected:
 	int moveCount;
 	void moveOrAttack(Actor* owner, GameplayState* state, int targetX, int targetY);
 private:
-	AiState aiState = AiState::NORMAL;
+	AiState aiState = AiState::FRIENDLY;
 	friend class boost::serialization::access;
 	template<class Archive>
 	void serialize(Archive & ar, const unsigned int version) {
 		ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(Ai);
 		ar & moveCount;
+		ar & aiState;
 	}
 };
 
