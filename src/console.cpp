@@ -13,11 +13,22 @@ consoleType(consoleType), clearMode(clearMode) {
 	cells.w = width;
 	cells.h = height;
 	cells.contents = std::vector<Cell>(width * height);
-	for(auto& c : cells) c = Cell();
+	if(clearMode == ClearMode::BLACK) {
+		for(auto& c : cells) c = Cell();
+	}
+	if(clearMode == ClearMode::TRANSPARENT) {
+		for(auto& c : cells) c = Cell{sf::Color(0,0,0,0), colors::get("black"), ' '};
+	}
 }
 
 void Console::clear() {
-	for(auto& c : cells) c = Cell();
+	// TODO what should this function really do? Who knows?
+	if(clearMode == ClearMode::BLACK) {
+		for(auto& c : cells) c = Cell();
+	}
+	if(clearMode == ClearMode::TRANSPARENT) {
+		for(auto& c : cells) c = Cell{sf::Color(0,0,0,0), colors::get("black"), ' '};
+	}
 	int cw = consoleType == ConsoleType::NARROW ? constants::CELL_WIDTH : constants::SQUARE_CELL_WIDTH;
 	int ch = consoleType == ConsoleType::NARROW ? constants::CELL_HEIGHT : constants::SQUARE_CELL_HEIGHT;
 
@@ -27,7 +38,7 @@ void Console::clear() {
 		bg.setFillColor(colors::get("black"));
 	}
 	else {
-
+		bg.setFillColor(sf::Color(0,0,0,0));
 	}
 	io::window.draw(bg);
 }

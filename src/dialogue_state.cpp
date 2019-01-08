@@ -4,7 +4,7 @@
 DialogueState::DialogueState(Engine* engine, Actor* actor) :
 State(engine, engine->getWindow()),
 actor(actor) {
-	console = Console(ConsoleType::NARROW);
+	console = Console(ConsoleType::NARROW, ClearMode::TRANSPARENT);
 }
 
 void DialogueState::update() {
@@ -13,7 +13,7 @@ void DialogueState::update() {
 }
 
 void DialogueState::render() {
-  console.clear();
+  //console.clear(); // TODO what should this function call actually do?
   console.drawGraphicsBlock(Point(2, 1), "DIALOGUE", colors::get("brightBlue"));
   console.draw();
   window->display();
