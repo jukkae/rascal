@@ -32,7 +32,22 @@ float Actor::update(GameplayState* state) {
 	if(ai) {
 		float fovRadius = constants::DEFAULT_FOV_RADIUS * (body ? body->perception / 10.0 : 1.0);
 		if(isPlayer()) world->computeFov(x, y, fovRadius);
-		if(actionsQueue.empty()) actionsQueue.push_back(ai->getNextAction(this));
+
+		// TODO
+		if(!isPlayer()) {
+			if(actionsQueue.empty()) {
+				auto actions = ai->getNextAction(this);
+				for(auto& a : actions) actionsQueue.push_back(std::move(a));
+			}
+		}
+		if(isPlayer()) {
+			if(actionsQueue.empty()) {
+				auto actions = ai->getNextAction(this);
+				for(auto& a : actions) actionsQueue.push_back(std::move(a));
+			}
+		}
+
+
 		float actionCost = actionsQueue.front()->getLength();
 		bool success = actionsQueue.front()->execute();
 		actionsQueue.pop_front();
