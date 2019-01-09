@@ -32,6 +32,8 @@
 #include <boost/optional.hpp>
 #include <SFML/Window.hpp>
 
+#include <unordered_map>
+
 static const int TRACKING_TURNS = 3;
 
 const int LEVEL_UP_BASE = 50;
@@ -104,6 +106,12 @@ std::unique_ptr<Action> PlayerAi::getNextAction(Actor* actor) {
 					case k::O: {
 						return std::make_unique<OpenAction>(actor);
 					}
+					case k::P: {
+						findPath(actor->world,
+										 Point(actor->x, actor->y),
+										 io::mousePosition);
+						break;
+					}
 					// TODO select direction
 					case k::T: {
 						return std::make_unique<TalkAction>(actor);
@@ -134,6 +142,64 @@ std::unique_ptr<Action> PlayerAi::getNextAction(Actor* actor) {
 		}
 	}
 	return std::make_unique<EmptyAction>(actor);
+}
+
+// TODO this belongs elsewhere, but here now for development
+void PlayerAi::findPath(World* world, Point from, Point to) {
+	std::cout << "Finding path from (" << from.x << ", " << from.y
+	<< ") to (" << to.x << ", " << to.y <<")...\n";
+
+	Mat2d<Tile> tiles = world->map.tiles;
+	std::queue<Point> frontier;
+	frontier.push(from);
+
+	std::unordered_map<Point, Point, PointHasher> came_from;
+	came_from[from] = from;
+
+	while(!frontier.empty()) {
+		Point current = frontier.front();
+		frontier.pop();
+
+		if (current == to) {
+			break;
+		}
+		//std::cout << "Visiting (" << current.x << ", " << current.y << ")\n";
+		for(int i = -1; i <= 1; ++i) {
+			for(int j = -1; j <= 1; ++j) {
+				if(i == 0 && j == 0) continue;
+				Point next = Point(current.x + i, current.y + j);
+				if(next.x < 0 || next.y < 0 || next.x >= tiles.w || next.y >= tiles.h) continue;
+				if(came_from.find(next) == came_from.end()) {
+					//std::cout << "  Next: (" << next.x << ", " << next.y << ")\n";
+					if(tiles.at(next.x, next.y).walkable) {
+						// std::cout << "    Walkable!\n";
+						frontier.push(next);
+						came_from[next] = current;
+					}
+					// else std::cout << "    Not walkable!\n";
+				}
+			}
+		}
+	}
+
+	std::cout << "Done!\n";
+	for(auto& a : came_from) {
+		std::cout << a.first.x << ", " << a.first.y << " <- "
+			<< a.second.x << ", " << a.second.y << "\n";
+	}
+
+	Point current = to;
+	std::vector<Point> path;
+	while(!(current == from)) {
+		path.push_back(current);
+		current = came_from[current];
+	}
+	path.push_back(from);
+
+	std::cout << "Path:\n";
+	for(auto& a : path) {
+		std::cout << a.x << ", " << a.y << "\n";
+	}
 }
 
 std::unique_ptr<Action> MonsterAi::getNextAction(Actor* actor) {

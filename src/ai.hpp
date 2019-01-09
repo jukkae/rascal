@@ -40,6 +40,7 @@ public:
 	void increaseXp(Actor* owner, int xp);
 private:
 	void handleActionKey(Actor* owner, int ascii, GameplayState* state);
+	void findPath(World* world, Point from, Point to);
 
 	friend class boost::serialization::access;
 	template<class Archive>
