@@ -19,6 +19,10 @@
 #include "wieldable.hpp"
 #include "world.hpp"
 
+// For sleeping, which shouldn't be implemented here in any case
+#include <chrono>
+#include <thread>
+
 
 Actor::Actor(World* world, int x, int y, int ch, std::string name, sf::Color col, boost::optional<float> energy) :
 	world(world), x(x), y(y), ch(ch), col(col), name(name), energy(energy),
@@ -41,6 +45,9 @@ float Actor::update(GameplayState* state) {
 			}
 		}
 		if(isPlayer()) {
+			// TODO this should happen at GameplayState level!
+			const int PLAYER_TURN_THROTTLE = 20;
+			std::this_thread::sleep_for(std::chrono::milliseconds(PLAYER_TURN_THROTTLE));
 			if(actionsQueue.empty()) {
 				auto actions = ai->getNextAction(this);
 				for(auto& a : actions) actionsQueue.push_back(std::move(a));
