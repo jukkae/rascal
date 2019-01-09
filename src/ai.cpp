@@ -122,9 +122,25 @@ std::vector<std::unique_ptr<Action>> PlayerAi::getNextAction(Actor* actor) {
 						break;
 					}
 					case k::P: {
-						findPath(actor->world,
+						std::vector<Point> path = findPath(actor->world,
 										 Point(actor->x, actor->y),
 										 io::mousePosition);
+						for(int i = 0; i < path.size() - 1; ++i) {
+							Point from = path.at(i);
+							Point to = path.at(i + 1);
+							int stepDx = to.x - from.x;
+							int stepDy = to.y - from.y;
+							Direction stepDir;
+							if (stepDx ==  0 && stepDy == -1) stepDir = Direction::N;
+							if (stepDx ==  1 && stepDy == -1) stepDir = Direction::NE;
+							if (stepDx ==  1 && stepDy ==  0) stepDir = Direction::E;
+							if (stepDx ==  1 && stepDy ==  1) stepDir = Direction::SE;
+							if (stepDx ==  0 && stepDy ==  1) stepDir = Direction::S;
+							if (stepDx == -1 && stepDy ==  1) stepDir = Direction::SW;
+							if (stepDx == -1 && stepDy ==  0) stepDir = Direction::W;
+							if (stepDx == -1 && stepDy == -1) stepDir = Direction::NW;
+							actions.push_back(std::make_unique<MoveAction>(MoveAction(actor, stepDir)));
+						}
 						break;
 					}
 					// TODO select direction
@@ -168,7 +184,7 @@ std::vector<std::unique_ptr<Action>> PlayerAi::getNextAction(Actor* actor) {
 }
 
 // TODO this belongs elsewhere, but here now for development
-void PlayerAi::findPath(World* world, Point from, Point to) {
+std::vector<Point> PlayerAi::findPath(World* world, Point from, Point to) {
 	std::cout << "Finding path from (" << from.x << ", " << from.y
 	<< ") to (" << to.x << ", " << to.y <<")...\n";
 
@@ -207,8 +223,8 @@ void PlayerAi::findPath(World* world, Point from, Point to) {
 
 	std::cout << "Done!\n";
 	for(auto& a : came_from) {
-		std::cout << a.first.x << ", " << a.first.y << " <- "
-			<< a.second.x << ", " << a.second.y << "\n";
+		//std::cout << a.first.x << ", " << a.first.y << " <- "
+		//	<< a.second.x << ", " << a.second.y << "\n";
 	}
 
 	Point current = to;
@@ -218,11 +234,14 @@ void PlayerAi::findPath(World* world, Point from, Point to) {
 		current = came_from[current];
 	}
 	path.push_back(from);
+	std::reverse(path.begin(), path.end());
 
 	std::cout << "Path:\n";
 	for(auto& a : path) {
 		std::cout << a.x << ", " << a.y << "\n";
 	}
+
+	return path;
 }
 
 std::vector<std::unique_ptr<Action>> MonsterAi::getNextAction(Actor* actor) {
