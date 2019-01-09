@@ -18,6 +18,7 @@ struct PointHasher
     using std::hash;
     using std::string;
 
+		// TODO probably a shit hash
     return ((hash<int>()(p.x)
              ^ (hash<int>()(p.y) << 1)) >> 1);
   }
