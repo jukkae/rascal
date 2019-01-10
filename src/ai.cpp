@@ -220,8 +220,11 @@ std::vector<Point> PlayerAi::findPath(World* world, Point from, Point to) {
 					 nextCost < cost_thus_far[next]) {
 			 		if(tiles.at(next.x, next.y).walkable) {
 						cost_thus_far[next] = nextCost;
+						float heuristic = sqrtf(pow(current.x - next.x, 2) +
+						                        pow(current.y - next.y, 2));
+						float priority = nextCost + heuristic;
 						came_from[next] = current;
-						frontier.put(next, nextCost);
+						frontier.put(next, priority);
 					}
 				}
 				//if(came_from.find(next) == came_from.end()) {
