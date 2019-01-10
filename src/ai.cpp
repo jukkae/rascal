@@ -183,8 +183,6 @@ std::vector<std::unique_ptr<Action>> PlayerAi::getNextAction(Actor* actor) {
 
 // TODO this belongs elsewhere, but here now for development
 std::vector<Point> PlayerAi::findPath(World* world, Point from, Point to) {
-	std::cout << "Finding path from (" << from.x << ", " << from.y
-	<< ") to (" << to.x << ", " << to.y <<")...\n";
 
 	Mat2d<Tile> tiles = world->map.tiles;
 	std::vector<Point> path;
@@ -227,23 +225,8 @@ std::vector<Point> PlayerAi::findPath(World* world, Point from, Point to) {
 						frontier.put(next, priority);
 					}
 				}
-				//if(came_from.find(next) == came_from.end()) {
-					//std::cout << "  Next: (" << next.x << ", " << next.y << ")\n";
-					//if(tiles.at(next.x, next.y).walkable) {
-						// std::cout << "    Walkable!\n";
-						//frontier.push(next);
-						//came_from[next] = current;
-					//}
-					// else std::cout << "    Not walkable!\n";
-				//}
 			}
 		}
-	}
-
-	std::cout << "Done!\n";
-	for(auto& a : came_from) {
-		//std::cout << a.first.x << ", " << a.first.y << " <- "
-		//	<< a.second.x << ", " << a.second.y << "\n";
 	}
 
 	Point current = to;
@@ -254,11 +237,6 @@ std::vector<Point> PlayerAi::findPath(World* world, Point from, Point to) {
 	}
 	path.push_back(from);
 	std::reverse(path.begin(), path.end());
-
-	std::cout << "Path:\n";
-	for(auto& a : path) {
-		std::cout << a.x << ", " << a.y << "\n";
-	}
 
 	return path;
 }
