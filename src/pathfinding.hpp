@@ -1,8 +1,8 @@
 #ifndef PATHFINDING_HPP
 #define PATHFINDING_HPP
 
-#include "point.hpp"
-class World;
+struct Point;
+class Map;
 
 template<typename T, typename priority_t>
 using PQElement = std::pair<priority_t, T>;
@@ -39,7 +39,7 @@ struct PriorityQueue {
 };
 
 namespace pathfinding {
-std::vector<Point> findPath(World* world, Point from, Point to);
+std::vector<Point> findPath(Map map, Point from, Point to);
 } // namespace pathfinding
 
 #endif /* PATHFINDING_HPP */

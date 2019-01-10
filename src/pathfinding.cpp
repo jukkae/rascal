@@ -1,14 +1,12 @@
-// TODO why do I need to include these two here??? wtf
-#include "actor.hpp"
-#include "status_effect.hpp"
 #include "pathfinding.hpp"
-#include "world.hpp"
+#include "map.hpp"
+#include "point.hpp"
 
 #include <unordered_map>
 
-std::vector<Point> pathfinding::findPath(World* world, Point from, Point to) {
+std::vector<Point> pathfinding::findPath(Map map, Point from, Point to) {
 
-	Mat2d<Tile> tiles = world->map.tiles;
+	Mat2d<Tile> tiles = map.tiles;
 	std::vector<Point> path;
 	if(to.x < 0 || to.x >= tiles.w || to.y < 0 || to.y >= tiles.h ||
 		 !tiles.at(to.x, to.y).walkable) return path; // TODO figure out more robust handling

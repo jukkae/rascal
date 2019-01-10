@@ -149,7 +149,7 @@ std::vector<std::unique_ptr<Action>> PlayerAi::getNextAction(Actor* actor) {
 			}
 		} else if(event.type == sf::Event::MouseButtonPressed) {
 			if(event.mouseButton.button == sf::Mouse::Left) {
-				std::vector<Point> path = pathfinding::findPath(actor->world,
+				std::vector<Point> path = pathfinding::findPath(actor->world->map,
 								 Point(actor->x, actor->y),
 								 io::mousePosition);
 				if(!(path.size() <= 1)) {
