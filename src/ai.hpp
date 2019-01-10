@@ -32,41 +32,6 @@ private:
 	}
 };
 
-// For pathfinding
-template<typename T, typename priority_t>
-using PQElement = std::pair<priority_t, T>;
-
-template<typename T, typename priority_t>
-class PQElementComparator {
-public:
-int operator()(const PQElement<T, priority_t>& lhs, const PQElement<T, priority_t>& rhs)
-	{
-		return lhs.first > rhs.first; // Equivalent to std::greater
-	}
-};
-
-template<typename T, typename priority_t>
-struct PriorityQueue {
-	using U = priority_t;
-
-  std::priority_queue<PQElement<T, U>, std::vector<PQElement<T, U>>,
-                 PQElementComparator<T, U>> elements;
-
-  inline bool empty() const {
-     return elements.empty();
-  }
-
-  inline void put(T item, priority_t priority) {
-    elements.emplace(priority, item);
-  }
-
-  T get() {
-    T best_item = elements.top().second;
-    elements.pop();
-    return best_item;
-  }
-};
-
 class PlayerAi : public Ai {
 public:
 	PlayerAi() : Ai(100, Faction::PLAYER), xpLevel(1), experience(0) {;}
@@ -78,7 +43,6 @@ public:
 	void increaseXp(Actor* owner, int xp);
 private:
 	void handleActionKey(Actor* owner, int ascii, GameplayState* state);
-	std::vector<Point> findPath(World* world, Point from, Point to);
 
 	friend class boost::serialization::access;
 	template<class Archive>

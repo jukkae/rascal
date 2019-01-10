@@ -12,6 +12,7 @@
 #include "effect.hpp"
 #include "event.hpp"
 #include "gameplay_state.hpp"
+#include "pathfinding.hpp"
 #include "pickable.hpp"
 #include "status_effect.hpp"
 #include "transporter.hpp"
