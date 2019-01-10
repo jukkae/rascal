@@ -121,28 +121,6 @@ std::vector<std::unique_ptr<Action>> PlayerAi::getNextAction(Actor* actor) {
 						actions.push_back(std::make_unique<OpenAction>(actor));
 						break;
 					}
-					case k::P: {
-						std::vector<Point> path = findPath(actor->world,
-										 Point(actor->x, actor->y),
-										 io::mousePosition);
-						for(int i = 0; i < path.size() - 1; ++i) {
-							Point from = path.at(i);
-							Point to = path.at(i + 1);
-							int stepDx = to.x - from.x;
-							int stepDy = to.y - from.y;
-							Direction stepDir;
-							if (stepDx ==  0 && stepDy == -1) stepDir = Direction::N;
-							if (stepDx ==  1 && stepDy == -1) stepDir = Direction::NE;
-							if (stepDx ==  1 && stepDy ==  0) stepDir = Direction::E;
-							if (stepDx ==  1 && stepDy ==  1) stepDir = Direction::SE;
-							if (stepDx ==  0 && stepDy ==  1) stepDir = Direction::S;
-							if (stepDx == -1 && stepDy ==  1) stepDir = Direction::SW;
-							if (stepDx == -1 && stepDy ==  0) stepDir = Direction::W;
-							if (stepDx == -1 && stepDy == -1) stepDir = Direction::NW;
-							actions.push_back(std::make_unique<MoveAction>(MoveAction(actor, stepDir)));
-						}
-						break;
-					}
 					// TODO select direction
 					case k::T: {
 						actions.push_back(std::make_unique<TalkAction>(actor));
@@ -172,10 +150,30 @@ std::vector<std::unique_ptr<Action>> PlayerAi::getNextAction(Actor* actor) {
 			}
 		} else if(event.type == sf::Event::MouseButtonPressed) {
 			if(event.mouseButton.button == sf::Mouse::Left) {
-				actions.push_back(std::make_unique<ShootAction>(actor, io::mousePosition));
+				std::vector<Point> path = findPath(actor->world,
+								 Point(actor->x, actor->y),
+								 io::mousePosition);
+				if(!(path.size() <= 1)) {
+					for(int i = 0; i < path.size() - 1; ++i) {
+						Point from = path.at(i);
+						Point to = path.at(i + 1);
+						int stepDx = to.x - from.x;
+						int stepDy = to.y - from.y;
+						Direction stepDir;
+						if (stepDx ==  0 && stepDy == -1) stepDir = Direction::N;
+						if (stepDx ==  1 && stepDy == -1) stepDir = Direction::NE;
+						if (stepDx ==  1 && stepDy ==  0) stepDir = Direction::E;
+						if (stepDx ==  1 && stepDy ==  1) stepDir = Direction::SE;
+						if (stepDx ==  0 && stepDy ==  1) stepDir = Direction::S;
+						if (stepDx == -1 && stepDy ==  1) stepDir = Direction::SW;
+						if (stepDx == -1 && stepDy ==  0) stepDir = Direction::W;
+						if (stepDx == -1 && stepDy == -1) stepDir = Direction::NW;
+						actions.push_back(std::make_unique<MoveAction>(MoveAction(actor, stepDir)));
+					}
+				}
 			}
 			if(event.mouseButton.button == sf::Mouse::Right) {
-
+				actions.push_back(std::make_unique<ShootAction>(actor, io::mousePosition));
 			}
 		}
 	}
@@ -189,15 +187,21 @@ std::vector<Point> PlayerAi::findPath(World* world, Point from, Point to) {
 	<< ") to (" << to.x << ", " << to.y <<")...\n";
 
 	Mat2d<Tile> tiles = world->map.tiles;
-	std::queue<Point> frontier;
-	frontier.push(from);
+	std::vector<Point> path;
+	if(to.x < 0 || to.x >= tiles.w || to.y < 0 || to.y >= tiles.h ||
+		 !tiles.at(to.x, to.y).walkable) return path; // TODO figure out more robust handling
+
+	PriorityQueue<Point, float> frontier;
+	frontier.put(from, 0.0f);
 
 	std::unordered_map<Point, Point, PointHasher> came_from;
 	came_from[from] = from;
 
+	std::unordered_map<Point, float, PointHasher> cost_thus_far;
+	cost_thus_far[from] = 0.0f;
+
 	while(!frontier.empty()) {
-		Point current = frontier.front();
-		frontier.pop();
+		Point current = frontier.get();
 
 		if (current == to) {
 			break;
@@ -208,15 +212,27 @@ std::vector<Point> PlayerAi::findPath(World* world, Point from, Point to) {
 				if(i == 0 && j == 0) continue;
 				Point next = Point(current.x + i, current.y + j);
 				if(next.x < 0 || next.y < 0 || next.x >= tiles.w || next.y >= tiles.h) continue;
-				if(came_from.find(next) == came_from.end()) {
-					//std::cout << "  Next: (" << next.x << ", " << next.y << ")\n";
-					if(tiles.at(next.x, next.y).walkable) {
-						// std::cout << "    Walkable!\n";
-						frontier.push(next);
+				float nextDeltaCost = (tiles.at(current.x, current.y).movementCost +
+															 tiles.at(next.x, next.y).movementCost) / 2.0f;
+				if((i != 0) && (j != 0)) nextDeltaCost *= sqrtf(2.0);
+				float nextCost = cost_thus_far[current] + nextDeltaCost;
+				if(cost_thus_far.find(next) == cost_thus_far.end() ||
+					 nextCost < cost_thus_far[next]) {
+			 		if(tiles.at(next.x, next.y).walkable) {
+						cost_thus_far[next] = nextCost;
 						came_from[next] = current;
+						frontier.put(next, nextCost);
 					}
-					// else std::cout << "    Not walkable!\n";
 				}
+				//if(came_from.find(next) == came_from.end()) {
+					//std::cout << "  Next: (" << next.x << ", " << next.y << ")\n";
+					//if(tiles.at(next.x, next.y).walkable) {
+						// std::cout << "    Walkable!\n";
+						//frontier.push(next);
+						//came_from[next] = current;
+					//}
+					// else std::cout << "    Not walkable!\n";
+				//}
 			}
 		}
 	}
@@ -228,7 +244,7 @@ std::vector<Point> PlayerAi::findPath(World* world, Point from, Point to) {
 	}
 
 	Point current = to;
-	std::vector<Point> path;
+
 	while(!(current == from)) {
 		path.push_back(current);
 		current = came_from[current];

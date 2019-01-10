@@ -24,8 +24,10 @@ struct Tile {
 	bool transparent;
 	bool walkable;
 	Terrain terrain;
+	float movementCost;
 	std::experimental::optional<Animation> animation;
-	Tile() : explored(false), inFov(false), transparent(true), walkable(true), terrain(Terrain::NORMAL) {;}
+	Tile() : explored(false), inFov(false), transparent(true), walkable(true),
+	terrain(Terrain::NORMAL), movementCost(1.0f) {;}
 
 	template<typename Archive>
 	void serialize(Archive & ar, const unsigned int version) {
@@ -34,6 +36,7 @@ struct Tile {
 		ar & transparent;
 		ar & walkable;
 		ar & terrain;
+		ar & movementCost;
 		ar & animation;
 	}
 };
