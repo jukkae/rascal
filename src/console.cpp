@@ -23,6 +23,7 @@ consoleType(consoleType), clearMode(clearMode) {
 
 void Console::clear() {
 	// TODO what should this function really do? Who knows?
+	// Doesn't work w/ transparent
 	if(clearMode == ClearMode::BLACK) {
 		for(auto& c : cells) c = Cell();
 	}
