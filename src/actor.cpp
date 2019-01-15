@@ -87,8 +87,9 @@ float Actor::update(GameplayState* state) {
 				}
 			}
 			return turnCost;
-		} else {
+		} else { // action not successful
 			if(ai->isPlayer()) {
+				actionsQueue.clear();
 				if(isPlayer()) world->computeFov(x, y, fovRadius);
 				return 0;
 			} else {
