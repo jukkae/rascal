@@ -218,13 +218,15 @@ private:
 
 class OpenAction : public Action {
 public:
-	OpenAction(Actor* actor) : Action(actor, 100.0f) {;}
+	OpenAction(Actor* actor, Actor* target) : Action(actor, 100.0f), target(target) {;}
 	bool execute();
 private:
+	Actor* target;
 	friend class boost::serialization::access;
 	template<class Archive>
 	void serialize(Archive & ar, const unsigned int version) {
 		ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(Action);
+		ar & target;
 	}
 };
 

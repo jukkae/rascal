@@ -398,32 +398,21 @@ bool ShootAction::execute() {
 }
 
 bool OpenAction::execute() {
+	// TODO check if actor is next to target
 	World* w = actor->world;
-	for(int x = actor->x - 1; x <= actor->x + 1; ++x) {
-		for(int y = actor->y - 1; y <= actor->y + 1; ++y) {
-			if(x == actor->x && y == actor->y) continue;
-			std::vector<Actor*> as = w->getActorsAt(x, y);
-			for(auto& a : as) if(a->openable && !a->openable->open) {
-				a->openable->open = true;
-				a->blocks = false;
-				a->blocksLight = false;
-				a->col = sf::Color(255, 255, 255);
-				return true;
-			}
-		}
+	if(target->openable && !target->openable->open) {
+		target->openable->open = true;
+		target->blocks = false;
+		target->blocksLight = false;
+		target->col = sf::Color(255, 255, 255);
+		return true;
 	}
-	for(int x = actor->x - 1; x <= actor->x + 1; ++x) {
-		for(int y = actor->y - 1; y <= actor->y + 1; ++y) {
-			if(x == actor->x && y == actor->y) continue;
-			std::vector<Actor*> as = w->getActorsAt(x, y);
-			for(auto& a : as) if(a->openable && a->openable->open) {
-				a->openable->open = false;
-				a->blocks = true;
-				a->blocksLight = true;
-				a->col = sf::Color(0, 0, 0);
-				return true;
-			}
-		}
+	else if(target->openable && target->openable->open) {
+		target->openable->open = false;
+		target->blocks = true;
+		target->blocksLight = true;
+		target->col = sf::Color(0, 0, 0);
+		return true;
 	}
 	return false;
 }

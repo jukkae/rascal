@@ -146,13 +146,13 @@ std::vector<std::unique_ptr<Action>> PlayerAi::getNextAction(Actor* actor) {
 			if(event.mouseButton.button == sf::Mouse::Left) {
 				std::unique_ptr<Action> lastAction = nullptr;
 				auto actorsAtTarget = actor->world->getActorsAt(io::mousePosition.x, io::mousePosition.y);
-				for(auto& a : actorsAtTarget) {
+				for(auto& target : actorsAtTarget) {
 					// TODO other default actions
-					if(a->openable && !a->openable->open) {
-						lastAction = std::make_unique<OpenAction>(actor);
+					if(target->openable && !target->openable->open) {
+						lastAction = std::make_unique<OpenAction>(actor, target);
 					}
-					if(a->openable && a->openable->open) {
-						lastAction = std::make_unique<OpenAction>(actor);
+					else if(target->openable && target->openable->open) {
+						lastAction = std::make_unique<OpenAction>(actor, target);
 					}
 				}
 
