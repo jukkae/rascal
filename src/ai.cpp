@@ -149,6 +149,16 @@ std::vector<std::unique_ptr<Action>> PlayerAi::getNextAction(Actor* actor) {
 			}
 		} else if(event.type == sf::Event::MouseButtonPressed) {
 			if(event.mouseButton.button == sf::Mouse::Left) {
+				std::unique_ptr<Action> lastAction = nullptr;
+				auto actorsAtTarget = actor->world->getActorsAt(io::mousePosition.x, io::mousePosition.y);
+				for(auto& a : actorsAtTarget) {
+					// TODO other default actions
+					if(a->openable && !a->openable->open) {
+						lastAction = std::make_unique<OpenAction>(actor);
+					}
+				}
+
+				// Find path
 				std::vector<Point> path = pathfinding::findPath(actor->world->map,
 								 Point(actor->x, actor->y),
 								 io::mousePosition);
@@ -167,7 +177,16 @@ std::vector<std::unique_ptr<Action>> PlayerAi::getNextAction(Actor* actor) {
 						if (stepDx == -1 && stepDy ==  1) stepDir = Direction::SW;
 						if (stepDx == -1 && stepDy ==  0) stepDir = Direction::W;
 						if (stepDx == -1 && stepDy == -1) stepDir = Direction::NW;
-						actions.push_back(std::make_unique<MoveAction>(MoveAction(actor, stepDir)));
+						if(i != path.size() - 2) {
+							actions.push_back(std::make_unique<MoveAction>(MoveAction(actor, stepDir)));
+						} else { // for the last step of the path...
+							if(lastAction == nullptr) { // ... if no alternate default, push move
+								actions.push_back(std::make_unique<MoveAction>(MoveAction(actor, stepDir)));
+							} else { // ... but if alternate exists, push that
+								actions.push_back(std::move(lastAction));
+							}
+						}
+
 					}
 				}
 			}
