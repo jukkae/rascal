@@ -318,11 +318,12 @@ bool EatAction::execute() {
 	}
 }
 
+// TODO what should ActionRange really be?
 LookAction::LookAction(Actor* actor):
-	Action(actor, 50.0f), location(Point(actor->x, actor->y)) {;}
+	Action(actor, ActionRange::ANYWHERE, 50.0f), location(Point(actor->x, actor->y)) {;}
 
 LookAction::LookAction(Actor* actor, Point location):
-	Action(actor, 50.0f), location(location) {;}
+	Action(actor, ActionRange::ANYWHERE, 50.0f), location(location) {;}
 
 bool LookAction::execute() {
 	RequestDescriptionEvent e(actor, location);
@@ -330,8 +331,9 @@ bool LookAction::execute() {
 	return true;
 }
 
+// TODO what should ActionRange really be? Range? But that's based on the weapon
 ShootAction::ShootAction(Actor* actor, Point target):
-	Action(actor, 100.0f), target(target) {;}
+	Action(actor, ActionRange::ANYWHERE, 100.0f), target(target) {;}
 
 bool ShootAction::execute() {
 	World* world = actor->world;

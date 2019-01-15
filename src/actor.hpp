@@ -79,8 +79,10 @@ public:
 	bool tryToMove(Direction direction, float distance);
 	int getAC();
 
+	std::deque<std::unique_ptr<Action>> actionsQueue; // TODO this should be private, but visible to this actor's AI
+
 private:
-	std::deque<std::unique_ptr<Action>> actionsQueue;
+
 	std::vector<std::unique_ptr<StatusEffect>> statusEffects;
 
 	friend class boost::serialization::access;

@@ -143,6 +143,7 @@ std::vector<std::unique_ptr<Action>> PlayerAi::getNextAction(Actor* actor) {
 				}
 			}
 		} else if(event.type == sf::Event::MouseButtonPressed) {
+			actor->actionsQueue.clear(); // TODO this should work!
 			if(event.mouseButton.button == sf::Mouse::Left) {
 				std::unique_ptr<Action> lastAction = nullptr;
 				auto actorsAtTarget = actor->world->getActorsAt(io::mousePosition.x, io::mousePosition.y);
@@ -153,6 +154,9 @@ std::vector<std::unique_ptr<Action>> PlayerAi::getNextAction(Actor* actor) {
 					}
 					else if(target->openable && target->openable->open) {
 						lastAction = std::make_unique<OpenAction>(actor, target);
+					}
+					if(target->pickable) {
+						lastAction = std::make_unique<PickupAction>(actor);
 					}
 				}
 
@@ -180,8 +184,27 @@ std::vector<std::unique_ptr<Action>> PlayerAi::getNextAction(Actor* actor) {
 						} else { // for the last step of the path...
 							if(lastAction == nullptr) { // ... if no alternate default, push move
 								actions.push_back(std::make_unique<MoveAction>(MoveAction(actor, stepDir)));
-							} else { // ... but if alternate exists, push that
-								actions.push_back(std::move(lastAction));
+							} else if(lastAction->actionRange.index() == 0) { // ActionRange enum
+								ActionRange actionRange = std::get<ActionRange>(lastAction->actionRange);
+								switch(actionRange) {
+									case ActionRange::ON_TOP:
+										actions.push_back(std::make_unique<MoveAction>(MoveAction(actor, stepDir)));
+										actions.push_back(std::move(lastAction));
+										break;
+									case ActionRange::NEXT_TO:
+										actions.push_back(std::move(lastAction));
+										break;
+									case ActionRange::ANYWHERE:
+										// TODO I suppose??
+										throw std::logic_error("Make sure this does what you think it does");
+										actions.push_back(std::move(lastAction));
+										break;
+									default:
+										throw std::logic_error("Unknown action range");
+								}
+
+							} else if(lastAction->actionRange.index() == 1) { // float for range
+								throw std::logic_error("Action ranges not implemented");
 							}
 						}
 

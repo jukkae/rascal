@@ -6,19 +6,22 @@ struct ActionResult;
 #include "actor.hpp"
 #include "direction.hpp"
 #include "point.hpp"
+#include <variant>
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/serialization/export.hpp>
 #include <boost/serialization/vector.hpp>
 #include <boost/optional.hpp>
 
+enum class ActionRange { ON_TOP, NEXT_TO, ANYWHERE };
 
 class Action {
 public:
-	Action(Actor* actor, float length = 100.0f) : actor(actor), length(length) {;}
+	Action(Actor* actor, std::variant<ActionRange, float> actionRange, float length) : actionRange(actionRange), actor(actor), length(length) {;}
 	virtual ~Action() {}
 	virtual bool execute() = 0;
 	float getLength() { return length; }
+	std::variant<ActionRange, float> actionRange;
 protected:
 	Actor* actor;
 	float length;
@@ -28,12 +31,13 @@ private:
 	void serialize(Archive & ar, const unsigned int version) {
 		ar & actor;
 		ar & length;
+		ar & actionRange;
 	}
 };
 
 class EmptyAction : public Action {
 public:
-	EmptyAction(Actor* actor) : Action(actor, 0.0f) {;}
+	EmptyAction(Actor* actor) : Action(actor, ActionRange::ANYWHERE, 0.0f) {;}
 	bool execute() { return true; }
 private:
 	friend class boost::serialization::access;
@@ -45,7 +49,7 @@ private:
 
 class WaitAction : public Action {
 public:
-	WaitAction(Actor* actor) : Action(actor, 100.0f) {;}
+	WaitAction(Actor* actor) : Action(actor, ActionRange::ANYWHERE, 100.0f) {;}
 	bool execute() { return true; }
 private:
 	friend class boost::serialization::access;
@@ -57,7 +61,7 @@ private:
 
 class MoveAction : public Action {
 public:
-	MoveAction(Actor* actor, Direction direction) : Action(actor, 100.0f), direction(direction)
+	MoveAction(Actor* actor, Direction direction) : Action(actor, ActionRange::ANYWHERE, 100.0f), direction(direction)
 	{
 		if(direction == Direction::NE || direction == Direction::SE ||
 		   direction == Direction::SW || direction == Direction::NW) {
@@ -78,7 +82,7 @@ private:
 
 class TraverseStairsAction : public Action {
 public:
-	TraverseStairsAction(Actor* actor, bool down) : Action(actor, 100.0f), down(down) {;}
+	TraverseStairsAction(Actor* actor, bool down) : Action(actor, ActionRange::ON_TOP, 100.0f), down(down) {;}
 	bool execute();
 private:
 	bool down;
@@ -93,7 +97,7 @@ private:
 
 class PickupAction : public Action {
 public:
-	PickupAction(Actor* actor) : Action(actor, 100.0f) {;}
+	PickupAction(Actor* actor) : Action(actor, ActionRange::ON_TOP, 100.0f) {;}
 	bool execute();
 private:
 	friend class boost::serialization::access;
@@ -105,7 +109,7 @@ private:
 
 class UseItemAction : public Action {
 public:
-	UseItemAction(Actor* actor, Actor* item) : Action(actor, 100.0f), item(item) {;}
+	UseItemAction(Actor* actor, Actor* item) : Action(actor, ActionRange::ANYWHERE, 100.0f), item(item) {;}
 	bool execute();
 private:
 	Actor* item;
@@ -119,7 +123,7 @@ private:
 
 class DropItemAction : public Action {
 public:
-	DropItemAction(Actor* actor, Actor* item) : Action(actor, 50.0f), item(item) {;}
+	DropItemAction(Actor* actor, Actor* item) : Action(actor, ActionRange::ANYWHERE, 50.0f), item(item) {;}
 	bool execute();
 private:
 	Actor* item;
@@ -133,7 +137,7 @@ private:
 
 class ThrowItemAction : public Action {
 public:
-	ThrowItemAction(Actor* actor, Actor* item) : Action(actor, 50.0f), item(item) {;}
+	ThrowItemAction(Actor* actor, Actor* item) : Action(actor, ActionRange::ANYWHERE, 50.0f), item(item) {;}
 	bool execute();
 private:
 	Actor* item;
@@ -147,7 +151,7 @@ private:
 
 class WieldItemAction : public Action {
 public:
-	WieldItemAction(Actor* actor, Actor* item) : Action(actor, 50.0f), item(item) {;}
+	WieldItemAction(Actor* actor, Actor* item) : Action(actor, ActionRange::ANYWHERE, 50.0f), item(item) {;}
 	bool execute();
 private:
 	Actor* item;
@@ -162,7 +166,7 @@ private:
 class UnWieldItemAction : public Action {
 public:
 	Actor* item;
-	UnWieldItemAction(Actor* actor, Actor* item) : Action(actor, 50.0f), item(item) {;}
+	UnWieldItemAction(Actor* actor, Actor* item) : Action(actor, ActionRange::ANYWHERE, 50.0f), item(item) {;}
 	bool execute();
 private:
 	friend class boost::serialization::access;
@@ -204,7 +208,7 @@ private:
 
 class EatAction : public Action {
 public:
-	EatAction(Actor* actor, Actor* item) : Action(actor, 200.0f), item(item) {;}
+	EatAction(Actor* actor, Actor* item) : Action(actor, ActionRange::ANYWHERE, 200.0f), item(item) {;}
 	bool execute();
 private:
 	Actor* item;
@@ -218,7 +222,7 @@ private:
 
 class OpenAction : public Action {
 public:
-	OpenAction(Actor* actor, Actor* target) : Action(actor, 100.0f), target(target) {;}
+	OpenAction(Actor* actor, Actor* target) : Action(actor, ActionRange::NEXT_TO, 100.0f), target(target) {;}
 	bool execute();
 private:
 	Actor* target;
@@ -232,7 +236,7 @@ private:
 
 class TalkAction : public Action {
 public:
-	TalkAction(Actor* actor) : Action(actor, 100.0f) {;}
+	TalkAction(Actor* actor) : Action(actor, ActionRange::NEXT_TO, 100.0f) {;}
 	bool execute();
 private:
 	friend class boost::serialization::access;
