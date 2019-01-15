@@ -116,11 +116,6 @@ std::vector<std::unique_ptr<Action>> PlayerAi::getNextAction(Actor* actor) {
 						break;
 					}
 					// TODO select direction
-					case k::O: {
-						actions.push_back(std::make_unique<OpenAction>(actor));
-						break;
-					}
-					// TODO select direction
 					case k::T: {
 						actions.push_back(std::make_unique<TalkAction>(actor));
 						break;
@@ -154,6 +149,9 @@ std::vector<std::unique_ptr<Action>> PlayerAi::getNextAction(Actor* actor) {
 				for(auto& a : actorsAtTarget) {
 					// TODO other default actions
 					if(a->openable && !a->openable->open) {
+						lastAction = std::make_unique<OpenAction>(actor);
+					}
+					if(a->openable && a->openable->open) {
 						lastAction = std::make_unique<OpenAction>(actor);
 					}
 				}
