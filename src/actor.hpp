@@ -34,6 +34,7 @@ class GameplayState;
 #include "armor.hpp" //FIXME for serialization for now
 #include "openable.hpp" //FIXME for serialization for now
 #include "comestible.hpp" //FIXME for serialization for now
+#include "quest.hpp"
 
 class World;
 class Actor {
@@ -61,6 +62,7 @@ public:
 	Actor* wornWeapon = nullptr;
 	std::vector<Actor*> wornArmors;
 	std::experimental::optional<Animation> animation;
+	std::vector<Quest> quests;
 
 	World* world;
 
@@ -115,6 +117,7 @@ private:
 		ar & world;
 		ar & animation;
 		ar & comestible;
+		ar & quests;
     }
 };
 #endif /* ACTOR_HPP */

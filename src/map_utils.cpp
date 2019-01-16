@@ -12,6 +12,7 @@
 #include "map_utils.hpp"
 #include "map.hpp"
 #include "pickable.hpp"
+#include "quest.hpp"
 #include "status_effect.hpp"
 #include "transporter.hpp"
 #include "wieldable.hpp"
@@ -178,6 +179,8 @@ void map_utils::addPlayer(World* world, Map* map) {
 	int hp = 0;
 	for(int i = 0; i < hpDice; ++i) hp += d4();
 	player->destructible = std::make_unique<PlayerDestructible>(hp, 2, 0, "your corpse");
+	player->quests.push_back(Quest("Test quest 1", "Go and do the thing"));
+	player->quests.push_back(Quest("Test quest 2", "Go and undo the other thing"));
 	world->addActor(std::move(player));
 }
 

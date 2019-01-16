@@ -160,10 +160,10 @@ void InventoryMenuState::render() {
 
 	renderStats();
 	renderBodyParts();
+	renderQuests();
 
 	console.draw();
 	window->display();
-
 }
 
 void InventoryMenuState::renderStats() {
@@ -239,6 +239,21 @@ void InventoryMenuState::renderBodyParts() {
 			else col = colors::get("blue");
 			console.drawGraphicsBlock(Point(x, y+1), bpt, col);
 		}
+	}
+}
+
+void InventoryMenuState::renderQuests() {
+	console.drawGraphicsBlock(Point(120, 1), "Q U E S T S", colors::get("brightBlue"));
+
+	int x = 120;
+	int y = 1;
+
+	for(auto& quest : actor->quests) {
+		++y;
+		console.drawGraphicsBlock(Point(x, y+1), quest.name, colors::get("brightBlue"));
+		++y;
+		console.drawGraphicsBlock(Point(x, y+1), quest.description, colors::get("blue"));
+		++y;
 	}
 }
 

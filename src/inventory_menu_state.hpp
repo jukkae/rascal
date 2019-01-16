@@ -18,6 +18,7 @@ private:
 	void renderPiles();
 	void renderStats();
 	void renderBodyParts();
+	void renderQuests();
 	Actor* actor;
 	int credits;
 	int contentsWeight;
