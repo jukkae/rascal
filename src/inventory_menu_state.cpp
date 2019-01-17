@@ -160,7 +160,7 @@ void InventoryMenuState::render() {
 
 	renderStats();
 	renderBodyParts();
-	renderQuests();
+	renderMissions();
 
 	console.draw();
 	window->display();
@@ -242,17 +242,17 @@ void InventoryMenuState::renderBodyParts() {
 	}
 }
 
-void InventoryMenuState::renderQuests() {
-	console.drawGraphicsBlock(Point(120, 1), "Q U E S T S", colors::get("brightBlue"));
+void InventoryMenuState::renderMissions() {
+	console.drawGraphicsBlock(Point(120, 1), "M I S S I O N S", colors::get("brightBlue"));
 
 	int x = 120;
 	int y = 1;
 
-	for(auto& quest : actor->quests) {
+	for(auto& mission : actor->missions) {
 		++y;
-		console.drawGraphicsBlock(Point(x, y+1), quest.name, colors::get("brightBlue"));
+		console.drawGraphicsBlock(Point(x, y+1), mission.name, colors::get("brightBlue"));
 		++y;
-		console.drawGraphicsBlock(Point(x, y+1), quest.description, colors::get("blue"));
+		console.drawGraphicsBlock(Point(x, y+1), mission.description, colors::get("blue"));
 		++y;
 	}
 }

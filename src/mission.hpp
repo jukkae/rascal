@@ -1,10 +1,14 @@
-#ifndef QUEST_HPP
-#define QUEST_HPP
+#ifndef MISSION_HPP
+#define MISSION_HPP
+#include "event.hpp"
 
-class Quest {
+struct Event;
+
+class Mission {
 public:
-  Quest(std::string name = "", std::string description = ""):
+  Mission(std::string name = "", std::string description = ""):
     name(name), description(description) {}
+  void notify(Event& e);
   std::string name;
   std::string description;
 private:
@@ -16,4 +20,4 @@ private:
 	}
 };
 
-#endif /* QUEST_HPP */
+#endif /* MISSION_HPP */

@@ -26,6 +26,7 @@ class Transporter;
 class Comestible;
 class Wieldable;
 class GameplayState;
+class Mission;
 
 #include "animation.hpp"
 #include "attribute.hpp"
@@ -34,7 +35,7 @@ class GameplayState;
 #include "armor.hpp" //FIXME for serialization for now
 #include "openable.hpp" //FIXME for serialization for now
 #include "comestible.hpp" //FIXME for serialization for now
-#include "quest.hpp"
+#include "mission.hpp"
 
 class World;
 class Actor {
@@ -62,7 +63,7 @@ public:
 	Actor* wornWeapon = nullptr;
 	std::vector<Actor*> wornArmors;
 	std::experimental::optional<Animation> animation;
-	std::vector<Quest> quests;
+	std::vector<Mission> missions;
 
 	World* world;
 
@@ -117,7 +118,7 @@ private:
 		ar & world;
 		ar & animation;
 		ar & comestible;
-		ar & quests;
+		ar & missions;
     }
 };
 #endif /* ACTOR_HPP */
