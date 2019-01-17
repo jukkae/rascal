@@ -254,6 +254,9 @@ void InventoryMenuState::renderMissions() {
 		++y;
 		console.drawGraphicsBlock(Point(x, y+1), mission.description, colors::get("blue"));
 		++y;
+		console.drawGraphicsBlock(Point(x, y+1), mission.completed ? "done" : "not done",
+			mission.completed ? colors::get("brightGreen") : colors::get("blue"));
+		++y;
 	}
 }
 

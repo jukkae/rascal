@@ -179,7 +179,9 @@ void map_utils::addPlayer(World* world, Map* map) {
 	int hp = 0;
 	for(int i = 0; i < hpDice; ++i) hp += d4();
 	player->destructible = std::make_unique<PlayerDestructible>(hp, 2, 0, "your corpse");
-	player->missions.push_back(Mission("Test quest 1", "Go and do the thing"));
+
+	player->missions.push_back(Mission("Kill Bill", "Find and kill Bill"));
+
 	player->missions.push_back(Mission("Test quest 2", "Go and undo the other thing"));
 	world->addActor(std::move(player));
 }
