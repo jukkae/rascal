@@ -50,7 +50,6 @@ bool isInteger(std::string const s);
 bool isNil(std::string const s);
 bool isSymbol(std::string const s);
 Atom parseSimple(std::string const str);
-Atom parseList(std::string const str);
 Atom readFrom(std::list<std::string> tokens);
 Atom readExpression(std::string const expression);
 

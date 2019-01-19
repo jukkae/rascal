@@ -80,14 +80,12 @@ Engine::Engine(sf::RenderWindow* window) : window(window) {
 	std::cout << "tokenizing \'" << toBeTokenized << "\':\n";
 	std::list<std::string> tokens = lisp::tokenize(toBeTokenized);
 	for(auto& t : tokens) {
-		std::cout << "  parsing " << t << "\n";
-		//lisp::Atom atom = lisp::parse(t);
-		//std::cout << "  lisp thinks this is:\n";
-		//lisp::printExpr(atom);
-		//std::cout << "\n";
+		std::cout << t << ",";
 	}
+	std::cout << "\n";
 
-	std::string toBeParsed = "(foo bar quux xyzzy)";
+	//std::string toBeParsed = "(foo (bar . quux) xyzzy . (woof . nil))";
+	std::string toBeParsed = "(foo (bar quux))";
 	std::cout << "parsing \'" << toBeParsed << "\':\n";
 	lisp::Atom atom = lisp::readExpression(toBeParsed);
 	lisp::printExpr(atom);

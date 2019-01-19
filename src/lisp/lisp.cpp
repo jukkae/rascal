@@ -123,43 +123,51 @@ Atom lisp::parseSimple(std::string const str) {
   if(isSymbol(str)) {
     return makeSymbol(str);
   }
+  if(str == "(" || str == ")") {
+    // TODO does this make sense?
+    //return Atom{ Nil{} };
+  }
   throw LispException("parseSimple: Simple token type not implemented for string: " + str);
 }
 
-Atom lisp::parseList(std::string const str) {
-  throw LispException("parseList: List parsing not implemented");
-  Atom p{ Nil{} };
-  Atom result{ Nil{} };
-  return result;
-}
-
 Atom lisp::readFrom(std::list<std::string> tokens) {
+  std::cout << "-- tokens --\n";
+  for(auto& a: tokens) std::cout << a << "\n";
+  std::cout << "--\n";
+
+  // If just one token, parse it
   if(tokens.size() == 1) {
     return parseSimple(tokens.front());
   }
-  if(tokens.size() == 2) {
-    if(tokens.back() == ")") {
-      return Atom{Nil{}};
-//      return parseSimple(tokens.front());
-    } else {
-      throw LispException("readFrom: malformed end of list: " + tokens.front() + ", " + tokens.back());
-    }
+
+  // If two tokens, parse those
+  else if(tokens.size() == 2) {
+    return Atom { new Pair{parseSimple(tokens.front()), parseSimple(tokens.back())}};
   }
+
+  // Else strip parens and recurse
   else {
+    int numberOfLParens = 0;
+    int numberOfRParens = 0;
+    for(auto& token : tokens) {
+      if(token == "(") ++numberOfLParens;
+      if(token == ")") ++numberOfRParens;
+    }
+    if(numberOfLParens != numberOfRParens) {
+      throw LispException("readFrom: Mismatched parens");
+    }
+    // Number of parens looks good
+
     const std::string token(tokens.front());
     tokens.pop_front();
     if(token == "(") {
-      //tokens.pop_front();
-      Atom a { .value = new Pair {} };
-      std::get<Pair*>(a.value)->head = parseSimple(tokens.front());
-      std::get<Pair*>(a.value)->tail = readFrom(tokens);
-      return a;
-    } else if(token == ")") return Atom{ Nil{} };
-    else {
-      Atom a { .value = new Pair{} };
-      std::get<Pair*>(a.value)->head = parseSimple(tokens.front());
-      std::get<Pair*>(a.value)->tail = readFrom(tokens);
-      return a;
+      if(tokens.back() != ")") {
+        throw LispException("readFrom: Bad end of list");
+      }
+      tokens.pop_back();
+      return Atom { readFrom(tokens) };
+    } else {
+      return Atom { new Pair{parseSimple(token), readFrom(tokens)}};
     }
   }
 }
