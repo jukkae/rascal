@@ -132,6 +132,22 @@ Engine::Engine(sf::RenderWindow* window) : window(window) {
 		lisp::printExpr(a);
 		std::cout << "\n";
 	}
+
+	{
+		std::string p = "((a b) d (a c) b d nil)";
+		std::cout << "parsing \'" << p << "\':\n";
+		lisp::Atom a = lisp::readExpression(p);
+		lisp::printExpr(a);
+		std::cout << "\n";
+	}
+
+	{
+		std::string p = "()((u cant) break (my parser nil nil) with (anything nil) at all)";
+		std::cout << "parsing \'" << p << "\':\n";
+		lisp::Atom a = lisp::readExpression(p);
+		lisp::printExpr(a);
+		std::cout << "\n";
+	}
 }
 
 Engine::~Engine() {

@@ -131,9 +131,9 @@ Atom lisp::parseSimple(std::string const str) {
 }
 
 Atom lisp::readFrom(std::list<std::string> tokens) {
-  std::cout << "--tokens--\n";
-  for(auto& a: tokens) std::cout << a << "\n";
-  std::cout << "--\n\n";
+  // std::cout << "--tokens--\n";
+  // for(auto& a: tokens) std::cout << a << "\n";
+  // std::cout << "--\n\n";
 
   // Empty list => nil
   if(tokens.size() == 0) {
@@ -182,13 +182,13 @@ Atom lisp::readFrom(std::list<std::string> tokens) {
         tokensInFirstParens.pop_front();
         tokensInFirstParens.pop_back();
       }
-      std::cout << "--toks in first parens--\n";
-      for(auto& a: tokensInFirstParens) std::cout << a << "\n";
-      std::cout << "--\n\n";
-
-      std::cout << "--rest of toks--\n";
-      for(auto& a: tokens) std::cout << a << "\n";
-      std::cout << "--\n\n";
+      // std::cout << "--toks in first parens--\n";
+      // for(auto& a: tokensInFirstParens) std::cout << a << "\n";
+      // std::cout << "--\n\n";
+      //
+      // std::cout << "--rest of toks--\n";
+      // for(auto& a: tokens) std::cout << a << "\n";
+      // std::cout << "--\n\n";
       return cons(readFrom(tokensInFirstParens), readFrom(tokens));
     } else {
       tokens.pop_front();
