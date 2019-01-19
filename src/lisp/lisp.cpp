@@ -57,11 +57,11 @@ void lisp::printExpr(Atom atom) {
     }
     std::cout << ")";
   }
-  if(std::holds_alternative<std::string>(atom)) {
-    std::cout << std::get<std::string>(atom);
+  if(std::holds_alternative<Symbol>(atom)) {
+    std::cout << std::get<Symbol>(atom);
   }
-  if(std::holds_alternative<long>(atom)) {
-    std::cout << std::get<long>(atom);
+  if(std::holds_alternative<Integer>(atom)) {
+    std::cout << std::get<Integer>(atom);
   }
 }
 
@@ -205,4 +205,10 @@ Atom lisp::readExpression(std::string const expression) {
 
 Atom lisp::createEnv(Atom parent) {
   return cons(parent, makeNil());
+}
+
+Atom lisp::getEnv(Atom env, Atom symbol) {
+  if(!std::holds_alternative<Pair*>(env)) throw LispException("getEnv: Env not pair");
+  if(!std::holds_alternative<Symbol>(symbol)) throw LispException("getEnv: Symbol not symbol");
+  return makeNil();
 }

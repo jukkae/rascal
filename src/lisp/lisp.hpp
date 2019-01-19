@@ -20,7 +20,9 @@ public:
 
 struct Pair;
 struct Nil { };
-using Atom = std::variant<Nil, Pair*, std::string, long>;
+using Symbol = std::string;
+using Integer = long;
+using Atom = std::variant<Nil, Pair*, Symbol, Integer>;
 
 struct Pair {
   Atom head;
