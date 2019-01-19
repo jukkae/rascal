@@ -18,16 +18,9 @@ public:
   }
 };
 
-enum class Status {
-  OK,
-  ERROR_SYNTAX
-};
-
 struct Pair;
 struct Nil { };
-struct Atom {
-  std::variant<Nil, Pair*, std::string, long> value;
-};
+using Atom = std::variant<Nil, Pair*, std::string, long>;
 
 struct Pair {
   Atom head;
@@ -53,6 +46,9 @@ Atom parseSimple(std::string const str);
 Atom readFrom(std::list<std::string> tokens);
 Atom readExpression(std::string const expression);
 
+Atom createEnv(Atom parent);
+Atom getEnv(Atom env, Atom symbol);
+void setEnv(Atom env, Atom symbol, Atom value);
 
 // TODO this could use e.g. std::set instead, but this is good enough for now
 extern Atom symbolTable;

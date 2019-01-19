@@ -6,7 +6,7 @@ using namespace lisp;
 Atom lisp::symbolTable {Nil{}};
 
 bool lisp::nilp(Atom atom) {
-  return std::holds_alternative<Nil>(atom.value);
+  return std::holds_alternative<Nil>(atom);
 }
 
 Atom lisp::cons(Atom head, Atom tail) {
@@ -25,11 +25,11 @@ Atom lisp::makeSymbol(std::string const s) {
   Atom a, p;
   p = symbolTable;
   while(!nilp(p)) {
-    a = std::get<Pair*>(p.value)->head;
-    if(std::get<std::string>(a.value) == s) {
+    a = std::get<Pair*>(p)->head;
+    if(std::get<std::string>(a) == s) {
       return a;
     }
-    p = std::get<Pair*>(p.value)->tail;
+    p = std::get<Pair*>(p)->tail;
   }
   a = Atom{s};
   lisp::symbolTable = cons(a, symbolTable);
@@ -37,18 +37,18 @@ Atom lisp::makeSymbol(std::string const s) {
 }
 
 void lisp::printExpr(Atom atom) {
-  if(std::holds_alternative<Nil>(atom.value)) {
+  if(std::holds_alternative<Nil>(atom)) {
     std::cout << "NIL";
   }
-  if(std::holds_alternative<Pair*>(atom.value)) {
+  if(std::holds_alternative<Pair*>(atom)) {
     std::cout << "(";
-    printExpr(std::get<Pair*>(atom.value)->head);
-    Atom currentAtom = std::get<Pair*>(atom.value)->tail;
+    printExpr(std::get<Pair*>(atom)->head);
+    Atom currentAtom = std::get<Pair*>(atom)->tail;
     while(!nilp(currentAtom)) {
-      if(std::holds_alternative<Pair*>(currentAtom.value)) {
+      if(std::holds_alternative<Pair*>(currentAtom)) {
         std::cout << " ";
-        printExpr(std::get<Pair*>(currentAtom.value)->head);
-        currentAtom = std::get<Pair*>(currentAtom.value)->tail;
+        printExpr(std::get<Pair*>(currentAtom)->head);
+        currentAtom = std::get<Pair*>(currentAtom)->tail;
       } else {
         std::cout << " . ";
         printExpr(currentAtom);
@@ -57,11 +57,11 @@ void lisp::printExpr(Atom atom) {
     }
     std::cout << ")";
   }
-  if(std::holds_alternative<std::string>(atom.value)) {
-    std::cout << std::get<std::string>(atom.value);
+  if(std::holds_alternative<std::string>(atom)) {
+    std::cout << std::get<std::string>(atom);
   }
-  if(std::holds_alternative<long>(atom.value)) {
-    std::cout << std::get<long>(atom.value);
+  if(std::holds_alternative<long>(atom)) {
+    std::cout << std::get<long>(atom);
   }
 }
 
@@ -201,4 +201,8 @@ Atom lisp::readFrom(std::list<std::string> tokens) {
 Atom lisp::readExpression(std::string const expression) {
   std::list<std::string> tokens = tokenize(expression);
   return readFrom(tokens);
+}
+
+Atom lisp::createEnv(Atom parent) {
+  return cons(parent, makeNil());
 }
