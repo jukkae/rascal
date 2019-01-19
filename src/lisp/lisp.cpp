@@ -131,6 +131,9 @@ Atom lisp::parseSimple(std::string const str) {
 }
 
 Atom lisp::readFrom(std::list<std::string> tokens) {
+  std::cout << "--tokens--\n";
+  for(auto& a: tokens) std::cout << a << "\n";
+  std::cout << "--\n\n";
 
   // Empty list => nil
   if(tokens.size() == 0) {
@@ -145,32 +148,51 @@ Atom lisp::readFrom(std::list<std::string> tokens) {
   // If two tokens, parse those
   else if(tokens.size() == 2) {
     if(tokens.front() == "(" && tokens.back() == ")") return makeNil();
-    return Atom { new Pair{parseSimple(tokens.front()), parseSimple(tokens.back())}};
+    return cons(parseSimple(tokens.front()), parseSimple(tokens.back()));
   }
 
   // Else strip parens and recurse
   else {
-    int numberOfLParens = 0;
-    int numberOfRParens = 0;
-    for(auto& token : tokens) {
-      if(token == "(") ++numberOfLParens;
-      if(token == ")") ++numberOfRParens;
-    }
-    if(numberOfLParens != numberOfRParens) {
-      throw LispException("readFrom: Mismatched parens");
+    {
+      int numberOfLParens = 0;
+      int numberOfRParens = 0;
+      for(auto& token : tokens) {
+        if(token == "(") ++numberOfLParens;
+        if(token == ")") ++numberOfRParens;
+      }
+      if(numberOfLParens != numberOfRParens) {
+        throw LispException("readFrom: Mismatched parens");
+      }
     }
     // Number of parens looks good
 
-    const std::string token(tokens.front());
-    tokens.pop_front();
+    std::string token(tokens.front());
     if(token == "(") {
-      if(tokens.back() != ")") {
-        throw LispException("readFrom: Bad end of list");
+      std::list<std::string> tokensInFirstParens;
+      int noLs = 0;
+      int noRs = 0;
+      do {
+        token = tokens.front();
+        tokens.pop_front();
+        tokensInFirstParens.push_back(token);
+        if(token == "(") ++noLs;
+        if(token == ")") ++noRs;
+      } while(noLs != noRs && tokens.size() != 0);
+      if(tokensInFirstParens.front() == "(" && tokensInFirstParens.back() == ")") {
+        tokensInFirstParens.pop_front();
+        tokensInFirstParens.pop_back();
       }
-      tokens.pop_back();
-      return Atom { readFrom(tokens) };
+      std::cout << "--toks in first parens--\n";
+      for(auto& a: tokensInFirstParens) std::cout << a << "\n";
+      std::cout << "--\n\n";
+
+      std::cout << "--rest of toks--\n";
+      for(auto& a: tokens) std::cout << a << "\n";
+      std::cout << "--\n\n";
+      return cons(readFrom(tokensInFirstParens), readFrom(tokens));
     } else {
-      return Atom { new Pair{parseSimple(token), readFrom(tokens)}};
+      tokens.pop_front();
+      return cons(parseSimple(token), readFrom(tokens));
     }
   }
 }
