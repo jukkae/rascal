@@ -85,11 +85,53 @@ Engine::Engine(sf::RenderWindow* window) : window(window) {
 	std::cout << "\n";
 
 	//std::string toBeParsed = "(foo (bar . quux) xyzzy . (woof . nil))";
-	std::string toBeParsed = "(foo (bar quux))";
-	std::cout << "parsing \'" << toBeParsed << "\':\n";
-	lisp::Atom atom = lisp::readExpression(toBeParsed);
-	lisp::printExpr(atom);
-	std::cout << "\n";
+	{
+		std::string p1 = "(foo (bar (quux (bork boof))))";
+		std::cout << "parsing \'" << p1 << "\':\n";
+		lisp::Atom a1 = lisp::readExpression(p1);
+		lisp::printExpr(a1);
+		std::cout << "\n";
+	}
+
+	{
+		std::string p2 = "(foo (bar (quux nil)))";
+		std::cout << "parsing \'" << p2 << "\':\n";
+		lisp::Atom a2 = lisp::readExpression(p2);
+		lisp::printExpr(a2);
+		std::cout << "\n";
+	}
+
+	{
+		std::string p = "()";
+		std::cout << "parsing \'" << p << "\':\n";
+		lisp::Atom a = lisp::readExpression(p);
+		lisp::printExpr(a);
+		std::cout << "\n";
+	}
+
+	{
+		std::string p = "((a b c d nil))";
+		std::cout << "parsing \'" << p << "\':\n";
+		lisp::Atom a = lisp::readExpression(p);
+		lisp::printExpr(a);
+		std::cout << "\n";
+	}
+
+	{
+		std::string p = "((a b c d))";
+		std::cout << "parsing \'" << p << "\':\n";
+		lisp::Atom a = lisp::readExpression(p);
+		lisp::printExpr(a);
+		std::cout << "\n";
+	}
+
+	{
+		std::string p = "((a b) (a c))";
+		std::cout << "parsing \'" << p << "\':\n";
+		lisp::Atom a = lisp::readExpression(p);
+		lisp::printExpr(a);
+		std::cout << "\n";
+	}
 }
 
 Engine::~Engine() {

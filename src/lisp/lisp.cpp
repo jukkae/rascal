@@ -131,9 +131,11 @@ Atom lisp::parseSimple(std::string const str) {
 }
 
 Atom lisp::readFrom(std::list<std::string> tokens) {
-  std::cout << "-- tokens --\n";
-  for(auto& a: tokens) std::cout << a << "\n";
-  std::cout << "--\n";
+
+  // Empty list => nil
+  if(tokens.size() == 0) {
+    return makeNil();
+  }
 
   // If just one token, parse it
   if(tokens.size() == 1) {
@@ -142,6 +144,7 @@ Atom lisp::readFrom(std::list<std::string> tokens) {
 
   // If two tokens, parse those
   else if(tokens.size() == 2) {
+    if(tokens.front() == "(" && tokens.back() == ")") return makeNil();
     return Atom { new Pair{parseSimple(tokens.front()), parseSimple(tokens.back())}};
   }
 
