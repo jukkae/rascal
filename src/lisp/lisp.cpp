@@ -114,7 +114,7 @@ bool lisp::isSymbol(std::string const s) {
 Atom lisp::parseSimple(std::string const str) {
   if(isInteger(str)){
     long l = std::stol(str);
-    std::cout << "    found integer: " << l << "\n";
+    //std::cout << "    found integer: " << l << "\n";
     return makeInt(l);
   }
   if(isNil(str)) {

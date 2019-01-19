@@ -45,6 +45,7 @@ Engine::Engine(sf::RenderWindow* window) : window(window) {
 	states.push_back(std::move(mainMenuState));
 
 	// LISP TESTS
+	std::cout << "Testing LISP subsystem\n";
 	lisp::Atom a = lisp::makeInt(42);
 	lisp::printExpr(a);
   std::cout << "\n";
@@ -162,6 +163,25 @@ Engine::Engine(sf::RenderWindow* window) : window(window) {
 		std::cout << "parsing \'" << p << "\':\n";
 		lisp::Atom a = lisp::readExpression(p);
 		lisp::printExpr(a);
+		std::cout << "\n";
+	}
+
+	// REPL
+
+	std::cout << "\n\n";
+
+	for(;;) {
+		std::cout << "lisp> ";
+		std::string s;
+		getline(std::cin, s);
+		try {
+			lisp::Atom a = lisp::readExpression(s);
+			lisp::printExpr(a);
+		}
+		catch(lisp::LispException e) {
+			std::cout << "LISP runtime exception: " << e.what();
+		}
+
 		std::cout << "\n";
 	}
 }
