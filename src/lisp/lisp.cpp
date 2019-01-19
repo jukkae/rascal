@@ -9,6 +9,14 @@ bool lisp::nilp(Atom atom) {
   return std::holds_alternative<Nil>(atom);
 }
 
+bool lisp::listp(Atom expr) {
+  while (!nilp(expr)) {
+    if(!std::holds_alternative<Pair*>(expr)) return false;
+    expr = std::get<Pair*>(expr)->tail;
+  }
+  return true;
+}
+
 Atom lisp::cons(Atom head, Atom tail) {
   return Atom { new Pair { head, tail } };
 }
@@ -245,4 +253,40 @@ void lisp::setEnv(Atom env, Atom symbol, Atom value) {
   }
   b = cons(symbol, value);
   std::get<Pair*>(env)->tail = cons(b, std::get<Pair*>(env)->tail);
+}
+
+Atom lisp::evaluateExpression(Atom expr, Atom env) {
+  Atom op;
+  Atom args;
+
+  if(std::holds_alternative<Symbol>(expr)) {
+    return getEnv(env, expr);
+  } else if(!std::holds_alternative<Pair*>(expr)) {
+    return expr;
+  }
+
+  if(!listp(expr)) throw LispException("evaluateExpression: Illformed syntax");
+
+  op = std::get<Pair*>(expr)->head;
+  args = std::get<Pair*>(expr)->tail;
+
+  if(std::holds_alternative<Symbol>(op)) {
+    if(std::get<Symbol>(op) == "quote") {
+      if(nilp(args) || !nilp(std::get<Pair*>(args)->tail)) throw LispException("evaluateExpression: Argument error");
+      return std::get<Pair*>(args)->head;
+    } else if(std::get<Symbol>(op) == "def") {
+      Atom sym, val;
+      if(nilp(args) || nilp(std::get<Pair*>(args)->tail)
+      || !nilp(std::get<Pair*>(std::get<Pair*>(args)->tail)->tail)) {
+        throw LispException("evaluateExpression: Argument error");
+      }
+      sym = std::get<Pair*>(args)->head;
+      if(!std::holds_alternative<Symbol>(sym)) throw LispException("evaluateExpression: Type error");
+
+      val = evaluateExpression(std::get<Pair*>(std::get<Pair*>(args)->tail)->head, env);
+      setEnv(env, sym, val);
+      return sym;
+    }
+  }
+  throw LispException("evaluateExpression: Illformed syntax");
 }

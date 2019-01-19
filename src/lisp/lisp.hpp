@@ -30,6 +30,7 @@ struct Pair {
 };
 
 bool nilp(Atom atom);
+bool listp(Atom expr);
 Atom cons(Atom head, Atom tail);
 
 // TODO this can be templated
@@ -51,6 +52,8 @@ Atom readExpression(std::string const expression);
 Atom createEnv(Atom parent);
 Atom getEnv(Atom env, Atom symbol);
 void setEnv(Atom env, Atom symbol, Atom value);
+
+Atom evaluateExpression(Atom expr, Atom env);
 
 // TODO this could use e.g. std::set instead, but this is good enough for now
 extern Atom symbolTable;
