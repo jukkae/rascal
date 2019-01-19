@@ -157,7 +157,7 @@ Atom lisp::readFrom(std::list<std::string> tokens) {
   else if(tokens.size() == 2) {
     if(tokens.front() == "(" && tokens.back() == ")") return makeNil();
     if(tokens.front() == ".") return parseSimple(tokens.back());
-    return cons(parseSimple(tokens.front()), parseSimple(tokens.back()));
+    return cons(parseSimple(tokens.front()), cons(parseSimple(tokens.back()), makeNil()));
   }
 
   // Else strip parens and recurse
