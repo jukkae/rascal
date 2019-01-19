@@ -18,6 +18,8 @@
 #include "status_effect.hpp"
 #include "world.hpp"
 
+#include "lisp/lisp.hpp"
+
 Engine::Engine(sf::RenderWindow* window) : window(window) {
 	font::load();
 	loadPreferences();
@@ -41,6 +43,38 @@ Engine::Engine(sf::RenderWindow* window) : window(window) {
 
 	states.push_back(std::move(gps));
 	states.push_back(std::move(mainMenuState));
+
+	// LISP TESTS
+	lisp::Atom a = lisp::makeInt(42);
+	lisp::printExpr(a);
+  std::cout << "\n";
+
+	lisp::Atom hello = lisp::makeSymbol("hello from lisp!");
+	lisp::printExpr(hello);
+  std::cout << "\n";
+
+	lisp::Atom nil = lisp::makeNil();
+	lisp::printExpr(nil);
+  std::cout << "\n";
+
+	lisp::Atom pair = lisp::cons(lisp::makeSymbol("head"), lisp::makeSymbol("tail"));
+	lisp::printExpr(pair);
+	std::cout << "\n";
+
+	lisp::Atom list = lisp::cons(lisp::makeInt(1),
+										lisp::cons(lisp::makeInt(2),
+										lisp::cons(lisp::makeInt(3),
+									 	lisp::makeNil())));
+	lisp::printExpr(list);
+	std::cout << "\n";
+
+	lisp::Atom h2 = lisp::makeSymbol("hello from lisp!");
+	lisp::printExpr(h2);
+	std::cout << "\n";
+
+	std::cout << "symbol table:\n";
+	lisp::printExpr(lisp::symbolTable);
+	std::cout << "\n";
 }
 
 Engine::~Engine() {
