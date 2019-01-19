@@ -210,5 +210,39 @@ Atom lisp::createEnv(Atom parent) {
 Atom lisp::getEnv(Atom env, Atom symbol) {
   if(!std::holds_alternative<Pair*>(env)) throw LispException("getEnv: Env not pair");
   if(!std::holds_alternative<Symbol>(symbol)) throw LispException("getEnv: Symbol not symbol");
-  return makeNil();
+
+  Atom parent = std::get<Pair*>(env)->head;
+  Atom bs = std::get<Pair*>(env)->tail;
+
+  while(!nilp(bs)) {
+    if(!std::holds_alternative<Pair*>(bs)) throw LispException("getEnv: bs not pair");
+    Atom b = std::get<Pair*>(bs)->head;
+    if(!std::holds_alternative<Pair*>(b)) throw LispException("getEnv: b not pair");
+    if(std::get<std::string>(std::get<Pair*>(b)->head) == std::get<std::string>(symbol)) {
+      return std::get<Pair*>(b)->tail;
+    }
+    bs = std::get<Pair*>(bs)->tail;
+  }
+  if(nilp(parent)) throw LispException("getEnv: Symbol unbound");
+  return getEnv(parent, symbol);
+}
+
+void lisp::setEnv(Atom env, Atom symbol, Atom value) {
+  if(!std::holds_alternative<Pair*>(env)) throw LispException("getEnv: Env not pair");
+  if(!std::holds_alternative<Symbol>(symbol)) throw LispException("getEnv: Symbol not symbol");
+
+  Atom bs = std::get<Pair*>(env)->tail;
+  Atom b = makeNil();
+
+  while(!nilp(bs)) {
+    b = std::get<Pair*>(bs)->head;
+    if(!std::holds_alternative<Pair*>(b)) throw LispException("getEnv: b not pair");
+    if(std::get<std::string>(std::get<Pair*>(b)->head) == std::get<std::string>(symbol)) {
+      std::get<Pair*>(b)->tail = value;
+      return;
+    }
+    bs = std::get<Pair*>(bs)->tail;
+  }
+  b = cons(symbol, value);
+  std::get<Pair*>(env)->tail = cons(b, std::get<Pair*>(env)->tail);
 }

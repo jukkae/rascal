@@ -166,10 +166,31 @@ Engine::Engine(sf::RenderWindow* window) : window(window) {
 		std::cout << "\n";
 	}
 
-	// REPL
-
 	std::cout << "\n\n";
 
+	std::cout << "Testing env and expressions\n";
+	std::cout << "Creating env\n";
+	lisp::Atom parent = lisp::makeNil();
+	lisp::Atom env = lisp::createEnv(parent);
+	std::cout << "env:\n";
+	lisp::printExpr(env);
+	std::cout << "\n";
+
+	std::cout << "Creating symbol and value and setting value\n";
+	lisp::Atom symbol = lisp::makeSymbol("foo");
+	lisp::Atom value = lisp::makeInt(3);
+	lisp::setEnv(env, symbol, value);
+	std::cout << "env:\n";
+	lisp::printExpr(env);
+	std::cout << "\n";
+
+	std::cout << "Getting value\n";
+	lisp::Atom result = lisp::getEnv(env, symbol);
+	std::cout << "result:\n";
+	lisp::printExpr(result);
+	std::cout << "\n";
+
+	// REPL
 	for(;;) {
 		std::cout << "lisp> ";
 		std::string s;
