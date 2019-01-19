@@ -157,6 +157,13 @@ Engine::Engine(sf::RenderWindow* window) : window(window) {
 		std::cout << "\n";
 	}
 
+	{
+		std::string p = "a b nil";
+		std::cout << "parsing \'" << p << "\':\n";
+		lisp::Atom a = lisp::readExpression(p);
+		lisp::printExpr(a);
+		std::cout << "\n";
+	}
 }
 
 Engine::~Engine() {
