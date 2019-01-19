@@ -148,6 +148,7 @@ Atom lisp::readFrom(std::list<std::string> tokens) {
   // If two tokens, parse those
   else if(tokens.size() == 2) {
     if(tokens.front() == "(" && tokens.back() == ")") return makeNil();
+    if(tokens.front() == ".") return parseSimple(tokens.back());
     return cons(parseSimple(tokens.front()), parseSimple(tokens.back()));
   }
 
