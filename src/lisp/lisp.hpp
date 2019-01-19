@@ -7,6 +7,11 @@ namespace lisp {
 
 enum class AtomType { NIL, PAIR, SYMBOL, INTEGER };
 
+enum class Status {
+  OK,
+  ERROR_SYNTAX
+};
+
 struct Pair;
 struct Nil { };
 struct Atom {
@@ -27,6 +32,8 @@ Atom makeInt(long x);
 Atom makeSymbol(std::string const s);
 
 void printExpr(Atom atom);
+
+std::vector<std::string> tokenize(std::string const str);
 
 // TODO this could use e.g. std::set instead, but this is good enough for now
 extern Atom symbolTable;

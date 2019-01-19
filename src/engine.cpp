@@ -75,6 +75,13 @@ Engine::Engine(sf::RenderWindow* window) : window(window) {
 	std::cout << "symbol table:\n";
 	lisp::printExpr(lisp::symbolTable);
 	std::cout << "\n";
+
+	std::string toBeTokenized = "(foo bar)";
+	std::cout << "tokenizing \'" << toBeTokenized << "\':\n";
+	std::vector<std::string> tokens = lisp::tokenize(toBeTokenized);
+	for(auto& t : tokens) {
+		std::cout << t << "\n";
+	}
 }
 
 Engine::~Engine() {
