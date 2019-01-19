@@ -76,12 +76,22 @@ Engine::Engine(sf::RenderWindow* window) : window(window) {
 	lisp::printExpr(lisp::symbolTable);
 	std::cout << "\n";
 
-	std::string toBeTokenized = "(foo bar)";
+	std::string toBeTokenized = "(foo bar(123 12 . -3) nil)";
 	std::cout << "tokenizing \'" << toBeTokenized << "\':\n";
-	std::vector<std::string> tokens = lisp::tokenize(toBeTokenized);
+	std::list<std::string> tokens = lisp::tokenize(toBeTokenized);
 	for(auto& t : tokens) {
-		std::cout << t << "\n";
+		std::cout << "  parsing " << t << "\n";
+		//lisp::Atom atom = lisp::parse(t);
+		//std::cout << "  lisp thinks this is:\n";
+		//lisp::printExpr(atom);
+		//std::cout << "\n";
 	}
+
+	std::string toBeParsed = "(foo bar quux xyzzy)";
+	std::cout << "parsing \'" << toBeParsed << "\':\n";
+	lisp::Atom atom = lisp::readExpression(toBeParsed);
+	lisp::printExpr(atom);
+	std::cout << "\n";
 }
 
 Engine::~Engine() {

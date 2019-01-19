@@ -1,11 +1,22 @@
 #ifndef LISP_HPP
 #define LISP_HPP
 #include <variant>
-
+#include <exception>
 
 namespace lisp {
 
 enum class AtomType { NIL, PAIR, SYMBOL, INTEGER };
+
+struct LispException : public std::exception {
+private:
+  std::string m_message;
+public:
+  explicit LispException(const std::string& message): m_message(message) {}
+  virtual const char* what() const throw()
+  {
+    return m_message.c_str();
+  }
+};
 
 enum class Status {
   OK,
@@ -33,7 +44,16 @@ Atom makeSymbol(std::string const s);
 
 void printExpr(Atom atom);
 
-std::vector<std::string> tokenize(std::string const str);
+std::list<std::string> tokenize(std::string const str);
+
+bool isInteger(std::string const s);
+bool isNil(std::string const s);
+bool isSymbol(std::string const s);
+Atom parseSimple(std::string const str);
+Atom parseList(std::string const str);
+Atom readFrom(std::list<std::string> tokens);
+Atom readExpression(std::string const expression);
+
 
 // TODO this could use e.g. std::set instead, but this is good enough for now
 extern Atom symbolTable;
