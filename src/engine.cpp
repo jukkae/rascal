@@ -191,7 +191,6 @@ Engine::Engine(sf::RenderWindow* window) : window(window) {
 	// }
 
 	{
-		// TODO this is fucky
 		std::string p = "((a b) (a c))";
 		std::cout << "parsing \'" << p << "\':\n";
 		lisp::Atom a = lisp::readExpression(p);

@@ -142,7 +142,10 @@ Atom lisp::readList(std::list<std::string>& tokens) {
     std::string token(tokens.front());
     std::cout << "tok: " << token << "\n";
     //tokens.pop_front();
-    if(token == ")") break;
+    if(token == ")") {
+      tokens.pop_front(); // consume rparen
+      break;
+    }
     else if(token == ".") {
       tokens.pop_front();
       token = tokens.front();
