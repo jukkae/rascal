@@ -119,100 +119,98 @@ bool lisp::isSymbol(std::string const s) {
   else throw LispException("tokenize: Parsing token with length 0");
 }
 
-Atom lisp::parseSimple(std::string const str) {
-  if(isInteger(str)){
-    long l = std::stol(str);
-    //std::cout << "    found integer: " << l << "\n";
-    return makeInt(l);
-  }
-  if(isNil(str)) {
-    return Atom{ Nil{} };
-  }
-  if(isSymbol(str)) {
-    return makeSymbol(str);
-  }
-  if(str == "(" || str == ")") {
-    // TODO does this make sense?
-    //return Atom{ Nil{} };
-  }
-  throw LispException("parseSimple: Simple token type not implemented for string: " + str);
+TokenType lisp::getTokenType(std::string token) {
+  if(isNil(token)) return TokenType::NIL;
+  if(isInteger(token)) return TokenType::INTEGER;
+  if(isSymbol(token)) return TokenType::SYMBOL;
+  if(token == "(") return TokenType::LPAREN;
+  if(token == ")") return TokenType::RPAREN;
+  if(token == ".") return TokenType::PERIOD;
+  else return TokenType::UNKNOWN;
 }
 
-Atom lisp::readFrom(std::list<std::string> tokens) {
-  // std::cout << "--tokens--\n";
-  // for(auto& a: tokens) std::cout << a << "\n";
-  // std::cout << "--\n\n";
+Atom lisp::readList(std::list<std::string>& tokens) {
+  Atom result = cons(makeNil(), makeNil());
+  Atom* current = &result;
+  if(tokens.empty()) return makeNil();
 
-  // Empty list => nil
-  if(tokens.size() == 0) {
-    return makeNil();
-  }
-
-  // If just one token, parse it
-  if(tokens.size() == 1) {
-    return parseSimple(tokens.front());
-  }
-
-  // If two tokens, parse those
-  else if(tokens.size() == 2) {
-    if(tokens.front() == "(" && tokens.back() == ")") return makeNil();
-    if(tokens.front() == ".") return parseSimple(tokens.back());
-    if(tokens.back() == ".") return parseSimple(tokens.front());
-    return cons(parseSimple(tokens.front()), cons(parseSimple(tokens.back()), makeNil()));
-  }
-
-  // Else strip parens and recurse
-  else {
-    {
-      int numberOfLParens = 0;
-      int numberOfRParens = 0;
-      for(auto& token : tokens) {
-        if(token == "(") ++numberOfLParens;
-        if(token == ")") ++numberOfRParens;
+  for(;;) {
+    std::string token(tokens.front());
+    tokens.pop_front();
+    switch(getTokenType(token)) {
+      case TokenType::SYMBOL: {
+        if(nilp(std::get<Pair*>(result)->head)) { // first item
+          std::get<Pair*>(*current)->head = makeSymbol(token);
+          current = &(std::get<Pair*>(*current)->tail);
+        } else {
+          *current = cons(makeSymbol(token), makeNil());
+          current = &(std::get<Pair*>(*current)->tail);
+        }
+        break;
       }
-      if(numberOfLParens != numberOfRParens) {
-        throw LispException("readFrom: Mismatched parens");
+      case TokenType::LPAREN: {
+        return readList(tokens);
+      }
+      case TokenType::NIL: {
+        return makeNil();
+      }
+      case TokenType::INTEGER: {
+        long l = std::stol(token);
+        return makeInt(l);
+      }
+      case TokenType::RPAREN: {
+        goto ret;
+      }
+      case TokenType::PERIOD: {
+        // TODO
+        goto ret;
+      }
+      case TokenType::UNKNOWN: {
+        throw LispException("readFrom: Unknown token type: " + token);
+      }
+      default: {
+        throw LispException("readFrom: Unknown token type: " + token);
       }
     }
-    // Number of parens looks good
+  }
+  ret:
+  return result;
+}
 
-    std::string token(tokens.front());
-    if(token == "(") {
-      std::list<std::string> tokensInFirstParens;
-      int noLs = 0;
-      int noRs = 0;
-      do {
-        token = tokens.front();
-        tokens.pop_front();
-        tokensInFirstParens.push_back(token);
-        if(token == "(") ++noLs;
-        if(token == ")") ++noRs;
-      } while(noLs != noRs && tokens.size() != 0);
-      if(tokensInFirstParens.front() == "(" && tokensInFirstParens.back() == ")") {
-        tokensInFirstParens.pop_front();
-        tokensInFirstParens.pop_back();
-      }
-      // std::cout << "--toks in first parens--\n";
-      // for(auto& a: tokensInFirstParens) std::cout << a << "\n";
-      // std::cout << "--\n\n";
-      //
-      // std::cout << "--rest of toks--\n";
-      // for(auto& a: tokens) std::cout << a << "\n";
-      // std::cout << "--\n\n";
-      //if(tokensInFirstParens.size() != 0 && tokens.size() != 0) {
-      // TODO this is fucky
-      return cons(readFrom(tokensInFirstParens), readFrom(tokens));
-      // } else if(tokensInFirstParens.size() != 0) {
-      //   return readFrom(tokensInFirstParens);
-      // } else if(tokens.size() != 0) {
-      //   return readFrom(tokens);
-      // } else {
-      //   throw LispException("This should never happen");
-      // }
+Atom lisp::readFrom(std::list<std::string>& tokens) {
+  // std::cout << "\n\n----\n";
+  // std::cout << "toks: ";
+  // for(auto& a: tokens) std::cout << a << " ";
+  // std::cout << "\n";
+  if(tokens.empty()) return makeNil();
 
-    } else {
-      tokens.pop_front();
-      return cons(parseSimple(token), readFrom(tokens));
+  std::string token(tokens.front());
+  tokens.pop_front();
+  switch(getTokenType(token)) {
+    case TokenType::LPAREN: {
+      return readList(tokens);
+    }
+    case TokenType::NIL: {
+      return makeNil();
+    }
+    case TokenType::SYMBOL: {
+      return makeSymbol(token);
+    }
+    case TokenType::INTEGER: {
+      long l = std::stol(token);
+      return makeInt(l);
+    }
+    case TokenType::RPAREN: {
+      return makeNil();
+    }
+    case TokenType::PERIOD: {
+      return makeNil();
+    }
+    case TokenType::UNKNOWN: {
+      throw LispException("readFrom: Unknown token type: " + token);
+    }
+    default: {
+      throw LispException("readFrom: Unknown token type: " + token);
     }
   }
 }

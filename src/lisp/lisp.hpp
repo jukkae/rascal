@@ -7,6 +7,8 @@ namespace lisp {
 
 enum class AtomType { NIL, PAIR, SYMBOL, INTEGER };
 
+enum class TokenType { NIL, SYMBOL, INTEGER, LPAREN, RPAREN, PERIOD, UNKNOWN };
+
 struct LispException : public std::exception {
 private:
   std::string m_message;
@@ -45,8 +47,9 @@ std::list<std::string> tokenize(std::string const str);
 bool isInteger(std::string const s);
 bool isNil(std::string const s);
 bool isSymbol(std::string const s);
-Atom parseSimple(std::string const str);
-Atom readFrom(std::list<std::string> tokens);
+TokenType getTokenType(std::string token);
+Atom readList(std::list<std::string>& tokens);
+Atom readFrom(std::list<std::string>& tokens);
 Atom readExpression(std::string const expression);
 
 Atom createEnv(Atom parent);
