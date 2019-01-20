@@ -130,7 +130,7 @@ TokenType lisp::getTokenType(std::string token) {
 }
 
 Atom lisp::readList(std::list<std::string>& tokens) {
-  Atom result = cons(makeNil(), makeNil());
+  Atom result = makeNil();
   Atom* current = &result;
   //if(tokens.empty()) return makeNil();
 
@@ -146,7 +146,8 @@ Atom lisp::readList(std::list<std::string>& tokens) {
     }
     else {
       Atom a = readFrom(tokens);
-      if(nilp(std::get<Pair*>(result)->head)) { // first item
+      if(nilp(result)) { // first item
+        result = cons(makeNil(), makeNil());
         std::get<Pair*>(*current)->head = a;
         current = &(std::get<Pair*>(*current)->tail);
       } else {
@@ -159,40 +160,26 @@ Atom lisp::readList(std::list<std::string>& tokens) {
 }
 
 Atom lisp::readFrom(std::list<std::string>& tokens) {
-  // std::cout << "\n\n----\n";
+  // std::cout << "\n\nREADFROM\n";
   // std::cout << "toks: ";
   // for(auto& a: tokens) std::cout << a << " ";
   // std::cout << "\n";
-  if(tokens.empty()) return makeNil();
+  //if(tokens.empty()) return makeNil();
 
   std::string token(tokens.front());
   tokens.pop_front();
-  switch(getTokenType(token)) {
-    case TokenType::LPAREN: {
-      return readList(tokens);
-    }
-    case TokenType::NIL: {
-      return makeNil();
-    }
-    case TokenType::SYMBOL: {
-      return makeSymbol(token);
-    }
-    case TokenType::INTEGER: {
-      long l = std::stol(token);
-      return makeInt(l);
-    }
-    case TokenType::RPAREN: {
-      return makeNil();
-    }
-    case TokenType::PERIOD: {
-      return makeNil();
-    }
-    case TokenType::UNKNOWN: {
-      throw LispException("readFrom: Unknown token type: " + token);
-    }
-    default: {
-      throw LispException("readFrom: Unknown token type: " + token);
-    }
+  TokenType tokenType = getTokenType(token);
+  if(tokenType == TokenType::LPAREN) {
+    return readList(tokens);
+  } else if (tokenType == TokenType::NIL) {
+    return makeNil();
+  } else if (tokenType == TokenType::SYMBOL) {
+    return makeSymbol(token);
+  } else if (tokenType == TokenType::INTEGER) {
+    long l = std::stol(token);
+    return makeInt(l);
+  } else {
+    throw LispException("readFrom: couldn't match token");
   }
 }
 
