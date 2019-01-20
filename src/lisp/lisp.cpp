@@ -132,48 +132,29 @@ TokenType lisp::getTokenType(std::string token) {
 Atom lisp::readList(std::list<std::string>& tokens) {
   Atom result = cons(makeNil(), makeNil());
   Atom* current = &result;
-  if(tokens.empty()) return makeNil();
+  //if(tokens.empty()) return makeNil();
 
   for(;;) {
     std::string token(tokens.front());
-    tokens.pop_front();
-    switch(getTokenType(token)) {
-      case TokenType::SYMBOL: {
-        if(nilp(std::get<Pair*>(result)->head)) { // first item
-          std::get<Pair*>(*current)->head = makeSymbol(token);
-          current = &(std::get<Pair*>(*current)->tail);
-        } else {
-          *current = cons(makeSymbol(token), makeNil());
-          current = &(std::get<Pair*>(*current)->tail);
-        }
-        break;
-      }
-      case TokenType::LPAREN: {
-        return readList(tokens);
-      }
-      case TokenType::NIL: {
-        return makeNil();
-      }
-      case TokenType::INTEGER: {
-        long l = std::stol(token);
-        return makeInt(l);
-      }
-      case TokenType::RPAREN: {
-        goto ret;
-      }
-      case TokenType::PERIOD: {
-        // TODO
-        goto ret;
-      }
-      case TokenType::UNKNOWN: {
-        throw LispException("readFrom: Unknown token type: " + token);
-      }
-      default: {
-        throw LispException("readFrom: Unknown token type: " + token);
+    //tokens.pop_front();
+    if(token == ")") break;
+    else if(token == ".") {
+      tokens.pop_front();
+      token = tokens.front();
+      *current = readFrom(tokens);
+      // TODO improper list
+    }
+    else {
+      Atom a = readFrom(tokens);
+      if(nilp(std::get<Pair*>(result)->head)) { // first item
+        std::get<Pair*>(*current)->head = a;
+        current = &(std::get<Pair*>(*current)->tail);
+      } else {
+        *current = cons(a, makeNil());
+        current = &(std::get<Pair*>(*current)->tail);
       }
     }
   }
-  ret:
   return result;
 }
 

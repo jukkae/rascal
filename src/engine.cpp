@@ -111,6 +111,14 @@ Engine::Engine(sf::RenderWindow* window) : window(window) {
 	}
 
 	{
+		std::string p = "(a b c d)";
+		std::cout << "parsing \'" << p << "\':\n";
+		lisp::Atom a = lisp::readExpression(p);
+		lisp::printExpr(a);
+		std::cout << "\n";
+	}
+
+	{
 		std::string p = "()";
 		std::cout << "parsing \'" << p << "\':\n";
 		lisp::Atom a = lisp::readExpression(p);
@@ -173,64 +181,63 @@ Engine::Engine(sf::RenderWindow* window) : window(window) {
 		lisp::printExpr(a);
 		std::cout << "\n";
 	}
-	//
-	// {
-	// 	std::string p = "((a b c d))";
-	// 	std::cout << "parsing \'" << p << "\':\n";
-	// 	lisp::Atom a = lisp::readExpression(p);
-	// 	lisp::printExpr(a);
-	// 	std::cout << "\n";
-	// }
-	//
-	// {
-	// 	// TODO this is fucky
-	// 	std::string p = "((a b) (a c))";
-	// 	std::cout << "parsing \'" << p << "\':\n";
-	// 	lisp::Atom a = lisp::readExpression(p);
-	// 	lisp::printExpr(a);
-	// 	std::cout << "\n";
-	// }
-	//
-	// {
-	// 	std::string p = "((a b) d (a c) b d nil)";
-	// 	std::cout << "parsing \'" << p << "\':\n";
-	// 	lisp::Atom a = lisp::readExpression(p);
-	// 	lisp::printExpr(a);
-	// 	std::cout << "\n";
-	// }
-	//
-	// {
-	// 	std::string p = "()((u cant) break (my parser nil nil) with (anything nil) at all)";
-	// 	std::cout << "parsing \'" << p << "\':\n";
-	// 	lisp::Atom a = lisp::readExpression(p);
-	// 	lisp::printExpr(a);
-	// 	std::cout << "\n";
-	// }
-	//
-	// {
-	// 	std::string p = "(a . b)";
-	// 	std::cout << "parsing \'" << p << "\':\n";
-	// 	lisp::Atom a = lisp::readExpression(p);
-	// 	lisp::printExpr(a);
-	// 	std::cout << "\n";
-	// }
-	//
-	// {
-	// 	std::string p = "a b nil";
-	// 	std::cout << "parsing \'" << p << "\':\n";
-	// 	lisp::Atom a = lisp::readExpression(p);
-	// 	lisp::printExpr(a);
-	// 	std::cout << "\n";
-	// }
-	//
-	// {
-	// 	// TODO this is fucky
-	// 	std::string p = "(s (t . u) v . (w . nil))";
-	// 	std::cout << "parsing \'" << p << "\':\n";
-	// 	lisp::Atom a = lisp::readExpression(p);
-	// 	lisp::printExpr(a);
-	// 	std::cout << "\n";
-	// }
+
+	{
+		std::string p = "((a b c d))";
+		std::cout << "parsing \'" << p << "\':\n";
+		lisp::Atom a = lisp::readExpression(p);
+		lisp::printExpr(a);
+		std::cout << "\n";
+	}
+
+	{
+		// TODO this is fucky
+		std::string p = "((a b) (a c))";
+		std::cout << "parsing \'" << p << "\':\n";
+		lisp::Atom a = lisp::readExpression(p);
+		lisp::printExpr(a);
+		std::cout << "\n";
+	}
+
+	{
+		std::string p = "((a b) d (a c) b d nil)";
+		std::cout << "parsing \'" << p << "\':\n";
+		lisp::Atom a = lisp::readExpression(p);
+		lisp::printExpr(a);
+		std::cout << "\n";
+	}
+
+	{
+		std::string p = "()((u cant) break (my parser nil nil) with (anything nil) at all)";
+		std::cout << "parsing \'" << p << "\':\n";
+		lisp::Atom a = lisp::readExpression(p);
+		lisp::printExpr(a);
+		std::cout << "\n";
+	}
+
+	{
+		std::string p = "(a . b)";
+		std::cout << "parsing \'" << p << "\':\n";
+		lisp::Atom a = lisp::readExpression(p);
+		lisp::printExpr(a);
+		std::cout << "\n";
+	}
+
+	{
+		std::string p = "a b nil";
+		std::cout << "parsing \'" << p << "\':\n";
+		lisp::Atom a = lisp::readExpression(p);
+		lisp::printExpr(a);
+		std::cout << "\n";
+	}
+
+	{
+		std::string p = "(s (t . u) v . (w . nil))";
+		std::cout << "parsing \'" << p << "\':\n";
+		lisp::Atom a = lisp::readExpression(p);
+		lisp::printExpr(a);
+		std::cout << "\n";
+	}
 
 	std::cout << "\n\n";
 
