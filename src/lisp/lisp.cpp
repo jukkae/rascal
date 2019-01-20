@@ -157,6 +157,7 @@ Atom lisp::readFrom(std::list<std::string> tokens) {
   else if(tokens.size() == 2) {
     if(tokens.front() == "(" && tokens.back() == ")") return makeNil();
     if(tokens.front() == ".") return parseSimple(tokens.back());
+    if(tokens.back() == ".") return parseSimple(tokens.front());
     return cons(parseSimple(tokens.front()), cons(parseSimple(tokens.back()), makeNil()));
   }
 
@@ -198,7 +199,17 @@ Atom lisp::readFrom(std::list<std::string> tokens) {
       // std::cout << "--rest of toks--\n";
       // for(auto& a: tokens) std::cout << a << "\n";
       // std::cout << "--\n\n";
+      //if(tokensInFirstParens.size() != 0 && tokens.size() != 0) {
+      // TODO this is fucky
       return cons(readFrom(tokensInFirstParens), readFrom(tokens));
+      // } else if(tokensInFirstParens.size() != 0) {
+      //   return readFrom(tokensInFirstParens);
+      // } else if(tokens.size() != 0) {
+      //   return readFrom(tokens);
+      // } else {
+      //   throw LispException("This should never happen");
+      // }
+
     } else {
       tokens.pop_front();
       return cons(parseSimple(token), readFrom(tokens));
@@ -265,7 +276,7 @@ Atom lisp::evaluateExpression(Atom expr, Atom env) {
     return expr;
   }
 
-  if(!listp(expr)) throw LispException("evaluateExpression: Illformed syntax");
+  if(!listp(expr)) throw LispException("evaluateExpression: Improper list");
 
   op = std::get<Pair*>(expr)->head;
   args = std::get<Pair*>(expr)->tail;
