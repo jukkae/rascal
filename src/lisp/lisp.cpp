@@ -12,7 +12,7 @@ bool lisp::nilp(Atom atom) {
 bool lisp::listp(Atom expr) {
   while (!nilp(expr)) {
     if(!std::holds_alternative<Pair*>(expr)) return false;
-    expr = std::get<Pair*>(expr)->tail;
+    expr = *tail(&expr);
   }
   return true;
 }
@@ -43,11 +43,11 @@ Atom lisp::makeSymbol(std::string const s) {
   Atom a, p;
   p = symbolTable;
   while(!nilp(p)) {
-    a = std::get<Pair*>(p)->head;
+    a = *head(&p);
     if(std::get<std::string>(a) == s) {
       return a;
     }
-    p = std::get<Pair*>(p)->tail;
+    p = *tail(&p);
   }
   a = Atom{s};
   lisp::symbolTable = cons(a, symbolTable);
@@ -60,13 +60,13 @@ void lisp::printExpr(Atom atom) {
   }
   if(std::holds_alternative<Pair*>(atom)) {
     std::cout << "(";
-    printExpr(std::get<Pair*>(atom)->head);
-    Atom currentAtom = std::get<Pair*>(atom)->tail;
+    printExpr(*head(&atom));
+    Atom currentAtom = *tail(&atom);
     while(!nilp(currentAtom)) {
       if(std::holds_alternative<Pair*>(currentAtom)) {
         std::cout << " ";
-        printExpr(std::get<Pair*>(currentAtom)->head);
-        currentAtom = std::get<Pair*>(currentAtom)->tail;
+        printExpr(*head(&currentAtom));
+        currentAtom = *tail(&currentAtom);
       } else {
         std::cout << " . ";
         printExpr(currentAtom);
@@ -248,7 +248,7 @@ void lisp::setEnv(Atom env, Atom symbol, Atom value) {
     bs = *tail(&bs);
   }
   b = cons(symbol, value);
-  *tail(&env) = cons(b, std::get<Pair*>(env)->tail);
+  *tail(&env) = cons(b, *tail(&env));
 }
 
 Atom lisp::evaluateExpression(Atom expr, Atom env) {
@@ -263,23 +263,23 @@ Atom lisp::evaluateExpression(Atom expr, Atom env) {
 
   if(!listp(expr)) throw LispException("evaluateExpression: Improper list");
 
-  op = std::get<Pair*>(expr)->head;
-  args = std::get<Pair*>(expr)->tail;
+  op = *head(&expr);
+  args = *tail(&expr);
 
   if(std::holds_alternative<Symbol>(op)) {
     if(std::get<Symbol>(op) == "quote") {
-      if(nilp(args) || !nilp(std::get<Pair*>(args)->tail)) throw LispException("evaluateExpression: Argument error");
-      return std::get<Pair*>(args)->head;
+      if(nilp(args) || !nilp(*tail(&args))) throw LispException("evaluateExpression: Argument error");
+      return *head(&args);
     } else if(std::get<Symbol>(op) == "def") {
       Atom sym, val;
-      if(nilp(args) || nilp(std::get<Pair*>(args)->tail)
-      || !nilp(std::get<Pair*>(std::get<Pair*>(args)->tail)->tail)) {
+      if(nilp(args) || nilp(*tail(&args))
+      || !nilp(*tail(tail(&args)))) {
         throw LispException("evaluateExpression: Argument error");
       }
-      sym = std::get<Pair*>(args)->head;
+      sym = *head(&args);
       if(!std::holds_alternative<Symbol>(sym)) throw LispException("evaluateExpression: Type error");
 
-      val = evaluateExpression(std::get<Pair*>(std::get<Pair*>(args)->tail)->head, env);
+      val = evaluateExpression(*head(tail(&args)), env);
       setEnv(env, sym, val);
       return sym;
     }
