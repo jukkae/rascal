@@ -138,7 +138,7 @@ std::list<std::string> lisp::tokenize(std::string const str) {
 }
 
 bool lisp::isInteger(std::string const s) {
-    return std::regex_match(s, std::regex("[(-|+)|][0-9]+"));
+  return std::regex_match(s, std::regex(R"(-?\d+)"));
 }
 
 bool lisp::isNil(std::string const s) {
