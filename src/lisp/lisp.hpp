@@ -24,6 +24,7 @@ struct Pair;
 struct Nil { };
 using Symbol = std::string;
 using Integer = long;
+// Atom should be called Cell, true Atoms are Nil, Symbol, Integer
 using Atom = std::variant<Nil, Pair*, Symbol, Integer>;
 
 struct Pair {
@@ -34,6 +35,8 @@ struct Pair {
 bool nilp(Atom atom);
 bool listp(Atom expr);
 Atom cons(Atom head, Atom tail);
+Atom* head(Atom* atom);
+Atom* tail(Atom* atom);
 
 // TODO this can be templated
 Atom makeNil();

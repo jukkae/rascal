@@ -239,53 +239,53 @@ Engine::Engine(sf::RenderWindow* window) : window(window) {
 	}
 
 	std::cout << "\n\n";
-	::exit(0);
+	//::exit(0);
 
-	// {
-	// 	std::cout << "Testing env and expressions\n";
-	// 	std::cout << "Creating env\n";
-	// 	lisp::Atom parent = lisp::makeNil();
-	// 	lisp::Atom env = lisp::createEnv(parent);
-	// 	std::cout << "env:\n";
-	// 	lisp::printExpr(env);
-	// 	std::cout << "\n";
-	//
-	// 	std::cout << "Creating symbol and value and setting value\n";
-	// 	lisp::Atom symbol = lisp::makeSymbol("foo");
-	// 	lisp::Atom value = lisp::makeInt(3);
-	// 	lisp::setEnv(env, symbol, value);
-	// 	std::cout << "env:\n";
-	// 	lisp::printExpr(env);
-	// 	std::cout << "\n";
-	//
-	// 	std::cout << "Getting value\n";
-	// 	lisp::Atom result = lisp::getEnv(env, symbol);
-	// 	std::cout << "result:\n";
-	// 	lisp::printExpr(result);
-	// 	std::cout << "\n";
-	// }
-	// std::cout << "\n\n";
-	// // REPL
-	// lisp::Atom env = lisp::createEnv(lisp::makeNil());
-	//
-	// for(;;) {
-	// 	std::cout << "lisp> ";
-	// 	std::string s;
-	// 	getline(std::cin, s);
-	// 	try {
-	// 		lisp::Atom expression = lisp::readExpression(s);
-	// 		lisp::printExpr(expression);
-	// 		std::cout << "\n";
-	// 		lisp::Atom result = lisp::evaluateExpression(expression, env);
-	// 		lisp::printExpr(result);
-	// 		std::cout << "\n";
-	// 	}
-	// 	catch(lisp::LispException e) {
-	// 		std::cout << "LISP runtime exception: " << e.what();
-	// 	}
-	//
-	// 	std::cout << "\n";
-	// }
+	{
+		std::cout << "Testing env and expressions\n";
+		std::cout << "Creating env\n";
+		lisp::Atom parent = lisp::makeNil();
+		lisp::Atom env = lisp::createEnv(parent);
+		std::cout << "env:\n";
+		lisp::printExpr(env);
+		std::cout << "\n";
+
+		std::cout << "Creating symbol and value and setting value\n";
+		lisp::Atom symbol = lisp::makeSymbol("foo");
+		lisp::Atom value = lisp::makeInt(3);
+		lisp::setEnv(env, symbol, value);
+		std::cout << "env:\n";
+		lisp::printExpr(env);
+		std::cout << "\n";
+
+		std::cout << "Getting value\n";
+		lisp::Atom result = lisp::getEnv(env, symbol);
+		std::cout << "result:\n";
+		lisp::printExpr(result);
+		std::cout << "\n";
+	}
+	std::cout << "\n\n";
+	// REPL
+	lisp::Atom env = lisp::createEnv(lisp::makeNil());
+
+	for(;;) {
+		std::cout << "lisp> ";
+		std::string s;
+		getline(std::cin, s);
+		try {
+			lisp::Atom expression = lisp::readExpression(s);
+			lisp::printExpr(expression);
+			std::cout << "\n";
+			lisp::Atom result = lisp::evaluateExpression(expression, env);
+			lisp::printExpr(result);
+			std::cout << "\n";
+		}
+		catch(lisp::LispException e) {
+			std::cout << "LISP runtime exception: " << e.what();
+		}
+
+		std::cout << "\n";
+	}
 }
 
 Engine::~Engine() {
