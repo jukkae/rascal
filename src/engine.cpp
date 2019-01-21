@@ -267,6 +267,9 @@ Engine::Engine(sf::RenderWindow* window) : window(window) {
 	std::cout << "\n\n";
 	// REPL
 	lisp::Atom env = lisp::createEnv(lisp::makeNil());
+	lisp::setEnv(env, lisp::makeSymbol("head"), lisp::makeBuiltin(lisp::Builtin{lisp::builtinHead}));
+	lisp::setEnv(env, lisp::makeSymbol("tail"), lisp::makeBuiltin(lisp::Builtin{lisp::builtinTail}));
+	lisp::setEnv(env, lisp::makeSymbol("cons"), lisp::makeBuiltin(lisp::Builtin{lisp::builtinCons}));
 
 	for(;;) {
 		std::cout << "lisp> ";
@@ -274,11 +277,8 @@ Engine::Engine(sf::RenderWindow* window) : window(window) {
 		getline(std::cin, s);
 		try {
 			lisp::Atom expression = lisp::readExpression(s);
-			lisp::printExpr(expression);
-			std::cout << "\n";
 			lisp::Atom result = lisp::evaluateExpression(expression, env);
 			lisp::printExpr(result);
-			std::cout << "\n";
 		}
 		catch(lisp::LispException e) {
 			std::cout << "LISP runtime exception: " << e.what();

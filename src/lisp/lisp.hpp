@@ -48,6 +48,10 @@ Atom* tail(Atom* atom);
 Atom makeNil();
 Atom makeInt(long x);
 Atom makeSymbol(std::string const s);
+Atom makeBuiltin(Builtin func);
+
+Atom copyList(Atom list);
+Atom apply(Atom func, Atom args);
 
 void printExpr(Atom atom);
 
@@ -64,6 +68,10 @@ Atom readExpression(std::string const expression);
 Atom createEnv(Atom parent);
 Atom getEnv(Atom env, Atom symbol);
 void setEnv(Atom env, Atom symbol, Atom value);
+
+Atom builtinHead(Atom args);
+Atom builtinTail(Atom args);
+Atom builtinCons(Atom args);
 
 Atom evaluateExpression(Atom expr, Atom env);
 

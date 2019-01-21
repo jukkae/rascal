@@ -54,6 +54,30 @@ Atom lisp::makeSymbol(std::string const s) {
   return a;
 }
 
+Atom lisp::makeBuiltin(Builtin func) {
+  return Atom { func };
+}
+
+// Make shallow copy
+Atom lisp::copyList(Atom list) {
+  if(nilp(list)) return makeNil();
+  Atom a, p;
+  a = cons(*head(&list), makeNil());
+  p = a;
+  list = *tail(&list);
+  while(!nilp(list)) {
+    *tail(&p) = cons(*head(&list), makeNil());
+    p = *tail(&p);
+    list = *tail(&list);
+  }
+  return a;
+}
+
+Atom lisp::apply(Atom func, Atom args) {
+  if(std::holds_alternative<Builtin>(func)) return std::get<Builtin>(func)(args);
+  else throw LispException("Apply: Tried to apply non-function");
+}
+
 void lisp::printExpr(Atom atom) {
   if(std::holds_alternative<Nil>(atom)) {
     std::cout << "NIL";
@@ -80,6 +104,9 @@ void lisp::printExpr(Atom atom) {
   }
   if(std::holds_alternative<Integer>(atom)) {
     std::cout << std::get<Integer>(atom);
+  }
+  if(std::holds_alternative<Builtin>(atom)) {
+    std::cout << "<BUILTIN>: " << &std::get<Builtin>(atom);
   }
 }
 
@@ -251,9 +278,35 @@ void lisp::setEnv(Atom env, Atom symbol, Atom value) {
   *tail(&env) = cons(b, *tail(&env));
 }
 
+Atom lisp::builtinHead(Atom args) {
+  Atom result;
+  if(nilp(args) || !nilp(*tail(&args))) throw LispException("builtin head: wrong number of args");
+
+  if(nilp(*head(&args))) result = makeNil();
+  else if(!std::holds_alternative<Pair*>(*head(&args))) throw LispException("builtin head: not pair");
+  else result = *head(head(&args));
+  return result;
+}
+
+Atom lisp::builtinTail(Atom args) {
+  Atom result;
+  if(nilp(args) || !nilp(*tail(&args))) throw LispException("builtin tail: wrong number of args");
+
+  if(nilp(*head(&args))) result = makeNil();
+  else if(!std::holds_alternative<Pair*>(*head(&args))) throw LispException("builtin tail: not pair");
+  else result = *tail(head(&args));
+  return result;
+}
+
+Atom lisp::builtinCons(Atom args) {
+  if(nilp(args) || nilp(*tail(&args)) || !nilp(*tail(tail(&args)))) throw LispException("builtin cons: wrong number of args");
+  return cons(*head(&args), *head(tail(&args)));
+}
+
 Atom lisp::evaluateExpression(Atom expr, Atom env) {
   Atom op;
   Atom args;
+  Atom p;
 
   if(std::holds_alternative<Symbol>(expr)) {
     return getEnv(env, expr);
@@ -283,6 +336,17 @@ Atom lisp::evaluateExpression(Atom expr, Atom env) {
       setEnv(env, sym, val);
       return sym;
     }
+  } else { // Not symbol, assume to be function-like
+    // Evaluate operator
+    op = evaluateExpression(op, env);
+    // Evaluate arguments
+    args = copyList(args);
+    p = args;
+    while(!nilp(p)) {
+      *head(&p) = evaluateExpression(*head(&p), env);
+      p = *tail(&p);
+    }
+    return apply(op, args);
   }
   throw LispException("evaluateExpression: Illformed syntax");
 }
