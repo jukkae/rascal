@@ -30,7 +30,7 @@ struct Builtin;
 using Atom = std::variant<Nil, Pair*, Symbol, Integer, Builtin>;
 struct Builtin {
   std::add_pointer_t<Atom(Atom args)> func;
-  Atom operator()(Atom args);
+  Atom operator()(Atom args) { return func(args); }
 };
 
 struct Pair {
