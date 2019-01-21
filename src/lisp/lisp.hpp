@@ -24,8 +24,14 @@ struct Pair;
 struct Nil { };
 using Symbol = std::string;
 using Integer = long;
+struct Builtin;
+
 // Atom should be called Cell, true Atoms are Nil, Symbol, Integer
-using Atom = std::variant<Nil, Pair*, Symbol, Integer>;
+using Atom = std::variant<Nil, Pair*, Symbol, Integer, Builtin>;
+struct Builtin {
+  std::add_pointer_t<Atom(Atom args)> func;
+  Atom operator()(Atom args);
+};
 
 struct Pair {
   Atom head;
