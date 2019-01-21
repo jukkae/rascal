@@ -321,7 +321,9 @@ Atom lisp::evaluateExpression(Atom expr, Atom env) {
 
   if(std::holds_alternative<Symbol>(op)) {
     if(std::get<Symbol>(op) == "quote") {
-      if(nilp(args) || !nilp(*tail(&args))) throw LispException("evaluateExpression: Argument error");
+      if(nilp(args) || !nilp(*tail(&args))) {
+        throw LispException("evaluateExpression: Argument error");
+      }
       return *head(&args);
     } else if(std::get<Symbol>(op) == "def") {
       Atom sym, val;
@@ -336,17 +338,17 @@ Atom lisp::evaluateExpression(Atom expr, Atom env) {
       setEnv(env, sym, val);
       return sym;
     }
-  } else { // Not symbol, assume to be function-like
-    // Evaluate operator
-    op = evaluateExpression(op, env);
-    // Evaluate arguments
-    args = copyList(args);
-    p = args;
-    while(!nilp(p)) {
-      *head(&p) = evaluateExpression(*head(&p), env);
-      p = *tail(&p);
-    }
-    return apply(op, args);
   }
+  // Evaluate operator
+  op = evaluateExpression(op, env);
+  // Evaluate arguments
+  args = copyList(args);
+  p = args;
+  while(!nilp(p)) {
+    *head(&p) = evaluateExpression(*head(&p), env);
+    p = *tail(&p);
+  }
+  return apply(op, args);
+
   throw LispException("evaluateExpression: Illformed syntax");
 }
