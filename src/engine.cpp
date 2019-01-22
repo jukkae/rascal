@@ -267,8 +267,8 @@ Engine::Engine(sf::RenderWindow* window) : window(window) {
 	std::cout << "\n\n";
 	// REPL
 	lisp::Atom env = lisp::createEnv(lisp::makeNil());
-	lisp::setEnv(env, lisp::makeSymbol("head"), lisp::makeBuiltin(lisp::Builtin{lisp::builtinHead}));
-	lisp::setEnv(env, lisp::makeSymbol("tail"), lisp::makeBuiltin(lisp::Builtin{lisp::builtinTail}));
+	lisp::setEnv(env, lisp::makeSymbol("car"), lisp::makeBuiltin(lisp::Builtin{lisp::builtinHead}));
+	lisp::setEnv(env, lisp::makeSymbol("cdr"), lisp::makeBuiltin(lisp::Builtin{lisp::builtinTail}));
 	lisp::setEnv(env, lisp::makeSymbol("cons"), lisp::makeBuiltin(lisp::Builtin{lisp::builtinCons}));
 	lisp::setEnv(env, lisp::makeSymbol("+"), lisp::makeBuiltin(lisp::Builtin{lisp::builtinAdd}));
 	lisp::setEnv(env, lisp::makeSymbol("-"), lisp::makeBuiltin(lisp::Builtin{lisp::builtinSubtract}));
