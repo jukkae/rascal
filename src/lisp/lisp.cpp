@@ -402,6 +402,7 @@ Atom lisp::evaluateExpression(Atom expr, Atom env) {
   args = *tail(&expr);
 
   if(std::holds_alternative<Symbol>(op)) {
+    // Special forms
     if(std::get<Symbol>(op) == "quote") {
       if(nilp(args) || !nilp(*tail(&args))) {
         throw LispException("evaluateExpression: Argument error");
@@ -422,6 +423,12 @@ Atom lisp::evaluateExpression(Atom expr, Atom env) {
     } else if(std::get<Symbol>(op) == "lambda") {
       if(nilp(args) || nilp(*tail(&args))) throw LispException("evaluateExpression: Argument error");
       return makeClosure(env, *head(&args), *tail(&args));
+    } else if(std::get<Symbol>(op) == "if") {
+      Atom cond, val;
+      if(nilp(args) || nilp(*tail(&args)) || nilp(*tail(tail(&args))) || !nilp(*tail(tail(tail(&args))))) throw LispException("evaluateExpression: Argument error");
+      cond = evaluateExpression(*head(&args), env);
+      val = nilp(cond) ? *head(tail(tail(&args))) : *head(tail(&args));
+      return evaluateExpression(val, env);
     }
   }
   // Evaluate operator

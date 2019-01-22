@@ -276,6 +276,8 @@ Engine::Engine(sf::RenderWindow* window) : window(window) {
 	lisp::setEnv(env, lisp::makeSymbol("/"), lisp::makeBuiltin(lisp::Builtin{lisp::builtinDivide}));
 	lisp::setEnv(env, lisp::makeSymbol("%"), lisp::makeBuiltin(lisp::Builtin{lisp::builtinModulo}));
 
+	lisp::setEnv(env, lisp::makeSymbol("t"), lisp::makeSymbol("t"));
+
 	for(;;) {
 		std::cout << "lisp> ";
 		std::string s;
