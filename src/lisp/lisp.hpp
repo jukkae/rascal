@@ -5,9 +5,9 @@
 
 namespace lisp {
 
-enum class AtomType { NIL, PAIR, SYMBOL, INTEGER };
-
-enum class TokenType { NIL, SYMBOL, INTEGER, LPAREN, RPAREN, PERIOD, QUOTE, UNKNOWN };
+enum class TokenType {
+  NIL, SYMBOL, INTEGER, LPAREN, RPAREN, PERIOD, QUOTE, UNKNOWN
+};
 
 struct LispException : public std::exception {
 private:
@@ -22,6 +22,7 @@ public:
 
 struct Pair;
 struct Closure;
+struct Macro;
 struct Nil { };
 using Symbol = std::string;
 using Integer = long;
@@ -29,7 +30,7 @@ struct Builtin;
 
 // Atom should be called Cell, true Atoms are Nil, Symbol, Integer
 // Are _pointers_ to Pair necessary, since everything is allocated via cons?
-using Atom = std::variant<Nil, Pair*, Symbol, Integer, Builtin, Closure*>;
+using Atom = std::variant<Nil, Pair*, Symbol, Integer, Builtin, Closure*, Macro*>;
 
 struct Builtin {
   std::add_pointer_t<Atom(Atom args)> func;
@@ -47,6 +48,11 @@ struct Closure : public Pair {
   Closure(Pair* pair) : Pair { pair->head, pair->tail } {}
 };
 
+struct Macro : public Pair {
+  using Pair::Pair;
+  Macro(Atom head, Atom tail) : Pair { head, tail } {}
+  Macro(Pair* pair) : Pair { pair->head, pair->tail } {}
+};
 
 bool nilp(Atom atom);
 bool listp(Atom expr);

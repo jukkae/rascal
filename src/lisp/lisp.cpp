@@ -438,6 +438,17 @@ Atom lisp::evaluateExpression(Atom expr, Atom env) {
         throw LispException("evaluateExpression: Argument error");
       }
       return *head(&args);
+    } else if(std::get<Symbol>(op) == "defmacro") {
+      if(nilp(args) || nilp(*tail(&args))) throw LispException("evaluateExpression: Argument error");
+      if(!std::holds_alternative<Pair*>(*head(&args))) throw LispException("evaluateExpression: Syntax error");
+
+      Atom name = *head(head(&args));
+      if(!std::holds_alternative<Symbol>(name))throw LispException("evaluateExpression: Type error");
+
+      Atom macro = Atom { static_cast<Macro*>(static_cast<Pair*>(std::get<Closure*>(makeClosure(env, *tail(head(&args)), *tail(&args))))) };
+      setEnv(env, name, macro);
+      return name;
+
     } else if(std::get<Symbol>(op) == "def") {
       Atom sym, val;
       if(nilp(args) || nilp(*tail(&args))) {
@@ -468,6 +479,13 @@ Atom lisp::evaluateExpression(Atom expr, Atom env) {
   }
   // Evaluate operator
   op = evaluateExpression(op, env);
+  // Which order line above and stuff below?
+  if(std::holds_alternative<Macro*>(op)) {
+
+    op = Atom { static_cast<Closure*>(static_cast<Pair*>(std::get<Macro*>(op))) };
+    Atom expansion = apply(op, args);
+    return evaluateExpression(expansion, env);
+  }
   // Evaluate arguments
   args = copyList(args);
   p = args;
