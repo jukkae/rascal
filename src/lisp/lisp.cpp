@@ -433,14 +433,19 @@ Atom lisp::evaluateExpression(Atom expr, Atom env) {
       return *head(&args);
     } else if(std::get<Symbol>(op) == "def") {
       Atom sym, val;
-      if(nilp(args) || nilp(*tail(&args))
-      || !nilp(*tail(tail(&args)))) {
+      if(nilp(args) || nilp(*tail(&args))) {
         throw LispException("evaluateExpression: Argument error");
       }
       sym = *head(&args);
-      if(!std::holds_alternative<Symbol>(sym)) throw LispException("evaluateExpression: Type error");
+      if(std::holds_alternative<Pair*>(sym)) {
+        val = makeClosure(env, *tail(&sym), *tail(&args));
+        sym = *head(&sym);
+        if(!std::holds_alternative<Symbol>(sym)) throw LispException("evaluateExpression: Argument error");
+      } else if(std::holds_alternative<Symbol>(sym)) {
+        if(!nilp(*tail(tail(&args)))) throw LispException("evaluateExpression: Argument error");
+        val = evaluateExpression(*head(tail(&args)), env);
+      } else throw LispException("evaluateExpression: Type error");
 
-      val = evaluateExpression(*head(tail(&args)), env);
       setEnv(env, sym, val);
       return sym;
     } else if(std::get<Symbol>(op) == "lambda") {
