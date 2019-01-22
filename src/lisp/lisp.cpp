@@ -22,13 +22,21 @@ Atom lisp::cons(Atom head, Atom tail) {
 }
 
 Atom* lisp::head(Atom* atom) {
-  if(!std::holds_alternative<Pair*>(*atom)) throw LispException("Head: expression does not refer to a pair");
-  else return &(std::get<Pair*>(*atom)->head);
+  if(std::holds_alternative<Pair*>(*atom)) {
+    return &(std::get<Pair*>(*atom)->head);
+  } else if(std::holds_alternative<Closure*>(*atom)) {
+    return &(std::get<Closure*>(*atom)->head);
+  }
+  else throw LispException("Head: expression does not refer to a pair");
 }
 
 Atom* lisp::tail(Atom* atom) {
-  if(!std::holds_alternative<Pair*>(*atom)) throw LispException("Tail: expression does not refer to a pair");
-  else return &(std::get<Pair*>(*atom)->tail);
+  if(std::holds_alternative<Pair*>(*atom)) {
+    return &(std::get<Pair*>(*atom)->tail);
+  } else if(std::holds_alternative<Closure*>(*atom)) {
+    return &(std::get<Closure*>(*atom)->tail);
+  }
+  else throw LispException("Tail: expression does not refer to a pair");
 }
 
 Atom lisp::makeNil() {
@@ -58,7 +66,20 @@ Atom lisp::makeBuiltin(Builtin func) {
   return Atom { func };
 }
 
+Atom lisp::makeClosure(Atom env, Atom args, Atom body) {
+  if(!listp(args) || !listp(body)) throw LispException("makeClosure: args or body not list");
+
+  Atom p = args;
+  while(!nilp(p)) {
+    if(!std::holds_alternative<Symbol>(*head(&p))) throw LispException("makeClosure: type error in args");
+    p = *tail(&p);
+  }
+  // TODO check this
+  return Atom { static_cast<Closure*>(std::get<Pair*>(cons(env, cons(args, body)))) };
+}
+
 // Make shallow copy
+// Do I actually need this?
 Atom lisp::copyList(Atom list) {
   if(nilp(list)) return makeNil();
   Atom a, p;
@@ -75,14 +96,35 @@ Atom lisp::copyList(Atom list) {
 
 Atom lisp::apply(Atom func, Atom args) {
   if(std::holds_alternative<Builtin>(func)) return std::get<Builtin>(func)(args);
-  else throw LispException("Apply: Tried to apply non-function");
+  else if(!std::holds_alternative<Closure*>(func)) throw LispException("Apply: Tried to apply non-function or non-lambda");
+
+  Atom env = createEnv(*head(&func));
+  Atom argNames = *head(tail(&func));
+  Atom body = *tail(tail(&func));
+  Atom result;
+
+  // Bind arguments
+  while(!nilp(argNames)) {
+    if(nilp(args)) throw LispException("Apply: Argument error");
+    setEnv(env, *head(&argNames), *head(&args));
+    argNames = *tail(&argNames);
+    args = *tail(&args);
+  }
+  if(!nilp(args)) throw LispException("Apply: Argument error");
+
+  // Evaluate body
+  while(!nilp(body)) {
+    result = evaluateExpression(*head(&body), env);
+    body = *tail(&body);
+  }
+  return result;
 }
 
 void lisp::printExpr(Atom atom) {
   if(std::holds_alternative<Nil>(atom)) {
     std::cout << "NIL";
   }
-  if(std::holds_alternative<Pair*>(atom)) {
+  if(std::holds_alternative<Pair*>(atom) || std::holds_alternative<Closure*>(atom)) {
     std::cout << "(";
     printExpr(*head(&atom));
     Atom currentAtom = *tail(&atom);
@@ -377,6 +419,9 @@ Atom lisp::evaluateExpression(Atom expr, Atom env) {
       val = evaluateExpression(*head(tail(&args)), env);
       setEnv(env, sym, val);
       return sym;
+    } else if(std::get<Symbol>(op) == "lambda") {
+      if(nilp(args) || nilp(*tail(&args))) throw LispException("evaluateExpression: Argument error");
+      return makeClosure(env, *head(&args), *tail(&args));
     }
   }
   // Evaluate operator

@@ -21,13 +21,16 @@ public:
 };
 
 struct Pair;
+struct Closure;
 struct Nil { };
 using Symbol = std::string;
 using Integer = long;
 struct Builtin;
 
 // Atom should be called Cell, true Atoms are Nil, Symbol, Integer
-using Atom = std::variant<Nil, Pair*, Symbol, Integer, Builtin>;
+// Are _pointers_ to Pair necessary, since everything is allocated via cons?
+using Atom = std::variant<Nil, Pair*, Symbol, Integer, Builtin, Closure*>;
+
 struct Builtin {
   std::add_pointer_t<Atom(Atom args)> func;
   Atom operator()(Atom args) { return func(args); }
@@ -37,6 +40,13 @@ struct Pair {
   Atom head;
   Atom tail;
 };
+
+struct Closure : public Pair {
+  using Pair::Pair;
+  Closure(Atom head, Atom tail) : Pair { head, tail } {}
+  Closure(Pair* pair) : Pair { pair->head, pair->tail } {}
+};
+
 
 bool nilp(Atom atom);
 bool listp(Atom expr);
@@ -49,6 +59,7 @@ Atom makeNil();
 Atom makeInt(long x);
 Atom makeSymbol(std::string const s);
 Atom makeBuiltin(Builtin func);
+Atom makeClosure(Atom env, Atom args, Atom body);
 
 Atom copyList(Atom list);
 Atom apply(Atom func, Atom args);
