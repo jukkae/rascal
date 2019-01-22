@@ -270,6 +270,11 @@ Engine::Engine(sf::RenderWindow* window) : window(window) {
 	lisp::setEnv(env, lisp::makeSymbol("head"), lisp::makeBuiltin(lisp::Builtin{lisp::builtinHead}));
 	lisp::setEnv(env, lisp::makeSymbol("tail"), lisp::makeBuiltin(lisp::Builtin{lisp::builtinTail}));
 	lisp::setEnv(env, lisp::makeSymbol("cons"), lisp::makeBuiltin(lisp::Builtin{lisp::builtinCons}));
+	lisp::setEnv(env, lisp::makeSymbol("+"), lisp::makeBuiltin(lisp::Builtin{lisp::builtinAdd}));
+	lisp::setEnv(env, lisp::makeSymbol("-"), lisp::makeBuiltin(lisp::Builtin{lisp::builtinSubtract}));
+	lisp::setEnv(env, lisp::makeSymbol("*"), lisp::makeBuiltin(lisp::Builtin{lisp::builtinMultiply}));
+	lisp::setEnv(env, lisp::makeSymbol("/"), lisp::makeBuiltin(lisp::Builtin{lisp::builtinDivide}));
+	lisp::setEnv(env, lisp::makeSymbol("%"), lisp::makeBuiltin(lisp::Builtin{lisp::builtinModulo}));
 
 	for(;;) {
 		std::cout << "lisp> ";

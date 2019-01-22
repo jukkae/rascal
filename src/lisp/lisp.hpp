@@ -72,6 +72,11 @@ void setEnv(Atom env, Atom symbol, Atom value);
 Atom builtinHead(Atom args);
 Atom builtinTail(Atom args);
 Atom builtinCons(Atom args);
+Atom builtinAdd(Atom args);
+Atom builtinSubtract(Atom args);
+Atom builtinMultiply(Atom args);
+Atom builtinDivide(Atom args);
+Atom builtinModulo(Atom args);
 
 Atom evaluateExpression(Atom expr, Atom env);
 

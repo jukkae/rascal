@@ -303,6 +303,46 @@ Atom lisp::builtinCons(Atom args) {
   return cons(*head(&args), *head(tail(&args)));
 }
 
+Atom lisp::builtinAdd(Atom args) {
+  if(nilp(args) || nilp(*tail(&args)) || !nilp(*tail(tail(&args)))) throw LispException("builtin add: wrong number of args");
+  Atom a = *head(&args);
+  Atom b = *head(tail(&args));
+  if(!std::holds_alternative<Integer>(a) || !std::holds_alternative<Integer>(b)) throw LispException("builtin add: not a number");
+  return makeInt(std::get<Integer>(a) + std::get<Integer>(b));
+}
+
+Atom lisp::builtinSubtract(Atom args) {
+  if(nilp(args) || nilp(*tail(&args)) || !nilp(*tail(tail(&args)))) throw LispException("builtin subtract: wrong number of args");
+  Atom a = *head(&args);
+  Atom b = *head(tail(&args));
+  if(!std::holds_alternative<Integer>(a) || !std::holds_alternative<Integer>(b)) throw LispException("builtin subtract: not a number");
+  return makeInt(std::get<Integer>(a) - std::get<Integer>(b));
+}
+
+Atom lisp::builtinMultiply(Atom args) {
+  if(nilp(args) || nilp(*tail(&args)) || !nilp(*tail(tail(&args)))) throw LispException("builtin multiply: wrong number of args");
+  Atom a = *head(&args);
+  Atom b = *head(tail(&args));
+  if(!std::holds_alternative<Integer>(a) || !std::holds_alternative<Integer>(b)) throw LispException("builtin multiply: not a number");
+  return makeInt(std::get<Integer>(a) * std::get<Integer>(b));
+}
+
+Atom lisp::builtinDivide(Atom args) {
+  if(nilp(args) || nilp(*tail(&args)) || !nilp(*tail(tail(&args)))) throw LispException("builtin divide: wrong number of args");
+  Atom a = *head(&args);
+  Atom b = *head(tail(&args));
+  if(!std::holds_alternative<Integer>(a) || !std::holds_alternative<Integer>(b)) throw LispException("builtin divide: not a number");
+  return makeInt(std::get<Integer>(a) / std::get<Integer>(b));
+}
+
+Atom lisp::builtinModulo(Atom args) {
+  if(nilp(args) || nilp(*tail(&args)) || !nilp(*tail(tail(&args)))) throw LispException("builtin modulo: wrong number of args");
+  Atom a = *head(&args);
+  Atom b = *head(tail(&args));
+  if(!std::holds_alternative<Integer>(a) || !std::holds_alternative<Integer>(b)) throw LispException("builtin modulo: not a number");
+  return makeInt(std::get<Integer>(a) % std::get<Integer>(b));
+}
+
 Atom lisp::evaluateExpression(Atom expr, Atom env) {
   Atom op;
   Atom args;
