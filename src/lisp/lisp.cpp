@@ -67,11 +67,12 @@ Atom lisp::makeBuiltin(Builtin func) {
 }
 
 Atom lisp::makeClosure(Atom env, Atom args, Atom body) {
-  if(!listp(args) || !listp(body)) throw LispException("makeClosure: args or body not list");
+  if(!listp(body)) throw LispException("makeClosure: body not list");
 
   Atom p = args;
   while(!nilp(p)) {
-    if(!std::holds_alternative<Symbol>(*head(&p))) throw LispException("makeClosure: type error in args");
+    if (std::holds_alternative<Symbol>(p)) break;
+    else if(!std::holds_alternative<Pair*>(p) || !std::holds_alternative<Symbol>(*head(&p))) throw LispException("makeClosure: type error in args");
     p = *tail(&p);
   }
   // TODO check this
@@ -105,6 +106,12 @@ Atom lisp::apply(Atom func, Atom args) {
 
   // Bind arguments
   while(!nilp(argNames)) {
+    if(std::holds_alternative<Symbol>(argNames)) {
+      setEnv(env, argNames, args);
+      args = makeNil();
+      break;
+    }
+
     if(nilp(args)) throw LispException("Apply: Argument error");
     setEnv(env, *head(&argNames), *head(&args));
     argNames = *tail(&argNames);
