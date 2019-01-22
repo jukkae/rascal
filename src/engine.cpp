@@ -275,6 +275,8 @@ Engine::Engine(sf::RenderWindow* window) : window(window) {
 	lisp::setEnv(env, lisp::makeSymbol("*"), lisp::makeBuiltin(lisp::Builtin{lisp::builtinMultiply}));
 	lisp::setEnv(env, lisp::makeSymbol("/"), lisp::makeBuiltin(lisp::Builtin{lisp::builtinDivide}));
 	lisp::setEnv(env, lisp::makeSymbol("%"), lisp::makeBuiltin(lisp::Builtin{lisp::builtinModulo}));
+	lisp::setEnv(env, lisp::makeSymbol("="), lisp::makeBuiltin(lisp::Builtin{lisp::builtinNumEq}));
+	lisp::setEnv(env, lisp::makeSymbol("<"), lisp::makeBuiltin(lisp::Builtin{lisp::builtinNumLess}));
 
 	lisp::setEnv(env, lisp::makeSymbol("t"), lisp::makeSymbol("t"));
 

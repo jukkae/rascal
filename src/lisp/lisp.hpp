@@ -7,7 +7,7 @@ namespace lisp {
 
 enum class AtomType { NIL, PAIR, SYMBOL, INTEGER };
 
-enum class TokenType { NIL, SYMBOL, INTEGER, LPAREN, RPAREN, PERIOD, UNKNOWN };
+enum class TokenType { NIL, SYMBOL, INTEGER, LPAREN, RPAREN, PERIOD, QUOTE, UNKNOWN };
 
 struct LispException : public std::exception {
 private:
@@ -88,6 +88,8 @@ Atom builtinSubtract(Atom args);
 Atom builtinMultiply(Atom args);
 Atom builtinDivide(Atom args);
 Atom builtinModulo(Atom args);
+Atom builtinNumEq(Atom args);
+Atom builtinNumLess(Atom args);
 
 Atom evaluateExpression(Atom expr, Atom env);
 

@@ -160,6 +160,8 @@ std::list<std::string> lisp::tokenize(std::string const str) {
       result.push_back("(");
     } else if(str[i] == ')') {
       result.push_back(")");
+    } else if(str[i] == '\'') {
+      result.push_back("\'");
     } else if(std::isspace(str[i])) {
       // do nothing
     } else {
@@ -167,6 +169,7 @@ std::list<std::string> lisp::tokenize(std::string const str) {
       while(i < str.length()
       && str[i] != '('
       && str[i] != ')'
+      && str[i] != '\''
       && !std::isspace(str[i])) {
         token.push_back(str[i]);
         ++i;
@@ -190,7 +193,7 @@ bool lisp::isNil(std::string const s) {
 bool lisp::isSymbol(std::string const s) {
   if(s.length() > 1) return true;
   if(s.length() == 1) {
-    if(s[0] == ')' || s[0] == '(') {
+    if(s[0] == ')' || s[0] == '(' || s[0] == '\'') {
       return false;
     }
     else return true;
@@ -205,6 +208,7 @@ TokenType lisp::getTokenType(std::string token) {
   if(token == "(") return TokenType::LPAREN;
   if(token == ")") return TokenType::RPAREN;
   if(token == ".") return TokenType::PERIOD;
+  if(token == "\'") return TokenType::QUOTE;
   else return TokenType::UNKNOWN;
 }
 
@@ -246,10 +250,7 @@ Atom lisp::readList(std::list<std::string>& tokens) {
 }
 
 Atom lisp::readFrom(std::list<std::string>& tokens) {
-  // std::cout << "\n\nREADFROM\n";
-  // std::cout << "RF: toks: ";
-  // for(auto& a: tokens) std::cout << a << " ";
-  // std::cout << "\n";
+
   //if(tokens.empty()) return makeNil();
 
   std::string token(tokens.front());
@@ -266,6 +267,10 @@ Atom lisp::readFrom(std::list<std::string>& tokens) {
   } else if (tokenType == TokenType::INTEGER) {
     long l = std::stol(token);
     return makeInt(l);
+  } else if (tokenType == TokenType::QUOTE) {
+    Atom result = cons(makeSymbol("quote"), cons(makeNil(), makeNil()));
+    *head(tail(&result)) = readFrom(tokens);
+    return result;
   } else {
     throw LispException("readFrom: couldn't match token");
   }
@@ -383,6 +388,24 @@ Atom lisp::builtinModulo(Atom args) {
   Atom b = *head(tail(&args));
   if(!std::holds_alternative<Integer>(a) || !std::holds_alternative<Integer>(b)) throw LispException("builtin modulo: not a number");
   return makeInt(std::get<Integer>(a) % std::get<Integer>(b));
+}
+
+Atom lisp::builtinNumEq(Atom args) {
+  if(nilp(args) || nilp(*tail(&args)) || !nilp(*tail(tail(&args)))) throw LispException("builtin numeq: wrong number of args");
+  Atom a = *head(&args);
+  Atom b = *head(tail(&args));
+  if(!std::holds_alternative<Integer>(a) || !std::holds_alternative<Integer>(b)) throw LispException("builtin numeq: not a number");
+  bool result = std::get<Integer>(a) == std::get<Integer>(b);
+  return result ? makeSymbol("t") : makeNil();
+}
+
+Atom lisp::builtinNumLess(Atom args) {
+  if(nilp(args) || nilp(*tail(&args)) || !nilp(*tail(tail(&args)))) throw LispException("builtin numless: wrong number of args");
+  Atom a = *head(&args);
+  Atom b = *head(tail(&args));
+  if(!std::holds_alternative<Integer>(a) || !std::holds_alternative<Integer>(b)) throw LispException("builtin numless: not a number");
+  bool result = std::get<Integer>(a) < std::get<Integer>(b);
+  return result ? makeSymbol("t") : makeNil();
 }
 
 Atom lisp::evaluateExpression(Atom expr, Atom env) {
