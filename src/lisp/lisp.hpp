@@ -99,6 +99,9 @@ Atom builtinNumLess(Atom args);
 
 Atom evaluateExpression(Atom expr, Atom env);
 
+std::string readFile(std::string path);
+void loadFile(Atom env, std::string path);
+
 // TODO this could use e.g. std::set instead, but this is good enough for now
 extern Atom symbolTable;
 

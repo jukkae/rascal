@@ -313,15 +313,15 @@ Atom lisp::getEnv(Atom env, Atom symbol) {
 }
 
 void lisp::setEnv(Atom env, Atom symbol, Atom value) {
-  if(!std::holds_alternative<Pair*>(env)) throw LispException("getEnv: Env not pair");
-  if(!std::holds_alternative<Symbol>(symbol)) throw LispException("getEnv: Symbol not symbol");
+  if(!std::holds_alternative<Pair*>(env)) throw LispException("setEnv: Env not pair");
+  if(!std::holds_alternative<Symbol>(symbol)) throw LispException("setEnv: Symbol not symbol");
 
   Atom bs = *tail(&env);
   Atom b = makeNil();
 
   while(!nilp(bs)) {
     b = *head(&bs);
-    if(!std::holds_alternative<Pair*>(b)) throw LispException("getEnv: b not pair");
+    if(!std::holds_alternative<Pair*>(b)) throw LispException("setEnv: b not pair");
     if(std::get<std::string>(*head(&b)) == std::get<std::string>(symbol)) {
       *tail(&b) = value;
       return;
@@ -496,4 +496,21 @@ Atom lisp::evaluateExpression(Atom expr, Atom env) {
   return apply(op, args);
 
   throw LispException("evaluateExpression: Illformed syntax");
+}
+
+std::string lisp::readFile(std::string path) {
+  std::cout << "Reading file " << path << "\n";
+	std::ifstream fin(path);
+	std::stringstream buffer;
+	buffer << fin.rdbuf();
+	std::string text = buffer.str();
+  std::cout << "File read\n";
+  return text;
+}
+
+void lisp::loadFile(Atom env, std::string path) {
+  std::cout << "Loading file " << path << "\n";
+  std::string text = readFile(path);
+  Atom expr = readExpression(text);
+  Atom result = evaluateExpression(expr, env);
 }
