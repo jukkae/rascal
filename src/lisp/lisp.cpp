@@ -288,6 +288,16 @@ Atom lisp::readExpression(std::string const expression) {
   return readFrom(tokens);
 }
 
+std::list<Atom> lisp::readExpressions(std::string const expressions) {
+  std::list<std::string> tokens = tokenize(expressions);
+  std::list<Atom> results;
+  while(!tokens.empty()) {
+    Atom result = readFrom(tokens);
+    results.push_back(result);
+  }
+  return results;
+}
+
 Atom lisp::createEnv(Atom parent) {
   return cons(parent, makeNil());
 }
@@ -504,13 +514,16 @@ std::string lisp::readFile(std::string path) {
 	std::stringstream buffer;
 	buffer << fin.rdbuf();
 	std::string text = buffer.str();
-  std::cout << "File read\n";
+  std::cout << "Read file " << path << "\n";
   return text;
 }
 
 void lisp::loadFile(Atom env, std::string path) {
   std::cout << "Loading file " << path << "\n";
   std::string text = readFile(path);
-  Atom expr = readExpression(text);
-  Atom result = evaluateExpression(expr, env);
+  std::list<Atom> exprs = readExpressions(text);
+  for(auto& expr : exprs) {
+    Atom result = evaluateExpression(expr, env);
+  }
+  std::cout << "Loaded file " << path << "\n";
 }

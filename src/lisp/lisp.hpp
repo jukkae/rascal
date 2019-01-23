@@ -81,6 +81,7 @@ TokenType getTokenType(std::string token);
 Atom readList(std::list<std::string>& tokens);
 Atom readFrom(std::list<std::string>& tokens);
 Atom readExpression(std::string const expression);
+std::list<Atom> readExpressions(std::string const expressions);
 
 Atom createEnv(Atom parent);
 Atom getEnv(Atom env, Atom symbol);
