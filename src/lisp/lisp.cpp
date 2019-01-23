@@ -211,9 +211,12 @@ bool lisp::isNil(std::string const s) {
     return s == "nil";
 }
 
+// TODO this is shit
 bool lisp::isSymbol(std::string const s) {
-  if(s.length() > 1) return true;
-  if(s.length() == 1) {
+  if(s.length() > 1) {
+    if(s[0] != ',') return true;
+    else return false;
+  } else if(s.length() == 1) {
     if(s[0] == ')' || s[0] == '(' || s[0] == '\'' || s[0] == '`' || s[0] == ',') {
       return false;
     }
@@ -224,15 +227,15 @@ bool lisp::isSymbol(std::string const s) {
 
 TokenType lisp::getTokenType(std::string token) {
   if(isNil(token)) return TokenType::NIL;
-  if(isInteger(token)) return TokenType::INTEGER;
-  if(isSymbol(token)) return TokenType::SYMBOL;
-  if(token == "(") return TokenType::LPAREN;
-  if(token == ")") return TokenType::RPAREN;
-  if(token == ".") return TokenType::PERIOD;
-  if(token == "\'") return TokenType::QUOTE;
-  if(token == "`") return TokenType::QUASIQUOTE;
-  if(token == ",") return TokenType::UNQUOTE;
-  if(token == ",@") return TokenType::UNQUOTE_SPLICING;
+  else if(isInteger(token)) return TokenType::INTEGER;
+  else if(isSymbol(token)) return TokenType::SYMBOL;
+  else if(token == "(") return TokenType::LPAREN;
+  else if(token == ")") return TokenType::RPAREN;
+  else if(token == ".") return TokenType::PERIOD;
+  else if(token == "\'") return TokenType::QUOTE;
+  else if(token == "`") return TokenType::QUASIQUOTE;
+  else if(token == ",@") return TokenType::UNQUOTE_SPLICING;
+  else if(token == ",") return TokenType::UNQUOTE;
   else return TokenType::UNKNOWN;
 }
 
@@ -381,10 +384,6 @@ Atom lisp::builtinHead(Atom args) {
   Atom result;
   if(nilp(args) || !nilp(*tail(&args))) throw LispException("builtin head: wrong number of args");
 
-  std::cout << "HEAD ARGS\n";
-  printExpr(args);
-  std::cout << "\n";
-
   if(nilp(*head(&args))) result = makeNil();
   else if(!std::holds_alternative<Pair*>(*head(&args))) throw LispException("builtin head: not pair");
   else result = *head(head(&args));
@@ -518,9 +517,9 @@ Atom lisp::evaluateExpression(Atom expr, Atom env) {
   Atom op;
   Atom args;
   Atom p;
-  std::cout << "expr:\n";
-  printExpr(expr);
-  std::cout << "\n";
+  // std::cout << "expr:\n";
+  // printExpr(expr);
+  // std::cout << "\n";
 
   if(std::holds_alternative<Symbol>(expr)) {
     return getEnv(env, expr);
@@ -578,7 +577,6 @@ Atom lisp::evaluateExpression(Atom expr, Atom env) {
       val = nilp(cond) ? *head(tail(tail(&args))) : *head(tail(&args));
       return evaluateExpression(val, env);
     } else if(std::get<Symbol>(op) == "and") { // Short-circuiting and
-      std::cout << "\nAND\n";
       Atom res = makeSymbol("t");
       while(!nilp(args)) {
         res = evaluateExpression(*head(&args), env);
