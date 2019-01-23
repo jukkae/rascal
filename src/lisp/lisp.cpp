@@ -425,6 +425,56 @@ Atom lisp::builtinNumLess(Atom args) {
   return result ? makeSymbol("t") : makeNil();
 }
 
+Atom lisp::builtinApply(Atom args) {
+  if(nilp(args) || nilp(*tail(&args)) || !nilp(*tail(tail(&args)))) throw LispException("builtin apply: wrong number of args");
+  Atom fn = *head(&args);
+  args = *head(tail(&args));
+  if(!listp(args)) throw LispException("builtin apply: syntax error");
+  return apply(fn, args);
+}
+
+Atom lisp::builtinEq(Atom args) {
+  if(nilp(args) || nilp(*tail(&args)) || !nilp(*tail(tail(&args)))) throw LispException("builtin eq: wrong number of args");
+
+  Atom a = *head(&args);
+  Atom b = *head(tail(&args));
+  bool result = false;
+  if(a.index() == b.index()) {
+    if(std::holds_alternative<Nil>(a)) {
+      return makeSymbol("t");
+    } else if(std::holds_alternative<Pair*>(a)) {
+      if(std::get<Pair*>(a) == std::get<Pair*>(b)) result = true;
+      else result = false;;
+    } else if(std::holds_alternative<Symbol>(a)) {
+      if(std::get<Symbol>(a) == std::get<Symbol>(b)) result = true;
+      else result = false;;
+    } else if(std::holds_alternative<Integer>(a)) {
+      if(std::get<Integer>(a) == std::get<Integer>(b)) result = true;
+      else result = false;;
+    } else if(std::holds_alternative<Builtin>(a)) {
+      if(std::get<Builtin>(a).func == std::get<Builtin>(b).func) result = true;
+      else result = false;;
+    } else if(std::holds_alternative<Closure*>(a)) {
+      if(std::get<Closure*>(a) == std::get<Closure*>(b)) result = true;
+      else result = false;;
+    } else if(std::holds_alternative<Macro*>(a)) {
+      if(std::get<Macro*>(a) == std::get<Macro*>(b)) result = true;
+      else result = false;;
+    } else {
+       throw LispException("builtin eq: comparison for type not implemented");
+    }
+  } else {
+    result = false;
+  }
+  return result ? makeSymbol("t") : makeNil();
+}
+
+Atom lisp::builtinPair(Atom args) {
+  if(nilp(args) || nilp(*tail(&args))) throw LispException("builtin pair: wrong number of args");
+  bool result = std::holds_alternative<Pair*>(*head(&args));
+  return result ? makeSymbol("t") : makeNil();
+}
+
 Atom lisp::evaluateExpression(Atom expr, Atom env) {
   Atom op;
   Atom args;

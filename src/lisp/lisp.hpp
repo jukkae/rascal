@@ -94,9 +94,12 @@ Atom builtinAdd(Atom args);
 Atom builtinSubtract(Atom args);
 Atom builtinMultiply(Atom args);
 Atom builtinDivide(Atom args);
-Atom builtinModulo(Atom args);
+Atom builtinModulo(Atom args); // TODO should integer divide return the quotient as well as modulo?
 Atom builtinNumEq(Atom args);
 Atom builtinNumLess(Atom args);
+Atom builtinApply(Atom args);
+Atom builtinEq(Atom args);
+Atom builtinPair(Atom args);
 
 Atom evaluateExpression(Atom expr, Atom env);
 
