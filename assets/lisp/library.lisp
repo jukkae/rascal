@@ -50,3 +50,7 @@
                     (list 'quasiquote (car x))
                     (list 'quasiquote (cdr x)))))
       (list 'quote x)))
+
+(defmacro (let defs . body)
+  `((lambda ,(map car defs) ,@body)
+    ,@(map cadr defs)))
