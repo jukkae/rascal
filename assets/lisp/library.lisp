@@ -54,3 +54,7 @@
 (defmacro (let defs . body)
   `((lambda ,(map car defs) ,@body)
     ,@(map cadr defs)))
+
+(def +
+  (let ((old+ +))
+    (lambda xs (foldl old+ 0 xs))))
