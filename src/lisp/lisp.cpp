@@ -156,6 +156,8 @@ void lisp::printExpr(Atom atom) {
   }
   if(std::holds_alternative<Builtin>(atom)) {
     std::cout << "<BUILTIN>: " << &std::get<Builtin>(atom);
+  } else {
+
   }
 }
 
@@ -169,6 +171,16 @@ std::list<std::string> lisp::tokenize(std::string const str) {
       result.push_back(")");
     } else if(str[i] == '\'') {
       result.push_back("\'");
+    } else if(str[i] == '`') {
+      result.push_back("`");
+    } else if(str[i] == ',') {
+      if(str[i+1] == '@') { // TODO bad form, this will blow up
+        result.push_back(",@");
+        ++i;
+      }
+      else {
+        result.push_back(",");
+      }
     } else if(std::isspace(str[i])) {
       // do nothing
     } else {
@@ -176,7 +188,9 @@ std::list<std::string> lisp::tokenize(std::string const str) {
       while(i < str.length()
       && str[i] != '('
       && str[i] != ')'
-      && str[i] != '\''
+      && str[i] != '\'' // TODO this is a shit implementation, should be defined as prefix characters
+      && str[i] != '`' // TODO this is a shit implementation, should be defined as prefix characters
+      && str[i] != '@' // Does @ count as a prefix?
       && !std::isspace(str[i])) {
         token.push_back(str[i]);
         ++i;
@@ -200,7 +214,7 @@ bool lisp::isNil(std::string const s) {
 bool lisp::isSymbol(std::string const s) {
   if(s.length() > 1) return true;
   if(s.length() == 1) {
-    if(s[0] == ')' || s[0] == '(' || s[0] == '\'') {
+    if(s[0] == ')' || s[0] == '(' || s[0] == '\'' || s[0] == '`' || s[0] == ',') {
       return false;
     }
     else return true;
@@ -216,6 +230,9 @@ TokenType lisp::getTokenType(std::string token) {
   if(token == ")") return TokenType::RPAREN;
   if(token == ".") return TokenType::PERIOD;
   if(token == "\'") return TokenType::QUOTE;
+  if(token == "`") return TokenType::QUASIQUOTE;
+  if(token == ",") return TokenType::UNQUOTE;
+  if(token == ",@") return TokenType::UNQUOTE_SPLICING;
   else return TokenType::UNKNOWN;
 }
 
@@ -278,7 +295,20 @@ Atom lisp::readFrom(std::list<std::string>& tokens) {
     Atom result = cons(makeSymbol("quote"), cons(makeNil(), makeNil()));
     *head(tail(&result)) = readFrom(tokens);
     return result;
-  } else {
+  } else if (tokenType == TokenType::QUASIQUOTE) {
+    Atom result = cons(makeSymbol("quasiquote"), cons(makeNil(), makeNil()));
+    *head(tail(&result)) = readFrom(tokens);
+    return result;
+  } else if (tokenType == TokenType::UNQUOTE) {
+    Atom result = cons(makeSymbol("unquote"), cons(makeNil(), makeNil()));
+    *head(tail(&result)) = readFrom(tokens);
+    return result;
+  } else if (tokenType == TokenType::UNQUOTE_SPLICING) {
+    Atom result = cons(makeSymbol("unquote-splicing"), cons(makeNil(), makeNil()));
+    *head(tail(&result)) = readFrom(tokens);
+    return result;
+  }
+  else {
     throw LispException("readFrom: couldn't match token");
   }
 }
@@ -318,7 +348,12 @@ Atom lisp::getEnv(Atom env, Atom symbol) {
     }
     bs = *tail(&bs);
   }
-  if(nilp(parent)) throw LispException("getEnv: Symbol unbound");
+  if(nilp(parent)) {
+    std::cout << "symbol unbound:\n";
+    printExpr(symbol);
+    std::cout << "\n";
+    throw LispException("getEnv: Symbol unbound");
+  }
   return getEnv(parent, symbol);
 }
 
@@ -345,6 +380,10 @@ void lisp::setEnv(Atom env, Atom symbol, Atom value) {
 Atom lisp::builtinHead(Atom args) {
   Atom result;
   if(nilp(args) || !nilp(*tail(&args))) throw LispException("builtin head: wrong number of args");
+
+  std::cout << "HEAD ARGS\n";
+  printExpr(args);
+  std::cout << "\n";
 
   if(nilp(*head(&args))) result = makeNil();
   else if(!std::holds_alternative<Pair*>(*head(&args))) throw LispException("builtin head: not pair");
@@ -470,7 +509,7 @@ Atom lisp::builtinEq(Atom args) {
 }
 
 Atom lisp::builtinPair(Atom args) {
-  if(nilp(args) || nilp(*tail(&args))) throw LispException("builtin pair: wrong number of args");
+  if(nilp(args) || !nilp(*tail(&args))) throw LispException("builtin pair: wrong number of args");
   bool result = std::holds_alternative<Pair*>(*head(&args));
   return result ? makeSymbol("t") : makeNil();
 }
@@ -479,6 +518,9 @@ Atom lisp::evaluateExpression(Atom expr, Atom env) {
   Atom op;
   Atom args;
   Atom p;
+  std::cout << "expr:\n";
+  printExpr(expr);
+  std::cout << "\n";
 
   if(std::holds_alternative<Symbol>(expr)) {
     return getEnv(env, expr);
@@ -535,13 +577,20 @@ Atom lisp::evaluateExpression(Atom expr, Atom env) {
       cond = evaluateExpression(*head(&args), env);
       val = nilp(cond) ? *head(tail(tail(&args))) : *head(tail(&args));
       return evaluateExpression(val, env);
+    } else if(std::get<Symbol>(op) == "and") { // Short-circuiting and
+      std::cout << "\nAND\n";
+      Atom res = makeSymbol("t");
+      while(!nilp(args)) {
+        res = evaluateExpression(*head(&args), env);
+        if(nilp(res)) return res;
+        args = *tail(&args);
+      }
+      return res;
     }
   }
   // Evaluate operator
   op = evaluateExpression(op, env);
-  // Which order line above and stuff below?
   if(std::holds_alternative<Macro*>(op)) {
-
     op = Atom { static_cast<Closure*>(static_cast<Pair*>(std::get<Macro*>(op))) };
     Atom expansion = apply(op, args);
     return evaluateExpression(expansion, env);

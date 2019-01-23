@@ -6,7 +6,7 @@
 namespace lisp {
 
 enum class TokenType {
-  NIL, SYMBOL, INTEGER, LPAREN, RPAREN, PERIOD, QUOTE, UNKNOWN
+  NIL, SYMBOL, INTEGER, LPAREN, RPAREN, PERIOD, QUOTE, QUASIQUOTE, UNQUOTE, UNQUOTE_SPLICING, UNKNOWN
 };
 
 struct LispException : public std::exception {
