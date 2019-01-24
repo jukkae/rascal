@@ -101,6 +101,13 @@ Atom builtinApply(Atom args);
 Atom builtinEq(Atom args);
 Atom builtinPair(Atom args);
 
+// Continuations and tail recursion-related stuff
+Atom getFromList(Atom list, int k);
+void setToList(Atom list, int k, Atom value);
+void reverseList(Atom* list); // TODO reversing in-place is dirty, nasty and dirty
+Atom makeFrame(Atom parent, Atom env, Atom tailAtom);
+
+
 Atom evaluateExpression(Atom expr, Atom env);
 
 std::string readFile(std::string path);

@@ -513,6 +513,41 @@ Atom lisp::builtinPair(Atom args) {
   return result ? makeSymbol("t") : makeNil();
 }
 
+Atom lisp::getFromList(Atom list, int k) {
+  while(k-- > 0) {
+    list = *tail(&list);
+  }
+  return *head(&list);
+}
+
+void lisp::setToList(Atom list, int k, Atom value) {
+  while(k-- > 0) {
+    list = *tail(&list);
+  }
+  *head(&list) = value;
+}
+
+void lisp::reverseList(Atom* list) {
+  Atom tailAtom = makeNil();
+  while(!nilp(*list)) {
+    Atom p = *tail(list);
+    *tail(list) = tailAtom;
+    tailAtom = *list;
+    *list = p;
+  }
+  *list = tailAtom;
+}
+
+Atom lisp::makeFrame(Atom parent, Atom env, Atom tailAtom) {
+  return cons(parent,
+           cons(env,
+           cons(makeNil(), /* OP */
+           cons(tailAtom,
+           cons(makeNil(), /* args */
+           cons(makeNil(), /* body */
+           makeNil()))))));
+}
+
 Atom lisp::evaluateExpression(Atom expr, Atom env) {
   Atom op;
   Atom args;

@@ -44,6 +44,24 @@ Engine::Engine(sf::RenderWindow* window) : window(window) {
 	states.push_back(std::move(gps));
 	states.push_back(std::move(mainMenuState));
 
+	std::cout << "\n\n";
+	std::cout << "reversing:\n";
+
+	lisp::Atom toBeReversed = lisp::cons(lisp::makeSymbol("a"), lisp::cons(lisp::makeSymbol("b"), lisp::cons(lisp::makeSymbol("c"), lisp::makeNil())));
+	lisp::printExpr(toBeReversed);
+	std::cout << "\n";
+	lisp::reverseList(&toBeReversed);
+	lisp::printExpr(toBeReversed);
+	std::cout << "\n";
+
+	lisp::Atom second = lisp::getFromList(toBeReversed, 0);
+	lisp::printExpr(second);
+	std::cout << "\n";
+
+	lisp::setToList(toBeReversed, 1, lisp::makeSymbol("d"));
+	lisp::printExpr(toBeReversed);
+	std::cout << "\n";
+
 
 	std::cout << "\n\n";
 
