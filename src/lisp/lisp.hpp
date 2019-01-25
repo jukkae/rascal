@@ -106,6 +106,10 @@ Atom getFromList(Atom list, int k);
 void setToList(Atom list, int k, Atom value);
 void reverseList(Atom* list); // TODO reversing in-place is dirty, nasty and dirty
 Atom makeFrame(Atom parent, Atom env, Atom tailAtom);
+void evalDoExec(Atom* stack, Atom* expr, Atom* env); // TODO return value instead of mutating
+void evalDoBind(Atom* stack, Atom* expr, Atom* env); // TODO return value instead of mutating
+void evalDoApply(Atom* stack, Atom* expr, Atom* env); // TODO return value instead of mutating
+Atom evalDoReturn(Atom* stack, Atom* expr, Atom* env, Atom* temp);
 
 
 Atom evaluateExpression(Atom expr, Atom env);

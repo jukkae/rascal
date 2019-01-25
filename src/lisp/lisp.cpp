@@ -548,6 +548,161 @@ Atom lisp::makeFrame(Atom parent, Atom env, Atom tailAtom) {
            makeNil()))))));
 }
 
+void lisp::evalDoExec(Atom* stack, Atom* expr, Atom* env) {
+  Atom body;
+  *env = getFromList(*stack, 1);
+  body = getFromList(*stack, 5);
+  *expr = *head(&body);
+  body = *tail(&body);
+  if(nilp(body)) {
+    // Finished function, pop stack
+    *stack = *head(stack);
+  } else {
+    setToList(*stack, 5, body);
+  }
+}
+
+// Bind function args to new env if not bound already, then call evalDoExec
+void lisp::evalDoBind(Atom* stack, Atom* expr, Atom* env) {
+  Atom op, args, argNames, body;
+  body = getFromList(*stack, 5);
+  if(!nilp(body)) {
+    evalDoExec(stack, expr, env);
+  } else {
+    op = getFromList(*stack, 2);
+    args = getFromList(*stack, 4);
+    *env = createEnv(*head(&op));
+    argNames = *head(tail(&op));
+    body = *tail(tail(&op));
+    setToList(*stack, 1, *env);
+    setToList(*stack, 5, body);
+    // Bind args
+    while(!nilp(argNames)) {
+      if(std::holds_alternative<Symbol>(argNames)) {
+        setEnv(*env, argNames, *head(&args));
+        args = makeNil();
+        break;
+      }
+      if(nilp(args)) throw LispException("evalDoBind: Arguments error");
+      setEnv(*env, *head(&argNames), *head(&args));
+      argNames = *tail(&argNames);
+      args = *tail(&args);
+    }
+    if(!nilp(args)) throw LispException("evalDoBind: Arguments error");
+    setToList(*stack, 4, makeNil());
+    evalDoExec(stack, expr, env);
+  }
+  return;
+}
+
+// Either generate expression to call a builtin or call evalDoBind
+// Called once all args have been evaluated
+void lisp::evalDoApply(Atom* stack, Atom* expr, Atom* env) {
+  Atom op, args;
+  op = getFromList(*stack, 2);
+  args = getFromList(*stack, 4);
+  if(!nilp(args)) {
+    reverseList(&args);
+    setToList(*stack, 4, args);
+  }
+
+  if(std::holds_alternative<Symbol>(op)) {
+    if(std::get<Symbol>(op) == "apply") {
+      // Replace current stack frame
+      *stack = *head(stack);
+      *stack = makeFrame(*stack, *env, makeNil());
+      op = *head(&args);
+      args = *head(tail(&args));
+      if(!listp(args)) {
+        throw LispException("evalDoApply: Syntax error");
+      }
+      setToList(*stack, 2, op);
+      setToList(*stack, 4, args);
+    }
+  }
+
+  if(std::holds_alternative<Builtin>(op)) {
+    *stack = *head(stack);
+    *expr = cons(op, args);
+    return;
+  } else if(!std::holds_alternative<Closure*>(op)) {
+    throw LispException("evalDoApply: Type error");
+  }
+  evalDoBind(stack, expr, env);
+  return;
+}
+
+// TODO figure out the whole Atom* temp business
+Atom lisp::evalDoReturn(Atom* stack, Atom* expr, Atom* env, Atom* temp) {
+  Atom op, args, body, result;
+  *env = getFromList(*stack, 1);
+  op = getFromList(*stack, 2);
+  body = getFromList(*stack, 5);
+
+  if(!nilp(body)) {
+    // Still running a procedure
+    evalDoApply(stack, expr, env);
+    return *temp;
+  }
+
+  if(nilp(op)) {
+    // Finished evaluating operator
+    op = *temp;
+    setToList(*stack, 2, op);
+    if(std::holds_alternative<Macro*>(op)) {
+      // Don't evaluate macro args
+      args = getFromList(*stack, 3);
+      *stack = makeFrame(*stack, *env, makeNil());
+      op = Atom { static_cast<Closure*>(static_cast<Pair*>(std::get<Macro*>(op))) };
+      setToList(*stack, 2, op);
+      setToList(*stack, 4, args);
+      evalDoBind(stack, expr, env);
+      return *temp;
+    }
+  } else if (std::holds_alternative<Symbol>(op)) {
+    // Finished working on special form
+    if(std::get<Symbol>(op) == "def") {
+      Atom sym = getFromList(*stack, 4);
+      setEnv(*env, sym, *temp);
+      *stack = *head(stack);
+      *expr = cons(makeSymbol("quote"), cons(sym, makeNil()));
+      return *temp;
+    } else if(std::get<Symbol>(op) == "if") {
+      args = getFromList(*stack, 3);
+      *expr = nilp(*temp) ? *head(tail(&args)) : *head(&args);
+      *stack = *head(stack);
+      return *temp;
+    } else if(std::get<Symbol>(op) == "and") {
+      // TODO implement
+      throw LispException("evalDoReturn: and special form not implemented");
+    } else {
+      goto storeArg;
+    }
+  } else if (std::holds_alternative<Macro*>(op)) {
+    // Finished evaluating macro
+    *expr = *temp;
+    *stack = *head(stack);
+    return *temp;
+  } else {
+    storeArg:
+    // Store evaluated arg
+    args = getFromList(*stack, 4);
+    setToList(*stack, 4, cons(*temp, args));
+  }
+
+  args = getFromList(*stack, 3);
+  if(nilp(args)) {
+    // No more args to evaluate
+    evalDoApply(stack, expr, env);
+    return *temp;
+  }
+  // Eval next argument
+  *expr = *head(&args);
+  setToList(*stack, 3, *tail(&args));
+  return *temp;
+}
+
+
 Atom lisp::evaluateExpression(Atom expr, Atom env) {
   Atom op;
   Atom args;
