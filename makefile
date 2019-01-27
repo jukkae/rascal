@@ -16,7 +16,7 @@ OBJ := obj
 # https://stackoverflow.com/questions/9054987/how-can-i-compile-sfml-project-via-command-line-on-mac
 # maybe also -framework OpenGL -framework SFML
 
-SOURCES := $(wildcard src/*.cpp)
+SOURCES := $(wildcard src/*.cpp) $(wildcard src/*/*.cpp)
 OBJECTS := $(patsubst $(SRC)/%.cpp, $(OBJ)/%.o, $(SOURCES))
 .PHONY: clean run bundle-deps header-check zip-bundle
 
