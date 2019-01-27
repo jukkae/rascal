@@ -45,26 +45,6 @@ Engine::Engine(sf::RenderWindow* window) : window(window) {
 	states.push_back(std::move(mainMenuState));
 
 	std::cout << "\n\n";
-	std::cout << "reversing:\n";
-
-	lisp::Atom toBeReversed = lisp::cons(lisp::makeSymbol("a"), lisp::cons(lisp::makeSymbol("b"), lisp::cons(lisp::makeSymbol("c"), lisp::makeNil())));
-	lisp::printExpr(toBeReversed);
-	std::cout << "\n";
-	lisp::reverseList(&toBeReversed);
-	lisp::printExpr(toBeReversed);
-	std::cout << "\n";
-
-	lisp::Atom second = lisp::getFromList(toBeReversed, 0);
-	lisp::printExpr(second);
-	std::cout << "\n";
-
-	lisp::setToList(toBeReversed, 1, lisp::makeSymbol("d"));
-	lisp::printExpr(toBeReversed);
-	std::cout << "\n";
-
-
-	std::cout << "\n\n";
-
 	// REPL
 	lisp::Atom env = lisp::createEnv(lisp::makeNil());
 
@@ -94,12 +74,16 @@ Engine::Engine(sf::RenderWindow* window) : window(window) {
 			lisp::Atom expression = lisp::readExpression(s);
 			lisp::Atom result = lisp::evaluateExpression(expression, env);
 			lisp::printExpr(result);
+			std::cout << "\n";
+			std::cout << "running gc\n";
+			lisp::gc_run(expression, result, env);
 		}
 		catch(lisp::LispException e) {
 			std::cout << "LISP runtime exception: " << e.what();
 		}
-
-		std::cout << "\n";
+		catch(lisp::GcException e) { // TODO this is bad
+			// std::cout << "GC done!\n";
+		}
 	}
 }
 

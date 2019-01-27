@@ -4,6 +4,7 @@
 using namespace lisp;
 
 Atom lisp::symbolTable {Nil{}};
+Pair* globalAllocations = nullptr;
 
 bool lisp::nilp(Atom atom) {
   return std::holds_alternative<Nil>(atom);
@@ -17,8 +18,31 @@ bool lisp::listp(Atom expr) {
   return true;
 }
 
+void* Pair::operator new(size_t size) {
+  void* p;
+  p =  ::operator new(size);
+  if(!p)
+  {
+      throw LispException("Bad allocation");
+  }
+  ((Pair*)p)->mark = false;
+  ((Pair*)p)->next = globalAllocations;
+  globalAllocations = (Pair*)p;
+  return p;
+}
+
+void Pair::operator delete(void* p) {
+  ::operator delete(p);
+}
+
 Atom lisp::cons(Atom head, Atom tail) {
-  return Atom { new Pair { head, tail } };
+  // std::cout << "CONS:\n";
+  // printExpr(head);
+  // std::cout << "\n";
+  // printExpr(tail);
+  // std::cout << "\n";
+  Pair* p = new Pair { head, tail };
+  return Atom { p };
 }
 
 Atom* lisp::head(Atom* atom) {
@@ -26,8 +50,14 @@ Atom* lisp::head(Atom* atom) {
     return &(std::get<Pair*>(*atom)->head);
   } else if(std::holds_alternative<Closure*>(*atom)) {
     return &(std::get<Closure*>(*atom)->head);
+  } else if(std::holds_alternative<Macro*>(*atom)) {
+    return &(std::get<Macro*>(*atom)->head);
+  } else if(atom->index() > 6){
+    // TODO this is related to GC but who knows how
+    throw GcException("");
+  } else {
+    throw LispException("Head: expression does not refer to a pair");
   }
-  else throw LispException("Head: expression does not refer to a pair");
 }
 
 Atom* lisp::tail(Atom* atom) {
@@ -35,8 +65,79 @@ Atom* lisp::tail(Atom* atom) {
     return &(std::get<Pair*>(*atom)->tail);
   } else if(std::holds_alternative<Closure*>(*atom)) {
     return &(std::get<Closure*>(*atom)->tail);
+  } else if(std::holds_alternative<Macro*>(*atom)) {
+    return &(std::get<Macro*>(*atom)->tail);
   }
   else throw LispException("Tail: expression does not refer to a pair");
+}
+
+void lisp::gc_mark(Atom root) {
+  Pair* a;
+  if(std::holds_alternative<Pair*>(root))
+    a = std::get<Pair*>(root);
+  else if(std::holds_alternative<Closure*>(root))
+    a = static_cast<Pair*>(std::get<Closure*>(root));
+  else if(std::holds_alternative<Macro*>(root))
+    a = static_cast<Pair*>(std::get<Macro*>(root));
+  else return;
+  if(a->mark) return;
+  // std::cout << "marked\n";
+  // printExpr(a->pair.head);
+  // std::cout << "\n";
+  // printExpr(a->pair.tail);
+  // std::cout << "\n";
+  a->mark = true;
+  if(std::holds_alternative<Pair*>(root)) {
+    Atom at = Atom { std::get<Pair*>(root) };
+    //std::cout << "Pair\n";
+    gc_mark(*head(&at));
+    gc_mark(*tail(&at));
+  } else if(std::holds_alternative<Closure*>(root)) {
+    Atom at = Atom { std::get<Closure*>(root) };
+    //std::cout << "Closure\n";
+    gc_mark(*head(&at));
+    gc_mark(*tail(&at));
+  } else if(std::holds_alternative<Macro*>(root)) {
+    Atom at = Atom { std::get<Macro*>(root) };
+    //std::cout << "Macro\n";
+    gc_mark(*head(&at));
+    gc_mark(*tail(&at));
+  }
+}
+
+void lisp::gc() {
+  Pair* a;
+  Pair** p;
+
+  p = &globalAllocations;
+  while(*p != nullptr) {
+    a = *p;
+    if(!a->mark) {
+      *p = a->next;
+      // Atom temp = Atom { &a->pair };
+      // std::cout << "would delete:";
+      // printExpr(temp);
+      // std::cout << "\n";
+      delete a;
+    } else {
+      p = &a->next;
+    }
+  }
+
+  a = globalAllocations;
+  while (a != nullptr) {
+    a->mark = false;
+    a = a->next;
+  }
+}
+
+void lisp::gc_run(Atom expr, Atom result, Atom env) {
+  gc_mark(expr);
+  gc_mark(result);
+  gc_mark(env);
+  gc_mark(symbolTable);
+  gc();
+  std::cout << "GC done\n";
 }
 
 Atom lisp::makeNil() {
@@ -131,12 +232,12 @@ void lisp::printExpr(Atom atom) {
   if(std::holds_alternative<Nil>(atom)) {
     std::cout << "NIL";
   }
-  if(std::holds_alternative<Pair*>(atom) || std::holds_alternative<Closure*>(atom)) {
+  else if(std::holds_alternative<Pair*>(atom) || std::holds_alternative<Closure*>(atom) || std::holds_alternative<Macro*>(atom)) {
     std::cout << "(";
     printExpr(*head(&atom));
     Atom currentAtom = *tail(&atom);
     while(!nilp(currentAtom)) {
-      if(std::holds_alternative<Pair*>(currentAtom)) {
+      if(std::holds_alternative<Pair*>(currentAtom) || std::holds_alternative<Closure*>(currentAtom) || std::holds_alternative<Macro*>(currentAtom)) {
         std::cout << " ";
         printExpr(*head(&currentAtom));
         currentAtom = *tail(&currentAtom);
@@ -148,16 +249,17 @@ void lisp::printExpr(Atom atom) {
     }
     std::cout << ")";
   }
-  if(std::holds_alternative<Symbol>(atom)) {
+  else if(std::holds_alternative<Symbol>(atom)) {
     std::cout << std::get<Symbol>(atom);
   }
-  if(std::holds_alternative<Integer>(atom)) {
+  else if(std::holds_alternative<Integer>(atom)) {
     std::cout << std::get<Integer>(atom);
   }
-  if(std::holds_alternative<Builtin>(atom)) {
+  else if(std::holds_alternative<Builtin>(atom)) {
     std::cout << "<BUILTIN>: " << &std::get<Builtin>(atom);
-  } else {
-
+  }
+  else {
+    std::cout << "expr-type: " << atom.index();
   }
 }
 
@@ -704,6 +806,7 @@ Atom lisp::evalDoReturn(Atom* stack, Atom* expr, Atom* env, Atom* temp) {
 
 
 Atom lisp::evaluateExpression(Atom expr, Atom env) {
+
   Atom op;
   Atom args;
   Atom p;

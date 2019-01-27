@@ -20,6 +20,17 @@ public:
   }
 };
 
+struct GcException : public std::exception {
+private:
+  std::string m_message;
+public:
+  explicit GcException(const std::string& message): m_message(message) {}
+  virtual const char* what() const throw()
+  {
+    return m_message.c_str();
+  }
+};
+
 struct Pair;
 struct Closure;
 struct Macro;
@@ -40,6 +51,14 @@ struct Builtin {
 struct Pair {
   Atom head;
   Atom tail;
+
+  bool mark = true;
+  Pair* next;
+
+  void* operator new(size_t size);
+  void operator delete(void*);
+
+  Pair(Atom head, Atom tail) : head(head), tail(tail) { }
 };
 
 struct Closure : public Pair {
@@ -59,6 +78,11 @@ bool listp(Atom expr);
 Atom cons(Atom head, Atom tail);
 Atom* head(Atom* atom);
 Atom* tail(Atom* atom);
+
+// GC
+void gc_mark(Atom root);
+void gc();
+void gc_run(Atom expr, Atom result, Atom env); // Helper for marking and running gc in one call
 
 // TODO this can be templated
 Atom makeNil();
