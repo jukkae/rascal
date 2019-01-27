@@ -52,7 +52,7 @@ struct Pair {
   Atom head;
   Atom tail;
 
-  bool mark = true;
+  bool mark = false;
   Pair* next;
 
   void* operator new(size_t size);

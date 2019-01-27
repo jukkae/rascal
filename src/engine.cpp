@@ -75,14 +75,10 @@ Engine::Engine(sf::RenderWindow* window) : window(window) {
 			lisp::Atom result = lisp::evaluateExpression(expression, env);
 			lisp::printExpr(result);
 			std::cout << "\n";
-			std::cout << "running gc\n";
 			lisp::gc_run(expression, result, env);
 		}
 		catch(lisp::LispException e) {
 			std::cout << "LISP runtime exception: " << e.what();
-		}
-		catch(lisp::GcException e) { // TODO this is bad
-			// std::cout << "GC done!\n";
 		}
 	}
 }
