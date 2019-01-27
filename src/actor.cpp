@@ -12,12 +12,17 @@
 #include "effect.hpp"
 #include "event.hpp"
 #include "gameplay_state.hpp"
+#include "pathfinding.hpp"
 #include "pickable.hpp"
 #include "status_effect.hpp"
 #include "transporter.hpp"
 #include "utils.hpp"
 #include "wieldable.hpp"
 #include "world.hpp"
+
+// For sleeping, which shouldn't be implemented here in any case
+#include <chrono>
+#include <thread>
 
 
 Actor::Actor(World* world, int x, int y, int ch, std::string name, sf::Color col, boost::optional<float> energy) :
@@ -32,7 +37,25 @@ float Actor::update(GameplayState* state) {
 	if(ai) {
 		float fovRadius = constants::DEFAULT_FOV_RADIUS * (body ? body->perception / 10.0 : 1.0);
 		if(isPlayer()) world->computeFov(x, y, fovRadius);
-		if(actionsQueue.empty()) actionsQueue.push_back(ai->getNextAction(this));
+
+		// TODO
+		if(!isPlayer()) {
+			if(actionsQueue.empty()) {
+				auto actions = ai->getNextAction(this);
+				for(auto& a : actions) actionsQueue.push_back(std::move(a));
+			}
+		}
+		if(isPlayer()) {
+			// TODO this should happen at GameplayState level!
+			const int PLAYER_TURN_THROTTLE = 20;
+			std::this_thread::sleep_for(std::chrono::milliseconds(PLAYER_TURN_THROTTLE));
+			if(actionsQueue.empty()) {
+				auto actions = ai->getNextAction(this);
+				for(auto& a : actions) actionsQueue.push_back(std::move(a));
+			}
+		}
+
+
 		float actionCost = actionsQueue.front()->getLength();
 		bool success = actionsQueue.front()->execute();
 		actionsQueue.pop_front();
@@ -64,8 +87,9 @@ float Actor::update(GameplayState* state) {
 				}
 			}
 			return turnCost;
-		} else {
+		} else { // action not successful
 			if(ai->isPlayer()) {
+				actionsQueue.clear();
 				if(isPlayer()) world->computeFov(x, y, fovRadius);
 				return 0;
 			} else {

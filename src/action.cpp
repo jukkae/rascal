@@ -13,6 +13,9 @@
 #include "transporter.hpp"
 #include "world.hpp"
 
+#include "dialogue_state.hpp"
+#include "io.hpp"
+
 bool MoveAction::execute() {
 	World* world = actor->world;
 	int targetX = actor->x;
@@ -42,7 +45,7 @@ bool MoveAction::execute() {
 				world->notify(e);
 				return false;
 			}
-			if(actor->wornWeapon && actor->wornWeapon->attacker) { 
+			if(actor->wornWeapon && actor->wornWeapon->attacker) {
 				bool atkResult;
 				if(actor->body) {
 					int toHitBonus = actor->body->getModifier(actor->body->agility);
@@ -315,11 +318,12 @@ bool EatAction::execute() {
 	}
 }
 
+// TODO what should ActionRange really be?
 LookAction::LookAction(Actor* actor):
-	Action(actor, 50.0f), location(Point(actor->x, actor->y)) {;}
+	Action(actor, ActionRange::ANYWHERE, 50.0f), location(Point(actor->x, actor->y)) {;}
 
 LookAction::LookAction(Actor* actor, Point location):
-	Action(actor, 50.0f), location(location) {;}
+	Action(actor, ActionRange::ANYWHERE, 50.0f), location(location) {;}
 
 bool LookAction::execute() {
 	RequestDescriptionEvent e(actor, location);
@@ -327,8 +331,9 @@ bool LookAction::execute() {
 	return true;
 }
 
+// TODO what should ActionRange really be? Range? But that's based on the weapon
 ShootAction::ShootAction(Actor* actor, Point target):
-	Action(actor, 100.0f), target(target) {;}
+	Action(actor, ActionRange::ANYWHERE, 100.0f), target(target) {;}
 
 bool ShootAction::execute() {
 	World* world = actor->world;
@@ -395,32 +400,39 @@ bool ShootAction::execute() {
 }
 
 bool OpenAction::execute() {
+	// TODO check if actor is next to target
+	World* w = actor->world;
+	if(target->openable && !target->openable->open) {
+		target->openable->open = true;
+		target->blocks = false;
+		target->blocksLight = false;
+		target->col = sf::Color(255, 255, 255);
+		return true;
+	}
+	else if(target->openable && target->openable->open) {
+		target->openable->open = false;
+		target->blocks = true;
+		target->blocksLight = true;
+		target->col = sf::Color(0, 0, 0);
+		return true;
+	}
+	return false;
+}
+
+bool TalkAction::execute() {
 	World* w = actor->world;
 	for(int x = actor->x - 1; x <= actor->x + 1; ++x) {
 		for(int y = actor->y - 1; y <= actor->y + 1; ++y) {
 			if(x == actor->x && y == actor->y) continue;
 			std::vector<Actor*> as = w->getActorsAt(x, y);
-			for(auto& a : as) if(a->openable && !a->openable->open) {
-				a->openable->open = true;
-				a->blocks = false;
-				a->blocksLight = false;
-				a->col = sf::Color(255, 255, 255);
+			for(auto& a : as) if(a->ai) { // also if not dead, if not hostile
+				Engine* engine = io::engine;
+				std::unique_ptr<State> dialogueState = std::make_unique<DialogueState>(engine, actor, a);
+				engine->pushState(std::move(dialogueState));
 				return true;
 			}
 		}
 	}
-	for(int x = actor->x - 1; x <= actor->x + 1; ++x) {
-		for(int y = actor->y - 1; y <= actor->y + 1; ++y) {
-			if(x == actor->x && y == actor->y) continue;
-			std::vector<Actor*> as = w->getActorsAt(x, y);
-			for(auto& a : as) if(a->openable && a->openable->open) {
-				a->openable->open = false;
-				a->blocks = true;
-				a->blocksLight = true;
-				a->col = sf::Color(0, 0, 0);
-				return true;
-			}
-		}
-	}
+	// TODO "talk to whom?" message in GUI console
 	return false;
 }

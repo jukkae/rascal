@@ -17,6 +17,7 @@
 #include "inventory_menu_state.hpp"
 #include "los.hpp"
 #include "map.hpp"
+#include "pathfinding.hpp"
 #include "pickable.hpp"
 #include "persistent.hpp"
 #include "point.hpp"
@@ -51,7 +52,8 @@ void PlayerAi::increaseXp(Actor* owner, int xp) {
 	}
 }
 
-std::unique_ptr<Action> PlayerAi::getNextAction(Actor* actor) {
+std::vector<std::unique_ptr<Action>> PlayerAi::getNextAction(Actor* actor) {
+	std::vector<std::unique_ptr<Action>> actions;
 	Direction dir = Direction::NONE;
 
 	Engine* engine = io::engine;
@@ -62,76 +64,164 @@ std::unique_ptr<Action> PlayerAi::getNextAction(Actor* actor) {
 				using k = sf::Keyboard::Key;
 				switch(event.key.code) {
 					case 56: { // < key
-						return std::make_unique<TraverseStairsAction>(actor, true);
+						actions.push_back(std::make_unique<TraverseStairsAction>(actor, true));
+						break;
 					}
-					default: return std::make_unique<EmptyAction>(actor);
+					default: {
+						actions.push_back(std::make_unique<EmptyAction>(actor));
+						break;
+					}
 				}
 			} else {
 				using k = sf::Keyboard::Key;
 				switch(event.key.code) {
 					case k::Q:
 						dir = Direction::NW;
-						return std::make_unique<MoveAction>(actor, dir);
+						actions.push_back(std::make_unique<MoveAction>(actor, dir));
+						break;
 					case k::W:
 						dir = Direction::N;
-						return std::make_unique<MoveAction>(actor, dir);
+						actions.push_back(std::make_unique<MoveAction>(actor, dir));
+						break;
 					case k::E:
 						dir = Direction::NE;
-						return std::make_unique<MoveAction>(actor, dir);
+						actions.push_back(std::make_unique<MoveAction>(actor, dir));
+						break;
 					case k::A:
 						dir = Direction::W;
-						return std::make_unique<MoveAction>(actor, dir);
+						actions.push_back(std::make_unique<MoveAction>(actor, dir));
+						break;
 					case k::S:
-						return std::make_unique<WaitAction>(actor);
+						actions.push_back(std::make_unique<WaitAction>(actor));
+						break;
 					case k::D:
 						dir = Direction::E;
-						return std::make_unique<MoveAction>(actor, dir);
+						actions.push_back(std::make_unique<MoveAction>(actor, dir));
+						break;
 					case k::Z:
 						dir = Direction::SW;
-						return std::make_unique<MoveAction>(actor, dir);
+						actions.push_back(std::make_unique<MoveAction>(actor, dir));
+						break;
 					case k::X:
 						dir = Direction::S;
-						return std::make_unique<MoveAction>(actor, dir);
+						actions.push_back(std::make_unique<MoveAction>(actor, dir));
+						break;
 					case k::C:
 						dir = Direction::SE;
-						return std::make_unique<MoveAction>(actor, dir);
+						actions.push_back(std::make_unique<MoveAction>(actor, dir));
+						break;
 					case k::I: {
 						std::unique_ptr<State> inventoryMenuState = std::make_unique<InventoryMenuState>(engine, actor);
 						engine->pushState(std::move(inventoryMenuState));
 						break;
 					}
-					case k::O: {
-						return std::make_unique<OpenAction>(actor);
+					// TODO select direction
+					case k::T: {
+						actions.push_back(std::make_unique<TalkAction>(actor));
+						break;
 					}
 					case k::Comma: {
-						return std::make_unique<PickupAction>(actor);
+						actions.push_back(std::make_unique<PickupAction>(actor));
+						break;
 					}
 					case k::Period:
-						return std::make_unique<LookAction>(actor);
+						actions.push_back(std::make_unique<LookAction>(actor));
+						break;
 					case 56: { // < key
-						return std::make_unique<TraverseStairsAction>(actor, false);
+						actions.push_back(std::make_unique<TraverseStairsAction>(actor, false));
+						break;
 					}
 					case k::Escape: {
 						engine->save();
 						std::unique_ptr<State> mainMenuState = std::make_unique<MainMenuState>(engine);
 						engine->pushState(std::move(mainMenuState));
 					}
-					default: return std::make_unique<EmptyAction>(actor);
+					default: {
+						actions.push_back(std::make_unique<EmptyAction>(actor));
+						break;
+					}
 				}
 			}
 		} else if(event.type == sf::Event::MouseButtonPressed) {
+			actor->actionsQueue.clear(); // TODO this should work!
 			if(event.mouseButton.button == sf::Mouse::Left) {
-				return std::make_unique<ShootAction>(actor, io::mousePosition);
+				std::unique_ptr<Action> lastAction = nullptr;
+				auto actorsAtTarget = actor->world->getActorsAt(io::mousePosition.x, io::mousePosition.y);
+				for(auto& target : actorsAtTarget) {
+					// TODO other default actions
+					if(target->openable && !target->openable->open) {
+						lastAction = std::make_unique<OpenAction>(actor, target);
+					}
+					else if(target->openable && target->openable->open) {
+						lastAction = std::make_unique<OpenAction>(actor, target);
+					}
+					if(target->pickable) {
+						lastAction = std::make_unique<PickupAction>(actor);
+					}
+				}
+
+				// Find path
+				std::vector<Point> path = pathfinding::findPath(actor->world->map,
+								 Point(actor->x, actor->y),
+								 io::mousePosition);
+				if(!(path.size() <= 1)) {
+					for(int i = 0; i < path.size() - 1; ++i) {
+						Point from = path.at(i);
+						Point to = path.at(i + 1);
+						int stepDx = to.x - from.x;
+						int stepDy = to.y - from.y;
+						Direction stepDir;
+						if (stepDx ==  0 && stepDy == -1) stepDir = Direction::N;
+						if (stepDx ==  1 && stepDy == -1) stepDir = Direction::NE;
+						if (stepDx ==  1 && stepDy ==  0) stepDir = Direction::E;
+						if (stepDx ==  1 && stepDy ==  1) stepDir = Direction::SE;
+						if (stepDx ==  0 && stepDy ==  1) stepDir = Direction::S;
+						if (stepDx == -1 && stepDy ==  1) stepDir = Direction::SW;
+						if (stepDx == -1 && stepDy ==  0) stepDir = Direction::W;
+						if (stepDx == -1 && stepDy == -1) stepDir = Direction::NW;
+						if(i != path.size() - 2) {
+							actions.push_back(std::make_unique<MoveAction>(MoveAction(actor, stepDir)));
+						} else { // for the last step of the path...
+							if(lastAction == nullptr) { // ... if no alternate default, push move
+								actions.push_back(std::make_unique<MoveAction>(MoveAction(actor, stepDir)));
+							} else if(lastAction->actionRange.index() == 0) { // ActionRange enum
+								ActionRange actionRange = std::get<ActionRange>(lastAction->actionRange);
+								switch(actionRange) {
+									case ActionRange::ON_TOP:
+										actions.push_back(std::make_unique<MoveAction>(MoveAction(actor, stepDir)));
+										actions.push_back(std::move(lastAction));
+										break;
+									case ActionRange::NEXT_TO:
+										actions.push_back(std::move(lastAction));
+										break;
+									case ActionRange::ANYWHERE:
+										// TODO I suppose??
+										throw std::logic_error("Make sure this does what you think it does");
+										actions.push_back(std::move(lastAction));
+										break;
+									default:
+										throw std::logic_error("Unknown action range");
+								}
+
+							} else if(lastAction->actionRange.index() == 1) { // float for range
+								throw std::logic_error("Action ranges not implemented");
+							}
+						}
+
+					}
+				}
 			}
 			if(event.mouseButton.button == sf::Mouse::Right) {
-
+				actions.push_back(std::make_unique<ShootAction>(actor, io::mousePosition));
 			}
 		}
 	}
-	return std::make_unique<EmptyAction>(actor);
+	if(actions.size() == 0) actions.push_back(std::make_unique<EmptyAction>(actor));
+	return actions;
 }
 
-std::unique_ptr<Action> MonsterAi::getNextAction(Actor* actor) {
+std::vector<std::unique_ptr<Action>> MonsterAi::getNextAction(Actor* actor) {
+	std::vector<std::unique_ptr<Action>> actions;
 	World* world = actor->world;
 	Direction direction = Direction::NONE;
 	Actor* player = world->getPlayer();
@@ -139,7 +229,15 @@ std::unique_ptr<Action> MonsterAi::getNextAction(Actor* actor) {
 		actor->col = colors::red;
 	} else  { actor->col = colors::black; }*/
 
-	if (actor->destructible && actor->destructible->isDead()) return std::make_unique<WaitAction>(WaitAction(actor));
+	if (actor->destructible && actor->destructible->isDead()) {
+		actions.push_back(std::make_unique<WaitAction>(WaitAction(actor)));
+		return actions;
+	}
+
+	if (aiState == AiState::FRIENDLY) {
+		actions.push_back(std::make_unique<WaitAction>(WaitAction(actor)));
+		return actions;
+	}
 
 	if(actor->destructible->hp <= actor->destructible->maxHp * 0.3 + (0.1 * player->body->getModifier(player->body->charisma))) {
 		aiState = AiState::FRIGHTENED; //TODO implement in terms of morale
@@ -168,7 +266,10 @@ std::unique_ptr<Action> MonsterAi::getNextAction(Actor* actor) {
 				dx = (int) (round(dx / distance));
 				dy = (int) (round(dy / distance));
 				if(world->canWalk(actor->x + stepDx, actor->y + stepDy)) { // uhh
-					if (stepDx ==  0 && stepDy ==  0) return std::make_unique<WaitAction>(WaitAction(actor));
+					if (stepDx ==  0 && stepDy ==  0) {
+						actions.push_back(std::make_unique<WaitAction>(WaitAction(actor)));
+						return actions;
+					}
 					if (stepDx ==  0 && stepDy == -1) direction = Direction::N;
 					if (stepDx ==  1 && stepDy == -1) direction = Direction::NE;
 					if (stepDx ==  1 && stepDy ==  0) direction = Direction::E;
@@ -177,20 +278,32 @@ std::unique_ptr<Action> MonsterAi::getNextAction(Actor* actor) {
 					if (stepDx == -1 && stepDy ==  1) direction = Direction::SW;
 					if (stepDx == -1 && stepDy ==  0) direction = Direction::W;
 					if (stepDx == -1 && stepDy == -1) direction = Direction::NW;
-					return std::make_unique<MoveAction>(MoveAction(actor, direction));
+					actions.push_back(std::make_unique<MoveAction>(MoveAction(actor, direction)));
+					return actions;
 				} else if (world->canWalk(actor->x + stepDx, actor->y)) { // Wall sliding
-					if (stepDx ==  0 && stepDy ==  0) return std::make_unique<WaitAction>(WaitAction(actor));
+					if (stepDx ==  0 && stepDy ==  0) {
+						actions.push_back(std::make_unique<WaitAction>(WaitAction(actor)));
+						return actions;
+					}
 					if (stepDx ==  1 && stepDy ==  0) direction = Direction::E;
 					if (stepDx == -1 && stepDy ==  0) direction = Direction::W;
-					return std::make_unique<MoveAction>(MoveAction(actor, direction));
+					actions.push_back(std::make_unique<MoveAction>(MoveAction(actor, direction)));
+					return actions;
 				} else if (world->canWalk(actor->x, actor->y + stepDy)) {
-					if (stepDx ==  0 && stepDy ==  0) return std::make_unique<WaitAction>(WaitAction(actor));
+					if (stepDx ==  0 && stepDy ==  0) {
+						actions.push_back(std::make_unique<WaitAction>(WaitAction(actor)));
+						return actions;
+					}
 					if (stepDx ==  0 && stepDy == -1) direction = Direction::N;
 					if (stepDx ==  0 && stepDy ==  1) direction = Direction::S;
-					return std::make_unique<MoveAction>(MoveAction(actor, direction));
+					actions.push_back(std::make_unique<MoveAction>(MoveAction(actor, direction)));
+					return actions;
 				}
 			} else { // Melee range
-				if (stepDx ==  0 && stepDy ==  0) return std::make_unique<WaitAction>(WaitAction(actor));
+				if (stepDx ==  0 && stepDy ==  0) {
+					actions.push_back(std::make_unique<WaitAction>(WaitAction(actor)));
+					return actions;
+				}
 
 				if (stepDx ==  0 && stepDy == -1) direction = Direction::N;
 				if (stepDx ==  1 && stepDy == -1) direction = Direction::NE;
@@ -200,10 +313,12 @@ std::unique_ptr<Action> MonsterAi::getNextAction(Actor* actor) {
 				if (stepDx == -1 && stepDy ==  1) direction = Direction::SW;
 				if (stepDx == -1 && stepDy ==  0) direction = Direction::W;
 				if (stepDx == -1 && stepDy == -1) direction = Direction::NW;
-				return std::make_unique<MoveAction>(MoveAction(actor, direction));
+				actions.push_back(std::make_unique<MoveAction>(MoveAction(actor, direction)));
+				return actions;
 			}
 		}
-		return std::make_unique<WaitAction>(WaitAction(actor));
+		actions.push_back(std::make_unique<WaitAction>(WaitAction(actor)));
+		return actions;
 	} else {
 		Actor* player = world->getPlayer();
 		int targetX = player->x;
@@ -220,7 +335,8 @@ std::unique_ptr<Action> MonsterAi::getNextAction(Actor* actor) {
 		if (stepDx == -1 && stepDy ==  1) direction = Direction::SW;
 		if (stepDx == -1 && stepDy ==  0) direction = Direction::W;
 		if (stepDx == -1 && stepDy == -1) direction = Direction::NW;
-		return std::make_unique<MoveAction>(MoveAction(actor, direction));
+		actions.push_back(std::make_unique<MoveAction>(MoveAction(actor, direction)));
+		return actions;
 	}
 }
 
@@ -237,14 +353,18 @@ void TemporaryAi::applyTo(Actor* actor) {
 	actor->ai.reset(this);
 }
 
-std::unique_ptr<Action> ConfusedMonsterAi::getNextAction(Actor* owner) {
+std::vector<std::unique_ptr<Action>> ConfusedMonsterAi::getNextAction(Actor* owner) {
 	decreaseTurns(owner);
+	std::vector<std::unique_ptr<Action>> actions;
 
 	int stepDx = d3() - 2; // -1, 0, 1
 	int stepDy = d3() - 2;
 
 	Direction direction;
-	if (stepDx ==  0 && stepDy ==  0) return std::make_unique<WaitAction>(WaitAction(owner));
+	if (stepDx ==  0 && stepDy ==  0) {
+		actions.push_back(std::make_unique<WaitAction>(WaitAction(owner)));
+		return actions;
+	}
 
 	if (stepDx ==  0 && stepDy == -1) direction = Direction::N;
 	if (stepDx ==  1 && stepDy == -1) direction = Direction::NE;
@@ -254,7 +374,8 @@ std::unique_ptr<Action> ConfusedMonsterAi::getNextAction(Actor* owner) {
 	if (stepDx == -1 && stepDy ==  1) direction = Direction::SW;
 	if (stepDx == -1 && stepDy ==  0) direction = Direction::W;
 	if (stepDx == -1 && stepDy == -1) direction = Direction::NW;
-	return std::make_unique<MoveAction>(MoveAction(owner, direction));
+	actions.push_back(std::make_unique<MoveAction>(MoveAction(owner, direction)));
+	return actions;
 }
 
 BOOST_CLASS_EXPORT(PlayerAi)

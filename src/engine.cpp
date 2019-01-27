@@ -18,6 +18,8 @@
 #include "status_effect.hpp"
 #include "world.hpp"
 
+#include "lisp/lisp.hpp"
+
 Engine::Engine(sf::RenderWindow* window) : window(window) {
 	font::load();
 	loadPreferences();
@@ -41,6 +43,44 @@ Engine::Engine(sf::RenderWindow* window) : window(window) {
 
 	states.push_back(std::move(gps));
 	states.push_back(std::move(mainMenuState));
+
+	std::cout << "\n\n";
+	// REPL
+	lisp::Atom env = lisp::createEnv(lisp::makeNil());
+
+	lisp::setEnv(env, lisp::makeSymbol("car"), lisp::makeBuiltin(lisp::Builtin{lisp::builtinHead}));
+	lisp::setEnv(env, lisp::makeSymbol("cdr"), lisp::makeBuiltin(lisp::Builtin{lisp::builtinTail}));
+	lisp::setEnv(env, lisp::makeSymbol("cons"), lisp::makeBuiltin(lisp::Builtin{lisp::builtinCons}));
+	lisp::setEnv(env, lisp::makeSymbol("+"), lisp::makeBuiltin(lisp::Builtin{lisp::builtinAdd}));
+	lisp::setEnv(env, lisp::makeSymbol("-"), lisp::makeBuiltin(lisp::Builtin{lisp::builtinSubtract}));
+	lisp::setEnv(env, lisp::makeSymbol("*"), lisp::makeBuiltin(lisp::Builtin{lisp::builtinMultiply}));
+	lisp::setEnv(env, lisp::makeSymbol("/"), lisp::makeBuiltin(lisp::Builtin{lisp::builtinDivide}));
+	lisp::setEnv(env, lisp::makeSymbol("%"), lisp::makeBuiltin(lisp::Builtin{lisp::builtinModulo}));
+	lisp::setEnv(env, lisp::makeSymbol("="), lisp::makeBuiltin(lisp::Builtin{lisp::builtinNumEq}));
+	lisp::setEnv(env, lisp::makeSymbol("<"), lisp::makeBuiltin(lisp::Builtin{lisp::builtinNumLess}));
+	lisp::setEnv(env, lisp::makeSymbol("apply"), lisp::makeBuiltin(lisp::Builtin{lisp::builtinApply}));
+	lisp::setEnv(env, lisp::makeSymbol("eq?"), lisp::makeBuiltin(lisp::Builtin{lisp::builtinEq}));
+	lisp::setEnv(env, lisp::makeSymbol("pair?"), lisp::makeBuiltin(lisp::Builtin{lisp::builtinPair}));
+
+	lisp::setEnv(env, lisp::makeSymbol("t"), lisp::makeSymbol("t"));
+
+	lisp::loadFile(env, "assets/lisp/library.lisp");
+
+	for(;;) {
+		std::cout << "lisp> ";
+		std::string s;
+		getline(std::cin, s);
+		try {
+			lisp::Atom expression = lisp::readExpression(s);
+			lisp::Atom result = lisp::evaluateExpression(expression, env);
+			lisp::printExpr(result);
+			std::cout << "\n";
+			lisp::gc_run(expression, result, env);
+		}
+		catch(lisp::LispException e) {
+			std::cout << "LISP runtime exception: " << e.what();
+		}
+	}
 }
 
 Engine::~Engine() {

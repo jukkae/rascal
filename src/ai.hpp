@@ -18,7 +18,10 @@ public:
 	virtual ~Ai() {};
 	float speed;
 	bool isPlayer() { return faction == Faction::PLAYER; }
-	virtual std::unique_ptr<Action> getNextAction(Actor* actor) { return std::make_unique<WaitAction>(WaitAction(actor)); }
+	virtual std::vector<std::unique_ptr<Action>> getNextAction(Actor* actor)
+		{ std::vector<std::unique_ptr<Action>> as;
+			as.insert(as.end(), std::make_unique<WaitAction>(WaitAction(actor)));
+			return as; }
 	Faction faction;
 private:
 	friend class boost::serialization::access;
@@ -36,7 +39,7 @@ public:
 	int getNextLevelXp() const;
 	int xpLevel;
 	int experience;
-	std::unique_ptr<Action> getNextAction(Actor* actor) override;
+	std::vector<std::unique_ptr<Action>> getNextAction(Actor* actor) override;
 	void increaseXp(Actor* owner, int xp);
 private:
 	void handleActionKey(Actor* owner, int ascii, GameplayState* state);
@@ -50,24 +53,25 @@ private:
 	}
 };
 
-enum class AiState { NORMAL, FRIGHTENED };
+enum class AiState { NORMAL, FRIGHTENED, FRIENDLY };
 
 class MonsterAi : public Ai {
 public:
 	MonsterAi() : Ai(140, Faction::ENEMY), moveCount(0) {;}
 	MonsterAi(float speed) : Ai(speed) {;}
 
-	std::unique_ptr<Action> getNextAction(Actor* actor) override;
+	std::vector<std::unique_ptr<Action>> getNextAction(Actor* actor) override;
 protected:
 	int moveCount;
 	void moveOrAttack(Actor* owner, GameplayState* state, int targetX, int targetY);
 private:
-	AiState aiState = AiState::NORMAL;
+	AiState aiState = AiState::FRIENDLY;
 	friend class boost::serialization::access;
 	template<class Archive>
 	void serialize(Archive & ar, const unsigned int version) {
 		ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(Ai);
 		ar & moveCount;
+		ar & aiState;
 	}
 };
 
@@ -76,7 +80,7 @@ public:
 	TemporaryAi(int turns = 0) : turns(turns) {;}
 	void applyTo(Actor* actor);
 
-	virtual std::unique_ptr<Action> getNextAction(Actor* actor) override = 0;
+	virtual std::vector<std::unique_ptr<Action>> getNextAction(Actor* actor) override = 0;
 	std::unique_ptr<Ai> oldAi; //TODO this should be private, but it's not for now
 protected:
 	int turns;
@@ -96,7 +100,7 @@ class ConfusedMonsterAi : public TemporaryAi {
 public:
 	ConfusedMonsterAi(int turns = 0) : TemporaryAi(turns) {;}
 
-	std::unique_ptr<Action> getNextAction(Actor* actor) override;
+	std::vector<std::unique_ptr<Action>> getNextAction(Actor* actor) override;
 private:
 	friend class boost::serialization::access;
 	template<class Archive>

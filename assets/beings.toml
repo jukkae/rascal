@@ -204,3 +204,21 @@ bonus = 2
 type = "MonsterAi"
 speed = 150
 [android.body]
+
+[bill]
+name = "bill"
+ch = "b"
+color = "desaturatedGreen"
+[bill.destructible]
+maxHp = 3
+defense = 0
+xp = 50
+corpseName = "bill's dead, baby"
+[bill.attacker]
+numberOfDice = 2
+dice = 3
+bonus = 0
+[bill.ai]
+type = "MonsterAi"
+speed = 100
+[bill.body]

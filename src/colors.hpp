@@ -35,6 +35,7 @@ namespace colors {
 		{ "darkerGreen",      Color(  0, 128,   0) },
 		{ "darkestGreen",     Color(  0,  64,   0) },
 		{ "desaturatedGreen", Color( 64, 128,  64) },
+		{ "brightGreen",      Color(100, 255, 100) },
 
 		{ "lightestBlue",     Color(191, 191, 255) },
 		{ "lighterBlue",      Color(166, 166, 255) },

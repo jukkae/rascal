@@ -182,4 +182,8 @@ std::vector<Actor*> World::getActorsAt(int x, int y) {
 void World::notify(Event& e) {
 	e.time = time;
 	if(state) state->notify(e);
+	// TODO this is a dirty hack, ok?
+	for(auto& mission : getPlayer()->missions) {
+		mission.notify(e);
+	}
 }

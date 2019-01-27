@@ -160,10 +160,10 @@ void InventoryMenuState::render() {
 
 	renderStats();
 	renderBodyParts();
+	renderMissions();
 
 	console.draw();
 	window->display();
-
 }
 
 void InventoryMenuState::renderStats() {
@@ -239,6 +239,24 @@ void InventoryMenuState::renderBodyParts() {
 			else col = colors::get("blue");
 			console.drawGraphicsBlock(Point(x, y+1), bpt, col);
 		}
+	}
+}
+
+void InventoryMenuState::renderMissions() {
+	console.drawGraphicsBlock(Point(120, 1), "M I S S I O N S", colors::get("brightBlue"));
+
+	int x = 120;
+	int y = 1;
+
+	for(auto& mission : actor->missions) {
+		++y;
+		console.drawGraphicsBlock(Point(x, y+1), mission.name, colors::get("brightBlue"));
+		++y;
+		console.drawGraphicsBlock(Point(x, y+1), mission.description, colors::get("blue"));
+		++y;
+		console.drawGraphicsBlock(Point(x, y+1), mission.completed ? "done" : "not done",
+			mission.completed ? colors::get("brightGreen") : colors::get("blue"));
+		++y;
 	}
 }
 

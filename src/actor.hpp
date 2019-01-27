@@ -26,6 +26,7 @@ class Transporter;
 class Comestible;
 class Wieldable;
 class GameplayState;
+class Mission;
 
 #include "animation.hpp"
 #include "attribute.hpp"
@@ -34,6 +35,7 @@ class GameplayState;
 #include "armor.hpp" //FIXME for serialization for now
 #include "openable.hpp" //FIXME for serialization for now
 #include "comestible.hpp" //FIXME for serialization for now
+#include "mission.hpp"
 
 class World;
 class Actor {
@@ -61,6 +63,7 @@ public:
 	Actor* wornWeapon = nullptr;
 	std::vector<Actor*> wornArmors;
 	std::experimental::optional<Animation> animation;
+	std::vector<Mission> missions;
 
 	World* world;
 
@@ -79,8 +82,10 @@ public:
 	bool tryToMove(Direction direction, float distance);
 	int getAC();
 
+	std::deque<std::unique_ptr<Action>> actionsQueue; // TODO this should be private, but visible to this actor's AI
+
 private:
-	std::deque<std::unique_ptr<Action>> actionsQueue;
+
 	std::vector<std::unique_ptr<StatusEffect>> statusEffects;
 
 	friend class boost::serialization::access;
@@ -113,6 +118,7 @@ private:
 		ar & world;
 		ar & animation;
 		ar & comestible;
+		ar & missions;
     }
 };
 #endif /* ACTOR_HPP */
