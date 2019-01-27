@@ -114,6 +114,8 @@ void lisp::gc() {
 
 void lisp::gc_run(Atom expr, Atom result, Atom env) {
 
+  // TODO add stack to marking phase when continuations work
+
   gc_mark(lisp::symbolTable);
   gc_mark(expr);
   gc_mark(result);
