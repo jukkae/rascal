@@ -157,6 +157,8 @@ void Engine::load() {
 	ia.register_type<PoisonedStatusEffect>();
 	ia.register_type<AttributeModifierStatusEffect>();
 
+	ia.register_type<KillMission>();
+
 	ia.template register_type<EffectGeneratorFor<MoveEffect>>();
 	ia.template register_type<EffectGeneratorFor<StatusEffectEffect>>();
 
@@ -177,6 +179,8 @@ void Engine::save() {
 
 	oa.register_type<PoisonedStatusEffect>();
 	oa.register_type<AttributeModifierStatusEffect>();
+
+	oa.register_type<KillMission>();
 
 	oa.template register_type<EffectGeneratorFor<MoveEffect>>();
 	oa.template register_type<EffectGeneratorFor<StatusEffectEffect>>();

@@ -5,7 +5,7 @@
 
 void DialogueAction::execute() {
 	if(createMission) {
-		player->missions.push_back(std::make_unique<Mission>("Kill Bill", "Find and kill Bill"));
+		player->missions.push_back(std::make_unique<KillMission>("Kill Bill", "Find and kill Bill"));
 		std::cout << "New quest created\n";
 	}
 }
