@@ -4,6 +4,17 @@
 
 struct Event;
 
+enum class MissionType {
+  KILL,
+  ACQUIRE_ITEMS,
+  DELIVER,
+  ESCORT,
+  GATHER_INTEL,
+  DEFEND,
+  DISCOVER,
+  NEGOTIATE
+};
+
 class Mission {
 public:
   Mission(std::string name = "", std::string description = ""):

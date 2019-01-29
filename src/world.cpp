@@ -184,6 +184,6 @@ void World::notify(Event& e) {
 	if(state) state->notify(e);
 	// TODO this is a dirty hack, ok?
 	for(auto& mission : getPlayer()->missions) {
-		mission.notify(e);
+		mission->notify(e);
 	}
 }

@@ -250,12 +250,12 @@ void InventoryMenuState::renderMissions() {
 
 	for(auto& mission : actor->missions) {
 		++y;
-		console.drawGraphicsBlock(Point(x, y+1), mission.name, colors::get("brightBlue"));
+		console.drawGraphicsBlock(Point(x, y+1), mission->name, colors::get("brightBlue"));
 		++y;
-		console.drawGraphicsBlock(Point(x, y+1), mission.description, colors::get("blue"));
+		console.drawGraphicsBlock(Point(x, y+1), mission->description, colors::get("blue"));
 		++y;
-		console.drawGraphicsBlock(Point(x, y+1), mission.completed ? "done" : "not done",
-			mission.completed ? colors::get("brightGreen") : colors::get("blue"));
+		console.drawGraphicsBlock(Point(x, y+1), mission->completed ? "done" : "not done",
+			mission->completed ? colors::get("brightGreen") : colors::get("blue"));
 		++y;
 	}
 }

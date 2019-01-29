@@ -63,7 +63,7 @@ public:
 	Actor* wornWeapon = nullptr;
 	std::vector<Actor*> wornArmors;
 	std::experimental::optional<Animation> animation;
-	std::vector<Mission> missions;
+	std::vector<std::unique_ptr<Mission>> missions;
 
 	World* world;
 
