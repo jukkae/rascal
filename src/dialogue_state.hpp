@@ -8,17 +8,17 @@ class Actor;
 
 class DialogueAction {
 public:
-	DialogueAction(Actor* player, bool createQuest = false) : player(player), createQuest(createQuest) {}
+	DialogueAction(Actor* player, bool createMission = false) : player(player), createMission(createMission) {}
 	Actor* player;
-	bool createQuest;
+	bool createMission;
 	void execute();
 };
 
 struct DialogueGraphNode {
 	std::string text;
 	std::vector<std::pair<std::string, DialogueGraphNode*>> replies;
-	bool createQuest = false;
-	DialogueAction enter(Actor* player) { return DialogueAction{ player, createQuest }; }
+	bool createMission = false;
+	DialogueAction enter(Actor* player) { return DialogueAction{ player, createMission }; }
 };
 
 class DialogueState : public State {

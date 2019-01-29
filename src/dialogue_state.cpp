@@ -4,7 +4,7 @@
 #include "engine_command.hpp"
 
 void DialogueAction::execute() {
-	if(createQuest) {
+	if(createMission) {
 		player->missions.push_back(Mission("Kill Bill", "Find and kill Bill"));
 		std::cout << "New quest created\n";
 	}
@@ -35,7 +35,7 @@ other(other) {
 	n3.text = "I'm sorry to have wasted your time. See you!";
 	n3.replies.push_back({"... [blank stare]", nullptr});
 
-	n4.createQuest = true;
+	n4.createMission = true;
 	n4.text = "Besides the joy of killing? Money. Go at it.";
 	n4.replies.push_back({"... [blank stare]", nullptr});
 }

@@ -180,7 +180,6 @@ void map_utils::addPlayer(World* world, Map* map) {
 	for(int i = 0; i < hpDice; ++i) hp += d4();
 	player->destructible = std::make_unique<PlayerDestructible>(hp, 2, 0, "your corpse");
 
-	player->missions.push_back(Mission("Test quest 2", "Go and undo the other thing"));
 	world->addActor(std::move(player));
 }
 
