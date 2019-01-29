@@ -10,6 +10,7 @@ class State;
 #include <SFML/Graphics.hpp>
 
 #include "audio.hpp"
+#include "lisp/lisp.hpp"
 class EngineCommand;
 class Engine {
 public:
@@ -37,6 +38,9 @@ public:
 	bool gameOver = false; //TODO this is bad and i feel bad
 	Preferences preferences;
 	AudioPlayer audioPlayer; //FIXME let's have this public for now
+	lisp::Atom env; // LISP execution environment
+	void initializeLisp();
+	void lispRepl();
 private:
 	sf::RenderWindow* window;
 	State* gameplayState;

@@ -37,7 +37,6 @@
 
 (def (cadr x) (car (cdr x)))
 
-
 (defmacro (quasiquote x)
   (if (pair? x)
       (if (eq? (car x) 'unquote)
@@ -58,3 +57,5 @@
 (def +
   (let ((old+ +))
     (lambda xs (foldl old+ 0 xs))))
+
+(def (not a) (if a nil t))

@@ -45,8 +45,15 @@ Engine::Engine(sf::RenderWindow* window) : window(window) {
 	states.push_back(std::move(mainMenuState));
 
 	std::cout << "\n\n";
-	// REPL
-	lisp::Atom env = lisp::createEnv(lisp::makeNil());
+
+	initializeLisp();
+}
+
+Engine::~Engine() {
+}
+
+void Engine::initializeLisp() {
+	env = lisp::createEnv(lisp::makeNil());
 
 	lisp::setEnv(env, lisp::makeSymbol("car"), lisp::makeBuiltin(lisp::Builtin{lisp::builtinHead}));
 	lisp::setEnv(env, lisp::makeSymbol("cdr"), lisp::makeBuiltin(lisp::Builtin{lisp::builtinTail}));
@@ -61,11 +68,12 @@ Engine::Engine(sf::RenderWindow* window) : window(window) {
 	lisp::setEnv(env, lisp::makeSymbol("apply"), lisp::makeBuiltin(lisp::Builtin{lisp::builtinApply}));
 	lisp::setEnv(env, lisp::makeSymbol("eq?"), lisp::makeBuiltin(lisp::Builtin{lisp::builtinEq}));
 	lisp::setEnv(env, lisp::makeSymbol("pair?"), lisp::makeBuiltin(lisp::Builtin{lisp::builtinPair}));
-
 	lisp::setEnv(env, lisp::makeSymbol("t"), lisp::makeSymbol("t"));
 
 	lisp::loadFile(env, "assets/lisp/library.lisp");
+}
 
+void Engine::lispRepl() {
 	for(;;) {
 		std::cout << "lisp> ";
 		std::string s;
@@ -79,11 +87,9 @@ Engine::Engine(sf::RenderWindow* window) : window(window) {
 		}
 		catch(lisp::LispException e) {
 			std::cout << "LISP runtime exception: " << e.what();
+			std::cout << "\n";
 		}
 	}
-}
-
-Engine::~Engine() {
 }
 
 void Engine::newGame() {
