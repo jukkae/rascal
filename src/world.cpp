@@ -86,7 +86,7 @@ void World::updateNextActor() {
 
 	float actionTime = activeActor->update(state);
 	*activeActor->energy -= actionTime;
-	applyRadiation(actionTime);
+	//applyRadiation(actionTime);
 
     /*actors.erase(actors.begin());
     auto it = std::lower_bound(actors.begin(), actors.end(), activeActor, [](const auto& lhs, const auto& rhs) { return lhs->energy > rhs->energy; });
