@@ -3,6 +3,7 @@
 #include "event.hpp"
 
 struct Event;
+class Actor;
 
 enum class MissionType {
   KILL,
@@ -17,12 +18,13 @@ enum class MissionType {
 
 class Mission {
 public:
-  Mission(std::string name = "", std::string description = ""):
-    name(name), description(description) {}
+  Mission(std::string name = "", std::string description = "", Actor* giver = nullptr):
+    name(name), description(description), giver(giver) {}
   virtual ~Mission() {}
   virtual void notify(Event& event) = 0;
   std::string name;
   std::string description;
+  Actor* giver;
   bool completed = false;
 private:
 	friend class boost::serialization::access;
@@ -31,13 +33,14 @@ private:
 		ar & name;
     ar & description;
     ar & completed;
+    ar & giver;
 	}
 };
 
 class KillMission : public Mission {
 public:
-	KillMission(std::string name = "", std::string description = ""):
-    Mission(name, description) {}
+	KillMission(std::string name = "", std::string description = "", Actor* giver = nullptr):
+    Mission(name, description, giver) {}
 	void notify(Event& event);
 private:
 	friend class boost::serialization::access;

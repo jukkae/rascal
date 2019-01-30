@@ -35,6 +35,9 @@ class Mission;
 #include "armor.hpp" //FIXME for serialization for now
 #include "openable.hpp" //FIXME for serialization for now
 #include "comestible.hpp" //FIXME for serialization for now
+#include "transporter.hpp" //FIXME for serialization for now
+#include "attacker.hpp" //FIXME for serialization for now
+#include "body.hpp" //FIXME for serialization for now
 #include "mission.hpp"
 
 class World;

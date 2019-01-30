@@ -7,6 +7,8 @@ class EffectGenerator;
 #include <boost/serialization/export.hpp>
 #include <boost/serialization/vector.hpp>
 
+#include "effect.hpp" //FIXME for serialization for now
+
 class Attacker {
 public :
 	//Would be nice, but damn hard to serialize

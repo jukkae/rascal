@@ -148,6 +148,8 @@ void Engine::load() {
 	std::ifstream ifs(constants::SAVE_FILE_NAME);
 	boost::archive::text_iarchive ia(ifs);
 
+	ia.register_type<GameplayState>();
+
 	ia.register_type<HealthEffect>();
 	ia.register_type<AiChangeEffect>();
 	ia.register_type<StatusEffectEffect>();
@@ -170,6 +172,8 @@ void Engine::load() {
 void Engine::save() {
 	std::ofstream ofs(constants::SAVE_FILE_NAME);
 	boost::archive::text_oarchive oa(ofs);
+
+	oa.register_type<GameplayState>();
 
 	oa.register_type<HealthEffect>();
 	oa.register_type<AiChangeEffect>();
