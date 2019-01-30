@@ -71,6 +71,7 @@ float Actor::update(GameplayState* state) {
 			const bool HUNGER_AND_IODINE_ON = false;
 			if(HUNGER_AND_IODINE_ON) {
 				if(isPlayer()) body->nutrition -= turnCost;
+				// TODO lines below are buggy, they don't take turnCost into account -> endless loop of dying until death
 				if(body->nutrition <= 0) {
 					body->nutrition = 0;
 					if(d6() == 1) {
