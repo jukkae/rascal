@@ -85,7 +85,8 @@ void World::update() {
 		}
 		for(auto& actor : actors) {
 			if(actor->ai)
-				fov::computeEnemyFov(&map, actor->x, actor->y, actor->ai->currentDirection);
+				actor->ai->updateFov(actor.get());
+				//fov::computeEnemyFov(&map, actor->x, actor->y, actor->ai->currentDirection);
 		}
 		state->handleEvents();
 	}

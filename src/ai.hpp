@@ -3,6 +3,8 @@
 
 class GameplayState;
 
+#include <set>
+
 #include "action.hpp"
 #include "actor.hpp"
 #include "direction.hpp"
@@ -24,7 +26,7 @@ public:
 			return as; }
 	Faction& faction;
 	Direction currentDirection = Direction::NONE;
-	std::vector<Point> fov = {};
+	std::set<Point> fov = {};
 	void updateFov(Actor* actor);
 private:
 	friend class boost::serialization::access;

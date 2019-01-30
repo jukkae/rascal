@@ -40,10 +40,10 @@ const int LEVEL_UP_FACTOR = 150;
 
 void Ai::updateFov(Actor* actor) {
 	if(isPlayer()) {
-
+		fov = fov::computeFov(&(actor->world->map), actor->x, actor->y);
 	}
 	else {
-
+		fov = fov::computeEnemyFov(&(actor->world->map), actor->x, actor->y, currentDirection);
 	}
 }
 
