@@ -5,24 +5,23 @@ class GameplayState;
 
 #include "action.hpp"
 #include "actor.hpp"
+#include "faction.hpp"
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/serialization/export.hpp>
 #include <boost/serialization/vector.hpp>
 
-enum class Faction { PLAYER, ENEMY, NEUTRAL };
-
 class Ai {
 public:
-	explicit Ai(float speed = 100, Faction faction = Faction::NEUTRAL) : speed(speed), faction(faction) {;}
+	explicit Ai(float speed = 100, Faction& faction = factions::neutral) : speed(speed), faction(faction) {;}
 	virtual ~Ai() {};
 	float speed;
-	bool isPlayer() { return faction == Faction::PLAYER; }
+	bool isPlayer() { return faction.name == "player"; }
 	virtual std::vector<std::unique_ptr<Action>> getNextAction(Actor* actor)
 		{ std::vector<std::unique_ptr<Action>> as;
 			as.insert(as.end(), std::make_unique<WaitAction>(WaitAction(actor)));
 			return as; }
-	Faction faction;
+	Faction& faction;
 private:
 	friend class boost::serialization::access;
 	template<class Archive>
@@ -34,7 +33,7 @@ private:
 
 class PlayerAi : public Ai {
 public:
-	PlayerAi() : Ai(100, Faction::PLAYER), xpLevel(1), experience(0) {;}
+	PlayerAi() : Ai(100, factions::player), xpLevel(1), experience(0) {;}
 
 	int getNextLevelXp() const;
 	int xpLevel;
@@ -57,7 +56,7 @@ enum class AiState { NORMAL, FRIGHTENED, FRIENDLY };
 
 class MonsterAi : public Ai {
 public:
-	MonsterAi() : Ai(140, Faction::ENEMY), moveCount(0) {;}
+	MonsterAi() : Ai(140, factions::reavers), moveCount(0) {;}
 	MonsterAi(float speed) : Ai(speed) {;}
 
 	std::vector<std::unique_ptr<Action>> getNextAction(Actor* actor) override;
