@@ -24,6 +24,8 @@ public:
 			return as; }
 	Faction& faction;
 	Direction currentDirection = Direction::NONE;
+	std::vector<Point> fov = {};
+	void updateFov(Actor* actor);
 private:
 	friend class boost::serialization::access;
 	template<class Archive>

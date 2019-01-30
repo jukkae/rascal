@@ -5,7 +5,8 @@
 #include "map.hpp"
 #include "vec.hpp"
 
-void fov::computeEnemyFov(Map* map, int x, int y, Direction direction, int radius, FovType fovType, std::vector<Actor*> actors) {
+std::set<Point> fov::computeEnemyFov(Map* map, int x, int y, Direction direction, int radius, FovType fovType, std::vector<Actor*> actors) {
+	std::set<Point> fovTiles { };
 	std::vector<int> octants;
 	switch(direction) {
 		case Direction::NONE: radius /= 4; octants = {0, 1, 2, 3, 4, 5, 6, 7}; break;
@@ -19,11 +20,14 @@ void fov::computeEnemyFov(Map* map, int x, int y, Direction direction, int radiu
 		case Direction::NW: octants = {6, 7}; break;
 	}
 	for(auto n : octants) {
-		computeEnemyFovForOctant(map, x, y, n, radius, fovType, actors);
+		auto octantTiles = computeEnemyFovForOctant(map, x, y, n, radius, fovType, actors);
+		fovTiles.insert(octantTiles.begin(), octantTiles.end());
 	}
+	return fovTiles;
 }
 
-void fov::computeEnemyFovForOctant(Map* map, int x, int y, int octant, int radius, FovType fovType, std::vector<Actor*> actors) {
+std::set<Point> fov::computeEnemyFovForOctant(Map* map, int x, int y, int octant, int radius, FovType fovType, std::vector<Actor*> actors) {
+	std::set<Point> fovTiles { };
 	ShadowLine shadowLine;
 	bool fullShadow = false;
 	for(int row = 0; row < radius; row++) {
@@ -43,6 +47,7 @@ void fov::computeEnemyFovForOctant(Map* map, int x, int y, int octant, int radiu
 				Shadow projection = Shadow::projectTile(row, col);
 				bool visible = !shadowLine.isInShadow(projection);
 				map->tiles(xPos, yPos).inEnemyFov = visible;
+				if(visible) fovTiles.emplace(Point{xPos, yPos});
 				//if(visible) map->tiles(xPos, yPos).explored = true; // *maybe* extract function
 
 				if(visible && map->isWall(xPos, yPos) /*TODO check for doors*/) {
@@ -60,9 +65,11 @@ void fov::computeEnemyFovForOctant(Map* map, int x, int y, int octant, int radiu
 			}
 		}
 	}
+	return fovTiles;
 }
 
-void fov::computeFov(Map* map, int x, int y, int radius, FovType fovType, std::vector<Actor*> actors) {
+std::set<Point> fov::computeFov(Map* map, int x, int y, int radius, FovType fovType, std::vector<Actor*> actors) {
+	std::set<Point> fovTiles { };
 	//Low-hanging fruit optimization:
 	//Only loop through possible values
 	for(int i = 0; i < map->width; ++i) {
@@ -71,11 +78,14 @@ void fov::computeFov(Map* map, int x, int y, int radius, FovType fovType, std::v
 		}
 	}
 	for(int octant = 0; octant < 8; octant++) {
-		computeFovForOctant(map, x, y, octant, radius, fovType, actors);
+		auto octantTiles = computeFovForOctant(map, x, y, octant, radius, fovType, actors);
+		fovTiles.insert(octantTiles.begin(), octantTiles.end());
 	}
+	return fovTiles;
 }
 
-void fov::computeFovForOctant(Map* map, int x, int y, int octant, int radius, FovType fovType, std::vector<Actor*> actors) {
+std::set<Point> fov::computeFovForOctant(Map* map, int x, int y, int octant, int radius, FovType fovType, std::vector<Actor*> actors) {
+	std::set<Point> fovTiles { };
 	ShadowLine shadowLine;
 	bool fullShadow = false;
 	for(int row = 0; row < radius; row++) {
@@ -94,7 +104,10 @@ void fov::computeFovForOctant(Map* map, int x, int y, int octant, int radius, Fo
 			else {
 				Shadow projection = Shadow::projectTile(row, col);
 				bool visible = !shadowLine.isInShadow(projection);
+
 				map->tiles(xPos, yPos).inFov = visible;
+				if(visible) fovTiles.emplace(Point{xPos, yPos});
+
 				if(visible) map->tiles(xPos, yPos).explored = true; // *maybe* extract function
 
 				if(visible && map->isWall(xPos, yPos) /*TODO check for doors*/) {
@@ -112,6 +125,7 @@ void fov::computeFovForOctant(Map* map, int x, int y, int octant, int radius, Fo
 			}
 		}
 	}
+	return fovTiles;
 }
 
 Vec<int> fov::transformOctant(int row, int col, int octant) {

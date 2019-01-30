@@ -38,6 +38,15 @@ static const int TRACKING_TURNS = 3;
 const int LEVEL_UP_BASE = 50;
 const int LEVEL_UP_FACTOR = 150;
 
+void Ai::updateFov(Actor* actor) {
+	if(isPlayer()) {
+
+	}
+	else {
+
+	}
+}
+
 int PlayerAi::getNextLevelXp() const {
 	return LEVEL_UP_BASE + xpLevel * LEVEL_UP_FACTOR;
 }

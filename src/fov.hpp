@@ -1,5 +1,6 @@
 #ifndef FOV_HPP
 #define FOV_HPP
+#include <set>
 
 #include "constants.hpp"
 #include "direction.hpp"
@@ -8,6 +9,7 @@ class Actor;
 class Map;
 template<class T>
 struct Vec;
+#include "point.hpp"
 
 
 enum class FovType { SQUARE, CIRCLE };
@@ -33,10 +35,10 @@ public:
 };
 
 namespace fov {
-	void computeEnemyFov(Map* map, int x, int y, Direction direction, int radius = constants::DEFAULT_FOV_RADIUS, FovType fovType = FovType::CIRCLE, std::vector<Actor*> actors = {});
-	void computeEnemyFovForOctant(Map* map, int x, int y, int octant, int radius = constants::DEFAULT_FOV_RADIUS, FovType fovType = FovType::CIRCLE, std::vector<Actor*> actors = {});
-	void computeFov(Map* map, int x, int y, int radius = constants::DEFAULT_FOV_RADIUS, FovType fovType = FovType::CIRCLE, std::vector<Actor*> actors = {});
-	void computeFovForOctant(Map* map, int x, int y, int octant, int radius = constants::DEFAULT_FOV_RADIUS, FovType fovType = FovType::CIRCLE, std::vector<Actor*> actors = {});
+	std::set<Point> computeEnemyFov(Map* map, int x, int y, Direction direction, int radius = constants::DEFAULT_FOV_RADIUS, FovType fovType = FovType::CIRCLE, std::vector<Actor*> actors = {});
+	std::set<Point> computeEnemyFovForOctant(Map* map, int x, int y, int octant, int radius = constants::DEFAULT_FOV_RADIUS, FovType fovType = FovType::CIRCLE, std::vector<Actor*> actors = {});
+	std::set<Point> computeFov(Map* map, int x, int y, int radius = constants::DEFAULT_FOV_RADIUS, FovType fovType = FovType::CIRCLE, std::vector<Actor*> actors = {});
+	std::set<Point> computeFovForOctant(Map* map, int x, int y, int octant, int radius = constants::DEFAULT_FOV_RADIUS, FovType fovType = FovType::CIRCLE, std::vector<Actor*> actors = {});
 	Vec<int> transformOctant(int row, int col, int octant);
 }; // namespace fov
 #endif /* FOV_HPP */
