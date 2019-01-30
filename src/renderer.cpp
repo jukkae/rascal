@@ -156,22 +156,22 @@ void Renderer::renderActors(const World* const world, sf::RenderWindow* window) 
 
 	for(auto& actor : corpses) {
 		if((!actor->fovOnly && map->isExplored(actor->x, actor->y)) || map->isInFov(actor->x, actor->y)) {
-			renderActor(actor, window);
+			renderActor(world, actor, window);
 		}
 	}
 	for(auto& actor : misc) {
 		if((!actor->fovOnly && map->isExplored(actor->x, actor->y)) || map->isInFov(actor->x, actor->y)) {
-			renderActor(actor, window);
+			renderActor(world, actor, window);
 		}
 	}
 	for(auto& actor : pickables) {
 		if((!actor->fovOnly && map->isExplored(actor->x, actor->y)) || map->isInFov(actor->x, actor->y)) {
-			renderActor(actor, window);
+			renderActor(world, actor, window);
 		}
 	}
 	for(auto& actor : live) {
 		if((!actor->fovOnly && map->isExplored(actor->x, actor->y)) || map->isInFov(actor->x, actor->y)) {
-			renderActor(actor, window);
+			renderActor(world, actor, window);
 		}
 	}
 
@@ -181,11 +181,11 @@ void Renderer::renderActors(const World* const world, sf::RenderWindow* window) 
 		}
 		else if(actor->isPlayer()) player = actor;
 	}*/
-	renderActor(player, window);
+	renderActor(world, player, window);
 }
 
 
-void Renderer::renderActor(const Actor* const actor, sf::RenderWindow* window) {
+void Renderer::renderActor(const World* const world, const Actor* const actor, sf::RenderWindow* window) {
 	Point worldPosition(actor->x, actor->y);
 	Point screenPosition = getScreenCoordsFromWorldCoords(worldPosition);
 	sf::Color color;
@@ -194,7 +194,7 @@ void Renderer::renderActor(const Actor* const actor, sf::RenderWindow* window) {
 	if(actor->ai) {
 		// render FOV cone
 		for(auto& p : actor->ai->fov) {
-			console.setBackground(getScreenCoordsFromWorldCoords(p), colors::get("blue"));
+			console.setBackground(getScreenCoordsFromWorldCoords(p), world->map.isWall(p.x, p.y) ? colors::get("lightWall") : colors::get("lightGround"));
 		}
 	}
 	console.drawGlyph(screenPosition, (char)actor->ch, color);
