@@ -264,7 +264,7 @@ std::unique_ptr<Actor> npc::makeBeingFromToml(World* world, Map* map, int x, int
 		auto ai = toml::get<toml::table>(being.at("ai"));
 		if(toml::get<std::string>(ai.at("type")) == "MonsterAi") {
 			int speed = toml::get<int>(ai.at("speed"));
-			a->ai = std::make_unique<MonsterAi>(speed); // TODO default
+			a->ai = std::make_unique<MonsterAi>(speed, factions::reavers); // TODO default
 		} else { /* DO WHAT */ }
 	}
 

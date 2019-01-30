@@ -1,11 +1,13 @@
 #include "renderer.hpp"
 
 #include "actor.hpp"
+#include "ai.hpp" // Required for getting color from faction
 #include "animation.hpp"
 #include "colors.hpp"
 #include "destructible.hpp"
 #include "effect.hpp"
 #include "event.hpp"
+#include "faction.hpp" // Required for faction colors
 #include "font.hpp"
 #include "gameplay_state.hpp"
 #include "io.hpp"
@@ -186,7 +188,10 @@ void Renderer::renderActors(const World* const world, sf::RenderWindow* window) 
 void Renderer::renderActor(const Actor* const actor, sf::RenderWindow* window) {
 	Point worldPosition(actor->x, actor->y);
 	Point screenPosition = getScreenCoordsFromWorldCoords(worldPosition);
-	console.drawGlyph(screenPosition, (char)actor->ch, actor->col);
+	sf::Color color;
+	if(actor->ai) color = actor->ai->faction.color;
+	else color = actor->col;
+	console.drawGlyph(screenPosition, (char)actor->ch, color);
 }
 
 Point Renderer::getWorldCoordsFromScreenCoords(const Point& point) const {

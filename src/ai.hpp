@@ -57,7 +57,8 @@ enum class AiState { NORMAL, FRIGHTENED, FRIENDLY };
 class MonsterAi : public Ai {
 public:
 	MonsterAi() : Ai(140, factions::reavers), moveCount(0) {;}
-	MonsterAi(float speed) : Ai(speed) {;}
+	MonsterAi(float speed) : Ai(speed, factions::reavers) {;}
+	MonsterAi(float speed, Faction& faction) : Ai(speed, faction) {;}
 
 	std::vector<std::unique_ptr<Action>> getNextAction(Actor* actor) override;
 protected:
