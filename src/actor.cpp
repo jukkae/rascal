@@ -36,7 +36,7 @@ Actor::~Actor() {
 float Actor::update(GameplayState* state) {
 	if(ai) {
 		float fovRadius = constants::DEFAULT_FOV_RADIUS * (body ? body->perception / 10.0 : 1.0);
-		if(isPlayer()) world->computeFov(x, y, fovRadius);
+		//if(isPlayer()) world->computeFov(x, y, fovRadius);
 
 		// TODO
 		if(!isPlayer()) {

@@ -39,11 +39,12 @@ const int LEVEL_UP_BASE = 50;
 const int LEVEL_UP_FACTOR = 150;
 
 void Ai::updateFov(Actor* actor) {
+	float fovRadius = constants::DEFAULT_FOV_RADIUS * (actor->body ? actor->body->perception / 10.0 : 1.0);
 	if(isPlayer()) {
-		fov = fov::computeFov(&(actor->world->map), actor->x, actor->y);
+		fov = fov::computeFov(&(actor->world->map), actor->x, actor->y, fovRadius);
 	}
 	else {
-		fov = fov::computeEnemyFov(&(actor->world->map), actor->x, actor->y, currentDirection);
+		fov = fov::computeEnemyFov(&(actor->world->map), actor->x, actor->y, currentDirection, fovRadius);
 	}
 }
 

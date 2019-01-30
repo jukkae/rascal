@@ -194,7 +194,9 @@ void Renderer::renderActor(const World* const world, const Actor* const actor, s
 	if(actor->ai) {
 		// render FOV cone
 		for(auto& p : actor->ai->fov) {
-			console.setBackground(getScreenCoordsFromWorldCoords(p), world->map.isWall(p.x, p.y) ? colors::get("lightWall") : colors::get("lightGround"));
+			sf::Color oldColor = console.getBackground(getScreenCoordsFromWorldCoords(p));
+			sf::Color newColor = world->map.isWall(p.x, p.y) ? colors::get("lightWall") : colors::get("lightGround");
+			console.setBackground(getScreenCoordsFromWorldCoords(p), colors::add(oldColor, colors::multiply(newColor, 0.1f)));
 		}
 	}
 	console.drawGlyph(screenPosition, (char)actor->ch, color);

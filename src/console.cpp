@@ -69,6 +69,13 @@ void Console::setBackground(Point position, sf::Color color) {
 	cells.at(x, y).bg = color;
 }
 
+sf::Color Console::getBackground(Point position) {
+	int x = position.x;
+	int y = position.y;
+	if(x < 0 || x >= width || y < 0 || y >= height) return colors::get("black"); // depends on the context, might throw, might return white, might return transparent... but for now good enough
+	return cells.at(x, y).bg;
+}
+
 void Console::drawGlyph(Point position, char glyph, sf::Color color) {
 	int x = position.x;
 	int y = position.y;

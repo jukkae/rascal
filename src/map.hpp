@@ -60,7 +60,6 @@ public:
 	bool isWall(int x, int y) const;
 	bool canWalk(int x, int y) const;
 	bool isInFov(int x, int y) const;
-	bool isInEnemyFov(int x, int y) const;
 	bool isExplored(int x, int y) const;
 	void setWorld(World* w) { world = w; }
 
