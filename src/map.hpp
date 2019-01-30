@@ -21,12 +21,13 @@ enum class Terrain { NORMAL, WATER };
 struct Tile {
 	bool explored;
 	bool inFov;
+	bool inEnemyFov; // TODO this belongs elsewhere
 	bool transparent;
 	bool walkable;
 	Terrain terrain;
 	float movementCost;
 	std::experimental::optional<Animation> animation;
-	Tile() : explored(false), inFov(false), transparent(true), walkable(true),
+	Tile() : explored(false), inFov(false), inEnemyFov(false), transparent(true), walkable(true),
 	terrain(Terrain::NORMAL), movementCost(1.0f) {;}
 
 	template<typename Archive>
@@ -59,6 +60,7 @@ public:
 	bool isWall(int x, int y) const;
 	bool canWalk(int x, int y) const;
 	bool isInFov(int x, int y) const;
+	bool isInEnemyFov(int x, int y) const;
 	bool isExplored(int x, int y) const;
 	void setWorld(World* w) { world = w; }
 

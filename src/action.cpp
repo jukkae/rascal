@@ -1,3 +1,4 @@
+#include "ai.hpp"
 #include "action.hpp"
 #include "actor.hpp"
 #include "attacker.hpp"
@@ -32,6 +33,10 @@ bool MoveAction::execute() {
 		case Direction::NW: targetY -= 1; targetX -= 1; break;
 		case Direction::NONE: return false;
 		default: break;
+	}
+
+	if(actor->ai) {
+		actor->ai->currentDirection = direction;
 	}
 
 	if (world->isWall(targetX, targetY)) return false;

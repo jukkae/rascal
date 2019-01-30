@@ -185,3 +185,11 @@ bool Map::isInFov(int x, int y) const {
 	}
 	return false;
 }
+
+bool Map::isInEnemyFov(int x, int y) const {
+	if(x < 0 || x >= width || y < 0 || y >= height) return false;
+	if(tiles(x, y).inEnemyFov) {
+		return true;
+	}
+	return false;
+}

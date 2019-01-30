@@ -2,6 +2,7 @@
 #define FOV_HPP
 
 #include "constants.hpp"
+#include "direction.hpp"
 
 class Actor;
 class Map;
@@ -32,6 +33,8 @@ public:
 };
 
 namespace fov {
+	void computeEnemyFov(Map* map, int x, int y, Direction direction, int radius = constants::DEFAULT_FOV_RADIUS, FovType fovType = FovType::CIRCLE, std::vector<Actor*> actors = {});
+	void computeEnemyFovForOctant(Map* map, int x, int y, int octant, int radius = constants::DEFAULT_FOV_RADIUS, FovType fovType = FovType::CIRCLE, std::vector<Actor*> actors = {});
 	void computeFov(Map* map, int x, int y, int radius = constants::DEFAULT_FOV_RADIUS, FovType fovType = FovType::CIRCLE, std::vector<Actor*> actors = {});
 	void computeFovForOctant(Map* map, int x, int y, int octant, int radius = constants::DEFAULT_FOV_RADIUS, FovType fovType = FovType::CIRCLE, std::vector<Actor*> actors = {});
 	Vec<int> transformOctant(int row, int col, int octant);

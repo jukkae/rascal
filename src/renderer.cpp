@@ -53,6 +53,9 @@ void Renderer::renderMap(const World* const world, sf::RenderWindow* window) {
 			if(worldX < 0 || worldX >= mapWidth || worldY < 0 || worldY >= mapHeight) {
 				console.setBackground(Point(x, y), colors::get("black"));
 			}
+			else if(map->isInEnemyFov(worldX, worldY)) {
+				console.setBackground(Point(x, y), colors::get("blue"));
+			}
 			else if(!map->isExplored(worldX, worldY)) {
 				console.setBackground(Point(x, y), colors::get("black"));
 			}
@@ -191,6 +194,9 @@ void Renderer::renderActor(const Actor* const actor, sf::RenderWindow* window) {
 	sf::Color color;
 	if(actor->ai) color = actor->ai->faction.color;
 	else color = actor->col;
+	if(actor->ai) {
+
+	}
 	console.drawGlyph(screenPosition, (char)actor->ch, color);
 }
 

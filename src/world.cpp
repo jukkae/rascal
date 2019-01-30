@@ -1,5 +1,6 @@
 #include "world.hpp"
 
+#include "ai.hpp"
 #include "body.hpp"
 #include "container.hpp"
 #include "damage.hpp"
@@ -7,6 +8,7 @@
 #include "dice.hpp"
 #include "effect.hpp"
 #include "event.hpp"
+#include "fov.hpp"
 #include "gameplay_state.hpp"
 #include "map_utils.hpp"
 #include <iostream>
@@ -76,6 +78,15 @@ bool World::canWalk(int x, int y) {
 void World::update() {
 	Actor* activeActor = getNextActor();
 	if(activeActor->isPlayer()) {
+		for(int i = 0; i < map.width; ++i) {
+			for(int j = 0; j < map.height; ++j) {
+				map.tiles(i, j).inEnemyFov = false;
+			}
+		}
+		for(auto& actor : actors) {
+			if(actor->ai)
+				fov::computeEnemyFov(&map, actor->x, actor->y, actor->ai->currentDirection);
+		}
 		state->handleEvents();
 	}
 	updateNextActor();

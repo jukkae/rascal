@@ -5,6 +5,63 @@
 #include "map.hpp"
 #include "vec.hpp"
 
+void fov::computeEnemyFov(Map* map, int x, int y, Direction direction, int radius, FovType fovType, std::vector<Actor*> actors) {
+	std::vector<int> octants;
+	switch(direction) {
+		case Direction::NONE: radius /= 4; octants = {0, 1, 2, 3, 4, 5, 6, 7}; break;
+		case Direction::N:  octants = {0, 7}; break;
+		case Direction::NE: octants = {0, 1}; break;
+		case Direction::E:  octants = {1, 2}; break;
+		case Direction::SE: octants = {2, 3}; break;
+		case Direction::S:  octants = {3, 4}; break;
+		case Direction::SW: octants = {4, 5}; break;
+		case Direction::W:  octants = {5, 6}; break;
+		case Direction::NW: octants = {6, 7}; break;
+	}
+	for(auto n : octants) {
+		computeEnemyFovForOctant(map, x, y, n, radius, fovType, actors);
+	}
+}
+
+void fov::computeEnemyFovForOctant(Map* map, int x, int y, int octant, int radius, FovType fovType, std::vector<Actor*> actors) {
+	ShadowLine shadowLine;
+	bool fullShadow = false;
+	for(int row = 0; row < radius; row++) {
+		for(int col = 0; col <= row; col++) {
+			if(fovType == FovType::CIRCLE) {
+				if(sqrt(row*row + col*col) > radius) break;
+			} // else if fovType == FovType::SQUARE
+			int xPos = x + transformOctant(row, col, octant).x;
+			int yPos = y + transformOctant(row, col, octant).y;
+
+			if(xPos < 0 || xPos >= map->width || yPos < 0 || yPos >= map->height) break;
+
+			if(fullShadow) {
+				map->tiles(xPos, yPos).inEnemyFov = false;
+			}
+			else {
+				Shadow projection = Shadow::projectTile(row, col);
+				bool visible = !shadowLine.isInShadow(projection);
+				map->tiles(xPos, yPos).inEnemyFov = visible;
+				//if(visible) map->tiles(xPos, yPos).explored = true; // *maybe* extract function
+
+				if(visible && map->isWall(xPos, yPos) /*TODO check for doors*/) {
+					shadowLine.addShadow(projection);
+					fullShadow = shadowLine.isFullShadow();
+				}
+				if(visible && actors.size() > 0) {
+					for(auto& a : actors) {
+						if(a->blocksLight && a->x == xPos && a->y == yPos) {
+							shadowLine.addShadow(projection);
+							fullShadow = shadowLine.isFullShadow();
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
 void fov::computeFov(Map* map, int x, int y, int radius, FovType fovType, std::vector<Actor*> actors) {
 	//Low-hanging fruit optimization:
 	//Only loop through possible values
@@ -124,4 +181,3 @@ void ShadowLine::addShadow(Shadow shadow) {
 		}
 	}
 }
-

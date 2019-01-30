@@ -5,6 +5,7 @@ class GameplayState;
 
 #include "action.hpp"
 #include "actor.hpp"
+#include "direction.hpp"
 #include "faction.hpp"
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
@@ -22,12 +23,14 @@ public:
 			as.insert(as.end(), std::make_unique<WaitAction>(WaitAction(actor)));
 			return as; }
 	Faction& faction;
+	Direction currentDirection = Direction::NONE;
 private:
 	friend class boost::serialization::access;
 	template<class Archive>
 	void serialize(Archive & ar, const unsigned int version) {
 		ar & speed;
 		ar & faction;
+		ar & currentDirection;
 	}
 };
 
