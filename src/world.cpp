@@ -40,6 +40,9 @@ width(width), height(height), level(level), state(state) {
 	map_utils::addDoors(this, &map);
 	map_utils::addItems(this, &map, level);
 	map_utils::addMonsters(this, &map, level);
+	for(auto& a : actors) {
+		if(a->ai) a->ai->updateFov(a.get());
+	}
 }
 
 void World::movePlayerFrom(World* other) {
@@ -77,20 +80,15 @@ bool World::canWalk(int x, int y) {
 
 void World::update() {
 	Actor* activeActor = getNextActor();
+	if(activeActor->ai) activeActor->ai->updateFov(activeActor); // update own fov
+	bool updateFovs = activeActor->isPlayer();
 	if(activeActor->isPlayer()) {
-		// for(int i = 0; i < map.width; ++i) {
-		// 	for(int j = 0; j < map.height; ++j) {
-		// 		map.tiles(i, j).inEnemyFov = false;
-		// 	}
-		// }
-		for(auto& actor : actors) {
-			if(actor->ai)
-				actor->ai->updateFov(actor.get());
-				//fov::computeEnemyFov(&map, actor->x, actor->y, actor->ai->currentDirection);
-		}
 		state->handleEvents();
 	}
 	updateNextActor();
+	if(updateFovs) {
+		if(activeActor->ai) activeActor->ai->updateFov(activeActor);
+	}
 }
 
 void World::updateNextActor() {
@@ -99,10 +97,6 @@ void World::updateNextActor() {
 	float actionTime = activeActor->update(state);
 	*activeActor->energy -= actionTime;
 	//applyRadiation(actionTime);
-
-    /*actors.erase(actors.begin());
-    auto it = std::lower_bound(actors.begin(), actors.end(), activeActor, [](const auto& lhs, const auto& rhs) { return lhs->energy > rhs->energy; });
-    actors.insert(it, std::move(activeActor));*/
 
 	sortActors();
 	updateTime();
