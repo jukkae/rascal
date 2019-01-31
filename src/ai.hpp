@@ -28,6 +28,7 @@ public:
 	Direction currentDirection = Direction::NONE;
 	std::set<Point> fov = {};
 	void updateFov(Actor* actor);
+	bool isInFov(int x, int y) { return fov.count(Point(x, y)) != 0; }
 private:
 	friend class boost::serialization::access;
 	template<class Archive>

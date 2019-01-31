@@ -178,10 +178,10 @@ bool Map::isExplored(int x, int y) const {
 	return tiles(x, y).explored;
 }
 
-bool Map::isInFov(int x, int y) const {
-	if(x < 0 || x >= width || y < 0 || y >= height) return false;
-	if(tiles(x, y).inFov) {
-		return true;
-	}
-	return false;
-}
+// bool Map::isInFov(int x, int y) const {
+// 	if(x < 0 || x >= width || y < 0 || y >= height) return false;
+// 	if(tiles(x, y).inFov) {
+// 		return true;
+// 	}
+// 	return false;
+// }

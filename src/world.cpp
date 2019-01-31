@@ -78,11 +78,11 @@ bool World::canWalk(int x, int y) {
 void World::update() {
 	Actor* activeActor = getNextActor();
 	if(activeActor->isPlayer()) {
-		for(int i = 0; i < map.width; ++i) {
-			for(int j = 0; j < map.height; ++j) {
-				map.tiles(i, j).inEnemyFov = false;
-			}
-		}
+		// for(int i = 0; i < map.width; ++i) {
+		// 	for(int j = 0; j < map.height; ++j) {
+		// 		map.tiles(i, j).inEnemyFov = false;
+		// 	}
+		// }
 		for(auto& actor : actors) {
 			if(actor->ai)
 				actor->ai->updateFov(actor.get());

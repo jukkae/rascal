@@ -41,12 +41,12 @@ std::set<Point> fov::computeEnemyFovForOctant(Map* map, int x, int y, int octant
 			if(xPos < 0 || xPos >= map->width || yPos < 0 || yPos >= map->height) break;
 
 			if(fullShadow) {
-				map->tiles(xPos, yPos).inEnemyFov = false;
+				// map->tiles(xPos, yPos).inEnemyFov = false;
 			}
 			else {
 				Shadow projection = Shadow::projectTile(row, col);
 				bool visible = !shadowLine.isInShadow(projection);
-				map->tiles(xPos, yPos).inEnemyFov = visible;
+				// map->tiles(xPos, yPos).inEnemyFov = visible;
 				if(visible) fovTiles.emplace(Point{xPos, yPos});
 				//if(visible) map->tiles(xPos, yPos).explored = true; // *maybe* extract function
 
@@ -72,11 +72,12 @@ std::set<Point> fov::computeFov(Map* map, int x, int y, int radius, FovType fovT
 	std::set<Point> fovTiles { };
 	//Low-hanging fruit optimization:
 	//Only loop through possible values
-	for(int i = 0; i < map->width; ++i) {
-		for(int j = 0; j < map->height; ++j) {
-			map->tiles(i, j).inFov = false;
-		}
-	}
+	//This clears FOV tiles, TODO check where this needs to happen
+	// for(int i = 0; i < map->width; ++i) {
+	// 	for(int j = 0; j < map->height; ++j) {
+	// 		// map->tiles(i, j).inFov = false;
+	// 	}
+	// }
 	for(int octant = 0; octant < 8; octant++) {
 		auto octantTiles = computeFovForOctant(map, x, y, octant, radius, fovType, actors);
 		fovTiles.insert(octantTiles.begin(), octantTiles.end());
@@ -99,13 +100,13 @@ std::set<Point> fov::computeFovForOctant(Map* map, int x, int y, int octant, int
 			if(xPos < 0 || xPos >= map->width || yPos < 0 || yPos >= map->height) break;
 
 			if(fullShadow) {
-				map->tiles(xPos, yPos).inFov = false;
+				// map->tiles(xPos, yPos).inFov = false;
 			}
 			else {
 				Shadow projection = Shadow::projectTile(row, col);
 				bool visible = !shadowLine.isInShadow(projection);
 
-				map->tiles(xPos, yPos).inFov = visible;
+				//map->tiles(xPos, yPos).inFov = visible;
 				if(visible) fovTiles.emplace(Point{xPos, yPos});
 
 				if(visible) map->tiles(xPos, yPos).explored = true; // *maybe* extract function

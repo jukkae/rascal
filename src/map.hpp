@@ -20,20 +20,17 @@ enum class Terrain { NORMAL, WATER };
 
 struct Tile {
 	bool explored;
-	bool inFov;
-	bool inEnemyFov; // TODO this belongs elsewhere
 	bool transparent;
 	bool walkable;
 	Terrain terrain;
 	float movementCost;
 	std::experimental::optional<Animation> animation;
-	Tile() : explored(false), inFov(false), inEnemyFov(false), transparent(true), walkable(true),
+	Tile() : explored(false), transparent(true), walkable(true),
 	terrain(Terrain::NORMAL), movementCost(1.0f) {;}
 
 	template<typename Archive>
 	void serialize(Archive & ar, const unsigned int version) {
 		ar & explored;
-		// ar & inFov; no serialization for dynamic properties!
 		ar & transparent;
 		ar & walkable;
 		ar & terrain;
@@ -59,7 +56,7 @@ public:
 	void setWall(int x, int y);
 	bool isWall(int x, int y) const;
 	bool canWalk(int x, int y) const;
-	bool isInFov(int x, int y) const;
+	//bool isInFov(int x, int y) const;
 	bool isExplored(int x, int y) const;
 	void setWorld(World* w) { world = w; }
 

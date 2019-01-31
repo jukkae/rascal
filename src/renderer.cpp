@@ -27,14 +27,14 @@ void Renderer::render(const World* const world, sf::RenderWindow* window) {
 	//window.clear(sf::Color::Black);
 	console.clear();
 
-	renderMap(world, window);
-	renderActors(world, window);
+	renderMap(world, world->getPlayer(), window);
+	renderActors(world, world->getPlayer(), window);
 
 	console.draw();
 	//window.display();
 }
 
-void Renderer::renderMap(const World* const world, sf::RenderWindow* window) {
+void Renderer::renderMap(const World* const world, const Actor* const player, sf::RenderWindow* window) {
 	const Map* const map = &world->map;
 	int cameraX = world->getPlayer()->x - (screenWidth/2);
 	int cameraY = world->getPlayer()->y - (screenHeight/2);
@@ -56,7 +56,7 @@ void Renderer::renderMap(const World* const world, sf::RenderWindow* window) {
 			else if(!map->isExplored(worldX, worldY)) {
 				console.setBackground(Point(x, y), colors::get("black"));
 			}
-			else if(map->isInFov(worldX, worldY)) {
+			else if(player->ai->isInFov(worldX, worldY)) {
 				console.setBackground(Point(x, y), map->isWall(worldX, worldY) ? colors::get("lightWall") : colors::get("lightGround"));
 			}
 			else if(map->isExplored(worldX, worldY)) {
@@ -70,14 +70,14 @@ void Renderer::renderMap(const World* const world, sf::RenderWindow* window) {
 			}
 		}
 	}
-	if(map->hasAnimations) renderAnimations(world, window);
+	if(map->hasAnimations) renderAnimations(world, player, window);
 	if(mouseX >= 0 && mouseX < console.width && mouseY >= 0 && mouseY < console.height) {
 		console.highlight(Point(mouseX, mouseY));
 	}
 }
 
 // FIXME shouldn't be called render animations, rather run automata or something
-void Renderer::renderAnimations(const World* const world, sf::RenderWindow* window) {
+void Renderer::renderAnimations(const World* const world, const Actor* const player, sf::RenderWindow* window) {
 	const Map* const map = &world->map;
 	int cameraX = world->getPlayer()->x - (screenWidth/2);
 	int cameraY = world->getPlayer()->y - (screenHeight/2);
@@ -117,9 +117,10 @@ void Renderer::renderAnimations(const World* const world, sf::RenderWindow* wind
 						}
 					}
 				}
-				if(map->tiles(worldX, worldY).inFov) {
-					console.setBackground(Point(x, y), color);
-				}
+				// TODO pass Actor* to player here
+				// if(map->tiles(worldX, worldY).inFov) {
+				// 	console.setBackground(Point(x, y), color);
+				// }
 			}
 		}
 	}
@@ -135,11 +136,10 @@ void Renderer::notify(Event& event, World* world) {
 	}
 }
 
-void Renderer::renderActors(const World* const world, sf::RenderWindow* window) {
+void Renderer::renderActors(const World* const world, const Actor* const player, sf::RenderWindow* window) {
 	const std::vector<std::unique_ptr<Actor>>& actors = world->actors;
 	const Map* const map = &world->map;
 	// Crude implementation of render layers
-	Actor* player;
 	std::vector<Actor*> corpses;
 	std::vector<Actor*> misc; // Maybe useless?
 	std::vector<Actor*> pickables;
@@ -151,27 +151,27 @@ void Renderer::renderActors(const World* const world, sf::RenderWindow* window) 
 			else if(actor->pickable) pickables.push_back(actor.get());
 			else if(actor->ai) live.push_back(actor.get());
 			else misc.push_back(actor.get());
-		} else player = actor.get();
+		}
 	}
 
 	for(auto& actor : corpses) {
-		if((!actor->fovOnly && map->isExplored(actor->x, actor->y)) || map->isInFov(actor->x, actor->y)) {
-			renderActor(world, actor, window);
+		if((!actor->fovOnly && map->isExplored(actor->x, actor->y)) || player->ai->isInFov(actor->x, actor->y)) {
+			renderActor(world, player, actor, window);
 		}
 	}
 	for(auto& actor : misc) {
-		if((!actor->fovOnly && map->isExplored(actor->x, actor->y)) || map->isInFov(actor->x, actor->y)) {
-			renderActor(world, actor, window);
+		if((!actor->fovOnly && map->isExplored(actor->x, actor->y)) || player->ai->isInFov(actor->x, actor->y)) {
+			renderActor(world, player, actor, window);
 		}
 	}
 	for(auto& actor : pickables) {
-		if((!actor->fovOnly && map->isExplored(actor->x, actor->y)) || map->isInFov(actor->x, actor->y)) {
-			renderActor(world, actor, window);
+		if((!actor->fovOnly && map->isExplored(actor->x, actor->y)) || player->ai->isInFov(actor->x, actor->y)) {
+			renderActor(world, player, actor, window);
 		}
 	}
 	for(auto& actor : live) {
-		if((!actor->fovOnly && map->isExplored(actor->x, actor->y)) || map->isInFov(actor->x, actor->y)) {
-			renderActor(world, actor, window);
+		if((!actor->fovOnly && map->isExplored(actor->x, actor->y)) || player->ai->isInFov(actor->x, actor->y)) {
+			renderActor(world, player, actor, window);
 		}
 	}
 
@@ -181,11 +181,11 @@ void Renderer::renderActors(const World* const world, sf::RenderWindow* window) 
 		}
 		else if(actor->isPlayer()) player = actor;
 	}*/
-	renderActor(world, player, window);
+	renderActor(world, player, player, window);
 }
 
 
-void Renderer::renderActor(const World* const world, const Actor* const actor, sf::RenderWindow* window) {
+void Renderer::renderActor(const World* const world, const Actor* const player, const Actor* const actor, sf::RenderWindow* window) {
 	Point worldPosition(actor->x, actor->y);
 	Point screenPosition = getScreenCoordsFromWorldCoords(worldPosition);
 	sf::Color color;
