@@ -117,10 +117,9 @@ void Renderer::renderAnimations(const World* const world, const Actor* const pla
 						}
 					}
 				}
-				// TODO pass Actor* to player here
-				// if(map->tiles(worldX, worldY).inFov) {
-				// 	console.setBackground(Point(x, y), color);
-				// }
+				if(player->ai->isInFov(worldX, worldY)) {
+					console.setBackground(Point(x, y), color);
+				}
 			}
 		}
 	}
