@@ -263,7 +263,8 @@ std::vector<std::unique_ptr<Action>> MonsterAi::getNextAction(Actor* actor) {
 
 	if(aiState == AiState::NORMAL) {
 		//if (actor->world->isInFov(actor->x, actor->y)) {
-		if (los::is_visible(Point(actor->x, actor->y), Point(player->x, player->y), &world->map, world->getActorsAsPtrs(), constants::DEFAULT_ENEMY_FOV_RADIUS)) {
+		//if (los::is_visible(Point(actor->x, actor->y), Point(player->x, player->y), &world->map, world->getActorsAsPtrs(), constants::DEFAULT_ENEMY_FOV_RADIUS)) {
+		if (isInFov(player->x, player->y)) {
 			moveCount = TRACKING_TURNS; //TODO also track if was in FOV, and fire event when first seeing player
 		} else { --moveCount; }
 
