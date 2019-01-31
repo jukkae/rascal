@@ -40,6 +40,10 @@ const int LEVEL_UP_FACTOR = 150;
 
 void Ai::updateFov(Actor* actor) {
 	float fovRadius = constants::DEFAULT_FOV_RADIUS * (actor->body ? actor->body->perception / 10.0 : 1.0);
+	if(actor->destructible->isDead()) {
+		fov = {};
+		return;
+	}
 	if(isPlayer()) {
 		fov = fov::computeFov(&(actor->world->map), actor->x, actor->y, fovRadius, FovType::CIRCLE, actor->world->getActorsAsPtrs());
 	}

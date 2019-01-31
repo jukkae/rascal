@@ -73,7 +73,7 @@ protected:
 	int moveCount;
 	void moveOrAttack(Actor* owner, GameplayState* state, int targetX, int targetY);
 private:
-	AiState aiState = AiState::FRIENDLY;
+	AiState aiState = AiState::NORMAL;
 	friend class boost::serialization::access;
 	template<class Archive>
 	void serialize(Archive & ar, const unsigned int version) {

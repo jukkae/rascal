@@ -54,10 +54,10 @@ namespace colors {
 		{ "yellow",           Color(255, 255,   0) },
 		{ "darkerYellow",     Color(128, 128,   0) },
 
-		{ "darkWall",         Color(  0,   0, 100) },
-		{ "darkGround",       Color(100, 110, 100) },
-		{ "lightWall",        Color(100, 100, 200) },
-		{ "lightGround",      Color(200, 210, 200) },
+		{ "darkWall",         Color(  0,   0,  50) },
+		{ "darkGround",       Color( 50,  60,  50) },
+		{ "lightWall",        Color( 50,  50, 100) },
+		{ "lightGround",      Color(100, 110, 100) },
 	};
 
 	static const inline Color get(std::string name) { return namedColors.at(name); }

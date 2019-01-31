@@ -80,15 +80,12 @@ bool World::canWalk(int x, int y) {
 
 void World::update() {
 	Actor* activeActor = getNextActor();
-	if(activeActor->ai) activeActor->ai->updateFov(activeActor); // update own fov
-	bool updateFovs = activeActor->isPlayer();
+	if(activeActor->ai) activeActor->ai->updateFov(activeActor); // update own fov before
 	if(activeActor->isPlayer()) {
 		state->handleEvents();
 	}
 	updateNextActor();
-	if(updateFovs) {
-		if(activeActor->ai) activeActor->ai->updateFov(activeActor);
-	}
+	if(activeActor->ai) activeActor->ai->updateFov(activeActor); // update own fov after
 }
 
 void World::updateNextActor() {
