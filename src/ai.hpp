@@ -60,7 +60,7 @@ private:
 	}
 };
 
-enum class AiState { NORMAL, FRIGHTENED, FRIENDLY };
+enum class AiState { NORMAL, PATROLLING, VIGILANT, ALERT, FRIGHTENED, FRIENDLY };
 
 class MonsterAi : public Ai {
 public:

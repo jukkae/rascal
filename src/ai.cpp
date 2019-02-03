@@ -184,15 +184,7 @@ std::vector<std::unique_ptr<Action>> PlayerAi::getNextAction(Actor* actor) {
 						Point to = path.at(i + 1);
 						int stepDx = to.x - from.x;
 						int stepDy = to.y - from.y;
-						Direction stepDir;
-						if (stepDx ==  0 && stepDy == -1) stepDir = Direction::N;
-						if (stepDx ==  1 && stepDy == -1) stepDir = Direction::NE;
-						if (stepDx ==  1 && stepDy ==  0) stepDir = Direction::E;
-						if (stepDx ==  1 && stepDy ==  1) stepDir = Direction::SE;
-						if (stepDx ==  0 && stepDy ==  1) stepDir = Direction::S;
-						if (stepDx == -1 && stepDy ==  1) stepDir = Direction::SW;
-						if (stepDx == -1 && stepDy ==  0) stepDir = Direction::W;
-						if (stepDx == -1 && stepDy == -1) stepDir = Direction::NW;
+						Direction stepDir = direction::getDirectionFromDeltas(stepDx, stepDy);
 						if(i != path.size() - 2) {
 							actions.push_back(std::make_unique<MoveAction>(MoveAction(actor, stepDir)));
 						} else { // for the last step of the path...
@@ -254,7 +246,7 @@ std::vector<std::unique_ptr<Action>> MonsterAi::getNextAction(Actor* actor) {
 	}
 
 	if(actor->destructible->hp <= actor->destructible->maxHp * 0.3 + (0.1 * player->body->getModifier(player->body->charisma))) {
-		aiState = AiState::FRIGHTENED; //TODO implement in terms of morale
+		aiState = AiState::FRIGHTENED;
 	}
 
 	if(actor->destructible->hp >= actor->destructible->maxHp * 0.6) {
@@ -285,14 +277,7 @@ std::vector<std::unique_ptr<Action>> MonsterAi::getNextAction(Actor* actor) {
 						actions.push_back(std::make_unique<WaitAction>(WaitAction(actor)));
 						return actions;
 					}
-					if (stepDx ==  0 && stepDy == -1) direction = Direction::N;
-					if (stepDx ==  1 && stepDy == -1) direction = Direction::NE;
-					if (stepDx ==  1 && stepDy ==  0) direction = Direction::E;
-					if (stepDx ==  1 && stepDy ==  1) direction = Direction::SE;
-					if (stepDx ==  0 && stepDy ==  1) direction = Direction::S;
-					if (stepDx == -1 && stepDy ==  1) direction = Direction::SW;
-					if (stepDx == -1 && stepDy ==  0) direction = Direction::W;
-					if (stepDx == -1 && stepDy == -1) direction = Direction::NW;
+					direction = direction::getDirectionFromDeltas(stepDx, stepDy);
 					actions.push_back(std::make_unique<MoveAction>(MoveAction(actor, direction)));
 					return actions;
 				} else if (world->canWalk(actor->x + stepDx, actor->y)) { // Wall sliding
@@ -320,14 +305,7 @@ std::vector<std::unique_ptr<Action>> MonsterAi::getNextAction(Actor* actor) {
 					return actions;
 				}
 
-				if (stepDx ==  0 && stepDy == -1) direction = Direction::N;
-				if (stepDx ==  1 && stepDy == -1) direction = Direction::NE;
-				if (stepDx ==  1 && stepDy ==  0) direction = Direction::E;
-				if (stepDx ==  1 && stepDy ==  1) direction = Direction::SE;
-				if (stepDx ==  0 && stepDy ==  1) direction = Direction::S;
-				if (stepDx == -1 && stepDy ==  1) direction = Direction::SW;
-				if (stepDx == -1 && stepDy ==  0) direction = Direction::W;
-				if (stepDx == -1 && stepDy == -1) direction = Direction::NW;
+				direction = direction::getDirectionFromDeltas(stepDx, stepDy);
 				actions.push_back(std::make_unique<MoveAction>(MoveAction(actor, direction)));
 				return actions;
 			}
@@ -342,14 +320,7 @@ std::vector<std::unique_ptr<Action>> MonsterAi::getNextAction(Actor* actor) {
 		int dy = targetY - actor->y;
 		int stepDx = (dx == 0 ? 0 : (dx > 0 ? -1 : 1));
 		int stepDy = (dy == 0 ? 0 : (dy > 0 ? -1 : 1));
-		if (stepDx ==  0 && stepDy == -1) direction = Direction::N;
-		if (stepDx ==  1 && stepDy == -1) direction = Direction::NE;
-		if (stepDx ==  1 && stepDy ==  0) direction = Direction::E;
-		if (stepDx ==  1 && stepDy ==  1) direction = Direction::SE;
-		if (stepDx ==  0 && stepDy ==  1) direction = Direction::S;
-		if (stepDx == -1 && stepDy ==  1) direction = Direction::SW;
-		if (stepDx == -1 && stepDy ==  0) direction = Direction::W;
-		if (stepDx == -1 && stepDy == -1) direction = Direction::NW;
+		direction = direction::getDirectionFromDeltas(stepDx, stepDy);
 		actions.push_back(std::make_unique<MoveAction>(MoveAction(actor, direction)));
 		return actions;
 	}
@@ -381,14 +352,7 @@ std::vector<std::unique_ptr<Action>> ConfusedMonsterAi::getNextAction(Actor* own
 		return actions;
 	}
 
-	if (stepDx ==  0 && stepDy == -1) direction = Direction::N;
-	if (stepDx ==  1 && stepDy == -1) direction = Direction::NE;
-	if (stepDx ==  1 && stepDy ==  0) direction = Direction::E;
-	if (stepDx ==  1 && stepDy ==  1) direction = Direction::SE;
-	if (stepDx ==  0 && stepDy ==  1) direction = Direction::S;
-	if (stepDx == -1 && stepDy ==  1) direction = Direction::SW;
-	if (stepDx == -1 && stepDy ==  0) direction = Direction::W;
-	if (stepDx == -1 && stepDy == -1) direction = Direction::NW;
+	direction = direction::getDirectionFromDeltas(stepDx, stepDy);
 	actions.push_back(std::make_unique<MoveAction>(MoveAction(owner, direction)));
 	return actions;
 }
