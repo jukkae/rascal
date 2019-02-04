@@ -113,6 +113,12 @@ struct AiChangeEvent : public Event { // Yes I know this is getting ridiculous
 	Actor* actor;
 };
 
+struct EnemyHasSeenPlayerEvent : public Event {
+	EnemyHasSeenPlayerEvent(Actor* actor = nullptr): actor(actor) {;}
+
+	Actor* actor;
+};
+
 namespace status_effect {
 enum class Activity { ADD, REMOVE };
 }; // namespace status_effect

@@ -10,6 +10,7 @@
 #include "event.hpp"
 #include "fov.hpp"
 #include "gameplay_state.hpp"
+#include "ignore.hpp"
 #include "map_utils.hpp"
 #include <iostream>
 #include "../include/toml.hpp"
@@ -188,5 +189,10 @@ void World::notify(Event& e) {
 	// TODO this is a dirty hack, ok?
 	for(auto& mission : getPlayer()->missions) {
 		mission->notify(e);
+	}
+	// TODO more dirty hacks
+	if(auto event = dynamic_cast<EnemyHasSeenPlayerEvent*>(&e)) {
+		ignore(event);
+    getPlayer()->actionsQueue.clear();
 	}
 }

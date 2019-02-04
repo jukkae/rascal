@@ -74,12 +74,14 @@ protected:
 	void moveOrAttack(Actor* owner, GameplayState* state, int targetX, int targetY);
 private:
 	AiState aiState = AiState::NORMAL;
+	bool hasSeenPlayer = false;
 	friend class boost::serialization::access;
 	template<class Archive>
 	void serialize(Archive & ar, const unsigned int version) {
 		ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(Ai);
 		ar & moveCount;
 		ar & aiState;
+		ar & hasSeenPlayer;
 	}
 };
 
