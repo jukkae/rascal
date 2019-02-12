@@ -173,7 +173,7 @@ Message messaging::createMessageFromEvent(Event& event) {
 
 	if(auto e = dynamic_cast<EnemyHasSeenPlayerEvent*>(&event)) {
 		fmt = "%d: %s has seen you!";
-		messageText = formatString(fmt, e->time, e->actor);
+		messageText = formatString(fmt, e->time, e->actor->name.c_str());
 		color = colors::get("red");
 	}
 
