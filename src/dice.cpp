@@ -30,3 +30,8 @@ int d12()   { return d12_dist  (generator); }
 int d20()   { return d20_dist  (generator); }
 int d100()  { return d100_dist (generator); }
 int d1000() { return d1000_dist(generator); }
+
+int randomInRange(int min, int max) {
+  std::uniform_int_distribution<int> dist(min, max);
+  return dist(generator);
+}

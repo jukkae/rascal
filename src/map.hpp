@@ -11,8 +11,9 @@
 #include "animation.hpp"
 #include "constants.hpp"
 #include "mat.hpp"
+#include "rect.hpp"
 class World;
-struct Rect;
+
 template<class T>
 struct Vec;
 
@@ -40,6 +41,19 @@ struct Tile {
 };
 
 
+enum class RoomType { NORMAL, COMMAND_CENTER };
+enum class RoomDecor { NONE, PILLARS };
+struct Room {
+	Rect coordinates;
+	RoomType roomType;
+	RoomDecor roomDecor;
+	int x0() { return coordinates.x0(); }
+	int x1() { return coordinates.x1(); }
+	int y0() { return coordinates.y0(); }
+	int y1() { return coordinates.y1(); }
+};
+
+
 enum class BreakDirection { HORIZONTAL, VERTICAL };
 enum class MapType { BUILDING, WATER, PILLARS };
 
@@ -48,6 +62,7 @@ public:
 	int width, height;
 	//std::vector<Tile> tiles;
 	Mat2d<Tile> tiles;
+	std::vector<Room> rooms;
 	bool hasAnimations = false;
 
 	Map();
@@ -67,7 +82,7 @@ private:
 	void generateBuildingMap();
 	void generatePillarsMap();
 	void generateWaterMap();
-	std::vector<Rect> breakRooms(Rect area, BreakDirection direction = BreakDirection::HORIZONTAL);
+	std::vector<Room> breakRooms(Rect area, BreakDirection direction = BreakDirection::HORIZONTAL);
 
 	friend class boost::serialization::access;
 	template<class Archive>

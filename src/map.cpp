@@ -50,9 +50,9 @@ void Map::generateMap(MapType mapType) {
 			break;
 	}
 	// DEBUG PRINT
-	std::cout << "MAP:\n";
+	std::cout << "MAP TILES:\n";
 	int x = 0;
-	for(auto& tile: tiles) {
+	for(auto& tile : tiles) {
 		++x;
 		std::cout << (tile.walkable ? "." : "#");
 		if(x >= width) {
@@ -60,12 +60,19 @@ void Map::generateMap(MapType mapType) {
 			x = 0;
 		}
 	}
-	std::cout << "END MAP\n";
+	std::cout << "END MAP TILES\n";
+	std::cout << "MAP ROOMS:\n";
+	for(auto& room : rooms) {
+		std::cout << "room: "
+		<< "(" << room.coordinates.x0() << ", " << room.coordinates.y0() << "), "
+		<< "(" << room.coordinates.x1() << ", " << room.coordinates.y1() << ")\n";
+	}
+	std::cout << "END MAP ROOMS\n";
 }
 
 void Map::generateBuildingMap() {
-	std::vector<Rect> rooms;
-	std::vector<Rect> areas = breakRooms(Rect(0, 0, (width - 1), (height - 1)));
+	std::vector<Room> areas = breakRooms(Rect(0, 0, (width - 1), (height - 1)));
+	rooms = areas;
 
 	// initialize whole map to walkable
 	for(int x = 0; x < width; ++x) {
@@ -165,37 +172,39 @@ void Map::generateWaterMap() {
 	}
 }
 
-std::vector<Rect> Map::breakRooms(Rect area, BreakDirection direction) {
+std::vector<Room> Map::breakRooms(Rect area, BreakDirection direction) {
+	// TODO this could tag the rooms with a room type
+	// if (getRandomType == special) break recursion
+	// if (room too small) break recursion
+	// else recurse
+	// Then, when going through the areas returned in generateMap,
+	// e.g. RoomType::PILLARS would be filled with pillars etc
 	int minDim = 20;
-	std::vector<Rect> areas;
+	std::vector<Room> areas;
 
 	if(area.width() < minDim || area.height() < minDim) {
-		areas.push_back(area);
+		areas.push_back({area, RoomType::NORMAL, RoomDecor::NONE});
 		return areas;
 	}
 	else {
 		Rect area1 = area;
 		Rect area2 = area;
 		if(direction == BreakDirection::HORIZONTAL) {
-			int d = d20();
-			int xBreak = d * area.width() / 20;
-			//int xBreak = area.width() / 2;
+			int xBreak = randomInRange(3, area.width()-3);
 			// if xBreak - 0 were xBreak - 1, this would cause areas to NOT overlap
 			area1 = Rect(area.x0(),          area.y0(), area.x0() + xBreak - 0, area.y1());
 			area2 = Rect(area.x0() + xBreak, area.y0(), area.x1(),              area.y1());
 		} else {
-			int d = d20();
-			int yBreak = d * area.height() / 20;
-			//int yBreak = area.height() / 2;
+			int yBreak = randomInRange(3, area.height()-3);
 			area1 = Rect(area.x0(), area.y0(),          area.x1(), area.y0() + yBreak - 0);
 			area2 = Rect(area.x0(), area.y0() + yBreak, area.x1(), area.y1()             );
 		}
 
 		BreakDirection nextDir = (direction == BreakDirection::HORIZONTAL) ? BreakDirection::VERTICAL : BreakDirection::HORIZONTAL;
 
-		std::vector<Rect> areas1 = breakRooms(area1, nextDir);
+		std::vector<Room> areas1 = breakRooms(area1, nextDir);
 		areas.insert(areas.end(), areas1.begin(), areas1.end());
-		std::vector<Rect> areas2 = breakRooms(area2, nextDir);
+		std::vector<Room> areas2 = breakRooms(area2, nextDir);
 		areas.insert(areas.end(), areas2.begin(), areas2.end());
 
 		return areas;
