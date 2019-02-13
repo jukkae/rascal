@@ -7,7 +7,8 @@
 
 struct Event {
 	int time; //set by world
-	bool noisy;
+	bool noisy; // TODO should be noise amount instead
+	// Actor* sender TODO add
 	Event() : time(0), noisy(false) {}
 	Event(bool noisy) : noisy(noisy) {}
 	virtual ~Event() {}

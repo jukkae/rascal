@@ -49,25 +49,64 @@ void Map::generateMap(MapType mapType) {
 		default:
 			break;
 	}
+	// DEBUG PRINT
+	std::cout << "MAP:\n";
+	int x = 0;
+	for(auto& tile: tiles) {
+		++x;
+		std::cout << (tile.walkable ? "." : "#");
+		if(x >= width) {
+			std::cout << "\n";
+			x = 0;
+		}
+	}
+	std::cout << "END MAP\n";
 }
 
 void Map::generateBuildingMap() {
 	std::vector<Rect> rooms;
 	std::vector<Rect> areas = breakRooms(Rect(0, 0, (width - 1), (height - 1)));
 
-	for(auto a : areas) {
-		for(int x = a.x0(); x < a.x1(); ++x) {
-			for(int y = a.y0(); y < a.y1(); ++y) {
-				if(x == a.x0() || x == a.x1() || y == a.y0() || y == a.y1()) {
-					tiles(x, y).walkable = false;
-				}
-				if(x == a.x0() + 1 || x == a.x1() - 1 || y == a.y0() + 1 || y == a.y1() - 1) {
-					tiles(x, y).walkable = true;
-				}
+	// initialize whole map to walkable
+	for(int x = 0; x < width; ++x) {
+		for(int y = 0; y < height; ++y) {
+			if(true) {
+				tiles(x, y).walkable = true;
 			}
 		}
 	}
 
+	// draw walls
+	for(auto a : areas) {
+		for(int x = a.x0(); x <= a.x1(); ++x) {
+			for(int y = a.y0(); y <= a.y1(); ++y) {
+				if(x == a.x0() || x == a.x1() || y == a.y0() || y == a.y1()) {
+					tiles(x, y).walkable = false;
+				}
+				// if(x == a.x0() + 1 || x == a.x1() - 1 || y == a.y0() + 1 || y == a.y1() - 1) {
+				// 	//tiles(x, y).walkable = true;
+				// }
+			}
+		}
+	}
+
+	// open doors
+	for(auto a : areas) {
+		int centerX = floor((a.x1() + a.x0()) / 2);
+		int centerY = floor((a.y1() + a.y0()) / 2);
+		// std::cout << "Area: "
+		// << "(" << a.x0() << ", " << a.y0() << "), "
+		// << "(" << a.x1() << ", " << a.y1() << ")\n";
+		// std::cout << "Centers: "
+		// << "(" << centerX << ", " << centerY << ")\n";
+
+		tiles(a.x0(), centerY).walkable = true;
+		tiles(a.x1(), centerY).walkable = true;
+		tiles(centerX, a.y0()).walkable = true;
+		tiles(centerX, a.y1()).walkable = true;
+	}
+
+	// close map boundaries
 	for(int x = 0; x < width; ++x) {
 		for(int y = 0; y < height; ++y) {
 			if(x == 0 || x == width - 1 || y == 0 || y == height - 1) {
@@ -127,7 +166,7 @@ void Map::generateWaterMap() {
 }
 
 std::vector<Rect> Map::breakRooms(Rect area, BreakDirection direction) {
-	int minDim = 30;
+	int minDim = 20;
 	std::vector<Rect> areas;
 
 	if(area.width() < minDim || area.height() < minDim) {
@@ -141,13 +180,14 @@ std::vector<Rect> Map::breakRooms(Rect area, BreakDirection direction) {
 			int d = d20();
 			int xBreak = d * area.width() / 20;
 			//int xBreak = area.width() / 2;
-			area1 = Rect(area.x0(),          area.y0(), area.x0() + xBreak - 1, area.y1());
+			// if xBreak - 0 were xBreak - 1, this would cause areas to NOT overlap
+			area1 = Rect(area.x0(),          area.y0(), area.x0() + xBreak - 0, area.y1());
 			area2 = Rect(area.x0() + xBreak, area.y0(), area.x1(),              area.y1());
 		} else {
 			int d = d20();
 			int yBreak = d * area.height() / 20;
 			//int yBreak = area.height() / 2;
-			area1 = Rect(area.x0(), area.y0(),          area.x1(), area.y0() + yBreak - 1);
+			area1 = Rect(area.x0(), area.y0(),          area.x1(), area.y0() + yBreak - 0);
 			area2 = Rect(area.x0(), area.y0() + yBreak, area.x1(), area.y1()             );
 		}
 
