@@ -10,6 +10,7 @@
 #include <boost/serialization/export.hpp>
 #include "animation.hpp"
 #include "constants.hpp"
+#include "faction.hpp"
 #include "mat.hpp"
 #include "rect.hpp"
 class World;
@@ -43,10 +44,12 @@ struct Tile {
 
 enum class RoomType { NORMAL, COMMAND_CENTER };
 enum class RoomDecor { NONE, PILLARS };
+
 struct Room {
 	Rect coordinates;
 	RoomType roomType;
 	RoomDecor roomDecor;
+	Faction roomFaction;
 	int x0() { return coordinates.x0(); }
 	int x1() { return coordinates.x1(); }
 	int y0() { return coordinates.y0(); }
@@ -74,6 +77,7 @@ public:
 	//bool isInFov(int x, int y) const;
 	bool isExplored(int x, int y) const;
 	void setWorld(World* w) { world = w; }
+	std::vector<Room> getRooms(Point location);
 
 private:
 	World* world;

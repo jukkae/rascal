@@ -160,6 +160,28 @@ void map_utils::addMonsters(World* world, Map* map, int difficulty) {
 	}
 }
 
+void map_utils::addMonstersBasedOnRoomTypes(World* world, Map* map, int difficulty) {
+	for(auto& room : map->rooms) {
+		switch(room.roomType) {
+			case RoomType::COMMAND_CENTER: {
+				int x = (room.x0() + room.x1()) / 2;
+				int y = (room.y0() + room.y1()) / 2;
+				auto being = npc::makeBeingFromToml(world, map, x, y, "guard");
+				Point p0 {room.x0() + 1, room.y0() + 1};
+				Point p1 {room.x1() - 1, room.y0() + 1};
+				Point p2 {room.x1() - 1, room.y1() - 1};
+				Point p3 {room.x0() + 1, room.y1() - 1};
+				static_cast<MonsterAi*>(being->ai.get())->setAiState(AiState::PATROLLING);
+				static_cast<MonsterAi*>(being->ai.get())->setPatrolPoints({p0, p1, p2, p3});
+				world->addActor(std::move(being));
+				break;
+			}
+			default:
+				break;
+		}
+	}
+}
+
 void map_utils::addPlayer(World* world, Map* map) {
 	int x = 0;
 	int y = 0;

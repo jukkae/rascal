@@ -49,6 +49,7 @@ private:
 void addItems(World* world, Map* map, int difficulty = 1);
 void addDoors(World* world, Map* map);
 void addMonsters(World* world, Map* map, int difficulty = 1);
+void addMonstersBasedOnRoomTypes(World* world, Map* map, int difficulty = 1);
 void addPlayer(World* world, Map* map);
 void addStairs(World* world, Map* map,
                World* lower = nullptr,

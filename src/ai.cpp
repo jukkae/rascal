@@ -245,6 +245,36 @@ std::vector<std::unique_ptr<Action>> MonsterAi::getNextAction(Actor* actor) {
 		return actions;
 	}
 
+	if (aiState == AiState::PATROLLING) {
+		if(patrolPoints.empty()) {
+			actions.push_back(std::make_unique<WaitAction>(WaitAction(actor)));
+			return actions;
+		}
+		if(currentTarget == nullptr) {
+			currentTargetIndex = 0;
+			currentTarget = &patrolPoints.at(0);
+		}
+		if(!(*currentTarget == Point{actor->x, actor->y})) {
+			int targetX = currentTarget->x;
+			int targetY = currentTarget->y;
+			int dx = targetX - actor->x;
+			int dy = targetY - actor->y;
+			int stepDx = (dx == 0 ? 0 : (dx > 0 ? 1 : -1));
+			int stepDy = (dy == 0 ? 0 : (dy > 0 ? 1 : -1));
+			Direction stepDir = direction::getDirectionFromDeltas(stepDx, stepDy);
+			actions.push_back(std::make_unique<MoveAction>(MoveAction(actor, stepDir)));
+			return actions;
+		} else {
+			++currentTargetIndex;
+			if(currentTargetIndex >= patrolPoints.size()) currentTargetIndex = 0;
+			currentTarget = &patrolPoints.at(currentTargetIndex);
+			actions.push_back(std::make_unique<WaitAction>(WaitAction(actor)));
+			return actions;
+		}
+		actions.push_back(std::make_unique<WaitAction>(WaitAction(actor)));
+		return actions;
+	}
+
 	if(actor->destructible->hp <= actor->destructible->maxHp * 0.3 + (0.1 * player->body->getModifier(player->body->charisma))) {
 		aiState = AiState::FRIGHTENED;
 	}

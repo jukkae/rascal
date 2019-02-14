@@ -69,6 +69,11 @@ public:
 	MonsterAi(float speed, Faction& faction) : Ai(speed, faction) {;}
 
 	std::vector<std::unique_ptr<Action>> getNextAction(Actor* actor) override;
+	void setAiState(AiState state) {aiState = state;}
+	void setPatrolPoints(std::vector<Point> points) {patrolPoints = points;}
+	std::vector<Point> patrolPoints;
+	Point* currentTarget = nullptr;
+	int currentTargetIndex = 0;
 protected:
 	int moveCount;
 	void moveOrAttack(Actor* owner, GameplayState* state, int targetX, int targetY);
@@ -82,6 +87,9 @@ private:
 		ar & moveCount;
 		ar & aiState;
 		ar & hasSeenPlayer;
+		ar & patrolPoints;
+		ar & currentTarget;
+		ar & currentTargetIndex;
 	}
 };
 

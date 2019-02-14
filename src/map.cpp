@@ -52,27 +52,52 @@ void Map::generateMap(MapType mapType) {
 	// DEBUG PRINT
 	std::cout << "MAP TILES:\n";
 	int x = 0;
+	int y = 0;
 	for(auto& tile : tiles) {
 		++x;
-		std::cout << (tile.walkable ? "." : "#");
+		if(!tile.walkable) std::cout << "#";
+		else {
+			if(getRooms(Point {x, y}).size() == 0) {
+				std::cout << ".";
+			} else if(getRooms(Point {x, y}).at(0).roomType == RoomType::COMMAND_CENTER) {
+				std::cout << "c";
+			} else {
+				std::cout << ".";
+			}
+		}
 		if(x >= width) {
 			std::cout << "\n";
 			x = 0;
+			++y;
 		}
 	}
 	std::cout << "END MAP TILES\n";
 	std::cout << "MAP ROOMS:\n";
 	for(auto& room : rooms) {
-		std::cout << "room: "
+		std::cout << "room "
+		<< (room.roomType == RoomType::COMMAND_CENTER ? "(command center)" : "(normal)")
+		<< ": "
 		<< "(" << room.coordinates.x0() << ", " << room.coordinates.y0() << "), "
 		<< "(" << room.coordinates.x1() << ", " << room.coordinates.y1() << ")\n";
 	}
 	std::cout << "END MAP ROOMS\n";
 }
 
+std::vector<Room> Map::getRooms(Point location) {
+	std::vector<Room> r;
+	for(auto room : rooms) {
+		if(   location.x >= room.x0()
+			 && location.x <= room.x1()
+		   && location.y >= room.y0()
+		   && location.y <= room.y1()) {
+			r.push_back(room);
+		}
+	}
+	return r;
+}
+
 void Map::generateBuildingMap() {
-	std::vector<Room> areas = breakRooms(Rect(0, 0, (width - 1), (height - 1)));
-	rooms = areas;
+	rooms = breakRooms(Rect(0, 0, (width - 1), (height - 1)));
 
 	// initialize whole map to walkable
 	for(int x = 0; x < width; ++x) {
@@ -84,7 +109,7 @@ void Map::generateBuildingMap() {
 	}
 
 	// draw walls
-	for(auto a : areas) {
+	for(auto& a : rooms) {
 		for(int x = a.x0(); x <= a.x1(); ++x) {
 			for(int y = a.y0(); y <= a.y1(); ++y) {
 				if(x == a.x0() || x == a.x1() || y == a.y0() || y == a.y1()) {
@@ -98,7 +123,7 @@ void Map::generateBuildingMap() {
 	}
 
 	// open doors
-	for(auto a : areas) {
+	for(auto& a : rooms) {
 		int centerX = floor((a.x1() + a.x0()) / 2);
 		int centerY = floor((a.y1() + a.y0()) / 2);
 		// std::cout << "Area: "
@@ -173,23 +198,21 @@ void Map::generateWaterMap() {
 }
 
 std::vector<Room> Map::breakRooms(Rect area, BreakDirection direction) {
-	// TODO this could tag the rooms with a room type
-	// if (getRandomType == special) break recursion
-	// if (room too small) break recursion
-	// else recurse
-	// Then, when going through the areas returned in generateMap,
-	// e.g. RoomType::PILLARS would be filled with pillars etc
 	int minDim = 20;
 	std::vector<Room> areas;
 
 	if(area.width() < minDim || area.height() < minDim) {
 		areas.push_back({area, RoomType::NORMAL, RoomDecor::NONE});
 		return areas;
+	} else if(d10() == 10) {
+		areas.push_back({area, RoomType::COMMAND_CENTER, RoomDecor::NONE});
+		return areas;
 	}
 	else {
 		Rect area1 = area;
 		Rect area2 = area;
 		if(direction == BreakDirection::HORIZONTAL) {
+			// 3 = minimum width for a corridor
 			int xBreak = randomInRange(3, area.width()-3);
 			// if xBreak - 0 were xBreak - 1, this would cause areas to NOT overlap
 			area1 = Rect(area.x0(),          area.y0(), area.x0() + xBreak - 0, area.y1());
@@ -213,7 +236,6 @@ std::vector<Room> Map::breakRooms(Rect area, BreakDirection direction) {
 
 bool Map::isWall(int x, int y) const {
 	return !tiles(x, y).walkable;
-	//return !map->isWalkable(x, y); // can't use this while creating monsters
 }
 
 bool Map::canWalk(int x, int y) const {
@@ -226,11 +248,3 @@ bool Map::isExplored(int x, int y) const {
 	if(x < 0 || x >= width || y < 0 || y >= height) return false; // I mean, if it's not on map, it can't be explored, right?
 	return tiles(x, y).explored;
 }
-
-// bool Map::isInFov(int x, int y) const {
-// 	if(x < 0 || x >= width || y < 0 || y >= height) return false;
-// 	if(tiles(x, y).inFov) {
-// 		return true;
-// 	}
-// 	return false;
-// }
