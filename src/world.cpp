@@ -42,6 +42,7 @@ width(width), height(height), level(level), state(state) {
 	//map_utils::addItems(this, &map, level);
 	//map_utils::addMonsters(this, &map, level);
 	map_utils::addMonstersBasedOnRoomTypes(this, &map, level);
+	map_utils::addItemsBasedOnRoomTypes(this, &map, level);
 	for(auto& a : actors) {
 		if(a->ai) a->ai->updateFov(a.get());
 	}

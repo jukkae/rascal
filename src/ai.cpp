@@ -226,6 +226,11 @@ std::vector<std::unique_ptr<Action>> PlayerAi::getNextAction(Actor* actor) {
 	return actions;
 }
 
+void MonsterAi::setCurrentTargetIndex(int index) {
+	currentTargetIndex = index % patrolPoints.size();
+	currentTarget = &patrolPoints.at(currentTargetIndex);
+}
+
 std::vector<std::unique_ptr<Action>> MonsterAi::getNextAction(Actor* actor) {
 	std::vector<std::unique_ptr<Action>> actions;
 	World* world = actor->world;
@@ -262,7 +267,13 @@ std::vector<std::unique_ptr<Action>> MonsterAi::getNextAction(Actor* actor) {
 			int stepDx = (dx == 0 ? 0 : (dx > 0 ? 1 : -1));
 			int stepDy = (dy == 0 ? 0 : (dy > 0 ? 1 : -1));
 			Direction stepDir = direction::getDirectionFromDeltas(stepDx, stepDy);
-			actions.push_back(std::make_unique<MoveAction>(MoveAction(actor, stepDir)));
+
+			if(world->canWalk(actor->x + stepDx, actor->y +stepDy)) {
+				actions.push_back(std::make_unique<MoveAction>(MoveAction(actor, stepDir)));
+			} else {
+				std::cout << "Have to wait\n";
+				actions.push_back(std::make_unique<WaitAction>(WaitAction(actor)));
+			}
 			return actions;
 		} else {
 			++currentTargetIndex;

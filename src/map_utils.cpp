@@ -164,16 +164,38 @@ void map_utils::addMonstersBasedOnRoomTypes(World* world, Map* map, int difficul
 	for(auto& room : map->rooms) {
 		switch(room.roomType) {
 			case RoomType::COMMAND_CENTER: {
+				int area = abs((room.x1() - room.x0()) * (room.y1() - room.y0())); //shouldn't need abs, but just making sure
+				std::cout << "area: " << area << "\n";
+				int numberOfGuards = floor(area / 100) + 1;
+				for(int i =  0; i < numberOfGuards; ++i) {
+					int x = (room.x0() + room.x1()) / 2 + i;
+					int y = (room.y0() + room.y1()) / 2 + i;
+					auto being = npc::makeBeingFromToml(world, map, x, y, "guard");
+					Point p0 {room.x0() + 1, room.y0() + 1};
+					Point p1 {room.x1() - 1, room.y0() + 1};
+					Point p2 {room.x1() - 1, room.y1() - 1};
+					Point p3 {room.x0() + 1, room.y1() - 1};
+					static_cast<MonsterAi*>(being->ai.get())->setAiState(AiState::PATROLLING);
+					static_cast<MonsterAi*>(being->ai.get())->setPatrolPoints({p0, p1, p2, p3});
+					static_cast<MonsterAi*>(being->ai.get())->setCurrentTargetIndex(i);
+					world->addActor(std::move(being));
+				}
+				break;
+			}
+			default:
+				break;
+		}
+	}
+}
+
+void map_utils::addItemsBasedOnRoomTypes(World* world, Map* map, int difficulty) {
+	for(auto& room : map->rooms) {
+		switch(room.roomType) {
+			case RoomType::COMMAND_CENTER: {
 				int x = (room.x0() + room.x1()) / 2;
-				int y = (room.y0() + room.y1()) / 2;
-				auto being = npc::makeBeingFromToml(world, map, x, y, "guard");
-				Point p0 {room.x0() + 1, room.y0() + 1};
-				Point p1 {room.x1() - 1, room.y0() + 1};
-				Point p2 {room.x1() - 1, room.y1() - 1};
-				Point p3 {room.x0() + 1, room.y1() - 1};
-				static_cast<MonsterAi*>(being->ai.get())->setAiState(AiState::PATROLLING);
-				static_cast<MonsterAi*>(being->ai.get())->setPatrolPoints({p0, p1, p2, p3});
-				world->addActor(std::move(being));
+				int y = (room.y0() + room.y1()) / 2 + 1;
+				auto item = item::makeItemFromToml(world, map, x, y, "ram_chip");
+				world->addActor(std::move(item));
 				break;
 			}
 			default:

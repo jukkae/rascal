@@ -95,7 +95,7 @@ dice = 3
 bonus = 0
 [guard.ai]
 type = "MonsterAi"
-speed = 200
+speed = 100
 [guard.container]
 capacity = 10
 contents = [ { content = "ration" },

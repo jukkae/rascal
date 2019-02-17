@@ -202,10 +202,9 @@ std::vector<Room> Map::breakRooms(Rect area, BreakDirection direction) {
 	std::vector<Room> areas;
 
 	if(area.width() < minDim || area.height() < minDim) {
-		areas.push_back({area, RoomType::NORMAL, RoomDecor::NONE});
-		return areas;
-	} else if(d10() == 10) {
-		areas.push_back({area, RoomType::COMMAND_CENTER, RoomDecor::NONE});
+		if(d10() == 10) {
+			areas.push_back({area, RoomType::COMMAND_CENTER, RoomDecor::NONE});
+		} else areas.push_back({area, RoomType::NORMAL, RoomDecor::NONE});
 		return areas;
 	}
 	else {

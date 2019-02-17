@@ -71,6 +71,7 @@ public:
 	std::vector<std::unique_ptr<Action>> getNextAction(Actor* actor) override;
 	void setAiState(AiState state) {aiState = state;}
 	void setPatrolPoints(std::vector<Point> points) {patrolPoints = points;}
+	void setCurrentTargetIndex(int index);
 	std::vector<Point> patrolPoints;
 	Point* currentTarget = nullptr;
 	int currentTargetIndex = 0;

@@ -293,3 +293,10 @@ ch = "q"
 color = "white"
 blocks = false
 [phlebotinum_link.pickable]
+
+[ram_chip]
+name = "ram chip"
+ch = "q"
+color = "yellow"
+blocks = false
+[ram_chip.pickable]
