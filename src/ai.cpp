@@ -259,26 +259,67 @@ std::vector<std::unique_ptr<Action>> MonsterAi::getNextAction(Actor* actor) {
 			currentTargetIndex = 0;
 			currentTarget = &patrolPoints.at(0);
 		}
-		if(!(*currentTarget == Point{actor->x, actor->y})) {
-			int targetX = currentTarget->x;
-			int targetY = currentTarget->y;
-			int dx = targetX - actor->x;
-			int dy = targetY - actor->y;
-			int stepDx = (dx == 0 ? 0 : (dx > 0 ? 1 : -1));
-			int stepDy = (dy == 0 ? 0 : (dy > 0 ? 1 : -1));
-			Direction stepDir = direction::getDirectionFromDeltas(stepDx, stepDy);
-
-			if(world->canWalk(actor->x + stepDx, actor->y +stepDy)) {
-				actions.push_back(std::make_unique<MoveAction>(MoveAction(actor, stepDir)));
-			} else {
-				std::cout << "Have to wait\n";
-				actions.push_back(std::make_unique<WaitAction>(WaitAction(actor)));
+		std::unique_ptr<Action> lastAction = nullptr;
+		auto actorsAtTarget = actor->world->getActorsAt(currentTarget->x, currentTarget->y);
+		for(auto& target : actorsAtTarget) {
+			// TODO other default actions
+			if(target->openable && !target->openable->open) {
+				lastAction = std::make_unique<OpenAction>(actor, target);
 			}
-			return actions;
+			else if(target->openable && target->openable->open) {
+				lastAction = std::make_unique<OpenAction>(actor, target);
+			}
+			if(target->pickable) {
+				lastAction = std::make_unique<PickupAction>(actor);
+			}
+		}
+
+		// Find path
+		std::vector<Point> path = pathfinding::findPath(actor->world->map,
+						 Point(actor->x, actor->y),
+						 *currentTarget);
+		if(!(path.size() <= 1)) {
+			for(int i = 0; i < path.size() - 1; ++i) {
+				Point from = path.at(i);
+				Point to = path.at(i + 1);
+				int stepDx = to.x - from.x;
+				int stepDy = to.y - from.y;
+				Direction stepDir = direction::getDirectionFromDeltas(stepDx, stepDy);
+				if(i != path.size() - 2) {
+					actions.push_back(std::make_unique<MoveAction>(MoveAction(actor, stepDir)));
+				} else { // for the last step of the path...
+					if(lastAction == nullptr) { // ... if no alternate default, push move
+						actions.push_back(std::make_unique<MoveAction>(MoveAction(actor, stepDir)));
+					} else if(lastAction->actionRange.index() == 0) { // ActionRange enum
+						ActionRange actionRange = std::get<ActionRange>(lastAction->actionRange);
+						switch(actionRange) {
+							case ActionRange::ON_TOP:
+								actions.push_back(std::make_unique<MoveAction>(MoveAction(actor, stepDir)));
+								actions.push_back(std::move(lastAction));
+								break;
+							case ActionRange::NEXT_TO:
+								actions.push_back(std::move(lastAction));
+								break;
+							case ActionRange::ANYWHERE:
+								// TODO I suppose??
+								throw std::logic_error("Make sure this does what you think it does");
+								actions.push_back(std::move(lastAction));
+								break;
+							default:
+								throw std::logic_error("Unknown action range");
+						}
+
+					} else if(lastAction->actionRange.index() == 1) { // float for range
+						throw std::logic_error("Action ranges not implemented");
+					}
+				}
+
+			}
 		} else {
 			++currentTargetIndex;
 			if(currentTargetIndex >= patrolPoints.size()) currentTargetIndex = 0;
 			currentTarget = &patrolPoints.at(currentTargetIndex);
+			actor->actionsQueue.clear();
 			actions.push_back(std::make_unique<WaitAction>(WaitAction(actor)));
 			return actions;
 		}

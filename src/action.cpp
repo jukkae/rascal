@@ -42,6 +42,45 @@ bool MoveAction::execute() {
 	if (world->isWall(targetX, targetY)) return false;
 	for (auto a : world->getActorsAt(targetX, targetY)) if (a->openable && a->blocks) return false;
 
+	// look for living actors
+	for (auto& a : world->getActorsAt(targetX, targetY)) {
+		if (a->destructible && !a->destructible->isDead()) {
+			return false;
+		}
+	}
+
+	// look for corpses or items
+	for (auto& a : world->getActorsAt(targetX, targetY)) {
+		bool corpseOrItem = (a->destructible && a->destructible->isDead()) || a->pickable;
+		if(corpseOrItem && a->x == targetX && a->y == targetY) {
+			ItemFoundEvent e(actor, a);
+			world->notify(e);
+		}
+	}
+	actor->x = targetX;
+	actor->y = targetY;
+	MoveEvent e(targetX, targetY);
+	world->notify(e);
+	return true;
+}
+
+HitAction::HitAction(Actor* actor, Point target):
+	Action(actor, ActionRange::NEXT_TO, 100.0f), target(target) {;}
+
+bool HitAction::execute() {
+	World* world = actor->world;
+
+	int targetX = target.x;
+	int targetY = target.y;
+
+	if(actor->ai) {
+		// TODO
+		// actor->ai->currentDirection = direction;
+	}
+
+	if (world->isWall(targetX, targetY)) return false;
+	for (auto a : world->getActorsAt(targetX, targetY)) if (a->openable && a->blocks) return false;
+
 	// look for living actors to attack
 	for (auto& a : world->getActors()) {
 		if (a->destructible && !a->destructible->isDead() && a->x == targetX && a->y == targetY) {
@@ -63,7 +102,7 @@ bool MoveAction::execute() {
 					//TODO handle all different effects
 					std::unique_ptr<Effect> ef = actor->wornWeapon->attacker->effectGenerator->generateEffect();
 					if(auto e = dynamic_cast<MoveEffect*>(ef.get())) {
-						e->direction = direction;
+						//e->direction = direction;
 						e->distance = 5.0f;
 					}
 					if(Actor* aPtr = a.get()) // TODO it seems that a might be invalidated at times, this is not the way to fix
@@ -82,19 +121,7 @@ bool MoveAction::execute() {
 			return true;
 		}
 	}
-	// look for corpses or items
-	for (auto& a : world->getActors()) {
-		bool corpseOrItem = (a->destructible && a->destructible->isDead()) || a->pickable;
-		if(corpseOrItem && a->x == targetX && a->y == targetY) {
-			ItemFoundEvent e(actor, a.get());
-			world->notify(e);
-		}
-	}
-	actor->x = targetX;
-	actor->y = targetY;
-	MoveEvent e(targetX, targetY);
-	world->notify(e);
-	return true;
+	return false; // ??
 }
 
 bool TraverseStairsAction::execute() {

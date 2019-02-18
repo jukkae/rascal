@@ -99,6 +99,7 @@ float Actor::update(GameplayState* state) {
 				if(isPlayer()) world->computeFov(x, y, fovRadius);
 				return 0;
 			} else {
+				actionsQueue.clear();
 				return constants::DEFAULT_TURN_LENGTH;
 			}
 		}
