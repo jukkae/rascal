@@ -163,6 +163,9 @@ std::vector<std::unique_ptr<Action>> PlayerAi::getNextAction(Actor* actor) {
 				auto actorsAtTarget = actor->world->getActorsAt(io::mousePosition.x, io::mousePosition.y);
 				for(auto& target : actorsAtTarget) {
 					// TODO other default actions
+					if(target->destructible && !target->destructible->isDead()) {
+						lastAction = std::make_unique<HitAction>(actor, io::mousePosition);
+					}
 					if(target->openable && !target->openable->open) {
 						lastAction = std::make_unique<OpenAction>(actor, target);
 					}
