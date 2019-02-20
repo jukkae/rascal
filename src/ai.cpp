@@ -284,6 +284,7 @@ std::vector<std::unique_ptr<Action>> MonsterAi::getNextAction(Actor* actor) {
 		break;
 	}
 
+	// Select actions
 	switch(aiState) {
 		case AiState::NORMAL_WANDER:
 			actions.push_back(std::make_unique<WaitAction>(WaitAction(actor)));
@@ -315,6 +316,10 @@ std::vector<std::unique_ptr<Action>> MonsterAi::getNextAction(Actor* actor) {
 			}
 
 			// Find path
+			// TODO:
+			// Add internal action queue,
+			// pop first action from there
+			// and only find path if queue is empty
 			std::vector<Point> path = pathfinding::findPath(actor->world->map,
 							 Point(actor->x, actor->y),
 							 *currentTarget);
@@ -440,7 +445,7 @@ std::vector<std::unique_ptr<Action>> MonsterAi::getNextAction(Actor* actor) {
 					}
 
 					direction = direction::getDirectionFromDeltas(stepDx, stepDy);
-					actions.push_back(std::make_unique<MoveAction>(MoveAction(actor, direction)));
+					actions.push_back(std::make_unique<HitAction>(HitAction(actor, Point{actor->x + stepDx, actor->y + stepDy})));
 					return actions;
 				}
 			}
