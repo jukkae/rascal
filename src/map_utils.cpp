@@ -175,7 +175,7 @@ void map_utils::addMonstersBasedOnRoomTypes(World* world, Map* map, int difficul
 					Point p1 {room.x1() - 1, room.y0() + 1};
 					Point p2 {room.x1() - 1, room.y1() - 1};
 					Point p3 {room.x0() + 1, room.y1() - 1};
-					static_cast<MonsterAi*>(being->ai.get())->setAiState(AiState::PATROLLING);
+					static_cast<MonsterAi*>(being->ai.get())->setAiState(AiState::NORMAL_PATROL);
 					static_cast<MonsterAi*>(being->ai.get())->setPatrolPoints({p0, p1, p2, p3});
 					static_cast<MonsterAi*>(being->ai.get())->setCurrentTargetIndex(i);
 					world->addActor(std::move(being));
