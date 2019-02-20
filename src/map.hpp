@@ -46,6 +46,7 @@ enum class RoomType { NORMAL, COMMAND_CENTER };
 enum class RoomDecor { NONE, PILLARS };
 
 struct Room {
+public:
 	Rect coordinates;
 	RoomType roomType;
 	RoomDecor roomDecor;
@@ -54,6 +55,15 @@ struct Room {
 	int x1() { return coordinates.x1(); }
 	int y0() { return coordinates.y0(); }
 	int y1() { return coordinates.y1(); }
+private:
+	friend class boost::serialization::access;
+	template<class Archive>
+	void serialize(Archive & ar, const unsigned int version) {
+		ar & coordinates;
+		ar & roomType;
+		ar & roomDecor;
+		ar & roomFaction;
+	}
 };
 
 
@@ -94,6 +104,7 @@ private:
 		ar & width;
 		ar & height;
 		ar & tiles;
+		ar & rooms;
 		ar & hasAnimations;
 		ar & world;
 	}
