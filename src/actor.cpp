@@ -40,10 +40,8 @@ float Actor::update(GameplayState* state) {
 
 		// TODO
 		if(!isPlayer()) {
-			if(actionsQueue.empty()) {
-				auto actions = ai->getNextAction(this);
-				for(auto& a : actions) actionsQueue.push_back(std::move(a));
-			}
+			auto actions = ai->getNextAction(this);
+			for(auto& a : actions) actionsQueue.push_back(std::move(a));
 		}
 		if(isPlayer()) {
 			// TODO this should happen at GameplayState level!

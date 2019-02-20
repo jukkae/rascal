@@ -364,6 +364,7 @@ std::vector<std::unique_ptr<Action>> MonsterAi::getNextAction(Actor* actor) {
 				return actions;
 			}
 			actions.push_back(std::make_unique<WaitAction>(WaitAction(actor)));
+			actions.erase(actions.begin() + 1, actions.end()); // Only return first
 			return actions;
 		break;
 		}
