@@ -60,7 +60,7 @@ private:
 	}
 };
 
-enum class AiState { NORMAL, PATROLLING, VIGILANT, ALERT, FRIGHTENED, FRIENDLY };
+enum class AiState { NORMAL_WANDER, NORMAL_PATROL, NORMAL_IDLE, CURIOUS, SEEN_PLAYER_FRIENDLY, SEEN_PLAYER_HOSTILE };
 
 class MonsterAi : public Ai {
 public:
@@ -79,7 +79,7 @@ protected:
 	int moveCount;
 	void moveOrAttack(Actor* owner, GameplayState* state, int targetX, int targetY);
 private:
-	AiState aiState = AiState::NORMAL;
+	AiState aiState = AiState::NORMAL_IDLE;
 	bool hasSeenPlayer = false;
 	friend class boost::serialization::access;
 	template<class Archive>
