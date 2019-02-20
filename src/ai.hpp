@@ -81,6 +81,8 @@ protected:
 private:
 	AiState aiState = AiState::NORMAL_IDLE;
 	bool hasSeenPlayer = false;
+	std::vector<std::unique_ptr<Action>> plannedActions {};
+
 	friend class boost::serialization::access;
 	template<class Archive>
 	void serialize(Archive & ar, const unsigned int version) {
@@ -91,6 +93,7 @@ private:
 		ar & patrolPoints;
 		ar & currentTarget;
 		ar & currentTargetIndex;
+		ar & plannedActions;
 	}
 };
 
