@@ -79,6 +79,7 @@ void Map::generateMap(MapType mapType) {
 		<< ": "
 		<< "(" << room.coordinates.x0() << ", " << room.coordinates.y0() << "), "
 		<< "(" << room.coordinates.x1() << ", " << room.coordinates.y1() << ")\n";
+		std::cout << "  neighbours: " << room.neighbours.size() << "\n";
 	}
 	std::cout << "END MAP ROOMS\n";
 }
@@ -98,6 +99,7 @@ std::vector<Room> Map::getRooms(Point location) {
 
 void Map::generateBuildingMap() {
 	rooms = breakRooms(Rect(0, 0, (width - 1), (height - 1)));
+	rooms = connectRooms(rooms);
 
 	// initialize whole map to walkable
 	for(int x = 0; x < width; ++x) {
@@ -231,6 +233,26 @@ std::vector<Room> Map::breakRooms(Rect area, BreakDirection direction) {
 
 		return areas;
 	}
+}
+
+std::vector<Room> Map::connectRooms(std::vector<Room> rooms) {
+	std::vector<Room> ret = rooms;
+	for(auto& room : ret) {
+		for(auto& other : ret) {
+			if(room == other) continue;
+			// check if overlap
+			if(room.x0() > other.x1() || other.x0() > room.x1()) continue; // no overlap
+			if(room.y0() > other.y1() || other.y0() > room.y1()) continue; // no overlap
+			// overlap!
+			// std::cout << "overlap: "
+			// << "(" << room.x0() << ", " << room.y0() << "), (" << room.x1() << ", " << room.y1() << ")"
+			// << " with "
+			// << "(" << other.x0() << ", " << other.y0() << "), (" << other.x1() << ", " << other.y1() << ")"
+			// << "\n";
+			room.neighbours.emplace_back(&other);
+		}
+	}
+	return ret;
 }
 
 bool Map::isWall(int x, int y) const {

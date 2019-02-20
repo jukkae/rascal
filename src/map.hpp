@@ -51,10 +51,16 @@ public:
 	RoomType roomType;
 	RoomDecor roomDecor;
 	Faction roomFaction;
+	std::vector<Room*> neighbours {};
 	int x0() { return coordinates.x0(); }
 	int x1() { return coordinates.x1(); }
 	int y0() { return coordinates.y0(); }
 	int y1() { return coordinates.y1(); }
+	int width() { return coordinates.width(); }
+	int height() { return coordinates.height(); }
+
+	// TODO not the most sophisticated, will break eventually
+	bool operator==(const Room& rhs) const { return this->coordinates == rhs.coordinates; }
 private:
 	friend class boost::serialization::access;
 	template<class Archive>
@@ -63,6 +69,7 @@ private:
 		ar & roomType;
 		ar & roomDecor;
 		ar & roomFaction;
+		ar & neighbours;
 	}
 };
 
@@ -97,6 +104,7 @@ private:
 	void generatePillarsMap();
 	void generateWaterMap();
 	std::vector<Room> breakRooms(Rect area, BreakDirection direction = BreakDirection::HORIZONTAL);
+	std::vector<Room> connectRooms(std::vector<Room> rooms);
 
 	friend class boost::serialization::access;
 	template<class Archive>

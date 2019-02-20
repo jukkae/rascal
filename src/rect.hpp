@@ -24,6 +24,8 @@ public:
 	int y1() { return bottomRight.y; }
 	int width() { return x1()-x0() + 1; }
 	int height() { return y1()-y0() + 1; }
+
+	bool operator==(const Rect& rhs) const { return this->topLeft == rhs.topLeft && this->bottomRight == rhs.bottomRight; }
 private:
 	friend class boost::serialization::access;
 	template<class Archive>
