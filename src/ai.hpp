@@ -93,7 +93,7 @@ private:
 		ar & patrolPoints;
 		ar & currentTarget;
 		ar & currentTargetIndex;
-		ar & plannedActions;
+		//ar & plannedActions; // TODO this crashes on serialization, because action refers to actor, actor refers to AI, and... here we are
 	}
 };
 
