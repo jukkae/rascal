@@ -326,6 +326,12 @@ Graph<Room> Map::pruneEdges(Graph<Room> rooms) {
 		std::find_if(ret.begin(), ret.end(), [&](const auto& r) {return r.id == neighbourIndex;})->neighbours.push_back(room.id);
 	}
 
+	// clear double edges: at this stage we shouldn't have two edges A-B, A-B
+	for(auto& room : ret) {
+		std::sort(room.neighbours.begin(), room.neighbours.end());
+		room.neighbours.erase(unique(room.neighbours.begin(), room.neighbours.end()), room.neighbours.end());
+	}
+
 	std::cout << "PRUNING EDGES\n";
 	for(auto& a : ret) {
 		std::cout << "room " << a.id << " "
