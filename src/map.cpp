@@ -304,6 +304,10 @@ Graph<Room> Map::pruneEdges(Graph<Room> rooms) {
 		if(possibleNextRooms.size() > 0) {
 			int rnd = randomInRange(0, possibleNextRooms.size() - 1);
 			int nextId = possibleNextRooms.at(rnd);
+			// add neighbour to previously-added node
+			auto& previousRoom = *std::find_if(ret.begin(), ret.end(), [&](const auto& a) { return a.id == currentRoom.id; });
+			previousRoom.neighbours.push_back(nextId);
+
 			currentRoom = *std::find_if(src.begin(), src.end(), [&](const auto& a) { return a.id == nextId; });
 			auto currentRoomNoNBs = GraphNode<Room>{currentRoom.id, currentRoom.value, {}};
 			ret.push_back(currentRoomNoNBs);
@@ -333,6 +337,31 @@ Graph<Room> Map::pruneEdges(Graph<Room> rooms) {
 
 			int rnd = randomInRange(0, possibleNextNodes.size() - 1);
 			int nextId = possibleNextNodes.at(rnd);
+
+			// add neighbour to some previously-added node that connects to upcoming node
+			std::vector<int> possiblePreviousRooms {};
+			for(auto& roomInRet : ret) {
+				auto roomWithNBs = *std::find_if(src.begin(), src.end(), [&](const auto& a) { return a.id == roomInRet.id; });
+				for(auto& n : roomWithNBs.neighbours) {
+					if(n == nextId) {
+						possiblePreviousRooms.push_back(roomWithNBs.id);
+					}
+				}
+			}
+			// remove duplicates
+			std::sort(possiblePreviousRooms.begin(), possiblePreviousRooms.end());
+			possiblePreviousRooms.erase(unique(possiblePreviousRooms.begin(), possiblePreviousRooms.end()), possiblePreviousRooms.end());
+			std::cout << "possible previous rooms: " << possiblePreviousRooms.size() << "\n";
+
+			int rndPrev = randomInRange(0, possiblePreviousRooms.size() - 1);
+			int prevId = possiblePreviousRooms.at(rndPrev);
+			std::cout << "previous id: " << prevId << "\n";
+			std::cout << "ret: ";
+			for(auto& a : ret) std::cout << a.id << " ";
+			std::cout << "\n";
+			auto& previousRoom = *std::find_if(ret.begin(), ret.end(), [&](const auto& a) { return a.id == prevId; });
+			previousRoom.neighbours.push_back(nextId);
+
 			currentRoom = *std::find_if(src.begin(), src.end(), [&](const auto& a) { return a.id == nextId; });
 			auto currentRoomNoNBs = GraphNode<Room>{currentRoom.id, currentRoom.value, {}};
 			ret.push_back(currentRoomNoNBs);
@@ -366,8 +395,9 @@ Graph<Room> Map::makeEdgesBidirectional(Graph<Room> rooms) {
 
 	// add bidirectional edges: if there's an edge from A to B, there's an edge from B to A
 	for(auto& room : ret) {
-		// int neighbourIndex = room.neighbours.at(0);
-		// std::find_if(ret.begin(), ret.end(), [&](const auto& r) {return r.id == neighbourIndex;})->neighbours.push_back(room.id);
+		for(auto neighbourIndex : room.neighbours) {
+			std::find_if(ret.begin(), ret.end(), [&](const auto& r) {return r.id == neighbourIndex;})->neighbours.push_back(room.id);
+		}
 	}
 
 	return ret;
@@ -377,8 +407,8 @@ Graph<Room> Map::cullDoubleEdges(Graph<Room> rooms) {
 	Graph<Room> ret = rooms;
 	// clear double edges: at this stage we shouldn't have two edges A-B, A-B
 	for(auto& room : ret) {
-		// std::sort(room.neighbours.begin(), room.neighbours.end());
-		// room.neighbours.erase(unique(room.neighbours.begin(), room.neighbours.end()), room.neighbours.end());
+		std::sort(room.neighbours.begin(), room.neighbours.end());
+		room.neighbours.erase(unique(room.neighbours.begin(), room.neighbours.end()), room.neighbours.end());
 	}
 
 	return ret;
