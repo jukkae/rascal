@@ -74,12 +74,16 @@ void Map::generateMap(MapType mapType) {
 	std::cout << "END MAP TILES\n";
 	std::cout << "MAP ROOMS:\n";
 	for(auto& room : rooms) {
-		std::cout << "room "
+		std::cout << "room " << room.id << " "
 		<< (room.value.roomType == RoomType::COMMAND_CENTER ? "(command center)" : "(normal)")
 		<< ": "
 		<< "(" << room.value.coordinates.x0() << ", " << room.value.coordinates.y0() << "), "
 		<< "(" << room.value.coordinates.x1() << ", " << room.value.coordinates.y1() << ")\n";
-		std::cout << "  neighbours: " << room.neighbours.size() << "\n";
+		std::cout << "  neighbours: ";
+		for(auto& a: room.neighbours){
+			std::cout << a << " ";
+		}
+		std::cout << "\n";
 	}
 	std::cout << "END MAP ROOMS\n";
 }
@@ -271,13 +275,64 @@ Graph<Room> Map::connectRooms(Graph<Room> rooms) {
 	return ret;
 }
 
-// Simple Prim's algorithm implementation
+// Simple (and horrible) Prim's algorithm implementation
 Graph<Room> Map::pruneEdges(Graph<Room> rooms) {
 	Graph<Room> ret {};
-	int startingPoint = randomInRange(0, rooms.size() - 1);
-	ret.emplace_back(rooms.at(startingPoint));
-	// TODO continue
-	return rooms;
+	int index = randomInRange(0, rooms.size() - 1);
+
+	// select one random neighbour
+	// and push back new node with just the selected neighbour
+	int nextNeighbourIndex = randomInRange(0, rooms.at(index).neighbours.size() - 1);
+	int nextNeighbour = rooms.at(index).neighbours.at(nextNeighbourIndex);
+	ret.push_back({rooms.at(index).id, rooms.at(index).value, {nextNeighbour}});
+
+	while(!rooms.empty()) {
+		// std::cout << "erasing " << index << ", there are " << rooms.size() << " rooms left:\n";
+		// std::cout << "  ";
+		// for(auto& a: rooms) std::cout << a.id << " ";
+		// std::cout << "\n";
+
+		rooms.erase(std::remove_if(rooms.begin(), rooms.end(),
+															 [&](const auto& r) {return r.id == index;}),
+								rooms.end());
+		if(rooms.empty()) break;
+		index = nextNeighbourIndex;
+		if(std::any_of(rooms.begin(), rooms.end(),
+								 	 [&](const auto& r) {return r.id == nextNeighbourIndex;}))
+		{
+			// We still have neighbours
+			auto currentRoom = *std::find_if(rooms.begin(), rooms.end(),
+																		 	 [&](const auto& r) {return r.id == nextNeighbourIndex;});
+			nextNeighbourIndex = randomInRange(0, currentRoom.neighbours.size() - 1);
+			nextNeighbour = currentRoom.neighbours.at(nextNeighbourIndex);
+			ret.push_back({currentRoom.id, currentRoom.value, {nextNeighbour}});
+		} else {
+			// no more neighbours, select next at random
+			index = randomInRange(0, rooms.size() - 1);
+			auto currentRoom = rooms.at(index);
+			index = currentRoom.id;
+			nextNeighbourIndex = randomInRange(0, currentRoom.neighbours.size() - 1);
+			nextNeighbour = currentRoom.neighbours.at(nextNeighbourIndex);
+			ret.push_back({currentRoom.id, currentRoom.value, {nextNeighbour}});
+		}
+	}
+
+	std::cout << "PRUNING EDGES\n";
+	for(auto& a : ret) {
+		std::cout << "room " << a.id << " "
+		<< (a.value.roomType == RoomType::COMMAND_CENTER ? "(command center)" : "(normal)")
+		<< ": "
+		<< "(" << a.value.coordinates.x0() << ", " << a.value.coordinates.y0() << "), "
+		<< "(" << a.value.coordinates.x1() << ", " << a.value.coordinates.y1() << ")\n";
+		std::cout << "  neighbours: ";
+		for(auto& n: a.neighbours){
+			std::cout << n << " ";
+		}
+		std::cout << "\n";
+	}
+	std::cout << "PRUNING DONE\n";
+
+	return ret;
 }
 
 bool Map::isWall(int x, int y) const {
