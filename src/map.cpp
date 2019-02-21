@@ -305,8 +305,13 @@ Graph<Room> Map::pruneEdges(Graph<Room> rooms) {
 		{
 			// We still have neighbours
 			auto currentRoom = *std::find_if(rooms.begin(), rooms.end(),
-																		 	 [&](const auto& r) {return r.id == nextNeighbourIndex;});
-			nextNeighbourIndex = randomInRange(0, currentRoom.neighbours.size() - 1);
+				[&](const auto& r) {return r.id == nextNeighbourIndex;}
+			);
+			do {
+				nextNeighbourIndex = randomInRange(0, currentRoom.neighbours.size() - 1);
+			} while(std::count_if(ret.begin(), ret.end(),
+					[&](const auto& r){return r.id == nextNeighbourIndex;}));
+
 			nextNeighbour = currentRoom.neighbours.at(nextNeighbourIndex);
 			ret.push_back({currentRoom.id, currentRoom.value, {nextNeighbour}});
 		} else {
@@ -321,7 +326,7 @@ Graph<Room> Map::pruneEdges(Graph<Room> rooms) {
 				}
 			}
 			for(auto it = indicesOfConnectedRoomsNotYetInRet.cbegin(); it != indicesOfConnectedRoomsNotYetInRet.end();) {
-				if(std::count_if(ret.begin(), ret.end(), [&](const auto& r) {return r.id == *it;}) != 0) {
+				if(std::count_if(ret.begin(), ret.end(), [&](const auto r) {return r.id == *it;}) != 0) {
 					it = indicesOfConnectedRoomsNotYetInRet.erase(it);
 				} else ++it;
 			}
@@ -336,6 +341,7 @@ Graph<Room> Map::pruneEdges(Graph<Room> rooms) {
 				std::cout << i << " ";
 			}
 			std::cout << "\n";
+			if(indicesOfConnectedRoomsNotYetInRet.size() == 0) break;
 
 			int rnd = randomInRange(0, indicesOfConnectedRoomsNotYetInRet.size() - 1);
 			auto it = indicesOfConnectedRoomsNotYetInRet.begin();
@@ -354,7 +360,14 @@ Graph<Room> Map::pruneEdges(Graph<Room> rooms) {
 																		 	 [&](const auto& r) {return r.id == index;});
 			currentRoom.neighbours.push_back(nextNeighbour);
 
+			// TODO should select such a node wot has new neighbours still
 			index = nextNeighbour;
+			currentRoom = *std::find_if(src.begin(), src.end(), [&](const auto& r) {return r.id == index;});
+
+			nextNeighbourIndex = randomInRange(0, currentRoom.neighbours.size() - 1);
+			nextNeighbour = currentRoom.neighbours.at(nextNeighbourIndex);
+
+			ret.push_back({nextNeighbour, currentRoom.value, {nextNeighbour}});
 			std::cout << "index: " << index << "\n";
 			std::cout << "rooms: ";
 			for(auto& a: rooms) std::cout << a.id << " ";
