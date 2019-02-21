@@ -293,7 +293,6 @@ Graph<Room> Map::pruneEdges(Graph<Room> rooms) {
     rooms.end());
 
 	while(!rooms.empty()) {
-		std::cout << "number of rooms: " << rooms.size() << "\n";
 		std::vector<int> possibleNextRooms {};
 		std::copy_if ( // only those ids that are not in ret yet
 			currentRoom.neighbours.begin(), currentRoom.neighbours.end(),
@@ -333,8 +332,6 @@ Graph<Room> Map::pruneEdges(Graph<Room> rooms) {
 			std::sort(possibleNextNodes.begin(), possibleNextNodes.end());
 			possibleNextNodes.erase(unique(possibleNextNodes.begin(), possibleNextNodes.end()), possibleNextNodes.end());
 
-			std::cout << "possible nodes left: " << possibleNextNodes.size() << "\n";
-
 			int rnd = randomInRange(0, possibleNextNodes.size() - 1);
 			int nextId = possibleNextNodes.at(rnd);
 
@@ -351,14 +348,10 @@ Graph<Room> Map::pruneEdges(Graph<Room> rooms) {
 			// remove duplicates
 			std::sort(possiblePreviousRooms.begin(), possiblePreviousRooms.end());
 			possiblePreviousRooms.erase(unique(possiblePreviousRooms.begin(), possiblePreviousRooms.end()), possiblePreviousRooms.end());
-			std::cout << "possible previous rooms: " << possiblePreviousRooms.size() << "\n";
 
 			int rndPrev = randomInRange(0, possiblePreviousRooms.size() - 1);
 			int prevId = possiblePreviousRooms.at(rndPrev);
-			std::cout << "previous id: " << prevId << "\n";
-			std::cout << "ret: ";
-			for(auto& a : ret) std::cout << a.id << " ";
-			std::cout << "\n";
+
 			auto& previousRoom = *std::find_if(ret.begin(), ret.end(), [&](const auto& a) { return a.id == prevId; });
 			previousRoom.neighbours.push_back(nextId);
 
@@ -371,21 +364,6 @@ Graph<Room> Map::pruneEdges(Graph<Room> rooms) {
 		    rooms.end());
 		}
 	}
-
-	std::cout << "PRUNING EDGES\n";
-	for(auto& a : ret) {
-		std::cout << "room " << a.id << " "
-		<< (a.value.roomType == RoomType::COMMAND_CENTER ? "(command center)" : "(normal)")
-		<< ": "
-		<< "(" << a.value.coordinates.x0() << ", " << a.value.coordinates.y0() << "), "
-		<< "(" << a.value.coordinates.x1() << ", " << a.value.coordinates.y1() << ")\n";
-		std::cout << "  neighbours: ";
-		for(auto& n: a.neighbours){
-			std::cout << n << " ";
-		}
-		std::cout << "\n";
-	}
-	std::cout << "PRUNING DONE\n";
 
 	return ret;
 }
