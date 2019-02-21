@@ -104,8 +104,8 @@ std::vector<Room> Map::getRooms(Point location) {
 void Map::generateBuildingMap() {
 	rooms = breakRooms(Rect(0, 0, (width - 1), (height - 1)));
 	rooms = indexRooms(rooms);
-	rooms = connectRooms(rooms);
-	rooms = pruneEdges(rooms);
+	physicalConnectionsBetweenRooms = connectRooms(rooms);
+	rooms = pruneEdges(physicalConnectionsBetweenRooms);
 
 	// initialize whole map to walkable
 	for(int x = 0; x < width; ++x) {
@@ -132,20 +132,21 @@ void Map::generateBuildingMap() {
 	}
 
 	// open doors
-	for(auto& aNode : rooms) {
-		auto a = aNode.value;
-		int centerX = floor((a.x1() + a.x0()) / 2);
-		int centerY = floor((a.y1() + a.y0()) / 2);
-		// std::cout << "Area: "
-		// << "(" << a.x0() << ", " << a.y0() << "), "
-		// << "(" << a.x1() << ", " << a.y1() << ")\n";
-		// std::cout << "Centers: "
-		// << "(" << centerX << ", " << centerY << ")\n";
-
-		tiles(a.x0(), centerY).walkable = true;
-		tiles(a.x1(), centerY).walkable = true;
-		tiles(centerX, a.y0()).walkable = true;
-		tiles(centerX, a.y1()).walkable = true;
+	for(auto& roomNode : rooms) {
+		auto room = roomNode.value;
+		for(auto& otherIndex : roomNode.neighbours) {
+			auto other = std::find_if(rooms.begin(), rooms.end(), [&](const auto& r) {return r.id == otherIndex;})->value;
+			int overlapMinX = fmax(room.x0(), other.x0());
+			int overlapMaxX = fmin(room.x1(), other.x1());
+			int overlapMinY = fmax(room.y0(), other.y0());
+			int overlapMaxY = fmin(room.y1(), other.y1());
+			int centerX = floor((overlapMinX + overlapMaxX) / 2);
+			int centerY = floor((overlapMinY + overlapMaxY) / 2);
+			tiles(centerX, centerY).walkable = true;
+			// std::cout << "Overlaps: "
+			// << "(" << overlapMinX << ", " << overlapMinY << "), "
+			// << "(" << overlapMaxX << ", " << overlapMaxY << ")\n";
+		}
 	}
 
 	// close map boundaries

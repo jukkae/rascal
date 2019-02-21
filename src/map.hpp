@@ -81,7 +81,8 @@ public:
 	int width, height;
 	//std::vector<Tile> tiles;
 	Mat2d<Tile> tiles;
-	Graph<Room> rooms;
+	Graph<Room> rooms; // Pruned topological adjacencies
+	Graph<Room> physicalConnectionsBetweenRooms; // All physical adjacencies
 	bool hasAnimations = false;
 
 	Map();
@@ -114,6 +115,7 @@ private:
 		ar & height;
 		ar & tiles;
 		ar & rooms;
+		ar & physicalConnectionsBetweenRooms;
 		ar & hasAnimations;
 		ar & world;
 	}
