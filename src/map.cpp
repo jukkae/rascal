@@ -278,6 +278,7 @@ Graph<Room> Map::connectRooms(Graph<Room> rooms) {
 
 // Simple (and horrible) Prim's algorithm implementation
 Graph<Room> Map::pruneEdges(Graph<Room> rooms) {
+	const auto src = rooms;
 	Graph<Room> ret {};
 	{ // scope for local vars
 	int index = randomInRange(0, rooms.size() - 1);
@@ -309,13 +310,67 @@ Graph<Room> Map::pruneEdges(Graph<Room> rooms) {
 			nextNeighbour = currentRoom.neighbours.at(nextNeighbourIndex);
 			ret.push_back({currentRoom.id, currentRoom.value, {nextNeighbour}});
 		} else {
-			// no more neighbours, select next at random
-			index = randomInRange(0, rooms.size() - 1);
-			auto currentRoom = rooms.at(index);
-			index = currentRoom.id;
-			nextNeighbourIndex = randomInRange(0, currentRoom.neighbours.size() - 1);
-			nextNeighbour = currentRoom.neighbours.at(nextNeighbourIndex);
-			ret.push_back({currentRoom.id, currentRoom.value, {nextNeighbour}});
+			// no more neighbours, select next room at random
+			std::set<int> indicesOfConnectedRoomsNotYetInRet {};
+			std::set<int> indicesOfRoomsInRet {};
+			for(auto& r : ret) {
+				auto rsrc = *std::find_if(src.begin(), src.end(), [&](const auto& rs) {return rs.id == r.id;});
+				indicesOfRoomsInRet.insert(r.id);
+				for(auto& n : rsrc.neighbours) {
+					indicesOfConnectedRoomsNotYetInRet.insert(n);
+				}
+			}
+			for(auto it = indicesOfConnectedRoomsNotYetInRet.cbegin(); it != indicesOfConnectedRoomsNotYetInRet.end();) {
+				if(std::count_if(ret.begin(), ret.end(), [&](const auto& r) {return r.id == *it;}) != 0) {
+					it = indicesOfConnectedRoomsNotYetInRet.erase(it);
+				} else ++it;
+			}
+			std::cout << "\n";
+			std::cout << "ret: ";
+			for(auto& i : ret) {
+				std::cout << i.id << " ";
+			}
+			std::cout << "\n";
+			std::cout << "available neighbours: ";
+			for(auto& i : indicesOfConnectedRoomsNotYetInRet) {
+				std::cout << i << " ";
+			}
+			std::cout << "\n";
+
+			int rnd = randomInRange(0, indicesOfConnectedRoomsNotYetInRet.size() - 1);
+			auto it = indicesOfConnectedRoomsNotYetInRet.begin();
+			for(int i = 0; i < rnd; ++i) ++it;
+			nextNeighbour = *it;
+			index = std::find_if(src.begin(), src.end(), [&](const auto& r)
+				{
+					return (std::count(r.neighbours.begin(), r.neighbours.end(), nextNeighbour) != 0) && (indicesOfRoomsInRet.count(r.id) != 0);
+				}
+			)->id;
+
+			//index = *indicesOfConnectedRoomsNotYetInRet.begin();
+			// std::cout << "this: " << index << ", next: " << nextNeighbour << "\n";
+			std::cout << "current: " << index << ", nb: " << nextNeighbour << "\n";
+			auto& currentRoom = *std::find_if(ret.begin(), ret.end(),
+																		 	 [&](const auto& r) {return r.id == index;});
+			currentRoom.neighbours.push_back(nextNeighbour);
+
+			index = nextNeighbour;
+			std::cout << "index: " << index << "\n";
+			std::cout << "rooms: ";
+			for(auto& a: rooms) std::cout << a.id << " ";
+			std::cout << "\n";
+
+			// rooms.erase(std::remove_if(rooms.begin(), rooms.end(),
+			// 													 [&](const auto& r) {return r.id == index;}),
+			// 						rooms.end());
+			// if(rooms.empty()) break;
+			// nextNeighbourIndex = randomInRange(0, currentRoom.neighbours.size() - 1);
+			// std::cout << currentRoom.neighbours.size() << "\n";
+			//
+			// // This crashes
+			// nextNeighbour = currentRoom.neighbours.at(nextNeighbourIndex);
+			//
+			// ret.push_back({currentRoom.id, currentRoom.value, {nextNeighbour}});
 		}
 	}
 	} // scope for local vars
