@@ -81,7 +81,8 @@ public:
 	int width, height;
 	//std::vector<Tile> tiles;
 	Mat2d<Tile> tiles;
-	Graph<Room> rooms; // Pruned topological adjacencies
+	Graph<Room> rooms; // Final adjacency map
+	Graph<Room> minimumSpanningTree; // Backbone with exactly 1 route between every room
 	Graph<Room> physicalConnectionsBetweenRooms; // All physical adjacencies
 	bool hasAnimations = false;
 
@@ -109,6 +110,7 @@ private:
 	Graph<Room> pruneEdges(Graph<Room> rooms);
 	Graph<Room> makeEdgesBidirectional(Graph<Room> rooms);
 	Graph<Room> cullDoubleEdges(Graph<Room> rooms);
+	Graph<Room> makeLoops(Graph<Room> rooms, const Graph<Room> physicalConnections, float loopFactor);
 
 	friend class boost::serialization::access;
 	template<class Archive>
@@ -117,6 +119,7 @@ private:
 		ar & height;
 		ar & tiles;
 		ar & rooms;
+		ar & minimumSpanningTree;
 		ar & physicalConnectionsBetweenRooms;
 		ar & hasAnimations;
 		ar & world;

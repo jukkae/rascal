@@ -73,6 +73,7 @@ void Map::generateMap(MapType mapType) {
 	}
 	std::cout << "END MAP TILES\n";
 	std::cout << "MAP ROOMS:\n";
+	std::cout << rooms.size() << " rooms\n";
 	for(auto& room : rooms) {
 		std::cout << "room " << room.id << " "
 		<< (room.value.roomType == RoomType::COMMAND_CENTER ? "(command center)" : "(normal)")
@@ -107,7 +108,8 @@ void Map::generateBuildingMap() {
 	physicalConnectionsBetweenRooms = connectRooms(rooms);
 	rooms = pruneEdges(physicalConnectionsBetweenRooms);
 	rooms = makeEdgesBidirectional(rooms);
-	rooms = cullDoubleEdges(rooms);
+	minimumSpanningTree = cullDoubleEdges(rooms);
+	rooms = makeLoops(minimumSpanningTree, physicalConnectionsBetweenRooms, 0.3f);
 
 	// initialize whole map to walkable
 	for(int x = 0; x < width; ++x) {
@@ -211,13 +213,11 @@ void Map::generateWaterMap() {
 }
 
 Graph<Room> Map::breakRooms(Rect area, BreakDirection direction) {
-	int minDim = 20;
+	int minDim = 18;
 	Graph<Room> areas;
 
 	if(area.width() < minDim || area.height() < minDim) {
-		if(d10() == 10) {
-			areas.push_back({0, {area, RoomType::COMMAND_CENTER, RoomDecor::NONE}, {}});
-		} else areas.push_back({0, {area, RoomType::NORMAL, RoomDecor::NONE}, {}});
+		areas.push_back({0, {area, RoomType::NORMAL, RoomDecor::NONE}, {}});
 		return areas;
 	}
 	else {
@@ -389,6 +389,36 @@ Graph<Room> Map::cullDoubleEdges(Graph<Room> rooms) {
 		room.neighbours.erase(unique(room.neighbours.begin(), room.neighbours.end()), room.neighbours.end());
 	}
 
+	return ret;
+}
+
+Graph<Room> Map::makeLoops(Graph<Room> rooms, const Graph<Room> physicalConnections, float loopFactor) {
+	Graph<Room> ret = rooms;
+	for(auto& room : ret) {
+		// TODO actually use loopFactor here for condition
+		// TODO move loopFactor, and other major mapgen vars, to TOML
+		if(randomInRange(0, 99) <= 30) {
+			int id = room.id;
+			auto roomWithNBs = std::find_if(physicalConnections.begin(), physicalConnections.end(), [&](const auto& r) {return r.id == id;});
+			auto allPhysicalNBs = roomWithNBs->neighbours;
+			std::vector<int> filteredNBs {};
+			for(auto& nbCandidate : allPhysicalNBs) {
+				if(std::count(room.neighbours.begin(), room.neighbours.end(), nbCandidate) == 0) {
+					filteredNBs.push_back(nbCandidate);
+				}
+			}
+			if(filteredNBs.size() > 0) {
+				int rnd = randomInRange(0, filteredNBs.size() - 1);
+				int newNeighbour = filteredNBs.at(rnd);
+
+				// add neighbour bidirectionally
+				room.neighbours.push_back(newNeighbour);
+				for(auto neighbourIndex : room.neighbours) {
+					std::find_if(ret.begin(), ret.end(), [&](const auto& r) {return r.id == newNeighbour;})->neighbours.push_back(room.id);
+				}
+			}
+		}
+	}
 	return ret;
 }
 
