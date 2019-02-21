@@ -74,12 +74,16 @@ void Map::generateMap(MapType mapType) {
 	std::cout << "END MAP TILES\n";
 	std::cout << "MAP ROOMS:\n";
 	for(auto& room : rooms) {
-		std::cout << "room "
+		std::cout << "room " << room.id << " "
 		<< (room.value.roomType == RoomType::COMMAND_CENTER ? "(command center)" : "(normal)")
 		<< ": "
 		<< "(" << room.value.coordinates.x0() << ", " << room.value.coordinates.y0() << "), "
 		<< "(" << room.value.coordinates.x1() << ", " << room.value.coordinates.y1() << ")\n";
-		std::cout << "  neighbours: " << room.neighbours.size() << "\n";
+		std::cout << "  neighbours: ";
+		for(auto& a: room.neighbours){
+			std::cout << a << " ";
+		}
+		std::cout << "\n";
 	}
 	std::cout << "END MAP ROOMS\n";
 }
@@ -100,8 +104,10 @@ std::vector<Room> Map::getRooms(Point location) {
 void Map::generateBuildingMap() {
 	rooms = breakRooms(Rect(0, 0, (width - 1), (height - 1)));
 	rooms = indexRooms(rooms);
-	rooms = connectRooms(rooms);
-	rooms = pruneEdges(rooms);
+	physicalConnectionsBetweenRooms = connectRooms(rooms);
+	rooms = pruneEdges(physicalConnectionsBetweenRooms);
+	rooms = makeEdgesBidirectional(rooms);
+	rooms = cullDoubleEdges(rooms);
 
 	// initialize whole map to walkable
 	for(int x = 0; x < width; ++x) {
@@ -128,20 +134,21 @@ void Map::generateBuildingMap() {
 	}
 
 	// open doors
-	for(auto& aNode : rooms) {
-		auto a = aNode.value;
-		int centerX = floor((a.x1() + a.x0()) / 2);
-		int centerY = floor((a.y1() + a.y0()) / 2);
-		// std::cout << "Area: "
-		// << "(" << a.x0() << ", " << a.y0() << "), "
-		// << "(" << a.x1() << ", " << a.y1() << ")\n";
-		// std::cout << "Centers: "
-		// << "(" << centerX << ", " << centerY << ")\n";
-
-		tiles(a.x0(), centerY).walkable = true;
-		tiles(a.x1(), centerY).walkable = true;
-		tiles(centerX, a.y0()).walkable = true;
-		tiles(centerX, a.y1()).walkable = true;
+	for(auto& roomNode : rooms) {
+		auto room = roomNode.value;
+		for(auto& otherIndex : roomNode.neighbours) {
+			auto other = std::find_if(rooms.begin(), rooms.end(), [&](const auto& r) {return r.id == otherIndex;})->value;
+			int overlapMinX = fmax(room.x0(), other.x0());
+			int overlapMaxX = fmin(room.x1(), other.x1());
+			int overlapMinY = fmax(room.y0(), other.y0());
+			int overlapMaxY = fmin(room.y1(), other.y1());
+			int centerX = floor((overlapMinX + overlapMaxX) / 2);
+			int centerY = floor((overlapMinY + overlapMaxY) / 2);
+			tiles(centerX, centerY).walkable = true;
+			// std::cout << "Overlaps: "
+			// << "(" << overlapMinX << ", " << overlapMinY << "), "
+			// << "(" << overlapMaxX << ", " << overlapMaxY << ")\n";
+		}
 	}
 
 	// close map boundaries
@@ -271,13 +278,118 @@ Graph<Room> Map::connectRooms(Graph<Room> rooms) {
 	return ret;
 }
 
-// Simple Prim's algorithm implementation
+// Simple (and horrible) Prim's algorithm implementation
 Graph<Room> Map::pruneEdges(Graph<Room> rooms) {
+	const auto src = rooms;
 	Graph<Room> ret {};
-	int startingPoint = randomInRange(0, rooms.size() - 1);
-	ret.emplace_back(rooms.at(startingPoint));
-	// TODO continue
-	return rooms;
+
+	int s = randomInRange(0, rooms.size());
+	auto currentRoom = src.at(s);
+	auto currentRoomNoNBs = GraphNode<Room>{currentRoom.id, currentRoom.value, {}};
+	ret.push_back(currentRoomNoNBs);
+	rooms.erase(
+    std::remove_if(rooms.begin(), rooms.end(),
+        [&](const auto& a) { return a.id == currentRoom.id; }),
+    rooms.end());
+
+	while(!rooms.empty()) {
+		std::vector<int> possibleNextRooms {};
+		std::copy_if ( // only those ids that are not in ret yet
+			currentRoom.neighbours.begin(), currentRoom.neighbours.end(),
+			std::back_inserter(possibleNextRooms),
+			[&](const auto& a) { return std::count_if(ret.begin(), ret.end(), [&](const auto& b) { return b.id == a; }) == 0; }
+		);
+
+		if(possibleNextRooms.size() > 0) {
+			int rnd = randomInRange(0, possibleNextRooms.size() - 1);
+			int nextId = possibleNextRooms.at(rnd);
+			// add neighbour to previously-added node
+			auto& previousRoom = *std::find_if(ret.begin(), ret.end(), [&](const auto& a) { return a.id == currentRoom.id; });
+			previousRoom.neighbours.push_back(nextId);
+
+			currentRoom = *std::find_if(src.begin(), src.end(), [&](const auto& a) { return a.id == nextId; });
+			auto currentRoomNoNBs = GraphNode<Room>{currentRoom.id, currentRoom.value, {}};
+			ret.push_back(currentRoomNoNBs);
+			rooms.erase(
+		    std::remove_if(rooms.begin(), rooms.end(),
+		        [&](const auto& a) { return a.id == currentRoom.id; }),
+		    rooms.end());
+		} else { // currentRoom does not have any possible neighbours, select new room
+			// collect all rooms that are connected to some of the room(s) currently in ret
+			// and that are not in ret themselves
+			std::vector<int> possibleNextNodes {};
+			for(auto& potentialRoom : rooms) {
+				for(auto& roomInRet : ret) {
+					auto roomWithNBs = *std::find_if(src.begin(), src.end(), [&](const auto& a) { return a.id == roomInRet.id; });
+					for(auto& n : roomWithNBs.neighbours) {
+						if (potentialRoom.id == n) {
+							possibleNextNodes.push_back(n);
+						}
+					}
+				}
+			}
+			// remove duplicates
+			std::sort(possibleNextNodes.begin(), possibleNextNodes.end());
+			possibleNextNodes.erase(unique(possibleNextNodes.begin(), possibleNextNodes.end()), possibleNextNodes.end());
+
+			int rnd = randomInRange(0, possibleNextNodes.size() - 1);
+			int nextId = possibleNextNodes.at(rnd);
+
+			// add neighbour to some previously-added node that connects to upcoming node
+			std::vector<int> possiblePreviousRooms {};
+			for(auto& roomInRet : ret) {
+				auto roomWithNBs = *std::find_if(src.begin(), src.end(), [&](const auto& a) { return a.id == roomInRet.id; });
+				for(auto& n : roomWithNBs.neighbours) {
+					if(n == nextId) {
+						possiblePreviousRooms.push_back(roomWithNBs.id);
+					}
+				}
+			}
+			// remove duplicates
+			std::sort(possiblePreviousRooms.begin(), possiblePreviousRooms.end());
+			possiblePreviousRooms.erase(unique(possiblePreviousRooms.begin(), possiblePreviousRooms.end()), possiblePreviousRooms.end());
+
+			int rndPrev = randomInRange(0, possiblePreviousRooms.size() - 1);
+			int prevId = possiblePreviousRooms.at(rndPrev);
+
+			auto& previousRoom = *std::find_if(ret.begin(), ret.end(), [&](const auto& a) { return a.id == prevId; });
+			previousRoom.neighbours.push_back(nextId);
+
+			currentRoom = *std::find_if(src.begin(), src.end(), [&](const auto& a) { return a.id == nextId; });
+			auto currentRoomNoNBs = GraphNode<Room>{currentRoom.id, currentRoom.value, {}};
+			ret.push_back(currentRoomNoNBs);
+			rooms.erase(
+		    std::remove_if(rooms.begin(), rooms.end(),
+		        [&](const auto& a) { return a.id == currentRoom.id; }),
+		    rooms.end());
+		}
+	}
+
+	return ret;
+}
+
+Graph<Room> Map::makeEdgesBidirectional(Graph<Room> rooms) {
+	Graph<Room> ret = rooms;
+
+	// add bidirectional edges: if there's an edge from A to B, there's an edge from B to A
+	for(auto& room : ret) {
+		for(auto neighbourIndex : room.neighbours) {
+			std::find_if(ret.begin(), ret.end(), [&](const auto& r) {return r.id == neighbourIndex;})->neighbours.push_back(room.id);
+		}
+	}
+
+	return ret;
+}
+
+Graph<Room> Map::cullDoubleEdges(Graph<Room> rooms) {
+	Graph<Room> ret = rooms;
+	// clear double edges: at this stage we shouldn't have two edges A-B, A-B
+	for(auto& room : ret) {
+		std::sort(room.neighbours.begin(), room.neighbours.end());
+		room.neighbours.erase(unique(room.neighbours.begin(), room.neighbours.end()), room.neighbours.end());
+	}
+
+	return ret;
 }
 
 bool Map::isWall(int x, int y) const {
