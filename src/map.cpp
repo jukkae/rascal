@@ -106,6 +106,8 @@ void Map::generateBuildingMap() {
 	rooms = indexRooms(rooms);
 	physicalConnectionsBetweenRooms = connectRooms(rooms);
 	rooms = pruneEdges(physicalConnectionsBetweenRooms);
+	rooms = makeEdgesBidirectional(rooms);
+	rooms = cullDoubleEdges(rooms);
 
 	// initialize whole map to walkable
 	for(int x = 0; x < width; ++x) {
@@ -280,124 +282,65 @@ Graph<Room> Map::connectRooms(Graph<Room> rooms) {
 Graph<Room> Map::pruneEdges(Graph<Room> rooms) {
 	const auto src = rooms;
 	Graph<Room> ret {};
-	{ // scope for local vars
-	int index = randomInRange(0, rooms.size() - 1);
 
-	// select one random neighbour
-	// and push back new node with just the selected neighbour
-	int nextNeighbourIndex = randomInRange(0, rooms.at(index).neighbours.size() - 1);
-	int nextNeighbour = rooms.at(index).neighbours.at(nextNeighbourIndex);
-	ret.push_back({rooms.at(index).id, rooms.at(index).value, {nextNeighbour}});
+	int s = randomInRange(0, rooms.size());
+	auto currentRoom = src.at(s);
+	auto currentRoomNoNBs = GraphNode<Room>{currentRoom.id, currentRoom.value, {}};
+	ret.push_back(currentRoomNoNBs);
+	rooms.erase(
+    std::remove_if(rooms.begin(), rooms.end(),
+        [&](const auto& a) { return a.id == currentRoom.id; }),
+    rooms.end());
 
 	while(!rooms.empty()) {
-		// std::cout << "erasing " << index << ", there are " << rooms.size() << " rooms left:\n";
-		// std::cout << "  ";
-		// for(auto& a: rooms) std::cout << a.id << " ";
-		// std::cout << "\n";
+		std::cout << "number of rooms: " << rooms.size() << "\n";
+		std::vector<int> possibleNextRooms {};
+		std::copy_if ( // only those ids that are not in ret yet
+			currentRoom.neighbours.begin(), currentRoom.neighbours.end(),
+			std::back_inserter(possibleNextRooms),
+			[&](const auto& a) { return std::count_if(ret.begin(), ret.end(), [&](const auto& b) { return b.id == a; }) == 0; }
+		);
 
-		rooms.erase(std::remove_if(rooms.begin(), rooms.end(),
-															 [&](const auto& r) {return r.id == index;}),
-								rooms.end());
-		if(rooms.empty()) break;
-		index = nextNeighbourIndex;
-		if(std::any_of(rooms.begin(), rooms.end(),
-								 	 [&](const auto& r) {return r.id == nextNeighbourIndex;}))
-		{
-			// We still have neighbours
-			auto currentRoom = *std::find_if(rooms.begin(), rooms.end(),
-				[&](const auto& r) {return r.id == nextNeighbourIndex;}
-			);
-			do {
-				nextNeighbourIndex = randomInRange(0, currentRoom.neighbours.size() - 1);
-			} while(std::count_if(ret.begin(), ret.end(),
-					[&](const auto& r){return r.id == nextNeighbourIndex;}));
-
-			nextNeighbour = currentRoom.neighbours.at(nextNeighbourIndex);
-			ret.push_back({currentRoom.id, currentRoom.value, {nextNeighbour}});
-		} else {
-			// no more neighbours, select next room at random
-			std::set<int> indicesOfConnectedRoomsNotYetInRet {};
-			std::set<int> indicesOfRoomsInRet {};
-			for(auto& r : ret) {
-				auto rsrc = *std::find_if(src.begin(), src.end(), [&](const auto& rs) {return rs.id == r.id;});
-				indicesOfRoomsInRet.insert(r.id);
-				for(auto& n : rsrc.neighbours) {
-					indicesOfConnectedRoomsNotYetInRet.insert(n);
+		if(possibleNextRooms.size() > 0) {
+			int rnd = randomInRange(0, possibleNextRooms.size() - 1);
+			int nextId = possibleNextRooms.at(rnd);
+			currentRoom = *std::find_if(src.begin(), src.end(), [&](const auto& a) { return a.id == nextId; });
+			auto currentRoomNoNBs = GraphNode<Room>{currentRoom.id, currentRoom.value, {}};
+			ret.push_back(currentRoomNoNBs);
+			rooms.erase(
+		    std::remove_if(rooms.begin(), rooms.end(),
+		        [&](const auto& a) { return a.id == currentRoom.id; }),
+		    rooms.end());
+		} else { // currentRoom does not have any possible neighbours, select new room
+			// collect all rooms that are connected to some of the room(s) currently in ret
+			// and that are not in ret themselves
+			std::vector<int> possibleNextNodes {};
+			for(auto& potentialRoom : rooms) {
+				for(auto& roomInRet : ret) {
+					auto roomWithNBs = *std::find_if(src.begin(), src.end(), [&](const auto& a) { return a.id == roomInRet.id; });
+					for(auto& n : roomWithNBs.neighbours) {
+						if (potentialRoom.id == n) {
+							possibleNextNodes.push_back(n);
+						}
+					}
 				}
 			}
-			for(auto it = indicesOfConnectedRoomsNotYetInRet.cbegin(); it != indicesOfConnectedRoomsNotYetInRet.end();) {
-				if(std::count_if(ret.begin(), ret.end(), [&](const auto r) {return r.id == *it;}) != 0) {
-					it = indicesOfConnectedRoomsNotYetInRet.erase(it);
-				} else ++it;
-			}
-			std::cout << "\n";
-			std::cout << "ret: ";
-			for(auto& i : ret) {
-				std::cout << i.id << " ";
-			}
-			std::cout << "\n";
-			std::cout << "available neighbours: ";
-			for(auto& i : indicesOfConnectedRoomsNotYetInRet) {
-				std::cout << i << " ";
-			}
-			std::cout << "\n";
-			if(indicesOfConnectedRoomsNotYetInRet.size() == 0) break;
+			// remove duplicates
+			std::sort(possibleNextNodes.begin(), possibleNextNodes.end());
+			possibleNextNodes.erase(unique(possibleNextNodes.begin(), possibleNextNodes.end()), possibleNextNodes.end());
 
-			int rnd = randomInRange(0, indicesOfConnectedRoomsNotYetInRet.size() - 1);
-			auto it = indicesOfConnectedRoomsNotYetInRet.begin();
-			for(int i = 0; i < rnd; ++i) ++it;
-			nextNeighbour = *it;
-			index = std::find_if(src.begin(), src.end(), [&](const auto& r)
-				{
-					return (std::count(r.neighbours.begin(), r.neighbours.end(), nextNeighbour) != 0) && (indicesOfRoomsInRet.count(r.id) != 0);
-				}
-			)->id;
+			std::cout << "possible nodes left: " << possibleNextNodes.size() << "\n";
 
-			//index = *indicesOfConnectedRoomsNotYetInRet.begin();
-			// std::cout << "this: " << index << ", next: " << nextNeighbour << "\n";
-			std::cout << "current: " << index << ", nb: " << nextNeighbour << "\n";
-			auto& currentRoom = *std::find_if(ret.begin(), ret.end(),
-																		 	 [&](const auto& r) {return r.id == index;});
-			currentRoom.neighbours.push_back(nextNeighbour);
-
-			// TODO should select such a node wot has new neighbours still
-			index = nextNeighbour;
-			currentRoom = *std::find_if(src.begin(), src.end(), [&](const auto& r) {return r.id == index;});
-
-			nextNeighbourIndex = randomInRange(0, currentRoom.neighbours.size() - 1);
-			nextNeighbour = currentRoom.neighbours.at(nextNeighbourIndex);
-
-			ret.push_back({nextNeighbour, currentRoom.value, {nextNeighbour}});
-			std::cout << "index: " << index << "\n";
-			std::cout << "rooms: ";
-			for(auto& a: rooms) std::cout << a.id << " ";
-			std::cout << "\n";
-
-			// rooms.erase(std::remove_if(rooms.begin(), rooms.end(),
-			// 													 [&](const auto& r) {return r.id == index;}),
-			// 						rooms.end());
-			// if(rooms.empty()) break;
-			// nextNeighbourIndex = randomInRange(0, currentRoom.neighbours.size() - 1);
-			// std::cout << currentRoom.neighbours.size() << "\n";
-			//
-			// // This crashes
-			// nextNeighbour = currentRoom.neighbours.at(nextNeighbourIndex);
-			//
-			// ret.push_back({currentRoom.id, currentRoom.value, {nextNeighbour}});
+			int rnd = randomInRange(0, possibleNextNodes.size() - 1);
+			int nextId = possibleNextNodes.at(rnd);
+			currentRoom = *std::find_if(src.begin(), src.end(), [&](const auto& a) { return a.id == nextId; });
+			auto currentRoomNoNBs = GraphNode<Room>{currentRoom.id, currentRoom.value, {}};
+			ret.push_back(currentRoomNoNBs);
+			rooms.erase(
+		    std::remove_if(rooms.begin(), rooms.end(),
+		        [&](const auto& a) { return a.id == currentRoom.id; }),
+		    rooms.end());
 		}
-	}
-	} // scope for local vars
-
-	// add bidirectional edges: if there's an edge from A to B, there's an edge from B to A
-	for(auto& room : ret) {
-		int neighbourIndex = room.neighbours.at(0);
-		std::find_if(ret.begin(), ret.end(), [&](const auto& r) {return r.id == neighbourIndex;})->neighbours.push_back(room.id);
-	}
-
-	// clear double edges: at this stage we shouldn't have two edges A-B, A-B
-	for(auto& room : ret) {
-		std::sort(room.neighbours.begin(), room.neighbours.end());
-		room.neighbours.erase(unique(room.neighbours.begin(), room.neighbours.end()), room.neighbours.end());
 	}
 
 	std::cout << "PRUNING EDGES\n";
@@ -414,6 +357,29 @@ Graph<Room> Map::pruneEdges(Graph<Room> rooms) {
 		std::cout << "\n";
 	}
 	std::cout << "PRUNING DONE\n";
+
+	return ret;
+}
+
+Graph<Room> Map::makeEdgesBidirectional(Graph<Room> rooms) {
+	Graph<Room> ret = rooms;
+
+	// add bidirectional edges: if there's an edge from A to B, there's an edge from B to A
+	for(auto& room : ret) {
+		// int neighbourIndex = room.neighbours.at(0);
+		// std::find_if(ret.begin(), ret.end(), [&](const auto& r) {return r.id == neighbourIndex;})->neighbours.push_back(room.id);
+	}
+
+	return ret;
+}
+
+Graph<Room> Map::cullDoubleEdges(Graph<Room> rooms) {
+	Graph<Room> ret = rooms;
+	// clear double edges: at this stage we shouldn't have two edges A-B, A-B
+	for(auto& room : ret) {
+		// std::sort(room.neighbours.begin(), room.neighbours.end());
+		// room.neighbours.erase(unique(room.neighbours.begin(), room.neighbours.end()), room.neighbours.end());
+	}
 
 	return ret;
 }

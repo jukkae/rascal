@@ -107,6 +107,8 @@ private:
 	Graph<Room> indexRooms(Graph<Room> rooms);
 	Graph<Room> connectRooms(Graph<Room> rooms);
 	Graph<Room> pruneEdges(Graph<Room> rooms);
+	Graph<Room> makeEdgesBidirectional(Graph<Room> rooms);
+	Graph<Room> cullDoubleEdges(Graph<Room> rooms);
 
 	friend class boost::serialization::access;
 	template<class Archive>
