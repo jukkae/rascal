@@ -161,7 +161,8 @@ void map_utils::addMonsters(World* world, Map* map, int difficulty) {
 }
 
 void map_utils::addMonstersBasedOnRoomTypes(World* world, Map* map, int difficulty) {
-	for(auto& room : map->rooms) {
+	for(auto& roomNode : map->rooms) {
+		auto room = roomNode.value;
 		switch(room.roomType) {
 			case RoomType::COMMAND_CENTER: {
 				int area = abs((room.x1() - room.x0()) * (room.y1() - room.y0())); //shouldn't need abs, but just making sure
@@ -189,7 +190,8 @@ void map_utils::addMonstersBasedOnRoomTypes(World* world, Map* map, int difficul
 }
 
 void map_utils::addItemsBasedOnRoomTypes(World* world, Map* map, int difficulty) {
-	for(auto& room : map->rooms) {
+	for(auto& roomNode : map->rooms) {
+		auto room = roomNode.value;
 		switch(room.roomType) {
 			case RoomType::COMMAND_CENTER: {
 				int x = (room.x0() + room.x1()) / 2;

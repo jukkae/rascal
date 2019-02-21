@@ -75,10 +75,10 @@ void Map::generateMap(MapType mapType) {
 	std::cout << "MAP ROOMS:\n";
 	for(auto& room : rooms) {
 		std::cout << "room "
-		<< (room.roomType == RoomType::COMMAND_CENTER ? "(command center)" : "(normal)")
+		<< (room.value.roomType == RoomType::COMMAND_CENTER ? "(command center)" : "(normal)")
 		<< ": "
-		<< "(" << room.coordinates.x0() << ", " << room.coordinates.y0() << "), "
-		<< "(" << room.coordinates.x1() << ", " << room.coordinates.y1() << ")\n";
+		<< "(" << room.value.coordinates.x0() << ", " << room.value.coordinates.y0() << "), "
+		<< "(" << room.value.coordinates.x1() << ", " << room.value.coordinates.y1() << ")\n";
 		std::cout << "  neighbours: " << room.neighbours.size() << "\n";
 	}
 	std::cout << "END MAP ROOMS\n";
@@ -87,11 +87,11 @@ void Map::generateMap(MapType mapType) {
 std::vector<Room> Map::getRooms(Point location) {
 	std::vector<Room> r;
 	for(auto room : rooms) {
-		if(   location.x >= room.x0()
-			 && location.x <= room.x1()
-		   && location.y >= room.y0()
-		   && location.y <= room.y1()) {
-			r.push_back(room);
+		if(   location.x >= room.value.x0()
+			 && location.x <= room.value.x1()
+		   && location.y >= room.value.y0()
+		   && location.y <= room.value.y1()) {
+			r.push_back(room.value);
 		}
 	}
 	return r;
@@ -99,7 +99,9 @@ std::vector<Room> Map::getRooms(Point location) {
 
 void Map::generateBuildingMap() {
 	rooms = breakRooms(Rect(0, 0, (width - 1), (height - 1)));
+	rooms = indexRooms(rooms);
 	rooms = connectRooms(rooms);
+	rooms = pruneEdges(rooms);
 
 	// initialize whole map to walkable
 	for(int x = 0; x < width; ++x) {
@@ -111,7 +113,8 @@ void Map::generateBuildingMap() {
 	}
 
 	// draw walls
-	for(auto& a : rooms) {
+	for(auto& aNode : rooms) {
+		auto a = aNode.value;
 		for(int x = a.x0(); x <= a.x1(); ++x) {
 			for(int y = a.y0(); y <= a.y1(); ++y) {
 				if(x == a.x0() || x == a.x1() || y == a.y0() || y == a.y1()) {
@@ -125,7 +128,8 @@ void Map::generateBuildingMap() {
 	}
 
 	// open doors
-	for(auto& a : rooms) {
+	for(auto& aNode : rooms) {
+		auto a = aNode.value;
 		int centerX = floor((a.x1() + a.x0()) / 2);
 		int centerY = floor((a.y1() + a.y0()) / 2);
 		// std::cout << "Area: "
@@ -199,14 +203,14 @@ void Map::generateWaterMap() {
 	}
 }
 
-std::vector<Room> Map::breakRooms(Rect area, BreakDirection direction) {
+Graph<Room> Map::breakRooms(Rect area, BreakDirection direction) {
 	int minDim = 20;
-	std::vector<Room> areas;
+	Graph<Room> areas;
 
 	if(area.width() < minDim || area.height() < minDim) {
 		if(d10() == 10) {
-			areas.push_back({area, RoomType::COMMAND_CENTER, RoomDecor::NONE});
-		} else areas.push_back({area, RoomType::NORMAL, RoomDecor::NONE});
+			areas.push_back({0, {area, RoomType::COMMAND_CENTER, RoomDecor::NONE}, {}});
+		} else areas.push_back({0, {area, RoomType::NORMAL, RoomDecor::NONE}, {}});
 		return areas;
 	}
 	else {
@@ -226,19 +230,31 @@ std::vector<Room> Map::breakRooms(Rect area, BreakDirection direction) {
 
 		BreakDirection nextDir = (direction == BreakDirection::HORIZONTAL) ? BreakDirection::VERTICAL : BreakDirection::HORIZONTAL;
 
-		std::vector<Room> areas1 = breakRooms(area1, nextDir);
+		Graph<Room> areas1 = breakRooms(area1, nextDir);
 		areas.insert(areas.end(), areas1.begin(), areas1.end());
-		std::vector<Room> areas2 = breakRooms(area2, nextDir);
+		Graph<Room> areas2 = breakRooms(area2, nextDir);
 		areas.insert(areas.end(), areas2.begin(), areas2.end());
 
 		return areas;
 	}
 }
 
-std::vector<Room> Map::connectRooms(std::vector<Room> rooms) {
-	std::vector<Room> ret = rooms;
-	for(auto& room : ret) {
-		for(auto& other : ret) {
+Graph<Room> Map::indexRooms(Graph<Room> rooms) {
+	Graph<Room> ret;
+	int i = 0;
+	for(auto& r : rooms) {
+		ret.push_back({i, r.value, {}});
+		++i;
+	}
+	return ret;
+}
+
+Graph<Room> Map::connectRooms(Graph<Room> rooms) {
+	Graph<Room> ret = rooms;
+	for(auto& roomNode : ret) {
+		for(auto& otherNode : ret) {
+			auto room = roomNode.value;
+			auto other = otherNode.value;
 			if(room == other) continue;
 			// check if overlap
 			if(room.x0() > other.x1() || other.x0() > room.x1()) continue; // no overlap
@@ -249,10 +265,19 @@ std::vector<Room> Map::connectRooms(std::vector<Room> rooms) {
 			// << " with "
 			// << "(" << other.x0() << ", " << other.y0() << "), (" << other.x1() << ", " << other.y1() << ")"
 			// << "\n";
-			room.neighbours.emplace_back(&other);
+			roomNode.neighbours.emplace_back(otherNode.id);
 		}
 	}
 	return ret;
+}
+
+// Simple Prim's algorithm implementation
+Graph<Room> Map::pruneEdges(Graph<Room> rooms) {
+	Graph<Room> ret {};
+	int startingPoint = randomInRange(0, rooms.size() - 1);
+	ret.emplace_back(rooms.at(startingPoint));
+	// TODO continue
+	return rooms;
 }
 
 bool Map::isWall(int x, int y) const {

@@ -11,6 +11,7 @@
 #include "animation.hpp"
 #include "constants.hpp"
 #include "faction.hpp"
+#include "graph.hpp"
 #include "mat.hpp"
 #include "rect.hpp"
 class World;
@@ -51,7 +52,6 @@ public:
 	RoomType roomType;
 	RoomDecor roomDecor;
 	Faction roomFaction;
-	std::vector<Room*> neighbours {};
 	int x0() { return coordinates.x0(); }
 	int x1() { return coordinates.x1(); }
 	int y0() { return coordinates.y0(); }
@@ -69,7 +69,6 @@ private:
 		ar & roomType;
 		ar & roomDecor;
 		ar & roomFaction;
-		ar & neighbours;
 	}
 };
 
@@ -82,7 +81,7 @@ public:
 	int width, height;
 	//std::vector<Tile> tiles;
 	Mat2d<Tile> tiles;
-	std::vector<Room> rooms;
+	Graph<Room> rooms;
 	bool hasAnimations = false;
 
 	Map();
@@ -103,8 +102,10 @@ private:
 	void generateBuildingMap();
 	void generatePillarsMap();
 	void generateWaterMap();
-	std::vector<Room> breakRooms(Rect area, BreakDirection direction = BreakDirection::HORIZONTAL);
-	std::vector<Room> connectRooms(std::vector<Room> rooms);
+	Graph<Room> breakRooms(Rect area, BreakDirection direction = BreakDirection::HORIZONTAL);
+	Graph<Room> indexRooms(Graph<Room> rooms);
+	Graph<Room> connectRooms(Graph<Room> rooms);
+	Graph<Room> pruneEdges(Graph<Room> rooms);
 
 	friend class boost::serialization::access;
 	template<class Archive>
