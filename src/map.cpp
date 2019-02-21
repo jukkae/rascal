@@ -278,6 +278,7 @@ Graph<Room> Map::connectRooms(Graph<Room> rooms) {
 // Simple (and horrible) Prim's algorithm implementation
 Graph<Room> Map::pruneEdges(Graph<Room> rooms) {
 	Graph<Room> ret {};
+	{ // scope for local vars
 	int index = randomInRange(0, rooms.size() - 1);
 
 	// select one random neighbour
@@ -315,6 +316,13 @@ Graph<Room> Map::pruneEdges(Graph<Room> rooms) {
 			nextNeighbour = currentRoom.neighbours.at(nextNeighbourIndex);
 			ret.push_back({currentRoom.id, currentRoom.value, {nextNeighbour}});
 		}
+	}
+	} // scope for local vars
+
+	// add bidirectional edges: if there's an edge from A to B, there's an edge from B to A
+	for(auto& room : ret) {
+		int neighbourIndex = room.neighbours.at(0);
+		std::find_if(ret.begin(), ret.end(), [&](const auto& r) {return r.id == neighbourIndex;})->neighbours.push_back(room.id);
 	}
 
 	std::cout << "PRUNING EDGES\n";
