@@ -61,6 +61,8 @@ void Map::generateMap(MapType mapType) {
 				std::cout << ".";
 			} else if(getRooms(Point {x, y}).at(0).roomType == RoomType::COMMAND_CENTER) {
 				std::cout << "c";
+			} else if(getRooms(Point {x, y}).at(0).roomType == RoomType::START) {
+				std::cout << "s";
 			} else {
 				std::cout << ".";
 			}
@@ -110,6 +112,7 @@ void Map::generateBuildingMap() {
 	rooms = makeEdgesBidirectional(rooms);
 	minimumSpanningTree = cullDoubleEdges(rooms);
 	rooms = makeLoops(minimumSpanningTree, physicalConnectionsBetweenRooms, 0.3f);
+	rooms = specializeRooms(rooms, minimumSpanningTree);
 
 	// initialize whole map to walkable
 	for(int x = 0; x < width; ++x) {
@@ -217,7 +220,7 @@ Graph<Room> Map::breakRooms(Rect area, BreakDirection direction) {
 	Graph<Room> areas;
 
 	if(area.width() < minDim || area.height() < minDim) {
-		areas.push_back({0, {area, RoomType::NORMAL, RoomDecor::NONE}, {}});
+		areas.push_back({0, {area, RoomType::UNASSIGNED, RoomDecor::NONE}, {}});
 		return areas;
 	}
 	else {
@@ -419,6 +422,27 @@ Graph<Room> Map::makeLoops(Graph<Room> rooms, const Graph<Room> physicalConnecti
 			}
 		}
 	}
+	return ret;
+}
+
+Graph<Room> Map::specializeRooms(Graph<Room> rooms, const Graph<Room> mst) {
+	Graph<Room> ret = rooms;
+	std::vector<GraphNode<Room>> leafNodes {};
+	std::copy_if(mst.begin(), mst.end(), std::back_inserter(leafNodes), [&](const auto& r) { return r.neighbours.size() == 1; });
+	std::vector<int> leafIndices (leafNodes.size());
+	std::transform(leafNodes.begin(), leafNodes.end(), leafIndices.begin(), [&](const auto& r) { return r.id; });
+
+	{ // scope for temporaries
+	int rnd = randomInRange(0, leafIndices.size() - 1);
+	int start = leafIndices.at(rnd);
+	std::find_if(ret.begin(), ret.end(), [&](const auto& r) { return r.id == start; })->value.roomType = RoomType::START;
+	leafIndices.erase(std::remove_if(leafIndices.begin(), leafIndices.end(), [&](const auto& a) { return a == start; }), leafIndices.end());
+	} // scope for temporaries
+
+	for(auto& r : ret) {
+		if(std::count(leafIndices.begin(), leafIndices.end(), r.id) != 0) r.value.roomType = RoomType::COMMAND_CENTER;
+	}
+
 	return ret;
 }
 

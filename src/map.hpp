@@ -43,7 +43,7 @@ struct Tile {
 };
 
 
-enum class RoomType { NORMAL, COMMAND_CENTER };
+enum class RoomType { UNASSIGNED, START, NORMAL, COMMAND_CENTER };
 enum class RoomDecor { NONE, PILLARS };
 
 struct Room {
@@ -111,6 +111,7 @@ private:
 	Graph<Room> makeEdgesBidirectional(Graph<Room> rooms);
 	Graph<Room> cullDoubleEdges(Graph<Room> rooms);
 	Graph<Room> makeLoops(Graph<Room> rooms, const Graph<Room> physicalConnections, float loopFactor);
+	Graph<Room> specializeRooms(Graph<Room> rooms, const Graph<Room> mst);
 
 	friend class boost::serialization::access;
 	template<class Archive>

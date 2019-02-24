@@ -207,14 +207,10 @@ void map_utils::addItemsBasedOnRoomTypes(World* world, Map* map, int difficulty)
 }
 
 void map_utils::addPlayer(World* world, Map* map) {
-	int x = 0;
-	int y = 0;
-	do {
-		int r = d100();
-		int s = d100();
-		x = (map->width-1) * r / 100;
-		y = (map->height-1) * s / 100;
-	} while (map->isWall(x, y)); // should check for canWalk, but can't do that yet
+	auto room = std::find_if(map->rooms.begin(), map->rooms.end(), [](const auto& r){ return r.value.roomType == RoomType::START; })->value;
+
+	int x = (room.x0() + room.x1()) / 2;
+	int y = (room.y0() + room.y1()) / 2 + 1;
 
 	std::unique_ptr<Actor> player = std::make_unique<Actor>(world, x, y, '@', "you", sf::Color::White, 2);
 	player->attacker     = std::make_unique<Attacker>(1, 2, 1);
