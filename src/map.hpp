@@ -43,7 +43,7 @@ struct Tile {
 };
 
 
-enum class RoomType { UNASSIGNED, START, NORMAL, COMMAND_CENTER };
+enum class RoomType { UNASSIGNED, START, MARKET, NORMAL, COMMAND_CENTER, ARMOURY };
 enum class RoomDecor { NONE, PILLARS };
 
 struct Room {

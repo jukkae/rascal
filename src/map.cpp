@@ -50,6 +50,22 @@ void Map::generateMap(MapType mapType) {
 			break;
 	}
 	// DEBUG PRINT
+	std::cout << "\n\n";
+	std::cout << "MAP ROOMS:\n";
+	std::cout << rooms.size() << " rooms\n";
+	for(auto& room : rooms) {
+		std::cout << "room " << room.id << " "
+		// << (room.value.roomType == RoomType::COMMAND_CENTER ? "(command center)" : "(normal)")
+		<< ": "
+		<< "(" << room.value.coordinates.x0() << ", " << room.value.coordinates.y0() << "), "
+		<< "(" << room.value.coordinates.x1() << ", " << room.value.coordinates.y1() << ")\n";
+		std::cout << "  neighbours: ";
+		for(auto& a: room.neighbours){
+			std::cout << a << " ";
+		}
+		std::cout << "\n";
+	}
+	std::cout << "END MAP ROOMS\n";
 	std::cout << "MAP TILES:\n";
 	int x = 0;
 	int y = 0;
@@ -63,6 +79,10 @@ void Map::generateMap(MapType mapType) {
 				std::cout << "c";
 			} else if(getRooms(Point {x, y}).at(0).roomType == RoomType::START) {
 				std::cout << "s";
+			} else if(getRooms(Point {x, y}).at(0).roomType == RoomType::ARMOURY) {
+				std::cout << "a";
+			} else if(getRooms(Point {x, y}).at(0).roomType == RoomType::MARKET) {
+				std::cout << "m";
 			} else {
 				std::cout << ".";
 			}
@@ -74,21 +94,6 @@ void Map::generateMap(MapType mapType) {
 		}
 	}
 	std::cout << "END MAP TILES\n";
-	std::cout << "MAP ROOMS:\n";
-	std::cout << rooms.size() << " rooms\n";
-	for(auto& room : rooms) {
-		std::cout << "room " << room.id << " "
-		<< (room.value.roomType == RoomType::COMMAND_CENTER ? "(command center)" : "(normal)")
-		<< ": "
-		<< "(" << room.value.coordinates.x0() << ", " << room.value.coordinates.y0() << "), "
-		<< "(" << room.value.coordinates.x1() << ", " << room.value.coordinates.y1() << ")\n";
-		std::cout << "  neighbours: ";
-		for(auto& a: room.neighbours){
-			std::cout << a << " ";
-		}
-		std::cout << "\n";
-	}
-	std::cout << "END MAP ROOMS\n";
 }
 
 std::vector<Room> Map::getRooms(Point location) {
@@ -432,6 +437,7 @@ Graph<Room> Map::specializeRooms(Graph<Room> rooms, const Graph<Room> mst) {
 	std::vector<int> leafIndices (leafNodes.size());
 	std::transform(leafNodes.begin(), leafNodes.end(), leafIndices.begin(), [&](const auto& r) { return r.id; });
 
+	// Starting room
 	{ // scope for temporaries
 	int rnd = randomInRange(0, leafIndices.size() - 1);
 	int start = leafIndices.at(rnd);
@@ -439,8 +445,32 @@ Graph<Room> Map::specializeRooms(Graph<Room> rooms, const Graph<Room> mst) {
 	leafIndices.erase(std::remove_if(leafIndices.begin(), leafIndices.end(), [&](const auto& a) { return a == start; }), leafIndices.end());
 	} // scope for temporaries
 
+	// Market
+	{ // scope for temporaries
+	int rnd = randomInRange(0, leafIndices.size() - 1);
+	int start = leafIndices.at(rnd);
+	std::find_if(ret.begin(), ret.end(), [&](const auto& r) { return r.id == start; })->value.roomType = RoomType::MARKET;
+	leafIndices.erase(std::remove_if(leafIndices.begin(), leafIndices.end(), [&](const auto& a) { return a == start; }), leafIndices.end());
+	} // scope for temporaries
+
+	// Armoury
+	{ // scope for temporaries
+	int rnd = randomInRange(0, leafIndices.size() - 1);
+	int start = leafIndices.at(rnd);
+	std::find_if(ret.begin(), ret.end(), [&](const auto& r) { return r.id == start; })->value.roomType = RoomType::ARMOURY;
+	leafIndices.erase(std::remove_if(leafIndices.begin(), leafIndices.end(), [&](const auto& a) { return a == start; }), leafIndices.end());
+	} // scope for temporaries
+
+	// Command  centers
 	for(auto& r : ret) {
 		if(std::count(leafIndices.begin(), leafIndices.end(), r.id) != 0) r.value.roomType = RoomType::COMMAND_CENTER;
+	}
+
+	// Make all the rest normal rooms
+	for(auto& r : ret) {
+		if (r.value.roomType == RoomType::UNASSIGNED) {
+			r.value.roomType = RoomType::NORMAL;
+		}
 	}
 
 	return ret;

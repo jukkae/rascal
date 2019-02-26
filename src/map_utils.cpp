@@ -166,7 +166,7 @@ void map_utils::addMonstersBasedOnRoomTypes(World* world, Map* map, int difficul
 		switch(room.roomType) {
 			case RoomType::COMMAND_CENTER: {
 				int area = abs((room.x1() - room.x0()) * (room.y1() - room.y0())); //shouldn't need abs, but just making sure
-				std::cout << "area: " << area << "\n";
+				//std::cout << "area: " << area << "\n";
 				int numberOfGuards = floor(area / 100) + 1;
 				for(int i =  0; i < numberOfGuards; ++i) {
 					int x = (room.x0() + room.x1()) / 2 + i;
@@ -179,6 +179,24 @@ void map_utils::addMonstersBasedOnRoomTypes(World* world, Map* map, int difficul
 					static_cast<MonsterAi*>(being->ai.get())->setAiState(AiState::NORMAL_PATROL);
 					static_cast<MonsterAi*>(being->ai.get())->setPatrolPoints({p0, p1, p2, p3});
 					static_cast<MonsterAi*>(being->ai.get())->setCurrentTargetIndex(i);
+					world->addActor(std::move(being));
+				}
+				break;
+			}
+			case RoomType::MARKET: {
+				int area = abs((room.x1() - room.x0()) * (room.y1() - room.y0())); //shouldn't need abs, but just making sure
+				//std::cout << "area: " << area << "\n";
+				int numberOfPeople = floor(area / 100) + 1;
+
+				for(int i =  0; i < numberOfPeople; ++i) {
+					int x = (room.x0() + room.x1()) / 2 + i;
+					int y = (room.y0() + room.y1()) / 2 + i;
+					do {
+						x = randomInRange(room.x0(), room.x1());
+						y = randomInRange(room.y0(), room.y1());
+					} while(map->isWall(x, y));
+					auto being = npc::makeBeingFromToml(world, map, x, y, "punk");
+					static_cast<MonsterAi*>(being->ai.get())->setAiState(AiState::NORMAL_IDLE);
 					world->addActor(std::move(being));
 				}
 				break;
@@ -198,6 +216,66 @@ void map_utils::addItemsBasedOnRoomTypes(World* world, Map* map, int difficulty)
 				int y = (room.y0() + room.y1()) / 2 + 1;
 				auto item = item::makeItemFromToml(world, map, x, y, "ram_chip");
 				world->addActor(std::move(item));
+				break;
+			}
+			case RoomType::ARMOURY: {
+
+				auto& levels = map_utils::LevelsTable::getInstance().levelsTable;
+
+				auto level = toml::get<toml::table>(levels.at(std::to_string(difficulty)));
+				auto items = toml::get<std::vector<toml::table>>(level.at("items"));
+				auto item_probability = toml::get<float>(level.at("item_probability"));
+
+				// std::map<int, std::string> would be better for both of these
+				std::vector<int> weights;
+				std::vector<std::string> weightedTypes;
+				std::vector<int> amounts;
+				std::vector<std::string> numberedTypes;
+				for(auto& itemTable : items) {
+					if(itemTable.count("amount") != 0) {
+						int amount = toml::get<int>(itemTable.at("amount"));
+						std::string itemType = toml::get<std::string>(itemTable.at("item"));
+						amounts.push_back(amount);
+						numberedTypes.push_back(itemType);
+					} else if(itemTable.count("with_weight") != 0) {
+						int weight = toml::get<int>(itemTable.at("with_weight"));
+						std::string itemType = toml::get<std::string>(itemTable.at("item"));
+						weights.push_back(weight);
+						weightedTypes.push_back(itemType);
+					} else throw std::logic_error("Malformed items in levels.toml");
+				}
+
+				auto& gen = dice::gen;
+				std::discrete_distribution<> d(weights.begin(), weights.end());
+
+				std::uniform_real_distribution<> probability_distribution(0, 1);
+
+				for(int x = room.x0() + 1; x < room.x1(); ++x) {
+					for(int y = room.y0() + 1; y < room.y1(); ++y) {
+						float r = probability_distribution(gen);
+						if (!map->isWall(x, y) && r <= item_probability) { // can't use canWalk yet
+							auto item = item::makeItemFromToml(world, map, x, y, weightedTypes.at(d(gen)));
+							world->addActor(std::move(item));
+						}
+					}
+				}
+
+				std::uniform_int_distribution<int> x_dist(room.x0(), room.x1());
+				std::uniform_int_distribution<int> y_dist(room.y0(), room.y1());
+				for(int i = 0; i < amounts.size(); ++i) {
+					int amount = amounts.at(i);
+					std::string itemType = numberedTypes.at(i);
+					for(int n = 0; n < amount; ++n) {
+						int x = x_dist(gen);
+						int y = y_dist(gen);
+						while(map->isWall(x, y)) {
+							x = x_dist(gen);
+							y = y_dist(gen);
+						} // TODO in extreme corner cases this might be endless
+						auto item = item::makeItemFromToml(world, map, x, y, itemType);
+						world->addActor(std::move(item));
+					}
+				}
 				break;
 			}
 			default:
