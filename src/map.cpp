@@ -94,6 +94,12 @@ void Map::generateMap(MapType mapType) {
 		}
 	}
 	std::cout << "END MAP TILES\n";
+	std::cout << "MAP GRAPH EDGES\n";
+	auto g = getEdges(rooms);
+	for(auto p : g) {
+		std::cout << "(" << p.first << ", " << p.second << ")\n";
+	}
+	std::cout << "END MAP GRAPH EDGES\n";
 }
 
 std::vector<Room> Map::getRooms(Point location) {

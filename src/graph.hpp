@@ -1,6 +1,8 @@
 #ifndef GRAPH_HPP
 #define GRAPH_HPP
 
+#include <set>
+
 template<class T>
 struct GraphNode {
 public:
@@ -30,5 +32,19 @@ using Graph = std::vector<GraphNode<T>>;
 //     ar & nodes;
 //   }
 // };
+
+template<typename T>
+std::set<std::pair<int, int>> getEdges(Graph<T> graph) {
+  std::set<std::pair<int, int>> ret {};
+  for(auto& n : graph) {
+    for(auto& nb : n.neighbours) {
+      int a = n.id;
+      int b = nb;
+      if(a > b) std::swap(a, b);
+      ret.insert({a, b});
+    }
+  }
+  return ret;
+}
 
 #endif /* GRAPH_HPP */
