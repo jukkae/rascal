@@ -7,8 +7,8 @@
 class DialogueGenerator {
 public:
   DialogueGenerator() {}
-  DialogueGenerator(std::experimental::optional<MissionType> missionType): missionType(missionType) {}
-  std::experimental::optional<MissionType> missionType;
+  DialogueGenerator(std::optional<MissionType> missionType): missionType(missionType) {}
+  std::optional<MissionType> missionType;
 private:
 	friend class boost::serialization::access;
 	template<class Archive>

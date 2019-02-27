@@ -3,7 +3,7 @@
 
 #include <string>
 #include <queue>
-#include <experimental/optional>
+#include <optional>
 #include <boost/optional.hpp>
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
@@ -67,7 +67,7 @@ public:
 	std::unique_ptr<Openable> openable;
 	Actor* wornWeapon = nullptr;
 	std::vector<Actor*> wornArmors;
-	std::experimental::optional<Animation> animation;
+	std::optional<Animation> animation;
 	std::vector<std::unique_ptr<Mission>> missions;
 	std::unique_ptr<DialogueGenerator> dialogueGenerator;
 

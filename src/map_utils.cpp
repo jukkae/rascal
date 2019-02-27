@@ -197,7 +197,7 @@ void map_utils::addMonstersBasedOnRoomTypes(World* world, Map* map, int difficul
 						y = randomInRange(room.y0(), room.y1());
 					} while(map->isWall(x, y));
 					auto being = npc::makeBeingFromToml(world, map, x, y, "punk");
-					int rnd = d8();
+					int rnd = d2(); // TODO
 					MissionType missionType;
 					switch(rnd) {
 						case 1: missionType = MissionType::KILL; break;

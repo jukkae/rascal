@@ -15,8 +15,9 @@ public:
 };
 
 struct DialogueGraphNode {
+	int id;
 	std::string text;
-	std::vector<std::pair<std::string, DialogueGraphNode*>> replies;
+	std::vector<std::pair<std::string, std::optional<int>>> replies;
 	bool createMission = false;
 	DialogueAction enter(Actor* player) { return DialogueAction{ player, createMission }; }
 };
@@ -29,9 +30,10 @@ public:
 	void update() override;
 	void render() override;
 private:
+	void initializeDialogueGraph();
+	std::vector<DialogueGraphNode> dialogueGraph;
 	int selectedReplyIndex = 0;
-	DialogueGraphNode n0, n1, n2, n3, n4;
-	DialogueGraphNode* currentNode = &n0;
+	DialogueGraphNode* currentNode = nullptr;
 	Actor* player;
 	Actor* other;
 };

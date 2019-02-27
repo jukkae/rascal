@@ -212,7 +212,7 @@ void Map::generateWaterMap() {
 		for(int y = 0; y < height; ++y) {
 			if(x % 3 == 0 && y % 3 == 0) {
 				tiles(x, y).walkable = false;
-				tiles(x, y).animation = std::experimental::nullopt;
+				tiles(x, y).animation = std::nullopt;
 			}
 		}
 	}
@@ -220,7 +220,7 @@ void Map::generateWaterMap() {
 		for(int y = 0; y < height; ++y) {
 			if(x == 0 || x == width - 1 || y == 0 || y == height - 1) {
 				tiles(x, y).walkable = false;
-				tiles(x, y).animation = std::experimental::nullopt;
+				tiles(x, y).animation = std::nullopt;
 			}
 		}
 	}

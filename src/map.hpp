@@ -4,7 +4,7 @@
 #include <vector>
 #include <fstream>
 #include <sstream>
-#include <experimental/optional>
+#include <optional>
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/serialization/export.hpp>
@@ -27,7 +27,7 @@ struct Tile {
 	bool walkable;
 	Terrain terrain;
 	float movementCost;
-	std::experimental::optional<Animation> animation;
+	std::optional<Animation> animation;
 	Tile() : explored(false), transparent(true), walkable(true),
 	terrain(Terrain::NORMAL), movementCost(1.0f) {;}
 

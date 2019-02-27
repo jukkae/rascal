@@ -16,28 +16,7 @@ player(player),
 other(other) {
 	console = Console(ConsoleType::NARROW, ClearMode::BLACK); // TODO would prefer TRANSPARENT, but that's broken
 
-	n0.text = "Hello, traveler!";
-	n0.replies.push_back({"Eat dirt, scumbag!", &n1});
-	n0.replies.push_back({"Nice to meet you, too!", &n2});
-	n0.replies.push_back({"... [blank stare]", &n3});
-
-	n1.text = "You sound like a tough one. I need a certain Bill dead.";
-	n1.replies.push_back({"Sounds good. What's in it for me?", &n4});
-	n1.replies.push_back({"Naw man, that ain't me.", nullptr});
-	n1.replies.push_back({"... [blank stare]", nullptr});
-
-	n2.text = "Say, what do you think of the weather?";
-	n2.replies.push_back({"Heck off, old man.", &n1});
-	n2.replies.push_back({"It's bad.", &n3});
-	n2.replies.push_back({"It's good.", &n3});
-	n2.replies.push_back({"It's okay.", &n3});
-
-	n3.text = "I'm sorry to have wasted your time. See you!";
-	n3.replies.push_back({"... [blank stare]", nullptr});
-
-	n4.createMission = true;
-	n4.text = "Besides the joy of killing? Money. Go at it.";
-	n4.replies.push_back({"... [blank stare]", nullptr});
+	initializeDialogueGraph();
 }
 
 void DialogueState::update() {
@@ -73,9 +52,9 @@ void DialogueState::handleEvents() {
 					if(selectedReplyIndex < currentNode->replies.size() - 1) ++selectedReplyIndex;
 					break;
 				case k::Return:
-					if(currentNode->replies.at(selectedReplyIndex).second != nullptr) {
+					if(currentNode->replies.at(selectedReplyIndex).second != std::nullopt) {
 						//console.clear();
-						currentNode = currentNode->replies.at(selectedReplyIndex).second;
+						currentNode = &dialogueGraph.at(currentNode->replies.at(selectedReplyIndex).second.value());
 						DialogueAction da = currentNode->enter(player);
 						da.execute();
 						selectedReplyIndex = 0;
@@ -90,4 +69,31 @@ void DialogueState::handleEvents() {
 			}
 		}
 	}
+}
+
+void DialogueState::initializeDialogueGraph() {
+	using std::nullopt;
+	DialogueGraphNode n0, n1, n2, n3, n4;
+	n0.text = "Hello, traveler!";
+	n0.replies.push_back({"Eat dirt, scumbag!", 1});
+	n0.replies.push_back({"Nice to meet you, too!", 2});
+	n0.replies.push_back({"... [blank stare]", 3});
+
+	n1.text = "You sound like a tough one. I need a certain Bill dead.";
+	n1.replies.push_back({"Sounds good. What's in it for me?", 4});
+	n1.replies.push_back({"Naw man, that ain't me.", nullopt});
+	n1.replies.push_back({"... [blank stare]", nullopt});
+
+	n2.text = "Say, what do you think of the weather?";
+	n2.replies.push_back({"Heck off, old man.", 1});
+	n2.replies.push_back({"It's bad.", 3});
+	n2.replies.push_back({"It's good.", 3});
+	n2.replies.push_back({"It's okay.", 3});
+
+	n3.text = "I'm sorry to have wasted your time. See you!";
+	n3.replies.push_back({"... [blank stare]", nullopt});
+
+	n4.createMission = true;
+	n4.text = "Besides the joy of killing? Money. Go at it.";
+	n4.replies.push_back({"... [blank stare]", nullopt});
 }
