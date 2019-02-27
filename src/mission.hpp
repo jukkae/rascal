@@ -1,6 +1,6 @@
 #ifndef MISSION_HPP
 #define MISSION_HPP
-#include "event.hpp"
+
 
 struct Event;
 class Actor;

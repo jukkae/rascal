@@ -1,4 +1,5 @@
 #include "mission.hpp"
+#include "event.hpp"
 
 void KillMission::notify(Event& event) {
   if(auto e = dynamic_cast<DeathEvent*>(&event)) {
