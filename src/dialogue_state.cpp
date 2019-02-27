@@ -5,8 +5,15 @@
 
 void DialogueAction::execute() {
 	if(createMission) {
-		player->missions.push_back(std::make_unique<KillMission>("Kill Bill", "Find and kill Bill"));
-		std::cout << "New quest created\n";
+		switch(other->dialogueGenerator->missionType.value()) {
+			case MissionType::KILL: {
+				player->missions.push_back(std::make_unique<KillMission>("Kill Bill", "Find and kill Bill"));
+			} break;
+			case MissionType::ACQUIRE_ITEMS: {
+				player->missions.push_back(std::make_unique<KillMission>("Acquire RAM", "Acquire 2 RAM chips"));
+			} break;
+			default: break;
+		}
 	}
 }
 
@@ -55,7 +62,7 @@ void DialogueState::handleEvents() {
 					if(currentNode->replies.at(selectedReplyIndex).second != std::nullopt) {
 						//console.clear();
 						currentNode = &dialogueGraph.at(currentNode->replies.at(selectedReplyIndex).second.value());
-						DialogueAction da = currentNode->enter(player);
+						DialogueAction da = currentNode->enter(player, other);
 						da.execute();
 						selectedReplyIndex = 0;
 					}
