@@ -457,7 +457,7 @@ bool TalkAction::execute() {
 		for(int y = actor->y - 1; y <= actor->y + 1; ++y) {
 			if(x == actor->x && y == actor->y) continue;
 			std::vector<Actor*> as = w->getActorsAt(x, y);
-			for(auto& a : as) if(a->ai) { // also if not dead, if not hostile
+			for(auto& a : as) if(a->dialogueGenerator) { // also if not dead, if not hostile
 				Engine* engine = io::engine;
 				std::unique_ptr<State> dialogueState = std::make_unique<DialogueState>(engine, actor, a);
 				engine->pushState(std::move(dialogueState));

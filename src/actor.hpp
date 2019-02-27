@@ -28,6 +28,7 @@ class Wieldable;
 class GameplayState;
 class Mission;
 
+
 #include "animation.hpp"
 #include "attribute.hpp"
 #include "direction.hpp"
@@ -39,6 +40,7 @@ class Mission;
 #include "attacker.hpp" //FIXME for serialization for now
 #include "body.hpp" //FIXME for serialization for now
 #include "mission.hpp"
+#include "dialogue_generator.hpp" //FIXME for serialization for now
 
 class World;
 class Actor {
@@ -67,6 +69,7 @@ public:
 	std::vector<Actor*> wornArmors;
 	std::experimental::optional<Animation> animation;
 	std::vector<std::unique_ptr<Mission>> missions;
+	std::unique_ptr<DialogueGenerator> dialogueGenerator;
 
 	World* world;
 
@@ -122,6 +125,7 @@ private:
 		ar & animation;
 		ar & comestible;
 		ar & missions;
+		ar & dialogueGenerator;
     }
 };
 #endif /* ACTOR_HPP */
