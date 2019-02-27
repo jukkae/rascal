@@ -10,7 +10,7 @@ void DialogueAction::execute() {
 				player->missions.push_back(std::make_unique<KillMission>("Kill Bill", "Find and kill Bill"));
 			} break;
 			case MissionType::ACQUIRE_ITEMS: {
-				player->missions.push_back(std::make_unique<KillMission>("Acquire RAM", "Acquire 2 RAM chips"));
+				player->missions.push_back(std::make_unique<AcquireItemsMission>("Acquire RAM", "Acquire 2 RAM chips"));
 			} break;
 			default: break;
 		}

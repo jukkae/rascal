@@ -50,4 +50,18 @@ private:
 	}
 };
 
+class AcquireItemsMission : public Mission {
+public:
+  AcquireItemsMission(std::string name = "", std::string description = "", Actor* giver = nullptr):
+    Mission(name, description, giver) {}
+  void notify(Event& event);
+private:
+  friend class boost::serialization::access;
+  template<class Archive>
+  void serialize(Archive & ar, const unsigned int version) {
+    ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(Mission);
+  }
+};
+
+// Whenever you add new Mission subclass, you need to register it.
 #endif /* MISSION_HPP */
