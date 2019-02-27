@@ -96,4 +96,12 @@ void DialogueState::initializeDialogueGraph() {
 	n4.createMission = true;
 	n4.text = "Besides the joy of killing? Money. Go at it.";
 	n4.replies.push_back({"... [blank stare]", nullopt});
+
+	dialogueGraph.push_back(n0);
+	dialogueGraph.push_back(n1);
+	dialogueGraph.push_back(n2);
+	dialogueGraph.push_back(n3);
+	dialogueGraph.push_back(n4);
+
+	currentNode = &dialogueGraph.at(0);
 }

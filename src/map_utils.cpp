@@ -184,6 +184,7 @@ void map_utils::addMonstersBasedOnRoomTypes(World* world, Map* map, int difficul
 				}
 				break;
 			}
+			case RoomType::START: // fallthrough for debugging TODO
 			case RoomType::MARKET: {
 				int area = abs((room.x1() - room.x0()) * (room.y1() - room.y0())); //shouldn't need abs, but just making sure
 				//std::cout << "area: " << area << "\n";
