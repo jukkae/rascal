@@ -74,34 +74,62 @@ void DialogueState::handleEvents() {
 void DialogueState::initializeDialogueGraph() {
 	using std::nullopt;
 	DialogueGraphNode n0, n1, n2, n3, n4;
-	n0.text = "Hello, traveler!";
-	n0.replies.push_back({"Eat dirt, scumbag!", 1});
-	n0.replies.push_back({"Nice to meet you, too!", 2});
-	n0.replies.push_back({"... [blank stare]", 3});
+	if(other->dialogueGenerator->missionType) {
+		switch(other->dialogueGenerator->missionType.value()) {
+			case MissionType::KILL: {
+				n0.text = "Hello, traveler!";
+				n0.replies.push_back({"Eat dirt, scumbag!", 1});
+				n0.replies.push_back({"Nice to meet you, too!", 2});
+				n0.replies.push_back({"... [blank stare]", 3});
 
-	n1.text = "You sound like a tough one. I need a certain Bill dead.";
-	n1.replies.push_back({"Sounds good. What's in it for me?", 4});
-	n1.replies.push_back({"Naw man, that ain't me.", nullopt});
-	n1.replies.push_back({"... [blank stare]", nullopt});
+				n1.text = "You sound like a tough one. I need a certain Bill dead.";
+				n1.replies.push_back({"Sounds good. What's in it for me?", 4});
+				n1.replies.push_back({"Naw man, that ain't me.", nullopt});
+				n1.replies.push_back({"... [blank stare]", nullopt});
 
-	n2.text = "Say, what do you think of the weather?";
-	n2.replies.push_back({"Heck off, old man.", 1});
-	n2.replies.push_back({"It's bad.", 3});
-	n2.replies.push_back({"It's good.", 3});
-	n2.replies.push_back({"It's okay.", 3});
+				n2.text = "Say, what do you think of the weather?";
+				n2.replies.push_back({"Heck off, old man.", 1});
+				n2.replies.push_back({"It's bad.", 3});
+				n2.replies.push_back({"It's good.", 3});
+				n2.replies.push_back({"It's okay.", 3});
 
-	n3.text = "I'm sorry to have wasted your time. See you!";
-	n3.replies.push_back({"... [blank stare]", nullopt});
+				n3.text = "I'm sorry to have wasted your time. See you!";
+				n3.replies.push_back({"... [blank stare]", nullopt});
 
-	n4.createMission = true;
-	n4.text = "Besides the joy of killing? Money. Go at it.";
-	n4.replies.push_back({"... [blank stare]", nullopt});
+				n4.createMission = true;
+				n4.text = "Besides the joy of killing? Money. Go at it.";
+				n4.replies.push_back({"... [blank stare]", nullopt});
 
-	dialogueGraph.push_back(n0);
-	dialogueGraph.push_back(n1);
-	dialogueGraph.push_back(n2);
-	dialogueGraph.push_back(n3);
-	dialogueGraph.push_back(n4);
+				dialogueGraph.push_back(n0);
+				dialogueGraph.push_back(n1);
+				dialogueGraph.push_back(n2);
+				dialogueGraph.push_back(n3);
+				dialogueGraph.push_back(n4);
+			} break;
+			case MissionType::ACQUIRE_ITEMS: {
+				n0.text = "I'm in dire need of some RAM chips.";
+				n0.replies.push_back({"Tough.", nullopt});
+				n0.replies.push_back({"How many do you need?", 1});
 
+				n1.text = "Two packs. I'll give you 25 credits.";
+				n1.replies.push_back({"It's a deal.", 2});
+				n1.replies.push_back({"Too low.", nullopt});
+
+				n2.createMission = true;
+				n2.text = "I'll wait for you here.";
+				n2.replies.push_back({"... [blank stare]", nullopt});
+
+				dialogueGraph.push_back(n0);
+				dialogueGraph.push_back(n1);
+				dialogueGraph.push_back(n2);
+			} break;
+			default: break;
+		}
+	} else { // no missionType
+		n0.text = "I don't know you.";
+		n0.replies.push_back({"That makes two of us.", nullopt});
+
+		dialogueGraph.push_back(n0);
+	}
 	currentNode = &dialogueGraph.at(0);
 }

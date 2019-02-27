@@ -198,18 +198,18 @@ void map_utils::addMonstersBasedOnRoomTypes(World* world, Map* map, int difficul
 						y = randomInRange(room.y0(), room.y1());
 					} while(map->isWall(x, y));
 					auto being = npc::makeBeingFromToml(world, map, x, y, "punk");
-					int rnd = d2(); // TODO
-					MissionType missionType;
+					int rnd = d3(); // TODO-
+					std::optional<MissionType> missionType;
 					switch(rnd) {
 						case 1: missionType = MissionType::KILL; break;
 						case 2: missionType = MissionType::ACQUIRE_ITEMS; break;
-						case 3: missionType = MissionType::DELIVER; break;
-						case 4: missionType = MissionType::ESCORT; break;
-						case 5: missionType = MissionType::GATHER_INTEL; break;
-						case 6: missionType = MissionType::DEFEND; break;
-						case 7: missionType = MissionType::DISCOVER; break;
-						case 8: missionType = MissionType::NEGOTIATE; break;
-						default: throw "This mission type not implemented!";
+						// case 3: missionType = MissionType::DELIVER; break;
+						// case 4: missionType = MissionType::ESCORT; break;
+						// case 5: missionType = MissionType::GATHER_INTEL; break;
+						// case 6: missionType = MissionType::DEFEND; break;
+						// case 7: missionType = MissionType::DISCOVER; break;
+						// case 8: missionType = MissionType::NEGOTIATE; break;
+						default: missionType = std::nullopt;
 					}
 					being->dialogueGenerator = std::make_unique<DialogueGenerator>(missionType);
 					static_cast<MonsterAi*>(being->ai.get())->setAiState(AiState::NORMAL_IDLE);
