@@ -80,6 +80,20 @@ private:
 	}
 };
 
+class HitAction : public Action {
+public:
+	HitAction(Actor* actor, Point target);
+	bool execute();
+	Point target;
+private:
+	friend class boost::serialization::access;
+	template<class Archive>
+	void serialize(Archive & ar, const unsigned int version) {
+		ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(Action);
+		ar & target;
+	}
+};
+
 class TraverseStairsAction : public Action {
 public:
 	TraverseStairsAction(Actor* actor, bool down) : Action(actor, ActionRange::ON_TOP, 100.0f), down(down) {;}

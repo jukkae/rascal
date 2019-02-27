@@ -13,6 +13,13 @@ struct Point {
 			return this->x < rhs.x;
 		else return this->y < rhs.y;
 	}
+private:
+	friend class boost::serialization::access;
+	template<class Archive>
+	void serialize(Archive & ar, const unsigned int version) {
+		ar & x;
+		ar & y;
+	}
 };
 
 struct PointHasher

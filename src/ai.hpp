@@ -60,7 +60,7 @@ private:
 	}
 };
 
-enum class AiState { NORMAL, PATROLLING, VIGILANT, ALERT, FRIGHTENED, FRIENDLY };
+enum class AiState { NORMAL_WANDER, NORMAL_PATROL, NORMAL_IDLE, CURIOUS, SEEN_PLAYER_FRIENDLY, SEEN_PLAYER_HOSTILE };
 
 class MonsterAi : public Ai {
 public:
@@ -69,12 +69,20 @@ public:
 	MonsterAi(float speed, Faction& faction) : Ai(speed, faction) {;}
 
 	std::vector<std::unique_ptr<Action>> getNextAction(Actor* actor) override;
+	void setAiState(AiState state) {aiState = state;}
+	void setPatrolPoints(std::vector<Point> points) {patrolPoints = points;}
+	void setCurrentTargetIndex(int index);
+	std::vector<Point> patrolPoints;
+	Point* currentTarget = nullptr;
+	int currentTargetIndex = 0;
 protected:
 	int moveCount;
 	void moveOrAttack(Actor* owner, GameplayState* state, int targetX, int targetY);
 private:
-	AiState aiState = AiState::NORMAL;
+	AiState aiState = AiState::NORMAL_IDLE;
 	bool hasSeenPlayer = false;
+	std::vector<std::unique_ptr<Action>> plannedActions {};
+
 	friend class boost::serialization::access;
 	template<class Archive>
 	void serialize(Archive & ar, const unsigned int version) {
@@ -82,6 +90,10 @@ private:
 		ar & moveCount;
 		ar & aiState;
 		ar & hasSeenPlayer;
+		ar & patrolPoints;
+		ar & currentTarget;
+		ar & currentTargetIndex;
+		//ar & plannedActions; // TODO this crashes on serialization, because action refers to actor, actor refers to AI, and... here we are
 	}
 };
 

@@ -1,7 +1,7 @@
 [1]
 mapType = "Building"
 being_probability = 0.003 # per tile
-item_probability = 0.01 # per tile
+item_probability = 0.05 # per tile
 beings = [ { amount = 1, being = "fighter" },
            { amount = 1, being = "bill" },
            { with_weight = 5, being = "dog" },

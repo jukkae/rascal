@@ -10,9 +10,12 @@
 #include <boost/serialization/export.hpp>
 #include "animation.hpp"
 #include "constants.hpp"
+#include "faction.hpp"
+#include "graph.hpp"
 #include "mat.hpp"
+#include "rect.hpp"
 class World;
-struct Rect;
+
 template<class T>
 struct Vec;
 
@@ -40,6 +43,36 @@ struct Tile {
 };
 
 
+enum class RoomType { UNASSIGNED, START, MARKET, NORMAL, COMMAND_CENTER, ARMOURY };
+enum class RoomDecor { NONE, PILLARS };
+
+struct Room {
+public:
+	Rect coordinates;
+	RoomType roomType;
+	RoomDecor roomDecor;
+	Faction roomFaction;
+	int x0() { return coordinates.x0(); }
+	int x1() { return coordinates.x1(); }
+	int y0() { return coordinates.y0(); }
+	int y1() { return coordinates.y1(); }
+	int width() { return coordinates.width(); }
+	int height() { return coordinates.height(); }
+
+	// TODO not the most sophisticated, will break eventually
+	bool operator==(const Room& rhs) const { return this->coordinates == rhs.coordinates; }
+private:
+	friend class boost::serialization::access;
+	template<class Archive>
+	void serialize(Archive & ar, const unsigned int version) {
+		ar & coordinates;
+		ar & roomType;
+		ar & roomDecor;
+		ar & roomFaction;
+	}
+};
+
+
 enum class BreakDirection { HORIZONTAL, VERTICAL };
 enum class MapType { BUILDING, WATER, PILLARS };
 
@@ -48,6 +81,9 @@ public:
 	int width, height;
 	//std::vector<Tile> tiles;
 	Mat2d<Tile> tiles;
+	Graph<Room> rooms; // Final adjacency map
+	Graph<Room> minimumSpanningTree; // Backbone with exactly 1 route between every room
+	Graph<Room> physicalConnectionsBetweenRooms; // All physical adjacencies
 	bool hasAnimations = false;
 
 	Map();
@@ -59,6 +95,7 @@ public:
 	//bool isInFov(int x, int y) const;
 	bool isExplored(int x, int y) const;
 	void setWorld(World* w) { world = w; }
+	std::vector<Room> getRooms(Point location);
 
 private:
 	World* world;
@@ -67,7 +104,14 @@ private:
 	void generateBuildingMap();
 	void generatePillarsMap();
 	void generateWaterMap();
-	std::vector<Rect> breakRooms(Rect area, BreakDirection direction = BreakDirection::HORIZONTAL);
+	Graph<Room> breakRooms(Rect area, BreakDirection direction = BreakDirection::HORIZONTAL);
+	Graph<Room> indexRooms(Graph<Room> rooms);
+	Graph<Room> connectRooms(Graph<Room> rooms);
+	Graph<Room> pruneEdges(Graph<Room> rooms);
+	Graph<Room> makeEdgesBidirectional(Graph<Room> rooms);
+	Graph<Room> cullDoubleEdges(Graph<Room> rooms);
+	Graph<Room> makeLoops(Graph<Room> rooms, const Graph<Room> physicalConnections, float loopFactor);
+	Graph<Room> specializeRooms(Graph<Room> rooms, const Graph<Room> mst);
 
 	friend class boost::serialization::access;
 	template<class Archive>
@@ -75,6 +119,9 @@ private:
 		ar & width;
 		ar & height;
 		ar & tiles;
+		ar & rooms;
+		ar & minimumSpanningTree;
+		ar & physicalConnectionsBetweenRooms;
 		ar & hasAnimations;
 		ar & world;
 	}
