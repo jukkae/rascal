@@ -7,10 +7,14 @@ void DialogueAction::execute() {
 	if(createMission) {
 		switch(other->dialogueGenerator->missionType.value()) {
 			case MissionType::KILL: {
-				player->missions.push_back(std::make_unique<KillMission>("Kill Bill", "Find and kill Bill"));
+				auto m = std::make_unique<KillMission>("Kill Bill", "Find and kill Bill");
+				other->dialogueGenerator->mission = m.get();
+				player->missions.push_back(std::move(m));
 			} break;
 			case MissionType::ACQUIRE_ITEMS: {
-				player->missions.push_back(std::make_unique<AcquireItemsMission>("Acquire RAM", "Acquire 2 RAM chips"));
+				auto m = std::make_unique<AcquireItemsMission>("Acquire RAM", "Acquire 2 RAM chips");
+				other->dialogueGenerator->mission = m.get();
+				player->missions.push_back(std::move(m));
 			} break;
 			default: break;
 		}
@@ -83,7 +87,8 @@ void DialogueState::initializeDialogueGraph() {
 	DialogueGraphNode n0, n1, n2, n3, n4;
 	if(other->dialogueGenerator->missionType) {
 		switch(other->dialogueGenerator->missionType.value()) {
-			case MissionType::KILL: {
+		case MissionType::KILL: {
+			if(!other->dialogueGenerator->mission) {
 				n0.text = "Hello, traveler!";
 				n0.replies.push_back({"Eat dirt, scumbag!", 1});
 				n0.replies.push_back({"Nice to meet you, too!", 2});
@@ -112,25 +117,40 @@ void DialogueState::initializeDialogueGraph() {
 				dialogueGraph.push_back(n2);
 				dialogueGraph.push_back(n3);
 				dialogueGraph.push_back(n4);
-			} break;
-			case MissionType::ACQUIRE_ITEMS: {
-				n0.text = "I'm in dire need of some RAM chips.";
-				n0.replies.push_back({"Tough.", nullopt});
-				n0.replies.push_back({"How many do you need?", 1});
+			} else {
+				switch(other->dialogueGenerator->mission->status) {
+				case MissionStatus::REQUIRES_CONFIRMATION: {
+					n0.text = "He's dead?";
+					n0.replies.push_back({"He's dead.", nullopt});
+					dialogueGraph.push_back(n0);
+				} break;
+				case MissionStatus::COMPLETED: {
+					n0.text = "How did you like it?";
+					n0.replies.push_back({"I loved it! Aaah!", nullopt});
+					dialogueGraph.push_back(n0);
+				} break;
+				default: break;
+				}
+			}
+		} break;
+		case MissionType::ACQUIRE_ITEMS: {
+			n0.text = "I'm in dire need of some RAM chips.";
+			n0.replies.push_back({"Tough.", nullopt});
+			n0.replies.push_back({"How many do you need?", 1});
 
-				n1.text = "Two packs. I'll give you 25 credits.";
-				n1.replies.push_back({"It's a deal.", 2});
-				n1.replies.push_back({"Too low.", nullopt});
+			n1.text = "Two packs. I'll give you 25 credits.";
+			n1.replies.push_back({"It's a deal.", 2});
+			n1.replies.push_back({"Too low.", nullopt});
 
-				n2.createMission = true;
-				n2.text = "I'll wait for you here.";
-				n2.replies.push_back({"... [blank stare]", nullopt});
+			n2.createMission = true;
+			n2.text = "I'll wait for you here.";
+			n2.replies.push_back({"... [blank stare]", nullopt});
 
-				dialogueGraph.push_back(n0);
-				dialogueGraph.push_back(n1);
-				dialogueGraph.push_back(n2);
-			} break;
-			default: break;
+			dialogueGraph.push_back(n0);
+			dialogueGraph.push_back(n1);
+			dialogueGraph.push_back(n2);
+		} break;
+		default: break;
 		}
 	} else { // no missionType
 		n0.text = "I don't know you.";

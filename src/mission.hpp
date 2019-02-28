@@ -16,6 +16,14 @@ enum class MissionType {
   NEGOTIATE
 };
 
+enum class MissionStatus {
+  NOT_ACTIVE,
+  ACTIVE,
+  REQUIRES_CONFIRMATION, // Mission has been completed, but not yet confirmed
+  COMPLETED, // Mission has been confirmed to be completed
+  FAILED
+};
+
 class Mission {
 public:
   Mission(std::string name = "", std::string description = "", Actor* giver = nullptr):
@@ -25,15 +33,15 @@ public:
   std::string name;
   std::string description;
   Actor* giver;
-  bool completed = false;
+  MissionStatus status = MissionStatus::NOT_ACTIVE;
 private:
 	friend class boost::serialization::access;
 	template<class Archive>
 	void serialize(Archive & ar, const unsigned int version) {
 		ar & name;
     ar & description;
-    ar & completed;
     ar & giver;
+    ar & status;
 	}
 };
 

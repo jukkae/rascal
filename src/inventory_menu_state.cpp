@@ -249,14 +249,19 @@ void InventoryMenuState::renderMissions() {
 	int y = 1;
 
 	for(auto& mission : actor->missions) {
+		bool completed = (mission->status == MissionStatus::COMPLETED);
 		++y;
 		console.drawGraphicsBlock(Point(x, y+1), mission->name, colors::get("brightBlue"));
 		++y;
 		console.drawGraphicsBlock(Point(x, y+1), mission->description, colors::get("blue"));
 		++y;
-		console.drawGraphicsBlock(Point(x, y+1), mission->completed ? "done" : "not done",
-			mission->completed ? colors::get("brightGreen") : colors::get("blue"));
+		console.drawGraphicsBlock(Point(x, y+1), completed ? "done" : "not done",
+			completed ? colors::get("brightGreen") : colors::get("blue"));
 		++y;
+		if(mission->status == MissionStatus::REQUIRES_CONFIRMATION) {
+			console.drawGraphicsBlock(Point(x, y+1), "get confirmation", colors::get("blue"));
+			++y;
+		}
 	}
 }
 
