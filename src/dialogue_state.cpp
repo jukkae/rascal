@@ -9,15 +9,20 @@ void DialogueAction::execute() {
 			case MissionType::KILL: {
 				auto m = std::make_unique<KillMission>("Kill Bill", "Find and kill Bill");
 				other->dialogueGenerator->mission = m.get();
+				m->status = MissionStatus::ACTIVE;
 				player->missions.push_back(std::move(m));
 			} break;
 			case MissionType::ACQUIRE_ITEMS: {
 				auto m = std::make_unique<AcquireItemsMission>("Acquire RAM", "Acquire 2 RAM chips");
 				other->dialogueGenerator->mission = m.get();
+				m->status = MissionStatus::ACTIVE;
 				player->missions.push_back(std::move(m));
 			} break;
 			default: break;
 		}
+	}
+	if(finishMission) {
+		other->dialogueGenerator->mission->status = MissionStatus::COMPLETED;
 	}
 }
 
@@ -119,10 +124,26 @@ void DialogueState::initializeDialogueGraph() {
 				dialogueGraph.push_back(n4);
 			} else {
 				switch(other->dialogueGenerator->mission->status) {
+				case MissionStatus::ACTIVE: {
+					n0.text = "He's dead?";
+					n0.replies.push_back({"He ain't dead yet.", 1});
+
+					n1.text = "Well, do something about it.";
+					n1.replies.push_back({"I'm on it.", nullopt});
+
+					dialogueGraph.push_back(n0);
+					dialogueGraph.push_back(n1);
+				} break;
 				case MissionStatus::REQUIRES_CONFIRMATION: {
 					n0.text = "He's dead?";
-					n0.replies.push_back({"He's dead.", nullopt});
+					n0.replies.push_back({"He's dead.", 1});
+
+					n1.finishMission = true;
+					n1.text = "That's just lovely.";
+					n1.replies.push_back({"The money?", nullopt});
+
 					dialogueGraph.push_back(n0);
+					dialogueGraph.push_back(n1);
 				} break;
 				case MissionStatus::COMPLETED: {
 					n0.text = "How did you like it?";
