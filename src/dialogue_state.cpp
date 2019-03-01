@@ -2,27 +2,40 @@
 #include "actor.hpp"
 #include "status_effect.hpp"
 #include "engine_command.hpp"
+#include "container.hpp"
+#include "ai.hpp"
 
 void DialogueAction::execute() {
 	if(createMission) {
 		switch(other->dialogueGenerator->missionType.value()) {
-			case MissionType::KILL: {
-				auto m = std::make_unique<KillMission>("Kill Bill", "Find and kill Bill");
-				other->dialogueGenerator->mission = m.get();
-				m->status = MissionStatus::ACTIVE;
-				player->missions.push_back(std::move(m));
-			} break;
-			case MissionType::ACQUIRE_ITEMS: {
-				auto m = std::make_unique<AcquireItemsMission>("Acquire RAM", "Acquire 2 RAM chips");
-				other->dialogueGenerator->mission = m.get();
-				m->status = MissionStatus::ACTIVE;
-				player->missions.push_back(std::move(m));
-			} break;
-			default: break;
+		case MissionType::KILL: {
+			auto m = std::make_unique<KillMission>("Kill Bill", "Find and kill Bill");
+			other->dialogueGenerator->mission = m.get();
+			m->status = MissionStatus::ACTIVE;
+			player->missions.push_back(std::move(m));
+		} break;
+		case MissionType::ACQUIRE_ITEMS: {
+			auto m = std::make_unique<AcquireItemsMission>("Acquire RAM", "Acquire 2 RAM chips");
+			other->dialogueGenerator->mission = m.get();
+			m->status = MissionStatus::ACTIVE;
+			player->missions.push_back(std::move(m));
+		} break;
+		default: break;
 		}
 	}
 	if(finishMission) {
 		other->dialogueGenerator->mission->status = MissionStatus::COMPLETED;
+		switch(other->dialogueGenerator->missionType.value()) {
+		case MissionType::KILL: {
+			player->container->credits += 100;
+			((PlayerAi*)(player->ai).get())->increaseXp(player, 50);
+		} break;
+		case MissionType::ACQUIRE_ITEMS: {
+			player->container->credits += 25;
+			((PlayerAi*)(player->ai).get())->increaseXp(player, 50);
+		} break;
+		default: break;
+		}
 	}
 }
 
