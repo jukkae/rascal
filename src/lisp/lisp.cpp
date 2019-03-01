@@ -216,12 +216,12 @@ void lisp::printExpr(Atom atom) {
   if(std::holds_alternative<Nil>(atom)) {
     std::cout << "NIL";
   }
-  else if(std::holds_alternative<Pair*>(atom) || std::holds_alternative<Closure*>(atom) || std::holds_alternative<Macro*>(atom)) {
+  else if(std::holds_alternative<Pair*>(atom)) {
     std::cout << "(";
     printExpr(*head(&atom));
     Atom currentAtom = *tail(&atom);
     while(!nilp(currentAtom)) {
-      if(std::holds_alternative<Pair*>(currentAtom) || std::holds_alternative<Closure*>(currentAtom) || std::holds_alternative<Macro*>(currentAtom)) {
+      if(std::holds_alternative<Pair*>(currentAtom)) {
         std::cout << " ";
         printExpr(*head(&currentAtom));
         currentAtom = *tail(&currentAtom);
@@ -241,6 +241,12 @@ void lisp::printExpr(Atom atom) {
   }
   else if(std::holds_alternative<Builtin>(atom)) {
     std::cout << "<BUILTIN>: " << &std::get<Builtin>(atom);
+  }
+  else if(std::holds_alternative<Closure*>(atom)) {
+    std::cout << "<CLOSURE>: " << "tbd";
+  }
+  else if(std::holds_alternative<Macro*>(atom)) {
+    std::cout << "<MACRO>: " << "tbd";
   }
   else {
     std::cout << "expr-type: " << atom.index();

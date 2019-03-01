@@ -18,5 +18,6 @@ int d12();
 int d20();
 int d100();
 int d1000();
+int randomInRange(int min, int max);
 
 #endif /* DICE_HPP */

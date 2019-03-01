@@ -3,7 +3,7 @@
 
 #include <string>
 #include <queue>
-#include <experimental/optional>
+#include <optional>
 #include <boost/optional.hpp>
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
@@ -28,6 +28,7 @@ class Wieldable;
 class GameplayState;
 class Mission;
 
+
 #include "animation.hpp"
 #include "attribute.hpp"
 #include "direction.hpp"
@@ -35,7 +36,11 @@ class Mission;
 #include "armor.hpp" //FIXME for serialization for now
 #include "openable.hpp" //FIXME for serialization for now
 #include "comestible.hpp" //FIXME for serialization for now
+#include "transporter.hpp" //FIXME for serialization for now
+#include "attacker.hpp" //FIXME for serialization for now
+#include "body.hpp" //FIXME for serialization for now
 #include "mission.hpp"
+#include "dialogue_generator.hpp" //FIXME for serialization for now
 
 class World;
 class Actor {
@@ -62,8 +67,9 @@ public:
 	std::unique_ptr<Openable> openable;
 	Actor* wornWeapon = nullptr;
 	std::vector<Actor*> wornArmors;
-	std::experimental::optional<Animation> animation;
-	std::vector<Mission> missions;
+	std::optional<Animation> animation;
+	std::vector<std::unique_ptr<Mission>> missions;
+	std::unique_ptr<DialogueGenerator> dialogueGenerator;
 
 	World* world;
 
@@ -119,6 +125,7 @@ private:
 		ar & animation;
 		ar & comestible;
 		ar & missions;
+		ar & dialogueGenerator;
     }
 };
 #endif /* ACTOR_HPP */

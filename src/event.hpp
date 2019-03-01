@@ -6,12 +6,24 @@
 #include "status_effect.hpp"
 
 struct Event {
-	int time = 0; //set by world
+	int time; //set by world
+	bool noisy; // TODO should be noise amount instead
+	// Actor* sender TODO add
+	Event() : time(0), noisy(false) {}
+	Event(bool noisy) : noisy(noisy) {}
 	virtual ~Event() {}
 };
 
 struct ItemFoundEvent : public Event {
 	ItemFoundEvent(Actor* finder = nullptr, Actor* item = nullptr):
+	finder(finder), item(item) {;}
+
+	Actor* finder;
+	Actor* item;
+};
+
+struct ItemPickedUpEvent : public Event {
+	ItemPickedUpEvent(Actor* finder = nullptr, Actor* item = nullptr):
 	finder(finder), item(item) {;}
 
 	Actor* finder;
@@ -30,8 +42,7 @@ struct MeleeHitEvent : public Event {
 };
 
 struct RangedHitEvent : public Event {
-	RangedHitEvent(Actor* hitter = nullptr, Actor* hittee = nullptr, Actor* weapon = nullptr, int damage = 0, bool hit = false):
-	hitter(hitter), hittee(hittee), weapon(weapon), damage(damage), hit(hit) {;}
+	RangedHitEvent(Actor* hitter = nullptr, Actor* hittee = nullptr, Actor* weapon = nullptr, int damage = 0, bool hit = false): Event{true}, hitter(hitter), hittee(hittee), weapon(weapon), damage(damage), hit(hit) {;}
 
 	Actor* hitter;
 	Actor* hittee; //:D
@@ -107,6 +118,12 @@ struct PickableHealthEffectEvent : public Event {
 
 struct AiChangeEvent : public Event { // Yes I know this is getting ridiculous
 	AiChangeEvent(Actor* actor = nullptr): actor(actor) {;}
+
+	Actor* actor;
+};
+
+struct EnemyHasSeenPlayerEvent : public Event {
+	EnemyHasSeenPlayerEvent(Actor* actor = nullptr): actor(actor) {;}
 
 	Actor* actor;
 };

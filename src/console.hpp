@@ -20,6 +20,7 @@ public:
 	void clear();
 	void draw();
 	void setBackground(Point position, sf::Color color);
+	sf::Color getBackground(Point position);
 	void drawGlyph(Point position, char glyph, sf::Color color);
 	void drawText(Point position, std::string text, sf::Color color);
 	void drawGraphicsBlock(Point position, std::string text, sf::Color color);

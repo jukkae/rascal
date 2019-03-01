@@ -36,14 +36,12 @@ Actor::~Actor() {
 float Actor::update(GameplayState* state) {
 	if(ai) {
 		float fovRadius = constants::DEFAULT_FOV_RADIUS * (body ? body->perception / 10.0 : 1.0);
-		if(isPlayer()) world->computeFov(x, y, fovRadius);
+		//if(isPlayer()) world->computeFov(x, y, fovRadius);
 
 		// TODO
 		if(!isPlayer()) {
-			if(actionsQueue.empty()) {
-				auto actions = ai->getNextAction(this);
-				for(auto& a : actions) actionsQueue.push_back(std::move(a));
-			}
+			auto actions = ai->getNextAction(this);
+			for(auto& a : actions) actionsQueue.push_back(std::move(a));
 		}
 		if(isPlayer()) {
 			// TODO this should happen at GameplayState level!
@@ -67,25 +65,31 @@ float Actor::update(GameplayState* state) {
 			}
 			utils::erase_where(statusEffects, [](auto& e){ return !e->isAlive(); });
 			if(isPlayer()) world->computeFov(x, y, fovRadius);
-			if(isPlayer()) body->nutrition -= turnCost;
-			if(body->nutrition <= 0) {
-				body->nutrition = 0;
-				if(d6() == 1) {
-					GenericActorEvent e(this, "%s are feeling pretty hungry");
-					world->notify(e);
+
+			const bool HUNGER_AND_IODINE_ON = false;
+			if(HUNGER_AND_IODINE_ON) {
+				if(isPlayer()) body->nutrition -= turnCost;
+				// TODO lines below are buggy, they don't take turnCost into account -> endless loop of dying until death
+				if(body->nutrition <= 0) {
+					body->nutrition = 0;
+					if(d6() == 1) {
+						GenericActorEvent e(this, "%s are feeling pretty hungry");
+						world->notify(e);
+					}
+					if(d12() == 1) {
+						destructible->takeDamage(this, d3()+1);
+						GenericActorEvent e(this, "%s are REALLY feeling pretty hungry");
+						world->notify(e);
+					}
+					//destructible->die(this);
 				}
-				if(d12() == 1) {
-					destructible->takeDamage(this, d3()+1);
-					GenericActorEvent e(this, "%s are REALLY feeling pretty hungry");
-					world->notify(e);
+				if(body->iodine > 0) {
+					if(d100() <= 2) {
+						body->iodine--; //FIXME doesn't take turn cost into account
+					}
 				}
-				//destructible->die(this);
 			}
-			if(body->iodine > 0) {
-				if(d100() <= 2) {
-					body->iodine--; //FIXME doesn't take turn cost into account
-				}
-			}
+
 			return turnCost;
 		} else { // action not successful
 			if(ai->isPlayer()) {
@@ -93,6 +97,7 @@ float Actor::update(GameplayState* state) {
 				if(isPlayer()) world->computeFov(x, y, fovRadius);
 				return 0;
 			} else {
+				actionsQueue.clear();
 				return constants::DEFAULT_TURN_LENGTH;
 			}
 		}

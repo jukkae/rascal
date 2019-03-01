@@ -280,6 +280,10 @@ bool Gui::isInteresting(Event& event) {
 	if(auto e = dynamic_cast<ItemFoundEvent*>(&event)) {
 		if(e->finder->isPlayer()) return true;
 	}
+	if(auto e = dynamic_cast<ItemPickedUpEvent*>(&event)) {
+		ignore(e);
+		return true;
+	}
 	if(auto e = dynamic_cast<MeleeHitEvent*>(&event)) {
 		ignore(e);
 		return true;
@@ -325,6 +329,10 @@ bool Gui::isInteresting(Event& event) {
 		return true;
 	}
 	if(auto e = dynamic_cast<GenericActorEvent*>(&event)) {
+		ignore(e);
+		return true;
+	}
+	if(auto e = dynamic_cast<EnemyHasSeenPlayerEvent*>(&event)) {
 		ignore(e);
 		return true;
 	}

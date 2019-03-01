@@ -35,7 +35,13 @@ Message messaging::createMessageFromEvent(Event& event) {
 	if(auto e = dynamic_cast<ItemFoundEvent*>(&event)) {
 		fmt = "%d: There's a %s here!";
 		messageText = formatString(fmt, e->time, e->item->name.c_str());
-			color = colors::get("green");
+		color = colors::get("green");
+	}
+
+	if(auto e = dynamic_cast<ItemPickedUpEvent*>(&event)) {
+		fmt = "%d: You pick up the %s.";
+		messageText = formatString(fmt, e->time, e->item->name.c_str());
+		color = colors::get("green");
 	}
 
 	if(auto e = dynamic_cast<MeleeHitEvent*>(&event)) {
@@ -169,6 +175,12 @@ Message messaging::createMessageFromEvent(Event& event) {
 		fmt = "%d: %s";
 		messageText = formatString(fmt, e->time, text.c_str());
 		color = colors::get("cyan");
+	}
+
+	if(auto e = dynamic_cast<EnemyHasSeenPlayerEvent*>(&event)) {
+		fmt = "%d: %s has seen you!";
+		messageText = formatString(fmt, e->time, e->actor->name.c_str());
+		color = colors::get("red");
 	}
 
 	return Message(messageText, color);

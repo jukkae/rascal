@@ -3,6 +3,7 @@
 
 #include <vector>
 #include "map.hpp"
+#include "ai.hpp"
 #include "fov.hpp" //FIXME move implementation to cpp
 
 class Actor;
@@ -34,7 +35,7 @@ public:
 	void computeFov(int x, int y, float r) { fov::computeFov(&map, x, y, r, FovType::CIRCLE, getActorsAsPtrs()); }
 	bool isWall(int x, int y) { return map.isWall(x, y); }
 	bool canWalk(int x, int y);
-	bool isInFov(int x, int y) { return map.isInFov(x, y); }
+	bool isInFov(int x, int y) { return getPlayer()->ai->isInFov(x, y); }
 
 	void addActor(std::unique_ptr<Actor> actor) { actors.push_back(std::move(actor)); }
 

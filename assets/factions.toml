@@ -1,0 +1,24 @@
+[police]
+name = "police"
+color = "blue"
+reputation = 0
+
+[reavers]
+name = "the reavers"
+color = "yellow"
+reputation = 0
+
+[knives]
+name = "the crimson knives"
+color = "red"
+reputation = 0
+
+[syndicate]
+name = "the syndicate"
+color = "green"
+reputation = 0
+
+[neutral]
+name = "neutral"
+color = "grey"
+reputation = 0

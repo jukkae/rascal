@@ -38,6 +38,20 @@ static const int TRACKING_TURNS = 3;
 const int LEVEL_UP_BASE = 50;
 const int LEVEL_UP_FACTOR = 150;
 
+void Ai::updateFov(Actor* actor) {
+	float fovRadius = constants::DEFAULT_FOV_RADIUS * (actor->body ? actor->body->perception / 10.0 : 1.0);
+	if(actor->destructible->isDead()) {
+		fov = {};
+		return;
+	}
+	if(isPlayer()) {
+		fov = fov::computeFov(&(actor->world->map), actor->x, actor->y, fovRadius, FovType::CIRCLE, actor->world->getActorsAsPtrs());
+	}
+	else {
+		fov = fov::computeEnemyFov(&(actor->world->map), actor->x, actor->y, currentDirection, fovRadius, FovType::CIRCLE, actor->world->getActorsAsPtrs());
+	}
+}
+
 int PlayerAi::getNextLevelXp() const {
 	return LEVEL_UP_BASE + xpLevel * LEVEL_UP_FACTOR;
 }
@@ -149,6 +163,9 @@ std::vector<std::unique_ptr<Action>> PlayerAi::getNextAction(Actor* actor) {
 				auto actorsAtTarget = actor->world->getActorsAt(io::mousePosition.x, io::mousePosition.y);
 				for(auto& target : actorsAtTarget) {
 					// TODO other default actions
+					if(target->destructible && !target->destructible->isDead()) {
+						lastAction = std::make_unique<HitAction>(actor, io::mousePosition);
+					}
 					if(target->openable && !target->openable->open) {
 						lastAction = std::make_unique<OpenAction>(actor, target);
 					}
@@ -170,15 +187,7 @@ std::vector<std::unique_ptr<Action>> PlayerAi::getNextAction(Actor* actor) {
 						Point to = path.at(i + 1);
 						int stepDx = to.x - from.x;
 						int stepDy = to.y - from.y;
-						Direction stepDir;
-						if (stepDx ==  0 && stepDy == -1) stepDir = Direction::N;
-						if (stepDx ==  1 && stepDy == -1) stepDir = Direction::NE;
-						if (stepDx ==  1 && stepDy ==  0) stepDir = Direction::E;
-						if (stepDx ==  1 && stepDy ==  1) stepDir = Direction::SE;
-						if (stepDx ==  0 && stepDy ==  1) stepDir = Direction::S;
-						if (stepDx == -1 && stepDy ==  1) stepDir = Direction::SW;
-						if (stepDx == -1 && stepDy ==  0) stepDir = Direction::W;
-						if (stepDx == -1 && stepDy == -1) stepDir = Direction::NW;
+						Direction stepDir = direction::getDirectionFromDeltas(stepDx, stepDy);
 						if(i != path.size() - 2) {
 							actions.push_back(std::make_unique<MoveAction>(MoveAction(actor, stepDir)));
 						} else { // for the last step of the path...
@@ -220,123 +229,249 @@ std::vector<std::unique_ptr<Action>> PlayerAi::getNextAction(Actor* actor) {
 	return actions;
 }
 
+void MonsterAi::setCurrentTargetIndex(int index) {
+	currentTargetIndex = index % patrolPoints.size();
+	currentTarget = &patrolPoints.at(currentTargetIndex);
+}
+
 std::vector<std::unique_ptr<Action>> MonsterAi::getNextAction(Actor* actor) {
 	std::vector<std::unique_ptr<Action>> actions;
 	World* world = actor->world;
 	Direction direction = Direction::NONE;
 	Actor* player = world->getPlayer();
-	/*if (los::is_visible(Point(actor->x, actor->y), Point(player->x, player->y), &world->map, world->getActorsAsPtrs(), constants::DEFAULT_ENEMY_FOV_RADIUS)) {
-		actor->col = colors::red;
-	} else  { actor->col = colors::black; }*/
 
 	if (actor->destructible && actor->destructible->isDead()) {
 		actions.push_back(std::make_unique<WaitAction>(WaitAction(actor)));
 		return actions;
 	}
 
-	if (aiState == AiState::FRIENDLY) {
-		actions.push_back(std::make_unique<WaitAction>(WaitAction(actor)));
-		return actions;
-	}
-
-	if(actor->destructible->hp <= actor->destructible->maxHp * 0.3 + (0.1 * player->body->getModifier(player->body->charisma))) {
-		aiState = AiState::FRIGHTENED; //TODO implement in terms of morale
-	}
-
-	if(actor->destructible->hp >= actor->destructible->maxHp * 0.6) {
-		aiState = AiState::NORMAL;
-	}
-
-	if(aiState == AiState::NORMAL) {
-		//if (actor->world->isInFov(actor->x, actor->y)) {
-		if (los::is_visible(Point(actor->x, actor->y), Point(player->x, player->y), &world->map, world->getActorsAsPtrs(), constants::DEFAULT_ENEMY_FOV_RADIUS)) {
-			moveCount = TRACKING_TURNS; //TODO also track if was in FOV, and fire event when first seeing player
-		} else { --moveCount; }
-
-		if (moveCount > 0) {
-			int targetX = player->x;
-			int targetY = player->y;
-			int dx = targetX - actor->x;
-			int dy = targetY - actor->y;
-			int stepDx = (dx == 0 ? 0 : (dx > 0 ? 1 : -1));
-			int stepDy = (dy == 0 ? 0 : (dy > 0 ? 1 : -1));
-			float distance = sqrtf(dx*dx + dy*dy);
-
-			if(distance >= 2) {
-				dx = (int) (round(dx / distance));
-				dy = (int) (round(dy / distance));
-				if(world->canWalk(actor->x + stepDx, actor->y + stepDy)) { // uhh
-					if (stepDx ==  0 && stepDy ==  0) {
-						actions.push_back(std::make_unique<WaitAction>(WaitAction(actor)));
-						return actions;
-					}
-					if (stepDx ==  0 && stepDy == -1) direction = Direction::N;
-					if (stepDx ==  1 && stepDy == -1) direction = Direction::NE;
-					if (stepDx ==  1 && stepDy ==  0) direction = Direction::E;
-					if (stepDx ==  1 && stepDy ==  1) direction = Direction::SE;
-					if (stepDx ==  0 && stepDy ==  1) direction = Direction::S;
-					if (stepDx == -1 && stepDy ==  1) direction = Direction::SW;
-					if (stepDx == -1 && stepDy ==  0) direction = Direction::W;
-					if (stepDx == -1 && stepDy == -1) direction = Direction::NW;
-					actions.push_back(std::make_unique<MoveAction>(MoveAction(actor, direction)));
-					return actions;
-				} else if (world->canWalk(actor->x + stepDx, actor->y)) { // Wall sliding
-					if (stepDx ==  0 && stepDy ==  0) {
-						actions.push_back(std::make_unique<WaitAction>(WaitAction(actor)));
-						return actions;
-					}
-					if (stepDx ==  1 && stepDy ==  0) direction = Direction::E;
-					if (stepDx == -1 && stepDy ==  0) direction = Direction::W;
-					actions.push_back(std::make_unique<MoveAction>(MoveAction(actor, direction)));
-					return actions;
-				} else if (world->canWalk(actor->x, actor->y + stepDy)) {
-					if (stepDx ==  0 && stepDy ==  0) {
-						actions.push_back(std::make_unique<WaitAction>(WaitAction(actor)));
-						return actions;
-					}
-					if (stepDx ==  0 && stepDy == -1) direction = Direction::N;
-					if (stepDx ==  0 && stepDy ==  1) direction = Direction::S;
-					actions.push_back(std::make_unique<MoveAction>(MoveAction(actor, direction)));
-					return actions;
+	// State machine: Check conditions for moving from one state to another
+	switch(aiState) {
+		case AiState::NORMAL_WANDER: { // TODO fix wander state
+			if (isInFov(player->x, player->y)) {
+				aiState = AiState::SEEN_PLAYER_HOSTILE;
+				moveCount = TRACKING_TURNS;
+				if(!hasSeenPlayer) {
+					hasSeenPlayer = true;
+					EnemyHasSeenPlayerEvent e(actor);
+					world->notify(e);
 				}
-			} else { // Melee range
-				if (stepDx ==  0 && stepDy ==  0) {
-					actions.push_back(std::make_unique<WaitAction>(WaitAction(actor)));
-					return actions;
+			}
+			break;
+		}
+		case AiState::NORMAL_PATROL: {
+			if (isInFov(player->x, player->y)) {
+				aiState = AiState::SEEN_PLAYER_HOSTILE;
+				moveCount = TRACKING_TURNS;
+				if(!hasSeenPlayer) {
+					hasSeenPlayer = true;
+					EnemyHasSeenPlayerEvent e(actor);
+					world->notify(e);
 				}
+			}
+			break;
+		}
+		case AiState::NORMAL_IDLE: {
+			break;
+		}
+		case AiState::CURIOUS: {
+			break;
+		}
+		case AiState::SEEN_PLAYER_FRIENDLY: {
+			break;
+		}
+		case AiState::SEEN_PLAYER_HOSTILE: {
+			if(moveCount <= 0) {
+				// TODO go to previous state instead
+				aiState = AiState::NORMAL_PATROL;
+			}
+			break;
+		}
+		default:
+		throw "AI state not implemented";
+		break;
+	}
 
-				if (stepDx ==  0 && stepDy == -1) direction = Direction::N;
-				if (stepDx ==  1 && stepDy == -1) direction = Direction::NE;
-				if (stepDx ==  1 && stepDy ==  0) direction = Direction::E;
-				if (stepDx ==  1 && stepDy ==  1) direction = Direction::SE;
-				if (stepDx ==  0 && stepDy ==  1) direction = Direction::S;
-				if (stepDx == -1 && stepDy ==  1) direction = Direction::SW;
-				if (stepDx == -1 && stepDy ==  0) direction = Direction::W;
-				if (stepDx == -1 && stepDy == -1) direction = Direction::NW;
-				actions.push_back(std::make_unique<MoveAction>(MoveAction(actor, direction)));
+	// Select actions
+	switch(aiState) {
+		case AiState::NORMAL_WANDER:
+			actions.push_back(std::make_unique<WaitAction>(WaitAction(actor)));
+			return actions;
+		break;
+		case AiState::NORMAL_PATROL:
+		{
+			if(patrolPoints.empty()) {
+				actions.push_back(std::make_unique<WaitAction>(WaitAction(actor)));
 				return actions;
 			}
+			if(currentTarget == nullptr) {
+				currentTargetIndex = 0;
+				currentTarget = &patrolPoints.at(0);
+			}
+			std::unique_ptr<Action> lastAction = nullptr;
+			auto actorsAtTarget = actor->world->getActorsAt(currentTarget->x, currentTarget->y);
+			for(auto& target : actorsAtTarget) {
+				// TODO other default actions
+				if(target->openable && !target->openable->open) {
+					lastAction = std::make_unique<OpenAction>(actor, target);
+				}
+				else if(target->openable && target->openable->open) {
+					lastAction = std::make_unique<OpenAction>(actor, target);
+				}
+				if(target->pickable) {
+					lastAction = std::make_unique<PickupAction>(actor);
+				}
+			}
+
+			// Find path
+			// TODO:
+			// Add internal action queue,
+			// pop first action from there
+			// and only find path if queue is empty
+			if(plannedActions.empty()) {
+				std::vector<Point> path = pathfinding::findPath(actor->world->map,
+								 Point(actor->x, actor->y),
+								 *currentTarget);
+				if(!(path.size() <= 1)) {
+					for(int i = 0; i < path.size() - 1; ++i) {
+						Point from = path.at(i);
+						Point to = path.at(i + 1);
+						int stepDx = to.x - from.x;
+						int stepDy = to.y - from.y;
+						Direction stepDir = direction::getDirectionFromDeltas(stepDx, stepDy);
+						if(i != path.size() - 2) {
+							plannedActions.push_back(std::make_unique<MoveAction>(MoveAction(actor, stepDir)));
+						} else { // for the last step of the path...
+							if(lastAction == nullptr) { // ... if no alternate default, push move
+								plannedActions.push_back(std::make_unique<MoveAction>(MoveAction(actor, stepDir)));
+							} else if(lastAction->actionRange.index() == 0) { // ActionRange enum
+								ActionRange actionRange = std::get<ActionRange>(lastAction->actionRange);
+								switch(actionRange) {
+									case ActionRange::ON_TOP:
+										plannedActions.push_back(std::make_unique<MoveAction>(MoveAction(actor, stepDir)));
+										plannedActions.push_back(std::move(lastAction));
+										break;
+									case ActionRange::NEXT_TO:
+										plannedActions.push_back(std::move(lastAction));
+										break;
+									case ActionRange::ANYWHERE:
+										// TODO I suppose??
+										throw std::logic_error("Make sure this does what you think it does");
+										plannedActions.push_back(std::move(lastAction));
+										break;
+									default:
+										throw std::logic_error("Unknown action range");
+								}
+
+							} else if(lastAction->actionRange.index() == 1) { // float for range
+								throw std::logic_error("Action ranges not implemented");
+							}
+						}
+
+					}
+				} else {
+					++currentTargetIndex;
+					if(currentTargetIndex >= patrolPoints.size()) currentTargetIndex = 0;
+					currentTarget = &patrolPoints.at(currentTargetIndex);
+					actor->actionsQueue.clear();
+					plannedActions.push_back(std::make_unique<WaitAction>(WaitAction(actor)));
+					std::move(plannedActions.begin(), plannedActions.begin() + 1, back_inserter(actions));
+					plannedActions.erase(plannedActions.begin(), plannedActions.begin() + 1);
+					return actions;
+				}
+				plannedActions.push_back(std::make_unique<WaitAction>(WaitAction(actor)));
+				std::move(plannedActions.begin(), plannedActions.begin() + 1, back_inserter(actions));
+				plannedActions.erase(plannedActions.begin(), plannedActions.begin() + 1);
+				return actions;
+			} else { // plannedActions NOT empty
+				std::move(plannedActions.begin(), plannedActions.begin() + 1, back_inserter(actions));
+				plannedActions.erase(plannedActions.begin(), plannedActions.begin() + 1);
+				return actions;
+			}
+		break;
 		}
-		actions.push_back(std::make_unique<WaitAction>(WaitAction(actor)));
-		return actions;
-	} else {
-		Actor* player = world->getPlayer();
-		int targetX = player->x;
-		int targetY = player->y;
-		int dx = targetX - actor->x;
-		int dy = targetY - actor->y;
-		int stepDx = (dx == 0 ? 0 : (dx > 0 ? -1 : 1));
-		int stepDy = (dy == 0 ? 0 : (dy > 0 ? -1 : 1));
-		if (stepDx ==  0 && stepDy == -1) direction = Direction::N;
-		if (stepDx ==  1 && stepDy == -1) direction = Direction::NE;
-		if (stepDx ==  1 && stepDy ==  0) direction = Direction::E;
-		if (stepDx ==  1 && stepDy ==  1) direction = Direction::SE;
-		if (stepDx ==  0 && stepDy ==  1) direction = Direction::S;
-		if (stepDx == -1 && stepDy ==  1) direction = Direction::SW;
-		if (stepDx == -1 && stepDy ==  0) direction = Direction::W;
-		if (stepDx == -1 && stepDy == -1) direction = Direction::NW;
-		actions.push_back(std::make_unique<MoveAction>(MoveAction(actor, direction)));
-		return actions;
+		case AiState::NORMAL_IDLE:
+			actions.push_back(std::make_unique<WaitAction>(WaitAction(actor)));
+			return actions;
+		break;
+		case AiState::CURIOUS:
+			actions.push_back(std::make_unique<WaitAction>(WaitAction(actor)));
+			return actions;
+		break;
+		case AiState::SEEN_PLAYER_FRIENDLY:
+			actions.push_back(std::make_unique<WaitAction>(WaitAction(actor)));
+			return actions;
+		break;
+		case AiState::SEEN_PLAYER_HOSTILE:
+		{
+			if (isInFov(player->x, player->y)) {
+				moveCount = TRACKING_TURNS; //TODO also track if was in FOV, and fire event when first seeing player
+				if(!hasSeenPlayer) {
+					hasSeenPlayer = true;
+					EnemyHasSeenPlayerEvent e(actor);
+					world->notify(e);
+				}
+			} else {
+				hasSeenPlayer = false;
+				--moveCount;
+			}
+
+			if (moveCount > 0) {
+				int targetX = player->x;
+				int targetY = player->y;
+				int dx = targetX - actor->x;
+				int dy = targetY - actor->y;
+				int stepDx = (dx == 0 ? 0 : (dx > 0 ? 1 : -1));
+				int stepDy = (dy == 0 ? 0 : (dy > 0 ? 1 : -1));
+				float distance = sqrtf(dx*dx + dy*dy);
+
+				if(distance >= 2) {
+					dx = (int) (round(dx / distance));
+					dy = (int) (round(dy / distance));
+					if(world->canWalk(actor->x + stepDx, actor->y + stepDy)) { // uhh
+						if (stepDx ==  0 && stepDy ==  0) {
+							actions.push_back(std::make_unique<WaitAction>(WaitAction(actor)));
+							return actions;
+						}
+						direction = direction::getDirectionFromDeltas(stepDx, stepDy);
+						actions.push_back(std::make_unique<MoveAction>(MoveAction(actor, direction)));
+						return actions;
+					} else if (world->canWalk(actor->x + stepDx, actor->y)) { // Wall sliding
+						if (stepDx ==  0 && stepDy ==  0) {
+							actions.push_back(std::make_unique<WaitAction>(WaitAction(actor)));
+							return actions;
+						}
+						if (stepDx ==  1 && stepDy ==  0) direction = Direction::E;
+						if (stepDx == -1 && stepDy ==  0) direction = Direction::W;
+						actions.push_back(std::make_unique<MoveAction>(MoveAction(actor, direction)));
+						return actions;
+					} else if (world->canWalk(actor->x, actor->y + stepDy)) {
+						if (stepDx ==  0 && stepDy ==  0) {
+							actions.push_back(std::make_unique<WaitAction>(WaitAction(actor)));
+							return actions;
+						}
+						if (stepDx ==  0 && stepDy == -1) direction = Direction::N;
+						if (stepDx ==  0 && stepDy ==  1) direction = Direction::S;
+						actions.push_back(std::make_unique<MoveAction>(MoveAction(actor, direction)));
+						return actions;
+					}
+				} else { // Melee range
+					if (stepDx ==  0 && stepDy ==  0) {
+						actions.push_back(std::make_unique<WaitAction>(WaitAction(actor)));
+						return actions;
+					}
+
+					direction = direction::getDirectionFromDeltas(stepDx, stepDy);
+					actions.push_back(std::make_unique<HitAction>(HitAction(actor, Point{actor->x + stepDx, actor->y + stepDy})));
+					return actions;
+				}
+			}
+			actions.push_back(std::make_unique<WaitAction>(WaitAction(actor)));
+			return actions;
+		break;
+		}
+		default:
+		throw "AI state not implemented";
 	}
 }
 
@@ -366,14 +501,7 @@ std::vector<std::unique_ptr<Action>> ConfusedMonsterAi::getNextAction(Actor* own
 		return actions;
 	}
 
-	if (stepDx ==  0 && stepDy == -1) direction = Direction::N;
-	if (stepDx ==  1 && stepDy == -1) direction = Direction::NE;
-	if (stepDx ==  1 && stepDy ==  0) direction = Direction::E;
-	if (stepDx ==  1 && stepDy ==  1) direction = Direction::SE;
-	if (stepDx ==  0 && stepDy ==  1) direction = Direction::S;
-	if (stepDx == -1 && stepDy ==  1) direction = Direction::SW;
-	if (stepDx == -1 && stepDy ==  0) direction = Direction::W;
-	if (stepDx == -1 && stepDy == -1) direction = Direction::NW;
+	direction = direction::getDirectionFromDeltas(stepDx, stepDy);
 	actions.push_back(std::make_unique<MoveAction>(MoveAction(owner, direction)));
 	return actions;
 }

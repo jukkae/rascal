@@ -1,3 +1,4 @@
+#include "ai.hpp"
 #include "action.hpp"
 #include "actor.hpp"
 #include "attacker.hpp"
@@ -34,6 +35,54 @@ bool MoveAction::execute() {
 		default: break;
 	}
 
+	if(actor->ai) {
+		actor->ai->currentDirection = direction;
+	}
+
+	if (world->isWall(targetX, targetY)) return false;
+	for (auto a : world->getActorsAt(targetX, targetY)) if (a->openable && a->blocks) return false;
+
+	// look for living actors
+	for (auto& a : world->getActorsAt(targetX, targetY)) {
+		if (a->destructible && !a->destructible->isDead()) {
+			return false;
+		}
+	}
+
+	// look for corpses or items
+	for (auto& a : world->getActorsAt(targetX, targetY)) {
+		bool corpseOrItem = (a->destructible && a->destructible->isDead()) || a->pickable;
+		if(corpseOrItem && a->x == targetX && a->y == targetY) {
+			ItemFoundEvent e(actor, a);
+			world->notify(e);
+		}
+	}
+	actor->x = targetX;
+	actor->y = targetY;
+	MoveEvent e(targetX, targetY);
+	world->notify(e);
+	return true;
+}
+
+bool WaitAction::execute() {
+	actor->ai->currentDirection = Direction::NONE;
+	return true;
+}
+
+HitAction::HitAction(Actor* actor, Point target):
+	Action(actor, ActionRange::NEXT_TO, 100.0f), target(target) {;}
+
+bool HitAction::execute() {
+	World* world = actor->world;
+
+	int targetX = target.x;
+	int targetY = target.y;
+
+	if(actor->ai) {
+		// TODO
+		// actor->ai->currentDirection = direction;
+	}
+
 	if (world->isWall(targetX, targetY)) return false;
 	for (auto a : world->getActorsAt(targetX, targetY)) if (a->openable && a->blocks) return false;
 
@@ -58,7 +107,7 @@ bool MoveAction::execute() {
 					//TODO handle all different effects
 					std::unique_ptr<Effect> ef = actor->wornWeapon->attacker->effectGenerator->generateEffect();
 					if(auto e = dynamic_cast<MoveEffect*>(ef.get())) {
-						e->direction = direction;
+						//e->direction = direction;
 						e->distance = 5.0f;
 					}
 					if(Actor* aPtr = a.get()) // TODO it seems that a might be invalidated at times, this is not the way to fix
@@ -77,19 +126,7 @@ bool MoveAction::execute() {
 			return true;
 		}
 	}
-	// look for corpses or items
-	for (auto& a : world->getActors()) {
-		bool corpseOrItem = (a->destructible && a->destructible->isDead()) || a->pickable;
-		if(corpseOrItem && a->x == targetX && a->y == targetY) {
-			ItemFoundEvent e(actor, a.get());
-			world->notify(e);
-		}
-	}
-	actor->x = targetX;
-	actor->y = targetY;
-	MoveEvent e(targetX, targetY);
-	world->notify(e);
-	return true;
+	return false; // ??
 }
 
 bool TraverseStairsAction::execute() {
@@ -141,6 +178,7 @@ bool PickupAction::execute() {
 	for(auto& a : world->getActors()) {
 		if(a->pickable && a->x == actor->x && a->y == actor->y) {
 			std::string itemName = a->name;
+			Actor* itemPtr = a.get(); // FIXME hacky hack
 			if(actor->container->isFull()) {
 				found = true;
 				ActionFailureEvent e(actor, "Your inventory is full!");
@@ -149,7 +187,7 @@ bool PickupAction::execute() {
 			}
 			if(a->pickable->pick(std::move(a), actor)) {
 				found = true;
-				ActionSuccessEvent e(actor, std::string("You pick up the ").append(itemName));
+				ItemPickedUpEvent e(actor, itemPtr); // a has been moved from
 				world->notify(e);
 				return true;
 			}
@@ -425,7 +463,7 @@ bool TalkAction::execute() {
 		for(int y = actor->y - 1; y <= actor->y + 1; ++y) {
 			if(x == actor->x && y == actor->y) continue;
 			std::vector<Actor*> as = w->getActorsAt(x, y);
-			for(auto& a : as) if(a->ai) { // also if not dead, if not hostile
+			for(auto& a : as) if(a->dialogueGenerator) { // also if not dead, if not hostile
 				Engine* engine = io::engine;
 				std::unique_ptr<State> dialogueState = std::make_unique<DialogueState>(engine, actor, a);
 				engine->pushState(std::move(dialogueState));

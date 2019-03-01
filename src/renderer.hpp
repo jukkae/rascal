@@ -26,10 +26,10 @@ private:
 	GameplayState* state;
 	Console console;
 
-	void renderMap(const World* const world, sf::RenderWindow* window);
-	void renderActors(const World* const world, sf::RenderWindow* window);
-	void renderActor(const Actor* const actor, sf::RenderWindow* window);
-	void renderAnimations(const World* const world, sf::RenderWindow* window);
+	void renderMap(const World* const world, const Actor* const player, sf::RenderWindow* window);
+	void renderActors(const World* const world, const Actor* const player, sf::RenderWindow* window);
+	void renderActor(const World* const world, const Actor* const player, const Actor* const actor, sf::RenderWindow* window);
+	void renderAnimations(const World* const world, const Actor* const player, sf::RenderWindow* window);
 
 	Point getScreenCoordsFromWorldCoords(const Point& point) const;
 	Point getWorldCoordsFromScreenCoords(const Point& point, const Point& player) const;

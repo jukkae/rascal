@@ -1,5 +1,6 @@
 #include "world.hpp"
 
+#include "ai.hpp"
 #include "body.hpp"
 #include "container.hpp"
 #include "damage.hpp"
@@ -7,7 +8,9 @@
 #include "dice.hpp"
 #include "effect.hpp"
 #include "event.hpp"
+#include "fov.hpp"
 #include "gameplay_state.hpp"
+#include "ignore.hpp"
 #include "map_utils.hpp"
 #include <iostream>
 #include "../include/toml.hpp"
@@ -35,9 +38,14 @@ width(width), height(height), level(level), state(state) {
 	map = Map(width, height, mapType);
 	map.setWorld(this);
 
-	map_utils::addDoors(this, &map);
-	map_utils::addItems(this, &map, level);
-	map_utils::addMonsters(this, &map, level);
+	//map_utils::addDoors(this, &map);
+	//map_utils::addItems(this, &map, level);
+	//map_utils::addMonsters(this, &map, level);
+	map_utils::addMonstersBasedOnRoomTypes(this, &map, level);
+	map_utils::addItemsBasedOnRoomTypes(this, &map, level);
+	for(auto& a : actors) {
+		if(a->ai) a->ai->updateFov(a.get());
+	}
 }
 
 void World::movePlayerFrom(World* other) {
@@ -75,10 +83,12 @@ bool World::canWalk(int x, int y) {
 
 void World::update() {
 	Actor* activeActor = getNextActor();
+	if(activeActor->ai) activeActor->ai->updateFov(activeActor); // update own fov before
 	if(activeActor->isPlayer()) {
 		state->handleEvents();
 	}
 	updateNextActor();
+	if(activeActor->ai) activeActor->ai->updateFov(activeActor); // update own fov after
 }
 
 void World::updateNextActor() {
@@ -86,11 +96,7 @@ void World::updateNextActor() {
 
 	float actionTime = activeActor->update(state);
 	*activeActor->energy -= actionTime;
-	applyRadiation(actionTime);
-
-    /*actors.erase(actors.begin());
-    auto it = std::lower_bound(actors.begin(), actors.end(), activeActor, [](const auto& lhs, const auto& rhs) { return lhs->energy > rhs->energy; });
-    actors.insert(it, std::move(activeActor));*/
+	//applyRadiation(actionTime);
 
 	sortActors();
 	updateTime();
@@ -184,6 +190,11 @@ void World::notify(Event& e) {
 	if(state) state->notify(e);
 	// TODO this is a dirty hack, ok?
 	for(auto& mission : getPlayer()->missions) {
-		mission.notify(e);
+		mission->notify(e);
+	}
+	// TODO more dirty hacks
+	if(auto event = dynamic_cast<EnemyHasSeenPlayerEvent*>(&e)) {
+		ignore(event);
+    getPlayer()->actionsQueue.clear();
 	}
 }

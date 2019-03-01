@@ -50,7 +50,7 @@ private:
 class WaitAction : public Action {
 public:
 	WaitAction(Actor* actor) : Action(actor, ActionRange::ANYWHERE, 100.0f) {;}
-	bool execute() { return true; }
+	bool execute();
 private:
 	friend class boost::serialization::access;
 	template<class Archive>
@@ -77,6 +77,20 @@ private:
 	void serialize(Archive & ar, const unsigned int version) {
 		ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(Action);
 		ar & direction;
+	}
+};
+
+class HitAction : public Action {
+public:
+	HitAction(Actor* actor, Point target);
+	bool execute();
+	Point target;
+private:
+	friend class boost::serialization::access;
+	template<class Archive>
+	void serialize(Archive & ar, const unsigned int version) {
+		ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(Action);
+		ar & target;
 	}
 };
 
