@@ -220,6 +220,19 @@ void map_utils::addMonstersBasedOnRoomTypes(World* world, Map* map, int difficul
 				auto being = npc::makeBeingFromToml(world, map, x, y, "bill");
 				static_cast<MonsterAi*>(being->ai.get())->setAiState(AiState::NORMAL_IDLE);
 				world->addActor(std::move(being));
+
+
+				x = (room.x0() + room.x1()) / 2 + 1;
+				y = (room.y0() + room.y1()) / 2 - 1;
+				auto item1 = item::makeItemFromToml(world, map, x, y, "ram_chip");
+				world->addActor(std::move(item1));
+
+				x = (room.x0() + room.x1()) / 2 - 1;
+				y = (room.y0() + room.y1()) / 2 + 1;
+				auto item2 = item::makeItemFromToml(world, map, x, y, "ram_chip");
+				world->addActor(std::move(item2));
+
+
 				break;
 			}
 			default:
