@@ -22,6 +22,14 @@ struct ItemFoundEvent : public Event {
 	Actor* item;
 };
 
+struct ItemPickedUpEvent : public Event {
+	ItemPickedUpEvent(Actor* finder = nullptr, Actor* item = nullptr):
+	finder(finder), item(item) {;}
+
+	Actor* finder;
+	Actor* item;
+};
+
 struct MeleeHitEvent : public Event {
 	MeleeHitEvent(Actor* hitter = nullptr, Actor* hittee = nullptr, Actor* weapon = nullptr, int damage = 0, bool hit = false):
 	hitter(hitter), hittee(hittee), weapon(weapon), damage(damage), hit(hit) {;}

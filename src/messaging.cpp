@@ -35,7 +35,13 @@ Message messaging::createMessageFromEvent(Event& event) {
 	if(auto e = dynamic_cast<ItemFoundEvent*>(&event)) {
 		fmt = "%d: There's a %s here!";
 		messageText = formatString(fmt, e->time, e->item->name.c_str());
-			color = colors::get("green");
+		color = colors::get("green");
+	}
+
+	if(auto e = dynamic_cast<ItemPickedUpEvent*>(&event)) {
+		fmt = "%d: You pick up the %s.";
+		messageText = formatString(fmt, e->time, e->item->name.c_str());
+		color = colors::get("green");
 	}
 
 	if(auto e = dynamic_cast<MeleeHitEvent*>(&event)) {

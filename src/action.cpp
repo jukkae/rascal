@@ -173,6 +173,7 @@ bool PickupAction::execute() {
 	for(auto& a : world->getActors()) {
 		if(a->pickable && a->x == actor->x && a->y == actor->y) {
 			std::string itemName = a->name;
+			Actor* itemPtr = a.get(); // FIXME hacky hack
 			if(actor->container->isFull()) {
 				found = true;
 				ActionFailureEvent e(actor, "Your inventory is full!");
@@ -181,7 +182,7 @@ bool PickupAction::execute() {
 			}
 			if(a->pickable->pick(std::move(a), actor)) {
 				found = true;
-				ActionSuccessEvent e(actor, std::string("You pick up the ").append(itemName));
+				ItemPickedUpEvent e(actor, itemPtr); // a has been moved from
 				world->notify(e);
 				return true;
 			}
