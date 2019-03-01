@@ -247,13 +247,21 @@ std::vector<std::unique_ptr<Action>> MonsterAi::getNextAction(Actor* actor) {
 
 	// State machine: Check conditions for moving from one state to another
 	switch(aiState) {
-		case AiState::NORMAL_WANDER: {
+		case AiState::NORMAL_WANDER: { // TODO fix wander state
+			if (isInFov(player->x, player->y)) {
+				aiState = AiState::SEEN_PLAYER_HOSTILE;
+				moveCount = TRACKING_TURNS;
+				if(!hasSeenPlayer) {
+					hasSeenPlayer = true;
+					EnemyHasSeenPlayerEvent e(actor);
+					world->notify(e);
+				}
+			}
 			break;
 		}
 		case AiState::NORMAL_PATROL: {
 			if (isInFov(player->x, player->y)) {
 				aiState = AiState::SEEN_PLAYER_HOSTILE;
-				std::cout << "Went from patrol to hostile\n";
 				moveCount = TRACKING_TURNS;
 				if(!hasSeenPlayer) {
 					hasSeenPlayer = true;
@@ -274,7 +282,7 @@ std::vector<std::unique_ptr<Action>> MonsterAi::getNextAction(Actor* actor) {
 		}
 		case AiState::SEEN_PLAYER_HOSTILE: {
 			if(moveCount <= 0) {
-				std::cout << "Went from hostile to patrol\n";
+				// TODO go to previous state instead
 				aiState = AiState::NORMAL_PATROL;
 			}
 			break;

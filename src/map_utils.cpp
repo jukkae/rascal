@@ -218,9 +218,8 @@ void map_utils::addMonstersBasedOnRoomTypes(World* world, Map* map, int difficul
 				// int x = (room.x0() + room.x1()) / 2 - 1;
 				// int y = (room.y0() + room.y1()) / 2 - 1;
 				// auto being = npc::makeBeingFromToml(world, map, x, y, "bill");
-				// static_cast<MonsterAi*>(being->ai.get())->setAiState(AiState::NORMAL_IDLE);
+				// static_cast<MonsterAi*>(being->ai.get())->setAiState(AiState::NORMAL_WANDER);
 				// world->addActor(std::move(being));
-				//
 				//
 				// x = (room.x0() + room.x1()) / 2 + 1;
 				// y = (room.y0() + room.y1()) / 2 - 1;
@@ -239,7 +238,7 @@ void map_utils::addMonstersBasedOnRoomTypes(World* world, Map* map, int difficul
 				int x = (room.x0() + room.x1()) / 2 - 1;
 				int y = (room.y0() + room.y1()) / 2 - 1;
 				auto being = npc::makeBeingFromToml(world, map, x, y, "bill");
-				static_cast<MonsterAi*>(being->ai.get())->setAiState(AiState::NORMAL_IDLE);
+				static_cast<MonsterAi*>(being->ai.get())->setAiState(AiState::NORMAL_WANDER);
 				world->addActor(std::move(being));
 
 				break;

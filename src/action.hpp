@@ -50,7 +50,7 @@ private:
 class WaitAction : public Action {
 public:
 	WaitAction(Actor* actor) : Action(actor, ActionRange::ANYWHERE, 100.0f) {;}
-	bool execute() { return true; }
+	bool execute();
 private:
 	friend class boost::serialization::access;
 	template<class Archive>

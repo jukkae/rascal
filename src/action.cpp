@@ -64,6 +64,11 @@ bool MoveAction::execute() {
 	return true;
 }
 
+bool WaitAction::execute() {
+	actor->ai->currentDirection = Direction::NONE;
+	return true;
+}
+
 HitAction::HitAction(Actor* actor, Point target):
 	Action(actor, ActionRange::NEXT_TO, 100.0f), target(target) {;}
 
