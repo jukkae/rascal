@@ -184,7 +184,7 @@ void map_utils::addMonstersBasedOnRoomTypes(World* world, Map* map, int difficul
 				}
 				break;
 			}
-			case RoomType::START: // fallthrough for debugging TODO
+			//case RoomType::START: // fallthrough for debugging TODO
 			case RoomType::MARKET: {
 				int area = abs((room.x1() - room.x0()) * (room.y1() - room.y0())); //shouldn't need abs, but just making sure
 				//std::cout << "area: " << area << "\n";
@@ -215,23 +215,32 @@ void map_utils::addMonstersBasedOnRoomTypes(World* world, Map* map, int difficul
 					static_cast<MonsterAi*>(being->ai.get())->setAiState(AiState::NORMAL_IDLE);
 					world->addActor(std::move(being));
 				}
+				// int x = (room.x0() + room.x1()) / 2 - 1;
+				// int y = (room.y0() + room.y1()) / 2 - 1;
+				// auto being = npc::makeBeingFromToml(world, map, x, y, "bill");
+				// static_cast<MonsterAi*>(being->ai.get())->setAiState(AiState::NORMAL_IDLE);
+				// world->addActor(std::move(being));
+				//
+				//
+				// x = (room.x0() + room.x1()) / 2 + 1;
+				// y = (room.y0() + room.y1()) / 2 - 1;
+				// auto item1 = item::makeItemFromToml(world, map, x, y, "ram_chip");
+				// world->addActor(std::move(item1));
+				//
+				// x = (room.x0() + room.x1()) / 2 - 1;
+				// y = (room.y0() + room.y1()) / 2 + 1;
+				// auto item2 = item::makeItemFromToml(world, map, x, y, "ram_chip");
+				// world->addActor(std::move(item2));
+
+
+				break;
+			}
+			case RoomType::ARMOURY: {
 				int x = (room.x0() + room.x1()) / 2 - 1;
 				int y = (room.y0() + room.y1()) / 2 - 1;
 				auto being = npc::makeBeingFromToml(world, map, x, y, "bill");
 				static_cast<MonsterAi*>(being->ai.get())->setAiState(AiState::NORMAL_IDLE);
 				world->addActor(std::move(being));
-
-
-				x = (room.x0() + room.x1()) / 2 + 1;
-				y = (room.y0() + room.y1()) / 2 - 1;
-				auto item1 = item::makeItemFromToml(world, map, x, y, "ram_chip");
-				world->addActor(std::move(item1));
-
-				x = (room.x0() + room.x1()) / 2 - 1;
-				y = (room.y0() + room.y1()) / 2 + 1;
-				auto item2 = item::makeItemFromToml(world, map, x, y, "ram_chip");
-				world->addActor(std::move(item2));
-
 
 				break;
 			}
