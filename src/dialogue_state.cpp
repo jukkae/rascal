@@ -155,21 +155,49 @@ void DialogueState::initializeDialogueGraph() {
 			}
 		} break;
 		case MissionType::ACQUIRE_ITEMS: {
-			n0.text = "I'm in dire need of some RAM chips.";
-			n0.replies.push_back({"Tough.", nullopt});
-			n0.replies.push_back({"How many do you need?", 1});
+			if(!other->dialogueGenerator->mission) {
+				n0.text = "I'm in dire need of some RAM chips.";
+				n0.replies.push_back({"Tough.", nullopt});
+				n0.replies.push_back({"How many do you need?", 1});
 
-			n1.text = "Two packs. I'll give you 25 credits.";
-			n1.replies.push_back({"It's a deal.", 2});
-			n1.replies.push_back({"Too low.", nullopt});
+				n1.text = "Two packs. I'll give you 25 credits.";
+				n1.replies.push_back({"It's a deal.", 2});
+				n1.replies.push_back({"Too low.", nullopt});
 
-			n2.createMission = true;
-			n2.text = "I'll wait for you here.";
-			n2.replies.push_back({"... [blank stare]", nullopt});
+				n2.createMission = true;
+				n2.text = "I'll wait for you here.";
+				n2.replies.push_back({"... [blank stare]", nullopt});
 
-			dialogueGraph.push_back(n0);
-			dialogueGraph.push_back(n1);
-			dialogueGraph.push_back(n2);
+				dialogueGraph.push_back(n0);
+				dialogueGraph.push_back(n1);
+				dialogueGraph.push_back(n2);
+			} else {
+				switch(other->dialogueGenerator->mission->status) {
+				case MissionStatus::ACTIVE: {
+					n0.text = "I can smell you don't have what I want.";
+					n0.replies.push_back({"Yeah, no.", nullopt});
+
+					dialogueGraph.push_back(n0);
+				} break;
+				case MissionStatus::REQUIRES_CONFIRMATION: {
+					n0.text = "I can sense you have the wares.";
+					n0.replies.push_back({"Yes.", 1});
+
+					n1.finishMission = true;
+					n1.text = "Thank you for your co-operation.";
+					n1.replies.push_back({"The money?", nullopt});
+
+					dialogueGraph.push_back(n0);
+					dialogueGraph.push_back(n1);
+				} break;
+				case MissionStatus::COMPLETED: {
+					n0.text = "Do not bother me when I am jacked in.";
+					n0.replies.push_back({"... [blank stare]", nullopt});
+					dialogueGraph.push_back(n0);
+				} break;
+				default: break;
+				}
+			}
 		} break;
 		default: break;
 		}
