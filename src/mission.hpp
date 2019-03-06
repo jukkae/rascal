@@ -1,6 +1,10 @@
 #ifndef MISSION_HPP
 #define MISSION_HPP
 
+#include "persistent.hpp"
+#include <string>
+
+namespace boost { namespace serialization { class access; } }
 
 struct Event;
 class Actor;

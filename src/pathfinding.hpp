@@ -1,6 +1,10 @@
 #ifndef PATHFINDING_HPP
 #define PATHFINDING_HPP
 
+#include <vector>
+#include <utility>
+#include <queue>
+
 struct Point;
 class Map;
 

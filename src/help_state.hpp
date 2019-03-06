@@ -1,6 +1,7 @@
 #ifndef HELP_STATE_HPP
 #define HELP_STATE_HPP
 #include "state.hpp"
+#include <fstream>
 
 class HelpState : public State {
 public:

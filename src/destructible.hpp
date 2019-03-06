@@ -3,6 +3,9 @@
 
 class Actor;
 #include "damage.hpp"
+#include "persistent.hpp"
+
+#include <boost/serialization/export.hpp>
 
 class Destructible {
 public:
@@ -11,7 +14,7 @@ public:
 	float defense;
 	int xp; // PlayerDestructible should maybe not have xp?
 	std::string corpseName;
-	
+
 	Destructible(float maxHp = 0, float defense = 0, int xp = 0, std::string corpseName = "corpse");
 	virtual ~Destructible() {};
 

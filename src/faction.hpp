@@ -3,6 +3,8 @@
 
 #include "colors.hpp"
 
+namespace boost { namespace serialization { class access; } }
+
 class Faction {
 public:
   std::string name;

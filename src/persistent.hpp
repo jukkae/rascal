@@ -1,9 +1,13 @@
 #ifndef PERSISTENT_HPP
 #define PERSISTENT_HPP
 
+#include <boost/archive/text_oarchive.hpp>
+#include <boost/archive/text_iarchive.hpp>
+#include <boost/serialization/item_version_type.hpp>
 #include <boost/serialization/unique_ptr.hpp>
 #include <boost/serialization/shared_ptr.hpp>
 #include <boost/serialization/utility.hpp>
+#include <boost/serialization/detail/stack_constructor.hpp>
 #include <SFML/Graphics.hpp>
 #include <optional>
 

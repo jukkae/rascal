@@ -1,6 +1,8 @@
 #ifndef MAT_HPP
 #define MAT_HPP
 
+namespace boost { namespace serialization { class access; } }
+
 template<class T>
 class Mat2d {
 public:

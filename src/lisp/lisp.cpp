@@ -1,6 +1,9 @@
 #include "lisp.hpp"
 #include <cctype>
 #include <regex>
+#include <iostream>
+#include <fstream>
+#include <sstream>
 using namespace lisp;
 
 Atom lisp::symbolTable {Nil{}};

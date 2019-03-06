@@ -2,6 +2,8 @@
 #define LISP_HPP
 #include <variant>
 #include <exception>
+#include <list>
+#include <string>
 
 namespace lisp {
 

@@ -2,6 +2,9 @@
 #define BODY_HPP
 
 #include "body_part.hpp"
+#include <vector>
+
+namespace boost { namespace serialization { class access; } }
 
 enum class BodyType {
 	BIOLOGICAL,
