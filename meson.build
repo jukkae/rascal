@@ -20,3 +20,5 @@ executable(
   cpp_args : ['-Wno-unused-parameter', '-I/usr/local/sys/usr/include', '-Wno-sign-compare'],
   link_args : ['-L/usr/local/lib', '-lc++', '-lboost_serialization', '-lsfml-window', '-lsfml-graphics', '-lsfml-system', '-lsfml-audio']
 )
+
+run_command('cp', 'build/rascal', 'rascal')
