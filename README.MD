@@ -10,12 +10,16 @@ Currently macOS only.
 1. Install SFML with homebrew.
 2. Install boost with homebrew.
 3. Run `mkdir obj` – this should ideally be in `makefile`.
-4. Clone https://github.com/auriamg/macdylibbundler.git to ../ and run make there
+4. On macOS, clone https://github.com/rkitover/mac-third-party-libs-tool to ../
 5. Run `mkdir frameworks` and copy SFML framework files there. It's likely this is redundant, but this needs to be looked into later.
 
-### Building bundle
+### Building with Meson
 
-When running `make bundle`, it's possible that macdylibbundler complains `/!\ WARNING : can't get path for '@rpath/libsfml-system.2.4.dylib'`. If this happens, the quickest workaround is to just paste a zillion times `/usr/local/lib`. Should fix this at some point. It's entirely possible that there's something wrong with the whole `rpath` thing here.
+```
+$ mkdir build
+$ meson build
+$ ninja -C build build OR $ ninja -C build bundle
+```
 
 ## Dependencies
 - SFML 2.4.2 or higher

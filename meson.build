@@ -5,6 +5,9 @@ project(
   default_options : ['warning_level=3', 'cpp_std=c++2a']
 )
 
+add_project_arguments(['-stdlib=libc++'], language : 'cpp')
+add_project_link_arguments(['-stdlib=libc++',], language : 'cpp')
+
 boost_dep = dependency('boost')
 sfml_dep = dependency('sfml')
 freetype_dep = dependency('appleframeworks', modules : 'freetype')
@@ -23,13 +26,15 @@ build_rascal = build_target(
   target_type : 'executable'
 )
 
+# add , '-mmacosx-version-min=10.12' to cpp_args when getting back to compatibility
 build_rascal_for_bundle = build_target(
   'rascal_for_bundle',
   sources,
   dependencies : [boost_dep, sfml_dep, freetype_dep, core_foundation_dep],
   install : true,
+  install_rpath : '@executable_path/../Resources/Frameworks',
   cpp_args : ['-Wno-unused-parameter', '-I/usr/local/sys/usr/include', '-Wno-sign-compare', '-DBUNDLE_BUILD'],
-  link_args : ['-L/usr/local/lib', '-lboost_serialization', '-lsfml-window', '-lsfml-graphics', '-lsfml-system', '-lsfml-audio'],
+  link_args : ['-lboost_serialization', '-lsfml-window', '-lsfml-graphics', '-lsfml-system', '-lsfml-audio'],
   target_type : 'executable'
 )
 
