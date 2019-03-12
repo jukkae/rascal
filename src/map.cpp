@@ -231,7 +231,7 @@ Graph<Room> Map::breakRooms(Rect area, BreakDirection direction) {
 	Graph<Room> areas;
 
 	if(area.width() < minDim || area.height() < minDim) {
-		areas.push_back({0, {area, RoomType::UNASSIGNED, RoomDecor::NONE}, {}});
+		areas.push_back({0, {area, RoomType::UNASSIGNED, RoomDecor::NONE, factions::neutral}, {}});
 		return areas;
 	}
 	else {
