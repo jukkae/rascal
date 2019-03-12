@@ -43,7 +43,9 @@ struct Tile {
 };
 
 
-enum class RoomType { UNASSIGNED, START, MARKET, NORMAL, COMMAND_CENTER, ARMOURY };
+// Function of the room
+enum class RoomType { UNASSIGNED, START, MARKET, NORMAL, COMMAND_CENTER, ARMOURY, HYDROPONICS, POWER_PLANT, WATER_PLANT, LIVING_QUARTERS, CLANDESTINE_LAB, VAULT, MEETING_ROOM };
+// Special features of the room
 enum class RoomDecor { NONE, PILLARS };
 
 struct Room {
