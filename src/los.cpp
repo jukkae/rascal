@@ -4,6 +4,8 @@
 #include "actor.hpp"
 #include "status_effect.hpp" //gorram
 
+#include <cmath>
+
 bool los::is_visible(Point a, Point b, Map* map, std::vector<Actor*> actors, int radius) {
 	if(std::sqrt((b.x-a.x)*(b.x-a.x) + (b.y-a.y)*(b.y-a.y)) > radius) return false;
 	auto line = los::get_line(a, b);

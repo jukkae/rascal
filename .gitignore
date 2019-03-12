@@ -6,6 +6,8 @@ save.txt
 dev_assets/
 lib/
 obj/
+build/
+bundle/
 *.a
 *.la
 *.lai

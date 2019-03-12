@@ -3,6 +3,8 @@
 
 #include "body_part.hpp"
 
+namespace boost { namespace serialization { class access; } }
+
 enum class WieldableType {
 	ONE_HAND,
 	TWO_HANDS,

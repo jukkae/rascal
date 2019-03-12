@@ -1,6 +1,8 @@
 #ifndef PLAYER_HPP
 #define PLAYER_HPP
 
+namespace boost { namespace serialization { class access; } }
+
 struct Event;
 class Player {
 public:

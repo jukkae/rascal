@@ -1,6 +1,7 @@
 #ifndef FOV_HPP
 #define FOV_HPP
 #include <set>
+#include <vector>
 
 #include "constants.hpp"
 #include "direction.hpp"

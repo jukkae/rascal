@@ -5,6 +5,8 @@
 #include "map.hpp"
 #include "vec.hpp"
 
+#include <cmath>
+
 std::set<Point> fov::computeEnemyFov(Map* map, int x, int y, Direction direction, int radius, FovType fovType, std::vector<Actor*> actors) {
 	std::set<Point> fovTiles { };
 	std::vector<int> octants;

@@ -1,6 +1,7 @@
 #ifndef ANIMATION_HPP
 #define ANIMATION_HPP
 #include <vector>
+#include <SFML/Graphics.hpp>
 
 struct Animation {
 	std::vector<char> chars;
