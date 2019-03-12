@@ -443,7 +443,8 @@ Graph<Room> Map::specializeRooms(Graph<Room> rooms, const Graph<Room> mst) {
 	std::vector<int> leafIndices (leafNodes.size());
 	std::transform(leafNodes.begin(), leafNodes.end(), leafIndices.begin(), [&](const auto& r) { return r.id; });
 
-	// TODO the blocks below may throw vector out of range
+	// TODO the blocks below may throw vector out of range,
+	// likely if there are not enough leaf nodes left!
 
 	// Starting room
 	{ // scope for temporaries
