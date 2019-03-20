@@ -44,7 +44,22 @@ struct Tile {
 
 
 // Function of the room
-enum class RoomType { UNASSIGNED, START, MARKET, NORMAL, COMMAND_CENTER, ARMOURY, HYDROPONICS, POWER_PLANT, WATER_PLANT, LIVING_QUARTERS, CLANDESTINE_LAB, VAULT, MEETING_ROOM, UPSTAIRS };
+enum class RoomType {
+	UNASSIGNED,
+	START,
+	MARKET,
+	NORMAL,
+	COMMAND_CENTER,
+	ARMOURY,
+	HYDROPONICS,
+	POWER_PLANT,
+	WATER_PLANT,
+	LIVING_QUARTERS,
+	CLANDESTINE_LAB,
+	VAULT,
+	MEETING_ROOM,
+	UPSTAIRS
+};
 // Special features of the room
 enum class RoomDecor { NONE, PILLARS };
 
@@ -114,6 +129,8 @@ private:
 	Graph<Room> cullDoubleEdges(Graph<Room> rooms);
 	Graph<Room> makeLoops(Graph<Room> rooms, const Graph<Room> physicalConnections, float loopFactor);
 	Graph<Room> specializeRooms(Graph<Room> rooms, const Graph<Room> mst);
+
+	std::vector<int> findPathBetweenRooms(Graph<Room> mst, int start, int end);
 
 	friend class boost::serialization::access;
 	template<class Archive>

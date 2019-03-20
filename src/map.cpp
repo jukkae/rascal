@@ -10,6 +10,7 @@
 #include "effect.hpp"
 #include "map.hpp"
 #include "map_utils.hpp"
+#include "pathfinding.hpp" // For PriorityQueue for room-based pathfinding
 #include "pickable.hpp"
 #include "point.hpp"
 #include "rect.hpp"
@@ -18,6 +19,8 @@
 #include "world.hpp"
 
 #include <SFML/Graphics/Color.hpp>
+
+#include <unordered_map> // For room-based pathfinding
 
 Map::Map() :
 Map(constants::DEFAULT_MAP_WIDTH,
@@ -83,6 +86,8 @@ void Map::generateMap(MapType mapType) {
 				std::cout << "a";
 			} else if(getRooms(Point {x, y}).at(0).roomType == RoomType::MARKET) {
 				std::cout << "m";
+			} else if(getRooms(Point {x, y}).at(0).roomType == RoomType::UPSTAIRS) {
+				std::cout << "u";
 			} else {
 				std::cout << ".";
 			}
@@ -443,10 +448,8 @@ Graph<Room> Map::specializeRooms(Graph<Room> rooms, const Graph<Room> mst) {
 	std::vector<int> leafIndices (leafNodes.size());
 	std::transform(leafNodes.begin(), leafNodes.end(), leafIndices.begin(), [&](const auto& r) { return r.id; });
 
-	// TODO the blocks below may throw vector out of range,
-	// likely if there are not enough leaf nodes left!
-
 	// Starting room
+	// There are at least 2 leaf rooms at this point
 	{ // scope for temporaries
 	int rnd = randomInRange(0, leafIndices.size() - 1);
 	int start = leafIndices.at(rnd);
@@ -454,25 +457,32 @@ Graph<Room> Map::specializeRooms(Graph<Room> rooms, const Graph<Room> mst) {
 	leafIndices.erase(std::remove_if(leafIndices.begin(), leafIndices.end(), [&](const auto& a) { return a == start; }), leafIndices.end());
 	} // scope for temporaries
 
-	// Market
+	// Upstairs
+	// There is at least 1 leaf room at this point
 	{ // scope for temporaries
 	int rnd = randomInRange(0, leafIndices.size() - 1);
 	int start = leafIndices.at(rnd);
-	std::find_if(ret.begin(), ret.end(), [&](const auto& r) { return r.id == start; })->value.roomType = RoomType::MARKET;
+	std::find_if(ret.begin(), ret.end(), [&](const auto& r) { return r.id == start; })->value.roomType = RoomType::UPSTAIRS;
 	leafIndices.erase(std::remove_if(leafIndices.begin(), leafIndices.end(), [&](const auto& a) { return a == start; }), leafIndices.end());
 	} // scope for temporaries
 
-	// Armoury
-	{ // scope for temporaries
-	int rnd = randomInRange(0, leafIndices.size() - 1);
-	int start = leafIndices.at(rnd);
-	std::find_if(ret.begin(), ret.end(), [&](const auto& r) { return r.id == start; })->value.roomType = RoomType::ARMOURY;
-	leafIndices.erase(std::remove_if(leafIndices.begin(), leafIndices.end(), [&](const auto& a) { return a == start; }), leafIndices.end());
-	} // scope for temporaries
 
-	// Command  centers
-	for(auto& r : ret) {
-		if(std::count(leafIndices.begin(), leafIndices.end(), r.id) != 0) r.value.roomType = RoomType::COMMAND_CENTER;
+	// The code is shit
+	int startingRoom = std::find_if(ret.begin(), ret.end(), [&](const auto& r) { return r.value.roomType == RoomType::START; })->id;
+	int endingRoom = std::find_if(ret.begin(), ret.end(), [&](const auto& r) { return r.value.roomType == RoomType::UPSTAIRS; })->id;
+	int currentRoom = startingRoom;
+	std::cout << "Starting room: " << startingRoom << "\n";
+	std::cout << "Ending room: " << endingRoom << "\n";
+
+	auto path = findPathBetweenRooms(mst, startingRoom, endingRoom);
+	std::cout << "Path:" << "\n";
+	for(auto i : path) { std::cout << i << "\n"; }
+
+	while(leafIndices.size() > 0) {
+		int rnd = randomInRange(0, leafIndices.size() - 1);
+		int start = leafIndices.at(rnd);
+		std::find_if(ret.begin(), ret.end(), [&](const auto& r) { return r.id == start; })->value.roomType = RoomType::COMMAND_CENTER;
+		leafIndices.erase(std::remove_if(leafIndices.begin(), leafIndices.end(), [&](const auto& a) { return a == start; }), leafIndices.end());
 	}
 
 	// Make all the rest normal rooms
@@ -483,6 +493,53 @@ Graph<Room> Map::specializeRooms(Graph<Room> rooms, const Graph<Room> mst) {
 	}
 
 	return ret;
+}
+
+// TODO work the data structures into such a form that the *actual* pathfinding::findPath can be used here instead of this copy-paste crap
+std::vector<int> Map::findPathBetweenRooms(Graph<Room> mst, int from, int to) {
+	std::vector<int> path;
+	PriorityQueue<int, float> frontier;
+	frontier.put(from, 0.0f);
+
+	std::unordered_map<int, int> came_from;
+	came_from[from] = from;
+
+	std::unordered_map<int, float> cost_thus_far;
+	cost_thus_far[from] = 0.0f;
+
+	while(!frontier.empty()) {
+		int current = frontier.get();
+
+		if(current == to) {
+			break;
+		}
+
+		auto currentRoom = std::find_if(mst.begin(), mst.end(), [&](const auto& r) { return r.id == current; });
+
+		for(auto i : currentRoom->neighbours) {
+			auto neighbour = std::find_if(mst.begin(), mst.end(), [&](const auto& r) { return r.id == i; });
+			int next = neighbour->id;
+			float nextDeltaCost = 1.0f; // Plug in cost function here
+			float nextCost = cost_thus_far[current] + nextDeltaCost;
+			if(cost_thus_far.find(next) == cost_thus_far.end() ||
+				 nextCost < cost_thus_far[next]) {
+				cost_thus_far[next] = nextCost;
+				float heuristic = 1.0f; // Plug in heuristic function here
+				float priority = nextCost + heuristic;
+				came_from[next] = current;
+				frontier.put(next, priority);
+			}
+		}
+	}
+	int current = to;
+
+	while(current != from) {
+		path.push_back(current);
+		current = came_from[current];
+	}
+	path.push_back(from);
+	std::reverse(path.begin(), path.end());
+	return path;
 }
 
 bool Map::isWall(int x, int y) const {
