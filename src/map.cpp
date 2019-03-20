@@ -88,6 +88,8 @@ void Map::generateMap(MapType mapType) {
 				std::cout << "m";
 			} else if(getRooms(Point {x, y}).at(0).roomType == RoomType::UPSTAIRS) {
 				std::cout << "u";
+			} else if(getRooms(Point {x, y}).at(0).roomType == RoomType::HYDROPONICS) {
+				std::cout << "h";
 			} else {
 				std::cout << ".";
 			}
@@ -470,7 +472,6 @@ Graph<Room> Map::specializeRooms(Graph<Room> rooms, const Graph<Room> mst) {
 	// The code is shit
 	int startingRoom = std::find_if(ret.begin(), ret.end(), [&](const auto& r) { return r.value.roomType == RoomType::START; })->id;
 	int endingRoom = std::find_if(ret.begin(), ret.end(), [&](const auto& r) { return r.value.roomType == RoomType::UPSTAIRS; })->id;
-	int currentRoom = startingRoom;
 	std::cout << "Starting room: " << startingRoom << "\n";
 	std::cout << "Ending room: " << endingRoom << "\n";
 
@@ -478,12 +479,20 @@ Graph<Room> Map::specializeRooms(Graph<Room> rooms, const Graph<Room> mst) {
 	std::cout << "Path:" << "\n";
 	for(auto i : path) { std::cout << i << "\n"; }
 
-	while(leafIndices.size() > 0) {
-		int rnd = randomInRange(0, leafIndices.size() - 1);
-		int start = leafIndices.at(rnd);
-		std::find_if(ret.begin(), ret.end(), [&](const auto& r) { return r.id == start; })->value.roomType = RoomType::COMMAND_CENTER;
-		leafIndices.erase(std::remove_if(leafIndices.begin(), leafIndices.end(), [&](const auto& a) { return a == start; }), leafIndices.end());
+	// Walk through the path in reverse, sprinkling special rooms
+	for(auto i = path.rbegin(); i != path.rend(); ++i) {
+		auto& currentRoom = *std::find_if(ret.begin(), ret.end(), [&](const auto& r) { return r.id == *i; });
+		if(currentRoom.value.roomType == RoomType::UNASSIGNED) {
+			currentRoom.value.roomType = RoomType::HYDROPONICS;
+		}
 	}
+
+	// while(leafIndices.size() > 0) {
+	// 	int rnd = randomInRange(0, leafIndices.size() - 1);
+	// 	int start = leafIndices.at(rnd);
+	// 	std::find_if(ret.begin(), ret.end(), [&](const auto& r) { return r.id == start; })->value.roomType = RoomType::COMMAND_CENTER;
+	// 	leafIndices.erase(std::remove_if(leafIndices.begin(), leafIndices.end(), [&](const auto& a) { return a == start; }), leafIndices.end());
+	// }
 
 	// Make all the rest normal rooms
 	for(auto& r : ret) {
