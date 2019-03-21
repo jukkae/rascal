@@ -260,6 +260,19 @@ void map_utils::addItemsBasedOnRoomTypes(World* world, Map* map, int difficulty)
 				world->addActor(std::move(item));
 				break;
 			}
+			case RoomType::HYDROPONICS: {
+				if((room.x1() - room.x0() > 1) && (room.y1() - room.y0() > 1)) {
+					for(int x = room.x0() + 1; x < room.x1(); ++x) {
+						for(int y = room.y0() + 1; y < room.y1(); ++y) {
+							if(d6() == 6) {
+								auto item = item::makeItemFromToml(world, map, x, y, "tree");
+								world->addActor(std::move(item));
+							}
+						}
+					}
+				}
+				break;
+			}
 			case RoomType::ARMOURY: {
 
 				auto& levels = map_utils::LevelsTable::getInstance().levelsTable;

@@ -300,3 +300,11 @@ ch = "q"
 color = "yellow"
 blocks = false
 [ram_chip.pickable]
+
+
+# Miscellanea
+[tree]
+name = "tree"
+ch = "t"
+color = "green"
+blocks = true
