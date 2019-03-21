@@ -308,3 +308,4 @@ name = "tree"
 ch = "t"
 color = "green"
 blocks = true
+blocks_light = true

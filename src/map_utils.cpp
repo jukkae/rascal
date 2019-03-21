@@ -503,6 +503,7 @@ std::unique_ptr<Actor> item::makeItemFromToml(World* world, Map* map, int x, int
 	a->col = colors::get(toml::get<std::string>(item.at("color")));
 
 	a->blocks = toml::get<bool>(item.at("blocks"));
+	a->blocksLight = toml::get<bool>(item.at("blocks_light"));
 
 	if(item.count("pickable") != 0) {
 		auto pickable = toml::get<toml::table>(item.at("pickable"));

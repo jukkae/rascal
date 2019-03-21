@@ -40,7 +40,7 @@ bool MoveAction::execute() {
 	}
 
 	if (world->isWall(targetX, targetY)) return false;
-	for (auto a : world->getActorsAt(targetX, targetY)) if (a->openable && a->blocks) return false;
+	for (auto a : world->getActorsAt(targetX, targetY)) if (a->blocks) return false;
 
 	// look for living actors
 	for (auto& a : world->getActorsAt(targetX, targetY)) {
