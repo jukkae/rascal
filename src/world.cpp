@@ -35,8 +35,7 @@ width(width), height(height), level(level), state(state) {
 		throw std::logic_error("This map type is not implemented yet");
 	}
 
-	map = Map(width, height, mapType);
-	map.setWorld(this);
+	map = Map(width, height, mapType, this);
 
 	//map_utils::addDoors(this, &map);
 	//map_utils::addItems(this, &map, level);

@@ -22,13 +22,15 @@
 
 #include <unordered_map> // For room-based pathfinding
 
+// This ctor is required for s11n
 Map::Map() :
 Map(constants::DEFAULT_MAP_WIDTH,
 	  constants::DEFAULT_MAP_HEIGHT,
-		MapType::BUILDING) { }
+		MapType::BUILDING,
+	  nullptr) { }
 
-Map::Map(int width, int height, MapType mapType) :
-width(width), height(height) {
+Map::Map(int width, int height, MapType mapType, World* world) :
+width(width), height(height), world(world) {
 	tiles = Mat2d<Tile>(width, height);
 	for(int i = 0; i < width; ++i) {
 		for(int j = 0; j < height; ++j) {
@@ -168,6 +170,14 @@ void Map::generateBuildingMap() {
 			int centerX = floor((overlapMinX + overlapMaxX) / 2);
 			int centerY = floor((overlapMinY + overlapMaxY) / 2);
 			tiles(centerX, centerY).walkable = true;
+
+			// add door
+			// std::unique_ptr<Actor> door = std::make_unique<Actor>(world, centerX, centerY, '+', "door", sf::Color::Black, 0);
+			// door->openable = std::make_unique<Openable>();
+			// door->blocks = true;
+			// door->blocksLight = true;
+			// door->fovOnly = false;
+			// world->addActor(std::move(door));
 			// std::cout << "Overlaps: "
 			// << "(" << overlapMinX << ", " << overlapMinY << "), "
 			// << "(" << overlapMaxX << ", " << overlapMaxY << ")\n";

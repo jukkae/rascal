@@ -104,14 +104,13 @@ public:
 	bool hasAnimations = false;
 
 	Map();
-	Map(int width, int height, MapType mapType);
+	Map(int width, int height, MapType mapType, World* world);
 
 	void setWall(int x, int y);
 	bool isWall(int x, int y) const;
 	bool canWalk(int x, int y) const;
 	//bool isInFov(int x, int y) const;
 	bool isExplored(int x, int y) const;
-	void setWorld(World* w) { world = w; }
 	std::vector<Room> getRooms(Point location);
 
 private:
