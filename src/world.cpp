@@ -15,9 +15,7 @@
 #include <iostream>
 #include "../include/toml.hpp"
 
-World::World(int width, int height, int level, GameplayState* state):
-width(width), height(height), level(level), state(state) {
-	radiation = level;
+MapType World::getMapType(int level) {
 	MapType mapType;
 
 	auto& levelsTable = map_utils::LevelsTable::getInstance().levelsTable;
@@ -34,8 +32,13 @@ width(width), height(height), level(level), state(state) {
 	} else {
 		throw std::logic_error("This map type is not implemented yet");
 	}
+	return mapType;
+}
 
-	map = Map(width, height, mapType, this);
+World::World(int width, int height, int level, GameplayState* state):
+width(width), height(height), level(level), state(state),
+map(width, height, getMapType(level), this) {
+	radiation = level;
 
 	map_utils::addDoors(this, &map);
 	//map_utils::addItems(this, &map, level);

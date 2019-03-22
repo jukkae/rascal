@@ -20,8 +20,7 @@
 
 GameplayState::GameplayState(Engine* engine, sf::RenderWindow* window) :
 State(engine, window) {
-	std::unique_ptr<World> w = std::make_unique<World>(120, 72, 1, this);
-	levels.push_back(std::move(w));
+	levels.push_back( std::make_unique<World>(120, 72, 1, this) );
 	world = levels.front().get();
 
 	gui.setState(this);
