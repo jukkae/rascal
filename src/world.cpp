@@ -37,7 +37,7 @@ width(width), height(height), level(level), state(state) {
 
 	map = Map(width, height, mapType, this);
 
-	//map_utils::addDoors(this, &map);
+	map_utils::addDoors(this, &map);
 	//map_utils::addItems(this, &map, level);
 	//map_utils::addMonsters(this, &map, level);
 	map_utils::addMonstersBasedOnRoomTypes(this, &map, level);

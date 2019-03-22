@@ -158,7 +158,7 @@ void Map::generateBuildingMap() {
 		}
 	}
 
-	// open doors
+	// open doorways
 	for(auto& roomNode : rooms) {
 		auto room = roomNode.value;
 		for(auto& otherIndex : roomNode.neighbours) {
@@ -170,17 +170,6 @@ void Map::generateBuildingMap() {
 			int centerX = floor((overlapMinX + overlapMaxX) / 2);
 			int centerY = floor((overlapMinY + overlapMaxY) / 2);
 			tiles(centerX, centerY).walkable = true;
-
-			// add door
-			// std::unique_ptr<Actor> door = std::make_unique<Actor>(world, centerX, centerY, '+', "door", sf::Color::Black, 0);
-			// door->openable = std::make_unique<Openable>();
-			// door->blocks = true;
-			// door->blocksLight = true;
-			// door->fovOnly = false;
-			// world->addActor(std::move(door));
-			// std::cout << "Overlaps: "
-			// << "(" << overlapMinX << ", " << overlapMinY << "), "
-			// << "(" << overlapMaxX << ", " << overlapMaxY << ")\n";
 		}
 	}
 
@@ -485,12 +474,12 @@ Graph<Room> Map::specializeRooms(Graph<Room> rooms, const Graph<Room> mst) {
 	std::cout << "Starting room: " << startingRoom << "\n";
 	std::cout << "Ending room: " << endingRoom << "\n";
 
-	auto path = findPathBetweenRooms(mst, startingRoom, endingRoom);
+	primaryPath = findPathBetweenRooms(mst, startingRoom, endingRoom);
 	std::cout << "Path:" << "\n";
-	for(auto i : path) { std::cout << i << "\n"; }
+	for(auto i : primaryPath) { std::cout << i << "\n"; }
 
 	// Walk through the path in reverse, sprinkling special rooms
-	for(auto i = path.rbegin(); i != path.rend(); ++i) {
+	for(auto i = primaryPath.rbegin(); i != primaryPath.rend(); ++i) {
 		auto& currentRoom = *std::find_if(ret.begin(), ret.end(), [&](const auto& r) { return r.id == *i; });
 		if(currentRoom.value.roomType == RoomType::UNASSIGNED) {
 			currentRoom.value.roomType = RoomType::HYDROPONICS;

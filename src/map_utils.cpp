@@ -83,19 +83,27 @@ void map_utils::addItems(World* world, Map* map, int difficulty) {
 }
 
 void map_utils::addDoors(World* world, Map* map) {
-	for(int x = 1; x < map->width-1; ++x) {
-		for(int y = 1; y < map->height-1; ++y) {
-			if (!map->isWall(x, y)) {
-				if ((map->isWall(x-1, y) && map->isWall(x+1, y)) ||
-					(map->isWall(x, y-1) && map->isWall(x, y+1))) {
-					std::unique_ptr<Actor> door = std::make_unique<Actor>(world, x, y, '+', "door", sf::Color::Black, 0);
-					door->openable = std::make_unique<Openable>();
-					door->blocks = true;
-					door->blocksLight = true;
-					door->fovOnly = false;
-					world->addActor(std::move(door));
-				}
+	for(auto& roomNode : map->rooms) {
+		auto room = roomNode.value;
+		for(auto& otherIndex : roomNode.neighbours) {
+			auto other = std::find_if(map->rooms.begin(), map->rooms.end(), [&](const auto& r) {return r.id == otherIndex;})->value;
+			int overlapMinX = fmax(room.x0(), other.x0());
+			int overlapMaxX = fmin(room.x1(), other.x1());
+			int overlapMinY = fmax(room.y0(), other.y0());
+			int overlapMaxY = fmin(room.y1(), other.y1());
+			int centerX = floor((overlapMinX + overlapMaxX) / 2);
+			int centerY = floor((overlapMinY + overlapMaxY) / 2);
+
+			// add door if doorway is empty
+			if(world->getActorsAt(centerX, centerY).empty()) {
+				std::unique_ptr<Actor> door = std::make_unique<Actor>(world, centerX, centerY, '+', "door", sf::Color::Black, 0);
+				door->openable = std::make_unique<Openable>();
+				door->blocks = true;
+				door->blocksLight = true;
+				door->fovOnly = false;
+				world->addActor(std::move(door));
 			}
+
 		}
 	}
 }

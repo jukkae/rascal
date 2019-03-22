@@ -8,6 +8,7 @@
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/serialization/export.hpp>
+#include <boost/serialization/vector.hpp>
 #include "animation.hpp"
 #include "constants.hpp"
 #include "faction.hpp"
@@ -101,6 +102,7 @@ public:
 	Graph<Room> rooms; // Final adjacency map
 	Graph<Room> minimumSpanningTree; // Backbone with exactly 1 route between every room
 	Graph<Room> physicalConnectionsBetweenRooms; // All physical adjacencies
+	std::vector<int> primaryPath {}; // Path from starting room to upstairs room
 	bool hasAnimations = false;
 
 	Map();
@@ -140,6 +142,7 @@ private:
 		ar & rooms;
 		ar & minimumSpanningTree;
 		ar & physicalConnectionsBetweenRooms;
+		ar & primaryPath;
 		ar & hasAnimations;
 		ar & world;
 	}
