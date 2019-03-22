@@ -33,6 +33,7 @@ Engine::Engine(sf::RenderWindow* window) : window(window) {
 		gameplayState = gps.get();
 	}
 	else { // FIXME urgh
+		// This causes multiple constructions – not terribly important, but a bit dirty
 		load();
 		(static_cast<GameplayState&>(*gameplayState)).initLoaded(this);
 		showContinueInMenu = true;
