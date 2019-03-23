@@ -192,7 +192,7 @@ void map_utils::addMonstersBasedOnRoomTypes(World* world, Map* map, int difficul
 				}
 				break;
 			}
-			//case RoomType::START: // fallthrough for debugging TODO
+			case RoomType::START: // fallthrough for debugging TODO
 			case RoomType::MARKET: {
 				int area = abs((room.x1() - room.x0()) * (room.y1() - room.y0())); //shouldn't need abs, but just making sure
 				//std::cout << "area: " << area << "\n";
@@ -511,7 +511,8 @@ std::unique_ptr<Actor> item::makeItemFromToml(World* world, Map* map, int x, int
 	a->col = colors::get(toml::get<std::string>(item.at("color")));
 
 	a->blocks = toml::get<bool>(item.at("blocks"));
-	a->blocksLight = toml::get<bool>(item.at("blocks_light"));
+	if(item.find("blocks_light") != item.end())
+		a->blocksLight = toml::get<bool>(item.at("blocks_light"));
 
 	if(item.count("pickable") != 0) {
 		auto pickable = toml::get<toml::table>(item.at("pickable"));
