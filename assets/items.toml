@@ -271,7 +271,7 @@ effect.value = 10
 
 [tesla_coil]
 name = "tesla coil"
-ch = "#"
+ch = "&"
 color = "grey"
 blocks = false
 [tesla_coil.pickable]
@@ -314,3 +314,10 @@ maxHp = 8
 defense = 1
 xp = 1
 corpseName = "tree stump"
+
+[force_field]
+name = "force field"
+ch = "#"
+color = "green"
+blocks = true
+blocks_light = false

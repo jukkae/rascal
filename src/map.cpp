@@ -92,6 +92,8 @@ void Map::generateMap(MapType mapType) {
 				std::cout << "u";
 			} else if(getRooms(Point {x, y}).at(0).roomType == RoomType::HYDROPONICS) {
 				std::cout << "h";
+			} else if(getRooms(Point {x, y}).at(0).roomType == RoomType::CLANDESTINE_LAB) {
+				std::cout << "l";
 			} else {
 				std::cout << ".";
 			}
@@ -482,7 +484,16 @@ Graph<Room> Map::specializeRooms(Graph<Room> rooms, const Graph<Room> mst) {
 	for(auto i = primaryPath.rbegin(); i != primaryPath.rend(); ++i) {
 		auto& currentRoom = *std::find_if(ret.begin(), ret.end(), [&](const auto& r) { return r.id == *i; });
 		if(currentRoom.value.roomType == RoomType::UNASSIGNED) {
-			currentRoom.value.roomType = RoomType::HYDROPONICS;
+			switch(d2()) {
+			case 1: {
+				currentRoom.value.roomType = RoomType::HYDROPONICS;
+				break;
+			}
+			case 2: {
+				currentRoom.value.roomType = RoomType::CLANDESTINE_LAB;
+				break;
+			}
+			}
 		}
 	}
 
