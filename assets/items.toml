@@ -309,3 +309,8 @@ ch = "t"
 color = "green"
 blocks = true
 blocks_light = true
+[tree.destructible]
+maxHp = 8
+defense = 1
+xp = 1
+corpseName = "tree stump"

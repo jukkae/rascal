@@ -510,7 +510,8 @@ std::unique_ptr<Actor> item::makeItemFromToml(World* world, Map* map, int x, int
 	a->name = toml::get<std::string>(item.at("name"));
 	a->col = colors::get(toml::get<std::string>(item.at("color")));
 
-	a->blocks = toml::get<bool>(item.at("blocks"));
+	if(item.find("blocks") != item.end())
+		a->blocks = toml::get<bool>(item.at("blocks"));
 	if(item.find("blocks_light") != item.end())
 		a->blocksLight = toml::get<bool>(item.at("blocks_light"));
 
@@ -629,6 +630,15 @@ std::unique_ptr<Actor> item::makeItemFromToml(World* world, Map* map, int x, int
 			a->wieldable = std::make_unique<Wieldable>(WieldableType::TWO_HANDS);
 		}
 		else throw std::logic_error("Not implemented");
+	}
+
+	if(item.count("destructible") != 0) {
+		auto destructible = toml::get<toml::table>(item.at("destructible"));
+		int maxHp = toml::get<int>(destructible.at("maxHp"));
+		int defense = toml::get<int>(destructible.at("defense"));
+		int xp = toml::get<int>(destructible.at("xp"));
+		std::string corpseName = toml::get<std::string>(destructible.at("corpseName"));
+		a->destructible = std::make_unique<MonsterDestructible>(maxHp, defense, xp, corpseName);
 	}
 
 	if(item.count("armor") != 0) {
