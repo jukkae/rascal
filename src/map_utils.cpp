@@ -96,15 +96,7 @@ void map_utils::addDoors(World* world, Map* map) {
 
 			// add door if doorway is empty
 			if(world->getActorsAt(centerX, centerY).empty()) {
-				std::unique_ptr<Actor> door = std::make_unique<Actor>(world, centerX, centerY, '+', "door", sf::Color::Black, 0);
-				door->openable = std::make_unique<Openable>();
-				if(d6() == 6) {
-					door->openable->lockType = LockType::RED;
-					door->col = colors::get("red");
-				}
-				door->blocks = true;
-				door->blocksLight = true;
-				door->fovOnly = false;
+				auto door = (d6() == 6) ? item::makeItemFromToml(world, map, centerX, centerY, "door_red") : item::makeItemFromToml(world, map, centerX, centerY, "door");
 				world->addActor(std::move(door));
 			}
 
@@ -538,6 +530,8 @@ std::unique_ptr<Actor> item::makeItemFromToml(World* world, Map* map, int x, int
 		a->blocks = toml::get<bool>(item.at("blocks"));
 	if(item.find("blocks_light") != item.end())
 		a->blocksLight = toml::get<bool>(item.at("blocks_light"));
+	if(item.find("fov_only") != item.end())
+		a->fovOnly = toml::get<bool>(item.at("fov_only"));
 
 	if(item.count("pickable") != 0) {
 		auto pickable = toml::get<toml::table>(item.at("pickable"));
@@ -676,6 +670,17 @@ std::unique_ptr<Actor> item::makeItemFromToml(World* world, Map* map, int x, int
 		auto armorTable = toml::get<toml::table>(item.at("armor"));
 		int armorValue = toml::get<int>(armorTable.at("value"));
 		a->armor = std::make_unique<Armor>(armorValue);
+	}
+
+	if(item.count("openable") != 0) {
+		auto openable = toml::get<toml::table>(item.at("openable"));
+		LockType lockType;
+		auto sLockType = toml::get<std::string>(openable.at("lock_type"));
+		if(sLockType == "red") lockType = LockType::RED;
+		else if(sLockType == "none") lockType = LockType::NONE;
+		else throw std::logic_error("This lock type not implemented yet");
+		a->openable = std::make_unique<Openable>();
+		a->openable->lockType = lockType;
 	}
 
 	return a;

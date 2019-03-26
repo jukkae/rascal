@@ -441,13 +441,13 @@ bool OpenAction::execute() {
 	// TODO check if actor is next to target
 	World* w = actor->world;
 	if(target->openable && !target->openable->open) { // to open
-		if(target->openable->lockType == LockType::NONE) {
+		if(target->openable->lockType == LockType::NONE) { // not locked
 			target->openable->open = true;
 			target->blocks = false;
 			target->blocksLight = false;
 			target->col = sf::Color(255, 255, 255);
 			return true;
-		} else {
+		} else { // locked door
 			std::vector<Actor*> contents {};
 			for(auto& a : actor->container->inventory) {
 				contents.push_back(a.get());
@@ -464,9 +464,15 @@ bool OpenAction::execute() {
 				target->blocks = false;
 				target->blocksLight = false;
 				target->col = sf::Color(255, 255, 255);
+				ActionSuccessEvent e(actor, "The door whirrs open.");
+				w->notify(e);
 				return true;
 			}
-			else return false;
+			else {
+				ActionFailureEvent e(actor, "You don't have the key to this door!");
+				w->notify(e);
+				return false;
+			}
 		}
 	}
 	else if(target->openable && target->openable->open) { // to close
