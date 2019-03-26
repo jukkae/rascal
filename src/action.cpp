@@ -440,18 +440,48 @@ bool ShootAction::execute() {
 bool OpenAction::execute() {
 	// TODO check if actor is next to target
 	World* w = actor->world;
-	if(target->openable && !target->openable->open) {
-		target->openable->open = true;
-		target->blocks = false;
-		target->blocksLight = false;
-		target->col = sf::Color(255, 255, 255);
-		return true;
+	if(target->openable && !target->openable->open) { // to open
+		if(target->openable->lockType == LockType::NONE) {
+			target->openable->open = true;
+			target->blocks = false;
+			target->blocksLight = false;
+			target->col = sf::Color(255, 255, 255);
+			return true;
+		} else {
+			std::vector<Actor*> contents {};
+			for(auto& a : actor->container->inventory) {
+				contents.push_back(a.get());
+			}
+			bool hasKey = false;
+			for(auto& a : contents) {
+				if(a->pickable && (a->pickable->keyType == target->openable->lockType)) {
+					hasKey = true;
+					break;
+				}
+			}
+			if(hasKey) {
+				target->openable->open = true;
+				target->blocks = false;
+				target->blocksLight = false;
+				target->col = sf::Color(255, 255, 255);
+				return true;
+			}
+			else return false;
+		}
 	}
-	else if(target->openable && target->openable->open) {
+	else if(target->openable && target->openable->open) { // to close
 		target->openable->open = false;
 		target->blocks = true;
 		target->blocksLight = true;
-		target->col = sf::Color(0, 0, 0);
+		sf::Color color;
+		switch (target->openable->lockType) {
+		case LockType::NONE: color = sf::Color(0, 0, 0); break;
+		case LockType::RED: color = sf::Color(255, 0, 0); break;
+		case LockType::GREEN: color = sf::Color(0, 255, 0); break;
+		case LockType::BLUE: color = sf::Color(0, 0, 255); break;
+		default: color = sf::Color(0, 0, 0); break;
+		}
+		target->col = color;
 		return true;
 	}
 	return false;

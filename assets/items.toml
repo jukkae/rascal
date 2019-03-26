@@ -321,3 +321,11 @@ ch = "#"
 color = "green"
 blocks = true
 blocks_light = false
+
+[key_red]
+name = "red key"
+ch = "k"
+color = "red"
+blocks = false
+[key_red.pickable]
+key_type = "red"

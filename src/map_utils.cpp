@@ -98,6 +98,10 @@ void map_utils::addDoors(World* world, Map* map) {
 			if(world->getActorsAt(centerX, centerY).empty()) {
 				std::unique_ptr<Actor> door = std::make_unique<Actor>(world, centerX, centerY, '+', "door", sf::Color::Black, 0);
 				door->openable = std::make_unique<Openable>();
+				if(d6() == 6) {
+					door->openable->lockType = LockType::RED;
+					door->col = colors::get("red");
+				}
 				door->blocks = true;
 				door->blocksLight = true;
 				door->fovOnly = false;
@@ -261,6 +265,13 @@ void map_utils::addItemsBasedOnRoomTypes(World* world, Map* map, int difficulty)
 	for(auto& roomNode : map->rooms) {
 		auto room = roomNode.value;
 		switch(room.roomType) {
+			case RoomType::START: {
+				int x = (room.x0() + room.x1()) / 2;
+				int y = (room.y0() + room.y1()) / 2 + 1;
+				auto item = item::makeItemFromToml(world, map, x, y, "key_red");
+				world->addActor(std::move(item));
+				break;
+			}
 			case RoomType::COMMAND_CENTER: {
 				int x = (room.x0() + room.x1()) / 2;
 				int y = (room.y0() + room.y1()) / 2 + 1;
@@ -588,6 +599,13 @@ std::unique_ptr<Actor> item::makeItemFromToml(World* world, Map* map, int x, int
 		if(pickable.count("weight") != 0) {
 			int weight = toml::get<int>(pickable.at("weight"));
 			a->pickable->weight = weight;
+		}
+		if(pickable.count("key_type") != 0) {
+			LockType keyType;
+			auto sKeyType = toml::get<std::string>(pickable.at("key_type"));
+			if(sKeyType == "red") keyType = LockType::RED;
+			else throw std::logic_error("This key type not implemented yet");
+			a->pickable->keyType = keyType;
 		}
 	}
 
