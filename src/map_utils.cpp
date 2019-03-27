@@ -401,11 +401,7 @@ void map_utils::addStairs(World* world, Map* map, World* lower, World* upper) {
 			 map->tiles(x, y).walkable = true; // Crude, TODO check if works
 		}
 
-		std::unique_ptr<Actor> downstairs = std::make_unique<Actor>(world, x, y, '>', "stairs (down)", sf::Color::White, boost::none);
-	  downstairs->blocks = false;
-	  downstairs->fovOnly = false;
-		downstairs->transporter = std::make_unique<Transporter>();
-		downstairs->transporter->direction = VerticalDirection::DOWN;
+		std::unique_ptr<Actor> downstairs = makeActorFromToml(world, map, x, y, "downstairs", TomlSource::ITEMS);
 		world->addActor(std::move(downstairs));
 	} else {
 		int x = 0;
@@ -417,11 +413,7 @@ void map_utils::addStairs(World* world, Map* map, World* lower, World* upper) {
 			y = (map->height-1) * s / 100;
 		} while (map->isWall(x, y)); // should check for canWalk, but can't do that yet
 
-		std::unique_ptr<Actor> downstairs = std::make_unique<Actor>(world, x, y, '>', "stairs (down)", sf::Color::White, boost::none);
-	  downstairs->blocks = false;
-	  downstairs->fovOnly = false;
-		downstairs->transporter = std::make_unique<Transporter>();
-		downstairs->transporter->direction = VerticalDirection::DOWN;
+		std::unique_ptr<Actor> downstairs = makeActorFromToml(world, map, x, y, "downstairs", TomlSource::ITEMS);
 		world->addActor(std::move(downstairs));
 	}
 	if(upper != nullptr) {
@@ -439,11 +431,7 @@ void map_utils::addStairs(World* world, Map* map, World* lower, World* upper) {
 		// x = world->getPlayer()->x + 1;
 		// y = world->getPlayer()->y + 1;
 
-		std::unique_ptr<Actor> upstairs = std::make_unique<Actor>(world, x, y, '<', "stairs (up)", sf::Color::White, boost::none);
-	  upstairs->blocks = false;
-	  upstairs->fovOnly = false;
-		upstairs->transporter = std::make_unique<Transporter>();
-		upstairs->transporter->direction = VerticalDirection::UP;
+		std::unique_ptr<Actor> upstairs = makeActorFromToml(world, map, x, y, "upstairs", TomlSource::ITEMS);
 		world->addActor(std::move(upstairs));
 	}
 }
@@ -664,6 +652,16 @@ std::unique_ptr<Actor> map_utils::makeActorFromToml(World* world, Map* map, int 
 		else throw std::logic_error("This lock type not implemented yet");
 		a->openable = std::make_unique<Openable>();
 		a->openable->lockType = lockType;
+	}
+
+	if(being.count("transporter") != 0) {
+		auto transporter = toml::get<toml::table>(being.at("transporter"));
+		a->transporter = std::make_unique<Transporter>();
+		if(toml::get<std::string>(transporter.at("direction")) == "up")
+			a->transporter->direction = VerticalDirection::UP;
+		else if(toml::get<std::string>(transporter.at("direction")) == "down")
+			a->transporter->direction = VerticalDirection::DOWN;
+		else throw std::logic_error("direction not implemented yet");
 	}
 
 	return a;

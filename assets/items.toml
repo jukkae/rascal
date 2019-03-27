@@ -385,3 +385,21 @@ blocks_light = true
 fov_only = false
 [door_blue.openable]
 lock_type = "blue"
+
+[upstairs]
+name = "stairs (up)"
+ch = "<"
+color = "white"
+blocks = false
+fov_only = false
+[upstairs.transporter]
+direction = "up"
+
+[downstairs]
+name = "stairs (down)"
+ch = ">"
+color = "white"
+blocks = false
+fov_only = false
+[downstairs.transporter]
+direction = "down"
