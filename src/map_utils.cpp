@@ -96,7 +96,7 @@ void map_utils::addDoors(World* world, Map* map) {
 
 			// add door if doorway is empty
 			if(world->getActorsAt(centerX, centerY).empty()) {
-				auto door = (d6() == 6) ? makeActorFromToml(world, map, centerX, centerY, "door_red", TomlSource::ITEMS) : makeActorFromToml(world, map, centerX, centerY, "door", TomlSource::ITEMS);
+				auto door = makeActorFromToml(world, map, centerX, centerY, "door", TomlSource::ITEMS);
 				world->addActor(std::move(door));
 			}
 
@@ -258,10 +258,6 @@ void map_utils::addItemsBasedOnRoomTypes(World* world, Map* map, int difficulty)
 		auto room = roomNode.value;
 		switch(room.roomType) {
 			case RoomType::START: {
-				int x = (room.x0() + room.x1()) / 2;
-				int y = (room.y0() + room.y1()) / 2 + 1;
-				auto item = makeActorFromToml(world, map, x, y, "key_red", TomlSource::ITEMS);
-				world->addActor(std::move(item));
 				break;
 			}
 			case RoomType::COMMAND_CENTER: {
@@ -359,6 +355,66 @@ void map_utils::addItemsBasedOnRoomTypes(World* world, Map* map, int difficulty)
 			}
 			default:
 				break;
+		}
+	}
+}
+
+void map_utils::fixMainPath(World* world, Map* map, int difficulty) {
+	std::cout << "generating main path...\n";
+	auto path = map->primaryPath;
+	for(auto roomId = map->primaryPath.rbegin(); roomId != map->primaryPath.rend(); ++roomId) {
+		std::cout << "room id: " << *roomId << "\n";
+		auto& room = std::find_if(map->rooms.begin(), map->rooms.end(), [&](const auto& r) {return r.id == *roomId;})->value;
+	}
+	int split = randomInRange(0, path.size() - 1);
+	std::cout << "split at " << split << "\n";
+	std::vector<int> low (path.begin(), path.begin() + split);
+	std::vector<int> high (path.begin() + split, path.end());
+	{
+		int target = low.at(randomInRange(0, low.size() - 1));
+		auto& room = std::find_if(map->rooms.begin(), map->rooms.end(), [&](const auto& r) {return r.id == target;})->value;
+		int x = (room.x0() + room.x1()) / 2;
+		int y = (room.y0() + room.y1()) / 2 + 1;
+		auto item = makeActorFromToml(world, map, x, y, "key_red", TomlSource::ITEMS);
+		world->addActor(std::move(item));
+	}
+	{
+		int target = high.at(randomInRange(0, low.size() - 1));
+		auto roomNode = std::find_if(map->rooms.begin(), map->rooms.end(), [&](const auto& r) {return r.id == target;});
+		auto& room = roomNode->value;
+
+		for(auto& otherIndex : roomNode->neighbours) {
+			auto other = std::find_if(map->rooms.begin(), map->rooms.end(), [&](const auto& r) {return r.id == otherIndex;})->value;
+			int overlapMinX = fmax(room.x0(), other.x0());
+			int overlapMaxX = fmin(room.x1(), other.x1());
+			int overlapMinY = fmax(room.y0(), other.y0());
+			int overlapMaxY = fmin(room.y1(), other.y1());
+			int centerX = floor((overlapMinX + overlapMaxX) / 2);
+			int centerY = floor((overlapMinY + overlapMaxY) / 2);
+
+			// clear targets, ie. all actors on target tile
+			auto actorsAtTarget = world->getActorsAt(centerX, centerY);
+			world->actors.erase(
+				std::remove_if(
+					world->actors.begin(),
+					world->actors.end(),
+					[&] (std::unique_ptr<Actor> const& p)
+					{
+						return std::find(
+										 actorsAtTarget.cbegin(),
+										 actorsAtTarget.cend(),
+										 p.get()
+									 ) != actorsAtTarget.end();
+					}),
+				world->actors.end()
+			);
+			actorsAtTarget.clear();
+
+			if(world->getActorsAt(centerX, centerY).empty()) {
+				auto door = makeActorFromToml(world, map, centerX, centerY, "door_red", TomlSource::ITEMS);
+				world->addActor(std::move(door));
+			}
+
 		}
 	}
 }
