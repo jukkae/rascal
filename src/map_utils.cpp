@@ -366,7 +366,7 @@ void map_utils::fixMainPath(World* world, Map* map, int difficulty) {
 		std::cout << "room id: " << *roomId << "\n";
 		auto& room = std::find_if(map->rooms.begin(), map->rooms.end(), [&](const auto& r) {return r.id == *roomId;})->value;
 	}
-	int split = randomInRange(0, path.size() - 1);
+	int split = randomInRange(1, path.size() - 2); // Don't split at either end
 	std::cout << "split at " << split << "\n";
 	std::vector<int> low (path.begin(), path.begin() + split);
 	std::vector<int> high (path.begin() + split, path.end());
@@ -379,7 +379,7 @@ void map_utils::fixMainPath(World* world, Map* map, int difficulty) {
 		world->addActor(std::move(item));
 	}
 	{
-		int target = high.at(randomInRange(0, low.size() - 1));
+		int target = high.at(randomInRange(0, high.size() - 1));
 		auto roomNode = std::find_if(map->rooms.begin(), map->rooms.end(), [&](const auto& r) {return r.id == target;});
 		auto& room = roomNode->value;
 

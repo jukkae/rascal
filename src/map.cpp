@@ -305,7 +305,7 @@ Graph<Room> Map::pruneEdges(Graph<Room> rooms) {
 	const auto src = rooms;
 	Graph<Room> ret {};
 
-	int s = randomInRange(0, rooms.size());
+	int s = randomInRange(0, rooms.size() - 1);
 	auto currentRoom = src.at(s);
 	auto currentRoomNoNBs = GraphNode<Room>{currentRoom.id, currentRoom.value, {}};
 	ret.push_back(currentRoomNoNBs);
