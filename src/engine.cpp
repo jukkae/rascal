@@ -29,15 +29,20 @@ Engine::Engine(sf::RenderWindow* window) : window(window) {
 	std::unique_ptr<State> gps = std::make_unique<GameplayState>(this, window);
 
 	bool showContinueInMenu = false;
-	if(!io::fileExists(constants::SAVE_FILE_NAME)) {
-		gameplayState = gps.get();
+	if(io::fileExists(constants::SAVE_FILE_NAME)) { // FIXME urgh
+		try {
+			// This causes multiple constructions – not terribly important, but a bit dirty
+			load(); // this might throw, because boost might throw
+			(static_cast<GameplayState&>(*gameplayState)).initLoaded(this);
+			showContinueInMenu = true;
+			gps = std::unique_ptr<GameplayState>(static_cast<GameplayState*>(gameplayState));
+		} catch (...) {
+			std::cout << "could not parse save file!\n";
+			gameplayState = gps.get();
+		}
 	}
-	else { // FIXME urgh
-		// This causes multiple constructions – not terribly important, but a bit dirty
-		load();
-		(static_cast<GameplayState&>(*gameplayState)).initLoaded(this);
-		showContinueInMenu = true;
-		gps = std::unique_ptr<GameplayState>(static_cast<GameplayState*>(gameplayState));
+	else {
+		gameplayState = gps.get();
 	}
 
 	std::unique_ptr<State> mainMenuState = std::make_unique<MainMenuState>(this, showContinueInMenu);
