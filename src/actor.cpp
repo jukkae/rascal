@@ -51,6 +51,19 @@ float Actor::update(GameplayState* state) {
 				auto actions = ai->getNextAction(this);
 				for(auto& a : actions) actionsQueue.push_back(std::move(a));
 			}
+
+			// TODO this should be implemented via event system
+			std::vector<Actor*> inventoryContents;
+			for(auto& item : this->container->inventory) inventoryContents.push_back(item.get());
+			for(auto& m : this->missions) {
+				if(dynamic_cast<AcquireItemsMission*>(m.get()) != nullptr) {
+					if(m.get()->status == MissionStatus::ACTIVE) {
+						int numberOfRamChips = 0;
+						for(auto& i : inventoryContents) if(i->name == "ram chip") ++numberOfRamChips;
+						if(numberOfRamChips >= 2) m.get()->status = MissionStatus::REQUIRES_CONFIRMATION;
+					}
+				}
+			}
 		}
 
 
