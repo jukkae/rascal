@@ -49,7 +49,7 @@ public:
 	int ch; // ASCII code // TODO
 	sf::Color col; // color // TODO animation (?)
 	std::string name;
-	boost::optional<float> energy; // Shouldn't be public // TODO should be std::optional
+	std::optional<float> energy; // Shouldn't be public
 	bool blocks; // does it block movement?
 	bool blocksLight = false;
 	bool fovOnly; // visible only when in fov?
@@ -73,7 +73,7 @@ public:
 
 	World* world;
 
-	Actor(World* world = nullptr, int x = 0, int y = 0, int ch = 'x', std::string name = "", sf::Color col = sf::Color::White, boost::optional<float> energy = boost::none);
+	Actor(World* world = nullptr, int x = 0, int y = 0, int ch = 'x', std::string name = "", sf::Color col = sf::Color::White, std::optional<float> energy = std::nullopt);
 	~Actor();
 	float update(GameplayState* state);
 	float getDistance(int cx, int cy) const; // TODO doesn't belong here i suppose

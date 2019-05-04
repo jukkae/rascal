@@ -137,11 +137,11 @@ void World::applyRadiation(float dt) {
 
 void World::updateTime() {
 	if(!actors.front()->energy) return;
-	if(actors.front()->energy.get() > 0) return;
+	if(actors.front()->energy.value() > 0) return;
 	else {
 		Actor* next = std::find_if(actors.begin(), actors.end(), [](const auto& a) { return a->ai != nullptr; })->get();
 
-		float tuna = next->energy.get() * -1;
+		float tuna = next->energy.value() * -1;
 		time += tuna;
 
 		for(auto& a : actors) {
