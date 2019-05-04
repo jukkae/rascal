@@ -8,6 +8,7 @@
 #include "player.hpp"
 #include "point.hpp"
 #include "renderer.hpp"
+#include "world.hpp"
 #include <SFML/Graphics.hpp>
 #include <boost/serialization/vector.hpp>
 
@@ -72,6 +73,8 @@ namespace serialization {
 		ar & s->world;
 		ar & s->levels;
 		ar & s->player;
+		// Recalculate FOVs, as they are not serialized directly
+		for(auto a : s->world->getActorsAsPtrs()) { if(a->ai){ a->ai->updateFov(a); } }
 	}
 } // namespace boost
 } // namespace serialization
