@@ -262,7 +262,7 @@ private:
 
 struct ActionResult {
 	bool succeeded;
-	boost::optional<Action> alternativeAction;
+	boost::optional<Action> alternativeAction; // TODO should use std::optional
 };
 
 
