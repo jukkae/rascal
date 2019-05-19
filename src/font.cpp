@@ -1,5 +1,5 @@
 #include "font.hpp"
-#include <iostream>
+#include "log.hpp"
 
 #ifdef __APPLE__
 # ifdef BUNDLE_BUILD
@@ -26,32 +26,31 @@ extern void font::load() {
     }
     CFRelease(resourcesURL);
     chdir(path);
-    //std::cout << "Current Path: " << path << std::endl;
 
 	if(!font::mainFont.loadFromFile("../Resources/Assets/" + mainFontFileName)) {
 		if(!font::mainFont.loadFromFile("assets/" + mainFontFileName)) {
-			std::cout << "font loading failed\n";
+			log::info("font loading failed");
 		}
 	}
 	if(!font::squareFont.loadFromFile("../Resources/Assets/" + squareFontFileName)) {
 		if(!font::squareFont.loadFromFile("assets/" + squareFontFileName)) {
-			std::cout << "font loading failed\n";
+			log::info("font loading failed");
 		}
 	}
 # else /* BUNDLE_BUILD */
 	if(!font::mainFont.loadFromFile("assets/" + mainFontFileName)) {
-		std::cout << "error loading main font\n";
+		log::info("error loading main font");
 	}
 	if(!font::squareFont.loadFromFile("assets/" + squareFontFileName)) {
-		std::cout << "error loading square font\n";
+		log::info("error loading square font");
 	}
 # endif /* __APPLE__ */
 #elif __linux__
 	if(!font::mainFont.loadFromFile("assets/" + mainFontFileName)) {
-		std::cout << "error loading main font\n";
+		log::info("error loading main font");
 	}
 	if(!font::squareFont.loadFromFile("assets/" + squareFontFileName)) {
-		std::cout << "error loading square font\n";
+		log::info("error loading square font");
 	}
 #else
 #    error "unknown compiler"

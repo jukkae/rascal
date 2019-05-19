@@ -10,6 +10,7 @@
 #include "dice.hpp"
 #include "destructible.hpp"
 #include "effect.hpp"
+#include "log.hpp"
 #include "map_utils.hpp"
 #include "map.hpp"
 #include "pickable.hpp"
@@ -170,8 +171,7 @@ void map_utils::addMonstersBasedOnRoomTypes(World* world, Map* map, int difficul
 		auto room = roomNode.value;
 		switch(room.roomType) {
 			case RoomType::COMMAND_CENTER: {
-				int area = abs((room.x1() - room.x0()) * (room.y1() - room.y0())); //shouldn't need abs, but just making sure
-				//std::cout << "area: " << area << "\n";
+				int area = abs((room.x1() - room.x0()) * (room.y1() - room.y0())); //shouldn't need abs, but just making sures
 				int numberOfGuards = floor(area / 100) + 1;
 				for(int i =  0; i < numberOfGuards; ++i) {
 					int x = (room.x0() + room.x1()) / 2 + i;
@@ -191,7 +191,6 @@ void map_utils::addMonstersBasedOnRoomTypes(World* world, Map* map, int difficul
 			case RoomType::START: // fallthrough for debugging TODO
 			case RoomType::MARKET: {
 				int area = abs((room.x1() - room.x0()) * (room.y1() - room.y0())); //shouldn't need abs, but just making sure
-				//std::cout << "area: " << area << "\n";
 				int numberOfPeople = floor(area / 100) + 1;
 
 				for(int i =  0; i < numberOfPeople; ++i) {
@@ -360,14 +359,21 @@ void map_utils::addItemsBasedOnRoomTypes(World* world, Map* map, int difficulty)
 }
 
 void map_utils::fixMainPath(World* world, Map* map, int difficulty) {
-	std::cout << "generating main path...\n";
+	log::info("generating main path from end to beginning...");
+	std::stringstream ss;
 	auto path = map->primaryPath;
 	for(auto roomId = map->primaryPath.rbegin(); roomId != map->primaryPath.rend(); ++roomId) {
-		std::cout << "room id: " << *roomId << "\n";
+		ss << "#" << *roomId << " ";
 		auto& room = std::find_if(map->rooms.begin(), map->rooms.end(), [&](const auto& r) {return r.id == *roomId;})->value;
 	}
+	log::info(ss.str());
 	int split = randomInRange(1, path.size() - 2); // Don't split at either end
-	std::cout << "split at " << split << "\n";
+	log::info(
+		std::string{"splitting main path at index "}
+		.append(std::to_string(split))
+		.append(", room #")
+		.append(std::to_string(path.at(split - 1)))
+	);
 	std::vector<int> low (path.begin(), path.begin() + split);
 	std::vector<int> high (path.begin() + split, path.end());
 	{

@@ -1,4 +1,5 @@
 #include "audio.hpp"
+#include "log.hpp"
 
 #ifdef __APPLE__
 # ifdef BUNDLE_BUILD
@@ -18,11 +19,10 @@ AudioPlayer::AudioPlayer() {
     }
     CFRelease(resourcesURL);
     chdir(path);
-    //std::cout << "Current Path: " << path << std::endl;
 
 	if(!music.openFromFile("../Resources/Assets/main_theme.ogg")) {
 		if(!music.openFromFile("assets/main_theme.ogg")) {
-			std::cout << "couldn't open music file" << "\n";
+			log::info("couldn't open music file");
 		}
 	}
 # endif /* BUNDLE_BUILD */

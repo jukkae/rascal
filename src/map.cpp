@@ -8,6 +8,7 @@
 #include "destructible.hpp"
 #include "dice.hpp"
 #include "effect.hpp"
+#include "log.hpp"
 #include "map.hpp"
 #include "map_utils.hpp"
 #include "pathfinding.hpp" // For PriorityQueue for room-based pathfinding
@@ -54,63 +55,84 @@ void Map::generateMap(MapType mapType) {
 		default:
 			break;
 	}
-	// DEBUG PRINT
-	std::cout << "\n\n";
-	std::cout << "MAP ROOMS:\n";
-	std::cout << rooms.size() << " rooms\n";
+
+	log::info("\n\n");
+	log::info("Map rooms:");
+	log::info(std::to_string(rooms.size()).append(" rooms"));
 	for(auto& room : rooms) {
-		std::cout << "room " << room.id << " "
-		// << (room.value.roomType == RoomType::COMMAND_CENTER ? "(command center)" : "(normal)")
-		<< ": "
-		<< "(" << room.value.coordinates.x0() << ", " << room.value.coordinates.y0() << "), "
-		<< "(" << room.value.coordinates.x1() << ", " << room.value.coordinates.y1() << ")\n";
-		std::cout << "  neighbours: ";
+		log::info(
+			std::string{"room #"}
+			.append(std::to_string(room.id))
+			.append(": ")
+		);
+		log::info(
+			std::string{"  "}
+			.append("(")
+			.append(std::to_string(room.value.coordinates.x0()))
+			.append(", ")
+			.append(std::to_string(room.value.coordinates.y0()))
+			.append("), (")
+			.append(std::to_string(room.value.coordinates.x1()))
+			.append(", ")
+			.append(std::to_string(room.value.coordinates.y1()))
+			.append(")")
+		);
+		std::stringstream ss;
+		ss << "  neighbours: ";
 		for(auto& a: room.neighbours){
-			std::cout << a << " ";
+			ss << "#" << a << " ";
 		}
-		std::cout << "\n";
+		log::info(ss.str());
 	}
-	std::cout << "END MAP ROOMS\n";
-	std::cout << "MAP TILES:\n";
+	log::info("--");
+	log::info("Map tiles:");
 	int x = 0;
 	int y = 0;
+	std::stringstream ss;
 	for(auto& tile : tiles) {
-		++x;
-		if(!tile.walkable) std::cout << "#";
+		if(!tile.walkable) ss << "#";
 		else {
 			if(getRooms(Point {x, y}).size() == 0) {
-				std::cout << ".";
+				ss << ".";
 			} else if(getRooms(Point {x, y}).at(0).roomType == RoomType::COMMAND_CENTER) {
-				std::cout << "c";
+				ss << "c";
 			} else if(getRooms(Point {x, y}).at(0).roomType == RoomType::START) {
-				std::cout << "s";
+				ss << "s";
 			} else if(getRooms(Point {x, y}).at(0).roomType == RoomType::ARMOURY) {
-				std::cout << "a";
+				ss << "a";
 			} else if(getRooms(Point {x, y}).at(0).roomType == RoomType::MARKET) {
-				std::cout << "m";
+				ss << "m";
 			} else if(getRooms(Point {x, y}).at(0).roomType == RoomType::UPSTAIRS) {
-				std::cout << "u";
+				ss << "u";
 			} else if(getRooms(Point {x, y}).at(0).roomType == RoomType::HYDROPONICS) {
-				std::cout << "h";
+				ss << "h";
 			} else if(getRooms(Point {x, y}).at(0).roomType == RoomType::CLANDESTINE_LAB) {
-				std::cout << "l";
+				ss << "l";
 			} else {
-				std::cout << ".";
+				ss << ".";
 			}
 		}
+		++x;
 		if(x >= width) {
-			std::cout << "\n";
+			log::info(ss.str());
+			ss = std::stringstream {};
 			x = 0;
 			++y;
 		}
 	}
-	std::cout << "END MAP TILES\n";
-	std::cout << "MAP GRAPH EDGES\n";
+	log::info("--");
+	log::info("Map graph edges:");
 	auto g = getEdges(rooms);
 	for(auto p : g) {
-		std::cout << "(" << p.first << ", " << p.second << ")\n";
+		log::info(
+			std::string{"("}
+			.append(std::to_string(p.first))
+			.append(", ")
+			.append(std::to_string(p.second))
+			.append(")")
+		);
 	}
-	std::cout << "END MAP GRAPH EDGES\n";
+	log::info("--");
 }
 
 std::vector<Room> Map::getRooms(Point location) {
@@ -289,11 +311,6 @@ Graph<Room> Map::connectRooms(Graph<Room> rooms) {
 			if(room.x0() > other.x1() || other.x0() > room.x1()) continue; // no overlap
 			if(room.y0() > other.y1() || other.y0() > room.y1()) continue; // no overlap
 			// overlap!
-			// std::cout << "overlap: "
-			// << "(" << room.x0() << ", " << room.y0() << "), (" << room.x1() << ", " << room.y1() << ")"
-			// << " with "
-			// << "(" << other.x0() << ", " << other.y0() << "), (" << other.x1() << ", " << other.y1() << ")"
-			// << "\n";
 			roomNode.neighbours.emplace_back(otherNode.id);
 		}
 	}
@@ -473,12 +490,12 @@ Graph<Room> Map::specializeRooms(Graph<Room> rooms, const Graph<Room> mst) {
 	// The code is shit
 	int startingRoom = std::find_if(ret.begin(), ret.end(), [&](const auto& r) { return r.value.roomType == RoomType::START; })->id;
 	int endingRoom = std::find_if(ret.begin(), ret.end(), [&](const auto& r) { return r.value.roomType == RoomType::UPSTAIRS; })->id;
-	std::cout << "Starting room: " << startingRoom << "\n";
-	std::cout << "Ending room: " << endingRoom << "\n";
+	log::info(std::string{"Starting room: "}.append(std::to_string(startingRoom)));
+	log::info(std::string{"Ending room: "}.append(std::to_string(endingRoom)));
 
 	primaryPath = findPathBetweenRooms(mst, startingRoom, endingRoom);
-	std::cout << "Path:" << "\n";
-	for(auto i : primaryPath) { std::cout << i << "\n"; }
+	log::info("Path:");
+	for(auto i : primaryPath) { log::info(std::to_string(i)); }
 
 	// Walk through the path in reverse, sprinkling special rooms
 	for(auto i = primaryPath.rbegin(); i != primaryPath.rend(); ++i) {

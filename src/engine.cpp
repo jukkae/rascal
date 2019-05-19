@@ -11,6 +11,7 @@
 #include "engine_command.hpp"
 #include "font.hpp"
 #include "io.hpp"
+#include "log.hpp"
 #include "pickable.hpp"
 #include "state.hpp"
 #include "gameplay_state.hpp"
@@ -37,7 +38,7 @@ Engine::Engine(sf::RenderWindow* window) : window(window) {
 			showContinueInMenu = true;
 			gps = std::unique_ptr<GameplayState>(static_cast<GameplayState*>(gameplayState));
 		} catch (...) {
-			std::cout << "could not parse save file!\n";
+			log::info("could not parse save file!");
 			gameplayState = gps.get();
 		}
 	}
@@ -49,8 +50,6 @@ Engine::Engine(sf::RenderWindow* window) : window(window) {
 
 	states.push_back(std::move(gps));
 	states.push_back(std::move(mainMenuState));
-
-	std::cout << "\n\n";
 
 	initializeLisp();
 }
@@ -81,19 +80,18 @@ void Engine::initializeLisp() {
 
 void Engine::lispRepl() {
 	for(;;) {
-		std::cout << "lisp> ";
+		log::info("lisp> ");
 		std::string s;
 		getline(std::cin, s);
 		try {
 			lisp::Atom expression = lisp::readExpression(s);
 			lisp::Atom result = lisp::evaluateExpression(expression, env);
 			lisp::printExpr(result);
-			std::cout << "\n";
+			log::info("");
 			lisp::gc_run(expression, result, env);
 		}
 		catch(lisp::LispException e) {
-			std::cout << "LISP runtime exception: " << e.what();
-			std::cout << "\n";
+			log::info(std::string("LISP runtime exception: ").append(e.what()));
 		}
 	}
 }
