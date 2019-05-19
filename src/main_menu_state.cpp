@@ -8,9 +8,6 @@
 #include "io.hpp"
 #include "preferences_state.hpp"
 
-#include <fstream>
-#include <string>
-#include <sstream>
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>

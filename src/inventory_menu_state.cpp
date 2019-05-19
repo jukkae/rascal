@@ -1,4 +1,3 @@
-#include <algorithm>
 #include "inventory_menu_state.hpp"
 #include "engine.hpp"
 #include "engine_command.hpp"

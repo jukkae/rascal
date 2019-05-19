@@ -1,6 +1,4 @@
-#include <algorithm>
-#include <cmath>
-#include <limits>
+
 #include "actor.hpp"
 #include "attacker.hpp"
 #include "colors.hpp"
@@ -10,7 +8,6 @@
 #include "effect.hpp"
 #include "log.hpp"
 #include "map.hpp"
-#include "map_utils.hpp"
 #include "pathfinding.hpp" // For PriorityQueue for room-based pathfinding
 #include "pickable.hpp"
 #include "point.hpp"
