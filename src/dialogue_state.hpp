@@ -1,8 +1,6 @@
 #ifndef DIALOGUE_STATE_HPP
 #define DIALOGUE_STATE_HPP
 #include "state.hpp"
-#include <SFML/Graphics.hpp>
-#include <optional>
 
 class Engine;
 class Actor;

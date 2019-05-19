@@ -2,7 +2,6 @@
 #define POINT_HPP
 
 #include <string>
-#include <utility>
 
 namespace boost { namespace serialization { class access; } }
 

@@ -5,6 +5,7 @@
 #include "engine_command.hpp"
 #include "io.hpp"
 #include "version.hpp"
+#include <fstream>
 
 HelpState::HelpState(Engine* engine) :
 State(engine, engine->getWindow())

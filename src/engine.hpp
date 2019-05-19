@@ -3,7 +3,6 @@
 class State;
 #include "preferences.hpp"
 #include <queue>
-#include <string>
 
 #include <SFML/Window/Event.hpp>
 #include <SFML/Window.hpp>

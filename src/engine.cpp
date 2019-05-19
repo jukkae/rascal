@@ -1,13 +1,11 @@
-#include <algorithm>
-#include <limits>
-#include <iostream>
+#include "engine.hpp"
+
 #include "actor.hpp"
 #include "ai.hpp"
 #include "constants.hpp"
 #include "container.hpp"
 #include "destructible.hpp"
 #include "effect.hpp"
-#include "engine.hpp"
 #include "engine_command.hpp"
 #include "font.hpp"
 #include "io.hpp"
@@ -20,6 +18,12 @@
 #include "world.hpp"
 
 #include "lisp/lisp.hpp"
+
+#include <algorithm>
+#include <limits>
+#include <iostream>
+#include <fstream>
+
 
 Engine::Engine(sf::RenderWindow* window) : window(window) {
 	font::load();

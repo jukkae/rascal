@@ -1,7 +1,7 @@
 #ifndef MAIN_MENU_STATE_HPP
 #define MAIN_MENU_STATE_HPP
 #include "state.hpp"
-#include <SFML/Graphics.hpp>
+
 
 class Engine;
 class MainMenuState : public State {

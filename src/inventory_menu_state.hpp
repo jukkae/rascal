@@ -1,8 +1,6 @@
 #ifndef INVENTORY_MENU_STATE_HPP
 #define INVENTORY_MENU_STATE_HPP
 #include "state.hpp"
-#include <vector>
-#include <SFML/Graphics.hpp>
 
 class Engine;
 class Actor;

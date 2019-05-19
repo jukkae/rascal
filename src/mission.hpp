@@ -2,7 +2,7 @@
 #define MISSION_HPP
 
 #include "persistent.hpp"
-#include <string>
+
 
 namespace boost { namespace serialization { class access; } }
 

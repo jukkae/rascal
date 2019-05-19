@@ -1,9 +1,6 @@
 #ifndef GAME_OVER_STATE_HPP
 #define GAME_OVER_STATE_HPP
 #include "state.hpp"
-#include <string>
-#include <vector>
-#include <SFML/Graphics.hpp>
 
 class Engine;
 class Actor;

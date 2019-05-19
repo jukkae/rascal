@@ -1,16 +1,13 @@
 #ifndef GAMEPLAY_STATE_HPP
 #define GAMEPLAY_STATE_HPP
 #include "state.hpp"
-#include <boost/archive/text_oarchive.hpp>
-#include <boost/archive/text_iarchive.hpp>
 #include "engine.hpp"
 #include "gui.hpp"
 #include "player.hpp"
 #include "point.hpp"
 #include "renderer.hpp"
 #include "world.hpp"
-#include <SFML/Graphics.hpp>
-#include <boost/serialization/vector.hpp>
+
 
 struct Event;
 class World;

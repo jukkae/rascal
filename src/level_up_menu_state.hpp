@@ -2,9 +2,9 @@
 #define LEVEL_UP_MENU_STATE
 #include "state.hpp"
 #include "attribute.hpp"
-#include <string>
-#include <vector>
-#include <SFML/Graphics.hpp>
+
+
+
 
 class Engine;
 class Actor;

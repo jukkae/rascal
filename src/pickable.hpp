@@ -3,12 +3,6 @@
 
 #include "openable.hpp"
 
-#include <boost/archive/text_oarchive.hpp>
-#include <boost/archive/text_iarchive.hpp>
-#include <boost/serialization/export.hpp>
-#include <boost/serialization/assume_abstract.hpp>
-#include <boost/serialization/base_object.hpp>
-
 class Actor;
 class Effect;
 class TargetSelector {

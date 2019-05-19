@@ -18,6 +18,7 @@
 
 #include <SFML/Graphics/Color.hpp>
 
+#include <sstream>
 #include <unordered_map> // For room-based pathfinding
 
 // This ctor is required for s11n

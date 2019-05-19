@@ -1,14 +1,6 @@
 #ifndef MAP_HPP
 #define MAP_HPP
-#include <memory>
-#include <vector>
-#include <fstream>
-#include <sstream>
-#include <optional>
-#include <boost/archive/text_oarchive.hpp>
-#include <boost/archive/text_iarchive.hpp>
-#include <boost/serialization/export.hpp>
-#include <boost/serialization/vector.hpp>
+
 #include "animation.hpp"
 #include "constants.hpp"
 #include "faction.hpp"

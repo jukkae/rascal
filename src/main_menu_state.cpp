@@ -11,6 +11,7 @@
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
+#include <fstream>
 
 MainMenuState::MainMenuState(Engine* engine, bool forceShowContinue) :
 State(engine, engine->getWindow())
