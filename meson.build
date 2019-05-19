@@ -21,7 +21,7 @@ build_rascal = build_target(
   sources,
   # dependencies : [boost_dep, sfml_dep, freetype_dep, core_foundation_dep],
   install : true,
-  cpp_args : ['-Wno-unused-parameter', '-I/usr/local/sys/usr/include', '-Wno-sign-compare'],
+  cpp_args : ['-Wno-unused-parameter', '-I/usr/local/sys/usr/include', '-Wno-sign-compare', '-Werror'],
   link_args : ['-L/usr/local/lib', '-lboost_serialization', '-lsfml-window', '-lsfml-graphics', '-lsfml-system', '-lsfml-audio'],
   target_type : 'executable'
 )
@@ -33,7 +33,7 @@ build_rascal_for_bundle = build_target(
   # dependencies : [boost_dep, sfml_dep, freetype_dep, core_foundation_dep],
   install : true,
   install_rpath : '@executable_path/../Resources/Frameworks',
-  cpp_args : ['-Wno-unused-parameter', '-I/usr/local/sys/usr/include', '-Wno-sign-compare', '-DBUNDLE_BUILD'],
+  cpp_args : ['-Wno-unused-parameter', '-I/usr/local/sys/usr/include', '-Wno-sign-compare', '-Werror', '-DBUNDLE_BUILD'],
   link_args : ['-lboost_serialization', '-lsfml-window', '-lsfml-graphics', '-lsfml-system', '-lsfml-audio'],
   target_type : 'executable'
 )

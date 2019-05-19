@@ -38,6 +38,7 @@ class Mission;
 class World;
 class Actor {
 public:
+	World* world;
 	int x, y; // FIXME reimplement in terms of Point
 	int ch; // ASCII code // TODO
 	sf::Color col; // color // TODO animation (?)
@@ -63,8 +64,6 @@ public:
 	std::optional<Animation> animation;
 	std::vector<std::unique_ptr<Mission>> missions;
 	std::unique_ptr<DialogueGenerator> dialogueGenerator;
-
-	World* world;
 
 	Actor(World* world = nullptr, int x = 0, int y = 0, int ch = 'x', std::string name = "", sf::Color col = sf::Color::White, std::optional<float> energy = std::nullopt);
 	~Actor();

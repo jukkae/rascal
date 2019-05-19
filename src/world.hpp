@@ -47,8 +47,8 @@ public:
 	int level;
 	int radiation = 1;
 	std::vector<std::unique_ptr<Actor>> actors;
-	Map map;
 	GameplayState* state;
+	Map map;
 private:
 	static MapType getMapType(int level);
 	friend class boost::serialization::access;

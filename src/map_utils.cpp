@@ -10,6 +10,7 @@
 #include "dice.hpp"
 #include "destructible.hpp"
 #include "effect.hpp"
+#include "ignore.hpp"
 #include "log.hpp"
 #include "map_utils.hpp"
 #include "map.hpp"
@@ -365,6 +366,7 @@ void map_utils::fixMainPath(World* world, Map* map, int difficulty) {
 	for(auto roomId = map->primaryPath.rbegin(); roomId != map->primaryPath.rend(); ++roomId) {
 		ss << "#" << *roomId << " ";
 		auto& room = std::find_if(map->rooms.begin(), map->rooms.end(), [&](const auto& r) {return r.id == *roomId;})->value;
+		ignore(room);
 	}
 	log::info(ss.str());
 	int split = randomInRange(1, path.size() - 2); // Don't split at either end

@@ -1,4 +1,4 @@
-
+#include "map.hpp"
 #include "actor.hpp"
 #include "attacker.hpp"
 #include "colors.hpp"
@@ -6,8 +6,8 @@
 #include "destructible.hpp"
 #include "dice.hpp"
 #include "effect.hpp"
+#include "ignore.hpp"
 #include "log.hpp"
-#include "map.hpp"
 #include "pathfinding.hpp" // For PriorityQueue for room-based pathfinding
 #include "pickable.hpp"
 #include "point.hpp"
@@ -452,6 +452,7 @@ Graph<Room> Map::makeLoops(Graph<Room> rooms, const Graph<Room> physicalConnecti
 				room.neighbours.push_back(newNeighbour);
 				for(auto neighbourIndex : room.neighbours) {
 					std::find_if(ret.begin(), ret.end(), [&](const auto& r) {return r.id == newNeighbour;})->neighbours.push_back(room.id);
+					ignore(neighbourIndex);
 				}
 			}
 		}
