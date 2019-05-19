@@ -12,7 +12,6 @@
 #include "gameplay_state.hpp"
 #include "ignore.hpp"
 #include "map_utils.hpp"
-#include <iostream>
 #include "../include/toml.hpp"
 
 MapType World::getMapType(int level) {

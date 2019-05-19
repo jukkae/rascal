@@ -3,7 +3,6 @@
 
 #ifdef __APPLE__
 # ifdef BUNDLE_BUILD
-#  include <iostream>
 #  include "CoreFoundation/CoreFoundation.h"
 # endif /* BUNDLE_BULD */
 #endif /* __APPLE__ */

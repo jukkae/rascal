@@ -1,4 +1,3 @@
-#include <cstdio>
 #include "actor.hpp"
 #include "ai.hpp"
 #include "body.hpp"

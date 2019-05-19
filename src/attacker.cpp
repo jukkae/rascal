@@ -1,4 +1,3 @@
-#include <cstdio>
 #include "attacker.hpp"
 #include "actor.hpp"
 #include "body.hpp"

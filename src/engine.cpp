@@ -1,6 +1,6 @@
 #include <algorithm>
 #include <limits>
-#include <cstdio>
+#include <iostream>
 #include "actor.hpp"
 #include "ai.hpp"
 #include "constants.hpp"
