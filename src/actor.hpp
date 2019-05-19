@@ -1,16 +1,9 @@
 #ifndef ACTOR_HPP
 #define ACTOR_HPP
 
-#include <string>
-#include <queue>
 #include <optional>
-#include <boost/optional.hpp>
-#include <boost/archive/text_oarchive.hpp>
-#include <boost/archive/text_iarchive.hpp>
-#include <boost/serialization/export.hpp>
-#include <boost/serialization/optional.hpp>
+
 #include <boost/serialization/deque.hpp>
-#include <boost/serialization/vector.hpp>
 #include <SFML/Graphics/Color.hpp>
 class Action;
 class Ai;

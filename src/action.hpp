@@ -3,7 +3,6 @@
 
 struct ActionResult;
 
-#include "actor.hpp"
 #include "direction.hpp"
 #include "point.hpp"
 #include <variant>
@@ -12,6 +11,8 @@ struct ActionResult;
 #include <boost/serialization/export.hpp>
 #include <boost/serialization/vector.hpp>
 #include <boost/optional.hpp>
+
+class Actor;
 
 enum class ActionRange { ON_TOP, NEXT_TO, ANYWHERE };
 
