@@ -62,9 +62,6 @@ void Map::generateMap(MapType mapType) {
 			std::string{"room #"}
 			.append(std::to_string(room.id))
 			.append(": ")
-		);
-		log::info(
-			std::string{"  "}
 			.append("(")
 			.append(std::to_string(room.value.coordinates.x0()))
 			.append(", ")
@@ -493,8 +490,6 @@ Graph<Room> Map::specializeRooms(Graph<Room> rooms, const Graph<Room> mst) {
 	log::info(std::string{"Ending room: "}.append(std::to_string(endingRoom)));
 
 	primaryPath = findPathBetweenRooms(mst, startingRoom, endingRoom);
-	log::info("Path:");
-	for(auto i : primaryPath) { log::info(std::to_string(i)); }
 
 	// Walk through the path in reverse, sprinkling special rooms
 	for(auto i = primaryPath.rbegin(); i != primaryPath.rend(); ++i) {
