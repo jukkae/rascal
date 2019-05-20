@@ -38,21 +38,16 @@ float Actor::update(GameplayState* state) {
 		float fovRadius = constants::DEFAULT_FOV_RADIUS * (body ? body->perception / 10.0 : 1.0);
 		//if(isPlayer()) world->computeFov(x, y, fovRadius);
 
-		// TODO
 		if(!isPlayer()) {
 			auto actions = ai->getNextAction(this);
 			for(auto& a : actions) actionsQueue.push_back(std::move(a));
 		}
 		if(isPlayer()) {
-			// TODO this should happen at GameplayState level!
-			const int PLAYER_TURN_THROTTLE = 20;
-			std::this_thread::sleep_for(std::chrono::milliseconds(PLAYER_TURN_THROTTLE));
 			if(actionsQueue.empty()) {
 				auto actions = ai->getNextAction(this);
 				for(auto& a : actions) actionsQueue.push_back(std::move(a));
 			}
 		}
-
 
 		float actionCost = actionsQueue.front()->getLength();
 		bool success = actionsQueue.front()->execute();
