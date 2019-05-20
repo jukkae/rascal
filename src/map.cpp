@@ -112,12 +112,12 @@ void Map::generateMap(MapType mapType) {
 		}
 		++x;
 		if(x >= width) {
-			log::info(ss.str());
-			ss = std::stringstream {};
+			ss << "\n";
 			x = 0;
 			++y;
 		}
 	}
+	log::info(ss.str());
 	log::info("--");
 	log::info("Map graph edges:");
 	auto g = getEdges(rooms);
