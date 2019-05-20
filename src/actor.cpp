@@ -20,11 +20,6 @@
 #include "wieldable.hpp"
 #include "world.hpp"
 
-// For sleeping, which shouldn't be implemented here in any case
-#include <chrono>
-#include <thread>
-
-
 Actor::Actor(World* world, int x, int y, int ch, std::string name, sf::Color col, std::optional<float> energy) :
 	world(world), x(x), y(y), ch(ch), col(col), name(name), energy(energy),
 	blocks(true), fovOnly(true), attacker(nullptr), destructible(nullptr), ai(nullptr),
