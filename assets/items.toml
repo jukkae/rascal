@@ -271,7 +271,7 @@ effect.value = 10
 
 [tesla_coil]
 name = "tesla coil"
-ch = "#"
+ch = "&"
 color = "grey"
 blocks = false
 [tesla_coil.pickable]
@@ -300,3 +300,106 @@ ch = "q"
 color = "yellow"
 blocks = false
 [ram_chip.pickable]
+
+
+# Miscellanea
+[tree]
+name = "tree"
+ch = "t"
+color = "green"
+blocks = true
+blocks_light = true
+[tree.destructible]
+maxHp = 8
+defense = 1
+xp = 1
+corpseName = "tree stump"
+
+[force_field]
+name = "force field"
+ch = "#"
+color = "green"
+blocks = true
+blocks_light = false
+
+[key_red]
+name = "red key"
+ch = "k"
+color = "red"
+blocks = false
+[key_red.pickable]
+key_type = "red"
+
+[key_green]
+name = "green key"
+ch = "k"
+color = "green"
+blocks = false
+[key_green.pickable]
+key_type = "green"
+
+[key_blue]
+name = "blue key"
+ch = "k"
+color = "blue"
+blocks = false
+[key_blue.pickable]
+key_type = "blue"
+
+[door]
+name = "door"
+ch = "+"
+color = "black"
+blocks = true
+blocks_light = true
+fov_only = false
+[door.openable]
+lock_type = "none"
+
+[door_red]
+name = "door"
+ch = "+"
+color = "red"
+blocks = true
+blocks_light = true
+fov_only = false
+[door_red.openable]
+lock_type = "red"
+
+[door_green]
+name = "door"
+ch = "+"
+color = "green"
+blocks = true
+blocks_light = true
+fov_only = false
+[door_green.openable]
+lock_type = "green"
+
+[door_blue]
+name = "door"
+ch = "+"
+color = "blue"
+blocks = true
+blocks_light = true
+fov_only = false
+[door_blue.openable]
+lock_type = "blue"
+
+[upstairs]
+name = "stairs (up)"
+ch = "<"
+color = "white"
+blocks = false
+fov_only = false
+[upstairs.transporter]
+direction = "up"
+
+[downstairs]
+name = "stairs (down)"
+ch = ">"
+color = "white"
+blocks = false
+fov_only = false
+[downstairs.transporter]
+direction = "down"

@@ -1,6 +1,5 @@
 #include "level_up_menu_state.hpp"
 
-#include <iostream>
 #include "body.hpp"
 #include "destructible.hpp"
 #include "engine.hpp"

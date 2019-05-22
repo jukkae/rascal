@@ -340,13 +340,7 @@ Atom lisp::readList(std::list<std::string>& tokens) {
   //if(tokens.empty()) return makeNil();
 
   for(;;) {
-    // std::cout << "RL: toks: ";
-    // for(auto& a: tokens) std::cout << a << " ";
-    // std::cout << "\n";
-
     std::string token(tokens.front());
-    // std::cout << "tok: " << token << "\n";
-    //tokens.pop_front();
     if(token == ")") {
       tokens.pop_front(); // consume rparen
       break;
@@ -373,10 +367,7 @@ Atom lisp::readList(std::list<std::string>& tokens) {
 
 Atom lisp::readFrom(std::list<std::string>& tokens) {
 
-  //if(tokens.empty()) return makeNil();
-
   std::string token(tokens.front());
-  // std::cout << "tok: " << token << "\n";
 
   tokens.pop_front();
   TokenType tokenType = getTokenType(token);
@@ -803,9 +794,6 @@ Atom lisp::evaluateExpression(Atom expr, Atom env) {
   Atom op;
   Atom args;
   Atom p;
-  // std::cout << "expr:\n";
-  // printExpr(expr);
-  // std::cout << "\n";
 
   if(std::holds_alternative<Symbol>(expr)) {
     return getEnv(env, expr);

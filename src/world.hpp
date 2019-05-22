@@ -47,9 +47,10 @@ public:
 	int level;
 	int radiation = 1;
 	std::vector<std::unique_ptr<Actor>> actors;
-	Map map;
 	GameplayState* state;
+	Map map;
 private:
+	static MapType getMapType(int level);
 	friend class boost::serialization::access;
     template<class Archive>
     void serialize(Archive & ar, const unsigned int version) {

@@ -1,13 +1,6 @@
 #ifndef MAP_HPP
 #define MAP_HPP
-#include <memory>
-#include <vector>
-#include <fstream>
-#include <sstream>
-#include <optional>
-#include <boost/archive/text_oarchive.hpp>
-#include <boost/archive/text_iarchive.hpp>
-#include <boost/serialization/export.hpp>
+
 #include "animation.hpp"
 #include "constants.hpp"
 #include "faction.hpp"
@@ -44,7 +37,22 @@ struct Tile {
 
 
 // Function of the room
-enum class RoomType { UNASSIGNED, START, MARKET, NORMAL, COMMAND_CENTER, ARMOURY, HYDROPONICS, POWER_PLANT, WATER_PLANT, LIVING_QUARTERS, CLANDESTINE_LAB, VAULT, MEETING_ROOM };
+enum class RoomType {
+	UNASSIGNED,
+	START,
+	MARKET,
+	NORMAL,
+	COMMAND_CENTER,
+	ARMOURY,
+	HYDROPONICS,
+	POWER_PLANT,
+	WATER_PLANT,
+	LIVING_QUARTERS,
+	CLANDESTINE_LAB,
+	VAULT,
+	MEETING_ROOM,
+	UPSTAIRS
+};
 // Special features of the room
 enum class RoomDecor { NONE, PILLARS };
 
@@ -86,17 +94,17 @@ public:
 	Graph<Room> rooms; // Final adjacency map
 	Graph<Room> minimumSpanningTree; // Backbone with exactly 1 route between every room
 	Graph<Room> physicalConnectionsBetweenRooms; // All physical adjacencies
+	std::vector<int> primaryPath {}; // Path from starting room to upstairs room
 	bool hasAnimations = false;
 
 	Map();
-	Map(int width, int height, MapType mapType);
+	Map(int width, int height, MapType mapType, World* world);
 
 	void setWall(int x, int y);
 	bool isWall(int x, int y) const;
 	bool canWalk(int x, int y) const;
 	//bool isInFov(int x, int y) const;
 	bool isExplored(int x, int y) const;
-	void setWorld(World* w) { world = w; }
 	std::vector<Room> getRooms(Point location);
 
 private:
@@ -115,6 +123,8 @@ private:
 	Graph<Room> makeLoops(Graph<Room> rooms, const Graph<Room> physicalConnections, float loopFactor);
 	Graph<Room> specializeRooms(Graph<Room> rooms, const Graph<Room> mst);
 
+	std::vector<int> findPathBetweenRooms(Graph<Room> mst, int start, int end);
+
 	friend class boost::serialization::access;
 	template<class Archive>
 	void serialize(Archive & ar, const unsigned int version) {
@@ -124,6 +134,7 @@ private:
 		ar & rooms;
 		ar & minimumSpanningTree;
 		ar & physicalConnectionsBetweenRooms;
+		ar & primaryPath;
 		ar & hasAnimations;
 		ar & world;
 	}

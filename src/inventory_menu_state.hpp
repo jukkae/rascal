@@ -1,8 +1,6 @@
 #ifndef INVENTORY_MENU_STATE_HPP
 #define INVENTORY_MENU_STATE_HPP
 #include "state.hpp"
-#include <vector>
-#include <SFML/Graphics.hpp>
 
 class Engine;
 class Actor;
@@ -19,7 +17,6 @@ private:
 	void renderStats();
 	void renderBodyParts();
 	void renderMissions();
-	void updateMissionStatuses();
 	Actor* actor;
 	int credits;
 	int contentsWeight;

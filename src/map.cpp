@@ -1,6 +1,4 @@
-#include <algorithm>
-#include <cmath>
-#include <limits>
+#include "map.hpp"
 #include "actor.hpp"
 #include "attacker.hpp"
 #include "colors.hpp"
@@ -8,8 +6,9 @@
 #include "destructible.hpp"
 #include "dice.hpp"
 #include "effect.hpp"
-#include "map.hpp"
-#include "map_utils.hpp"
+#include "ignore.hpp"
+#include "log.hpp"
+#include "pathfinding.hpp" // For PriorityQueue for room-based pathfinding
 #include "pickable.hpp"
 #include "point.hpp"
 #include "rect.hpp"
@@ -19,13 +18,18 @@
 
 #include <SFML/Graphics/Color.hpp>
 
+#include <sstream>
+#include <unordered_map> // For room-based pathfinding
+
+// This ctor is required for s11n
 Map::Map() :
 Map(constants::DEFAULT_MAP_WIDTH,
 	  constants::DEFAULT_MAP_HEIGHT,
-		MapType::BUILDING) { }
+		MapType::BUILDING,
+	  nullptr) { }
 
-Map::Map(int width, int height, MapType mapType) :
-width(width), height(height) {
+Map::Map(int width, int height, MapType mapType, World* world) :
+width(width), height(height), world(world) {
 	tiles = Mat2d<Tile>(width, height);
 	for(int i = 0; i < width; ++i) {
 		for(int j = 0; j < height; ++j) {
@@ -49,57 +53,81 @@ void Map::generateMap(MapType mapType) {
 		default:
 			break;
 	}
-	// DEBUG PRINT
-	std::cout << "\n\n";
-	std::cout << "MAP ROOMS:\n";
-	std::cout << rooms.size() << " rooms\n";
+
+	log::info("\n\n");
+	log::info("Map rooms:");
+	log::info(std::to_string(rooms.size()).append(" rooms"));
 	for(auto& room : rooms) {
-		std::cout << "room " << room.id << " "
-		// << (room.value.roomType == RoomType::COMMAND_CENTER ? "(command center)" : "(normal)")
-		<< ": "
-		<< "(" << room.value.coordinates.x0() << ", " << room.value.coordinates.y0() << "), "
-		<< "(" << room.value.coordinates.x1() << ", " << room.value.coordinates.y1() << ")\n";
-		std::cout << "  neighbours: ";
+		log::info(
+			std::string{"room #"}
+			.append(std::to_string(room.id))
+			.append(": ")
+			.append("(")
+			.append(std::to_string(room.value.coordinates.x0()))
+			.append(", ")
+			.append(std::to_string(room.value.coordinates.y0()))
+			.append("), (")
+			.append(std::to_string(room.value.coordinates.x1()))
+			.append(", ")
+			.append(std::to_string(room.value.coordinates.y1()))
+			.append(")")
+		);
+		std::stringstream ss;
+		ss << "  neighbours: ";
 		for(auto& a: room.neighbours){
-			std::cout << a << " ";
+			ss << "#" << a << " ";
 		}
-		std::cout << "\n";
+		log::info(ss.str());
 	}
-	std::cout << "END MAP ROOMS\n";
-	std::cout << "MAP TILES:\n";
+	log::info("--");
+	log::info("Map tiles:");
 	int x = 0;
 	int y = 0;
+	std::stringstream ss;
 	for(auto& tile : tiles) {
-		++x;
-		if(!tile.walkable) std::cout << "#";
+		if(!tile.walkable) ss << "#";
 		else {
 			if(getRooms(Point {x, y}).size() == 0) {
-				std::cout << ".";
+				ss << ".";
 			} else if(getRooms(Point {x, y}).at(0).roomType == RoomType::COMMAND_CENTER) {
-				std::cout << "c";
+				ss << "c";
 			} else if(getRooms(Point {x, y}).at(0).roomType == RoomType::START) {
-				std::cout << "s";
+				ss << "s";
 			} else if(getRooms(Point {x, y}).at(0).roomType == RoomType::ARMOURY) {
-				std::cout << "a";
+				ss << "a";
 			} else if(getRooms(Point {x, y}).at(0).roomType == RoomType::MARKET) {
-				std::cout << "m";
+				ss << "m";
+			} else if(getRooms(Point {x, y}).at(0).roomType == RoomType::UPSTAIRS) {
+				ss << "u";
+			} else if(getRooms(Point {x, y}).at(0).roomType == RoomType::HYDROPONICS) {
+				ss << "h";
+			} else if(getRooms(Point {x, y}).at(0).roomType == RoomType::CLANDESTINE_LAB) {
+				ss << "l";
 			} else {
-				std::cout << ".";
+				ss << ".";
 			}
 		}
+		++x;
 		if(x >= width) {
-			std::cout << "\n";
+			ss << "\n";
 			x = 0;
 			++y;
 		}
 	}
-	std::cout << "END MAP TILES\n";
-	std::cout << "MAP GRAPH EDGES\n";
+	log::info(ss.str());
+	log::info("--");
+	log::info("Map graph edges:");
 	auto g = getEdges(rooms);
 	for(auto p : g) {
-		std::cout << "(" << p.first << ", " << p.second << ")\n";
+		log::info(
+			std::string{"("}
+			.append(std::to_string(p.first))
+			.append(", ")
+			.append(std::to_string(p.second))
+			.append(")")
+		);
 	}
-	std::cout << "END MAP GRAPH EDGES\n";
+	log::info("--");
 }
 
 std::vector<Room> Map::getRooms(Point location) {
@@ -149,7 +177,7 @@ void Map::generateBuildingMap() {
 		}
 	}
 
-	// open doors
+	// open doorways
 	for(auto& roomNode : rooms) {
 		auto room = roomNode.value;
 		for(auto& otherIndex : roomNode.neighbours) {
@@ -161,9 +189,6 @@ void Map::generateBuildingMap() {
 			int centerX = floor((overlapMinX + overlapMaxX) / 2);
 			int centerY = floor((overlapMinY + overlapMaxY) / 2);
 			tiles(centerX, centerY).walkable = true;
-			// std::cout << "Overlaps: "
-			// << "(" << overlapMinX << ", " << overlapMinY << "), "
-			// << "(" << overlapMaxX << ", " << overlapMaxY << ")\n";
 		}
 	}
 
@@ -281,11 +306,6 @@ Graph<Room> Map::connectRooms(Graph<Room> rooms) {
 			if(room.x0() > other.x1() || other.x0() > room.x1()) continue; // no overlap
 			if(room.y0() > other.y1() || other.y0() > room.y1()) continue; // no overlap
 			// overlap!
-			// std::cout << "overlap: "
-			// << "(" << room.x0() << ", " << room.y0() << "), (" << room.x1() << ", " << room.y1() << ")"
-			// << " with "
-			// << "(" << other.x0() << ", " << other.y0() << "), (" << other.x1() << ", " << other.y1() << ")"
-			// << "\n";
 			roomNode.neighbours.emplace_back(otherNode.id);
 		}
 	}
@@ -297,7 +317,7 @@ Graph<Room> Map::pruneEdges(Graph<Room> rooms) {
 	const auto src = rooms;
 	Graph<Room> ret {};
 
-	int s = randomInRange(0, rooms.size());
+	int s = randomInRange(0, rooms.size() - 1);
 	auto currentRoom = src.at(s);
 	auto currentRoomNoNBs = GraphNode<Room>{currentRoom.id, currentRoom.value, {}};
 	ret.push_back(currentRoomNoNBs);
@@ -429,6 +449,7 @@ Graph<Room> Map::makeLoops(Graph<Room> rooms, const Graph<Room> physicalConnecti
 				room.neighbours.push_back(newNeighbour);
 				for(auto neighbourIndex : room.neighbours) {
 					std::find_if(ret.begin(), ret.end(), [&](const auto& r) {return r.id == newNeighbour;})->neighbours.push_back(room.id);
+					ignore(neighbourIndex);
 				}
 			}
 		}
@@ -443,9 +464,8 @@ Graph<Room> Map::specializeRooms(Graph<Room> rooms, const Graph<Room> mst) {
 	std::vector<int> leafIndices (leafNodes.size());
 	std::transform(leafNodes.begin(), leafNodes.end(), leafIndices.begin(), [&](const auto& r) { return r.id; });
 
-	// TODO the blocks below may throw vector out of range
-
 	// Starting room
+	// There are at least 2 leaf rooms at this point
 	{ // scope for temporaries
 	int rnd = randomInRange(0, leafIndices.size() - 1);
 	int start = leafIndices.at(rnd);
@@ -453,26 +473,47 @@ Graph<Room> Map::specializeRooms(Graph<Room> rooms, const Graph<Room> mst) {
 	leafIndices.erase(std::remove_if(leafIndices.begin(), leafIndices.end(), [&](const auto& a) { return a == start; }), leafIndices.end());
 	} // scope for temporaries
 
-	// Market
+	// Upstairs
+	// There is at least 1 leaf room at this point
 	{ // scope for temporaries
 	int rnd = randomInRange(0, leafIndices.size() - 1);
 	int start = leafIndices.at(rnd);
-	std::find_if(ret.begin(), ret.end(), [&](const auto& r) { return r.id == start; })->value.roomType = RoomType::MARKET;
+	std::find_if(ret.begin(), ret.end(), [&](const auto& r) { return r.id == start; })->value.roomType = RoomType::UPSTAIRS;
 	leafIndices.erase(std::remove_if(leafIndices.begin(), leafIndices.end(), [&](const auto& a) { return a == start; }), leafIndices.end());
 	} // scope for temporaries
 
-	// Armoury
-	{ // scope for temporaries
-	int rnd = randomInRange(0, leafIndices.size() - 1);
-	int start = leafIndices.at(rnd);
-	std::find_if(ret.begin(), ret.end(), [&](const auto& r) { return r.id == start; })->value.roomType = RoomType::ARMOURY;
-	leafIndices.erase(std::remove_if(leafIndices.begin(), leafIndices.end(), [&](const auto& a) { return a == start; }), leafIndices.end());
-	} // scope for temporaries
 
-	// Command  centers
-	for(auto& r : ret) {
-		if(std::count(leafIndices.begin(), leafIndices.end(), r.id) != 0) r.value.roomType = RoomType::COMMAND_CENTER;
+	// The code is shit
+	int startingRoom = std::find_if(ret.begin(), ret.end(), [&](const auto& r) { return r.value.roomType == RoomType::START; })->id;
+	int endingRoom = std::find_if(ret.begin(), ret.end(), [&](const auto& r) { return r.value.roomType == RoomType::UPSTAIRS; })->id;
+	log::info(std::string{"Starting room: "}.append(std::to_string(startingRoom)));
+	log::info(std::string{"Ending room: "}.append(std::to_string(endingRoom)));
+
+	primaryPath = findPathBetweenRooms(mst, startingRoom, endingRoom);
+
+	// Walk through the path in reverse, sprinkling special rooms
+	for(auto i = primaryPath.rbegin(); i != primaryPath.rend(); ++i) {
+		auto& currentRoom = *std::find_if(ret.begin(), ret.end(), [&](const auto& r) { return r.id == *i; });
+		if(currentRoom.value.roomType == RoomType::UNASSIGNED) {
+			switch(d2()) {
+			case 1: {
+				currentRoom.value.roomType = RoomType::HYDROPONICS;
+				break;
+			}
+			case 2: {
+				currentRoom.value.roomType = RoomType::CLANDESTINE_LAB;
+				break;
+			}
+			}
+		}
 	}
+
+	// while(leafIndices.size() > 0) {
+	// 	int rnd = randomInRange(0, leafIndices.size() - 1);
+	// 	int start = leafIndices.at(rnd);
+	// 	std::find_if(ret.begin(), ret.end(), [&](const auto& r) { return r.id == start; })->value.roomType = RoomType::COMMAND_CENTER;
+	// 	leafIndices.erase(std::remove_if(leafIndices.begin(), leafIndices.end(), [&](const auto& a) { return a == start; }), leafIndices.end());
+	// }
 
 	// Make all the rest normal rooms
 	for(auto& r : ret) {
@@ -482,6 +523,53 @@ Graph<Room> Map::specializeRooms(Graph<Room> rooms, const Graph<Room> mst) {
 	}
 
 	return ret;
+}
+
+// TODO work the data structures into such a form that the *actual* pathfinding::findPath can be used here instead of this copy-paste crap
+std::vector<int> Map::findPathBetweenRooms(Graph<Room> mst, int from, int to) {
+	std::vector<int> path;
+	PriorityQueue<int, float> frontier;
+	frontier.put(from, 0.0f);
+
+	std::unordered_map<int, int> came_from;
+	came_from[from] = from;
+
+	std::unordered_map<int, float> cost_thus_far;
+	cost_thus_far[from] = 0.0f;
+
+	while(!frontier.empty()) {
+		int current = frontier.get();
+
+		if(current == to) {
+			break;
+		}
+
+		auto currentRoom = std::find_if(mst.begin(), mst.end(), [&](const auto& r) { return r.id == current; });
+
+		for(auto i : currentRoom->neighbours) {
+			auto neighbour = std::find_if(mst.begin(), mst.end(), [&](const auto& r) { return r.id == i; });
+			int next = neighbour->id;
+			float nextDeltaCost = 1.0f; // Plug in cost function here
+			float nextCost = cost_thus_far[current] + nextDeltaCost;
+			if(cost_thus_far.find(next) == cost_thus_far.end() ||
+				 nextCost < cost_thus_far[next]) {
+				cost_thus_far[next] = nextCost;
+				float heuristic = 1.0f; // Plug in heuristic function here
+				float priority = nextCost + heuristic;
+				came_from[next] = current;
+				frontier.put(next, priority);
+			}
+		}
+	}
+	int current = to;
+
+	while(current != from) {
+		path.push_back(current);
+		current = came_from[current];
+	}
+	path.push_back(from);
+	std::reverse(path.begin(), path.end());
+	return path;
 }
 
 bool Map::isWall(int x, int y) const {

@@ -1,11 +1,7 @@
 #ifndef PICKABLE_HPP
 #define PICKABLE_HPP
 
-#include <boost/archive/text_oarchive.hpp>
-#include <boost/archive/text_iarchive.hpp>
-#include <boost/serialization/export.hpp>
-#include <boost/serialization/assume_abstract.hpp>
-#include <boost/serialization/base_object.hpp>
+#include "openable.hpp"
 
 class Actor;
 class Effect;
@@ -37,6 +33,7 @@ public:
 	int weight;
 	bool fragile = false;
 	bool explosive = false;
+	LockType keyType = LockType::NONE;
 protected:
 	TargetSelector selector;
 	std::unique_ptr<Effect> effect;
@@ -47,6 +44,7 @@ private:
 		ar & selector;
 		ar & effect;
 		ar & weight;
+		ar & keyType;
     }
 };
 

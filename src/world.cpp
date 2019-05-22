@@ -12,12 +12,9 @@
 #include "gameplay_state.hpp"
 #include "ignore.hpp"
 #include "map_utils.hpp"
-#include <iostream>
 #include "../include/toml.hpp"
 
-World::World(int width, int height, int level, GameplayState* state):
-width(width), height(height), level(level), state(state) {
-	radiation = level;
+MapType World::getMapType(int level) {
 	MapType mapType;
 
 	auto& levelsTable = map_utils::LevelsTable::getInstance().levelsTable;
@@ -34,15 +31,20 @@ width(width), height(height), level(level), state(state) {
 	} else {
 		throw std::logic_error("This map type is not implemented yet");
 	}
+	return mapType;
+}
 
-	map = Map(width, height, mapType);
-	map.setWorld(this);
+World::World(int width, int height, int level, GameplayState* state):
+width(width), height(height), level(level), state(state),
+map(width, height, getMapType(level), this) {
+	radiation = level;
 
-	//map_utils::addDoors(this, &map);
+	map_utils::addDoors(this, &map);
 	//map_utils::addItems(this, &map, level);
 	//map_utils::addMonsters(this, &map, level);
 	map_utils::addMonstersBasedOnRoomTypes(this, &map, level);
 	map_utils::addItemsBasedOnRoomTypes(this, &map, level);
+	map_utils::fixMainPath(this, &map, level);
 	for(auto& a : actors) {
 		if(a->ai) a->ai->updateFov(a.get());
 	}
@@ -134,11 +136,11 @@ void World::applyRadiation(float dt) {
 
 void World::updateTime() {
 	if(!actors.front()->energy) return;
-	if(actors.front()->energy.get() > 0) return;
+	if(actors.front()->energy.value() > 0) return;
 	else {
 		Actor* next = std::find_if(actors.begin(), actors.end(), [](const auto& a) { return a->ai != nullptr; })->get();
 
-		float tuna = next->energy.get() * -1;
+		float tuna = next->energy.value() * -1;
 		time += tuna;
 
 		for(auto& a : actors) {

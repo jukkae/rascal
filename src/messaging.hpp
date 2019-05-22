@@ -1,6 +1,6 @@
 #ifndef MESSAGING_HPP
 #define MESSAGING_HPP
-#include <string> // bad
+
 #include "persistent.hpp"
 
 struct Message {

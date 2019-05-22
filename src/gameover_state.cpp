@@ -10,7 +10,6 @@
 #include "main_menu_state.hpp"
 #include "player.hpp"
 #include "status_effect.hpp"
-#include <iostream>
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>

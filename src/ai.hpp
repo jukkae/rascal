@@ -9,10 +9,6 @@ class GameplayState;
 #include "actor.hpp"
 #include "direction.hpp"
 #include "faction.hpp"
-#include <boost/archive/text_oarchive.hpp>
-#include <boost/archive/text_iarchive.hpp>
-#include <boost/serialization/export.hpp>
-#include <boost/serialization/vector.hpp>
 
 class Ai {
 public:

@@ -1,16 +1,15 @@
-#include <algorithm>
-#include <limits>
-#include <cstdio>
+#include "engine.hpp"
+
 #include "actor.hpp"
 #include "ai.hpp"
 #include "constants.hpp"
 #include "container.hpp"
 #include "destructible.hpp"
 #include "effect.hpp"
-#include "engine.hpp"
 #include "engine_command.hpp"
 #include "font.hpp"
 #include "io.hpp"
+#include "log.hpp"
 #include "pickable.hpp"
 #include "state.hpp"
 #include "gameplay_state.hpp"
@@ -19,6 +18,12 @@
 #include "world.hpp"
 
 #include "lisp/lisp.hpp"
+
+#include <algorithm>
+#include <limits>
+#include <iostream>
+#include <fstream>
+
 
 Engine::Engine(sf::RenderWindow* window) : window(window) {
 	font::load();
@@ -29,22 +34,26 @@ Engine::Engine(sf::RenderWindow* window) : window(window) {
 	std::unique_ptr<State> gps = std::make_unique<GameplayState>(this, window);
 
 	bool showContinueInMenu = false;
-	if(!io::fileExists(constants::SAVE_FILE_NAME)) {
-		gameplayState = gps.get();
+	if(io::fileExists(constants::SAVE_FILE_NAME)) { // FIXME urgh
+		try {
+			// This causes multiple constructions – not terribly important, but a bit dirty
+			load(); // this might throw, because boost might throw
+			(static_cast<GameplayState&>(*gameplayState)).initLoaded(this);
+			showContinueInMenu = true;
+			gps = std::unique_ptr<GameplayState>(static_cast<GameplayState*>(gameplayState));
+		} catch (...) {
+			log::info("could not parse save file!");
+			gameplayState = gps.get();
+		}
 	}
-	else { // FIXME urgh
-		load();
-		(static_cast<GameplayState&>(*gameplayState)).initLoaded(this);
-		showContinueInMenu = true;
-		gps = std::unique_ptr<GameplayState>(static_cast<GameplayState*>(gameplayState));
+	else {
+		gameplayState = gps.get();
 	}
 
 	std::unique_ptr<State> mainMenuState = std::make_unique<MainMenuState>(this, showContinueInMenu);
 
 	states.push_back(std::move(gps));
 	states.push_back(std::move(mainMenuState));
-
-	std::cout << "\n\n";
 
 	initializeLisp();
 }
@@ -75,19 +84,18 @@ void Engine::initializeLisp() {
 
 void Engine::lispRepl() {
 	for(;;) {
-		std::cout << "lisp> ";
+		log::info("lisp> ");
 		std::string s;
 		getline(std::cin, s);
 		try {
 			lisp::Atom expression = lisp::readExpression(s);
 			lisp::Atom result = lisp::evaluateExpression(expression, env);
 			lisp::printExpr(result);
-			std::cout << "\n";
+			log::info("");
 			lisp::gc_run(expression, result, env);
 		}
 		catch(lisp::LispException e) {
-			std::cout << "LISP runtime exception: " << e.what();
-			std::cout << "\n";
+			log::info(std::string("LISP runtime exception: ").append(e.what()));
 		}
 	}
 }

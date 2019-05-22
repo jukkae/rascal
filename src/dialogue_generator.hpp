@@ -1,7 +1,6 @@
 #ifndef DIALOGUE_GENERATOR_HPP
 #define DIALOGUE_GENERATOR_HPP
 #include "persistent.hpp"
-#include <optional>
 #include "mission.hpp"
 
 class DialogueGenerator {

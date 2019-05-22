@@ -46,23 +46,19 @@ private:
   void operator=(LevelsTable const&) = delete;
 };
 
+enum class TomlSource { BEINGS, ITEMS };
+
 void addItems(World* world, Map* map, int difficulty = 1);
 void addDoors(World* world, Map* map);
 void addMonsters(World* world, Map* map, int difficulty = 1);
 void addMonstersBasedOnRoomTypes(World* world, Map* map, int difficulty = 1);
 void addItemsBasedOnRoomTypes(World* world, Map* map, int difficulty = 1);
+void fixMainPath(World* world, Map* map, int difficulty = 1);
 void addPlayer(World* world, Map* map);
 void addStairs(World* world, Map* map,
                World* lower = nullptr,
                World* upper = nullptr);
+std::unique_ptr<Actor> makeActorFromToml(World* world, Map* map, int x, int y, std::string type, TomlSource source);
 } // namespace map_utils
-
-namespace item {
-std::unique_ptr<Actor> makeItemFromToml(World* world, Map* map, int x, int y, std::string type);
-} // namespace item
-
-namespace npc {
-std::unique_ptr<Actor> makeBeingFromToml(World* world, Map* map, int x, int y, std::string type);
-} // namespace npc
 
 #endif /* MAP_UTILS_HPP */

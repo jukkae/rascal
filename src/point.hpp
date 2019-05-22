@@ -1,9 +1,7 @@
 #ifndef POINT_HPP
 #define POINT_HPP
 
-#include <cstdio> // For size_t
 #include <string>
-#include <utility>
 
 namespace boost { namespace serialization { class access; } }
 

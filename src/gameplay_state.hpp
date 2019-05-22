@@ -1,15 +1,13 @@
 #ifndef GAMEPLAY_STATE_HPP
 #define GAMEPLAY_STATE_HPP
 #include "state.hpp"
-#include <boost/archive/text_oarchive.hpp>
-#include <boost/archive/text_iarchive.hpp>
 #include "engine.hpp"
 #include "gui.hpp"
 #include "player.hpp"
 #include "point.hpp"
 #include "renderer.hpp"
-#include <SFML/Graphics.hpp>
-#include <boost/serialization/vector.hpp>
+#include "world.hpp"
+
 
 struct Event;
 class World;
@@ -72,6 +70,8 @@ namespace serialization {
 		ar & s->world;
 		ar & s->levels;
 		ar & s->player;
+		// Recalculate FOVs, as they are not serialized directly
+		for(auto a : s->world->getActorsAsPtrs()) { if(a->ai){ a->ai->updateFov(a); } }
 	}
 } // namespace boost
 } // namespace serialization

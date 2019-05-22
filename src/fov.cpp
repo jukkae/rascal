@@ -84,6 +84,7 @@ std::set<Point> fov::computeFov(Map* map, int x, int y, int radius, FovType fovT
 		auto octantTiles = computeFovForOctant(map, x, y, octant, radius, fovType, actors);
 		fovTiles.insert(octantTiles.begin(), octantTiles.end());
 	}
+	fovTiles.emplace(Point{x, y});
 	return fovTiles;
 }
 
@@ -91,7 +92,8 @@ std::set<Point> fov::computeFovForOctant(Map* map, int x, int y, int octant, int
 	std::set<Point> fovTiles { };
 	ShadowLine shadowLine;
 	bool fullShadow = false;
-	for(int row = 0; row < radius; row++) {
+	// Ideally, would start from row 0, ie. self, but this breaks if player is e.g. on a tile with a bush
+	for(int row = 1; row < radius; row++) {
 		for(int col = 0; col <= row; col++) {
 			if(fovType == FovType::CIRCLE) {
 				if(sqrt(row*row + col*col) > radius) break;

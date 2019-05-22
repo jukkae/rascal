@@ -1,4 +1,3 @@
-#include <cstdio>
 #include "actor.hpp"
 #include "ai.hpp"
 #include "body.hpp"
@@ -11,7 +10,7 @@
 #include "gameover_state.hpp"
 #include "colors.hpp"
 #include "pickable.hpp"
-#include "world.hpp"
+
 #include <SFML/Graphics/Color.hpp>
 
 Destructible::Destructible(float maxHp, float defense, int xp, std::string corpseName) :

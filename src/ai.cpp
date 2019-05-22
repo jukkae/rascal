@@ -75,7 +75,7 @@ std::vector<std::unique_ptr<Action>> PlayerAi::getNextAction(Actor* actor) {
 	while(engine->pollEvent(event)) {
 		if(event.type == sf::Event::KeyPressed) {
 			if(event.key.shift) {
-				using k = sf::Keyboard::Key;
+				// using k = sf::Keyboard::Key;
 				switch(event.key.code) {
 					case 56: { // < key
 						actions.push_back(std::make_unique<TraverseStairsAction>(actor, true));

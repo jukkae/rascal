@@ -1,5 +1,3 @@
-#include <iostream>
-#include <algorithm>
 #include "inventory_menu_state.hpp"
 #include "engine.hpp"
 #include "engine_command.hpp"
@@ -34,8 +32,6 @@ actor(actor) {
 	credits = actor->container->credits;
 	contentsWeight = actor->container->getContentsWeight();
 	capacity = actor->container->capacity;
-
-	updateMissionStatuses();
 }
 
 void InventoryMenuState::sortIntoPiles() {
@@ -268,17 +264,4 @@ void InventoryMenuState::renderMissions() {
 }
 
 void InventoryMenuState::renderPiles() {
-}
-
-// TODO this doesn't belong here, really, but whaddya do
-void InventoryMenuState::updateMissionStatuses() {
-	for(auto& m : actor->missions) {
-		if(dynamic_cast<AcquireItemsMission*>(m.get()) != nullptr) {
-			if(m.get()->status == MissionStatus::ACTIVE) {
-				int numberOfRamChips = 0;
-				for(auto& i : inventoryContents) if(i->name == "ram chip") ++numberOfRamChips;
-				if(numberOfRamChips >= 2) m.get()->status = MissionStatus::REQUIRES_CONFIRMATION;
-			}
-		}
-	}
 }

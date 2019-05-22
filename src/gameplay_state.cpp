@@ -15,13 +15,13 @@
 #include "transporter.hpp"
 #include "world.hpp"
 #include <chrono>
+#include <thread>
 #include <SFML/Window/Mouse.hpp>
 #include <boost/optional/optional_io.hpp>
 
 GameplayState::GameplayState(Engine* engine, sf::RenderWindow* window) :
 State(engine, window) {
-	std::unique_ptr<World> w = std::make_unique<World>(120, 72, 1, this);
-	levels.push_back(std::move(w));
+	levels.push_back( std::make_unique<World>(120, 72, 1, this) );
 	world = levels.front().get();
 
 	gui.setState(this);
@@ -45,8 +45,20 @@ void GameplayState::newGame(Engine* engine) {
 
 void GameplayState::update() {
 	auto previous = std::chrono::system_clock::now();
-	double frameLength = 1.0 / 60.0; // 60 Hz, in seconds
+	auto previousPlayerTurn = std::chrono::system_clock::now();
+	constexpr double frameLength = 1.0 / 60.0; // 60 Hz, in seconds
+	constexpr auto playerTurnThrottle = std::chrono::milliseconds(10);
 	while(true) { // TODO events are not polled correctly
+		// If player, throttle speed
+		if(world->getNextActor()->isPlayer()) {
+			auto currentPlayerTurn = std::chrono::system_clock::now();
+			std::chrono::duration<double> deltaPlayerTime = currentPlayerTurn - previousPlayerTurn;
+			if(deltaPlayerTime < playerTurnThrottle) {
+				auto timeToSleep = playerTurnThrottle - deltaPlayerTime;
+				std::this_thread::sleep_for(timeToSleep);
+			}
+			previousPlayerTurn = std::chrono::system_clock::now();
+		}
 		world->update();
 
 		auto now = std::chrono::system_clock::now();

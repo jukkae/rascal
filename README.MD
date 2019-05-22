@@ -15,6 +15,7 @@ $ ninja -C build build OR $ ninja -C build bundle
 ## Dependencies
 - SFML 2.4.2 or higher
 - Boost 1.65.1 or higher
+- spdlog 1.3.1 or higher
 
 ## Acknowledgments
 Includes toml11 library licensed under MIT License.
