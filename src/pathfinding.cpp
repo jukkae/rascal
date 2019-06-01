@@ -1,10 +1,11 @@
 #include "pathfinding.hpp"
 #include "map.hpp"
 #include "point.hpp"
+#include "world.hpp"
 
 #include <unordered_map>
 
-std::vector<Point> pathfinding::findPath(Map map, Point from, Point to) {
+std::vector<Point> pathfinding::findPath(Map map, Point from, Point to, World* world) {
 
 	Mat2d<Tile> tiles = map.tiles;
 	std::vector<Point> path;
@@ -38,6 +39,14 @@ std::vector<Point> pathfinding::findPath(Map map, Point from, Point to) {
 				if(cost_thus_far.find(next) == cost_thus_far.end() ||
 					 nextCost < cost_thus_far[next]) {
 			 		if(tiles.at(next.x, next.y).walkable) {
+						if(world) { // Check blocking actors
+							auto actorsAtNext = world->getActorsAt(next.x, next.y);
+							if(!actorsAtNext.empty() && Point{next.x, next.y} != from && Point{next.x, next.y} != to) {
+								bool blocking = false;
+								for(auto a : actorsAtNext) if(a->blocks) blocking = true;
+								if(blocking) continue;
+							}
+						}
 						cost_thus_far[next] = nextCost;
 						float heuristic = sqrtf(pow(current.x - next.x, 2) +
 						                        pow(current.y - next.y, 2));

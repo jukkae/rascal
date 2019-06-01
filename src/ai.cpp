@@ -180,7 +180,7 @@ std::vector<std::unique_ptr<Action>> PlayerAi::getNextAction(Actor* actor) {
 				// Find path
 				std::vector<Point> path = pathfinding::findPath(actor->world->map,
 								 Point(actor->x, actor->y),
-								 io::mousePosition);
+								 io::mousePosition, actor->world);
 				if(!(path.size() <= 1)) {
 					for(int i = 0; i < path.size() - 1; ++i) {
 						Point from = path.at(i);
@@ -331,7 +331,7 @@ std::vector<std::unique_ptr<Action>> MonsterAi::getNextAction(Actor* actor) {
 			if(plannedActions.empty()) {
 				std::vector<Point> path = pathfinding::findPath(actor->world->map,
 								 Point(actor->x, actor->y),
-								 *currentTarget);
+								 *currentTarget/*, actor->world*/);
 				if(!(path.size() <= 1)) {
 					for(int i = 0; i < path.size() - 1; ++i) {
 						Point from = path.at(i);

@@ -5,6 +5,7 @@
 
 struct Point;
 class Map;
+class World;
 
 template<typename T, typename priority_t>
 using PQElement = std::pair<priority_t, T>;
@@ -41,7 +42,7 @@ struct PriorityQueue {
 };
 
 namespace pathfinding {
-std::vector<Point> findPath(Map map, Point from, Point to);
+std::vector<Point> findPath(Map map, Point from, Point to, World* world = nullptr);
 } // namespace pathfinding
 
 #endif /* PATHFINDING_HPP */
